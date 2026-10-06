@@ -37,6 +37,7 @@ sys.path.insert(0, HERE)
 import backtest as bt  # noqa: E402
 import events as E  # noqa: E402
 import predictor as pr  # noqa: E402
+import team_colors as TC  # noqa: E402
 
 N_RECENT_CALLS = 20
 N_TEAM_RESULTS = 10
@@ -52,6 +53,46 @@ def data_uri(rel):
             ".svg": "image/svg+xml", ".webp": "image/webp"}.get(ext, "image/png")
     with open(path, "rb") as f:
         return f"data:{mime};base64," + base64.b64encode(f.read()).decode()
+
+
+_DROP = {"team", "esports", "esport", "gaming", "clan", "club", "gg"}
+
+
+def _norm(name):
+    words = re.findall(r"[a-z0-9]+", name.lower())
+    return "".join(w for w in words if w not in _DROP) or "".join(words)
+
+
+def vrs_lookup(path):
+    """team -> {"rank", "points", "region", "region_rank", "name"} from data/vrs.py output.
+    Matched by normalised name ("Team Vitality" == "Vitality"); ties and
+    renamed teams are settled by roster overlap (>= 3 shared players)."""
+    if not os.path.exists(path):
+        return None, lambda team, roster: None
+    vrs = json.load(open(path, encoding="utf-8"))
+    glob = vrs["standings"].get("global", [])
+    regional = {}
+    for region, rows in vrs["standings"].items():
+        if region == "global":
+            continue
+        for r in rows:
+            regional[(r["name"], tuple(sorted(p.lower() for p in r["roster"])))] = (region, r["rank"])
+
+    def find(team, roster):
+        roster = {p.lower() for p in roster}
+        overlap = lambda r: len(roster & {p.lower() for p in r["roster"]})
+        by_name = [r for r in glob if _norm(r["name"]) == _norm(team)]
+        if by_name:
+            best = max(by_name, key=overlap)
+        else:
+            cands = [r for r in glob if overlap(r) >= 3]
+            if not cands:
+                return None
+            best = max(cands, key=lambda r: (overlap(r), -r["rank"]))
+        region, rrank = regional.get((best["name"], tuple(sorted(p.lower() for p in best["roster"]))), (None, None))
+        return {"rank": best["rank"], "points": best["points"], "name": best["name"],
+                "region": region, "region_rank": rrank}
+    return vrs["date"], find
 
 
 def compact(r):
@@ -142,6 +183,13 @@ def main(out_path):
                 if not players[pid.lower()]["flag"]:
                     players[pid.lower()]["flag"] = cc
 
+    colors = TC.all_team_colors(assets, ROOT)
+    vrs_date, vrs_find = vrs_lookup(os.path.join(ROOT, "data", "vrs.json"))
+    latest_lineup = {}
+    for e in events:                     # newest event lineup per team (events are date-sorted)
+        for t, v in e["participants"].items():
+            if v["players"]:
+                latest_lineup[t] = v["players"]
     teams = {}
     for t in names:
         rec = assets["teams"].get(t, {"roster": [], "location": "", "region": ""})
@@ -161,6 +209,9 @@ def main(out_path):
         roster = [{"id": p["id"], "coach": p["role"].lower() == "coach"} for p in rec["roster"]]
         teams[t] = {
             "slug": E.slug(t), "elo": round(h_now.elo[t]), "rank": rank.get(t),
+            "color": colors.get(t, [None, None]),
+            "vrs": vrs_find(t, [p["id"] for p in rec["roster"] if p["role"].lower() != "coach"]
+                            + latest_lineup.get(t, [])),
             "series": len(h_now.games[t]),
             "location": rec.get("location", ""), "region": rec.get("region", ""),
             "liquipedia": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
@@ -248,7 +299,7 @@ def main(out_path):
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
         "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
-        "factors": FACTORS,
+        "factors": FACTORS, "vrs_date": vrs_date,
     }
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")

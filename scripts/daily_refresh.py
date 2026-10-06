@@ -12,7 +12,7 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    stand-ins, logos). Everything else keeps being served from the cache.
 3. Rebuild, in order: data/matches.json (collect_liquipedia), data/
    roster_events.json (rosters), viewer/assets.json + new images
-   (fetch_assets).
+   (fetch_assets), data/vrs.json (Valve Regional Standings, from GitHub).
 
 The site itself is built from these files on each deploy
 (python viewer/build_viewer.py public/index.html, see vercel.json).
@@ -135,6 +135,10 @@ def main(argv=None):
     import fetch_assets
     fetch_assets.OFFLINE = False
     fetch_assets.main()
+
+    import vrs          # Valve Regional Standings (GitHub; new file roughly monthly)
+    vrs.OFFLINE = False
+    vrs.main()
     print("refresh done")
 
 

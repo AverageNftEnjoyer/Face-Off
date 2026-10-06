@@ -26,8 +26,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Refresh Liquipedia data (rate-limited, cached)
+      - name: Refresh Liquipedia data and Valve standings (rate-limited, cached)
         run: python scripts/daily_refresh.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # for the one GitHub API call in data/vrs.py
 
       - name: Tests
         run: python -m unittest discover -s tests

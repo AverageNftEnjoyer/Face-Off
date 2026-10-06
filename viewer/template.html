@@ -218,7 +218,7 @@ tr.out .tlink { color: var(--dim); }
 .tug .ends .cond { font-size: var(--s3); }
 .bar { position: relative; height: 2.6rem; border-radius: var(--r); overflow: hidden; background: var(--t); }
 .bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--ct); width: 50%; transition: width .9s cubic-bezier(.2, .8, .2, 1); }
-.bar .band { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 7px); border-inline: 2px solid var(--bg); transition: left .9s cubic-bezier(.2, .8, .2, 1), width .9s cubic-bezier(.2, .8, .2, 1); }
+.bar .band { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, rgba(10, 14, 20, .55) 0 2px, rgba(255, 255, 255, .45) 2px 4px, transparent 4px 8px); border-inline: 2px solid var(--bg); transition: left .9s cubic-bezier(.2, .8, .2, 1), width .9s cubic-bezier(.2, .8, .2, 1); }
 .bar .mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--bg); transform: translateX(-1px); }
 .tug .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; font-size: var(--s-1); color: var(--dim); align-items: center; }
 
@@ -326,6 +326,9 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 
 /* compare picker */
 .picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: .4rem; }
+.pick .pn { overflow-wrap: anywhere; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 100%; }
+.pick .pv { font-size: .68rem; color: var(--dim); }
+.vrs { display: inline-flex; align-items: baseline; gap: .3rem; font-weight: 700; color: var(--text); }
 .pick {
   display: grid; justify-items: center; gap: .3rem; padding: .6rem .3rem;
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); cursor: pointer;
@@ -460,7 +463,13 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
 const T = DATA.teams;
-const NAMES = Object.keys(T).sort((a, b) => T[b].elo - T[a].elo);
+// Valve Regional Standings first (that is how teams are seeded), then Elo for unranked teams
+const vrsRank = t => T[t]?.vrs?.rank ?? 1e9;
+const NAMES = Object.keys(T).sort((a, b) => vrsRank(a) - vrsRank(b) || T[b].elo - T[a].elo);
+const REGION = { europe: "Europe", americas: "Americas", asia: "Asia" };
+const vrsShort = t => T[t]?.vrs ? `VRS #${T[t].vrs.rank}` : "Not in VRS";
+const vrsLine = t => T[t] ? `${vrsShort(t)}, Elo ${T[t].elo}` : "No results in the data";
+const pickTile = (n, attrs) => `<button type="button" class="pick" ${attrs}>${logo(n, "lg")}<span class="pn">${esc(n)}</span><span class="pv">${esc(vrsShort(n))}</span></button>`;
 const BY_SLUG = Object.fromEntries(NAMES.map(n => [T[n].slug, n]));
 const EV = DATA.events;
 const EV_BY = Object.fromEntries(EV.map(e => [e.slug, e]));
@@ -488,6 +497,35 @@ const LABELS = {
   stakes: ["Stakes", "Elimination or qualification"],
 };
 const REL = { H: "Clear read", M: "Fairly clear read", L: "Close or uncertain read" };
+
+/* ---------------- team colours (from each logo, see viewer/team_colors.py) ---------------- */
+const DEFAULT_A = "#6E9DE2", DEFAULT_B = "#E7AB3F", PAGE_BG = [23, 29, 37];
+const rgbOf = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const dist = (x, y) => { const a = rgbOf(x), b = rgbOf(y); return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); };
+const deep = h => { const c = rgbOf(h); return `rgb(${c.map((v, i) => Math.round(v * .32 + PAGE_BG[i] * .68)).join(",")})`; };
+function pairColors(a, b) {
+  const ca = (T[a]?.color || [])[0] || DEFAULT_A;
+  const [pb, sb] = T[b]?.color || [];
+  let cb = pb || DEFAULT_B;
+  if (dist(ca, cb) < 110) {
+    // too alike: the second team uses its other logo colour if that is bright
+    // enough to read on the dark page, otherwise white, gold or blue
+    const bright = c => { const [r, g, bb] = rgbOf(c); return (.2126 * r + .7152 * g + .0722 * bb) / 255 >= .45; };
+    cb = sb && bright(sb) && dist(ca, sb) >= 110 ? sb : ["#F2F4F7", DEFAULT_B, DEFAULT_A].find(c => dist(ca, c) >= 110);
+  }
+  return [ca, cb];
+}
+let PAIR = null;                      // set by views that show two teams head to head
+function applyPair(el) {
+  const props = ["--ct", "--t", "--ct-deep", "--t-deep"];
+  if (!PAIR) { props.forEach(p => el.style.removeProperty(p)); return; }
+  const [ca, cb] = pairColors(PAIR[0], PAIR[1]);
+  el.style.setProperty("--ct", ca); el.style.setProperty("--t", cb);
+  el.style.setProperty("--ct-deep", deep(ca)); el.style.setProperty("--t-deep", deep(cb));
+}
+// A miss is only an "Upset" when the losing side was a clear favourite.
+const UPSET_AT = 0.75;
+const missLabel = (hit, favP) => hit ? "Model called it" : favP >= UPSET_AT ? "Upset" : "Incorrect";
 
 function logo(team, cls = "") {
   const src = IMG.logos[team];
@@ -744,7 +782,7 @@ function matchRow(m) {
   if (live) tag = `<span class="chip live">Live</span>`;
   else if (m.finished && pred) {
     const fav = pred.p >= .5 ? a : b;
-    tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${pct(Math.max(pred.p, 1 - pred.p))}">${fav === w ? "Model called it" : "Upset"}</span>`;
+    tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${pct(Math.max(pred.p, 1 - pred.p))}">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}</span>`;
   }
   const team = (t, side) => `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}<span>${esc(t || "To be decided")}</span></div>`;
   const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}</span></div>
@@ -822,8 +860,8 @@ function evMatches(e) {
     <div style="display:grid;gap:1.5rem">
       ${groups.length ? `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
         ${groups.map(([name, rows]) => `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table>
-          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th></tr></thead>
-          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td></tr>`).join("")}</tbody>
+          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th><th class="n">VRS</th></tr></thead>
+          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td><td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
         </table></div></div>`).join("")}</section>` : ""}
       ${cols.length ? `<section class="panel"><h2>Playoffs</h2><div class="bracket" style="grid-template-columns:repeat(${Math.min(cols.length, 4)},minmax(9rem,1fr))">${cols.map(c => `<div class="bcol"><h3>${esc(c.name)}</h3>${c.list.map(bm).join("")}</div>`).join("")}</div></section>` : ""}
       ${e.prizes.length ? `<section class="panel"><h2>Prize pool</h2><div class="prizes">${e.prizes.map(p => `<span>${place(p)}</span><b>${p.usd ? "$" + p.usd.toLocaleString("en-US") : "-"}</b>`).join("")}</div></section>` : ""}
@@ -847,7 +885,7 @@ function evTeams(e) {
     const L = lineupOf(t, e);
     const sel = t === s.a ? "sel-a" : t === s.b ? "sel-b" : "";
     return `<div class="pcard ${sel}">
-      <div class="ph">${logo(t, "lg")}${T[t] ? `<a class="cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cond">${esc(t)}</span>`}<span class="small dim">${T[t] ? `Elo ${T[t].elo}${T[t].rank ? `, ${ordinal(T[t].rank)}` : ""}` : "No results in the data"}</span></div>
+      <div class="ph">${logo(t, "lg")}${T[t] ? `<a class="cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cond">${esc(t)}</span>`}<span class="small dim">${esc(vrsLine(t))}</span></div>
       ${L.players.length ? `<ul>${L.players.map(p => `<li>${flag(p.flag)}<b>${esc(p.id)}</b><span class="rn">${esc(p.name)}</span>${p.igl ? `<span class="chip plain">IGL</span>` : ""}${p.standin ? `<span class="chip miss">Stand-in</span>` : ""}</li>`).join("")}${L.coach.map(c => `<li class="dim">${flag(c.flag)}Coach ${esc(c.id)}</li>`).join("")}</ul>` : `<p class="empty">Lineup not announced yet.</p>`}
       ${T[t] ? `<button type="button" class="btn" data-addpick="${esc(t)}" data-ev="${e.slug}" aria-pressed="${!!sel}">${sel ? "In matchup" : "Add to matchup"}</button>` : ""}
     </div>`;
@@ -868,17 +906,18 @@ function evMatchup(e) {
   if (!s.b || !list.includes(s.b) || s.b === s.a) s.b = list.find(t => t !== s.a);
   s.next = s.next || "a";
   const pred = matchupPred(e, s.a, s.b);
+  PAIR = [s.a, s.b];
   const asof = e.status === "finished" ? `ratings as of ${fmtDate(e.start)}, the first day of the event` : `ratings as of ${fmtDate(DATA.as_of)}`;
   return `
   <section class="panel">
     <h2>Pick two teams from ${esc(e.name)} <span class="dim">click a logo to set the ${s.next === "a" ? `<span class="ct">blue</span>` : `<span class="t">gold</span>`} side next</span></h2>
-    <div class="picker">${list.map(n => `<button type="button" class="pick" data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("")}</div>
+    <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
     <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap sides</button></div>
   </section>
   <section class="vs">${vsSide(s.a, "a")}<div class="centre"><div class="when dim">vs</div><span class="small dim">Hypothetical Bo3, ${asof}</span></div>${vsSide(s.b, "b")}</section>
   ${matchBody(pred, s.a, s.b, { ev: e, label: e.status === "finished" ? "Model's call before the event" : "Model's call today" })}`;
 }
-const vsSide = (t, cls) => `<a class="side ${cls}" href="#t-${T[t].slug}">${logo(t, "xl")}<span class="cond">${esc(t)}</span><span class="meta">Elo ${T[t].elo}${T[t].rank ? `, ranked ${ordinal(T[t].rank)}` : ""}</span></a>`;
+const vsSide = (t, cls) => `<a class="side ${cls}" href="#t-${T[t].slug}">${logo(t, "xl")}<span class="cond">${esc(t)}</span><span class="meta">${esc(vrsLine(t))}</span></a>`;
 
 /* ---------------- match page ---------------- */
 function viewMatch(id) {
@@ -886,6 +925,7 @@ function viewMatch(id) {
   if (!m || !m.t1 || !m.t2) return `<p>That match isn't in this snapshot. <a class="btn" href="#events">Tournaments</a></p>`;
   const e = EV_BY[m.ev];
   const a = m.t1, b = m.t2, live = isLive(m), w = winnerOf(m), pred = decode(m.pred);
+  PAIR = [a, b];
   let centre;
   if (m.finished || live) {
     centre = `<div class="score cond"><span class="${m.w1 >= m.w2 ? "ct" : "lost"}">${m.w1}</span><span class="dim">:</span><span class="${m.w2 >= m.w1 ? "t" : "lost"}">${m.w2}</span></div>
@@ -896,7 +936,7 @@ function viewMatch(id) {
   let verdict = "";
   if (m.finished && pred) {
     const fav = pred.p >= .5 ? a : b, fp = Math.max(pred.p, 1 - pred.p);
-    verdict = fav === w ? `<span class="chip hit">Model called it: ${esc(fav)} at ${pct(fp)}</span>` : `<span class="chip miss">Upset: model had ${esc(fav)} at ${pct(fp)}</span>`;
+    verdict = `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, fp)}: ${fav === w ? "" : "model had "}${esc(fav)} at ${pct(fp)}</span>`;
   }
   const side = (t, cls) => T[t] ? vsSide(t, cls) : `<span class="side ${cls}">${logo(t, "xl")}<span class="cond">${esc(t)}</span></span>`;
   return `
@@ -918,15 +958,20 @@ function countdown(when) {
 
 /* ---------------- global head to head ---------------- */
 let cmpA = null, cmpB = null, cmpNext = "a", cmpFilter = "";
+function cmpTiles() {
+  const shown = NAMES.filter(n => !cmpFilter || n.toLowerCase().includes(cmpFilter.toLowerCase()));
+  return shown.map(n => pickTile(n, `data-team="${esc(n)}" ${n === cmpA ? 'data-slot="a"' : n === cmpB ? 'data-slot="b"' : ""} aria-pressed="${n === cmpA || n === cmpB}"`)).join("")
+    || `<p class="empty">No team matches that filter.</p>`;
+}
 function viewCompare() {
   if (!cmpA || !cmpB) { cmpA = NAMES[0]; cmpB = NAMES[1]; }
   const pred = decode(DATA.pairs[`${cmpA}|${cmpB}`]);
-  const shown = NAMES.filter(n => !cmpFilter || n.toLowerCase().includes(cmpFilter.toLowerCase()));
+  PAIR = [cmpA, cmpB];
   return `
   <section class="panel">
     <h2>Any two teams <span class="dim">click a logo to set the ${cmpNext === "a" ? `<span class="ct">blue</span>` : `<span class="t">gold</span>`} side next</span></h2>
     <input class="search" id="cmpSearch" type="search" placeholder="Filter teams" value="${esc(cmpFilter)}" aria-label="Filter teams">
-    <div class="picker" id="cmpGrid">${shown.map(n => `<button type="button" class="pick" data-team="${esc(n)}" ${n === cmpA ? 'data-slot="a"' : n === cmpB ? 'data-slot="b"' : ""} aria-pressed="${n === cmpA || n === cmpB}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("") || `<p class="empty">No team matches that filter.</p>`}</div>
+    <div class="picker" id="cmpGrid">${cmpTiles()}</div>
     <div class="slots"><span><span class="ct">${esc(cmpA)}</span> bans first in the simulated veto</span><button type="button" class="btn" id="swap">Swap sides</button></div>
   </section>
   <section class="vs">${vsSide(cmpA, "a")}<div class="centre"><div class="when dim">vs</div><span class="small dim">Hypothetical Bo3, ratings as of ${fmtDate(DATA.as_of)}</span></div>${vsSide(cmpB, "b")}</section>
@@ -935,8 +980,8 @@ function viewCompare() {
 
 /* ---------------- teams ---------------- */
 function viewTeams() {
-  return `<section class="panel"><h2>Teams <span class="dim">everyone at a 2026 tournament here, ordered by Elo</span></h2>
-    <div class="tgrid">${NAMES.map(n => `<a class="tcard" href="#t-${T[n].slug}">${logo(n, "lg")}<span class="cond">${esc(n)}</span><span class="small dim">Elo ${T[n].elo}${T[n].rank ? `, ${ordinal(T[n].rank)}` : ""}</span></a>`).join("")}</div></section>`;
+  return `<section class="panel"><h2>Teams <span class="dim">ordered by Valve Regional Standings${DATA.vrs_date ? ` (${fmtDate(DATA.vrs_date)})` : ""}; teams outside the standings follow by Elo</span></h2>
+    <div class="tgrid">${NAMES.map(n => `<a class="tcard" href="#t-${T[n].slug}">${logo(n, "lg")}<span class="cond">${esc(n)}</span><span class="small dim">${esc(vrsLine(n))}</span></a>`).join("")}</div></section>`;
 }
 
 function spark(trace) {
@@ -970,7 +1015,10 @@ function viewTeam(slugv) {
   <section class="thead">${logo(n, "xl")}
     <div><h1 class="cond">${esc(n)}</h1><p class="dim small">${esc(t.location)}${t.region ? `, region ${esc(t.region.toUpperCase())}` : ""}</p>
       <div class="links" style="margin-top:.6rem"><a class="btn" href="${esc(t.liquipedia)}" target="_blank" rel="noopener">Team on Liquipedia</a><a class="btn" href="#compare" data-cmp="${esc(n)}">Compare with another team</a></div></div>
-    <div class="big"><span class="small dim">Elo</span><b class="cond">${t.elo}</b><span class="small dim">${t.rank ? `${ordinal(t.rank)} of active teams` : `${t.series} series in the data`}</span></div>
+    <div class="big">${t.vrs
+        ? `<span class="small dim">Valve Regional Standings</span><b class="cond">#${t.vrs.rank}</b><span class="small dim">${t.vrs.points} points${t.vrs.region ? `, ${REGION[t.vrs.region] || t.vrs.region} #${t.vrs.region_rank}` : ""}</span>`
+        : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}
+      <span class="small dim" style="margin-top:.4rem">Elo ${t.elo}${t.rank ? `, ${ordinal(t.rank)} of active teams` : `, ${t.series} series in the data`}</span></div>
   </section>
   <div class="grid2">
     ${lineup(n, "a", null)}
@@ -1029,6 +1077,7 @@ function calib(rows) {
 function route() {
   const h = decodeURIComponent((location.hash || "#events").slice(1));
   let html, tab = "events";
+  PAIR = null;
   if (h === "compare") { html = viewCompare(); tab = "compare"; }
   else if (h === "teams") { html = viewTeams(); tab = "teams"; }
   else if (h === "record") { html = viewRecord(); tab = "record"; }
@@ -1038,6 +1087,7 @@ function route() {
   else html = viewEvents();
   const v = $("#view");
   v.innerHTML = html;
+  applyPair(v);
   document.querySelectorAll(".tabs a").forEach(a => a.dataset.tab === tab ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   animateBars(v);
   return h;
@@ -1092,8 +1142,7 @@ document.addEventListener("input", e => {
   if (e.target.id !== "cmpSearch") return;
   cmpFilter = e.target.value;
   const grid = $("#cmpGrid");
-  const shown = NAMES.filter(n => !cmpFilter || n.toLowerCase().includes(cmpFilter.toLowerCase()));
-  grid.innerHTML = shown.map(n => `<button type="button" class="pick" data-team="${esc(n)}" ${n === cmpA ? 'data-slot="a"' : n === cmpB ? 'data-slot="b"' : ""} aria-pressed="${n === cmpA || n === cmpB}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("") || `<p class="empty">No team matches that filter.</p>`;
+  grid.innerHTML = cmpTiles();
 });
 
 document.addEventListener("pointermove", e => {
