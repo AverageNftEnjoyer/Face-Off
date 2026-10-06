@@ -69,43 +69,46 @@ import sys
 # ============================================================================
 CONFIG = {
     # --- calibration ---
-    "temperature": 0.909,
-    # Final p = sigmoid(temperature * total_logodds). FITTED by backtest.py
-    # (max likelihood / min log-loss on total_logodds) on the TRAIN split only:
-    # 2023-10-22 to 2025-10-08, n=917 real BO3 series (Liquipedia), chronological
-    # split; the 611 later series (2025-10-10 to 2026-10-05) are held out.
-    # Fitted value 0.909. Re-fit whenever weights or features change.
+    "temperature": 1.0,
+    # Final p = sigmoid(temperature * total_logodds). The fitted weights below
+    # already carry the overall scale (fit_weights.py fits w_i with the
+    # temperature held at 1), so this stays 1.0. If weights are changed by
+    # hand again, re-fit it with backtest.py on the TRAIN split.
 
-    # --- factor weights (log-odds multipliers). Heuristic, NOT fitted. Each
-    # could be fitted by logistic regression of series outcomes on the capped
-    # standardized signals once a few hundred labelled series exist. ---
-    "w_base": 0.8,
-    # Justification: long-run skill (HLTV rating 2.1 / VRS) is the best single
-    # predictor of true ability and the ONLY factor that encodes raw strength.
-    # Max contribution 0.8 * 2 = 1.6 log-odds (~83%) on its own.
+    # --- factor weights (log-odds multipliers) ---
+    # FITTED by fit_weights.py (2026-10-06): penalised logistic regression of
+    # series outcomes on each factor's log-odds contribution, multipliers
+    # constrained >= 0, L2 strength chosen on the last 20% of TRAIN (lambda 0
+    # won). TRAIN = 917 real BO3 series 2023-10-22 to 2025-10-08 (Liquipedia);
+    # the 611 later series were held out. Held-out result vs the previous
+    # reasoned weights: Brier 0.2134 -> 0.2109, log loss 0.6161 -> 0.6104,
+    # ECE 0.0275 -> 0.0247, accuracy unchanged (0.661); both paired 95% CIs
+    # include 0, so the gain is small and not yet significant.
+    # Caveat: the >= 0 constraint was added after seeing an unconstrained fit
+    # (which flipped w_veto negative) evaluated on the held-out split.
+    "w_base": 0.7955,
+    # Elo-based strength: the only factor that carries clear predictive
+    # weight; fitted value is essentially the reasoned 0.8.
 
-    "w_form30": 0.7,
-    # Justification: last-30-day form is the largest-sample CURRENT signal,
-    # but it now enters only as the DEVIATION from the form gap the ratings
-    # already predict (counting strength once). Lowered from 1.2 because the
-    # old weight multiplied a raw form gap that largely duplicated the rating.
-    # Evidence that would fit it: regression of outcomes on the residual.
+    "w_form30": 0.1049,
+    # 30-day form residual (vs the rating-implied gap). Fitted far below the
+    # reasoned 0.7: series Elo already absorbs recent results, so form beyond
+    # it adds little (single-factor multiplier ~0.17 on both train and test).
 
-    "w_form5": 0.25,
-    # Justification: last-5 captures heaters and slumps, but 5 series is a
-    # tiny sample. Enters as deviation from the team's own 30-day form and is
-    # further shrunk by n=5 (see form_shrink_k).
+    "w_form5": 0.0436,
+    # Last-5 swing vs 30-day form: nearly switched off by the fit.
 
-    "w_h2h": 0.3,
-    # Justification: head-to-head is matchup-specific but built on tiny
-    # samples. Small relative to larger-sample current form (2026-10-06
-    # FURIA lesson: 9-3 historical H2H must not outrank 47%-vs-63% form).
+    "w_h2h": 0.177,
+    # Head-to-head residual vs strength: small positive weight; noisy
+    # (single-factor multiplier 0.6 on train, 3.0 on test, few meetings).
 
-    "w_veto": 0.75,
-    # Justification: a BO3 is won map-by-map, but the veto signal is already a
-    # series log-odds quantity (no 1/0.7 inflation any more) and is built from
-    # pool-RELATIVE map rates, so it carries only map-specific structure.
-    # Kept below 1.0 because ban/pick paths are uncertain.
+    "w_veto": 0.0,
+    # Simulated-veto series edge: OFF. Its best-fit multiplier on top of base
+    # strength was negative on both train and test, with plain map win rates
+    # (-1.07 / -0.98) and with Elo-residual map rates (-0.77 / -0.38). Until a
+    # map signal shows positive held-out value it does not move p_a. The veto
+    # simulation still runs and is still reported (veto_log, picks, decider);
+    # per-map probabilities are then equal and simply match p_a.
 
     # --- signal scaling and caps ---
     "signal_cap": 2.0,
@@ -196,18 +199,16 @@ CONFIG = {
     "band_z": 1.2816,
     # Band = sigmoid(logit(p) +- z * temperature * s); z=1.28 is a nominal 80%
     # band IF s were calibrated. It is NOT yet coverage-validated.
-    "rel_high_width_pp": 34.4,
-    "rel_med_width_pp": 37.5,
+    "rel_high_width_pp": 29.3,
+    "rel_med_width_pp": 33.6,
     # Reliability tier from the band WIDTH in probability points (interval_width_pp):
-    # HIGH if width <= 34.4, MEDIUM if <= 37.5, else LOW. FITTED on the TRAIN
-    # split only (2023-10-22 to 2025-10-08, n=917, temperature 0.909): the cuts
-    # are the 33rd/67th percentiles of width, giving train Brier 0.190 / 0.233 /
-    # 0.244 (n 315 / 301 / 301), monotone. Tiers were NOT based on logit_sd:
-    # on train, Brier FELL as logit_sd rose (quintiles 0.237 -> 0.199), because
-    # s grows with |delta| via the weight-cv term, and in every logit_sd bin the
-    # observed Brier matched the forecast's own expected Brier p(1-p). Caveat:
-    # prob-space width is largely a proxy for how close p is to 50%, so these
-    # tiers mostly say "how lopsided the read is", not "extra error beyond p".
+    # HIGH if width <= 29.3, MEDIUM if <= 33.6, else LOW. Cut-offs are the
+    # 33rd/67th percentiles of width on the TRAIN split (917 series, 2023-10-22
+    # to 2025-10-08) under the fitted weights. Brier by tier: train 0.196 /
+    # 0.232 / 0.229 (MEDIUM and LOW about level), held-out test 0.188 / 0.216 /
+    # 0.240. Width is largely a proxy for how close p is to 50%, so the tiers
+    # mostly say "how clear-cut the read is", not "extra error beyond p".
+    # Tiers were NOT based on logit_sd: on train, Brier FELL as logit_sd rose.
 
     # --- factor-split warning ---
     "split_min_conflict": 0.25,

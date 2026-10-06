@@ -513,7 +513,7 @@ function decode(c) {
   };
 }
 function matchupPred(e, a, b) {
-  if (e && e.status === "finished" && DATA.epairs[e.slug]) return decode(DATA.epairs[e.slug][`${a}|${b}`]);
+  if (e && DATA.epairs[e.slug] && DATA.epairs[e.slug][`${a}|${b}`]) return decode(DATA.epairs[e.slug][`${a}|${b}`]);
   return decode(DATA.pairs[`${a}|${b}`]);
 }
 

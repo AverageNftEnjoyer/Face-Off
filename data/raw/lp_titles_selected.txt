@@ -117,3 +117,23 @@ BLAST/Rivals/2025/Fall
 BLAST/Rivals/2025/Spring
 BLAST/Rivals/2026/Fall
 BLAST/Rivals/2026/Spring
+Intel Extreme Masters/2026/China
+Intel Extreme Masters/2027/Brazil
+Intel Extreme Masters/2027/Cologne
+Intel Extreme Masters/2027/Kraków
+Intel Extreme Masters/2027/United States
+BLAST/Open/2027/Fall
+BLAST/Open/2027/Spring
+BLAST/Open/2027/Summer
+BLAST/Bounty/2027/Summer
+BLAST/Bounty/2027/Winter
+PGL/2027/April
+PGL/2027/Bucharest
+PGL/2027/China
+PGL/2027/Cluj-Napoca
+PGL/2027/January
+PGL/2027/Lodz
+PGL/2027/October
+PGL/2027/September
+PGL/2027/Łódź
+StarLadder/StarSeries/2027/Fall

@@ -19,8 +19,15 @@ sys.path.insert(0, os.path.join(ROOT, "data"))
 import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
 
-YEARS = ("2026",)
 MAX_DAYS = 45          # longer "events" are season circuits, not tournaments
+AHEAD_DAYS = 120       # show next year's tournaments once they are this close
+
+
+def in_window(sd, today):
+    """This calendar year's tournaments, plus any starting within AHEAD_DAYS."""
+    from datetime import date, timedelta
+    t = date.fromisoformat(today)
+    return sd[:4] == today[:4] or (today <= sd <= (t + timedelta(days=AHEAD_DAYS)).isoformat())
 TZ_OFFSETS = {"CEST": "+02:00", "CET": "+01:00", "UTC": "+00:00", "EEST": "+03:00",
               "BST": "+01:00", "EDT": "-04:00", "EST": "-05:00", "CDT": "-05:00",
               "PDT": "-07:00", "BRT": "-03:00", "SGT": "+08:00", "CST": "+08:00",
@@ -55,7 +62,8 @@ def load_texts():
                                       encoding="utf-8") if l.strip()]
     texts = {}
     for b in batched(titles, 8):
-        texts.update({k: v for k, v in lpfetch.wikitext(b, offline=True).items() if v})
+        # strict=False: titles added by the daily refresh may not be fetched yet
+        texts.update({k: v for k, v in lpfetch.wikitext(b, offline=True, strict=False).items() if v})
     return titles, texts
 
 
@@ -205,6 +213,8 @@ def parse_participants(txt, alias):
             continue
         pos, nm = C.split_params(body)
         team = (pos[0] if pos else "").strip()
+        # entries use either the team page name or a short team code ("100t")
+        team = alias.get(team.lower(), team)
         # team entries carry a players= list (possibly still empty); player-type
         # opponents elsewhere on a page (awards, solo brackets) do not
         if (not team or "players" not in nm or team.lower() in ("tbd", "tba") or "{" in team
@@ -259,7 +269,7 @@ def discover(alias=None):
         ib = infobox(txt, "Infobox league")
         name = strip_markup(ib.get("name", "")) or t
         sd, ed = ib.get("sdate", "")[:10], ib.get("edate", "")[:10]
-        if not sd or not ed or (name, sd) in seen or sd[:4] not in YEARS:
+        if not sd or not ed or (name, sd) in seen or not in_window(sd, C.TODAY):
             continue
         try:
             from datetime import date

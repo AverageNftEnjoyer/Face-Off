@@ -78,7 +78,11 @@ class TestNoLeakage(unittest.TestCase):
         ms = [synth("2025-01-01", "Alpha", "Bravo", "Alpha"),
               synth("2025-03-01", "Alpha", "Bravo", "Bravo", i=1),
               synth("2025-03-15", "Alpha", "Bravo", "Alpha", i=2)]
-        r = bt.build_dataset(ms)[2]["input"]
+        saved, bt.MAP_RATES = bt.MAP_RATES, "raw"     # window check on plain win rates
+        try:
+            r = bt.build_dataset(ms)[2]["input"]
+        finally:
+            bt.MAP_RATES = saved
         # 30-day window only sees the 2025-03-01 series
         self.assertEqual(r["n30_a"], 1)
         self.assertEqual(r["form30_a"], 0.0)

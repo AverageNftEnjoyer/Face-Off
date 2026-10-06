@@ -22,7 +22,10 @@
   "pgl-major-singapore-2026": "data/raw/liquipedia_media/e82d6e38d644c3de.png",
   "starladder-starseries-fall-2026": "data/raw/liquipedia_media/ab59d01940e9026c.png",
   "thunderpick-world-championship-2026": "data/raw/liquipedia_media/80952d123b0b5b19.png",
-  "esports-world-cup-2026": "data/raw/liquipedia_media/c7cd916a23ad992f.png"
+  "esports-world-cup-2026": "data/raw/liquipedia_media/c7cd916a23ad992f.png",
+  "intel-extreme-masters-krak-w-2027": "data/raw/liquipedia_media/af9b934d835666bb.png",
+  "blast-bounty-winter-2027": "data/raw/liquipedia_media/659fed02909a9624.png",
+  "pgl-bucharest-2027": "data/raw/liquipedia_media/6826a73c0bf39458.png"
  },
  "teams": {
   "100 Thieves": {
@@ -2606,67 +2609,6 @@
    "icon_dark": "SemperFI Esports allmode.png",
    "logo_path": "data/raw/liquipedia_media/732e294c875770a7.png",
    "logo_dark_path": "data/raw/liquipedia_media/732e294c875770a7.png"
-  },
-  "Sharks Esports": {
-   "page": "Sharks Esports",
-   "logo": "DENDELE CS allmode.png",
-   "logo_dark": "DENDELE CS allmode.png",
-   "location": "Portugal",
-   "region": "South America",
-   "roster": [
-    {
-     "id": "gafolo",
-     "name": "Victor Andrade",
-     "flag": "br",
-     "igl": true,
-     "role": "",
-     "joined": "2023-01-16"
-    },
-    {
-     "id": "rdnzao",
-     "name": "Daniel Monteiro",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2023-01-16"
-    },
-    {
-     "id": "doc",
-     "name": "Danilo Moraes",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2023-06-30"
-    },
-    {
-     "id": "koala",
-     "name": "João Pedro",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2024-05-21"
-    },
-    {
-     "id": "maxxkor",
-     "name": "Máximo Cortina",
-     "flag": "ar",
-     "igl": false,
-     "role": "",
-     "joined": "2025-08-26"
-    },
-    {
-     "id": "coachi",
-     "name": "Hélder Sancho",
-     "flag": "pt",
-     "igl": false,
-     "role": "Coach",
-     "joined": "2017-07-17"
-    }
-   ],
-   "icon": "DENDELE CS allmode.png",
-   "icon_dark": "DENDELE CS allmode.png",
-   "logo_path": "data/raw/liquipedia_media/c995ae8e184646cc.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c995ae8e184646cc.png"
   },
   "ShindeN": {
    "page": "ShindeN",

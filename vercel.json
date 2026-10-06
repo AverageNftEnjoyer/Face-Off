@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'stdlib only, nothing to install'",
+  "buildCommand": "python3 viewer/build_viewer.py public/index.html",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "headers": [
+    { "source": "/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] }
+  ]
+}

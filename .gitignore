@@ -38,3 +38,6 @@ data/raw/valve/
 # rebuilt offline; uncomment if this repo is public and you'd rather not
 # republish them (python viewer/fetch_assets.py downloads them again).
 # data/raw/liquipedia_media/
+
+# --- site build output (Vercel builds it: see vercel.json) ---
+public/

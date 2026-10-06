@@ -27,7 +27,10 @@ sys.path.insert(0, HERE)
 import lpfetch  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
-TODAY = "2026-10-06"
+# Series dated after today are excluded; only decided series are parsed, so
+# today's finished matches count. Override
+# with FACEOFF_TODAY=YYYY-MM-DD to reproduce an earlier snapshot exactly.
+TODAY = os.environ.get("FACEOFF_TODAY") or datetime.utcnow().strftime("%Y-%m-%d")
 CS2_START = "2023-09-27"   # CS2 official release; earlier matches are CS:GO
 
 MAP_NORMALIZE = {"dust ii": "Dust2", "dust2": "Dust2", "de_dust2": "Dust2",
@@ -330,7 +333,7 @@ def main():
         if a == b or is_showmatch(a) or is_showmatch(b):
             continue
         key = (m["date"], tuple(sorted([a, b])), m["hltv"] or "")
-        if m["date"] < CS2_START or m["date"] >= TODAY:
+        if m["date"] < CS2_START or m["date"] > TODAY:   # only decided series reach here, so today's finished matches are kept
             continue
         rec = {"date": m["date"], "event": m["event"], "team_a": a, "team_b": b,
                "winner": a if m["winner"] == 1 else b, "best_of": m["best_of"],

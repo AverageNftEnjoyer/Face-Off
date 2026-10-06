@@ -89,8 +89,10 @@ class Timeline:
         return self.h
 
 
-def predict(h, a, b, day):
-    inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat()})
+def predict(h, a, b, day, title=None):
+    """Engine call with point-in-time features; `title` (the tournament page)
+    lets the feature builder attach stand-in / missing-IGL flags."""
+    inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
     return compact(pr.predict_match(inp))
 
 
@@ -175,7 +177,7 @@ def main(out_path):
         for m in e["matches"]:
             if m["t1"] in teams and m["t2"] in teams and m["day"]:
                 d = min(date.fromisoformat(m["day"]), as_of)
-                jobs[d].append(("match", m))
+                jobs[d].append(("match", (m, e["title"])))
         if e["status"] == "finished":
             jobs[date.fromisoformat(e["start"])].append(("event", e))
     epairs = {}
@@ -184,12 +186,20 @@ def main(out_path):
         h = tl.at(d)
         for kind, obj in jobs[d]:
             if kind == "match":
-                obj["pred"] = predict(h, obj["t1"], obj["t2"], d)
+                m, title = obj
+                m["pred"] = predict(h, m["t1"], m["t2"], d, title)
             else:
                 ps = [t for t in obj["participants"] if t in teams]
-                epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d) for a in ps for b in ps if a != b}
+                epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d, obj["title"]) for a in ps for b in ps if a != b}
     h_today = tl.at(as_of)
     pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in names for b in names if a != b}
+    # live and upcoming tournaments get their own matchup grid too, so that
+    # announced stand-ins for that tournament are applied
+    for e in events:
+        if e["status"] != "finished":
+            ps = [t for t in e["participants"] if t in teams]
+            epairs[e["slug"]] = {f"{a}|{b}": predict(h_today, a, b, as_of, e["title"])
+                                 for a in ps for b in ps if a != b}
 
     h2h = defaultdict(list)
     for m in reversed(all_matches):
@@ -244,6 +254,7 @@ def main(out_path):
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     img = json.dumps(images, separators=(",", ":")).replace("</", "<\\/")
     html = tpl.replace("/*__DATA__*/null", blob).replace("/*__IMAGES__*/null", img)
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     n_m = sum(len(e["matches"]) for e in events)

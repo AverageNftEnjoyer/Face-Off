@@ -67,6 +67,13 @@ VOL_DEFAULT = 0.3
 POOL_WINDOW_DAYS = 60
 POOL_MIN_PLAYS = 3
 POOL_SIZE = 7
+# Map inputs to the engine. "residual": per-map results relative to what Elo
+# expected in those maps (0.5 + mean(won - expected)), so a team's strength is
+# not counted again through its map rates and one strong map does not make
+# every other map look weak after the engine's pool-relative step. "raw":
+# plain 90-day win rates (the original behaviour; the veto factor was
+# anti-predictive with these, see fit_weights.py).
+MAP_RATES = "residual"
 EPS = 1e-12
 
 
@@ -236,6 +243,21 @@ def roster_flags(team, title):
     return {}
 
 
+def map_prob_from_series(p, best_of=3):
+    """Per-map win probability q implied by a series win probability p,
+    assuming independent maps: BO1 q = p; BO3 p = q^2 (3 - 2q); BO5 p =
+    q^3 (10 - 15q + 6q^2). Solved by bisection."""
+    p = min(1 - 1e-9, max(1e-9, p))
+    if best_of == 1:
+        return p
+    f = (lambda q: q * q * (3 - 2 * q)) if best_of != 5 else (lambda q: q ** 3 * (10 - 15 * q + 6 * q * q))
+    lo, hi = 0.0, 1.0
+    for _ in range(50):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if f(mid) < p else (lo, mid)
+    return (lo + hi) / 2
+
+
 def elo_expected(ea, eb):
     return 1.0 / (1.0 + 10 ** (-(ea - eb) / 400.0))
 
@@ -285,7 +307,9 @@ class History:
         for t, o, won, exp, oe in ((a, b, a_won, exp_a, eb), (b, a, not a_won, 1 - exp_a, ea)):
             self.games[t].append({"date": dt, "opp": o, "won": won, "exp": exp,
                                   "opp_elo": oe,
-                                  "maps": [(x["map"], x["winner"] == t) for x in m.get("maps", [])]})
+                                  "maps": [(x["map"], x["winner"] == t,
+                                            map_prob_from_series(exp, m.get("best_of", 3)))
+                                           for x in m.get("maps", [])]})
         self.elo[a], self.elo[b] = elo_update(ea, eb, a_won, m.get("best_of", 3))
         for x in m.get("maps", []):
             self.map_dates[x["map"]].append(dt)
@@ -314,13 +338,17 @@ class History:
         last5 = g[-5:]
         if last5:
             out["form5"] = sum(r["won"] for r in last5) / len(last5)
-        maps = defaultdict(lambda: [0, 0])
+        maps = defaultdict(lambda: [0, 0, 0.0])
         for r in g:
             if dt - timedelta(days=90) <= r["date"] < dt:
-                for mp, won in r["maps"]:
+                for mp, won, q in r["maps"]:
                     maps[mp][0] += won
                     maps[mp][1] += 1
-        out["maps"] = {mp: [round(w / n, 4), n] for mp, (w, n) in sorted(maps.items())}
+                    maps[mp][2] += won - q
+        out["maps_raw"] = {mp: [round(w / n, 4), n] for mp, (w, n, _) in sorted(maps.items())}
+        out["maps_resid"] = {mp: [round(min(1.0, max(0.0, 0.5 + e / n)), 4), n]
+                             for mp, (_, n, e) in sorted(maps.items())}
+        out["maps"] = out["maps_resid"] if MAP_RATES == "residual" else out["maps_raw"]
         lastv = g[-VOL_WINDOW:]
         if len(lastv) >= 3:
             dev = abs(sum(r["won"] for r in lastv) - sum(r["exp"] for r in lastv)) / len(lastv)

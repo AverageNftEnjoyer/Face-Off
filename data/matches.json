@@ -43121,5 +43121,135 @@
    }
   ],
   "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398739)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "9z Team",
+  "team_b": "BetBoom Team",
+  "winner": "9z Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "9z Team"
+   },
+   {
+    "map": "Mirage",
+    "winner": "9z Team"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398744)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "FURIA",
+  "team_b": "Aurora Gaming",
+  "winner": "Aurora Gaming",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "FURIA"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Aurora Gaming"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Aurora Gaming"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398743)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "G2 Esports",
+  "team_b": "PARIVISION",
+  "winner": "PARIVISION",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "PARIVISION"
+   },
+   {
+    "map": "Anubis",
+    "winner": "G2 Esports"
+   },
+   {
+    "map": "Inferno",
+    "winner": "PARIVISION"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398741)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Legacy",
+  "team_b": "M80",
+  "winner": "M80",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "M80"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Legacy"
+   },
+   {
+    "map": "Dust2",
+    "winner": "M80"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398746)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Falcons",
+  "team_b": "Natus Vincere",
+  "winner": "Team Falcons",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Team Falcons"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Natus Vincere"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Team Falcons"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398745)"
+ },
+ {
+  "date": "2026-10-06",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Spirit",
+  "team_b": "1w Team",
+  "winner": "1w Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "1w Team"
+   },
+   {
+    "map": "Anubis",
+    "winner": "1w Team"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398742)"
  }
 ]
