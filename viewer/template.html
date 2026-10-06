@@ -1,0 +1,1124 @@
+<title>Faceoff CS2 Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@50..125,300..900&display=swap">
+<style>
+/* Layout: a CS2-HUD style event hub. Dark slate panels like the in-game menus;
+   the two sides of every matchup are coloured by CS2's own factions
+   (first team = Counter-Terrorist blue, second team = Terrorist gold).
+   One typeface (Saira) in two widths: condensed + heavy for team names, scores
+   and map names; normal width for everything you read. Single dark theme by
+   design, because the subject's own UI is dark. */
+:root {
+  color-scheme: dark;
+  --bg: #171D25;         /* page: CS2 menu slate */
+  --panel: #1F2630;      /* cards, rows */
+  --raise: #28313D;      /* hover / selected */
+  --line: #36414F;       /* hairlines */
+  --text: #E8ECF1;
+  --dim: #95A1B0;
+  --ct: #6E9DE2;         /* first team: Counter-Terrorist blue */
+  --t: #E7AB3F;          /* second team: Terrorist gold */
+  --ct-deep: #2B4468;
+  --t-deep: #5A4219;
+  --win: #5BC48B;
+  --loss: #E4684F;
+  --scrim: rgba(18, 23, 30, .82);
+  --hatch: rgba(232, 236, 241, .45);
+  --face: "Saira", "Bahnschrift", "Arial Narrow", system-ui, sans-serif;
+  --s-1: .8125rem;
+  --s0: 1rem;
+  --s1: 1.25rem;
+  --s2: 1.75rem;
+  --s3: 2.5rem;
+  --s4: clamp(2.75rem, 8vw, 4.5rem);
+  --r: 6px;
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--text); }
+body {
+  font-family: var(--face);
+  font-size: var(--s0);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  font-stretch: 100%;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--text); }
+p { margin: 0; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--t); outline-offset: 2px; }
+.cond { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: .95; }
+.dim { color: var(--dim); }
+.small { font-size: var(--s-1); }
+.win { color: var(--win); }
+.loss { color: var(--loss); }
+.ct { color: var(--ct); }
+.t { color: var(--t); }
+
+/* ---------- top bar ---------- */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.top-in {
+  max-width: 76rem; margin: 0 auto;
+  padding-inline: max(16px, 2.5vw);
+  display: flex; align-items: center; gap: .5rem 1.5rem; flex-wrap: wrap;
+  min-height: 3.5rem;
+}
+.brand { display: flex; align-items: center; gap: .55rem; font-stretch: 75%; font-weight: 800; font-size: var(--s1); letter-spacing: .04em; }
+.brand svg { width: 1.6rem; height: 1.6rem; }
+.tabs { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
+.tabs a {
+  padding: .45rem .8rem; border-radius: var(--r);
+  color: var(--dim); font-weight: 600; white-space: nowrap;
+}
+.tabs a:hover { background: var(--panel); color: var(--text); }
+.tabs a[aria-current="page"] { background: var(--raise); color: var(--text); box-shadow: inset 0 -2px 0 var(--t); }
+.snap { margin-left: auto; font-size: var(--s-1); color: var(--dim); }
+
+.page { max-width: 76rem; margin: 0 auto; padding-inline: max(16px, 2.5vw); padding-block: 1.5rem 4rem; display: grid; gap: 1.5rem; }
+
+/* ---------- generic panels ---------- */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 1rem; display: grid; gap: .85rem; align-content: start; min-width: 0; }
+.panel > h2, .sec-h { font-stretch: 75%; font-weight: 800; font-size: var(--s1); letter-spacing: .02em; display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+.panel > h2 .dim, .sec-h .dim { font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+
+/* ---------- logos, flags ---------- */
+.logo { width: 2rem; height: 2rem; object-fit: contain; flex: none; }
+.logo.lg { width: 4.5rem; height: 4.5rem; }
+.logo.xl { width: clamp(4.5rem, 12vw, 7.5rem); height: clamp(4.5rem, 12vw, 7.5rem); }
+.logo.sm { width: 1.35rem; height: 1.35rem; }
+.logo-ph { display: grid; place-items: center; border-radius: 50%; background: var(--raise); color: var(--dim); font-weight: 800; font-size: .7rem; }
+.flag { width: 1.15rem; height: auto; border-radius: 2px; vertical-align: -.1em; flex: none; }
+
+/* ---------- event hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--panel);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.25rem 1.75rem; align-items: center;
+  padding: 1.25rem;
+}
+.hero .evlogo { width: clamp(5rem, 14vw, 8.5rem); height: auto; }
+.hero h1 { font-size: var(--s3); }
+.facts { display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin-top: .6rem; }
+.facts div { display: grid; }
+.facts dt { font-size: var(--s-1); color: var(--dim); }
+.facts dd { margin: 0; font-weight: 700; }
+.facts dl { margin: 0; display: contents; }
+
+.pool { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .5rem; }
+.maptile {
+  position: relative; aspect-ratio: 16 / 10; max-width: 100%;
+  border-radius: var(--r); overflow: hidden; background: var(--raise) center / cover no-repeat;
+  display: flex; align-items: flex-end; padding: .5rem .6rem;
+  border: 1px solid var(--line);
+  transition: transform .15s ease;
+}
+.maptile::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, var(--scrim)); }
+.maptile:hover { transform: translateY(-2px); }
+.maptile span { position: relative; font-size: var(--s1); }
+.maptile small { position: relative; display: block; font-size: .7rem; color: var(--dim); font-stretch: 100%; text-transform: none; font-weight: 400; }
+
+/* ---------- schedule ---------- */
+.days { display: flex; gap: .35rem; overflow-x: auto; padding-bottom: .2rem; }
+.days button {
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
+  padding: .35rem .7rem; cursor: pointer; display: grid; text-align: left; min-width: 4.6rem;
+}
+.days button b { font-weight: 700; }
+.days button span { font-size: .72rem; color: var(--dim); }
+.days button[aria-pressed="true"] { background: var(--raise); border-color: var(--t); }
+.days button:hover { border-color: var(--dim); }
+
+.mrow {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1fr) 5.2rem minmax(0, 1fr) auto;
+  align-items: center; gap: .75rem;
+  padding: .65rem .75rem;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
+}
+.mrow:hover { background: var(--raise); }
+.mrow .time { font-size: var(--s-1); color: var(--dim); display: grid; }
+.mrow .tm { display: flex; align-items: center; gap: .5rem; min-width: 0; font-weight: 600; }
+.mrow .tm.r { flex-direction: row-reverse; text-align: right; }
+.mrow .tm span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mrow .tm.lost span { color: var(--dim); font-weight: 400; }
+.mrow .mid { text-align: center; font-size: var(--s2); }
+.mrow .mid.pct { font-size: var(--s-1); font-stretch: 100%; font-weight: 600; text-transform: none; color: var(--dim); }
+.mrow .tag { display: grid; justify-items: end; gap: .15rem; font-size: .72rem; color: var(--dim); white-space: nowrap; }
+.mlist { display: grid; gap: .45rem; }
+
+.chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .05rem .5rem; font-size: .72rem; font-weight: 700; border: 1px solid currentColor; white-space: nowrap; }
+.chip.live { color: var(--loss); }
+.chip.live::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.chip.hit { color: var(--win); }
+.chip.miss { color: var(--loss); }
+.chip.plain { color: var(--dim); }
+
+/* standings */
+table { border-collapse: collapse; width: 100%; font-size: var(--s-1); }
+th { text-align: left; color: var(--dim); font-weight: 600; padding: .35rem .4rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: .35rem .4rem; border-bottom: 1px solid var(--line); }
+td.n, th.n { text-align: right; }
+.tlink { display: flex; align-items: center; gap: .5rem; font-weight: 600; min-width: 0; }
+.tlink:hover span { text-decoration: underline; }
+tr.up td:first-child { box-shadow: inset 3px 0 0 var(--win); }
+tr.out td:first-child { box-shadow: inset 3px 0 0 var(--loss); }
+tr.out .tlink { color: var(--dim); }
+.tablewrap { overflow-x: auto; }
+
+/* bracket */
+.bracket { display: grid; grid-template-columns: repeat(3, minmax(9rem, 1fr)); gap: .75rem; overflow-x: auto; }
+.bcol { display: grid; gap: .5rem; align-content: space-around; }
+.bcol h3 { font-size: var(--s-1); color: var(--dim); font-weight: 600; }
+.bm { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); font-size: var(--s-1); }
+.bm div { display: flex; align-items: center; gap: .4rem; padding: .3rem .5rem; color: var(--dim); }
+.bm div + div { border-top: 1px solid var(--line); }
+.bm .when { font-size: .7rem; color: var(--dim); padding: .25rem .5rem; border-top: 1px solid var(--line); }
+
+.prizes { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .25rem 1rem; font-size: var(--s-1); }
+.prizes b { font-weight: 700; text-align: right; }
+.fmt { margin: 0; padding-left: 1rem; font-size: var(--s-1); display: grid; gap: .15rem; }
+.fmt li.d1 { list-style: none; margin-left: -1rem; font-weight: 700; color: var(--text); margin-top: .35rem; }
+.fmt li { color: var(--dim); }
+
+/* ---------- match page ---------- */
+.crumb { font-size: var(--s-1); color: var(--dim); display: flex; gap: .5rem; flex-wrap: wrap; }
+.crumb a { text-decoration: underline; text-underline-offset: 3px; }
+.vs {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 1rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: clamp(1rem, 3vw, 1.75rem);
+  position: relative; overflow: hidden;
+}
+.vs::before, .vs::after { content: ""; position: absolute; top: 0; bottom: 0; width: 35%; pointer-events: none; }
+.vs::before { left: 0; background: linear-gradient(90deg, var(--ct-deep), transparent); opacity: .55; }
+.vs::after { right: 0; background: linear-gradient(270deg, var(--t-deep), transparent); opacity: .55; }
+.vs .side { display: grid; justify-items: center; gap: .4rem; text-align: center; position: relative; z-index: 1; min-width: 0; }
+.vs .side .cond { font-size: clamp(1.5rem, 4.5vw, 2.6rem); overflow-wrap: anywhere; }
+.vs .side.a .cond { color: var(--ct); }
+.vs .side.b .cond { color: var(--t); }
+.vs .side .meta { font-size: var(--s-1); color: var(--dim); }
+.vs .centre { display: grid; justify-items: center; gap: .3rem; position: relative; z-index: 1; text-align: center; }
+.vs .score { font-size: var(--s4); display: flex; gap: .6rem; align-items: baseline; }
+.vs .score .lost { color: var(--dim); }
+.vs .when { font-size: var(--s1); font-weight: 700; }
+
+.tug { display: grid; gap: .6rem; }
+.tug .ends { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.tug .ends .cond { font-size: var(--s3); }
+.bar { position: relative; height: 2.6rem; border-radius: var(--r); overflow: hidden; background: var(--t); }
+.bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--ct); width: 50%; transition: width .9s cubic-bezier(.2, .8, .2, 1); }
+.bar .band { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 7px); border-inline: 2px solid var(--bg); transition: left .9s cubic-bezier(.2, .8, .2, 1), width .9s cubic-bezier(.2, .8, .2, 1); }
+.bar .mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--bg); transform: translateX(-1px); }
+.tug .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; font-size: var(--s-1); color: var(--dim); align-items: center; }
+
+/* map cards */
+.maps { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .75rem; }
+.mapcard {
+  position: relative; border-radius: var(--r); overflow: hidden; min-height: 9.5rem;
+  background: var(--raise) center / cover no-repeat; border: 1px solid var(--line);
+  display: grid; align-content: end; gap: .35rem; padding: .75rem;
+  cursor: pointer; text-align: left; width: 100%;
+}
+.mapcard::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18, 23, 30, .25), var(--scrim) 65%); transition: background .2s; }
+.mapcard > * { position: relative; }
+.mapcard .role { font-size: .72rem; color: var(--dim); display: flex; gap: .4rem; align-items: center; }
+.mapcard .nm { font-size: var(--s2); }
+.mapcard .sc { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--s2); }
+.mapcard .sc .x { font-size: var(--s-1); color: var(--dim); font-stretch: 100%; font-weight: 400; text-transform: none; }
+.mapcard.wa { box-shadow: inset 0 -3px 0 var(--ct); }
+.mapcard.wb { box-shadow: inset 0 -3px 0 var(--t); }
+.mapcard .halves { display: none; font-size: var(--s-1); gap: .15rem; }
+.mapcard[aria-expanded="true"] .halves { display: grid; }
+.mapcard[aria-expanded="true"]::before { background: var(--scrim); }
+.halves .hr { display: grid; grid-template-columns: minmax(0, 1fr) 3rem 3rem 3rem; gap: .25rem; }
+.halves .hr span:not(:first-child) { text-align: right; }
+.halves .hd { color: var(--dim); font-size: .7rem; }
+.mapcard .odds { height: .45rem; border-radius: 3px; overflow: hidden; background: var(--t); position: relative; }
+.mapcard .odds b { position: absolute; inset: 0 auto 0 0; background: var(--ct); }
+.mapcard.ban { min-height: 5.5rem; cursor: default; filter: grayscale(1); opacity: .55; }
+.mapcard.ban .nm { text-decoration: line-through; text-decoration-thickness: 2px; font-size: var(--s1); }
+.reveal { animation: rise .45s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes rise { from { transform: translateY(8px); opacity: .001; } }
+
+/* series scores */
+.srow { display: grid; grid-template-columns: 8rem minmax(0, 1fr) 3rem; gap: .6rem; align-items: center; font-size: var(--s-1); }
+.srow .trk { height: 1rem; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.srow .trk b { display: block; height: 100%; }
+.srow.a .trk b { background: var(--ct); }
+.srow.b .trk b { background: var(--t); }
+.srow.top { font-weight: 700; }
+.srow .v { text-align: right; }
+
+/* lineups */
+.lineup { display: grid; gap: .4rem; }
+.player {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .6rem; align-items: center;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: .5rem .65rem;
+}
+.player .nick { font-size: var(--s1); }
+.player .real { font-size: .75rem; color: var(--dim); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player .badges { display: flex; gap: .3rem; }
+.lineup.a .nick { color: var(--ct); }
+.lineup.b .nick { color: var(--t); }
+.coach { font-size: var(--s-1); color: var(--dim); display: flex; gap: .4rem; align-items: center; padding-left: .2rem; }
+
+/* factors */
+.frow { display: grid; grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr) 3.5rem; gap: .75rem; align-items: center; padding: .4rem 0; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
+.frow b { display: block; font-size: var(--s0); }
+.frow .sub { color: var(--dim); }
+.dv { position: relative; height: .9rem; }
+.dv::before { content: ""; position: absolute; left: 50%; top: -.3rem; bottom: -.3rem; width: 1px; background: var(--dim); }
+.dv b { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+.dv b.pos { left: 50%; background: var(--ct); }
+.dv b.neg { right: 50%; background: var(--t); }
+.frow .v { text-align: right; font-weight: 700; }
+.frow.off { color: var(--dim); }
+.frow.off b { font-weight: 400; }
+details summary { cursor: pointer; color: var(--dim); font-size: var(--s-1); width: fit-content; }
+details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); color: var(--dim); display: grid; gap: .3rem; }
+
+/* map pool butterfly */
+.fly { display: grid; gap: .35rem; }
+.fly .fr { display: grid; grid-template-columns: minmax(0, 1fr) 5.5rem minmax(0, 1fr); gap: .5rem; align-items: center; font-size: var(--s-1); }
+.fly .half { display: flex; align-items: center; gap: .4rem; }
+.fly .half.l { flex-direction: row-reverse; }
+.fly .trk { flex: 1; height: .8rem; background: var(--bg); border-radius: 3px; overflow: hidden; display: flex; }
+.fly .half.l .trk { justify-content: flex-end; }
+.fly .trk b { display: block; height: 100%; }
+.fly .half.l b { background: var(--ct); }
+.fly .half.r b { background: var(--t); }
+.fly .half span { min-width: 4.4rem; color: var(--dim); }
+.fly .half.l span { text-align: right; }
+.fly .mn { text-align: center; font-size: var(--s0); }
+
+/* form + h2h */
+.res { display: grid; gap: .3rem; }
+.res a, .res div.r {
+  display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) auto; gap: .5rem; align-items: center;
+  font-size: var(--s-1); padding: .3rem .4rem; border-radius: var(--r);
+}
+.res a:hover { background: var(--raise); }
+.wl { width: 1.4rem; height: 1.4rem; border-radius: 3px; display: grid; place-items: center; font-weight: 800; font-size: .7rem; color: var(--bg); }
+.wl.W { background: var(--win); }
+.wl.L { background: var(--loss); }
+.res .ev { color: var(--dim); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.res .opp { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+
+.warn { border-left: 3px solid var(--loss); padding: .15rem 0 .15rem .7rem; font-size: var(--s-1); color: var(--dim); }
+.links { display: flex; flex-wrap: wrap; gap: .5rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .45rem .8rem; border-radius: var(--r);
+  background: var(--raise); border: 1px solid var(--line); font-weight: 600; font-size: var(--s-1); cursor: pointer;
+}
+.btn:hover { border-color: var(--dim); }
+
+/* compare picker */
+.picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: .4rem; }
+.pick {
+  display: grid; justify-items: center; gap: .3rem; padding: .6rem .3rem;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); cursor: pointer;
+  font-size: .72rem; text-align: center;
+}
+.pick:hover { background: var(--raise); }
+.pick[data-slot="a"] { border-color: var(--ct); box-shadow: inset 0 -3px 0 var(--ct); background: var(--raise); }
+.pick[data-slot="b"] { border-color: var(--t); box-shadow: inset 0 -3px 0 var(--t); background: var(--raise); }
+.slots { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; font-size: var(--s-1); color: var(--dim); }
+
+/* teams */
+.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: .6rem; }
+.tcard { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .3rem .7rem; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: .75rem; }
+.tcard:hover { background: var(--raise); }
+.tcard .cond { font-size: var(--s1); overflow-wrap: anywhere; }
+.tcard .small { grid-column: 2; }
+.thead { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.25rem; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 1.25rem; }
+.thead h1 { font-size: var(--s3); }
+.thead .big { text-align: right; display: grid; }
+.thead .big b { font-size: var(--s3); }
+.spark { width: 100%; height: auto; display: block; }
+.poolbars { display: grid; gap: .4rem; }
+.pb { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 6rem; gap: .6rem; align-items: center; font-size: var(--s-1); }
+.pb .thumb { height: 2.2rem; border-radius: 4px; background: var(--raise) center / cover; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: .15rem .3rem; }
+.pb .thumb::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent, var(--scrim)); }
+.pb .thumb span { position: relative; font-size: .78rem; }
+.pb .trk { height: .9rem; background: var(--bg); border-radius: 3px; overflow: hidden; position: relative; }
+.pb .trk b { display: block; height: 100%; background: var(--ct); }
+.pb .trk i { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--dim); }
+
+/* record */
+.figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.figs div { display: grid; }
+.figs b { font-size: var(--s3); }
+.calib svg { width: 100%; max-width: 28rem; height: auto; display: block; }
+
+footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35rem; max-width: 80ch; }
+
+@media (max-width: 960px) {
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .pool { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .pool { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mrow { grid-template-columns: 3.4rem minmax(0, 1fr) 3.6rem minmax(0, 1fr); }
+  .mrow .tag { grid-column: 1 / -1; justify-items: start; grid-auto-flow: column; justify-content: start; gap: .5rem; }
+  .vs { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .5rem; }
+  .frow { grid-template-columns: minmax(0, 1fr) 3.5rem; }
+  .frow .dv { grid-column: 1 / -1; grid-row: 2; }
+  .thead { grid-template-columns: auto minmax(0, 1fr); }
+  .thead .big { grid-column: 1 / -1; text-align: left; }
+  .fly .half span { min-width: 3.2rem; }
+  .srow { grid-template-columns: 6.5rem minmax(0, 1fr) 2.75rem; }
+  .snap { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar .fill, .bar .band, .maptile { transition: none; }
+  .reveal { animation: none; }
+  .chip.live::before { animation: none; }
+}
+
+/* ---------- v3: tournaments ---------- */
+.evgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .75rem; }
+.evcard {
+  display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: .35rem .9rem; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: .9rem;
+}
+.evcard:hover { background: var(--raise); border-color: var(--dim); }
+.evcard img.evl { width: 4rem; height: 4rem; object-fit: contain; grid-row: span 2; }
+.evcard .ename { font-stretch: 75%; font-weight: 800; font-size: var(--s1); line-height: 1.1; }
+.evcard .emeta { font-size: var(--s-1); color: var(--dim); display: flex; flex-wrap: wrap; gap: .1rem .9rem; }
+.evcard .efoot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding-top: .5rem; border-top: 1px solid var(--line); font-size: var(--s-1); }
+.evcard .champ { display: flex; align-items: center; gap: .4rem; font-weight: 700; }
+.chip.up { color: var(--ct); }
+.chip.done { color: var(--dim); }
+.subtabs { display: flex; gap: .35rem; flex-wrap: wrap; }
+.subtabs a { padding: .5rem .9rem; border-radius: var(--r); border: 1px solid var(--line); background: var(--panel); font-weight: 700; color: var(--dim); }
+.subtabs a:hover { color: var(--text); border-color: var(--dim); }
+.subtabs a[aria-current="page"] { color: var(--text); background: var(--raise); border-color: var(--t); }
+.hero .champline { display: flex; align-items: center; gap: .6rem; margin-top: .75rem; font-weight: 700; }
+
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: .75rem; }
+.pcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: .85rem; display: grid; gap: .6rem; align-content: start; }
+.pcard.sel-a { border-color: var(--ct); box-shadow: inset 0 3px 0 var(--ct); }
+.pcard.sel-b { border-color: var(--t); box-shadow: inset 0 3px 0 var(--t); }
+.pcard .ph { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .1rem .7rem; align-items: center; }
+.pcard .ph .cond { font-size: var(--s1); overflow-wrap: anywhere; }
+.pcard .ph .small { grid-column: 2; }
+.pcard ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .2rem; font-size: var(--s-1); }
+.pcard li { display: flex; align-items: center; gap: .45rem; min-width: 0; }
+.pcard li b { font-weight: 700; }
+.pcard li .rn { color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcard .btn[aria-pressed="true"] { border-color: var(--t); }
+.tray {
+  position: sticky; bottom: env(safe-area-inset-bottom, 0px); z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem;
+  background: var(--raise); border: 1px solid var(--line); border-radius: var(--r); padding: .65rem .9rem;
+}
+.tray .slot { display: flex; align-items: center; gap: .45rem; font-weight: 700; }
+.search { width: 100%; max-width: 22rem; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .5rem .7rem; font: inherit; }
+.empty { color: var(--dim); font-size: var(--s-1); padding: .5rem 0; }
+.grouptbl + .grouptbl { margin-top: .75rem; }
+.grouptbl h3 { font-size: var(--s-1); color: var(--dim); font-weight: 600; margin-bottom: .2rem; }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#events" aria-label="Faceoff home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 6h9l-6 10 6 10H3l6-10z" fill="var(--ct)"/><path d="M29 6h-9l6 10-6 10h9l-6-10z" fill="var(--t)"/></svg>
+      <span>FACEOFF</span>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#events" data-tab="events">Tournaments</a>
+      <a href="#compare" data-tab="compare">Head to head</a>
+      <a href="#teams" data-tab="teams">Teams</a>
+      <a href="#record" data-tab="record">Track record</a>
+    </nav>
+    <span class="snap" id="snap"></span>
+  </div>
+</header>
+
+<main class="page" id="view" tabindex="-1"></main>
+
+<script>
+const DATA = /*__DATA__*/null;
+const IMG = /*__IMAGES__*/null;
+
+/* ---------------- basics ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const T = DATA.teams;
+const NAMES = Object.keys(T).sort((a, b) => T[b].elo - T[a].elo);
+const BY_SLUG = Object.fromEntries(NAMES.map(n => [T[n].slug, n]));
+const EV = DATA.events;
+const EV_BY = Object.fromEntries(EV.map(e => [e.slug, e]));
+const MATCH = {};
+for (const e of EV) for (const m of e.matches) MATCH[m.id] = { ...m, ev: e.slug };
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const dObj = s => new Date(s + "T12:00:00Z");
+const fmtDay = s => { const d = dObj(s); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`; };
+const fmtDate = s => { const d = dObj(s); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const span = (a, b) => a === b ? fmtDate(a) : `${fmtDay(a)} to ${fmtDate(b)}`;
+const wday = s => WD[dObj(s).getUTCDay()];
+const clock = w => w ? w.slice(11, 16) : null;
+const TZN = { "+02:00": "CEST", "+01:00": "CET", "+00:00": "UTC", "+03:00": "MSK", "-04:00": "EDT", "-05:00": "CDT", "-07:00": "PDT", "-03:00": "BRT", "+08:00": "SGT", "+05:00": "ALMT", "+10:00": "AEST", "+04:00": "GST", "+09:00": "KST" };
+const tz = w => !w ? "" : (TZN[w.slice(19)] || w.slice(19));
+const ordinal = n => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || "th");
+
+const LABELS = {
+  base_strength: ["Team strength", "Elo rating gap"],
+  form_30d: ["Last 30 days", "Results vs what the rating expects"],
+  form_last5: ["Last 5 series", "Recent swing vs 30-day form"],
+  head_to_head: ["Head-to-head", "Meetings in the past year"],
+  map_veto: ["Map pool", "Edge on the simulated veto maps"],
+  roster: ["Roster", "Stand-ins and missing IGL"],
+  stakes: ["Stakes", "Elimination or qualification"],
+};
+const REL = { H: "Clear read", M: "Fairly clear read", L: "Close or uncertain read" };
+
+function logo(team, cls = "") {
+  const src = IMG.logos[team];
+  if (src) return `<img class="logo ${cls}" src="${src}" alt="" loading="lazy">`;
+  const ini = String(team || "?").replace(/^Team\s+/, "").split(/\s+/).map(w => w[0]).join("").slice(0, 3);
+  return `<span class="logo logo-ph ${cls}" aria-hidden="true">${esc(team ? ini : "?")}</span>`;
+}
+const flag = cc => cc && IMG.flags[cc] ? `<img class="flag" src="${IMG.flags[cc]}" alt="${esc(cc.toUpperCase())}" title="${esc(cc.toUpperCase())}">` : `<span class="flag" aria-hidden="true"></span>`;
+const mapBg = m => IMG.maps[m] ? `background-image:url('${IMG.maps[m]}')` : "";
+const tlink = (team, cls = "") => T[team]
+  ? `<a class="tlink ${cls}" href="#t-${T[team].slug}">${logo(team, "sm")}<span>${esc(team)}</span></a>`
+  : `<span class="tlink ${cls}">${logo(team, "sm")}<span>${esc(team || "To be decided")}</span></span>`;
+const statusChip = e => e.status === "live" ? `<span class="chip live">Live</span>` : e.status === "upcoming" ? `<span class="chip up">Upcoming</span>` : `<span class="chip done">Finished</span>`;
+
+/* ---------------- predictions (compact form from the build) ---------------- */
+function decode(c) {
+  if (!c) return null;
+  return {
+    p: c.p, band: c.b, rel: c.r, score: { p_2_0: c.s[0], p_2_1: c.s[1], p_1_2: c.s[2], p_0_2: c.s[3] },
+    maps: c.vm, map_p: c.vp, warn: c.w,
+    veto: c.v.map(x => x[0] === "D" ? { verb: "decider", map: x.slice(1) } : { side: x[0], verb: x[1] === "-" ? "bans" : "picks", map: x.slice(2) }),
+    factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })),
+  };
+}
+function matchupPred(e, a, b) {
+  if (e && e.status === "finished" && DATA.epairs[e.slug]) return decode(DATA.epairs[e.slug][`${a}|${b}`]);
+  return decode(DATA.pairs[`${a}|${b}`]);
+}
+
+/* ---------------- event helpers ---------------- */
+const isLive = m => !m.finished && m.maps.length > 0;
+const winnerOf = m => m.finished ? (m.w1 > m.w2 ? m.t1 : m.t2) : null;
+const groupKey = st => st.replace(/,?\s*round \d+$/i, "").replace(/\s*Round \d+.*$/, "").trim() || "Group stage";
+
+function groupTables(e) {
+  const groups = {};
+  for (const m of e.matches) {
+    if (m.kind !== "groups" || !m.t1 || !m.t2) continue;
+    const g = groups[groupKey(m.stage)] = groups[groupKey(m.stage)] || {};
+    for (const t of [m.t1, m.t2]) g[t] = g[t] || { team: t, w: 0, l: 0, mw: 0, ml: 0 };
+    if (!m.finished) continue;
+    const w = winnerOf(m), l = w === m.t1 ? m.t2 : m.t1;
+    g[w].w++; g[l].l++;
+    g[m.t1].mw += m.w1; g[m.t1].ml += m.w2; g[m.t2].mw += m.w2; g[m.t2].ml += m.w1;
+  }
+  return Object.entries(groups).map(([name, g]) => [name, Object.values(g).sort((a, b) => b.w - a.w || a.l - b.l || (b.mw - b.ml) - (a.mw - a.ml) || (T[b.team]?.elo || 0) - (T[a.team]?.elo || 0))]);
+}
+
+function lineupOf(team, e) {
+  const part = e && e.participants.find(p => p.team === team);
+  const current = new Set((T[team]?.roster || []).map(p => p.id.toLowerCase()));
+  const person = (id, extra) => {
+    const p = DATA.players[id.toLowerCase()] || { id, name: "", flag: "", igl: false };
+    return { ...p, id: p.id || id, ...extra };
+  };
+  if (part && (part.players.length || part.coach.length)) {
+    const fresh = e.status !== "finished";
+    return {
+      source: "event",
+      players: part.players.map(id => person(id, { standin: fresh && current.size > 0 && !current.has(id.toLowerCase()) })),
+      coach: part.coach.map(id => person(id, {})),
+      subs: part.subs.map(id => person(id, {})),
+    };
+  }
+  const r = T[team]?.roster || [];
+  return { source: "current", players: r.filter(p => !p.coach).map(p => person(p.id, {})), coach: r.filter(p => p.coach).map(p => person(p.id, {})), subs: [] };
+}
+
+/* ---------------- shared match widgets ---------------- */
+function tug(pred, a, b, label) {
+  const p = pred.p;
+  return `<div class="tug">
+    <div class="ends">
+      <div><div class="cond ct">${pct(p)}</div><div class="small dim">${esc(a)}</div></div>
+      <div class="small dim" style="text-align:center">${esc(label)}</div>
+      <div style="text-align:right"><div class="cond t">${pct(1 - p)}</div><div class="small dim">${esc(b)}</div></div>
+    </div>
+    <div class="bar" role="img" aria-label="${esc(`${a} ${pct(p)}, ${b} ${pct(1 - p)}; likely range for ${a} ${pct(pred.band[0])} to ${pct(pred.band[1])}`)}">
+      <div class="fill" data-w="${(p * 100).toFixed(2)}"></div>
+      <div class="band" data-l="${(pred.band[0] * 100).toFixed(2)}" data-bw="${((pred.band[1] - pred.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
+      <div class="mid"></div>
+    </div>
+    <div class="legend">
+      <span>Hatched zone: likely range ${pct(pred.band[0])} to ${pct(pred.band[1])}</span>
+      <span class="chip ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span>
+    </div>
+  </div>`;
+}
+function animateBars(root) {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    root.querySelectorAll(".bar .fill").forEach(el => { el.style.width = el.dataset.w + "%"; });
+    root.querySelectorAll(".bar .band").forEach(el => { el.style.left = el.dataset.l + "%"; el.style.width = el.dataset.bw + "%"; });
+  }));
+}
+
+function playedMaps(m) {
+  return `<div class="maps">${m.maps.map((x, i) => {
+    const aWon = x.w === 1;
+    const has = x.s1 != null;
+    const half = (team, side) => team === 1 ? x.side1[side] : x.side2[side];
+    const otv = (team) => (team === 1 ? x.s1 : x.s2) - half(team, "ct") - half(team, "t");
+    return `<button type="button" class="mapcard reveal ${aWon ? "wa" : "wb"}" style="${mapBg(x.map)};animation-delay:${i * 90}ms" aria-expanded="false" aria-label="${esc(x.map)}: ${has ? `${esc(m.t1)} ${x.s1}, ${esc(m.t2)} ${x.s2}` : `won by ${esc(aWon ? m.t1 : m.t2)}`}. Show halves">
+      <span class="role">Map ${i + 1}${x.ot ? `<span class="chip plain">Overtime</span>` : ""}</span>
+      <span class="nm cond">${esc(x.map)}</span>
+      <span class="sc cond"><span class="${aWon ? "ct" : "dim"}">${has ? x.s1 : aWon ? "W" : "L"}</span><span class="x">${has ? "tap for halves" : "no round data"}</span><span class="${aWon ? "dim" : "t"}">${has ? x.s2 : aWon ? "L" : "W"}</span></span>
+      ${has ? `<span class="halves">
+        <span class="hr hd"><span></span><span>CT</span><span>T</span><span>OT</span></span>
+        <span class="hr"><span class="ct">${esc(m.t1)}</span><span>${half(1, "ct")}</span><span>${half(1, "t")}</span><span>${x.ot ? otv(1) : "-"}</span></span>
+        <span class="hr"><span class="t">${esc(m.t2)}</span><span>${half(2, "ct")}</span><span>${half(2, "t")}</span><span>${x.ot ? otv(2) : "-"}</span></span>
+        ${x.first1 ? `<span class="hd">${esc(m.t1)} started on ${x.first1 === "ct" ? "CT" : "T"}</span>` : ""}
+        ${x.vod ? `<a class="btn" href="${esc(x.vod)}" target="_blank" rel="noopener">Watch VOD</a>` : ""}
+      </span>` : ""}
+    </button>`;
+  }).join("")}</div>`;
+}
+
+function vetoView(pred, a, b) {
+  const played = {};
+  pred.maps.forEach((mp, i) => { played[mp] = pred.map_p[i]; });
+  const card = (s, i) => {
+    const ban = s.verb === "bans", pm = played[s.map];
+    const who = s.side === "A" ? a : s.side === "B" ? b : null;
+    const role = s.verb === "decider" ? "Decider" : `${esc(who)} ${s.verb}`;
+    const odds = !ban && pm !== undefined ? `<span class="sc cond"><span class="ct">${pct(pm)}</span><span class="x">map win chance</span><span class="t">${pct(1 - pm)}</span></span><span class="odds"><b style="width:${(pm * 100).toFixed(1)}%"></b></span>` : "";
+    return `<div class="mapcard reveal ${ban ? "ban" : ""}" style="${mapBg(s.map)};animation-delay:${i * 90}ms">
+      <span class="role"><b class="${s.side === "A" ? "ct" : s.side === "B" ? "t" : ""}">${i + 1}</b> ${role}</span>
+      <span class="nm cond">${esc(s.map)}</span>${odds}
+    </div>`;
+  };
+  const steps = pred.veto.map((s, i) => [s, i]);
+  return `<div class="maps">${steps.filter(([s]) => s.verb !== "bans").map(([s, i]) => card(s, i)).join("")}</div>
+    <div class="maps" style="grid-template-columns:repeat(auto-fit,minmax(8rem,1fr))">${steps.filter(([s]) => s.verb === "bans").map(([s, i]) => card(s, i)).join("")}</div>`;
+}
+
+function seriesScores(pred, a, b, bo = 3) {
+  const s = pred.score;
+  const rows = [["p_2_0", `${a} 2-0`, "a"], ["p_2_1", `${a} 2-1`, "a"], ["p_1_2", `${b} 2-1`, "b"], ["p_0_2", `${b} 2-0`, "b"]];
+  const top = rows.reduce((m, x) => s[x[0]] > s[m] ? x[0] : m, "p_2_0");
+  const mx = Math.max(...rows.map(x => s[x[0]]));
+  return `<div class="panel"><h2>Series score <span class="dim">most likely: ${esc(rows.find(r => r[0] === top)[1])}</span></h2>
+    ${bo !== 3 ? `<p class="small dim">Modelled as a best-of-three; this series is a best-of-${bo}.</p>` : ""}
+    ${rows.map(([k, lab, side]) => `<div class="srow ${side}${k === top ? " top" : ""}"><span>${esc(lab)}</span><span class="trk"><b style="width:${(s[k] / mx * 100).toFixed(1)}%"></b></span><span class="v">${pct(s[k])}</span></div>`).join("")}
+  </div>`;
+}
+
+function factors(pred, a, b) {
+  const fs = pred.factors;
+  const mx = Math.max(4, ...fs.map(f => Math.abs(f.pp)));
+  const rows = fs.map(f => {
+    const [nm, sub] = LABELS[f.factor] || [f.factor, ""];
+    const pp = f.pp, off = Math.abs(pp) < 0.05;
+    return `<div class="frow${off ? " off" : ""}">
+      <div><b>${esc(nm)}</b><span class="sub">${esc(sub)}</span></div>
+      <div class="dv" aria-hidden="true">${off ? "" : `<b class="${pp > 0 ? "pos" : "neg"}" style="width:${(Math.abs(pp) / mx * 50).toFixed(2)}%"></b>`}</div>
+      <div class="v ${off ? "" : pp > 0 ? "ct" : "t"}">${off ? "none" : "+" + Math.abs(pp).toFixed(1)}</div>
+    </div>`;
+  }).join("");
+  const warns = pred.warn.map(w => {
+    let t = w;
+    for (const [k, [n]] of Object.entries(LABELS)) t = t.split(`'${k}'`).join(n);
+    return `<p class="warn">${esc(t)}</p>`;
+  }).join("");
+  return `<div class="panel"><h2>What moves the number <span class="dim">points added for <span class="ct">${esc(a)}</span> (left) or <span class="t">${esc(b)}</span> (right)</span></h2>${rows}${warns}</div>`;
+}
+
+function lineup(team, side, e) {
+  const L = lineupOf(team, e);
+  const note = L.source === "event" ? `lineup at ${esc(e.name)}` : "current roster";
+  return `<div class="panel"><h2>${tlink(team)} <span class="dim">${note}</span></h2>
+    ${L.players.length ? `<div class="lineup ${side}">${L.players.map(p => `<div class="player">
+      ${flag(p.flag)}
+      <div style="min-width:0"><span class="nick cond">${esc(p.id)}</span><span class="real">${esc(p.name || " ")}</span></div>
+      <div class="badges">${p.igl ? `<span class="chip plain" title="In-game leader">IGL</span>` : ""}${p.standin ? `<span class="chip miss" title="Not on the team's listed active roster">Stand-in</span>` : ""}</div>
+    </div>`).join("")}</div>` : `<p class="empty">Lineup not announced yet.</p>`}
+    ${L.coach.map(c => `<div class="coach">${flag(c.flag)} Coach <b>${esc(c.id)}</b></div>`).join("")}
+    ${L.subs.length ? `<div class="coach">Bench: ${L.subs.map(s => `<b>${esc(s.id)}</b>`).join(", ")}</div>` : ""}
+  </div>`;
+}
+
+function poolCompare(a, b, pool) {
+  const ma = T[a]?.maps || {}, mb = T[b]?.maps || {};
+  const cell = (m, side) => {
+    const v = (side === "l" ? ma : mb)[m], w = v ? v[0] * 100 : 0;
+    return `<div class="half ${side}"><span>${v ? `${Math.round(w)}% (${v[1]})` : "no maps"}</span><span class="trk"><b style="width:${w.toFixed(1)}%"></b></span></div>`;
+  };
+  return `<div class="panel"><h2>Map pool <span class="dim">win rate over the last 90 days (maps played)</span></h2>
+    <div class="fly">${pool.map(m => `<div class="fr">${cell(m, "l")}<span class="mn cond">${esc(m)}</span>${cell(m, "r")}</div>`).join("")}</div></div>`;
+}
+
+function formList(team) {
+  const t = T[team];
+  if (!t) return `<div class="panel"><h2>${esc(team)}</h2><p class="empty">No results in the data.</p></div>`;
+  return `<div class="panel"><h2>${tlink(team)} <span class="dim">last 5</span></h2><div class="res">${t.results.slice(0, 5).map(r => `<div class="r">
+      <span class="wl ${r.won ? "W" : "L"}">${r.won ? "W" : "L"}</span>
+      <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${esc(r.event)}</span></span>
+      <span>${esc(r.score)}</span></div>`).join("") || `<p class="empty">No results in the data.</p>`}</div></div>`;
+}
+
+function h2hList(a, b) {
+  const list = DATA.h2h[[a, b].sort().join("|")] || [];
+  const aw = list.filter(x => x.winner === a).length, bw = list.length - aw;
+  return `<div class="panel"><h2>Head-to-head <span class="dim">${list.length ? `<span class="ct">${esc(a)} ${aw}</span> to <span class="t">${bw} ${esc(b)}</span> in the last ${list.length}` : "no meetings in the data"}</span></h2>
+    <div class="res">${list.map(x => {
+      const sc = x.score ? (x.winner === x.a ? x.score : x.score.split("-").reverse().join("-")) : "";
+      const loser = x.winner === x.a ? x.b : x.a;
+      return `<div class="r"><span class="wl ${x.winner === a ? "W" : "L"}">${x.winner === a ? "W" : "L"}</span>
+        <span style="min-width:0"><span class="opp">${logo(x.winner, "sm")}<span>${esc(x.winner)} beat ${esc(loser)}</span></span><span class="ev">${esc(x.event)}, ${fmtDate(x.date)}</span></span>
+        <span>${esc(sc)}</span></div>`;
+    }).join("")}</div></div>`;
+}
+
+function matchBody(pred, a, b, opts = {}) {
+  const pool = (opts.ev && opts.ev.pool.length ? opts.ev.pool : null) || ["Ancient", "Anubis", "Cache", "Dust2", "Inferno", "Mirage", "Nuke"];
+  return `
+  ${pred ? `<section class="panel">${tug(pred, a, b, opts.label || "Model's pre-match call")}</section>` : `<section class="panel"><p class="empty">No model call: one of these teams has no results in the data.</p></section>`}
+  ${opts.played ? `<section class="panel"><h2>Maps <span class="dim">tap a map for CT and T halves</span></h2>${opts.played}</section>` : ""}
+  ${pred ? `<section class="panel"><h2>${opts.played ? "Model's simulated veto" : "Simulated veto"} <span class="dim">from 90-day map records, numbered in veto order</span></h2>${vetoView(pred, a, b)}</section>` : ""}
+  ${pred ? `<div class="grid2">${seriesScores(pred, a, b, opts.bo)}${factors(pred, a, b)}</div>` : ""}
+  <div class="grid2">${lineup(a, "a", opts.ev)}${lineup(b, "b", opts.ev)}</div>
+  <div class="grid2">${poolCompare(a, b, pool)}${h2hList(a, b)}</div>
+  <div class="grid2">${formList(a)}${formList(b)}</div>`;
+}
+
+/* ---------------- tournaments index ---------------- */
+function evCard(e) {
+  const n = new Set([...e.participants.map(p => p.team), ...e.matches.flatMap(m => [m.t1, m.t2]).filter(Boolean)]).size;
+  return `<a class="evcard" href="#e-${e.slug}">
+    ${IMG.events[e.slug] ? `<img class="evl" src="${IMG.events[e.slug]}" alt="">` : `<span class="evl"></span>`}
+    <span class="ename">${esc(e.name)}</span>
+    <span class="emeta"><span>${span(e.start, e.end)}</span>${e.city ? `<span>${esc(e.city)}${e.country ? ", " + esc(e.country) : ""}</span>` : e.type ? `<span>${esc(e.type)}</span>` : ""}</span>
+    <span class="efoot">${e.champion ? `<span class="champ">${logo(e.champion, "sm")}${esc(e.champion)} won</span>` : `<span class="dim">${n ? `${n} teams` : "Teams to be announced"}</span>`}
+      <span style="display:flex;gap:.5rem;align-items:center"><span class="dim">${e.prize ? "$" + esc(e.prize) : ""}</span>${statusChip(e)}</span></span>
+  </a>`;
+}
+function viewEvents() {
+  const live = EV.filter(e => e.status === "live"), up = EV.filter(e => e.status === "upcoming"), done = EV.filter(e => e.status === "finished").reverse();
+  const sec = (title, list, note) => list.length ? `<section class="panel"><h2>${title} <span class="dim">${note}</span></h2><div class="evgrid">${list.map(evCard).join("")}</div></section>` : "";
+  return sec("Live now", live, "matches, lineups and the model's calls") +
+    sec("Upcoming", up, "build matchups from the announced teams") +
+    sec("Finished in 2026", done, "results with the model's pre-match calls");
+}
+
+/* ---------------- one tournament ---------------- */
+const dayPick = {};
+const evPick = {};      // slug -> {a, b, next}
+
+function matchRow(m) {
+  const a = m.t1, b = m.t2, live = isLive(m), w = winnerOf(m);
+  const pred = decode(m.pred);
+  let mid, tag = "";
+  if (m.finished || live) mid = `<div class="mid cond"><span class="${m.w1 > m.w2 ? "ct" : ""}">${m.w1}</span> : <span class="${m.w2 > m.w1 ? "t" : ""}">${m.w2}</span></div>`;
+  else if (pred) mid = `<div class="mid pct" title="Model's pre-match call">${pct(pred.p)} / ${pct(1 - pred.p)}</div>`;
+  else mid = `<div class="mid pct">vs</div>`;
+  if (live) tag = `<span class="chip live">Live</span>`;
+  else if (m.finished && pred) {
+    const fav = pred.p >= .5 ? a : b;
+    tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${pct(Math.max(pred.p, 1 - pred.p))}">${fav === w ? "Model called it" : "Upset"}</span>`;
+  }
+  const team = (t, side) => `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}<span>${esc(t || "To be decided")}</span></div>`;
+  const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}</span></div>
+    ${team(a, "")}${mid}${team(b, "r")}
+    <div class="tag">${tag}<span>${esc(m.stage)}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span></div>`;
+  return a && b ? `<a class="mrow" href="#m-${m.id}">${inner}</a>` : `<div class="mrow">${inner}</div>`;
+}
+
+function evHero(e) {
+  const facts = [
+    ["Dates", span(e.start, e.end)],
+    e.city ? ["Location", `${e.city}${e.country ? ", " + e.country : ""}`] : e.type ? ["Format", e.type] : null,
+    e.venue ? ["Venue", e.venue] : null,
+    e.prize ? ["Prize pool", "$" + e.prize] : null,
+    e.organizer ? ["Organizer", e.organizer] : null,
+    e.tier ? ["Tier", e.tier] : null,
+  ].filter(Boolean);
+  return `<section class="hero">
+    ${IMG.events[e.slug] ? `<img class="evlogo" src="${IMG.events[e.slug]}" alt="">` : ""}
+    <div>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap"><h1 class="cond">${esc(e.name)}</h1>${statusChip(e)}</div>
+      <dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+      ${e.champion ? `<div class="champline">${logo(e.champion)}<span>${esc(e.champion)} won the title</span></div>` : ""}
+    </div>
+  </section>`;
+}
+
+function viewEvent(slug, sub) {
+  const e = EV_BY[slug];
+  if (!e) return `<p>Tournament not found. <a class="btn" href="#events">All tournaments</a></p>`;
+  const tabs = [["", "Matches"], ["teams", "Teams & lineups"], ["matchup", "Build a matchup"]];
+  const nav = `<nav class="subtabs" aria-label="Tournament sections">${tabs.map(([k, l]) => `<a href="#e-${slug}${k ? "." + k : ""}" ${sub === k ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>`;
+  let body;
+  if (sub === "teams") body = evTeams(e);
+  else if (sub === "matchup") body = evMatchup(e);
+  else body = evMatches(e);
+  return `<nav class="crumb"><a href="#events">Tournaments</a><span>/</span><span>${esc(e.name)}</span></nav>${evHero(e)}${nav}${body}`;
+}
+
+function evMatches(e) {
+  const days = [...new Set(e.matches.map(m => m.day).filter(Boolean))].sort();
+  if (!days.length) return `<section class="panel"><p class="empty">No schedule published yet. ${e.participants.length ? `See <a class="btn" href="#e-${e.slug}.teams">Teams & lineups</a> or <a class="btn" href="#e-${e.slug}.matchup">build a matchup</a>.` : ""}</p></section>`;
+  let d = dayPick[e.slug];
+  if (!d || !days.includes(d)) {
+    const live = e.matches.find(isLive);
+    d = live ? live.day : e.status === "finished" ? days[days.length - 1] : (days.find(x => x >= DATA.as_of) || days[0]);
+  }
+  dayPick[e.slug] = d;
+  const list = e.matches.filter(m => m.day === d).sort((x, y) => (x.when || "").localeCompare(y.when || ""));
+  const groups = groupTables(e);
+  const po = e.matches.filter(m => m.kind === "playoffs");
+  const cols = [];
+  for (const m of [...po].sort((x, y) => (x.day || "").localeCompare(y.day || ""))) {
+    let c = cols.find(c => c.name === m.stage);
+    if (!c) cols.push(c = { name: m.stage, list: [] });
+    c.list.push(m);
+  }
+  const bm = m => {
+    const w = winnerOf(m);
+    const row = (t, s) => `<div style="${w && t !== w ? "" : w ? "color:var(--text);font-weight:700" : ""}">${logo(t, "sm")}<span style="flex:1">${esc(t || "To be decided")}</span>${m.finished || isLive(m) ? `<b>${s}</b>` : ""}</div>`;
+    const inner = `${row(m.t1, m.w1)}${row(m.t2, m.w2)}<div class="when">${m.day ? fmtDay(m.day) : "TBA"}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</div>`;
+    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" style="display:block">${inner}</a>` : `<div class="bm">${inner}</div>`;
+  };
+  const place = p => p.from === p.to ? ordinal(p.from) : `${ordinal(p.from)} to ${ordinal(p.to)}`;
+  const firstTz = e.matches.find(m => m.when);
+  return `
+  ${e.pool.length ? `<section class="pool" aria-label="Map pool">${e.pool.map(mp => `<div class="maptile" style="${mapBg(mp)}"><span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}</small></span></div>`).join("")}</section>` : ""}
+  <div class="cols">
+    <section class="panel">
+      <h2>Matches <span class="dim">${firstTz ? `times in ${esc(tz(firstTz.when))}; ` : ""}percentages are the model's pre-match call</span></h2>
+      <div class="days" role="group" aria-label="Match day">${days.map(x => `<button type="button" data-day="${x}" data-ev="${e.slug}" aria-pressed="${x === d}"><b>${wday(x)} ${fmtDay(x)}</b><span>${e.matches.filter(m => m.day === x).length} matches</span></button>`).join("")}</div>
+      <div class="mlist">${list.map(matchRow).join("")}</div>
+      ${list.some(m => !m.t1 || !m.t2) ? `<p class="small dim">Opponents for open slots are set by earlier results.</p>` : ""}
+    </section>
+    <div style="display:grid;gap:1.5rem">
+      ${groups.length ? `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
+        ${groups.map(([name, rows]) => `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table>
+          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th></tr></thead>
+          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td></tr>`).join("")}</tbody>
+        </table></div></div>`).join("")}</section>` : ""}
+      ${cols.length ? `<section class="panel"><h2>Playoffs</h2><div class="bracket" style="grid-template-columns:repeat(${Math.min(cols.length, 4)},minmax(9rem,1fr))">${cols.map(c => `<div class="bcol"><h3>${esc(c.name)}</h3>${c.list.map(bm).join("")}</div>`).join("")}</div></section>` : ""}
+      ${e.prizes.length ? `<section class="panel"><h2>Prize pool</h2><div class="prizes">${e.prizes.map(p => `<span>${place(p)}</span><b>${p.usd ? "$" + p.usd.toLocaleString("en-US") : "-"}</b>`).join("")}</div></section>` : ""}
+      ${e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : ""}
+      <div class="links"><a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a></div>
+    </div>
+  </div>`;
+}
+
+function evTeamsList(e) {
+  const fromParts = e.participants.map(p => p.team);
+  const fromMatches = e.matches.flatMap(m => [m.t1, m.t2]).filter(Boolean);
+  return [...new Set([...fromParts, ...fromMatches])].sort((a, b) => (T[b]?.elo || 0) - (T[a]?.elo || 0));
+}
+
+function evTeams(e) {
+  const list = evTeamsList(e);
+  if (!list.length) return `<section class="panel"><p class="empty">Teams for this tournament have not been announced yet.</p></section>`;
+  const s = evPick[e.slug] || {};
+  const cards = list.map(t => {
+    const L = lineupOf(t, e);
+    const sel = t === s.a ? "sel-a" : t === s.b ? "sel-b" : "";
+    return `<div class="pcard ${sel}">
+      <div class="ph">${logo(t, "lg")}${T[t] ? `<a class="cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cond">${esc(t)}</span>`}<span class="small dim">${T[t] ? `Elo ${T[t].elo}${T[t].rank ? `, ${ordinal(T[t].rank)}` : ""}` : "No results in the data"}</span></div>
+      ${L.players.length ? `<ul>${L.players.map(p => `<li>${flag(p.flag)}<b>${esc(p.id)}</b><span class="rn">${esc(p.name)}</span>${p.igl ? `<span class="chip plain">IGL</span>` : ""}${p.standin ? `<span class="chip miss">Stand-in</span>` : ""}</li>`).join("")}${L.coach.map(c => `<li class="dim">${flag(c.flag)}Coach ${esc(c.id)}</li>`).join("")}</ul>` : `<p class="empty">Lineup not announced yet.</p>`}
+      ${T[t] ? `<button type="button" class="btn" data-addpick="${esc(t)}" data-ev="${e.slug}" aria-pressed="${!!sel}">${sel ? "In matchup" : "Add to matchup"}</button>` : ""}
+    </div>`;
+  }).join("");
+  const tray = `<div class="tray"><span>Matchup:</span>
+    <span class="slot">${s.a ? `${logo(s.a, "sm")}<span class="ct">${esc(s.a)}</span>` : `<span class="dim">pick a team</span>`}</span><span class="dim">vs</span>
+    <span class="slot">${s.b ? `${logo(s.b, "sm")}<span class="t">${esc(s.b)}</span>` : `<span class="dim">pick a second team</span>`}</span>
+    ${s.a && s.b ? `<a class="btn" href="#e-${e.slug}.matchup">Show prediction</a>` : ""}</div>`;
+  return `<section class="panel"><h2>${list.length} teams <span class="dim">${e.status === "finished" ? "lineups as played at this event" : "announced lineups; stand-in marks a player who is not on the team's listed roster"}</span></h2>
+    <div class="pgrid">${cards}</div></section>${tray}`;
+}
+
+function evMatchup(e) {
+  const list = evTeamsList(e).filter(t => T[t]);
+  if (list.length < 2) return `<section class="panel"><p class="empty">Matchups open once at least two teams are announced.</p></section>`;
+  const s = evPick[e.slug] = evPick[e.slug] || {};
+  if (!s.a || !list.includes(s.a)) s.a = list[0];
+  if (!s.b || !list.includes(s.b) || s.b === s.a) s.b = list.find(t => t !== s.a);
+  s.next = s.next || "a";
+  const pred = matchupPred(e, s.a, s.b);
+  const asof = e.status === "finished" ? `ratings as of ${fmtDate(e.start)}, the first day of the event` : `ratings as of ${fmtDate(DATA.as_of)}`;
+  return `
+  <section class="panel">
+    <h2>Pick two teams from ${esc(e.name)} <span class="dim">click a logo to set the ${s.next === "a" ? `<span class="ct">blue</span>` : `<span class="t">gold</span>`} side next</span></h2>
+    <div class="picker">${list.map(n => `<button type="button" class="pick" data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("")}</div>
+    <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap sides</button></div>
+  </section>
+  <section class="vs">${vsSide(s.a, "a")}<div class="centre"><div class="when dim">vs</div><span class="small dim">Hypothetical Bo3, ${asof}</span></div>${vsSide(s.b, "b")}</section>
+  ${matchBody(pred, s.a, s.b, { ev: e, label: e.status === "finished" ? "Model's call before the event" : "Model's call today" })}`;
+}
+const vsSide = (t, cls) => `<a class="side ${cls}" href="#t-${T[t].slug}">${logo(t, "xl")}<span class="cond">${esc(t)}</span><span class="meta">Elo ${T[t].elo}${T[t].rank ? `, ranked ${ordinal(T[t].rank)}` : ""}</span></a>`;
+
+/* ---------------- match page ---------------- */
+function viewMatch(id) {
+  const m = MATCH[id];
+  if (!m || !m.t1 || !m.t2) return `<p>That match isn't in this snapshot. <a class="btn" href="#events">Tournaments</a></p>`;
+  const e = EV_BY[m.ev];
+  const a = m.t1, b = m.t2, live = isLive(m), w = winnerOf(m), pred = decode(m.pred);
+  let centre;
+  if (m.finished || live) {
+    centre = `<div class="score cond"><span class="${m.w1 >= m.w2 ? "ct" : "lost"}">${m.w1}</span><span class="dim">:</span><span class="${m.w2 >= m.w1 ? "t" : "lost"}">${m.w2}</span></div>
+      ${live ? `<span class="chip live">Live in this snapshot</span>` : `<span class="small dim">Final</span>`}`;
+  } else {
+    centre = `<div class="when">${m.when ? `${clock(m.when)} ${tz(m.when)}` : "Time to be announced"}</div><span class="small dim">${countdown(m.when)}</span>`;
+  }
+  let verdict = "";
+  if (m.finished && pred) {
+    const fav = pred.p >= .5 ? a : b, fp = Math.max(pred.p, 1 - pred.p);
+    verdict = fav === w ? `<span class="chip hit">Model called it: ${esc(fav)} at ${pct(fp)}</span>` : `<span class="chip miss">Upset: model had ${esc(fav)} at ${pct(fp)}</span>`;
+  }
+  const side = (t, cls) => T[t] ? vsSide(t, cls) : `<span class="side ${cls}">${logo(t, "xl")}<span class="cond">${esc(t)}</span></span>`;
+  return `
+  <nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span><span>/</span><span>${m.day ? `${wday(m.day)} ${fmtDate(m.day)}` : "Date to be announced"}</span><span>/</span><span>Best of ${m.bo}</span></nav>
+  <section class="vs">${side(a, "a")}<div class="centre">${centre}${verdict}</div>${side(b, "b")}</section>
+  ${matchBody(pred, a, b, { played: m.maps.length ? playedMaps(m) : "", bo: m.bo, ev: e })}
+  <div class="links">
+    ${m.hltv ? `<a class="btn" href="https://www.hltv.org/matches/${encodeURIComponent(m.hltv)}/match" target="_blank" rel="noopener">Match on HLTV</a>` : ""}
+    <a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a>
+  </div>`;
+}
+function countdown(when) {
+  if (!when) return "";
+  const ms = new Date(when) - Date.now();
+  if (ms <= 0) return "Scheduled start has passed; result not in this snapshot";
+  const h = Math.floor(ms / 36e5), d = Math.floor(h / 24);
+  return d >= 1 ? `Starts in ${d} day${d > 1 ? "s" : ""}` : `Starts in ${h} hour${h === 1 ? "" : "s"}`;
+}
+
+/* ---------------- global head to head ---------------- */
+let cmpA = null, cmpB = null, cmpNext = "a", cmpFilter = "";
+function viewCompare() {
+  if (!cmpA || !cmpB) { cmpA = NAMES[0]; cmpB = NAMES[1]; }
+  const pred = decode(DATA.pairs[`${cmpA}|${cmpB}`]);
+  const shown = NAMES.filter(n => !cmpFilter || n.toLowerCase().includes(cmpFilter.toLowerCase()));
+  return `
+  <section class="panel">
+    <h2>Any two teams <span class="dim">click a logo to set the ${cmpNext === "a" ? `<span class="ct">blue</span>` : `<span class="t">gold</span>`} side next</span></h2>
+    <input class="search" id="cmpSearch" type="search" placeholder="Filter teams" value="${esc(cmpFilter)}" aria-label="Filter teams">
+    <div class="picker" id="cmpGrid">${shown.map(n => `<button type="button" class="pick" data-team="${esc(n)}" ${n === cmpA ? 'data-slot="a"' : n === cmpB ? 'data-slot="b"' : ""} aria-pressed="${n === cmpA || n === cmpB}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("") || `<p class="empty">No team matches that filter.</p>`}</div>
+    <div class="slots"><span><span class="ct">${esc(cmpA)}</span> bans first in the simulated veto</span><button type="button" class="btn" id="swap">Swap sides</button></div>
+  </section>
+  <section class="vs">${vsSide(cmpA, "a")}<div class="centre"><div class="when dim">vs</div><span class="small dim">Hypothetical Bo3, ratings as of ${fmtDate(DATA.as_of)}</span></div>${vsSide(cmpB, "b")}</section>
+  ${matchBody(pred, cmpA, cmpB, { label: "Model's call today" })}`;
+}
+
+/* ---------------- teams ---------------- */
+function viewTeams() {
+  return `<section class="panel"><h2>Teams <span class="dim">everyone at a 2026 tournament here, ordered by Elo</span></h2>
+    <div class="tgrid">${NAMES.map(n => `<a class="tcard" href="#t-${T[n].slug}">${logo(n, "lg")}<span class="cond">${esc(n)}</span><span class="small dim">Elo ${T[n].elo}${T[n].rank ? `, ${ordinal(T[n].rank)}` : ""}</span></a>`).join("")}</div></section>`;
+}
+
+function spark(trace) {
+  if (trace.length < 2) return `<p class="empty">Not enough series to chart.</p>`;
+  const W = 560, H = 150, L = 36, R = 10, Tp = 12, B = 22;
+  const ys = trace.map(p => p[1]);
+  const lo = Math.floor((Math.min(...ys) - 10) / 25) * 25, hi = Math.ceil((Math.max(...ys) + 10) / 25) * 25;
+  const x = i => L + i * (W - L - R) / (trace.length - 1);
+  const y = v => Tp + (hi - v) * (H - Tp - B) / (hi - lo);
+  const pts = trace.map((p, i) => `${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Elo after each of the last ${trace.length} series, from ${ys[0]} to ${ys[ys.length - 1]}" data-trace="${esc(JSON.stringify(trace))}" data-geo="${L},${R},${Tp},${B},${lo},${hi},${W},${H}">
+    ${[lo, Math.round((lo + hi) / 2), hi].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="var(--dim)">${v}</text>`).join("")}
+    <polygon points="${L},${H - B} ${pts} ${x(trace.length - 1)},${H - B}" fill="var(--ct)" fill-opacity=".12"/>
+    <polyline points="${pts}" fill="none" stroke="var(--ct)" stroke-width="2"/>
+    <circle cx="${x(trace.length - 1)}" cy="${y(ys[ys.length - 1])}" r="4" fill="var(--ct)"/>
+    <text x="${L}" y="${H - 6}" font-size="10" fill="var(--dim)">${fmtDate(trace[0][0])}</text>
+    <text x="${W - R}" y="${H - 6}" font-size="10" fill="var(--dim)" text-anchor="end">${fmtDate(trace[trace.length - 1][0])}</text>
+    <g class="hover" visibility="hidden"><line y1="${Tp}" y2="${H - B}" stroke="var(--dim)" stroke-dasharray="3 3"/><circle r="4" fill="var(--t)"/><text font-size="11" fill="var(--text)"></text></g>
+  </svg>`;
+}
+
+function viewTeam(slugv) {
+  const n = BY_SLUG[slugv];
+  if (!n) return `<p>Team not found. <a class="btn" href="#teams">All teams</a></p>`;
+  const t = T[n];
+  const maps = Object.entries(t.maps).filter(([, v]) => v[1] > 0).sort((x, y) => y[1][1] - x[1][1]);
+  const evs = t.events.map(s => EV_BY[s]).filter(Boolean).sort((a, b) => b.start.localeCompare(a.start));
+  const latest = evs.find(e => e.status !== "upcoming") || evs[0];
+  return `
+  <nav class="crumb"><a href="#teams">Teams</a><span>/</span><span>${esc(n)}</span></nav>
+  <section class="thead">${logo(n, "xl")}
+    <div><h1 class="cond">${esc(n)}</h1><p class="dim small">${esc(t.location)}${t.region ? `, region ${esc(t.region.toUpperCase())}` : ""}</p>
+      <div class="links" style="margin-top:.6rem"><a class="btn" href="${esc(t.liquipedia)}" target="_blank" rel="noopener">Team on Liquipedia</a><a class="btn" href="#compare" data-cmp="${esc(n)}">Compare with another team</a></div></div>
+    <div class="big"><span class="small dim">Elo</span><b class="cond">${t.elo}</b><span class="small dim">${t.rank ? `${ordinal(t.rank)} of active teams` : `${t.series} series in the data`}</span></div>
+  </section>
+  <div class="grid2">
+    ${lineup(n, "a", null)}
+    <section class="panel"><h2>Elo over the last ${t.trace.length} series <span class="dim">hover to read</span></h2>${spark(t.trace)}
+      <p class="small dim">${t.form30 == null ? "No series in the last 30 days." : `Won ${pct(t.form30)} of ${t.n30} series in the last 30 days.`} Volatility ${t.vol.toFixed(2)} (how far results have strayed from what Elo expected).</p></section>
+  </div>
+  ${evs.length ? `<section class="panel"><h2>Tournaments in 2026</h2><div class="evgrid">${evs.map(evCard).join("")}</div></section>` : ""}
+  <div class="grid2">
+    <section class="panel"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
+      <div class="poolbars">${maps.map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk"><b style="width:${(v[0] * 100).toFixed(1)}%"></b><i></i></span><span>${pct(v[0])} of ${v[1]}</span></div>`).join("") || `<p class="empty">No maps in the last 90 days.</p>`}</div></section>
+    <section class="panel"><h2>Recent results</h2><div class="res">${t.results.map(r => `<div class="r">
+      <span class="wl ${r.won ? "W" : "L"}">${r.won ? "W" : "L"}</span>
+      <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${esc(r.event)}, ${fmtDate(r.date)}</span></span>
+      <span>${esc(r.score)}</span></div>`).join("") || `<p class="empty">No results in the data.</p>`}</div></section>
+  </div>`;
+}
+
+/* ---------------- track record ---------------- */
+function viewRecord() {
+  const rep = DATA.report, d = rep.data, m = rep.models;
+  const hits = DATA.recent.filter(x => (x.p >= .5 ? x.a : x.b) === x.winner).length;
+  const done = Object.values(MATCH).filter(x => x.finished && x.pred);
+  const dh = done.filter(x => (x.pred.p >= .5 ? x.t1 : x.t2) === winnerOf(x)).length;
+  return `
+  <section class="panel">
+    <h2>How often it's right</h2>
+    <p class="small dim" style="max-width:75ch">The model was tuned on ${d.train.toLocaleString()} matches up to ${fmtDate(d.train_range[1])}, then scored on ${d.test.toLocaleString()} later matches it never saw. It picks the winner about as often as simply backing the higher-Elo team; its extra factors make the percentages more honest, not more accurate. Across the 2026 tournaments here it called ${dh} of ${done.length} finished matches before they were played.</p>
+    <div class="figs">${[[m.new_engine.accuracy, "this model"], [m.elo_only.accuracy, "Elo alone"], [m.old_engine_v1.accuracy, "the old engine"]].map(([v, l]) => `<div><b class="cond">${pct(v, 1)}</b><span class="small dim">winners picked by ${l}</span></div>`).join("")}</div>
+  </section>
+  <div class="grid2">
+    <section class="panel calib"><h2>Calibration <span class="dim">dots on the line mean 70% calls win about 70% of the time</span></h2><svg viewBox="0 0 320 260" role="img" aria-label="Predicted chance against how often it happened">${calib(m.new_engine.calibration)}</svg></section>
+    <section class="panel"><h2>Last ${DATA.recent.length} held-out calls <span class="dim">${hits} right</span></h2>
+      <div class="tablewrap"><table><thead><tr><th>Date</th><th>Match</th><th class="n">Model</th><th>Result</th></tr></thead><tbody>
+      ${DATA.recent.map(x => { const fav = x.p >= .5 ? x.a : x.b, hit = fav === x.winner; return `<tr><td>${fmtDay(x.date)}</td><td>${esc(x.a)} vs ${esc(x.b)}<br><span class="dim">${esc(x.event)}</span></td><td class="n">${esc(fav)} ${pct(Math.max(x.p, 1 - x.p))}</td><td><span class="${hit ? "win" : "loss"}">${hit ? "Right" : "Wrong"}</span></td></tr>`; }).join("")}
+      </tbody></table></div></section>
+  </div>
+  <footer class="foot">
+    <p>Fan analytics only. Team strength is an Elo rating rebuilt from Liquipedia results, not HLTV ratings. Tournaments, lineups, logos, map images and results come from Liquipedia (text CC BY-SA 3.0); logos and map art belong to their owners.</p>
+    <p>The likely range is a heuristic band and has not been checked for coverage. Snapshot ${fmtDate(DATA.as_of)}.</p>
+  </footer>`;
+}
+function calib(rows) {
+  const W = 320, H = 260, L = 44, R = 12, Tp = 12, B = 40;
+  const x = v => L + v * (W - L - R), y = v => H - B - v * (H - Tp - B);
+  const pts = rows.filter(r => r.n > 0), mx = Math.max(...pts.map(r => r.n));
+  let s = "";
+  for (const v of [0, .25, .5, .75, 1]) s += `<line x1="${x(0)}" x2="${x(1)}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${v * 100}%</text><text x="${x(v)}" y="${H - B + 16}" text-anchor="middle" font-size="11" fill="var(--dim)">${v * 100}%</text>`;
+  s += `<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--dim)" stroke-dasharray="4 4"/>`;
+  s += `<text x="${(L + W - R) / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--dim)">Model's predicted chance</text>`;
+  s += `<text transform="translate(12 ${(Tp + H - B) / 2}) rotate(-90)" text-anchor="middle" font-size="11" fill="var(--dim)">How often it happened</text>`;
+  for (const r of pts) s += `<circle cx="${x(r.mean_pred).toFixed(1)}" cy="${y(r.actual).toFixed(1)}" r="${(3 + 7 * Math.sqrt(r.n / mx)).toFixed(1)}" fill="var(--t)" fill-opacity=".85" stroke="var(--panel)" stroke-width="1.5"><title>${r.n} matches: predicted ${pct(r.mean_pred)}, happened ${pct(r.actual)}</title></circle>`;
+  return s;
+}
+
+/* ---------------- router + interactions ---------------- */
+function route() {
+  const h = decodeURIComponent((location.hash || "#events").slice(1));
+  let html, tab = "events";
+  if (h === "compare") { html = viewCompare(); tab = "compare"; }
+  else if (h === "teams") { html = viewTeams(); tab = "teams"; }
+  else if (h === "record") { html = viewRecord(); tab = "record"; }
+  else if (h.startsWith("m-")) { html = viewMatch(h.slice(2)); }
+  else if (h.startsWith("t-")) { html = viewTeam(h.slice(2)); tab = "teams"; }
+  else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = viewEvent(slug, sub); }
+  else html = viewEvents();
+  const v = $("#view");
+  v.innerHTML = html;
+  document.querySelectorAll(".tabs a").forEach(a => a.dataset.tab === tab ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  animateBars(v);
+  return h;
+}
+let lastHash = null;
+function go() {
+  const h = route();
+  if (h !== lastHash) { window.scrollTo(0, 0); lastHash = h; }
+}
+window.addEventListener("hashchange", go);
+
+function rerender() {
+  const y = window.scrollY;
+  route();
+  window.scrollTo(0, y);
+}
+document.addEventListener("click", e => {
+  const day = e.target.closest("[data-day]");
+  if (day) { dayPick[day.dataset.ev] = day.dataset.day; rerender(); return; }
+  const mc = e.target.closest("button.mapcard");
+  if (mc && !e.target.closest("a")) { mc.setAttribute("aria-expanded", mc.getAttribute("aria-expanded") === "true" ? "false" : "true"); return; }
+  const pk = e.target.closest(".pick[data-team]");
+  if (pk) {
+    const t = pk.dataset.team;
+    if (cmpNext === "a") { if (t !== cmpB) cmpA = t; else [cmpA, cmpB] = [cmpB, cmpA]; cmpNext = "b"; }
+    else { if (t !== cmpA) cmpB = t; else [cmpA, cmpB] = [cmpB, cmpA]; cmpNext = "a"; }
+    rerender(); return;
+  }
+  const ep = e.target.closest(".pick[data-epick]");
+  if (ep) {
+    const s = evPick[ep.dataset.ev] = evPick[ep.dataset.ev] || {}, t = ep.dataset.epick;
+    if ((s.next || "a") === "a") { if (t !== s.b) s.a = t; else [s.a, s.b] = [s.b, s.a]; s.next = "b"; }
+    else { if (t !== s.a) s.b = t; else [s.a, s.b] = [s.b, s.a]; s.next = "a"; }
+    rerender(); return;
+  }
+  const add = e.target.closest("[data-addpick]");
+  if (add) {
+    const s = evPick[add.dataset.ev] = evPick[add.dataset.ev] || {}, t = add.dataset.addpick;
+    if (s.a === t) s.a = null; else if (s.b === t) s.b = null;
+    else if (!s.a) s.a = t; else if (!s.b) s.b = t; else { s.a = s.b; s.b = t; }
+    s.next = "a";
+    if (s.a && s.b) { location.hash = `e-${add.dataset.ev}.matchup`; return; }
+    rerender(); return;
+  }
+  const es = e.target.closest("[data-eswap]");
+  if (es) { const s = evPick[es.dataset.eswap]; [s.a, s.b] = [s.b, s.a]; rerender(); return; }
+  if (e.target.closest("#swap")) { [cmpA, cmpB] = [cmpB, cmpA]; rerender(); return; }
+  const cmp = e.target.closest("[data-cmp]");
+  if (cmp) { cmpA = cmp.dataset.cmp; cmpB = NAMES.find(n => n !== cmpA); cmpNext = "b"; }
+});
+document.addEventListener("input", e => {
+  if (e.target.id !== "cmpSearch") return;
+  cmpFilter = e.target.value;
+  const grid = $("#cmpGrid");
+  const shown = NAMES.filter(n => !cmpFilter || n.toLowerCase().includes(cmpFilter.toLowerCase()));
+  grid.innerHTML = shown.map(n => `<button type="button" class="pick" data-team="${esc(n)}" ${n === cmpA ? 'data-slot="a"' : n === cmpB ? 'data-slot="b"' : ""} aria-pressed="${n === cmpA || n === cmpB}">${logo(n, "lg")}<span>${esc(n)}</span></button>`).join("") || `<p class="empty">No team matches that filter.</p>`;
+});
+
+document.addEventListener("pointermove", e => {
+  const svg = e.target.closest && e.target.closest("svg.spark");
+  if (!svg) return;
+  const tr = JSON.parse(svg.dataset.trace);
+  const [L, R, Tp, B, lo, hi, W, H] = svg.dataset.geo.split(",").map(Number);
+  const box = svg.getBoundingClientRect();
+  const sx = (e.clientX - box.left) * W / box.width;
+  const step = (W - L - R) / Math.max(1, tr.length - 1);
+  const i = Math.max(0, Math.min(tr.length - 1, Math.round((sx - L) / step)));
+  const x = L + i * step, y = Tp + (hi - tr[i][1]) * (H - Tp - B) / (hi - lo);
+  const g = svg.querySelector(".hover");
+  g.setAttribute("visibility", "visible");
+  const ln = g.querySelector("line"); ln.setAttribute("x1", x); ln.setAttribute("x2", x);
+  const c = g.querySelector("circle"); c.setAttribute("cx", x); c.setAttribute("cy", y);
+  const tx = g.querySelector("text");
+  tx.textContent = `${tr[i][1]} on ${fmtDate(tr[i][0])}`;
+  tx.setAttribute("x", x > W / 2 ? x - 8 : x + 8); tx.setAttribute("y", Math.max(Tp + 10, y - 8));
+  tx.setAttribute("text-anchor", x > W / 2 ? "end" : "start");
+});
+document.addEventListener("pointerleave", e => {
+  if (e.target.matches && e.target.matches("svg.spark")) e.target.querySelector(".hover").setAttribute("visibility", "hidden");
+}, true);
+
+$("#snap").textContent = `Snapshot ${fmtDate(DATA.as_of)}`;
+go();
+</script>

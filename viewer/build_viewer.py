@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+"""
+Build the Faceoff CS2 hub: one static HTML page with
+
+  * every 2026 tournament on the cached Liquipedia pages: info, prize pool,
+    map pool, participants with their event lineups, schedule and results
+    with per-map round scores, group tables and playoff brackets
+  * the engine's PRE-MATCH call for every match with two known teams
+    (features from series dated strictly before that match day)
+  * a matchup builder inside each tournament: every ordered pair of its
+    participants. Finished events use ratings as of the event's first day;
+    live and upcoming events use today's ratings.
+  * a global head-to-head comparer, team pages, and the held-out track record
+
+Inputs: data/matches.json, cached event pages (viewer/events.py),
+viewer/assets.json (python viewer/fetch_assets.py) and predictor.py.
+Images are embedded as data: URIs. Nothing is estimated by hand.
+
+USAGE:
+    python viewer/build_viewer.py OUT.html
+"""
+
+import base64
+import json
+import os
+import re
+import sys
+from collections import defaultdict
+from datetime import date, timedelta
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, "data"))
+sys.path.insert(0, HERE)
+
+import backtest as bt  # noqa: E402
+import events as E  # noqa: E402
+import predictor as pr  # noqa: E402
+
+N_RECENT_CALLS = 20
+N_TEAM_RESULTS = 10
+FACTORS = ["base_strength", "form_30d", "form_last5", "head_to_head", "map_veto", "roster", "stakes"]
+
+
+def data_uri(rel):
+    if not rel:
+        return None
+    path = os.path.join(ROOT, rel)
+    ext = os.path.splitext(path)[1].lower()
+    mime = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+            ".svg": "image/svg+xml", ".webp": "image/webp"}.get(ext, "image/png")
+    with open(path, "rb") as f:
+        return f"data:{mime};base64," + base64.b64encode(f.read()).decode()
+
+
+def compact(r):
+    """Engine output trimmed to what the page draws."""
+    s = r["series_probs"]
+    fac = {f["factor"]: f["marginal_pp"] for f in r["factor_breakdown"]}
+    return {
+        "p": round(r["p_a_exact"], 4),
+        "b": r["confidence_interval"],
+        "r": r["reliability"][0],
+        "s": [s["p_2_0"], s["p_2_1"], s["p_1_2"], s["p_0_2"]],
+        "vm": r["veto_maps"], "vp": r["map_probs"],
+        "v": [re.sub(r"^(A|B) (bans|picks) ", lambda m: m.group(1) + ("-" if m.group(2) == "bans" else "+"), x)
+              .replace("decider: ", "D") for x in r["veto_log"]],
+        "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],
+        "w": r["warnings"],
+    }
+
+
+class Timeline:
+    """Fold series day by day so a prediction for day D sees only days < D."""
+
+    def __init__(self, matches):
+        self.ms = sorted(matches, key=lambda m: m["date"])
+        self.h = bt.History()
+        self.i = 0
+        self.day = None
+
+    def at(self, day):
+        assert self.day is None or day >= self.day, "days must be requested in order"
+        while self.i < len(self.ms) and bt._d(self.ms[self.i]["date"]) < day:
+            self.h.add(self.ms[self.i])
+            self.i += 1
+        self.day = day
+        return self.h
+
+
+def predict(h, a, b, day):
+    inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat()})
+    return compact(pr.predict_match(inp))
+
+
+def main(out_path):
+    assets = json.load(open(os.path.join(HERE, "assets.json"), encoding="utf-8"))
+    all_matches = sorted(bt.load_matches(), key=lambda m: m["date"])
+    events = sorted(E.discover(), key=lambda e: e["start"])
+    last_day = max(bt._d(m["date"]) for m in all_matches)
+    as_of = last_day + timedelta(days=1)
+
+    # ---- status, champion
+    for e in events:
+        s, en = date.fromisoformat(e["start"]), date.fromisoformat(e["end"])
+        e["status"] = "finished" if en < as_of else ("upcoming" if s > as_of else "live")
+        done = [m for m in e["matches"] if m["finished"] and m["t1"] and m["t2"]]
+        gf = [m for m in done if m["stage"] == "Grand final"]
+        last = (gf or sorted(done, key=lambda m: (m["day"] or "", m["when"] or "")))[-1:] if done else []
+        e["champion"] = None
+        if e["status"] == "finished" and last:
+            m = last[0]
+            e["champion"] = m["t1"] if m["w1"] > m["w2"] else m["t2"]
+
+    # ---- teams: every participant, every team in a match, plus the top active teams
+    h_now = bt.History()
+    for m in all_matches:
+        h_now.add(m)
+    active = [t for t, g in h_now.games.items() if g and g[-1]["date"] >= as_of - timedelta(days=90)]
+    rank = {t: i + 1 for i, t in enumerate(sorted(active, key=lambda t: -h_now.elo[t]))}
+    top = [t for t in sorted(active, key=lambda t: -h_now.elo[t]) if len(h_now.games[t]) >= 15][:16]
+    names = sorted(set(E.event_teams(events)) | set(top))
+
+    trace = defaultdict(list)
+    hh = bt.History()
+    for m in all_matches:
+        hh.add(m)
+        for t in (m["team_a"], m["team_b"]):
+            trace[t].append([m["date"], round(hh.elo[t])])
+
+    players = {}
+    for t, rec in assets["teams"].items():
+        for p in rec["roster"]:
+            players.setdefault(p["id"].lower(), {"id": p["id"], "name": p["name"], "flag": p["flag"], "igl": p["igl"]})
+    for e in events:
+        for v in e["participants"].values():
+            for pid, cc in v["flags"].items():
+                players.setdefault(pid.lower(), {"id": pid, "name": "", "flag": cc, "igl": False})
+                if not players[pid.lower()]["flag"]:
+                    players[pid.lower()]["flag"] = cc
+
+    teams = {}
+    for t in names:
+        rec = assets["teams"].get(t, {"roster": [], "location": "", "region": ""})
+        f = h_now.team_feats(t, as_of)
+        results = []
+        for m in reversed(all_matches):
+            if t not in (m["team_a"], m["team_b"]):
+                continue
+            opp = m["team_b"] if m["team_a"] == t else m["team_a"]
+            sc = bt.actual_scoreline(m)
+            if sc and m["team_a"] != t:
+                sc = "-".join(reversed(sc.split("-")))
+            results.append({"date": m["date"], "opp": opp, "won": m["winner"] == t,
+                            "score": sc or ("W" if m["winner"] == t else "L"), "event": m["event"]})
+            if len(results) >= N_TEAM_RESULTS:
+                break
+        roster = [{"id": p["id"], "coach": p["role"].lower() == "coach"} for p in rec["roster"]]
+        teams[t] = {
+            "slug": E.slug(t), "elo": round(h_now.elo[t]), "rank": rank.get(t),
+            "series": len(h_now.games[t]),
+            "location": rec.get("location", ""), "region": rec.get("region", ""),
+            "liquipedia": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
+            "roster": roster,
+            "form30": f.get("form30"), "n30": f.get("n30", 0), "vol": f["volatility"],
+            "maps": f["maps"], "results": results, "trace": trace[t][-40:],
+            "events": [e["slug"] for e in events if t in e["participants"]
+                       or any(t in (m["t1"], m["t2"]) for m in e["matches"])],
+        }
+
+    # ---- predictions, in date order so each sees only earlier days
+    jobs = defaultdict(list)            # day -> [callable(h, day)]
+    for e in events:
+        for m in e["matches"]:
+            if m["t1"] in teams and m["t2"] in teams and m["day"]:
+                d = min(date.fromisoformat(m["day"]), as_of)
+                jobs[d].append(("match", m))
+        if e["status"] == "finished":
+            jobs[date.fromisoformat(e["start"])].append(("event", e))
+    epairs = {}
+    tl = Timeline(all_matches)
+    for d in sorted(jobs):
+        h = tl.at(d)
+        for kind, obj in jobs[d]:
+            if kind == "match":
+                obj["pred"] = predict(h, obj["t1"], obj["t2"], d)
+            else:
+                ps = [t for t in obj["participants"] if t in teams]
+                epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d) for a in ps for b in ps if a != b}
+    h_today = tl.at(as_of)
+    pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in names for b in names if a != b}
+
+    h2h = defaultdict(list)
+    for m in reversed(all_matches):
+        a, b = m["team_a"], m["team_b"]
+        if a in teams and b in teams:
+            key = "|".join(sorted([a, b]))
+            if len(h2h[key]) < 6:
+                h2h[key].append({"date": m["date"], "event": m["event"], "a": a, "b": b,
+                                 "winner": m["winner"], "score": bt.actual_scoreline(m)})
+
+    rows = bt.build_dataset(all_matches)
+    ev_rows, _ = bt.select_eval(rows, bt.MIN_HISTORY)
+    _, test = bt.chrono_split(ev_rows, 0.6)
+    recent = []
+    for r in test[-N_RECENT_CALLS:][::-1]:
+        res = pr.predict_match(dict(r["input"]))
+        m = r["match"]
+        recent.append({"date": m["date"], "event": m["event"], "a": m["team_a"], "b": m["team_b"],
+                       "winner": m["winner"], "p": round(res["p_a_exact"], 3)})
+    full = json.load(open(os.path.join(ROOT, "data", "backtest_report.json"), encoding="utf-8"))
+    tm = full["test_metrics"]
+    report = {
+        "data": {k: full["data"][k] for k in ("matches_total", "eval_series", "train", "test",
+                                              "train_range", "test_range")},
+        "models": {k: {"accuracy": tm[k]["accuracy"], "brier": tm[k]["brier"],
+                       "calibration": tm[k].get("reliability_table", [])}
+                   for k in ("new_engine", "elo_only", "old_engine_v1")},
+    }
+
+    ev_out = []
+    for e in events:
+        ev_out.append({k: e[k] for k in ("slug", "name", "start", "end", "tier", "type", "city", "country",
+                                         "venue", "prize", "organizer", "swiss", "format", "prizes", "pool",
+                                         "status", "champion", "page")}
+                      | {"participants": [{"team": t, **v} for t, v in e["participants"].items()],
+                         "matches": e["matches"]})
+
+    images = {
+        "logos": {t: data_uri(assets["teams"][t]["logo_dark_path"]) for t in names
+                  if t in assets["teams"] and assets["teams"][t].get("logo_dark_path")},
+        "maps": {mp: data_uri(v["path"]) for mp, v in assets["maps"].items()},
+        "flags": {c: data_uri(p) for c, p in assets["flags"].items() if p},
+        "events": {s: data_uri(p) for s, p in assets["event_logos"].items() if p},
+    }
+    data = {
+        "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
+        "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
+        "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
+        "factors": FACTORS,
+    }
+    tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
+    blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    img = json.dumps(images, separators=(",", ":")).replace("</", "<\\/")
+    html = tpl.replace("/*__DATA__*/null", blob).replace("/*__IMAGES__*/null", img)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    n_m = sum(len(e["matches"]) for e in events)
+    n_p = sum(1 for e in events for m in e["matches"] if "pred" in m)
+    print(f"wrote {out_path}: {len(events)} events, {len(teams)} teams, {n_m} matches "
+          f"({n_p} pre-match calls), {len(pairs)} + {sum(len(v) for v in epairs.values())} matchups, "
+          f"{len(html) // 1024} KB (data {len(blob) // 1024} KB, images {len(img) // 1024} KB)")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "faceoff_viewer.html"))

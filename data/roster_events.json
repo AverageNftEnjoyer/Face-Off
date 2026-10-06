@@ -1,0 +1,4634 @@
+{
+ "3DMAX": {
+  "ESL/Pro League/Season 22": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Nivera",
+     "Maka"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "9INE": {
+  "StarLadder/StarSeries/2025/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MoDo",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Super DraculaN/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cej0t",
+     "kraghen"
+    ],
+    [
+     "St0m4k",
+     "rim3"
+    ],
+    [
+     "b1elany",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "9z Team": {
+  "BLAST/Premier/2021/Spring/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "EasTor",
+     "rox"
+    ]
+   ],
+   "standin": true
+  },
+  "Roobet Cup/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tge",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "AMKAL ESPORTS": {
+  "BLAST/Premier/2024/Fall/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "svyat",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Skyesports/Championship/2024": {
+   "missing_igl": false,
+   "players": [
+    [
+     "shady",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Apeks": {
+  "BLAST/Premier/2020/Spring/Showdown/Elisa Invitational": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Rising": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "HomeSweetHome/Week 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "HomeSweetHome/Week 5": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "HomeSweetHome/Week 6": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "IGame.com/Nordic Invitational/1": {
+   "missing_igl": true,
+   "players": [
+    [
+     "DaY",
+     "aNdz"
+    ]
+   ],
+   "standin": true
+  },
+  "LOOT.BET/CS/Season 7": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "Radifaction"
+    ]
+   ],
+   "standin": true
+  },
+  "Minor Championship/2017/Atlanta/Europe/Qualifier 1": {
+   "missing_igl": true,
+   "players": [
+    [
+     "DaY",
+     "aNdz"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Astralis": {
+  "BLAST/Premier/2020/Spring/Showdown/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Snappi",
+     "Xyp9x"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2022/Fall/Showdown/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MistR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Pro Series/2017/Copenhagen": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "BenjaCS": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dupreeh"
+    ]
+   ],
+   "standin": true
+  },
+  "CLG": {
+   "missing_igl": true,
+   "players": [
+    [
+     "zonic",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "Dot Esports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2020/Spring/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Snappi",
+     "Xyp9x"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/Season 1": {
+   "missing_igl": true,
+   "players": [
+    [
+     "zonic",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/IV/Europe": {
+   "missing_igl": true,
+   "players": [
+    [
+     "NoTaN1dgl",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2016/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dupreeh"
+    ],
+    [
+     "gla1ve",
+     "Kjaerbye"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 6/Finals": {
+   "missing_igl": false,
+   "players": [
+    [
+     "RUBINO",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Masters/2022": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kristou",
+     "dev1ce"
+    ],
+    [
+     "MistR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 4": {
+   "missing_igl": false,
+   "players": [
+    [
+     "RUBINO",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 4/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Pimp",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": true,
+   "players": [
+    [
+     "RUBINO",
+     "dev1ce"
+    ],
+    [
+     "zonic",
+     "dev1ce"
+    ],
+    [
+     "NoTaN1dgl",
+     "karrigan"
+    ],
+    [
+     "zonic",
+     "dupreeh"
+    ],
+    [
+     "gla1ve",
+     "Kjaerbye"
+    ],
+    [
+     "zonic",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Oakland 2017": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2022/Rio/Europe A": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MistR",
+     "k0nfig"
+    ]
+   ],
+   "standin": true
+  },
+  "MIRAA": {
+   "missing_igl": true,
+   "players": [
+    [
+     "zonic",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "NRG": {
+   "missing_igl": true,
+   "players": [
+    [
+     "zonic",
+     "karrigan"
+    ]
+   ],
+   "standin": true
+  },
+  "NiP": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Astana": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HooXi",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Masters": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ruggah",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Perfect World/Major/2024/Shanghai/Europe B": {
+   "missing_igl": false,
+   "players": [
+    [
+     "br0",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Professeur": {
+   "missing_igl": false,
+   "players": [
+    [
+     "RUBINO",
+     "dev1ce"
+    ],
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Sam Nordmark": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": true,
+   "players": [
+    [
+     "NoTaN1dgl",
+     "karrigan"
+    ],
+    [
+     "gla1ve",
+     "Kjaerbye"
+    ]
+   ],
+   "standin": true
+  },
+  "VP": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zonic",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Aurora Gaming": {
+  "Intel Extreme Masters/2025/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "xfl0ud",
+     "XANTARES"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "B8": {
+  "CS Asia Championships/2025": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kRaSnaL",
+     "kensizor"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Kraków": {
+   "missing_igl": false,
+   "players": [
+    [
+     "segukawa",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "BC.Game Esports": {
+  "CS Asia Championships/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ScrunK",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CacaNito",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CacaNito",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ScrunK",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CacaNito",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "BESTIA": {
+  "ESL/Challenger/2023/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "reversive",
+     "luchov"
+    ],
+    [
+     "NikoM",
+     "tomaszin"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "BIG": {
+  "BLAST/Premier/2022/Fall/Showdown/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1n",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  },
+  "Brazy Party": {
+   "missing_igl": false,
+   "players": [
+    [
+     "prosus",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Masters/2022": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1n",
+     "syrsoN"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "S3NSEY",
+     "mantuu"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Sydney 2019": {
+   "missing_igl": false,
+   "players": [
+    [
+     "LEGIJA",
+     "XANTARES"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2022/Rio": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1n",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2022/Rio/Europe B": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1n",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "S3NSEY",
+     "mantuu"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XVII/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  },
+  "Nohte": {
+   "missing_igl": false,
+   "players": [
+    [
+     "S3NSEY",
+     "mantuu"
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Cup/Championship": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "Krimbo"
+    ]
+   ],
+   "standin": true
+  },
+  "Roobet Cup": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "faveN"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "BetBoom Team": {
+  "BC.Game Masters Championship/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "FL4MUS",
+     "d1Ledez"
+    ],
+    [
+     "zorte",
+     "ArtFr0st"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Bounty/2025/Spring": {
+   "missing_igl": true,
+   "players": [
+    [
+     "KaiR0N-",
+     "zorte"
+    ],
+    [
+     "nafany",
+     "Boombl4"
+    ]
+   ],
+   "standin": true
+  },
+  "FISSURE/Playground/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ArtFr0st",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Roman Imperium Cup/7": {
+   "missing_igl": false,
+   "players": [
+    [
+     "FL4MUS",
+     "d1Ledez"
+    ],
+    [
+     "zorte",
+     "ArtFr0st"
+    ]
+   ],
+   "standin": true
+  },
+  "Stake Ranked/Episode 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "FL4MUS",
+     "d1Ledez"
+    ],
+    [
+     "zorte",
+     "ArtFr0st"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Betclic Apogee Esports": {
+  "Super DraculaN/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Qlocuu",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Cloud9": {
+  "BLAST/Pro Series/2018/Copenhagen": {
+   "missing_igl": true,
+   "players": [
+    [
+     "valens",
+     "Golden"
+    ],
+    [
+     "kioShiMa",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Pro Series/2018/Lisbon": {
+   "missing_igl": true,
+   "players": [
+    [
+     "refrezh",
+     "Golden"
+    ]
+   ],
+   "standin": true
+  },
+  "CEVO/Season 6/Professional": {
+   "missing_igl": false,
+   "players": [
+    [
+     "stunna",
+     "ShahZaM"
+    ]
+   ],
+   "standin": true
+  },
+  "Counter Logic Gaming": {
+   "missing_igl": false,
+   "players": [
+    [
+     "shroud",
+     "autimatic"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/2018/Premier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "STYKO",
+     ""
+    ],
+    [
+     "Golden",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/III/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Irukandji",
+     "fREAKAZOiD"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2018/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "STYKO",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "valens",
+     "Skadoodle"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 6/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "valens",
+     "autimatic"
+    ],
+    [
+     "shroud",
+     "autimatic"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 7/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Skadoodle",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 8/North America": {
+   "missing_igl": true,
+   "players": [
+    [
+     "valens",
+     "Golden"
+    ],
+    [
+     "kioShiMa",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 5/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Skadoodle",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 6": {
+   "missing_igl": true,
+   "players": [
+    [
+     "valens",
+     "Golden"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "buster",
+     "Ax1Le"
+    ]
+   ],
+   "standin": true
+  },
+  "MIBR": {
+   "missing_igl": true,
+   "players": [
+    [
+     "valens",
+     "Golden"
+    ]
+   ],
+   "standin": true
+  },
+  "Na`Vi": {
+   "missing_igl": true,
+   "players": [
+    [
+     "valens",
+     "Golden"
+    ]
+   ],
+   "standin": true
+  },
+  "RGN/Pro Series": {
+   "missing_igl": true,
+   "players": [
+    [
+     "swag",
+     "sgares"
+    ]
+   ],
+   "standin": true
+  },
+  "SK Gaming": {
+   "missing_igl": false,
+   "players": [
+    [
+     "valens",
+     "autimatic"
+    ]
+   ],
+   "standin": true
+  },
+  "Thunderpick/World Championship/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Boombl4",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "cs summit/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "swag",
+     "Skadoodle"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Complexity": {
+  "BLAST/Major/2025/Austin": {
+   "missing_igl": false,
+   "players": [
+    [
+     "junior",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2020/Global Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JUGi",
+     "poizon"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Sonic",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "Cs summit/7": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JUGi",
+     "poizon"
+    ]
+   ],
+   "standin": true
+  },
+  "Dust2.us": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Sonic",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/III/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "roca",
+     "shinobi"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 12/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "NaToSaphiX",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 14": {
+   "missing_igl": false,
+   "players": [
+    [
+     "NaToSaphiX",
+     "k0nfig"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jasonR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 7/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Professor_Chaos",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 9/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "yay",
+     "Rickeh"
+    ],
+    [
+     "n0thing",
+     "Rickeh"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 1/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "aKis",
+     "Surreal"
+    ],
+    [
+     "aKis",
+     "dephh"
+    ],
+    [
+     "androidx23",
+     "shinobi"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "junior",
+     "hallzerk"
+    ],
+    [
+     "n0thing",
+     "Rickeh"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Global Challenge 2020": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ottoNd",
+     "poizon"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Sonic",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XV/New York/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "NaToSaphiX",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "King Dempz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "junior",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "Nordavind": {
+   "missing_igl": false,
+   "players": [
+    [
+     "NaToSaphiX",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Northern Arena/2016/Toronto": {
+   "missing_igl": false,
+   "players": [
+    [
+     "APE",
+     "witmer"
+    ]
+   ],
+   "standin": true
+  },
+  "Renegades": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Professor_Chaos",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Slevo": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Sonic",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "Sonic (South African player)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Sonic",
+     "hallzerk"
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "n0thing",
+     "Rickeh"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "ENCE": {
+  "CCT/Central Europe/Finals/Malta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HENU",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "CS Asia Championships/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "VLDN",
+     "dycha"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2016/Tours": {
+   "missing_igl": false,
+   "players": [
+    [
+     "naSu",
+     "stonde"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2020/Fall/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "xseveN",
+     "Jamppi"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2020/Winter/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "SADDYX",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESEA/Season 22/Global Premier Challenge": {
+   "missing_igl": false,
+   "players": [
+    [
+     "natu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Winter 2021": {
+   "missing_igl": true,
+   "players": [
+    [
+     "maden",
+     "Snappi"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XVII/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Snax",
+     "Spinx"
+    ]
+   ],
+   "standin": true
+  },
+  "Minor Championship/2017/Atlanta/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tomsku",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "EYEBALLERS": {
+  "BLAST/Bounty/2026/Summer/Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "yxngstxr",
+     "maxster"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Elevate": {
+  "BLAST/Premier/2024/Spring/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MRC9",
+     "dea"
+    ]
+   ],
+   "standin": true
+  },
+  "Dust2.us": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MRC9",
+     "dea"
+    ],
+    [
+     "nbgee12",
+     "dea"
+    ]
+   ],
+   "standin": true
+  },
+  "Mnmzzz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MRC9",
+     "dea"
+    ],
+    [
+     "nbgee12",
+     "dea"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2024/Copenhagen/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nbgee12",
+     "dea"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Eternal Fire": {
+  "CCT/Central Europe/Series 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "hey",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Fall Series/2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "mirbit",
+     "ISSAA"
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Winter Series/2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "EMSTAR",
+     "xfl0ud"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "FORZE Esports": {
+  "ASUS Open/2009/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Zeus",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 19": {
+   "missing_igl": false,
+   "players": [
+    [
+     "smooya",
+     ""
+    ],
+    [
+     "NickelBack",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "GG.BET Summer/Europe and CIS": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     "liTTle"
+    ]
+   ],
+   "standin": true
+  },
+  "GG.Bet Sydney Invitational": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Flarich",
+     "almazer"
+    ]
+   ],
+   "standin": true
+  },
+  "MID.TV Cyber Cup": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     "liTTle"
+    ]
+   ],
+   "standin": true
+  },
+  "Movistar Riders": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Flarich",
+     "almazer"
+    ]
+   ],
+   "standin": true
+  },
+  "devils.one": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Flarich",
+     "almazer"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "FURIA": {
+  "Cs summit/5": {
+   "missing_igl": false,
+   "players": [
+    [
+     "guerri",
+     "HEN1"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 14": {
+   "missing_igl": false,
+   "players": [
+    [
+     "guerri",
+     "drop"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 19": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kye",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Global Esports Tour/2024/Rio de Janeiro": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kye",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "guerri": {
+   "missing_igl": false,
+   "players": [
+    [
+     "guerri",
+     "drop"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "FUT Esports": {
+  "BLAST/Rivals/2026/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "coolio",
+     "lauNX"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "FaZe Clan": {
+  "BLAST/Bounty/2026/Summer": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Neityu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/Spring/Groups": {
+   "missing_igl": false,
+   "players": [
+    [
+     "es3tag",
+     "rain"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Rivals/2026/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Neityu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2017/Las Vegas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jkaem",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/III/Europe/Week 1-4": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zbM",
+     "jkaem"
+    ],
+    [
+     "RobbaN",
+     "jkaem"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 22": {
+   "missing_igl": false,
+   "players": [
+    [
+     "rain",
+     "jcobbb"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/Europe/Week 1-4": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tenzki",
+     "kioShiMa"
+    ],
+    [
+     "jkaem",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jkaem",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Katowice 2022": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jks",
+     "rain"
+    ],
+    [
+     "jks",
+     "ropz"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Sydney 2019": {
+   "missing_igl": true,
+   "players": [
+    [
+     "YNk",
+     "NiKo"
+    ],
+    [
+     "USTILO",
+     "AdreN"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "skullz",
+     "rain"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Neityu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "MIRAA": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jkaem",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "NiP": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zbM",
+     "jkaem"
+    ],
+    [
+     "RobbaN",
+     "jkaem"
+    ]
+   ],
+   "standin": true
+  },
+  "Stake Ranked/Episode 2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Neityu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "StarSeries i-League/Season 7": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YNk",
+     "GuardiaN"
+    ]
+   ],
+   "standin": true
+  },
+  "Team Liquid": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jks",
+     "ropz"
+    ]
+   ],
+   "standin": true
+  },
+  "XSE Pro League/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Neityu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "mousesports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tenzki",
+     "kioShiMa"
+    ]
+   ],
+   "standin": true
+  },
+  "paiN Gaming": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YNk",
+     "GuardiaN"
+    ]
+   ],
+   "standin": true
+  },
+  "ropz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jks",
+     "ropz"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Fisher College": {
+  "AlekS": {
+   "missing_igl": false,
+   "players": [
+    [
+     "neaLaN",
+     "ReFuZR"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2026/Astana": {
+   "missing_igl": false,
+   "players": [
+    [
+     "neaLaN",
+     "ReFuZR"
+    ]
+   ],
+   "standin": true
+  },
+  "corn": {
+   "missing_igl": false,
+   "players": [
+    [
+     "neaLaN",
+     "ReFuZR"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Fnatic": {
+  "CPLAY": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cENTRYZ",
+     "Devilwalk"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/Season 2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Jumpy",
+     "dennis"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/I/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "schneider",
+     "olofmeister"
+    ],
+    [
+     "cENTRYZ",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/II/Europe": {
+   "missing_igl": true,
+   "players": [
+    [
+     "vuggo",
+     "olofmeister"
+    ],
+    [
+     "dennis",
+     "pronax"
+    ],
+    [
+     "dennis",
+     "KRiMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2015/Katowice": {
+   "missing_igl": false,
+   "players": [
+    [
+     "vuggo",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 15": {
+   "missing_igl": false,
+   "players": [
+    [
+     "poizon",
+     "regali"
+    ],
+    [
+     "Peppzor",
+     "Brollan"
+    ],
+    [
+     "Banjo",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Invitational/2021/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "regali",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Masters/2022": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Peppzor",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "EnVyUs": {
+   "missing_igl": false,
+   "players": [
+    [
+     "schneider",
+     "olofmeister"
+    ],
+    [
+     "cENTRYZ",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 4/Europe/Week 1-4#Week 4": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Jumpy",
+     "flusha"
+    ]
+   ],
+   "standin": true
+  },
+  "FlipSid3 Tactics": {
+   "missing_igl": false,
+   "players": [
+    [
+     "schneider",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "G2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Jumpy",
+     "flusha"
+    ]
+   ],
+   "standin": true
+  },
+  "HellRaisers": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "KRiMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "f0rest",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "KRIMZ": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Peppzor",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Na`Vi": {
+   "missing_igl": false,
+   "players": [
+    [
+     "vuggo",
+     "olofmeister"
+    ]
+   ],
+   "standin": true
+  },
+  "NiP": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "KRiMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/Championship Series/Kick-Off Season/Regular Season": {
+   "missing_igl": false,
+   "players": [
+    [
+     "schneider",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Cup/Championship": {
+   "missing_igl": false,
+   "players": [
+    [
+     "f0rest",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "REPUBLEAGUE/Season 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HEAP",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "SK": {
+   "missing_igl": true,
+   "players": [
+    [
+     "dennis",
+     "pronax"
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/StarSeries/VII/Round Robin": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cENTRYZ",
+     "Devilwalk"
+    ]
+   ],
+   "standin": true
+  },
+  "TSM": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dennis",
+     "KRiMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "World Electronic Sports Games/2017/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Brollan",
+     "KRIMZ"
+    ]
+   ],
+   "standin": true
+  },
+  "mousesports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "vuggo",
+     "olofmeister"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "G2 Esports": {
+  "BLAST/Premier/2024/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "TaZ",
+     "m0NESY"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Fuks",
+     "RpK"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2019/New York": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kioShiMa",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 15": {
+   "missing_igl": true,
+   "players": [
+    [
+     "AMANEK",
+     "Aleksib"
+    ]
+   ],
+   "standin": true
+  },
+  "Fragbite Masters/Season 5": {
+   "missing_igl": false,
+   "players": [
+    [
+     "RUBINO",
+     "jkaem"
+    ],
+    [
+     "MUTiRiS",
+     "rain"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Winter 2021": {
+   "missing_igl": true,
+   "players": [
+    [
+     "kennyS",
+     "nexa"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2024/Dallas": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Stewie2K",
+     "HooXi"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Chengdu": {
+   "missing_igl": true,
+   "players": [
+    [
+     "sAw",
+     "huNter-"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Rio": {
+   "missing_igl": true,
+   "players": [
+    [
+     "tAk",
+     "huNter-"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Astana": {
+   "missing_igl": true,
+   "players": [
+    [
+     "TaZ",
+     "huNter-"
+    ]
+   ],
+   "standin": true
+  },
+  "SK Gaming": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MUTiRiS",
+     "rain"
+    ]
+   ],
+   "standin": true
+  },
+  "Stewie2K": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Stewie2K",
+     "HooXi"
+    ]
+   ],
+   "standin": true
+  },
+  "Team LDLC.com White": {
+   "missing_igl": false,
+   "players": [
+    [
+     "RUBINO",
+     "jkaem"
+    ]
+   ],
+   "standin": true
+  },
+  "Team Vitality": {
+   "missing_igl": true,
+   "players": [
+    [
+     "sAw",
+     "huNter-"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "GamerLegion": {
+  "ESL/Challenger/2023/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "aNdu",
+     "volt"
+    ]
+   ],
+   "standin": true
+  },
+  "FISSURE/Playground/3": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Grashog",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "acoR",
+     "sl3nd"
+    ]
+   ],
+   "standin": true
+  },
+  "Logitech G Play Connect/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kRaSnaL",
+     "REZ"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Gentle Mates": {
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CRUC1AL",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Nohte": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CRUC1AL",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Stake Ranked/Episode 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "CRUC1AL",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "HEROIC": {
+  "AGO Esports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "friberg",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Bounty/2025/Fall/Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Scr0b",
+     "Alkaren"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Bounty/2025/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "maden",
+     "tN1R"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2021/World Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "b0RUP",
+     "stavn"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2022/World Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k0nfig",
+     "stavn"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Zyphon",
+     ""
+    ],
+    [
+     "cadiaN",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/World Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "salazar",
+     ""
+    ],
+    [
+     "Zyphon",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Fall/Groups": {
+   "missing_igl": false,
+   "players": [
+    [
+     "sAw",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "CS Asia Championships/2025": {
+   "missing_igl": false,
+   "players": [
+    [
+     "hades",
+     "Alkaren"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "LOMME",
+     "Friis"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 7/Europe": {
+   "missing_igl": true,
+   "players": [
+    [
+     "friberg",
+     ""
+    ],
+    [
+     "JUGi",
+     "Snappi"
+    ],
+    [
+     "es3tag",
+     "JUGi"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nicoodoz",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "HellRaisers": {
+   "missing_igl": false,
+   "players": [
+    [
+     "es3tag",
+     "JUGi"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2024/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Woro2k",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2024/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nicoodoz",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "Roobet Cup/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Chr1zN",
+     ""
+    ],
+    [
+     "sirah",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nicoodoz",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "Team EnVyUs": {
+   "missing_igl": true,
+   "players": [
+    [
+     "JUGi",
+     "Snappi"
+    ]
+   ],
+   "standin": true
+  },
+  "Thunderpick/World Championship/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Chr1zN",
+     ""
+    ],
+    [
+     "sirah",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Imperial Esports": {
+  "BLAST/Premier/2023/Fall/Showdown/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "LUCAS1",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Brazy Party": {
+   "missing_igl": false,
+   "players": [
+    [
+     "lux",
+     "chelo"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Imperial Female": {
+  "HLTV": {
+   "missing_igl": true,
+   "players": [
+    [
+     "bubble",
+     "tory"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Katowice": {
+   "missing_igl": true,
+   "players": [
+    [
+     "bubble",
+     "tory"
+    ]
+   ],
+   "standin": true
+  },
+  "Sumljiv Model": {
+   "missing_igl": true,
+   "players": [
+    [
+     "bubble",
+     "tory"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "K27": {
+  "Stake Ranked/Episode 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "shalfey",
+     "clax"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Legacy": {
+  "ESL/Pro League/Season 24": {
+   "missing_igl": true,
+   "players": [
+    [
+     "bobz",
+     "arT"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "M80": {
+  "BLAST/Bounty/2025/Spring/Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "reck"
+    ]
+   ],
+   "standin": true
+  },
+  "Dust2.us": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "reck"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Challenger/2023/Atlanta": {
+   "missing_igl": true,
+   "players": [
+    [
+     "dephh",
+     "maNkz"
+    ]
+   ],
+   "standin": true
+  },
+  "ICE Invitational/2025": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "reck"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2024/Katowice": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dephh",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Mnmzzz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "k1to",
+     "reck"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2024/Copenhagen/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dephh",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "MIBR": {
+  "BLAST/Premier/2021/Fall/Groups": {
+   "missing_igl": true,
+   "players": [
+    [
+     "nak",
+     "chelo"
+    ],
+    [
+     "brnz4n",
+     "boltz"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2021/Fall/Showdown": {
+   "missing_igl": true,
+   "players": [
+    [
+     "brnz4n",
+     "chelo"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2022/Spring/Groups": {
+   "missing_igl": true,
+   "players": [
+    [
+     "brnz4n",
+     "chelo"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Pro Series/2018/Lisbon": {
+   "missing_igl": false,
+   "players": [
+    [
+     "swag",
+     "fer"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Pro Series/2019/Los Angeles": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "coldzera"
+    ]
+   ],
+   "standin": true
+  },
+  "Dust2.com.br": {
+   "missing_igl": false,
+   "players": [
+    [
+     "brn$",
+     "kl1m"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "coldzera"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Chicago 2019": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "coldzera"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Katowice 2022": {
+   "missing_igl": true,
+   "players": [
+    [
+     "brnz4n",
+     "chelo"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XVII/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "BIT",
+     "brnz4n"
+    ]
+   ],
+   "standin": true
+  },
+  "MIRAA": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "coldzera"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Masters": {
+   "missing_igl": false,
+   "players": [
+    [
+     "brn$",
+     "kl1m"
+    ]
+   ],
+   "standin": true
+  },
+  "REPUBLEAGUE/Season 2": {
+   "missing_igl": true,
+   "players": [
+    [
+     "brnz4n",
+     "chelo"
+    ]
+   ],
+   "standin": true
+  },
+  "vitoriavonb": {
+   "missing_igl": false,
+   "players": [
+    [
+     "brn$",
+     "kl1m"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "MOUZ": {
+  "2004 CPL Summer Championship": {
+   "missing_igl": false,
+   "players": [
+    [
+     "r4id",
+     "Johnny R."
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/World Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Brollan",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "CS:GO Champions League/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Tixo",
+     "LEGIJA"
+    ],
+    [
+     "tabseN",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Cs summit/5": {
+   "missing_igl": false,
+   "players": [
+    [
+     "NaToSaphiX",
+     "woxic"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2021/November": {
+   "missing_igl": false,
+   "players": [
+    [
+     "chrisJ",
+     "Bymas"
+    ]
+   ],
+   "standin": true
+  },
+  "ESEA/Season 17/Invite": {
+   "missing_igl": false,
+   "players": [
+    [
+     "gob b",
+     "allu"
+    ]
+   ],
+   "standin": true
+  },
+  "ESEA/Season 18/Invite": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tabseN",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2018/Belo Horizonte": {
+   "missing_igl": false,
+   "players": [
+    [
+     "n0thing",
+     "oskar"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro Series/Germany/Spring 2012/Counter-Strike": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Blizzard",
+     ""
+    ],
+    [
+     "karrigan",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro Series/Germany/Summer 2014": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nooky",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro Series/Germany/Winter 2012": {
+   "missing_igl": false,
+   "players": [
+    [
+     "crZy",
+     "stavros"
+    ],
+    [
+     "weber",
+     "nex"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro Series/Germany/Winter 2014": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nooky",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Electronic Sports World Cup/2008": {
+   "missing_igl": false,
+   "players": [
+    [
+     "bara",
+     "cyx"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 1/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tabseN",
+     "Spiidi"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 5/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1mple",
+     "STYKO"
+    ]
+   ],
+   "standin": true
+  },
+  "Game Show League Season 2": {
+   "missing_igl": true,
+   "players": [
+    [
+     "tabseN",
+     ""
+    ],
+    [
+     "NiKolinho",
+     "Troubley"
+    ]
+   ],
+   "standin": true
+  },
+  "Hitbox/Arena Championship/3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "schneider",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Katowice 2022": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JDC",
+     "Bymas"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Sydney": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Nexius",
+     "Jimpphat"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Katowice": {
+   "missing_igl": false,
+   "players": [
+    [
+     "xelex",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Brollan",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/StarSeries/IV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "TORNADOTONI",
+     "approx"
+    ]
+   ],
+   "standin": true
+  },
+  "Virtus.pro": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1mple",
+     "STYKO"
+    ]
+   ],
+   "standin": true
+  },
+  "WEG 2005 S01": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Hare",
+     "gore"
+    ]
+   ],
+   "standin": true
+  },
+  "World Cyber Games/2009": {
+   "missing_igl": false,
+   "players": [
+    [
+     "seraph",
+     "cash"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Metizport": {
+  "Global Esports Tour/2024/Rio de Janeiro": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Plopski",
+     "nilo"
+    ]
+   ],
+   "standin": true
+  },
+  "Journey/2026/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "stanislaw",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Mindfreak (Australian team)": {
+  "ESL/Impact/2022/Valencia": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cAra",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Monte": {
+  "BLAST/Bounty/2026/Winter/Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Rainwaker",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Spring/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "sdy",
+     ""
+    ],
+    [
+     "Leen",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2024/Copenhagen/Europe B": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Gizmy",
+     "sdy"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "NRG": {
+  "CS Asia Championships/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "daps",
+     "br0"
+    ]
+   ],
+   "standin": true
+  },
+  "Counter Pit League/Season 2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "tabseN",
+     "ptr"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 5/North America": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Professor_Chaos",
+     "daps"
+    ]
+   ],
+   "standin": true
+  },
+  "OpTic": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Professor_Chaos",
+     "daps"
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/2025/Major": {
+   "missing_igl": true,
+   "players": [
+    [
+     "daps",
+     "nitr0"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Natus Vincere": {
+  "BIG": {
+   "missing_igl": true,
+   "players": [
+    [
+     "kane",
+     "electronic"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2022/Fall/Groups": {
+   "missing_igl": false,
+   "players": [
+    [
+     "headtr1ck",
+     "s1mple"
+    ]
+   ],
+   "standin": true
+  },
+  "Counter Pit League": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ANGE1",
+     "GuardiaN"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2016/Malmö": {
+   "missing_igl": false,
+   "players": [
+    [
+     "starix",
+     "GuardiaN"
+    ]
+   ],
+   "standin": true
+  },
+  "ESEA/Season 16/Invite": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ceh9",
+     "Edward"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/League/Pro/I": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Dosia",
+     "Zeus"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 15": {
+   "missing_igl": true,
+   "players": [
+    [
+     "headtr1ck",
+     "Boombl4"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 6/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "1uke",
+     ""
+    ],
+    [
+     "kane",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 8/Europe": {
+   "missing_igl": true,
+   "players": [
+    [
+     "kane",
+     "electronic"
+    ]
+   ],
+   "standin": true
+  },
+  "GODSENT": {
+   "missing_igl": false,
+   "players": [
+    [
+     "1uke",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Sydney": {
+   "missing_igl": false,
+   "players": [
+    [
+     "B1ad3",
+     "s1mple"
+    ]
+   ],
+   "standin": true
+  },
+  "North": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kane",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Space Soldiers": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kalinka",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/StarSeries/IV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "mouseTT",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Team Kinguin": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ANGE1",
+     "GuardiaN"
+    ]
+   ],
+   "standin": true
+  },
+  "World Cyber Arena/2017/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kalinka",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "dAT Team": {
+   "missing_igl": false,
+   "players": [
+    [
+     "mouseTT",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Ninjas in Pyjamas": {
+  "BLAST/Premier/2023/Spring/Groups": {
+   "missing_igl": true,
+   "players": [
+    [
+     "maxster",
+     "hampus"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Spring/Showdown": {
+   "missing_igl": true,
+   "players": [
+    [
+     "BluePho3nix",
+     ""
+    ],
+    [
+     "jocab",
+     "REZ"
+    ],
+    [
+     "MisteM",
+     "alex"
+    ],
+    [
+     "maxster",
+     ""
+    ],
+    [
+     "Silence",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "CS Asia Championships/2023": {
+   "missing_igl": true,
+   "players": [
+    [
+     "maxster",
+     "alex"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2019/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "pita",
+     "dennis"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 12/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "THREAT",
+     "nawwk"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 15": {
+   "missing_igl": false,
+   "players": [
+    [
+     "phzy",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 19": {
+   "missing_igl": false,
+   "players": [
+    [
+     "xKacpersky",
+     "REZ"
+    ],
+    [
+     "BluePho3nix",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 4/Europe/Week 1-4": {
+   "missing_igl": false,
+   "players": [
+    [
+     "disco doplan",
+     "pyth"
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Masters/2024": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jocab",
+     "maxster"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 2/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "freddieb",
+     "friberg"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 3/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "flamie",
+     "friberg"
+    ],
+    [
+     "s1mple",
+     "f0rest"
+    ]
+   ],
+   "standin": true
+  },
+  "FaZe Clan": {
+   "missing_igl": false,
+   "players": [
+    [
+     "THREAT",
+     "nawwk"
+    ]
+   ],
+   "standin": true
+  },
+  "Fnatic": {
+   "missing_igl": false,
+   "players": [
+    [
+     "THREAT",
+     "nawwk"
+    ]
+   ],
+   "standin": true
+  },
+  "G2 Esports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "phzy",
+     "dev1ce"
+    ],
+    [
+     "flamie",
+     "friberg"
+    ],
+    [
+     "s1mple",
+     "f0rest"
+    ]
+   ],
+   "standin": true
+  },
+  "Global Esports Tour/2022/Dubai": {
+   "missing_igl": true,
+   "players": [
+    [
+     "ztr",
+     "hampus"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": true,
+   "players": [
+    [
+     "ztr",
+     "hampus"
+    ]
+   ],
+   "standin": true
+  },
+  "IEM Winter 2021": {
+   "missing_igl": false,
+   "players": [
+    [
+     "phzy",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XVII/Dallas": {
+   "missing_igl": true,
+   "players": [
+    [
+     "ztr",
+     "hampus"
+    ]
+   ],
+   "standin": true
+  },
+  "King of Majors": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Delpan",
+     "Maikelele"
+    ]
+   ],
+   "standin": true
+  },
+  "MLG/2016/Columbus": {
+   "missing_igl": false,
+   "players": [
+    [
+     "THREAT",
+     "pyth"
+    ]
+   ],
+   "standin": true
+  },
+  "Perfect World/Major/2024/Shanghai/Europe B": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jocab",
+     "maxster"
+    ]
+   ],
+   "standin": true
+  },
+  "Roobet Cup/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "maxster",
+     ""
+    ],
+    [
+     "maxster",
+     "Brollan"
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/2019/Major": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Golden",
+     "Plopski"
+    ]
+   ],
+   "standin": true
+  },
+  "Team Vitality": {
+   "missing_igl": false,
+   "players": [
+    [
+     "phzy",
+     "dev1ce"
+    ]
+   ],
+   "standin": true
+  },
+  "Thunderpick/World Championship/2023": {
+   "missing_igl": false,
+   "players": [
+    [
+     "maxster",
+     ""
+    ],
+    [
+     "maxster",
+     "Brollan"
+    ]
+   ],
+   "standin": true
+  },
+  "Thunderpick/World Championship/2024": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jocab",
+     "maxster"
+    ]
+   ],
+   "standin": true
+  },
+  "Xizt": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jocab",
+     "maxster"
+    ]
+   ],
+   "standin": true
+  },
+  "mitsxha": {
+   "missing_igl": true,
+   "players": [
+    [
+     "ztr",
+     "hampus"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "OG": {
+  "BLAST/Premier/2022/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "degster",
+     "mantuu"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/Spring/Showdown/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "smooya",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Fall/Groups": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Thomas",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Spring/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s0und",
+     "HeavyGod"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 13": {
+   "missing_igl": false,
+   "players": [
+    [
+     "niko",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Global Esports Tour/2024/Rio de Janeiro": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MoDo",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2023/Dallas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "regali",
+     "degster"
+    ]
+   ],
+   "standin": true
+  },
+  "SAW": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s0und",
+     "HeavyGod"
+    ]
+   ],
+   "standin": true
+  },
+  "Skyesports/Masters/2024": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MoDo",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Thunderpick/World Championship/2024": {
+   "missing_igl": false,
+   "players": [
+    [
+     "M1key",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Passion UA": {
+  "Intel Extreme Masters/2026/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "sdy",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Rio": {
+   "missing_igl": false,
+   "players": [
+    [
+     "FaNg",
+     "Senzu"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Rooster": {
+  "ESL/Challenger/2024/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jhd",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Sangal Esports": {
+  "PGL/2022/Antwerp/Europe B": {
+   "missing_igl": false,
+   "players": [
+    [
+     "TuGuX",
+     "Soulfly"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "TYLOO": {
+  "China Top/2017/Shenzhen": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Monster",
+     "bondik"
+    ]
+   ],
+   "standin": true
+  },
+  "DreamHack/2017/Las Vegas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HZ",
+     "fancy1"
+    ]
+   ],
+   "standin": true
+  },
+  "FISSURE": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zhokiNg",
+     "Jee"
+    ]
+   ],
+   "standin": true
+  },
+  "FISSURE/Playground/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zhokiNg",
+     "Jee"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season III/Asian Championship Finals II": {
+   "missing_igl": false,
+   "players": [
+    [
+     "eVonne",
+     "tb"
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/i-League StarSeries/Season 3": {
+   "missing_igl": true,
+   "players": [
+    [
+     "zhokiNg",
+     "BnTeT"
+    ]
+   ],
+   "standin": true
+  },
+  "World Electronic Sports Games/2016": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HZ",
+     "fancy1"
+    ],
+    [
+     "bottle",
+     "AttackeR"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Team Falcons": {
+  "BLAST/Bounty/2026/Winter": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Nucleonz",
+     "kyousuke"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Open/2026/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Nucleonz",
+     "kyousuke"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/Spring/Showdown": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1mple",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Global Esports Tour/2022/Dubai": {
+   "missing_igl": false,
+   "players": [
+    [
+     "SIXER",
+     "Python"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Team Liquid": {
+  "BLAST/Bounty/2026/Summer/Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "ultimate",
+     "Jorko"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2022/Fall/Groups": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2023/Fall/Showdown/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "daps",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "CS Asia Championships/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "flashie",
+     "malbsMd"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/2018/Major": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "steel"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/Road to Vegas/North America": {
+   "missing_igl": false,
+   "players": [
+    [
+     "allu",
+     "FugLy"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL ESEA/Pro League/Season/II/Finals": {
+   "missing_igl": false,
+   "players": [
+    [
+     "mOE",
+     "EliGE"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/One/2016/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1mple",
+     "Pimp"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 16": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 6/Finals": {
+   "missing_igl": false,
+   "players": [
+    [
+     "zews",
+     "steel"
+    ]
+   ],
+   "standin": true
+  },
+  "Esports Championship Series/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "s1mple",
+     "Pimp"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ],
+    [
+     "allu",
+     "FugLy"
+    ]
+   ],
+   "standin": true
+  },
+  "IBUYPOWER/Invitational/2017/Spring": {
+   "missing_igl": false,
+   "players": [
+    [
+     "hazed",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2022/Rio/Americas": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2026/Kraków": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Krimbo",
+     "NAF"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season XVII/Cologne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Logitech G Play Connect/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "VLDN",
+     "malbsMd"
+    ]
+   ],
+   "standin": true
+  },
+  "MLG/2016/Columbus": {
+   "missing_igl": false,
+   "players": [
+    [
+     "adreN",
+     "koosta"
+    ]
+   ],
+   "standin": true
+  },
+  "MLG/2016/Columbus/Offline Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "adreN",
+     "koosta"
+    ]
+   ],
+   "standin": true
+  },
+  "Roman Imperium Cup/6": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jL",
+     "NertZ"
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "YEKINDAR",
+     ""
+    ],
+    [
+     "allu",
+     "FugLy"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Team Spirit": {
+  "BLAST/Premier/2024/Spring/Groups": {
+   "missing_igl": true,
+   "players": [
+    [
+     "hally",
+     "magixx"
+    ],
+    [
+     "baz",
+     "donk"
+    ]
+   ],
+   "standin": true
+  },
+  "ELEAGUE/2017/Major/Offline Qualifier": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Certus",
+     "COLDY"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Team Vitality": {
+  "BLAST/Open/2026/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "jL",
+     "mezii"
+    ]
+   ],
+   "standin": true
+  },
+  "BLAST/Premier/2024/World Final": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JACKZ",
+     "mezii"
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Pro League/Season 17": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JACKZ",
+     "dupreeh"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JACKZ",
+     "mezii"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2026/Masters": {
+   "missing_igl": true,
+   "players": [
+    [
+     "jL",
+     "apEX"
+    ]
+   ],
+   "standin": true
+  },
+  "Striker (Czech journalist)": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JACKZ",
+     "mezii"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Team Voca": {
+  "Dust2.us": {
+   "missing_igl": false,
+   "players": [
+    [
+     "retchy",
+     "Infinite"
+    ]
+   ],
+   "standin": true
+  },
+  "Mnmzzz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "retchy",
+     "Infinite"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2026/Bucharest": {
+   "missing_igl": false,
+   "players": [
+    [
+     "retchy",
+     "Infinite"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "The MongolZ": {
+  "BLAST/Rivals/2025/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "controlez",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "FISSURE/Playground/3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cobrazera",
+     "Techno4K"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Chengdu": {
+   "missing_igl": false,
+   "players": [
+    [
+     "controlez",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "StarLadder/2025/Major": {
+   "missing_igl": false,
+   "players": [
+    [
+     "controlez",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "VERTEX Esports Club": {
+  "ESL/Challenger/2022/Melbourne": {
+   "missing_igl": false,
+   "players": [
+    [
+     "BL1TZ",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Virtus.pro": {
+  "BLAST/Premier/2020/Spring/Showdown/Europe": {
+   "missing_igl": true,
+   "players": [
+    [
+     "NickelBack",
+     "AdreN"
+    ]
+   ],
+   "standin": true
+  },
+  "Caseking of the Hill/King of Kings": {
+   "missing_igl": true,
+   "players": [
+    [
+     "olofmeister",
+     "NEO"
+    ]
+   ],
+   "standin": true
+  },
+  "Fragbite Masters/Season 3": {
+   "missing_igl": true,
+   "players": [
+    [
+     "MINISE",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "Game Show/League/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "MICHU",
+     "pasha"
+    ]
+   ],
+   "standin": true
+  },
+  "Gfinity Spring Masters I": {
+   "missing_igl": true,
+   "players": [
+    [
+     "MICHU",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "HLTV": {
+   "missing_igl": true,
+   "players": [
+    [
+     "MICHU",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Katowice": {
+   "missing_igl": false,
+   "players": [
+    [
+     "mir",
+     "FL4MUS"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/Season X/San Jose": {
+   "missing_igl": true,
+   "players": [
+    [
+     "MICHU",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "MIRAA": {
+   "missing_igl": true,
+   "players": [
+    [
+     "MICHU",
+     "Snax"
+    ]
+   ],
+   "standin": true
+  },
+  "mousesports": {
+   "missing_igl": true,
+   "players": [
+    [
+     "NickelBack",
+     "AdreN"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Wildcard": {
+  "Dust2.us": {
+   "missing_igl": false,
+   "players": [
+    [
+     "motm",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "ESL/Challenger/2024/Atlanta": {
+   "missing_igl": false,
+   "players": [
+    [
+     "fr3nd",
+     "phzy"
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2024/Chengdu": {
+   "missing_igl": false,
+   "players": [
+    [
+     "horvy",
+     "JBa"
+    ],
+    [
+     "motm",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Mnmzzz": {
+   "missing_igl": false,
+   "players": [
+    [
+     "motm",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "horvy": {
+   "missing_igl": false,
+   "players": [
+    [
+     "horvy",
+     "JBa"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "magic": {
+  "StarLadder/StarSeries/2026/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "eksiver",
+     "AW"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "paiN Gaming": {
+  "Global Esports Tour/2024/Rio de Janeiro": {
+   "missing_igl": false,
+   "players": [
+    [
+     "nyezin",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Intel Extreme Masters/2025/Melbourne": {
+   "missing_igl": true,
+   "players": [
+    [
+     "rikz",
+     "biguzera"
+    ],
+    [
+     "deemO",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "International Gaming League/2016/Grand Finals": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Zilkenberg",
+     "zqk"
+    ],
+    [
+     "felippe1",
+     "KillDreaM"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Astana": {
+   "missing_igl": false,
+   "players": [
+    [
+     "rikz",
+     "dgt"
+    ]
+   ],
+   "standin": true
+  },
+  "PGL/2025/Bucharest": {
+   "missing_igl": false,
+   "players": [
+    [
+     "deemO",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ }
+}

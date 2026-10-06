@@ -1,0 +1,119 @@
+Intel Extreme Masters/2023/Fall
+Intel Extreme Masters/2023/Spring
+Intel Extreme Masters/2023/Sydney
+Intel Extreme Masters/2024/Chengdu
+Intel Extreme Masters/2024/Cologne
+Intel Extreme Masters/2024/Dallas
+Intel Extreme Masters/2024/Fall
+Intel Extreme Masters/2024/Katowice
+Intel Extreme Masters/2024/Rio
+Intel Extreme Masters/2025/Chengdu
+Intel Extreme Masters/2025/Cologne
+Intel Extreme Masters/2025/Dallas
+Intel Extreme Masters/2025/Katowice
+Intel Extreme Masters/2025/Melbourne
+Intel Extreme Masters/2025/Spring
+Intel Extreme Masters/2026/Atlanta
+Intel Extreme Masters/2026/Beijing
+Intel Extreme Masters/2026/Brazil
+Intel Extreme Masters/2026/Cologne
+Intel Extreme Masters/2026/Cologne/Playoffs
+Intel Extreme Masters/2026/Cologne/Stage 1
+Intel Extreme Masters/2026/Cologne/Stage 2
+Intel Extreme Masters/2026/Cologne/Stage 3
+Intel Extreme Masters/2026/Kraków
+Intel Extreme Masters/2026/Rio
+ESL/Pro League/Season 19
+ESL/Pro League/Season 20
+ESL/Pro League/Season 21
+ESL/Pro League/Season 21/Stage 1
+ESL/Pro League/Season 21/Stage 2
+ESL/Pro League/Season 22
+ESL/Pro League/Season 22/Stage 1
+ESL/Pro League/Season 22/Stage 2
+ESL/Pro League/Season 23
+ESL/Pro League/Season 23/Online Stage
+ESL/Pro League/Season 23/Online Stage/Stage 1
+ESL/Pro League/Season 23/Online Stage/Stage 2
+ESL/Pro League/Season 24
+ESL/Pro League/Season 25
+ESL/Pro League/Season 26
+BLAST/Premier/2023/Fall
+BLAST/Premier/2023/Fall/Groups
+BLAST/Premier/2023/World Final
+BLAST/Premier/2024/Fall
+BLAST/Premier/2024/Fall/Groups
+BLAST/Premier/2024/Fall/Showdown
+BLAST/Premier/2024/Spring
+BLAST/Premier/2024/Spring/Groups
+BLAST/Premier/2024/Spring/Showdown
+BLAST/Premier/2024/World Final
+BLAST/Premier/2025/Frequent Flyers
+BLAST/Premier/2026/Frequent Flyers
+BLAST/Major/2025/Austin
+BLAST/Major/2025/Austin/Playoffs
+BLAST/Major/2025/Austin/Stage 1
+BLAST/Major/2025/Austin/Stage 2
+BLAST/Major/2025/Austin/Stage 3
+BLAST/Open/2025/Fall
+BLAST/Open/2025/Lisbon
+BLAST/Open/2025/London
+BLAST/Open/2025/Spring
+BLAST/Open/2026/Fall
+BLAST/Open/2026/Rotterdam
+BLAST/Open/2026/Spring
+BLAST/Bounty/2025/Fall
+BLAST/Bounty/2025/Spring
+BLAST/Bounty/2026/Fall
+BLAST/Bounty/2026/Spring
+BLAST/Bounty/2026/Summer
+BLAST/Bounty/2026/Winter
+BLAST/Rivals/2025/Fall
+BLAST/Rivals/2025/Spring
+BLAST/Rivals/2026/Fall
+BLAST/Rivals/2026/Spring
+PGL/2024/Copenhagen
+PGL/2024/Copenhagen/Elimination Stage
+PGL/2024/Copenhagen/Opening Stage
+PGL/2024/Copenhagen/Playoff Stage
+PGL/2025/Astana
+PGL/2025/Belgrade
+PGL/2025/Bucharest
+PGL/2025/Buenos Aires
+PGL/2025/Cluj-Napoca
+PGL/2025/Masters
+PGL/2026/Astana
+PGL/2026/Barcelona
+PGL/2026/Belgrade
+PGL/2026/Bucharest
+PGL/2026/Buenos Aires
+PGL/2026/Cluj-Napoca
+PGL/2026/Fall
+PGL/2026/Masters
+PGL/2026/Singapore
+PGL/2026/Summer
+PGL/2026/São Paulo
+Perfect World/Major/2024/Shanghai
+Perfect World/Major/2024/Shanghai/Elimination Stage
+Perfect World/Major/2024/Shanghai/Opening Stage
+Perfect World/Major/2024/Shanghai/Playoff Stage
+StarLadder/2025/Major
+StarLadder/2025/Major/Playoffs
+StarLadder/2025/Major/Stage 1
+StarLadder/2025/Major/Stage 2
+StarLadder/2025/Major/Stage 3
+StarLadder/StarSeries/2025/Fall
+StarLadder/StarSeries/2026/Fall
+Thunderpick/World Championship/2023
+Thunderpick/World Championship/2024
+Thunderpick/World Championship/2025
+Thunderpick/World Championship/2026
+Esports World Cup/2024
+Esports World Cup/2024/Middle East
+Esports World Cup/2025
+Esports World Cup/2026
+IEM Cologne Major 2026
+BLAST/Rivals/2025/Fall
+BLAST/Rivals/2025/Spring
+BLAST/Rivals/2026/Fall
+BLAST/Rivals/2026/Spring

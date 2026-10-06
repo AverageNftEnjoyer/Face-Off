@@ -1,0 +1,331 @@
+{
+ "_note": "canonical name -> Liquipedia team-template codes seen; resolved via Template:TeamShort/<code> redirects",
+ "aliases": {
+  "100 Thieves": [
+   "100t"
+  ],
+  "1w Team": [
+   "1w"
+  ],
+  "3DMAX": [
+   "3dmax"
+  ],
+  "9INE": [
+   "9ine"
+  ],
+  "9z Team": [
+   "9z"
+  ],
+  "ALTERNATE aTTaX": [
+   "attax"
+  ],
+  "AMKAL ESPORTS": [
+   "amkal",
+   "amkal esports"
+  ],
+  "ATOX Esports": [
+   "atox",
+   "atox esports"
+  ],
+  "Apeks": [
+   "apeks"
+  ],
+  "Astralis": [
+   "astralis"
+  ],
+  "Aurora Gaming": [
+   "aurora"
+  ],
+  "B8": [
+   "b8"
+  ],
+  "BC.Game Esports": [
+   "bc.game"
+  ],
+  "BESTIA": [
+   "bestia"
+  ],
+  "BIG": [
+   "big"
+  ],
+  "BOSS": [
+   "boss"
+  ],
+  "Bad News Kangaroos": [
+   "bnk"
+  ],
+  "BetBoom Team": [
+   "betboom"
+  ],
+  "Betclic Apogee Esports": [
+   "apogee"
+  ],
+  "Chinggis Warriors": [
+   "chinggis warriors"
+  ],
+  "Cloud9": [
+   "c9",
+   "cloud9"
+  ],
+  "Complexity": [
+   "col",
+   "complexity"
+  ],
+  "DENDELE CS": [
+   "dendele",
+   "sharks",
+   "sharks esports"
+  ],
+  "ECSTATIC": [
+   "ecstatic"
+  ],
+  "ENCE": [
+   "ence"
+  ],
+  "EYEBALLERS": [
+   "eyeballers"
+  ],
+  "Elevate": [
+   "elevate"
+  ],
+  "Eternal Fire": [
+   "ef",
+   "eternal fire"
+  ],
+  "Evil Geniuses": [
+   "eg"
+  ],
+  "FOKUS": [
+   "fokus"
+  ],
+  "FORZE Esports": [
+   "forze"
+  ],
+  "FURIA": [
+   "furia"
+  ],
+  "FUT Esports": [
+   "fut"
+  ],
+  "FaZe Clan": [
+   "faze"
+  ],
+  "Fisher College": [
+   "fisher college"
+  ],
+  "Fluxo": [
+   "fluxo"
+  ],
+  "FlyQuest": [
+   "flyquest",
+   "fq"
+  ],
+  "Fnatic": [
+   "fnatic",
+   "fnc"
+  ],
+  "G2 Esports": [
+   "g2"
+  ],
+  "Gaimin Gladiators": [
+   "gaimin"
+  ],
+  "GamerLegion": [
+   "gamerlegion",
+   "gl"
+  ],
+  "Gentle Mates": [
+   "gentle mates"
+  ],
+  "Grayhound Gaming": [
+   "ghg",
+   "grayhound"
+  ],
+  "HEROIC": [
+   "heroic"
+  ],
+  "HOTU": [
+   "hotu"
+  ],
+  "Housebets": [
+   "housebets"
+  ],
+  "IC Esports": [
+   "ic",
+   "inner circle"
+  ],
+  "Imperial Esports": [
+   "imp",
+   "imperial esports",
+   "imperial.br"
+  ],
+  "Imperial Female": [
+   "imperial female"
+  ],
+  "JiJieHao": [
+   "jijiehao",
+   "jjh"
+  ],
+  "K27": [
+   "k27"
+  ],
+  "KOI": [
+   "koi"
+  ],
+  "Legacy": [
+   "legacy"
+  ],
+  "Luminosity Gaming": [
+   "lg"
+  ],
+  "Lynn Vision Gaming": [
+   "lvg",
+   "lynn vision"
+  ],
+  "M80": [
+   "m80"
+  ],
+  "MIBR": [
+   "mibr"
+  ],
+  "MOUZ": [
+   "mouz"
+  ],
+  "Metizport": [
+   "metizport"
+  ],
+  "Mindfreak (Australian team)": [
+   "mindfreak"
+  ],
+  "Monte": [
+   "monte"
+  ],
+  "NRG": [
+   "nrg"
+  ],
+  "Natus Vincere": [
+   "navi"
+  ],
+  "Nemiga Gaming": [
+   "nemiga"
+  ],
+  "Ninjas in Pyjamas": [
+   "nip"
+  ],
+  "NoChance (Israeli team)": [
+   "nochance (israeli team)"
+  ],
+  "Nouns Esports": [
+   "nouns"
+  ],
+  "ODDIK": [
+   "oddik"
+  ],
+  "OG": [
+   "og"
+  ],
+  "Onyx Ravens": [
+   "onyx ravens"
+  ],
+  "PARIVISION": [
+   "parivision"
+  ],
+  "Passion UA": [
+   "passion ua"
+  ],
+  "Pera Esports": [
+   "pera"
+  ],
+  "RED Canids": [
+   "red canids"
+  ],
+  "Rare Atom": [
+   "rare atom"
+  ],
+  "Rebels Gaming": [
+   "rebels gaming"
+  ],
+  "Rooster": [
+   "rooster"
+  ],
+  "SAW": [
+   "saw"
+  ],
+  "SINNERS Esports": [
+   "sinners"
+  ],
+  "Sangal Esports": [
+   "sangal"
+  ],
+  "Sashi Esport": [
+   "sashi"
+  ],
+  "SemperFi Esports": [
+   "semperfi"
+  ],
+  "ShindeN": [
+   "shinden"
+  ],
+  "Steel Helmet": [
+   "steel helmet"
+  ],
+  "THUNDERdOWNUNDER": [
+   "thunderdownunder"
+  ],
+  "TYLOO": [
+   "tyloo"
+  ],
+  "Team Falcons": [
+   "falcons",
+   "team falcons"
+  ],
+  "Team Liquid": [
+   "liquid",
+   "team liquid",
+   "tl"
+  ],
+  "Team Spirit": [
+   "spirit",
+   "team spirit"
+  ],
+  "Team Venom": [
+   "team venom"
+  ],
+  "Team Vitality": [
+   "vit",
+   "vitality"
+  ],
+  "Team Voca": [
+   "voca"
+  ],
+  "The Huns Esports": [
+   "huns"
+  ],
+  "The MongolZ": [
+   "mongolz",
+   "the mongolz"
+  ],
+  "VC esport": [
+   "vc esport"
+  ],
+  "VERTEX Esports Club": [
+   "vertex"
+  ],
+  "Virtus.pro": [
+   "vp"
+  ],
+  "Wildcard": [
+   "wildcard"
+  ],
+  "Zero Tenacity": [
+   "z10"
+  ],
+  "magic": [
+   "magic"
+  ],
+  "paiN Gaming": [
+   "pain",
+   "pain gaming"
+  ]
+ }
+}

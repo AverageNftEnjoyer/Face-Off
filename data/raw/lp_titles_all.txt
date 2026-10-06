@@ -1,0 +1,1786 @@
+Intel Extreme Masters/2023/Cologne
+Intel Extreme Masters/2023/Dallas
+Intel Extreme Masters/2023/Dallas/Europe
+Intel Extreme Masters/2023/Dallas/Europe/Open/1
+Intel Extreme Masters/2023/Dallas/Europe/Open/2
+Intel Extreme Masters/2023/Dallas/North America
+Intel Extreme Masters/2023/Dallas/North America/Open/1
+Intel Extreme Masters/2023/Dallas/North America/Open/2
+Intel Extreme Masters/2023/Dallas/Oceania
+Intel Extreme Masters/2023/Dallas/Oceania/Open/1
+Intel Extreme Masters/2023/Dallas/Oceania/Open/2
+Intel Extreme Masters/2023/Dallas/South America
+Intel Extreme Masters/2023/Dallas/South America/Open/1
+Intel Extreme Masters/2023/Dallas/South America/Open/2
+Intel Extreme Masters/2023/Fall
+Intel Extreme Masters/2023/Fall/Asia
+Intel Extreme Masters/2023/Fall/Asia/Open/1
+Intel Extreme Masters/2023/Fall/Asia/Open/2
+Intel Extreme Masters/2023/Fall/Europe
+Intel Extreme Masters/2023/Fall/Europe/Open/1
+Intel Extreme Masters/2023/Fall/Europe/Open/2
+Intel Extreme Masters/2023/Fall/North America
+Intel Extreme Masters/2023/Fall/North America/Open/1
+Intel Extreme Masters/2023/Fall/North America/Open/2
+Intel Extreme Masters/2023/Fall/Oceania
+Intel Extreme Masters/2023/Fall/Oceania/Open/1
+Intel Extreme Masters/2023/Fall/Oceania/Open/2
+Intel Extreme Masters/2023/Katowice
+Intel Extreme Masters/2023/Rio
+Intel Extreme Masters/2023/Rio/Asia
+Intel Extreme Masters/2023/Rio/Asia/Open/1
+Intel Extreme Masters/2023/Rio/Asia/Open/2
+Intel Extreme Masters/2023/Rio/Europe
+Intel Extreme Masters/2023/Rio/Europe/Open/1
+Intel Extreme Masters/2023/Rio/Europe/Open/2
+Intel Extreme Masters/2023/Rio/North America
+Intel Extreme Masters/2023/Rio/North America/Open/1
+Intel Extreme Masters/2023/Rio/North America/Open/2
+Intel Extreme Masters/2023/Rio/South America
+Intel Extreme Masters/2023/Rio/South America/Open/1
+Intel Extreme Masters/2023/Rio/South America/Open/2
+Intel Extreme Masters/2023/Spring
+Intel Extreme Masters/2023/Spring/Asia
+Intel Extreme Masters/2023/Spring/Asia/Open/1
+Intel Extreme Masters/2023/Spring/Asia/Open/2
+Intel Extreme Masters/2023/Spring/Europe
+Intel Extreme Masters/2023/Spring/Europe/Open/1
+Intel Extreme Masters/2023/Spring/Europe/Open/2
+Intel Extreme Masters/2023/Spring/North America
+Intel Extreme Masters/2023/Spring/North America/Open/1
+Intel Extreme Masters/2023/Spring/North America/Open/2
+Intel Extreme Masters/2023/Spring/South America
+Intel Extreme Masters/2023/Spring/South America/Open/1
+Intel Extreme Masters/2023/Spring/South America/Open/2
+Intel Extreme Masters/2023/Sydney
+Intel Extreme Masters/2023/Sydney/Asia
+Intel Extreme Masters/2023/Sydney/Asia/Open/1
+Intel Extreme Masters/2023/Sydney/Asia/Open/2
+Intel Extreme Masters/2023/Sydney/Europe
+Intel Extreme Masters/2023/Sydney/Europe/Open/1
+Intel Extreme Masters/2023/Sydney/Europe/Open/2
+Intel Extreme Masters/2023/Sydney/North America
+Intel Extreme Masters/2023/Sydney/North America/Open/1
+Intel Extreme Masters/2023/Sydney/North America/Open/2
+Intel Extreme Masters/2023/Sydney/Oceania
+Intel Extreme Masters/2023/Sydney/Oceania/Open/1
+Intel Extreme Masters/2023/Sydney/Oceania/Open/2
+Intel Extreme Masters/2024/Chengdu
+Intel Extreme Masters/2024/Chengdu/Asia
+Intel Extreme Masters/2024/Chengdu/Asia/Open/1
+Intel Extreme Masters/2024/Chengdu/Asia/Open/2
+Intel Extreme Masters/2024/Chengdu/China
+Intel Extreme Masters/2024/Chengdu/China/Open/1
+Intel Extreme Masters/2024/Chengdu/China/Open/2
+Intel Extreme Masters/2024/Chengdu/Europe
+Intel Extreme Masters/2024/Chengdu/Europe/Open/1
+Intel Extreme Masters/2024/Chengdu/Europe/Open/2
+Intel Extreme Masters/2024/Chengdu/North America
+Intel Extreme Masters/2024/Chengdu/North America/Open/1
+Intel Extreme Masters/2024/Chengdu/North America/Open/2
+Intel Extreme Masters/2024/Chengdu/Oceania
+Intel Extreme Masters/2024/Chengdu/Oceania/Open/1
+Intel Extreme Masters/2024/Chengdu/Oceania/Open/2
+Intel Extreme Masters/2024/Chengdu/South America
+Intel Extreme Masters/2024/Chengdu/South America/Open/1
+Intel Extreme Masters/2024/Chengdu/South America/Open/2
+Intel Extreme Masters/2024/China
+Intel Extreme Masters/2024/China/Asia
+Intel Extreme Masters/2024/China/Asia/Open/1
+Intel Extreme Masters/2024/China/Asia/Open/2
+Intel Extreme Masters/2024/China/China
+Intel Extreme Masters/2024/China/China/Open/1
+Intel Extreme Masters/2024/China/China/Open/2
+Intel Extreme Masters/2024/China/Europe
+Intel Extreme Masters/2024/China/Europe/Open/1
+Intel Extreme Masters/2024/China/Europe/Open/2
+Intel Extreme Masters/2024/China/North America
+Intel Extreme Masters/2024/China/North America/Open/1
+Intel Extreme Masters/2024/China/North America/Open/2
+Intel Extreme Masters/2024/China/Oceania
+Intel Extreme Masters/2024/China/Oceania/Open/1
+Intel Extreme Masters/2024/China/Oceania/Open/2
+Intel Extreme Masters/2024/China/South America
+Intel Extreme Masters/2024/China/South America/Open/1
+Intel Extreme Masters/2024/China/South America/Open/2
+Intel Extreme Masters/2024/Cologne
+Intel Extreme Masters/2024/Cologne/Qualifier
+Intel Extreme Masters/2024/Dallas
+Intel Extreme Masters/2024/Dallas/Europe
+Intel Extreme Masters/2024/Dallas/Europe/Open/1
+Intel Extreme Masters/2024/Dallas/Europe/Open/2
+Intel Extreme Masters/2024/Dallas/North America
+Intel Extreme Masters/2024/Dallas/North America/Open/1
+Intel Extreme Masters/2024/Dallas/North America/Open/2
+Intel Extreme Masters/2024/Dallas/Oceania
+Intel Extreme Masters/2024/Dallas/Oceania/Open/1
+Intel Extreme Masters/2024/Dallas/Oceania/Open/2
+Intel Extreme Masters/2024/Dallas/South America
+Intel Extreme Masters/2024/Dallas/South America/Open/1
+Intel Extreme Masters/2024/Dallas/South America/Open/2
+Intel Extreme Masters/2024/Fall
+Intel Extreme Masters/2024/Fall/Asia
+Intel Extreme Masters/2024/Fall/Asia/Open/1
+Intel Extreme Masters/2024/Fall/Asia/Open/2
+Intel Extreme Masters/2024/Fall/Europe
+Intel Extreme Masters/2024/Fall/Europe/Open/1
+Intel Extreme Masters/2024/Fall/Europe/Open/2
+Intel Extreme Masters/2024/Fall/North America
+Intel Extreme Masters/2024/Fall/North America/Open/1
+Intel Extreme Masters/2024/Fall/North America/Open/2
+Intel Extreme Masters/2024/Fall/South America
+Intel Extreme Masters/2024/Fall/South America/Open/1
+Intel Extreme Masters/2024/Fall/South America/Open/2
+Intel Extreme Masters/2024/Katowice
+Intel Extreme Masters/2024/Rio
+Intel Extreme Masters/2024/Rio/Asia
+Intel Extreme Masters/2024/Rio/Asia/Open/1
+Intel Extreme Masters/2024/Rio/Asia/Open/2
+Intel Extreme Masters/2024/Rio/Europe
+Intel Extreme Masters/2024/Rio/Europe/Open/1
+Intel Extreme Masters/2024/Rio/Europe/Open/2
+Intel Extreme Masters/2024/Rio/North America
+Intel Extreme Masters/2024/Rio/North America/Open/1
+Intel Extreme Masters/2024/Rio/North America/Open/2
+Intel Extreme Masters/2024/Rio/South America
+Intel Extreme Masters/2024/Rio/South America/Open/1
+Intel Extreme Masters/2024/Rio/South America/Open/2
+Intel Extreme Masters/2025/Chengdu
+Intel Extreme Masters/2025/Cologne
+Intel Extreme Masters/2025/Dallas
+Intel Extreme Masters/2025/Dallas/Asia
+Intel Extreme Masters/2025/Dallas/Asia/Open
+Intel Extreme Masters/2025/Dallas/Europe
+Intel Extreme Masters/2025/Dallas/Europe/Open
+Intel Extreme Masters/2025/Dallas/North America
+Intel Extreme Masters/2025/Dallas/North America/Open
+Intel Extreme Masters/2025/Dallas/South America
+Intel Extreme Masters/2025/Dallas/South America/Open
+Intel Extreme Masters/2025/Katowice
+Intel Extreme Masters/2025/Melbourne
+Intel Extreme Masters/2025/Spring
+Intel Extreme Masters/2026/Atlanta
+Intel Extreme Masters/2026/Atlanta/Qualifier/Americas
+Intel Extreme Masters/2026/Atlanta/Qualifier/Americas/Open
+Intel Extreme Masters/2026/Atlanta/Qualifier/Global
+Intel Extreme Masters/2026/Atlanta/Qualifier/Global/Open
+Intel Extreme Masters/2026/Beijing
+Intel Extreme Masters/2026/Beijing/Qualifier/Asia
+Intel Extreme Masters/2026/Beijing/Qualifier/Asia/Open
+Intel Extreme Masters/2026/Beijing/Qualifier/Global
+Intel Extreme Masters/2026/Beijing/Qualifier/Global/Open
+Intel Extreme Masters/2026/Brazil
+Intel Extreme Masters/2026/Brazil/Qualifier/Americas
+Intel Extreme Masters/2026/Brazil/Qualifier/Americas/Open
+Intel Extreme Masters/2026/Brazil/Qualifier/Global
+Intel Extreme Masters/2026/Brazil/Qualifier/Global/Open
+Intel Extreme Masters/2026/China
+Intel Extreme Masters/2026/China/Qualifier/Asia
+Intel Extreme Masters/2026/China/Qualifier/Asia/Open
+Intel Extreme Masters/2026/China/Qualifier/Global
+Intel Extreme Masters/2026/China/Qualifier/Global/Open
+Intel Extreme Masters/2026/Cologne
+Intel Extreme Masters/2026/Cologne/Playoffs
+Intel Extreme Masters/2026/Cologne/Stage 1
+Intel Extreme Masters/2026/Cologne/Stage 2
+Intel Extreme Masters/2026/Cologne/Stage 3
+Intel Extreme Masters/2026/Kraków
+Intel Extreme Masters/2026/Rio
+Intel Extreme Masters/2026/Rio/Qualifier/Americas
+Intel Extreme Masters/2026/Rio/Qualifier/Americas/Open
+Intel Extreme Masters/2026/Rio/Qualifier/Global
+Intel Extreme Masters/2026/Rio/Qualifier/Global/Open
+ESL/Pro League/Season 19
+ESL/Pro League/Season 19/Europe
+ESL/Pro League/Season 19/Oceania
+ESL/Pro League/Season 19/South America
+ESL/Pro League/Season 20
+ESL/Pro League/Season 20/Europe
+ESL/Pro League/Season 21
+ESL/Pro League/Season 21/Stage 1
+ESL/Pro League/Season 21/Stage 2
+ESL/Pro League/Season 22
+ESL/Pro League/Season 22/Asia
+ESL/Pro League/Season 22/Asia/Open
+ESL/Pro League/Season 22/Europe
+ESL/Pro League/Season 22/Europe/Open
+ESL/Pro League/Season 22/North America
+ESL/Pro League/Season 22/North America/Open
+ESL/Pro League/Season 22/South America
+ESL/Pro League/Season 22/South America/Open
+ESL/Pro League/Season 22/Stage 1
+ESL/Pro League/Season 22/Stage 2
+ESL/Pro League/Season 23
+ESL/Pro League/Season 23/Online Stage
+ESL/Pro League/Season 23/Online Stage/Stage 1
+ESL/Pro League/Season 23/Online Stage/Stage 2
+ESL/Pro League/Season 24
+ESL/Pro League/Season 25
+ESL/Pro League/Season 26
+BLAST/Premier/2023/Fall
+BLAST/Premier/2023/Fall/Groups
+BLAST/Premier/2023/Fall/Showdown/Americas
+BLAST/Premier/2023/Fall/Showdown/Europe
+BLAST/Premier/2023/Leaderboard
+BLAST/Premier/2023/Spring
+BLAST/Premier/2023/Spring/Groups
+BLAST/Premier/2023/Spring/Showdown/Americas
+BLAST/Premier/2023/Spring/Showdown/Europe
+BLAST/Premier/2023/World Final
+BLAST/Premier/2024/Fall
+BLAST/Premier/2024/Fall/Groups
+BLAST/Premier/2024/Fall/Showdown
+BLAST/Premier/2024/Leaderboard
+BLAST/Premier/2024/Spring
+BLAST/Premier/2024/Spring/Groups
+BLAST/Premier/2024/Spring/Showdown
+BLAST/Premier/2024/World Final
+BLAST/Premier/2025/Frequent Flyers
+BLAST/Premier/2026/Frequent Flyers
+BLAST/Major/2023/Paris
+BLAST/Major/2023/Paris/Americas
+BLAST/Major/2023/Paris/Americas/North America
+BLAST/Major/2023/Paris/Americas/North America/Open/1
+BLAST/Major/2023/Paris/Americas/North America/Open/2
+BLAST/Major/2023/Paris/Americas/South America
+BLAST/Major/2023/Paris/Americas/South America/Open/1
+BLAST/Major/2023/Paris/Americas/South America/Open/2
+BLAST/Major/2023/Paris/Asia-Pacific
+BLAST/Major/2023/Paris/Asia-Pacific/Asia
+BLAST/Major/2023/Paris/Asia-Pacific/Asia/Open
+BLAST/Major/2023/Paris/Asia-Pacific/China
+BLAST/Major/2023/Paris/Asia-Pacific/China/Open
+BLAST/Major/2023/Paris/Asia-Pacific/Middle East
+BLAST/Major/2023/Paris/Asia-Pacific/Middle East/Open
+BLAST/Major/2023/Paris/Asia-Pacific/Oceania
+BLAST/Major/2023/Paris/Asia-Pacific/Oceania/Open
+BLAST/Major/2023/Paris/Challengers Stage
+BLAST/Major/2023/Paris/Champions Stage
+BLAST/Major/2023/Paris/Europe/Decider
+BLAST/Major/2023/Paris/Europe/Qualifier/Decider
+BLAST/Major/2023/Paris/Europe/Qualifier/Open/1
+BLAST/Major/2023/Paris/Europe/Qualifier/Open/2
+BLAST/Major/2023/Paris/Europe/Qualifier A
+BLAST/Major/2023/Paris/Europe/Qualifier B
+BLAST/Major/2023/Paris/Europe A
+BLAST/Major/2023/Paris/Europe B
+BLAST/Major/2023/Paris/Legends Stage
+BLAST/Major/2025/Austin
+BLAST/Major/2025/Austin/Asia-Pacific
+BLAST/Major/2025/Austin/China
+BLAST/Major/2025/Austin/Europe
+BLAST/Major/2025/Austin/Mongolia and West Asia
+BLAST/Major/2025/Austin/North America
+BLAST/Major/2025/Austin/Oceania and Southeast Asia
+BLAST/Major/2025/Austin/Playoffs
+BLAST/Major/2025/Austin/South America
+BLAST/Major/2025/Austin/Stage 1
+BLAST/Major/2025/Austin/Stage 2
+BLAST/Major/2025/Austin/Stage 3
+BLAST/Open/2025/Fall
+BLAST/Open/2025/Fall/Qualifier
+BLAST/Open/2025/Lisbon
+BLAST/Open/2025/London
+BLAST/Open/2025/Spring
+BLAST/Open/2026/Fall
+BLAST/Open/2026/Fall/North America
+BLAST/Open/2026/Fall/North America/Qualifier/1
+BLAST/Open/2026/Fall/North America/Qualifier/2
+BLAST/Open/2026/Rotterdam
+BLAST/Open/2026/Spring
+BLAST/Open/2027/Fall
+BLAST/Open/2027/Spring
+BLAST/Open/2027/Summer
+BLAST/Bounty/2025/Fall
+BLAST/Bounty/2025/Fall/Qualifier
+BLAST/Bounty/2025/Spring
+BLAST/Bounty/2025/Spring/Qualifier
+BLAST/Bounty/2026/Fall
+BLAST/Bounty/2026/Fall/Qualifier
+BLAST/Bounty/2026/Spring
+BLAST/Bounty/2026/Spring/Qualifier
+BLAST/Bounty/2026/Summer
+BLAST/Bounty/2026/Summer/Qualifier
+BLAST/Bounty/2026/Winter
+BLAST/Bounty/2026/Winter/Qualifier
+BLAST/Bounty/2027/Summer
+BLAST/Bounty/2027/Winter
+BLAST/Rivals/2025/Fall
+BLAST/Rivals/2025/Spring
+BLAST/Rivals/2026/Fall
+BLAST/Rivals/2026/Spring
+BLAST/Rivals/2027
+PGL/2024/Copenhagen
+PGL/2024/Copenhagen/Americas
+PGL/2024/Copenhagen/Americas/North America
+PGL/2024/Copenhagen/Americas/North America/Open/1
+PGL/2024/Copenhagen/Americas/North America/Open/2
+PGL/2024/Copenhagen/Americas/South America
+PGL/2024/Copenhagen/Americas/South America/Open/1
+PGL/2024/Copenhagen/Americas/South America/Open/2
+PGL/2024/Copenhagen/Asia-Pacific
+PGL/2024/Copenhagen/Asia-Pacific/China
+PGL/2024/Copenhagen/Asia-Pacific/China/Open
+PGL/2024/Copenhagen/Asia-Pacific/East Asia
+PGL/2024/Copenhagen/Asia-Pacific/East Asia/Open
+PGL/2024/Copenhagen/Asia-Pacific/Middle East
+PGL/2024/Copenhagen/Asia-Pacific/Middle East/Arabia
+PGL/2024/Copenhagen/Asia-Pacific/Middle East/Levant and North Africa
+PGL/2024/Copenhagen/Asia-Pacific/Middle East/North Africa
+PGL/2024/Copenhagen/Asia-Pacific/Middle East/South Africa
+PGL/2024/Copenhagen/Asia-Pacific/Oceania
+PGL/2024/Copenhagen/Asia-Pacific/Oceania/Open
+PGL/2024/Copenhagen/Asia-Pacific/Rest of Asia
+PGL/2024/Copenhagen/Asia-Pacific/Rest of Asia/Open
+PGL/2024/Copenhagen/Asia-Pacific/Southeast Asia
+PGL/2024/Copenhagen/Asia-Pacific/Southeast Asia/Open
+PGL/2024/Copenhagen/Elimination Stage
+PGL/2024/Copenhagen/Europe/Decider
+PGL/2024/Copenhagen/Europe/Qualifier/Decider
+PGL/2024/Copenhagen/Europe/Qualifier/Open/1
+PGL/2024/Copenhagen/Europe/Qualifier/Open/2
+PGL/2024/Copenhagen/Europe/Qualifier/Open/3
+PGL/2024/Copenhagen/Europe/Qualifier/Open/4
+PGL/2024/Copenhagen/Europe/Qualifier A
+PGL/2024/Copenhagen/Europe/Qualifier B
+PGL/2024/Copenhagen/Europe A
+PGL/2024/Copenhagen/Europe B
+PGL/2024/Copenhagen/Opening Stage
+PGL/2024/Copenhagen/Playoff Stage
+PGL/2025/Astana
+PGL/2025/Astana/Asia
+PGL/2025/Astana/Asia/China
+PGL/2025/Astana/Asia/China/Open/1
+PGL/2025/Astana/Asia/China/Open/2
+PGL/2025/Astana/Asia/China/Open/3
+PGL/2025/Astana/Asia/MENA
+PGL/2025/Astana/Asia/Oceania
+PGL/2025/Astana/Asia/Oceania/Open/1
+PGL/2025/Astana/Asia/Oceania/Open/2
+PGL/2025/Astana/Asia/Oceania/Open/3
+PGL/2025/Astana/Asia/Oceania/Open/4
+PGL/2025/Astana/Asia/Rest of Asia
+PGL/2025/Astana/Asia/Rest of Asia/Open
+PGL/2025/Astana/Europe
+PGL/2025/Astana/Europe/Open/1
+PGL/2025/Astana/Europe/Open/2
+PGL/2025/Astana/Europe/Open/3
+PGL/2025/Astana/Europe/Open/4
+PGL/2025/Astana/North America
+PGL/2025/Astana/North America/Open/1
+PGL/2025/Astana/North America/Open/2
+PGL/2025/Astana/North America/Open/3
+PGL/2025/Astana/North America/Open/4
+PGL/2025/Astana/South America
+PGL/2025/Astana/South America/Open/1
+PGL/2025/Astana/South America/Open/2
+PGL/2025/Astana/South America/Open/3
+PGL/2025/Astana/South America/Open/4
+PGL/2025/Belgrade
+PGL/2025/Belgrade/Asia
+PGL/2025/Belgrade/Europe
+PGL/2025/Belgrade/North America
+PGL/2025/Belgrade/South America
+PGL/2025/Bucharest
+PGL/2025/Bucharest/Asia
+PGL/2025/Bucharest/Europe
+PGL/2025/Bucharest/Europe/Open/1
+PGL/2025/Bucharest/Europe/Open/2
+PGL/2025/Bucharest/Europe/Open/3
+PGL/2025/Bucharest/Europe/Open/4
+PGL/2025/Bucharest/North America
+PGL/2025/Bucharest/North America/Open/1
+PGL/2025/Bucharest/North America/Open/2
+PGL/2025/Bucharest/North America/Open/3
+PGL/2025/Bucharest/North America/Open/4
+PGL/2025/Bucharest/South America
+PGL/2025/Bucharest/South America/Open/1
+PGL/2025/Bucharest/South America/Open/2
+PGL/2025/Bucharest/South America/Open/3
+PGL/2025/Bucharest/South America/Open/4
+PGL/2025/Buenos Aires
+PGL/2025/Cluj-Napoca
+PGL/2025/Masters
+PGL/2026/Astana
+PGL/2026/Astana/Asia
+PGL/2026/Astana/Asia/East Asia
+PGL/2026/Astana/Asia/East Asia/Open
+PGL/2026/Astana/Asia/Oceania
+PGL/2026/Astana/Asia/Oceania/Open
+PGL/2026/Astana/Asia/West Asia
+PGL/2026/Astana/Asia/West Asia/Open
+PGL/2026/Astana/Europe
+PGL/2026/Astana/Europe/Open/1
+PGL/2026/Astana/Europe/Open/2
+PGL/2026/Astana/North America
+PGL/2026/Astana/North America/Open/1
+PGL/2026/Astana/North America/Open/2
+PGL/2026/Astana/South America
+PGL/2026/Astana/South America/Open/1
+PGL/2026/Astana/South America/Open/2
+PGL/2026/Barcelona
+PGL/2026/Belgrade
+PGL/2026/Belgrade/Asia
+PGL/2026/Belgrade/Europe
+PGL/2026/Belgrade/North America
+PGL/2026/Belgrade/South America
+PGL/2026/Bucharest
+PGL/2026/Bucharest/Asia
+PGL/2026/Bucharest/Asia/East Asia
+PGL/2026/Bucharest/Asia/East Asia/Open
+PGL/2026/Bucharest/Asia/Oceania
+PGL/2026/Bucharest/Asia/Oceania/Open
+PGL/2026/Bucharest/Asia/West Asia
+PGL/2026/Bucharest/Asia/West Asia/Open
+PGL/2026/Bucharest/Europe
+PGL/2026/Bucharest/Europe/Open/1
+PGL/2026/Bucharest/Europe/Open/2
+PGL/2026/Bucharest/North America
+PGL/2026/Bucharest/North America/Open/1
+PGL/2026/Bucharest/North America/Open/2
+PGL/2026/Bucharest/South America
+PGL/2026/Bucharest/South America/Open/1
+PGL/2026/Bucharest/South America/Open/2
+PGL/2026/Buenos Aires
+PGL/2026/Cluj-Napoca
+PGL/2026/Fall
+PGL/2026/Fall/Asia
+PGL/2026/Fall/Europe
+PGL/2026/Fall/North America
+PGL/2026/Fall/South America
+PGL/2026/Masters
+PGL/2026/Masters/Asia
+PGL/2026/Masters/Asia/East Asia
+PGL/2026/Masters/Asia/East Asia/Open
+PGL/2026/Masters/Asia/Oceania
+PGL/2026/Masters/Asia/Oceania/Open
+PGL/2026/Masters/Asia/West Asia
+PGL/2026/Masters/Asia/West Asia/Open
+PGL/2026/Masters/Europe
+PGL/2026/Masters/Europe/Open/1
+PGL/2026/Masters/Europe/Open/2
+PGL/2026/Masters/North America
+PGL/2026/Masters/North America/Open/1
+PGL/2026/Masters/North America/Open/2
+PGL/2026/Masters/South America
+PGL/2026/Masters/South America/Open/1
+PGL/2026/Masters/South America/Open/2
+PGL/2026/Singapore
+PGL/2026/Summer
+PGL/2026/Summer/Asia
+PGL/2026/Summer/Europe
+PGL/2026/Summer/North America
+PGL/2026/Summer/South America
+PGL/2026/São Paulo
+Perfect World/Major/2024/Shanghai
+Perfect World/Major/2024/Shanghai/Americas
+Perfect World/Major/2024/Shanghai/Americas/North America
+Perfect World/Major/2024/Shanghai/Americas/South America
+Perfect World/Major/2024/Shanghai/Asia-Pacific
+Perfect World/Major/2024/Shanghai/Asia-Pacific/China
+Perfect World/Major/2024/Shanghai/Asia-Pacific/China/Open
+Perfect World/Major/2024/Shanghai/Asia-Pacific/East Asia
+Perfect World/Major/2024/Shanghai/Asia-Pacific/East Asia/Open
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Middle East
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Middle East/Arabia
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Middle East/Levant and North Africa
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Middle East/South Africa
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Oceania
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Oceania/Open
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Rest of Asia
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Rest of Asia/Open
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Southeast Asia
+Perfect World/Major/2024/Shanghai/Asia-Pacific/Southeast Asia/Open
+Perfect World/Major/2024/Shanghai/Elimination Stage
+Perfect World/Major/2024/Shanghai/Europe
+Perfect World/Major/2024/Shanghai/Europe/Qualifier A
+Perfect World/Major/2024/Shanghai/Europe/Qualifier B
+Perfect World/Major/2024/Shanghai/Europe A
+Perfect World/Major/2024/Shanghai/Europe A/Qualifier A
+Perfect World/Major/2024/Shanghai/Europe A/Qualifier B
+Perfect World/Major/2024/Shanghai/Europe B
+Perfect World/Major/2024/Shanghai/Europe B/Qualifier A
+Perfect World/Major/2024/Shanghai/Europe B/Qualifier B
+Perfect World/Major/2024/Shanghai/Opening Stage
+Perfect World/Major/2024/Shanghai/Playoff Stage
+Perfect World/Major/2027
+Perfect World/Major/2027/Shanghai
+StarLadder/2025/Major
+StarLadder/2025/Major/Playoffs
+StarLadder/2025/Major/Stage 1
+StarLadder/2025/Major/Stage 2
+StarLadder/2025/Major/Stage 3
+StarLadder/StarSeries/2025/Fall
+StarLadder/StarSeries/2025/Fall/Europe
+StarLadder/StarSeries/2025/Fall/North America
+StarLadder/StarSeries/2025/Fall/South America
+StarLadder/StarSeries/2026/Fall
+StarLadder/StarSeries/2026/Fall/Europe
+StarLadder/StarSeries/2026/Fall/North America
+StarLadder/StarSeries/2026/Fall/South America
+Thunderpick/World Championship/2023
+Thunderpick/World Championship/2023/Europe/1
+Thunderpick/World Championship/2023/Europe/2
+Thunderpick/World Championship/2023/North America/1
+Thunderpick/World Championship/2023/North America/2
+Thunderpick/World Championship/2024
+Thunderpick/World Championship/2024/Europe/1
+Thunderpick/World Championship/2024/Europe/2
+Thunderpick/World Championship/2024/North America/1
+Thunderpick/World Championship/2024/North America/2
+Thunderpick/World Championship/2024/North America/2/Female Wildcard
+Thunderpick/World Championship/2024/South America/1
+Thunderpick/World Championship/2024/South America/2
+Thunderpick/World Championship/2025
+Thunderpick/World Championship/2025/Europe/1
+Thunderpick/World Championship/2025/Europe/2
+Thunderpick/World Championship/2025/North America/1
+Thunderpick/World Championship/2025/North America/2
+Thunderpick/World Championship/2025/Qualifier
+Thunderpick/World Championship/2025/South America/1
+Thunderpick/World Championship/2025/South America/2
+Thunderpick/World Championship/2026
+Thunderpick/World Championship/2026/Europe/1
+Thunderpick/World Championship/2026/Europe/2
+Thunderpick/World Championship/2026/North America
+Thunderpick/World Championship/2026/Qualifier
+Thunderpick/World Championship/2026/South America/1
+Thunderpick/World Championship/2026/South America/2
+Esports World Cup/2024
+Esports World Cup/2024/Asia
+Esports World Cup/2024/Asia/Open
+Esports World Cup/2024/Europe
+Esports World Cup/2024/Europe/Open
+Esports World Cup/2024/Middle East
+Esports World Cup/2024/Middle East/Open
+Esports World Cup/2024/North America
+Esports World Cup/2024/North America/Open
+Esports World Cup/2024/Oceania
+Esports World Cup/2024/Oceania/Open
+Esports World Cup/2024/South America
+Esports World Cup/2024/South America/Open
+Esports World Cup/2025
+Esports World Cup/2026
+Esports World Cup/2026/Qualifier
+Esports World Cup/2026/Qualifier/Group Stage
+IEM Cologne Major 2026
+FISSURE
+FISSURE/2025/Autumn
+FISSURE/2025/Summer
+FISSURE/Playground/1
+FISSURE/Playground/10
+FISSURE/Playground/11
+FISSURE/Playground/12
+FISSURE/Playground/13
+FISSURE/Playground/2
+FISSURE/Playground/3
+FISSURE/Playground/3/Qualifier
+FISSURE/Playground/4
+FISSURE/Playground/5
+FISSURE/Playground/6
+FISSURE/Playground/7
+FISSURE/Playground/8
+FISSURE/Playground/9
+FISSURE/Regional Clash Arena/CIS
+FISSURE/Regional Clash Arena/CIS/Qualifier
+FISSURE/Regional Clash Arena/CIS/Qualifier/Open/1
+FISSURE/Regional Clash Arena/CIS/Qualifier/Open/2
+FISSURE/Regional Clash Arena/CIS/Qualifier/Open/3
+FISSURE/Regional Clash Arena/CIS/Qualifier/Open/4
+FISSURE/Regional Clash Arena/Europe
+FISSURE/Regional Clash Arena/Europe/Qualifier
+FISSURE/Regional Clash Arena/Europe/Qualifier/Open/2
+FISSURE/Regional Clash Arena/Europe/Qualifier/Open/3
+FISSURE/Regional Clash Arena/Europe/Qualifier/Open/4
+FISSURE/Regional Clash Arena/South America
+FISSURE/Regional Clash Arena/South America/Qualifier
+Skyesports/Championship/2022
+Skyesports/Championship/2022/Qualifier/Asia
+Skyesports/Championship/2022/Qualifier/India
+Skyesports/Championship/2023
+Skyesports/Championship/2023/Europe
+Skyesports/Championship/2023/India
+Skyesports/Championship/2023/India/Open
+Skyesports/Championship/2023/UAE
+Skyesports/Championship/2024
+Skyesports/Championship/2024/Europe
+Skyesports/Championship/2024/India
+Skyesports/Championship/2025
+Skyesports/Grand Slam/2024
+Skyesports/Grand Slam/2024/India
+Skyesports/Grand Slam/2024/Oceania
+Skyesports/Masters/2023
+Skyesports/Masters/2023/Regular Season
+Skyesports/Masters/2024
+Skyesports/Masters/2024/Europe
+Skyesports/Masters/2024/India
+Skyesports/Masters/2024/India/Open
+Skyesports/Masters/2025
+Skyesports/Masters/2025/Qualifier
+Skyesports/Pro League/2025
+Skyesports/Showdown/2024
+Skyesports/Souvenir/2023
+Skyesports/Souvenir/2023/India
+Skyesports/Souvenir/2024
+Skyesports/Souvenir/2025
+Skyesports/Souvenir/2025/National Championship
+Skyesports/Souvenir/2025/Qualifier
+Skyesports/WD Black Cup/Season 4
+Skyesports/World Tour/2025
+BetBoom Dacha
+BetBoom Dacha/2023/Dubai
+BetBoom Dacha/2023/Dubai/Qualifier
+BetBoom Dacha/2024/Belgrade/1
+BetBoom Dacha/2024/Belgrade/1/Europe
+BetBoom Dacha/2024/Belgrade/1/South America
+BetBoom Dacha/2024/Belgrade/2
+BetBoom Dacha/2024/Belgrade/2/Europe
+BetBoom Dacha/2024/Belgrade/2/Europe/Open
+BetBoom Dacha/2024/Belgrade/2/South America
+BetBoom Dacha/Qualifier
+YaLLa Compass/2023/Fall
+YaLLa Compass/2023/Fall/Contenders Stage
+YaLLa Compass/2023/Fall/Main Stage
+YaLLa Compass/2024
+YaLLa Compass/2024/Fall
+YaLLa Compass/2024/Fall/Contenders Stage
+YaLLa Compass/2024/Fall/Main Stage
+YaLLa Compass/2024/Spring
+YaLLa Compass/2024/Spring/Contenders Stage
+YaLLa Compass/2024/Spring/Main Stage
+YaLLa Compass/2024/Summer
+YaLLa Compass/2024/Summer/Contenders Stage
+YaLLa Compass/2024/Summer/Main Stage
+YaLLa Compass/2025/Dubai
+YaLLa Compass/2025/Dubai/Qualifier
+YaLLa Compass/2025/Fall
+YaLLa Compass/2025/Fall/Contenders Stage
+YaLLa Compass/2025/Fall/Main Stage
+YaLLa Compass/2025/Qatar
+YaLLa Compass/2025/Qatar/Qualifier
+YaLLa Compass/2025/Spring
+YaLLa Compass/2025/Spring/Contenders Stage
+YaLLa Compass/2025/Spring/Main Stage
+YaLLa Compass/2025/Summer
+YaLLa Compass/2025/Summer/Contenders Stage
+YaLLa Compass/2025/Summer/Main Stage
+YaLLa Compass/2025/UAE
+YaLLa Compass/2025/UAE/Qualifier
+YaLLa Compass/2025/Winter
+YaLLa Compass/2025/Winter/Contenders Stage
+YaLLa Compass/2025/Winter/Main Stage
+YaLLa Compass/2026/Qatar
+YaLLa Compass/2026/Summer
+YaLLa Compass/2026/UAE
+CCT
+CCT/2026/Europe/Challengers 1
+CCT/2026/Europe/Challengers 2
+CCT/2026/Europe/Challengers 3
+CCT/2026/Europe/Challengers 4
+CCT/2026/Europe/Challengers 5
+CCT/2026/Europe/Challengers 6
+CCT/2026/Europe/Challengers 7
+CCT/2026/Europe/Challengers 8
+CCT/2026/Europe/Contenders 1
+CCT/2026/Europe/Contenders 1/Qualifier/1
+CCT/2026/Europe/Contenders 1/Qualifier/2
+CCT/2026/Europe/Contenders 10
+CCT/2026/Europe/Contenders 10/Qualifier/1
+CCT/2026/Europe/Contenders 10/Qualifier/2
+CCT/2026/Europe/Contenders 11
+CCT/2026/Europe/Contenders 11/Qualifier/1
+CCT/2026/Europe/Contenders 11/Qualifier/2
+CCT/2026/Europe/Contenders 12
+CCT/2026/Europe/Contenders 12/Qualifier/1
+CCT/2026/Europe/Contenders 12/Qualifier/2
+CCT/2026/Europe/Contenders 2
+CCT/2026/Europe/Contenders 2/Qualifier/1
+CCT/2026/Europe/Contenders 2/Qualifier/2
+CCT/2026/Europe/Contenders 3
+CCT/2026/Europe/Contenders 3/Qualifier/1
+CCT/2026/Europe/Contenders 3/Qualifier/2
+CCT/2026/Europe/Contenders 4
+CCT/2026/Europe/Contenders 4/Qualifier/1
+CCT/2026/Europe/Contenders 4/Qualifier/2
+CCT/2026/Europe/Contenders 5
+CCT/2026/Europe/Contenders 5/Qualifier
+CCT/2026/Europe/Contenders 6
+CCT/2026/Europe/Contenders 6/Qualifier/1
+CCT/2026/Europe/Contenders 6/Qualifier/2
+CCT/2026/Europe/Contenders 7
+CCT/2026/Europe/Contenders 7/Qualifier/1
+CCT/2026/Europe/Contenders 7/Qualifier/2
+CCT/2026/Europe/Contenders 8
+CCT/2026/Europe/Contenders 8/Qualifier/1
+CCT/2026/Europe/Contenders 8/Qualifier/2
+CCT/2026/Europe/Contenders 9
+CCT/2026/Europe/Contenders 9/Qualifier/1
+CCT/2026/Europe/Contenders 9/Qualifier/2
+CCT/2026/Europe/Series 1
+CCT/2026/Europe/Series 1/Play-In
+CCT/2026/Europe/Series 10
+CCT/2026/Europe/Series 10/Play-In
+CCT/2026/Europe/Series 11
+CCT/2026/Europe/Series 11/Play-In
+CCT/2026/Europe/Series 12
+CCT/2026/Europe/Series 12/Play-In
+CCT/2026/Europe/Series 13
+CCT/2026/Europe/Series 13/Play-In
+CCT/2026/Europe/Series 14
+CCT/2026/Europe/Series 14/Play-In
+CCT/2026/Europe/Series 15
+CCT/2026/Europe/Series 15/Play-In
+CCT/2026/Europe/Series 16
+CCT/2026/Europe/Series 16/Play-In
+CCT/2026/Europe/Series 2
+CCT/2026/Europe/Series 2/Play-In
+CCT/2026/Europe/Series 3
+CCT/2026/Europe/Series 3/Play-In
+CCT/2026/Europe/Series 4
+CCT/2026/Europe/Series 4/Play-In
+CCT/2026/Europe/Series 5
+CCT/2026/Europe/Series 5/Play-In
+CCT/2026/Europe/Series 6
+CCT/2026/Europe/Series 6/Play-In
+CCT/2026/Europe/Series 7
+CCT/2026/Europe/Series 7/Play-In
+CCT/2026/Europe/Series 8
+CCT/2026/Europe/Series 8/Play-In
+CCT/2026/Europe/Series 9
+CCT/2026/Europe/Series 9/Play-In
+CCT/2026/North America/Challengers 1
+CCT/2026/North America/Challengers 1/Qualifier/1
+CCT/2026/North America/Challengers 1/Qualifier/2
+CCT/2026/South America/Challengers 1
+CCT/2026/South America/Challengers 1/Qualifier
+CCT/2026/South America/Challengers 2
+CCT/2026/South America/Challengers 2/Qualifier/1
+CCT/2026/South America/Challengers 2/Qualifier/2
+CCT/2026/South America/Challengers 3
+CCT/2026/South America/Challengers 3/Qualifier/1
+CCT/2026/South America/Challengers 3/Qualifier/2
+CCT/2026/South America/Challengers 4
+CCT/2026/South America/Challengers 4/Qualifier/1
+CCT/2026/South America/Challengers 4/Qualifier/2
+CCT/2026/South America/Series 1
+CCT/2026/South America/Series 1/Qualifier
+CCT/2026/South America/Series 2
+CCT/2026/South America/Series 2/Qualifier
+CCT/2026/South America/Series 3
+CCT/2026/South America/Series 3/Qualifier
+CCT/2026/South America/Series 4
+CCT/2026/South America/Series 4/Qualifier
+CCT/2026/South America/Series 5
+CCT/2026/South America/Series 5/Qualifier
+CCT/2026/South America/Series 6
+CCT/2026/South America/Series 6/Qualifier
+CCT/2026/South America/Series 7
+CCT/2026/South America/Series 7/Qualifier
+CCT/2026/South America/Series 8
+CCT/2026/South America/Series 8/Qualifier
+CCT/Central Europe/Finals/Malta
+CCT/Central Europe/Finals 1
+CCT/Central Europe/Series 1
+CCT/Central Europe/Series 1/Qualifier
+CCT/Central Europe/Series 1/Qualifier/Open
+CCT/Central Europe/Series 2
+CCT/Central Europe/Series 2/Qualifier
+CCT/Central Europe/Series 2/Qualifier/Open
+CCT/Central Europe/Series 3
+CCT/Central Europe/Series 3/Qualifier
+CCT/Central Europe/Series 3/Qualifier/Open
+CCT/Central Europe/Series 4
+CCT/Central Europe/Series 4/Qualifier
+CCT/Central Europe/Series 4/Qualifier/Open
+CCT/Central Europe/Series 5
+CCT/Central Europe/Series 5/Qualifier
+CCT/Central Europe/Series 5/Qualifier/Open
+CCT/Central Europe/Series 6
+CCT/Central Europe/Series 6/Qualifier
+CCT/Central Europe/Series 6/Qualifier/Open
+CCT/Central Europe/Series 7
+CCT/Central Europe/Series 7/Qualifier
+CCT/Central Europe/Series 7/Qualifier/Open
+CCT/Central Europe/Series 8
+CCT/Central Europe/Series 8/Qualifier
+CCT/Central Europe/Series 8/Qualifier/Open
+CCT/East Europe/Series 1
+CCT/East Europe/Series 1/Qualifier
+CCT/East Europe/Series 1/Qualifier/Open
+CCT/East Europe/Series 2
+CCT/East Europe/Series 2/Qualifier
+CCT/East Europe/Series 2/Qualifier/Open
+CCT/East Europe/Series 3
+CCT/East Europe/Series 3/Qualifier
+CCT/East Europe/Series 3/Qualifier/Open
+CCT/East Europe/Series 4
+CCT/East Europe/Series 4/Qualifier
+CCT/East Europe/Series 4/Qualifier/Open
+CCT/Global Finals
+CCT/Global Finals/Season 1
+CCT/North America/Series 1
+CCT/North America/Series 1/Qualifier
+CCT/North America/Series 2
+CCT/North America/Series 2/Qualifier
+CCT/North America/Series 3
+CCT/North America/Series 4
+CCT/North Europe/Series 1
+CCT/North Europe/Series 1/Qualifier
+CCT/North Europe/Series 1/Qualifier/Open
+CCT/North Europe/Series 2
+CCT/North Europe/Series 2/Qualifier
+CCT/North Europe/Series 2/Qualifier/Open
+CCT/North Europe/Series 3
+CCT/North Europe/Series 3/Qualifier
+CCT/North Europe/Series 3/Qualifier/Open
+CCT/North Europe/Series 4
+CCT/North Europe/Series 4/Qualifier
+CCT/North Europe/Series 4/Qualifier/Open
+CCT/North Europe/Series 5
+CCT/North Europe/Series 5/Qualifier
+CCT/North Europe/Series 5/Qualifier/Open
+CCT/North Europe/Series 6
+CCT/North Europe/Series 6/Qualifier
+CCT/North Europe/Series 6/Qualifier/Open
+CCT/North Europe/Series 7
+CCT/North Europe/Series 7/Qualifier
+CCT/North Europe/Series 7/Qualifier/Open
+CCT/North Europe/Series 8
+CCT/North Europe/Series 8/Qualifier
+CCT/North Europe/Series 8/Qualifier/Open
+CCT/Oceania/Series 1
+CCT/Oceania/Series 2
+CCT/Oceania/Series 3
+CCT/Oceania/Series 4
+CCT/Online Finals/1
+CCT/Online Finals/2
+CCT/Online Finals/3
+CCT/Online Finals/4
+CCT/Online Finals/5
+CCT/Season 1/Central Europe/Finals/Malta
+CCT/Season 1/Central Europe/Series 1
+CCT/Season 1/Central Europe/Series 1/Qualifier
+CCT/Season 1/Central Europe/Series 1/Qualifier/Open
+CCT/Season 1/Central Europe/Series 2
+CCT/Season 1/Central Europe/Series 2/Qualifier
+CCT/Season 1/Central Europe/Series 2/Qualifier/Open
+CCT/Season 1/Central Europe/Series 3
+CCT/Season 1/Central Europe/Series 3/Qualifier
+CCT/Season 1/Central Europe/Series 3/Qualifier/Open
+CCT/Season 1/Central Europe/Series 4
+CCT/Season 1/Central Europe/Series 4/Qualifier
+CCT/Season 1/Central Europe/Series 4/Qualifier/Open
+CCT/Season 1/Central Europe/Series 5
+CCT/Season 1/Central Europe/Series 5/Qualifier
+CCT/Season 1/Central Europe/Series 5/Qualifier/Open
+CCT/Season 1/Central Europe/Series 6
+CCT/Season 1/Central Europe/Series 6/Qualifier
+CCT/Season 1/Central Europe/Series 6/Qualifier/Open
+CCT/Season 1/Central Europe/Series 7
+CCT/Season 1/Central Europe/Series 7/Qualifier
+CCT/Season 1/Central Europe/Series 7/Qualifier/Open
+CCT/Season 1/Central Europe/Series 8
+CCT/Season 1/Central Europe/Series 8/Qualifier
+CCT/Season 1/Central Europe/Series 8/Qualifier/Open
+CCT/Season 1/East Europe/Series 1
+CCT/Season 1/East Europe/Series 1/Qualifier
+CCT/Season 1/East Europe/Series 1/Qualifier/Open
+CCT/Season 1/East Europe/Series 2
+CCT/Season 1/East Europe/Series 2/Qualifier
+CCT/Season 1/East Europe/Series 2/Qualifier/Open
+CCT/Season 1/East Europe/Series 3
+CCT/Season 1/East Europe/Series 3/Qualifier
+CCT/Season 1/East Europe/Series 3/Qualifier/Open
+CCT/Season 1/East Europe/Series 4
+CCT/Season 1/East Europe/Series 4/Qualifier
+CCT/Season 1/East Europe/Series 4/Qualifier/Open
+CCT/Season 1/Global Finals
+CCT/Season 1/North America/Series 1
+CCT/Season 1/North America/Series 1/Qualifier
+CCT/Season 1/North America/Series 2
+CCT/Season 1/North America/Series 2/Qualifier
+CCT/Season 1/North America/Series 3
+CCT/Season 1/North America/Series 4
+CCT/Season 1/North Europe/Series 1
+CCT/Season 1/North Europe/Series 1/Qualifier
+CCT/Season 1/North Europe/Series 1/Qualifier/Open
+CCT/Season 1/North Europe/Series 2
+CCT/Season 1/North Europe/Series 2/Qualifier
+CCT/Season 1/North Europe/Series 2/Qualifier/Open
+CCT/Season 1/North Europe/Series 3
+CCT/Season 1/North Europe/Series 3/Qualifier
+CCT/Season 1/North Europe/Series 3/Qualifier/Open
+CCT/Season 1/North Europe/Series 4
+CCT/Season 1/North Europe/Series 4/Qualifier
+CCT/Season 1/North Europe/Series 4/Qualifier/Open
+CCT/Season 1/North Europe/Series 5
+CCT/Season 1/North Europe/Series 5/Qualifier
+CCT/Season 1/North Europe/Series 5/Qualifier/Open
+CCT/Season 1/North Europe/Series 6
+CCT/Season 1/North Europe/Series 6/Qualifier
+CCT/Season 1/North Europe/Series 6/Qualifier/Open
+CCT/Season 1/North Europe/Series 7
+CCT/Season 1/North Europe/Series 7/Qualifier
+CCT/Season 1/North Europe/Series 7/Qualifier/Open
+CCT/Season 1/North Europe/Series 8
+CCT/Season 1/North Europe/Series 8/Qualifier
+CCT/Season 1/North Europe/Series 8/Qualifier/Open
+CCT/Season 1/Oceania/Series 1
+CCT/Season 1/Oceania/Series 2
+CCT/Season 1/Oceania/Series 3
+CCT/Season 1/Oceania/Series 4
+CCT/Season 1/Online Finals/1
+CCT/Season 1/Online Finals/2
+CCT/Season 1/Online Finals/3
+CCT/Season 1/Online Finals/4
+CCT/Season 1/Online Finals/5
+CCT/Season 1/South America/Series 1
+CCT/Season 1/South America/Series 1/Qualifier
+CCT/Season 1/South America/Series 1/Qualifier/Open
+CCT/Season 1/South America/Series 10
+CCT/Season 1/South America/Series 10/Qualifier
+CCT/Season 1/South America/Series 10/Qualifier/Open
+CCT/Season 1/South America/Series 11
+CCT/Season 1/South America/Series 11/Qualifier
+CCT/Season 1/South America/Series 11/Qualifier/Open
+CCT/Season 1/South America/Series 12
+CCT/Season 1/South America/Series 12/Qualifier
+CCT/Season 1/South America/Series 12/Qualifier/Open
+CCT/Season 1/South America/Series 2
+CCT/Season 1/South America/Series 2/Qualifier
+CCT/Season 1/South America/Series 2/Qualifier/Open
+CCT/Season 1/South America/Series 3
+CCT/Season 1/South America/Series 3/Qualifier
+CCT/Season 1/South America/Series 3/Qualifier/Open
+CCT/Season 1/South America/Series 4
+CCT/Season 1/South America/Series 4/Qualifier
+CCT/Season 1/South America/Series 4/Qualifier/Open
+CCT/Season 1/South America/Series 5
+CCT/Season 1/South America/Series 5/Qualifier
+CCT/Season 1/South America/Series 5/Qualifier/Open
+CCT/Season 1/South America/Series 6
+CCT/Season 1/South America/Series 6/Qualifier
+CCT/Season 1/South America/Series 6/Qualifier/Open
+CCT/Season 1/South America/Series 7
+CCT/Season 1/South America/Series 7/Qualifier
+CCT/Season 1/South America/Series 7/Qualifier/Open
+CCT/Season 1/South America/Series 8
+CCT/Season 1/South America/Series 8/Qualifier
+CCT/Season 1/South America/Series 8/Qualifier/Open
+CCT/Season 1/South America/Series 9
+CCT/Season 1/South America/Series 9/Qualifier
+CCT/Season 1/South America/Series 9/Qualifier/Open
+CCT/Season 1/South Europe/Series 1
+CCT/Season 1/South Europe/Series 1/Qualifier
+CCT/Season 1/South Europe/Series 2
+CCT/Season 1/South Europe/Series 2/Qualifier
+CCT/Season 1/South Europe/Series 3
+CCT/Season 1/South Europe/Series 3/Qualifier
+CCT/Season 1/South Europe/Series 4
+CCT/Season 1/South Europe/Series 4/Qualifier
+CCT/Season 1/West Europe/Series 1
+CCT/Season 1/West Europe/Series 1/Qualifier
+CCT/Season 1/West Europe/Series 1/Qualifier/Open
+CCT/Season 1/West Europe/Series 2
+CCT/Season 1/West Europe/Series 2/Qualifier
+CCT/Season 1/West Europe/Series 2/Qualifier/Open
+CCT/Season 1/West Europe/Series 3
+CCT/Season 1/West Europe/Series 3/Qualifier
+CCT/Season 1/West Europe/Series 3/Qualifier/Open
+CCT/Season 1/West Europe/Series 4
+CCT/Season 1/West Europe/Series 4/Qualifier
+CCT/Season 2/Europe
+CCT/Season 2/Europe/Series 1
+CCT/Season 2/Europe/Series 1/Play-In
+CCT/Season 2/Europe/Series 10
+CCT/Season 2/Europe/Series 10/Play-In
+CCT/Season 2/Europe/Series 11
+CCT/Season 2/Europe/Series 11/Play-In
+CCT/Season 2/Europe/Series 12
+CCT/Season 2/Europe/Series 12/Play-In
+CCT/Season 2/Europe/Series 13
+CCT/Season 2/Europe/Series 13/Play-In
+CCT/Season 2/Europe/Series 14
+CCT/Season 2/Europe/Series 14/Play-In
+CCT/Season 2/Europe/Series 15
+CCT/Season 2/Europe/Series 15/Play-In
+CCT/Season 2/Europe/Series 16
+CCT/Season 2/Europe/Series 16/Play-In
+CCT/Season 2/Europe/Series 17
+CCT/Season 2/Europe/Series 17/Play-In
+CCT/Season 2/Europe/Series 18
+CCT/Season 2/Europe/Series 18/Play-In
+CCT/Season 2/Europe/Series 19
+CCT/Season 2/Europe/Series 19/Play-In
+CCT/Season 2/Europe/Series 2
+CCT/Season 2/Europe/Series 2/Play-In
+CCT/Season 2/Europe/Series 20
+CCT/Season 2/Europe/Series 20/Play-In
+CCT/Season 2/Europe/Series 3
+CCT/Season 2/Europe/Series 3/Play-In
+CCT/Season 2/Europe/Series 4
+CCT/Season 2/Europe/Series 4/Play-In
+CCT/Season 2/Europe/Series 5
+CCT/Season 2/Europe/Series 5/Play-In
+CCT/Season 2/Europe/Series 6
+CCT/Season 2/Europe/Series 6/Play-In
+CCT/Season 2/Europe/Series 7
+CCT/Season 2/Europe/Series 7/Play-In
+CCT/Season 2/Europe/Series 8
+CCT/Season 2/Europe/Series 8/Play-In
+CCT/Season 2/Europe/Series 9
+CCT/Season 2/Europe/Series 9/Play-In
+CCT/Season 2/Global Finals
+CCT/Season 2/North America
+CCT/Season 2/North America/Series 1
+CCT/Season 2/North America/Series 2
+CCT/Season 2/North America/Series 3
+CCT/Season 2/North America/Series 4
+CCT/Season 2/South America
+CCT/Season 2/South America/Series 1
+CCT/Season 2/South America/Series 2
+CCT/Season 2/South America/Series 3
+CCT/Season 2/South America/Series 4
+CCT/Season 2/South America/Series 5
+CCT/Season 2/South America/Series 6
+CCT/Season 2/South America/Series 7
+CCT/Season 2/South America/Series 8
+CCT/Season 3/CIS/Contenders 1
+CCT/Season 3/Eastern Europe/Contenders 1
+CCT/Season 3/Eastern Europe/Contenders 1/Qualifier
+CCT/Season 3/Europe/Contenders 1
+CCT/Season 3/Europe/Contenders 2
+CCT/Season 3/Europe/Series 1
+CCT/Season 3/Europe/Series 1/Play-In
+CCT/Season 3/Europe/Series 10
+CCT/Season 3/Europe/Series 10/Play-In
+CCT/Season 3/Europe/Series 11
+CCT/Season 3/Europe/Series 11/Play-In
+CCT/Season 3/Europe/Series 12
+CCT/Season 3/Europe/Series 12/Play-In
+CCT/Season 3/Europe/Series 13
+CCT/Season 3/Europe/Series 13/Play-In
+CCT/Season 3/Europe/Series 13/Play-In/Qualifier
+CCT/Season 3/Europe/Series 14
+CCT/Season 3/Europe/Series 14/Play-In
+CCT/Season 3/Europe/Series 14/Play-In/Qualifier
+CCT/Season 3/Europe/Series 15
+CCT/Season 3/Europe/Series 15/Play-In
+CCT/Season 3/Europe/Series 15/Play-In/Qualifier
+CCT/Season 3/Europe/Series 16
+CCT/Season 3/Europe/Series 16/Play-In
+CCT/Season 3/Europe/Series 16/Play-In/Qualifier
+CCT/Season 3/Europe/Series 17
+CCT/Season 3/Europe/Series 17/Play-In
+CCT/Season 3/Europe/Series 17/Play-In/Qualifier
+CCT/Season 3/Europe/Series 18
+CCT/Season 3/Europe/Series 18/Play-In
+CCT/Season 3/Europe/Series 18/Play-In/Qualifier
+CCT/Season 3/Europe/Series 19
+CCT/Season 3/Europe/Series 19/Play-In
+CCT/Season 3/Europe/Series 19/Play-In/Qualifier
+CCT/Season 3/Europe/Series 2
+CCT/Season 3/Europe/Series 2/Play-In
+CCT/Season 3/Europe/Series 20
+CCT/Season 3/Europe/Series 20/Play-In
+CCT/Season 3/Europe/Series 20/Play-In/Qualifier
+CCT/Season 3/Europe/Series 3
+CCT/Season 3/Europe/Series 3/Play-In
+CCT/Season 3/Europe/Series 4
+CCT/Season 3/Europe/Series 4/Play-In
+CCT/Season 3/Europe/Series 5
+CCT/Season 3/Europe/Series 5/Play-In
+CCT/Season 3/Europe/Series 6
+CCT/Season 3/Europe/Series 6/Play-In
+CCT/Season 3/Europe/Series 7
+CCT/Season 3/Europe/Series 7/Play-In
+CCT/Season 3/Europe/Series 8
+CCT/Season 3/Europe/Series 8/Play-In
+CCT/Season 3/Europe/Series 9
+CCT/Season 3/Europe/Series 9/Play-In
+CCT/Season 3/Global Finals
+CCT/Season 3/North America/Series 1
+CCT/Season 3/North America/Series 2
+CCT/Season 3/North America/Series 3
+CCT/Season 3/North America/Series 3/Qualifier
+CCT/Season 3/North America/Series 4
+CCT/Season 3/North America/Series 4/Qualifier
+CCT/Season 3/Oceania/Series 1
+CCT/Season 3/Oceania/Series 1/Qualifier
+CCT/Season 3/Oceania/Series 2
+CCT/Season 3/Oceania/Series 2/Qualifier
+CCT/Season 3/Oceania/Series 3
+CCT/Season 3/Oceania/Series 3/Qualifier
+CCT/Season 3/Oceania/Series 4
+CCT/Season 3/Oceania/Series 4/Qualifier
+CCT/Season 3/South America/Series 1
+CCT/Season 3/South America/Series 10
+CCT/Season 3/South America/Series 10/Qualifier
+CCT/Season 3/South America/Series 2
+CCT/Season 3/South America/Series 3
+CCT/Season 3/South America/Series 3/Qualifier
+CCT/Season 3/South America/Series 4
+CCT/Season 3/South America/Series 4/Qualifier
+CCT/Season 3/South America/Series 5
+CCT/Season 3/South America/Series 5/Qualifier
+CCT/Season 3/South America/Series 6
+CCT/Season 3/South America/Series 6/Qualifier
+CCT/Season 3/South America/Series 7
+CCT/Season 3/South America/Series 7/Qualifier
+CCT/Season 3/South America/Series 8
+CCT/Season 3/South America/Series 8/Qualifier
+CCT/Season 3/South America/Series 9
+CCT/Season 3/South America/Series 9/Qualifier
+CCT/South America/Series 1
+CCT/South America/Series 1/Qualifier
+CCT/South America/Series 1/Qualifier/Open
+CCT/South America/Series 10
+CCT/South America/Series 10/Qualifier
+CCT/South America/Series 10/Qualifier/Open
+CCT/South America/Series 11
+CCT/South America/Series 11/Qualifier
+CCT/South America/Series 11/Qualifier/Open
+CCT/South America/Series 12
+CCT/South America/Series 12/Qualifier
+CCT/South America/Series 12/Qualifier/Open
+CCT/South America/Series 2
+CCT/South America/Series 2/Qualifier
+CCT/South America/Series 2/Qualifier/Open
+CCT/South America/Series 3
+CCT/South America/Series 3/Qualifier
+CCT/South America/Series 3/Qualifier/Open
+CCT/South America/Series 4
+CCT/South America/Series 4/Qualifier
+CCT/South America/Series 4/Qualifier/Open
+CCT/South America/Series 5
+CCT/South America/Series 5/Qualifier
+CCT/South America/Series 5/Qualifier/Open
+CCT/South America/Series 6
+CCT/South America/Series 6/Qualifier
+CCT/South America/Series 6/Qualifier/Open
+CCT/South America/Series 7
+CCT/South America/Series 7/Qualifier
+CCT/South America/Series 7/Qualifier/Open
+CCT/South America/Series 8
+CCT/South America/Series 8/Qualifier
+CCT/South America/Series 8/Qualifier/Open
+CCT/South America/Series 9
+CCT/South America/Series 9/Qualifier
+CCT/South America/Series 9/Qualifier/Open
+CCT/South Europe/Series 1
+CCT/South Europe/Series 1/Qualifier
+CCT/South Europe/Series 2
+CCT/South Europe/Series 2/Qualifier
+CCT/South Europe/Series 3
+ESL/Challenger
+ESL/Challenger/2022/Anaheim
+ESL/Challenger/2022/Anaheim/Europe
+ESL/Challenger/2022/Anaheim/Europe/Open/1
+ESL/Challenger/2022/Anaheim/Europe/Open/2
+ESL/Challenger/2022/Anaheim/North America
+ESL/Challenger/2022/Anaheim/North America/Open/1
+ESL/Challenger/2022/Anaheim/North America/Open/2
+ESL/Challenger/2022/Anaheim/Oceania
+ESL/Challenger/2022/Anaheim/Oceania/Open/1
+ESL/Challenger/2022/Anaheim/Oceania/Open/2
+ESL/Challenger/2022/Anaheim/South America
+ESL/Challenger/2022/Anaheim/South America/Open/1
+ESL/Challenger/2022/Anaheim/South America/Open/2
+ESL/Challenger/2022/Melbourne
+ESL/Challenger/2022/Melbourne/Asia
+ESL/Challenger/2022/Melbourne/Asia/Open/1
+ESL/Challenger/2022/Melbourne/Asia/Open/2
+ESL/Challenger/2022/Melbourne/Europe
+ESL/Challenger/2022/Melbourne/Europe/Open/1
+ESL/Challenger/2022/Melbourne/Europe/Open/2
+ESL/Challenger/2022/Melbourne/North America
+ESL/Challenger/2022/Melbourne/North America/Open/1
+ESL/Challenger/2022/Melbourne/North America/Open/2
+ESL/Challenger/2022/Melbourne/Oceania
+ESL/Challenger/2022/Melbourne/Oceania/Open/1
+ESL/Challenger/2022/Melbourne/Oceania/Open/2
+ESL/Challenger/2022/Rotterdam
+ESL/Challenger/2022/Rotterdam/Europe
+ESL/Challenger/2022/Rotterdam/Europe/Open/1
+ESL/Challenger/2022/Rotterdam/Europe/Open/2
+ESL/Challenger/2022/Rotterdam/North America
+ESL/Challenger/2022/Rotterdam/North America/Open/1
+ESL/Challenger/2022/Rotterdam/North America/Open/2
+ESL/Challenger/2022/Rotterdam/South Africa
+ESL/Challenger/2022/Rotterdam/South Africa/Open/1
+ESL/Challenger/2022/Rotterdam/South Africa/Open/2
+ESL/Challenger/2022/Rotterdam/South America
+ESL/Challenger/2022/Rotterdam/South America/Open/1
+ESL/Challenger/2022/Rotterdam/South America/Open/2
+ESL/Challenger/2022/Valencia
+ESL/Challenger/2022/Valencia/Asia
+ESL/Challenger/2022/Valencia/Asia/Open/1
+ESL/Challenger/2022/Valencia/Asia/Open/2
+ESL/Challenger/2022/Valencia/Europe
+ESL/Challenger/2022/Valencia/Europe/Open/1
+ESL/Challenger/2022/Valencia/Europe/Open/2
+ESL/Challenger/2022/Valencia/North America
+ESL/Challenger/2022/Valencia/North America/Open/1
+ESL/Challenger/2022/Valencia/North America/Open/2
+ESL/Challenger/2022/Valencia/South America
+ESL/Challenger/2022/Valencia/South America/Open/1
+ESL/Challenger/2022/Valencia/South America/Open/2
+ESL/Challenger/2023/Atlanta
+ESL/Challenger/2023/Atlanta/Asia
+ESL/Challenger/2023/Atlanta/Asia/Open
+ESL/Challenger/2023/Atlanta/Europe
+ESL/Challenger/2023/Atlanta/Europe/Open
+ESL/Challenger/2023/Atlanta/North America
+ESL/Challenger/2023/Atlanta/North America/Open
+ESL/Challenger/2023/Atlanta/South America
+ESL/Challenger/2023/Atlanta/South America/Open
+ESL/Challenger/2023/Hannover
+ESL/Challenger/2023/Hannover/Europe
+ESL/Challenger/2023/Hannover/Europe/Open
+ESL/Challenger/2023/Hannover/North America
+ESL/Challenger/2023/Hannover/North America/Open
+ESL/Challenger/2023/Hannover/South Africa
+ESL/Challenger/2023/Hannover/South Africa/Open
+ESL/Challenger/2023/Hannover/South America
+ESL/Challenger/2023/Hannover/South America/Open
+ESL/Challenger/2023/Jonköping
+ESL/Challenger/2023/Jönköping
+ESL/Challenger/2023/Jönköping/Asia
+ESL/Challenger/2023/Jönköping/Asia/Open
+ESL/Challenger/2023/Jönköping/Europe
+ESL/Challenger/2023/Jönköping/Europe/Open
+ESL/Challenger/2023/Jönköping/North America
+ESL/Challenger/2023/Jönköping/North America/Open
+ESL/Challenger/2023/Jönköping/South America
+ESL/Challenger/2023/Jönköping/South America/Open
+ESL/Challenger/2023/Katowice
+ESL/Challenger/2023/Katowice/Europe
+ESL/Challenger/2023/Katowice/Europe/Open
+ESL/Challenger/2023/Katowice/North America
+ESL/Challenger/2023/Katowice/North America/Open
+ESL/Challenger/2023/Katowice/South Africa
+ESL/Challenger/2023/Katowice/South Africa/Open
+ESL/Challenger/2023/Katowice/South America
+ESL/Challenger/2023/Katowice/South America/Open
+ESL/Challenger/2023/Melbourne
+ESL/Challenger/2023/Melbourne/Asia
+ESL/Challenger/2023/Melbourne/Asia/Open
+ESL/Challenger/2023/Melbourne/Europe
+ESL/Challenger/2023/Melbourne/Europe/Open
+ESL/Challenger/2023/Melbourne/North America
+ESL/Challenger/2023/Melbourne/North America/Open
+ESL/Challenger/2023/Melbourne/Oceania
+ESL/Challenger/2023/Melbourne/Oceania/Open
+ESL/Challenger/2024/Atlanta
+ESL/Challenger/2024/Atlanta/Europe
+ESL/Challenger/2024/Atlanta/Europe/Open
+ESL/Challenger/2024/Atlanta/North America
+ESL/Challenger/2024/Atlanta/North America/Open
+ESL/Challenger/2024/Atlanta/Oceania
+ESL/Challenger/2024/Atlanta/Oceania/Open
+ESL/Challenger/2024/Atlanta/South America
+ESL/Challenger/2024/Atlanta/South America/Open
+ESL/Challenger/2024/Jönköping
+ESL/Challenger/2024/Jönköping/Asia
+ESL/Challenger/2024/Jönköping/Asia/Open
+ESL/Challenger/2024/Jönköping/Europe
+ESL/Challenger/2024/Jönköping/Europe/Open
+ESL/Challenger/2024/Jönköping/North America
+ESL/Challenger/2024/Jönköping/North America/Open
+ESL/Challenger/2024/Jönköping/South America
+ESL/Challenger/2024/Jönköping/South America/Open
+ESL/Challenger/2024/Jönköping/Sweden
+ESL/Challenger/2024/Katowice
+ESL/Challenger/2024/Katowice/Europe
+ESL/Challenger/2024/Katowice/Europe/Open
+ESL/Challenger/2024/Katowice/North America
+ESL/Challenger/2024/Katowice/North America/Open
+ESL/Challenger/2024/Katowice/Poland
+ESL/Challenger/2024/Katowice/South America
+ESL/Challenger/2024/Katowice/South America/Open
+ESL/Challenger/2024/Melbourne
+ESL/Challenger/2024/Melbourne/Asia
+ESL/Challenger/2024/Melbourne/Asia/Open
+ESL/Challenger/2024/Melbourne/Europe
+ESL/Challenger/2024/Melbourne/Europe/Open
+ESL/Challenger/2024/Melbourne/North America
+ESL/Challenger/2024/Melbourne/North America/Open
+ESL/Challenger/2024/Melbourne/Oceania
+ESL/Challenger/2024/Melbourne/Oceania/Open
+ESL/Challenger/48
+ESL/Challenger/52
+ESL/Challenger/56
+ESL/Challenger/56/Asia
+ESL/Challenger/56/Asia/Open
+ESL/Challenger/56/Europe
+ESL/Challenger/56/Europe/Open
+ESL/Challenger/56/North America
+ESL/Challenger/56/North America/Open
+ESL/Challenger/56/Oceania
+ESL/Challenger/56/Oceania/Open
+ESL/Challenger/57
+ESL/Challenger/57/Asia
+ESL/Challenger/57/Asia/Open
+ESL/Challenger/57/Europe
+ESL/Challenger/57/Europe/Open
+ESL/Challenger/57/North America
+ESL/Challenger/57/North America/Open
+ESL/Challenger/57/South America
+ESL/Challenger/57/South America/Open
+ESL/Challenger/59
+ESL/Challenger/59/Europe
+ESL/Challenger/59/Europe/Open
+ESL/Challenger/59/North America
+ESL/Challenger/59/North America/Open
+ESL/Challenger/59/South America
+ESL/Challenger/59/South America/Open
+ESL/Challenger League/Season 40/Asia-Pacific
+ESL/Challenger League/Season 40/Asia-Pacific/Qualifier/1
+ESL/Challenger League/Season 40/Asia-Pacific/Qualifier/2
+ESL/Challenger League/Season 40/Asia-Pacific/Qualifier/3
+ESL/Challenger League/Season 40/Asia-Pacific/Relegation
+ESL/Challenger League/Season 40/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 40/Asia-Pacific/Weeks 5 to 7
+ESL/Challenger League/Season 40/Europe
+ESL/Challenger League/Season 40/Europe/Relegation
+ESL/Challenger League/Season 40/North America
+ESL/Challenger League/Season 40/North America/Default
+ESL/Challenger League/Season 40/North America/Relegation
+ESL/Challenger League/Season 40/North America/Weeks 1 to 5
+ESL/Challenger League/Season 40/North America/Weeks 1 to 6
+ESL/Challenger League/Season 40/North America/Weeks 6 to 10
+ESL/Challenger League/Season 40/North America/Weeks 7 to 10
+ESL/Challenger League/Season 41/Asia-Pacific
+ESL/Challenger League/Season 41/Asia-Pacific/Relegation
+ESL/Challenger League/Season 41/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 41/Asia-Pacific/Weeks 5 to 7
+ESL/Challenger League/Season 41/Europe
+ESL/Challenger League/Season 41/Europe/Relegation
+ESL/Challenger League/Season 41/North America
+ESL/Challenger League/Season 41/North America/Default
+ESL/Challenger League/Season 41/North America/Relegation
+ESL/Challenger League/Season 41/North America/Weeks 1 to 5
+ESL/Challenger League/Season 41/North America/Weeks 6 to 7
+ESL/Challenger League/Season 42/Asia-Pacific
+ESL/Challenger League/Season 42/Asia-Pacific/Relegation
+ESL/Challenger League/Season 42/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 42/Asia-Pacific/Weeks 1 to 5
+ESL/Challenger League/Season 42/Asia-Pacific/Weeks 5 to 7
+ESL/Challenger League/Season 42/Europe
+ESL/Challenger League/Season 42/Europe/Relegation
+ESL/Challenger League/Season 42/North America
+ESL/Challenger League/Season 42/North America/Relegation
+ESL/Challenger League/Season 42/North America/Weeks 1 to 4
+ESL/Challenger League/Season 42/North America/Weeks 5 to 6
+ESL/Challenger League/Season 43/Asia-Pacific
+ESL/Challenger League/Season 43/Asia-Pacific/Relegation
+ESL/Challenger League/Season 43/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 43/Asia-Pacific/Weeks 5 to 7
+ESL/Challenger League/Season 43/Europe
+ESL/Challenger League/Season 43/Europe/Relegation
+ESL/Challenger League/Season 43/North America
+ESL/Challenger League/Season 43/North America/Relegation
+ESL/Challenger League/Season 43/North America/Weeks 1 to 4
+ESL/Challenger League/Season 43/North America/Weeks 5 to 7
+ESL/Challenger League/Season 44/Asia-Pacific
+ESL/Challenger League/Season 44/Asia-Pacific/Relegation
+ESL/Challenger League/Season 44/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 44/Asia-Pacific/Weeks 5 to 8
+ESL/Challenger League/Season 44/Europe
+ESL/Challenger League/Season 44/Europe/Relegation
+ESL/Challenger League/Season 44/North America
+ESL/Challenger League/Season 44/North America/Default
+ESL/Challenger League/Season 44/North America/Relegation
+ESL/Challenger League/Season 44/North America/Weeks 1 to 4
+ESL/Challenger League/Season 44/North America/Weeks 5 to 8
+ESL/Challenger League/Season 45/Asia-Pacific
+ESL/Challenger League/Season 45/Asia-Pacific/Relegation
+ESL/Challenger League/Season 45/Asia-Pacific/Weeks 1 to 3
+ESL/Challenger League/Season 45/Asia-Pacific/Weeks 1 to 4
+ESL/Challenger League/Season 45/Asia-Pacific/Weeks 4 to 6
+ESL/Challenger League/Season 45/Asia-Pacific/Weeks 5 to 6
+ESL/Challenger League/Season 45/Europe
+ESL/Challenger League/Season 45/Europe/Relegation
+ESL/Challenger League/Season 45/North America
+ESL/Challenger League/Season 45/North America/Relegation
+ESL/Challenger League/Season 45/North America/Weeks 1 to 4
+ESL/Challenger League/Season 45/North America/Weeks 5 to 6
+ESL/Challenger League/Season 46/Asia-Pacific
+ESL/Challenger League/Season 46/Asia-Pacific/Relegation
+ESL/Challenger League/Season 46/Asia-Pacific/Weeks 1 to 5
+ESL/Challenger League/Season 46/Asia-Pacific/Weeks 6 to 10
+ESL/Challenger League/Season 46/Europe
+ESL/Challenger League/Season 46/Europe/Relegation
+ESL/Challenger League/Season 46/North America
+ESL/Challenger League/Season 46/North America/Default
+ESL/Challenger League/Season 46/North America/Relegation
+ESL/Challenger League/Season 46/North America/Relegation/Play-In
+ESL/Challenger League/Season 46/North America/Weeks 11 to 14
+ESL/Challenger League/Season 46/North America/Weeks 1 to 5
+ESL/Challenger League/Season 46/North America/Weeks 6 to 10
+ESL/Challenger League/Season 47/Asia
+ESL/Challenger League/Season 47/Asia/Relegation
+ESL/Challenger League/Season 47/Asia/Weeks 1 to 5
+ESL/Challenger League/Season 47/Asia/Weeks 6 to 11
+ESL/Challenger League/Season 47/Europe
+ESL/Challenger League/Season 47/Europe/Relegation
+ESL/Challenger League/Season 47/North America
+ESL/Challenger League/Season 47/North America/Relegation
+ESL/Challenger League/Season 47/North America/Weeks 11 to 13
+ESL/Challenger League/Season 47/North America/Weeks 1 to 5
+ESL/Challenger League/Season 47/North America/Weeks 6 to 10
+ESL/Challenger League/Season 47/Oceania
+ESL/Challenger League/Season 47/Oceania/Qualifier/1
+ESL/Challenger League/Season 47/Oceania/Qualifier/2
+ESL/Challenger League/Season 47/Oceania/Relegation
+ESL/Challenger League/Season 47/Oceania/Weeks 10 to 12
+ESL/Challenger League/Season 47/Oceania/Weeks 1 to 5
+ESL/Challenger League/Season 47/Oceania/Weeks 6 to 9
+ESL/Challenger League/Season 47/South America
+ESL/Challenger League/Season 47/South America/Qualifier/1
+ESL/Challenger League/Season 47/South America/Qualifier/2
+ESL/Challenger League/Season 47/South America/Relegation
+ESL/Challenger League/Season 47/South America/Weeks 11 to 14
+ESL/Challenger League/Season 47/South America/Weeks 1 to 5
+ESL/Challenger League/Season 47/South America/Weeks 6 to 10
+ESL/Challenger League/Season 48/Asia
+ESL/Challenger League/Season 48/Asia/Relegation
+ESL/Challenger League/Season 48/Asia/Weeks 1 to 5
+ESL/Challenger League/Season 48/Asia/Weeks 6 to 10
+ESL/Challenger League/Season 48/Europe
+ESL/Challenger League/Season 48/Europe/Relegation
+ESL/Challenger League/Season 48/North America
+ESL/Challenger League/Season 48/North America/Relegation
+ESL/Challenger League/Season 48/North America/Weeks 10 to 12
+ESL/Challenger League/Season 48/North America/Weeks 1 to 5
+ESL/Challenger League/Season 48/North America/Weeks 6 to 9
+ESL/Challenger League/Season 48/Oceania
+ESL/Challenger League/Season 48/Oceania/Relegation
+ESL/Challenger League/Season 48/Oceania/Weeks 1 to 4
+ESL/Challenger League/Season 48/Oceania/Weeks 5 to 8
+ESL/Challenger League/Season 48/Oceania/Weeks 9 to 11
+ESL/Challenger League/Season 48/South America
+ESL/Challenger League/Season 48/South America/Relegation
+ESL/Challenger League/Season 48/South America/Weeks 10 to 12
+ESL/Challenger League/Season 48/South America/Weeks 1 to 5
+ESL/Challenger League/Season 48/South America/Weeks 6 to 9
+ESL/Challenger League/Season 49/Asia
+ESL/Challenger League/Season 49/Asia/Weeks 1 to 4
+ESL/Challenger League/Season 49/Asia/Weeks 5 to 8
+ESL/Challenger League/Season 49/Europe
+ESL/Challenger League/Season 49/North America
+ESL/Challenger League/Season 49/North America/Weeks 1 to 5
+ESL/Challenger League/Season 49/North America/Weeks 6 to 11
+ESL/Challenger League/Season 49/Oceania
+ESL/Challenger League/Season 49/Oceania/Weeks 1 to 4
+ESL/Challenger League/Season 49/Oceania/Weeks 5 to 9
+ESL/Challenger League/Season 49/South America
+ESL/Challenger League/Season 49/South America/Weeks 1 to 5
+ESL/Challenger League/Season 49/South America/Weeks 6 to 9
+ESL/Challenger League/Season 50/Asia
+ESL/Challenger League/Season 50/Asia/Cup 1
+ESL/Challenger League/Season 50/Asia/Cup 2
+ESL/Challenger League/Season 50/Asia/Cup 3
+ESL/Challenger League/Season 50/Asia/Cup 4
+ESL/Challenger League/Season 50/Europe
+ESL/Challenger League/Season 50/Europe/Cup 1
+ESL/Challenger League/Season 50/Europe/Cup 2
+ESL/Challenger League/Season 50/Europe/Cup 3
+ESL/Challenger League/Season 50/Europe/Cup 4
+ESL/Challenger League/Season 50/North America
+ESL/Challenger League/Season 50/North America/Cup 1
+ESL/Challenger League/Season 50/North America/Cup 2
+ESL/Challenger League/Season 50/North America/Cup 3
+ESL/Challenger League/Season 50/North America/Cup 4
+ESL/Challenger League/Season 50/Oceania
+ESL/Challenger League/Season 50/Oceania/Cup 1
+ESL/Challenger League/Season 50/Oceania/Cup 2
+ESL/Challenger League/Season 50/Oceania/Cup 3
+ESL/Challenger League/Season 50/Oceania/Cup 4
+ESL/Challenger League/Season 50/South America
+ESL/Challenger League/Season 50/South America/Cup 1
+ESL/Challenger League/Season 50/South America/Cup 2
+ESL/Challenger League/Season 50/South America/Cup 3
+ESL/Challenger League/Season 50/South America/Cup 4
+ESL/Challenger League/Season 51/Asia
+ESL/Challenger League/Season 51/Asia-Pacific
+ESL/Challenger League/Season 51/Asia/Cup 1
+ESL/Challenger League/Season 51/Asia/Cup 2
+ESL/Challenger League/Season 51/Asia/Cup 3
+ESL/Challenger League/Season 51/Asia/Cup 4
+ESL/Challenger League/Season 51/Europe
+ESL/Challenger League/Season 51/Europe/Cup 1
+ESL/Challenger League/Season 51/Europe/Cup 2
+ESL/Challenger League/Season 51/Europe/Cup 3
+ESL/Challenger League/Season 51/Europe/Cup 4
+ESL/Challenger League/Season 51/North America
+ESL/Challenger League/Season 51/North America/Cup 1
+ESL/Challenger League/Season 51/North America/Cup 2
+ESL/Challenger League/Season 51/North America/Cup 3
+ESL/Challenger League/Season 51/North America/Cup 4
+ESL/Challenger League/Season 51/Oceania/Cup 1
+ESL/Challenger League/Season 51/Oceania/Cup 2
+ESL/Challenger League/Season 51/Oceania/Cup 3
+ESL/Challenger League/Season 51/Oceania/Cup 4
+ESL/Challenger League/Season 51/South America
+ESL/Challenger League/Season 51/South America/Cup 1
+ESL/Challenger League/Season 51/South America/Cup 2
+ESL/Challenger League/Season 51/South America/Cup 3
+ESL/Challenger League/Season 51/South America/Cup 4
+ESL/Challenger League/Season 52/Asia-Pacific
+ESL/Challenger League/Season 52/Asia/Cup 1
+ESL/Challenger League/Season 52/Asia/Cup 2
+ESL/Challenger League/Season 52/Asia/Cup 3
+ESL/Challenger League/Season 52/Asia/Cup 4
+ESL/Challenger League/Season 52/Europe
+ESL/Challenger League/Season 52/Europe/Cup 1
+ESL/Challenger League/Season 52/Europe/Cup 10
+ESL/Challenger League/Season 52/Europe/Cup 11
+ESL/Challenger League/Season 52/Europe/Cup 12
+ESL/Challenger League/Season 52/Europe/Cup 13
+ESL/Challenger League/Season 52/Europe/Cup 14
+ESL/Challenger League/Season 52/Europe/Cup 2
+ESL/Challenger League/Season 52/Europe/Cup 3
+ESL/Challenger League/Season 52/Europe/Cup 4
+ESL/Challenger League/Season 52/Europe/Cup 5
+ESL/Challenger League/Season 52/Europe/Cup 6
+ESL/Challenger League/Season 52/Europe/Cup 7
+ESL/Challenger League/Season 52/Europe/Cup 8
+ESL/Challenger League/Season 52/Europe/Cup 9
+ESL/Challenger League/Season 52/Europe/Play-In
+ESL/Challenger League/Season 52/North America
+ESL/Challenger League/Season 52/North America/Cup 1
+ESL/Challenger League/Season 52/North America/Cup 2
+ESL/Challenger League/Season 52/North America/Cup 3
+ESL/Challenger League/Season 52/North America/Cup 4
+ESL/Challenger League/Season 52/Oceania/Cup 1
+ESL/Challenger League/Season 52/Oceania/Cup 2
+ESL/Challenger League/Season 52/Oceania/Cup 3
+ESL/Challenger League/Season 52/Oceania/Cup 4
+ESL/Challenger League/Season 52/South America
+ESL/Challenger League/Season 52/South America/Cup 1
+ESL/Challenger League/Season 52/South America/Cup 2
+ESL/Challenger League/Season 52/South America/Cup 3
+ESL/Challenger League/Season 52/South America/Cup 4
+Exort
+Exort/Cataclysm/CIS/Season 1
+Exort/Cataclysm/Season 1
+Exort/Meteor/Season 1
+Exort/Meteor/Season 2
+Exort/Meteor/Season 3
+Exort/Meteor/Season 4
+Exort/Meteor/Season 5
+Exort/Meteor/South America/Season 1
+Exort/Proving Grounds/Season 1
+Exort/Proving Grounds/Season 2
+Exort/Proving Grounds/Season 3
+Exort/Proving Grounds/Season 4
+Exort/Proving Grounds/Season 5
+Exort/Proving Grounds/Season 6
+Exort Series/1
+Exort Series/10
+Exort Series/10/Contenders Stage
+Exort Series/10/Main Stage
+Exort Series/11
+Exort Series/11/Contenders Stage
+Exort Series/11/Main Stage
+Exort Series/12
+Exort Series/12/Contenders Stage
+Exort Series/12/Main Stage
+Exort Series/13
+Exort Series/13/Contenders Stage
+Exort Series/13/Main Stage
+Exort Series/14
+Exort Series/14/Contenders Stage
+Exort Series/14/Main Stage
+Exort Series/15
+Exort Series/15/Contenders Stage
+Exort Series/15/Main Stage
+Exort Series/16
+Exort Series/16/Contenders Stage
+Exort Series/16/Main Stage
+Exort Series/17
+Exort Series/17/Contenders Stage
+Exort Series/17/Main Stage
+Exort Series/18
+Exort Series/18/Contenders Stage
+Exort Series/18/Main Stage
+Exort Series/19
+Exort Series/19/Contenders Stage
+Exort Series/19/Main Stage
+Exort Series/2
+Exort Series/20
+Exort Series/20/Contenders Stage
+Exort Series/20/Main Stage
+Exort Series/21
+Exort Series/21/Contenders Stage
+Exort Series/21/Main Stage
+Exort Series/22
+Exort Series/22/Contenders Stage
+Exort Series/22/Main Stage
+Exort Series/23
+Exort Series/23/Contenders Stage
+Exort Series/23/Main Stage
+Exort Series/24
+Exort Series/24/Contenders Stage
+Exort Series/24/Main Stage
+Exort Series/25
+Exort Series/25/Contenders Stage
+Exort Series/25/Main Stage
+Exort Series/26
+Exort Series/26/Contenders Stage
+Exort Series/26/Main Stage
+Exort Series/27
+Exort Series/27/Contenders Stage
+Exort Series/27/Main Stage
+Exort Series/28
+Exort Series/28/Contenders Stage
+Exort Series/28/Main Stage
+Exort Series/29
+Exort Series/29/Contenders Stage
+Exort Series/29/Main Stage
+Exort Series/3
+Exort Series/30
+Exort Series/30/Contenders Stage
+Exort Series/30/Main Stage
+Exort Series/31
+Exort Series/31/Contenders Stage
+Exort Series/31/Main Stage
+Exort Series/32
+Exort Series/32/Contenders Stage
+Exort Series/32/Main Stage
+Exort Series/33
+Exort Series/33/Contenders Stage
+Exort Series/33/Main Stage
+Exort Series/4
+Exort Series/5
+Exort Series/6
+Exort Series/7
+Exort Series/8
+Exort Series/8/Contenders Stage
+Exort Series/8/Main Stage
+Exort Series/9
+Exort Series/9/Contenders Stage
+Exort Series/9/Main Stage
+Galaxy Battle/1
+Galaxy Battle/2
+Galaxy Battle/2025/Phase 1
+Galaxy Battle/2025/Phase 1/Qualifier
+Galaxy Battle/2025/Phase 2
+Galaxy Battle/2025/Phase 2/Qualifier
+Galaxy Battle/2025/Phase 3
+Galaxy Battle/2025/Phase 3/Qualifier
+Galaxy Battle/2025/Phase 4
+Galaxy Battle/2025/Phase 4/Main Stage
+Galaxy Battle/2025/Phase 4/Play-In Stage
+Galaxy Battle/2025/Phase 4/Qualifier
+Galaxy Battle/2025/Phase 5
+Galaxy Battle/2025/Phase 5/Main Stage
+Galaxy Battle/2025/Phase 5/Play-In
+Galaxy Battle/2025/Phase 5/Play-In/Qualifier
+Galaxy Battle/2025/STARTER
+Galaxy Battle/3
+Galaxy Battle/4
+Galaxy Battle/5
+Galaxy Battle/LAN-Station/1
+Galaxy Battle/LAN-Station/1/Online Stage
+Galaxy Battle/LAN-Station/1/Online Stage/Qualifier/Europe
+Galaxy Battle/LAN-Station/1/Online Stage/Qualifier/Ukraine
+European Pro League
+European Pro League/Female/Season 1
+European Pro League/Regular/Season 1
+European Pro League/Regular/Season 2
+European Pro League/Regular/Season 3
+European Pro League/Regular/Season 4
+European Pro League/Regular/Season 5
+European Pro League/Regular/Season 6
+European Pro League/Regular/Season 7
+European Pro League/Season 1
+European Pro League/Season 10
+European Pro League/Season 10/Division 2
+European Pro League/Season 11
+European Pro League/Season 11/Division 2
+European Pro League/Season 12
+European Pro League/Season 12/Division 2
+European Pro League/Season 13
+European Pro League/Season 13/Division 2
+European Pro League/Season 14
+European Pro League/Season 14/Division 2
+European Pro League/Season 15
+European Pro League/Season 15/Division 2
+European Pro League/Season 16
+European Pro League/Season 16/Division 2
+European Pro League/Season 17
+European Pro League/Season 17/Division 2
+European Pro League/Season 18
+European Pro League/Season 18/Division 2
+European Pro League/Season 19
+European Pro League/Season 19/Division 2
+European Pro League/Season 2
+European Pro League/Season 20
+European Pro League/Season 20/Division 2
+European Pro League/Season 21
+European Pro League/Season 21/Division 2
+European Pro League/Season 22
+European Pro League/Season 22/Division 2
+European Pro League/Season 23
+European Pro League/Season 23/Division 2
+European Pro League/Season 24
+European Pro League/Season 24/Division 2
+European Pro League/Season 25
+European Pro League/Season 25/Division 2
+European Pro League/Season 26
+European Pro League/Season 26/Division 2
+European Pro League/Season 27
+European Pro League/Season 27/Division 2
+European Pro League/Season 28/Division 2
+European Pro League/Season 29/Division 2
+European Pro League/Season 3
+European Pro League/Season 4
+European Pro League/Season 5
+European Pro League/Season 6
+European Pro League/Season 6/Division 2
+European Pro League/Season 7
+European Pro League/Season 7/Division 2
+European Pro League/Season 8
+European Pro League/Season 8/Division 2
+European Pro League/Season 9
+European Pro League/Season 9/Division 2
+European Pro League/Series 1
+European Pro League/Series 1/Play-In
+European Pro League/Series 11
+European Pro League/Series 11/Play-In
+European Pro League/Series 2
+European Pro League/Series 2/Play-In
+European Pro League/Series 3
+European Pro League/Series 3/Play-In
+European Pro League/Series 4
+European Pro League/Series 4/Play-In
+European Pro League/Series 5
+European Pro League/Series 5/Play-In
+European Pro League/Series 6
+European Pro League/Series 6/Play-In
+European Pro League/Series 6/Play-In/Qualifier/1
+European Pro League/Series 6/Play-In/Qualifier/2
+European Pro League/Series 7
+European Pro League/Series 7/Play-In
+European Pro League/Series 8
+European Pro League/Series 8/Play-In
+European Pro League/Series 9
+European Pro League/Series 9/Play-In
+European Pro League/Winter Holidays Cup/2022
+European Pro League/World Series/Americas/Season 1
+European Pro League/World Series/Americas/Season 2
+European Pro League/World Series/Americas/Season 3
+European Pro League/World Series/Americas/Season 4
+European Pro League/World Series/Americas/Season 5
+European Pro League/World Series/Americas/Season 6
+European Pro League/World Series/Americas/Season 7
+European Pro League/World Series/Americas/Season 8
+European Pro League/World Series/Americas/Season 9
+European Pro League/World Series/Oceania/1
+European Pro League/World Series/Oceania/2
+ESL/Pro League/Season 18
+ESL/Pro League/Season 18/Europe
+ESL/Pro League/Season 18/Oceania
+ESL/Pro League/Season 18/South America
