@@ -601,10 +601,10 @@
      "joined": "2026-01-05"
     }
    ],
-   "icon": "BC.Game Esports nov 2025 full lightmode.png",
-   "icon_dark": "BC.Game Esports nov 2025 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/e43b32d7cc37e371.png",
-   "logo_dark_path": "data/raw/liquipedia_media/cda777f60e72fefe.png"
+   "icon": "BC.Game Esports nov 2025 allmode.png",
+   "icon_dark": "BC.Game Esports nov 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png"
   },
   "BIG": {
    "page": "BIG",
@@ -2579,10 +2579,10 @@
      "joined": "2023-11-07"
     }
    ],
-   "icon": "Nemiga Gaming 2020 red full allmode.png",
-   "icon_dark": "Nemiga Gaming 2020 red full allmode.png",
-   "logo_path": "data/raw/liquipedia_media/0f1effb7cf8b7941.png",
-   "logo_dark_path": "data/raw/liquipedia_media/0f1effb7cf8b7941.png"
+   "icon": "Nemiga Gaming 2020logo.png",
+   "icon_dark": "Nemiga Gaming 2020logo.png",
+   "logo_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png"
   },
   "Ninjas in Pyjamas": {
    "page": "Ninjas in Pyjamas",

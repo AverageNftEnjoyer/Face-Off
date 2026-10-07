@@ -467,7 +467,20 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
     linear-gradient(120deg, transparent 46%, var(--ct) 46% 54%, transparent 54%) left -6rem top -2rem / 22rem 22rem no-repeat,
     linear-gradient(60deg, transparent 46%, var(--t) 46% 54%, transparent 54%) right -6rem top -2rem / 22rem 22rem no-repeat;
 }
+/* faint team logos behind each half, masked to the same slanted split as the background */
+.cwm { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.cwm.a { -webkit-mask-image: linear-gradient(104deg, #000 0 49.6%, transparent 49.6%); mask-image: linear-gradient(104deg, #000 0 49.6%, transparent 49.6%); }
+.cwm.b { -webkit-mask-image: linear-gradient(104deg, transparent 50.4%, #000 50.4%); mask-image: linear-gradient(104deg, transparent 50.4%, #000 50.4%); }
+.cwm img {
+  position: absolute; top: 50%; width: auto; height: 135%; max-width: none; aspect-ratio: 1; object-fit: contain;
+  opacity: .11; filter: grayscale(.35) blur(1px); transform: translateY(-50%) rotate(-8deg);
+}
+.cwm.a img { left: -6%; }
+.cwm.b img { right: -6%; transform: translateY(-50%) rotate(8deg); }
 .cside { display: grid; justify-items: start; gap: .3rem; min-width: 0; }
+.cside .cchg { padding: .25rem .6rem; font-size: .72rem; background: rgba(10, 14, 20, .45); }
+.cctl { display: grid; gap: .4rem; justify-items: center; }
+.cctl .btn { background: var(--bg); justify-content: center; text-align: center; }
 .cside.b { justify-items: end; text-align: right; }
 .cside .logo.xl { width: clamp(4rem, 9vw, 6rem); height: clamp(4rem, 9vw, 6rem); filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .35)); }
 .cname { font-size: clamp(1.4rem, 3.2vw, 2.4rem); overflow-wrap: anywhere; }
@@ -565,14 +578,21 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 /* right rail */
 .rail { display: grid; gap: 1rem; position: sticky; top: 4.5rem; }
 .rail .panel > h2 { font-size: var(--s0); }
-/* build a matchup: full-width logo picker under the desk */
-.builder { margin-top: 1.5rem; scroll-margin-top: 4.5rem; }
-.builder .bctl { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
-.builder input[type="search"] { min-width: 0; width: 16rem; max-width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .45rem .65rem; font: inherit; font-size: var(--s-1); }
-.builder .slot { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; color: var(--text); }
-.builder .slot.a { box-shadow: inset 0 -2px 0 var(--ct); }
-.builder .slot.b { box-shadow: inset 0 -2px 0 var(--t); }
-.builder .slots .slot img { margin-left: .15rem; }
+/* team chooser: a modal dialog opened from the court's "Change Team" buttons */
+.tdlg {
+  padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--text);
+  width: min(46rem, calc(100vw - 1.5rem)); max-width: none; max-height: min(85vh, 44rem); overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
+}
+.tdlg[open] { display: flex; }
+.tdlg::backdrop { background: rgba(5, 8, 12, .7); }
+.tdlg-in { display: flex; flex-direction: column; gap: .65rem; padding: 1rem; min-height: 0; width: 100%; }
+.tdlg-h { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.tdlg-h h2 { margin: 0; font-size: var(--s1); }
+.tdlg input[type="search"] { min-width: 0; width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .55rem .7rem; font: inherit; }
+.tdlg p { margin: 0; }
+.tdlg .picker { overflow-y: auto; min-height: 0; flex: 1 1 auto; padding: 2px; overscroll-behavior: contain; }
+@media (max-width: 520px) { .tdlg-in { padding: .75rem; } .tdlg .picker { grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr)); } }
 .rlist { display: grid; }
 .rlist a { display: grid; grid-template-columns: 1.6rem 1.35rem minmax(0, 1fr) auto; gap: .5rem; align-items: center; padding: .4rem .2rem; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
 .rlist a:last-child { border-bottom: 0; }
@@ -637,6 +657,8 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .splitfig { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .splitfig div { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: .75rem .85rem; display: grid; gap: .15rem; }
 .splitfig b { font-size: var(--s3); }
+.chart-head { display: flex; justify-content: flex-end; }
+svg.rchart { cursor: crosshair; touch-action: pan-y; }
 /* track record: wide-screen layout */
 .page.rwide { max-width: 136rem; padding-inline: max(16px, 3vw); }
 body[data-w="wide"] .top-in { max-width: 84rem; }
@@ -674,7 +696,8 @@ body[data-w="rwide"] .top-in { max-width: 136rem; padding-inline: max(16px, 3vw)
 }
 @media (max-width: 520px) {
   .court { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .ccentre { grid-column: 1 / -1; grid-row: 1; }
+  .ccentre { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: none; }
+  .cctl { grid-auto-flow: column; }
   .splitfig { grid-template-columns: minmax(0, 1fr); }
 }
 </style>
@@ -689,7 +712,7 @@ body[data-w="rwide"] .top-in { max-width: 136rem; padding-inline: max(16px, 3vw)
       <a href="#home" data-tab="home">Matchups</a>
       <a href="#events" data-tab="events">Tournaments</a>
       <a href="#teams" data-tab="teams">Teams</a>
-      <a href="#record" data-tab="record">Track record</a>
+      <a href="#record" data-tab="record">Stats</a>
     </nav>
     <span class="snap" id="snap"></span>
   </div>
@@ -814,7 +837,27 @@ function decode(c) {
     maps: c.vm, map_p: c.vp, warn: c.w,
     veto: c.v.map(x => x[0] === "D" ? { verb: "decider", map: x.slice(1) } : { side: x[0], verb: x[1] === "-" ? "bans" : "picks", map: x.slice(2) }),
     factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })),
+    ...vetoFmt(c.v1, [c.p], 1), ...vetoFmt(c.v5, c.p5, 5),
   };
+}
+// BO1 / BO5 vetoes, coded by build_viewer.veto_code: two characters per step,
+// kind (a/b ban, x/y permaban, A/B pick, D decider) then a DATA.vmaps index.
+const VCODE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function vetoFmt(code, mp, n) {
+  if (!code || !mp) return { [`veto${n}`]: null, [`maps${n}`]: null, [`map_p${n}`]: null };
+  const steps = [];
+  for (let i = 0; i < code.length; i += 2) {
+    const k = code[i], map = (DATA.vmaps || [])[VCODE.indexOf(code[i + 1])];
+    steps.push(k === "D" ? { verb: "decider", map }
+      : { side: "aAx".includes(k) ? "A" : "B", verb: "AB".includes(k) ? "picks" : "bans", map });
+  }
+  return { [`veto${n}`]: steps, [`maps${n}`]: steps.filter(s => s.verb !== "bans").map(s => s.map), [`map_p${n}`]: mp };
+}
+// the veto, maps and map chances shown for a series format (BO3 when the format has none)
+function vetoFor(pred, bo) {
+  return bo === 1 && pred.veto1 ? { veto: pred.veto1, maps: pred.maps1, map_p: pred.map_p1 }
+    : bo === 5 && pred.veto5 ? { veto: pred.veto5, maps: pred.maps5, map_p: pred.map_p5 }
+    : { veto: pred.veto, maps: pred.maps, map_p: pred.map_p };
 }
 function matchupPred(e, a, b) {
   if (e && DATA.epairs[e.slug] && DATA.epairs[e.slug][`${a}|${b}`]) return decode(DATA.epairs[e.slug][`${a}|${b}`]);
@@ -1017,7 +1060,14 @@ function flatQ(p, n) {
 function scoreSet(pred, bo) {
   let s;
   if (bo === 3) s = [pred.score.p_2_0, pred.score.p_2_1, pred.score.p_1_2, pred.score.p_0_2];
+  else if (bo === 1) s = [pred.p, 1 - pred.p];
   else if (bo === 5 && pred.score5) s = ["p_3_0", "p_3_1", "p_3_2", "p_2_3", "p_1_3", "p_0_3"].map(k => pred.score5[k]);
+  else if (bo === 5 && pred.map_p5) {
+    // the engine's BO5 per-map chances (5 decimals in the page); rescale each
+    // side so the series total is exactly the engine's win probability
+    const r = scorelines(pred.map_p5), wa = r[0] + r[1] + r[2];
+    s = r.map((x, i) => i < 3 ? x * pred.p / wa : x * (1 - pred.p) / (1 - wa));
+  }
   else s = scorelines(Array(bo).fill(flatQ(pred.p, bo)));
   const need = (bo + 1) / 2;
   return s.map((p, i) => i < need ? { a: need, b: i, p } : { a: 2 * need - 1 - i, b: need, p });
@@ -1036,6 +1086,7 @@ function court(pred, a, b, o, bo) {
       ${T[t] ? `<a href="#t-${T[t].slug}" aria-label="${esc(t)} team page">${logo(t, "xl")}</a>` : logo(t, "xl")}
       ${T[t] ? `<a class="cname cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cname cond">${esc(t)}</span>`}
       <span class="small cmeta">${esc(vrsLine(t))}</span>
+      ${o.change ? `<button type="button" class="btn cchg" data-chg="${cls}" aria-haspopup="dialog" aria-label="${esc(`Change Team ${i + 1}, now ${t}`)}">Change Team ${i + 1}</button>` : ""}
       ${shown ? `<span class="cbig cond" aria-label="${esc(t)} ${shown[i]}% to win">${bigPct(shown[i])}</span>` : ""}
     </div>`;
   const fmt = `<div class="seg" role="group" aria-label="Series format">${[1, 3, 5].map(n =>
@@ -1046,15 +1097,18 @@ function court(pred, a, b, o, bo) {
         <div class="band" data-l="${(pred.band[0] * 100).toFixed(2)}" data-bw="${((pred.band[1] - pred.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
         <div class="mid"></div>
       </div>
-      <div class="legend"><span>${esc(o.label || "Model's pre-match call")}. Hatched: likely range ${pct(pred.band[0], 2)} to ${pct(pred.band[1], 2)}</span>
+      <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure.</span>
         <span class="chip ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span></div>
     </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p></div>`;
-  return `<section class="court">${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}${fmt}${o.verdict || ""}</div>${side(b, "b", 1)}${bar}</section>`;
+  // a large, faint copy of each logo behind its half; the mask follows the slanted split
+  const wm = (t, cls) => IMG.logos[t] ? `<div class="cwm ${cls}" aria-hidden="true"><img src="${IMG.logos[t]}" alt=""></div>` : "";
+  const ctl = o.change ? `<div class="cctl"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>` : "";
+  return `<section class="court">${wm(a, "a")}${wm(b, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}${fmt}${ctl}${o.verdict || ""}</div>${side(b, "b", 1)}${bar}</section>`;
 }
 
-function tape(pred, a, b) {
-  const steps = pred.veto;
-  if (!desk.spot || !steps.some(s => s.map === desk.spot)) desk.spot = pred.maps[0];
+function tape(pred, a, b, bo = 3) {
+  const V = vetoFor(pred, bo), steps = V.veto;
+  if (!desk.spot || !steps.some(s => s.map === desk.spot)) desk.spot = V.maps[0];
   return `<div class="tape" style="--n:${steps.length}" role="group" aria-label="Veto, in order">${steps.map((s, i) => {
     const who = s.side === "A" ? a : s.side === "B" ? b : null;
     const cls = s.verb === "bans" ? "ban" : s.verb === "picks" ? "pick" : "dec";
@@ -1072,11 +1126,14 @@ function tape(pred, a, b) {
   }).join("")}</div>`;
 }
 
-function spotlight(pred, a, b) {
-  const m = desk.spot, i = pred.veto.findIndex(s => s.map === m), s = pred.veto[i];
+function spotlight(pred, a, b, bo = 3) {
+  const V = vetoFor(pred, bo), n = V.maps.length;
+  const m = desk.spot, i = V.veto.findIndex(s => s.map === m), s = V.veto[i];
   const who = s.side === "A" ? a : s.side === "B" ? b : null;
-  const k = pred.maps.indexOf(m), pm = k >= 0 ? pred.map_p[k] : null;
-  const role = s.verb === "decider" ? `The map left after the bans: played third if it goes the distance.`
+  const k = V.maps.indexOf(m), pm = k >= 0 ? V.map_p[k] : null;
+  const nth = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"][n - 1] || `number ${n}`;
+  const role = s.verb === "decider" ? (n === 1 ? `The map left after the bans: the only map played.`
+      : `The map left after the bans: played ${nth} if it goes the distance.`)
     : s.verb === "picks" ? `${esc(who)} pick, played as map ${k + 1}.`
     : `${esc(who)} ban at step ${i + 1}. Not played in this veto.`;
   let chance = "";
@@ -1107,7 +1164,8 @@ function scoreTiles(pred, a, b, bo) {
   const mx = Math.max(...set.map(x => x.p));
   const t = set[top], topTeam = winOf(t) ? a : b;
   const note = bo === 1 ? "One map: the series chance is the map chance."
-    : bo === 5 ? "Best-of-five: the same win chance on every map, set so the series total matches the win probability."
+    : bo === 5 ? (pred.score5 || pred.map_p5 ? "Map win chances from the simulated best-of-five veto, set so the series total matches the win probability."
+      : "Best-of-five: the same win chance on every map, set so the series total matches the win probability.")
     : "Map win chances from the simulated veto.";
   return `<div class="panel"><h2>Series score <span class="dim">most likely ${esc(topTeam)} ${scoreFrom(t, winOf(t))}</span></h2>
     <div class="stiles" style="--n:${set.length}">${set.map((x, i) => {
@@ -1129,7 +1187,7 @@ function matchDesk(pred, a, b, o = {}) {
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
   else body = `
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
-    ${pred ? `<section class="panel"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b)}${spotlight(pred, a, b)}</section>
+    ${pred ? `<section class="panel"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
     <div class="grid2">${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
   return `${o.ctx || ""}${court(pred, a, b, o, bo)}
     <div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}">${l}</button>`).join("")}</div>
@@ -1168,31 +1226,39 @@ const builderTiles = () => {
   return list.map(n => pickTile(n, `data-dpick="${esc(n)}" ${n === desk.a ? 'data-slot="a"' : n === desk.b ? 'data-slot="b"' : ""} aria-pressed="${n === desk.a || n === desk.b}"`)).join("")
     || `<p class="empty">No team matches "${esc(desk.q)}".</p>`;
 };
-function builder(showingFeat) {
-  const nx = desk.next === "b" ? `<span class="t">Team 2</span>` : `<span class="ct">Team 1</span>`;
-  return `<section class="panel builder" id="build" aria-label="Build a matchup">
-    <h2>Build a matchup <span class="dim">Next click sets ${nx}</span></h2>
-    <div class="bctl"><input type="search" id="dSearch" placeholder="Filter teams" aria-label="Filter teams" value="${esc(desk.q)}" autocomplete="off">
-      <button type="button" class="btn" id="exSwap">Swap teams</button>
-      ${featuredMatch() && !showingFeat ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>
-    <div class="picker" id="dGrid">${builderTiles()}</div>
-    <div class="slots"><span>Team 1 <span class="slot a">${logo(desk.a, "sm")}${esc(desk.a)}</span></span><span>Team 2 <span class="slot b">${logo(desk.b, "sm")}${esc(desk.b)}</span></span><span>Team 1 bans first in the simulated veto.</span></div>
-  </section>`;
+// the team chooser: a modal dialog opened from the "Change Team" buttons on the court
+function builder() {
+  return `<dialog class="tdlg" id="tDlg" aria-labelledby="tDlgT">
+    <div class="tdlg-in">
+      <div class="tdlg-h"><h2 id="tDlgT">Choose Team 1</h2><button type="button" class="btn" data-dclose="1">Close</button></div>
+      <input type="search" id="dSearch" placeholder="Filter teams" aria-label="Filter teams" autocomplete="off">
+      <p class="small dim">Team 1 bans first in the simulated veto. Picking the other side's team swaps the two.</p>
+      <div class="picker" id="dGrid"></div>
+    </div>
+  </dialog>`;
+}
+let dlgSide = "a";
+function openChooser(side) {
+  const d = $("#tDlg");
+  if (!d) return;
+  dlgSide = desk.next = side; desk.q = "";
+  $("#tDlgT").textContent = `Choose Team ${side === "a" ? 1 : 2}`;
+  const q = $("#dSearch"); q.value = "";
+  $("#dGrid").innerHTML = builderTiles();
+  if (d.showModal) d.showModal(); else d.setAttribute("open", "");
+  q.focus();
+}
+function closeChooser() {
+  const d = $("#tDlg");
+  if (d && d.open) { if (d.close) d.close(); else d.removeAttribute("open"); }
 }
 
 function rail() {
-  const f = featuredMatch();
-  const showingFeat = f && desk.feat === f.id && desk.a === f.t1 && desk.b === f.t2;
   const top = NAMES.filter(n => T[n].vrs).slice(0, 8);
   const keyOf = m => (m.day || "") + (m.when || "");
   const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= DATA.as_of)
     .sort((x, y) => keyOf(x).localeCompare(keyOf(y))).slice(0, 5);
-  const calls = callLog(), hits = calls.filter(c => c.hit).length;
   return `
-  <section class="panel"><h2>Build a matchup</h2>
-    <p class="small dim">Pick any two teams by logo and see the model's call.</p>
-    <div class="links"><button type="button" class="btn" data-tobuild="1">Build a matchup</button>${f && !showingFeat ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>
-  </section>
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
     <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
       <span class="form5" aria-label="last five: ${T[n].results.slice(0, 5).map(r => r.won ? "won" : "lost").join(", ") || "no results"}">${T[n].results.slice(0, 5).reverse().map(r => `<i class="${r.won ? "W" : "L"}"></i>`).join("")}</span></a>`).join("")}</div>
@@ -1203,8 +1269,7 @@ function rail() {
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${p != null ? `<span class="mini" title="Model: ${esc(m.t1)} ${displayPercent([p, 1 - p])[0]}%"><b style="width:${(p * 100).toFixed(1)}%"></b></span>` : ""}</a>`; }).join("")
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
-  </section>
-  ${calls.length ? `<section class="panel"><h2>Track record</h2><p class="small dim">${hits} of ${calls.length} finished 2026 matches called right before they were played.</p><a class="btn" href="#record">See every call</a></section>` : ""}`;
+  </section>`;
 }
 
 function viewHome() {
@@ -1219,13 +1284,13 @@ function viewHome() {
   if (isFeat) {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
-    o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), verdict: verdictFor(m, pred), label: "Model's call for this match" };
+    o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), verdict: verdictFor(m, pred), change: true };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
-    o = { label: "Model's call today" };
+    o = { change: true, back: !!f };
   }
   PAIR = [desk.a, desk.b];
-  return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder(isFeat)}`;
+  return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
 }
 
 /* ---------------- tournaments index ---------------- */
@@ -1554,31 +1619,48 @@ function calibChart(calls) {
   return svg + table;
 }
 
+const RANGES = [["7", "7D"], ["30", "30D"], ["90", "90D"], ["all", "Season"]];
+const daysBefore = (day, n) => new Date(Date.parse(day + "T00:00:00Z") - n * 864e5).toISOString().slice(0, 10);
 function timeChart(calls) {
   const n = calls.length, w = Math.max(10, Math.min(40, Math.floor(n / 5)));
   if (n < w + 2) return `<p class="empty">Not enough finished calls to draw a trend yet.</p>`;
-  const W = 520, H = 300, L = 44, R = 14, Tp = 14, B = 34;
-  const pts = [];
+  const roll = [];
   let h = 0;
   for (let i = 0; i < n; i++) {
     h += calls[i].hit; if (i >= w) h -= calls[i - w].hit;
-    if (i >= w - 1) pts.push([i, h / w]);
+    if (i >= w - 1) roll.push({ v: h / w, c: calls[i] });
   }
-  const lo = Math.min(.4, Math.floor(Math.min(...pts.map(p => p[1])) * 10) / 10);
-  const x = i => L + i / (n - 1) * (W - L - R), y = v => Tp + (1 - v) / (1 - lo) * (H - Tp - B);
+  const r = rec.range || "all";
+  const cut = r === "all" ? "" : daysBefore(calls[n - 1].day, +r);
+  const pts = roll.filter(p => p.c.day > cut), inRange = calls.filter(c => c.day > cut);
+  const ih = inRange.filter(c => c.hit).length;
+  const seg = `<div class="seg" role="group" aria-label="Time range">${RANGES.map(([k, l]) => `<button type="button" data-range="${k}" aria-pressed="${r === k}">${l}</button>`).join("")}</div>`;
+  const label = r === "all" ? "Whole season" : `Last ${r} days`;
+  const summary = `<p class="small dim">${label}: ${ih} of ${inRange.length} right${inRange.length ? ` (${acc2(ih, inRange.length)}%)` : ""}. The line is the share right over the previous ${w} calls; the dashed line is the season average. Hover the chart to read any point.</p>`;
+  if (pts.length < 2) return `<div class="chart-head">${seg}</div><p class="empty">Fewer than two calls in this range. Pick a longer range.</p>${summary}`;
+  const W = 520, H = 300, L = 44, R = 14, Tp = 14, B = 34;
   const all = calls.filter(c => c.hit).length / n;
+  const lo = Math.min(.4, Math.floor(Math.min(...pts.map(p => p.v)) * 10) / 10);
+  const x = k => L + k / (pts.length - 1) * (W - L - R), y = v => Tp + (1 - v) / (1 - lo) * (H - Tp - B);
   let g = "";
   for (let v = lo; v <= 1.0001; v += .1) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
-  let lastM = "", lastX = -1e9;
-  calls.forEach((c, i) => { const mo = c.day.slice(0, 7); if (mo !== lastM) { lastM = mo; if (x(i) - lastX < 50 || x(i) > W - R - 40) return; lastX = x(i); g += `<text x="${x(i)}" y="${H - 12}" font-size="11" fill="var(--dim)">${mo}</text><line x1="${x(i)}" x2="${x(i)}" y1="${H - B}" y2="${H - B + 4}" stroke="var(--dim)"/>`; } });
-  g += `<line x1="${L}" x2="${W - R}" y1="${y(all)}" y2="${y(all)}" stroke="var(--dim)" stroke-dasharray="5 5"/><text x="${L + 6}" y="${Tp + 12}" font-size="11" fill="var(--dim)">Dashed line: whole season, ${(all * 100).toFixed(2)}%</text>`;
-  const line = pts.map(([i, v]) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-  g += `<polygon points="${x(pts[0][0])},${H - B} ${line} ${x(pts[pts.length - 1][0])},${H - B}" fill="var(--win)" fill-opacity=".1"/>`;
+  // axis labels: days for short ranges, months for long ones, never closer than 56 units
+  const tickKey = d => r === "all" || r === "90" ? d.slice(0, 7) : d;
+  let lastK = "", lastX = -1e9;
+  pts.forEach((p, k) => { const tk = tickKey(p.c.day); if (tk !== lastK) { lastK = tk; if (x(k) - lastX < (tk.length > 7 ? 76 : 56) || x(k) > W - R - (tk.length > 7 ? 60 : 44)) return; lastX = x(k); g += `<text x="${x(k)}" y="${H - 12}" font-size="11" fill="var(--dim)">${tk}</text><line x1="${x(k)}" x2="${x(k)}" y1="${H - B}" y2="${H - B + 4}" stroke="var(--dim)"/>`; } });
+  g += `<line x1="${L}" x2="${W - R}" y1="${y(all)}" y2="${y(all)}" stroke="var(--dim)" stroke-dasharray="5 5"/>`;
+  const line = pts.map((p, k) => `${x(k).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+  g += `<polygon points="${x(0)},${H - B} ${line} ${x(pts.length - 1)},${H - B}" fill="var(--win)" fill-opacity=".1"/>`;
   g += `<polyline points="${line}" fill="none" stroke="var(--win)" stroke-width="2.25"/>`;
+  if (pts.length <= 60) g += pts.map((p, k) => `<circle cx="${x(k).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="2.5" fill="${p.c.hit ? "var(--win)" : "var(--loss)"}"/>`).join("");
   const lp = pts[pts.length - 1];
-  g += `<circle cx="${x(lp[0])}" cy="${y(lp[1])}" r="4" fill="var(--win)"/>`;
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Share right over the last ${w} calls through the season; latest ${(lp[1] * 100).toFixed(2)}%">${g}</svg>
-    <p class="small dim">Share of the last ${w} calls that were right, after each match. Latest: ${(lp[1] * 100).toFixed(2)}%.</p>${monthTable(calls)}`;
+  g += `<circle cx="${x(pts.length - 1)}" cy="${y(lp.v)}" r="4" fill="var(--win)"/>`;
+  g += `<g class="hover" visibility="hidden"><line y1="${Tp}" y2="${H - B}" stroke="var(--dim)" stroke-dasharray="3 3"/><circle r="5" fill="var(--text)" stroke="var(--panel)" stroke-width="2"/>
+    <rect rx="4" fill="var(--bg)" stroke="var(--line)"/><text font-size="11" fill="var(--text)"><tspan class="t1"></tspan><tspan class="t2" fill="var(--dim)"></tspan></text></g>`;
+  const data = pts.map((p, k) => [+x(k).toFixed(1), +y(p.v).toFixed(1), p.c.day, (p.v * 100).toFixed(2), `${p.c.a} vs ${p.c.b}, ${p.c.hit ? "right" : "wrong"}`]);
+  return `<div class="chart-head">${seg}</div>
+    <svg class="chart rchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}: share right over the previous ${w} calls, latest ${(lp.v * 100).toFixed(2)}%" data-pts="${esc(JSON.stringify(data))}" data-geo="${W},${H},${L},${R}">${g}</svg>
+    ${summary}${monthTable(calls)}`;
 }
 
 function monthTable(calls) {
@@ -1611,7 +1693,7 @@ function callCard(c, line) {
 
 function viewRecord() {
   const calls = callLog();
-  if (!calls.length) return `<section class="panel"><h2>Track record</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p></section>`;
+  if (!calls.length) return `<section class="panel"><h2>Stats</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p></section>`;
   const n = calls.length, hits = calls.filter(c => c.hit).length;
   let k = n - 1, run = 0;
   const lastHit = calls[k].hit;
@@ -1629,7 +1711,7 @@ function viewRecord() {
   const fh = fav.filter(c => c.hit).length, dh = dog.filter(c => c.hit).length;
   return `
   <div style="display:grid;gap:.4rem">
-    <h1 class="cond" style="font-size:var(--s3)">Track record</h1>
+    <h1 class="cond" style="font-size:var(--s3)">Stats</h1>
     <p class="dim" style="max-width:68ch">Every finished 2026 match on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
   </div>
   <section class="board" aria-label="Headline numbers">
@@ -1721,22 +1803,30 @@ document.addEventListener("click", e => {
   const mc = e.target.closest("button.mapcard");
   if (mc && !e.target.closest("a")) { mc.setAttribute("aria-expanded", mc.getAttribute("aria-expanded") === "true" ? "false" : "true"); return; }
   const bo = e.target.closest("[data-bo]");
-  if (bo && !bo.disabled) { desk.bo = +bo.dataset.bo; rerender(); return; }
+  // a new format has its own veto: start the spotlight on that format's first played map
+  if (bo && !bo.disabled) { desk.bo = +bo.dataset.bo; desk.spot = null; rerender(); return; }
   const dt = e.target.closest("[data-dtab]");
   if (dt) { desk.tab = dt.dataset.dtab; rerender(); return; }
   const sp = e.target.closest("[data-spot]");
   if (sp) { desk.spot = sp.dataset.spot; rerender(); return; }
   if (e.target.closest("#exSwap")) { [desk.a, desk.b] = [desk.b, desk.a]; desk.feat = null; rerender(); return; }
-  if (e.target.closest("[data-tobuild]")) { const bs = $("#build"); if (bs) { bs.scrollIntoView({ behavior: "smooth", block: "start" }); const q = $("#dSearch"); if (q) q.focus({ preventScroll: true }); } return; }
+  const chg = e.target.closest("[data-chg]");
+  if (chg) { openChooser(chg.dataset.chg); return; }
+  if (e.target.closest("[data-dclose]") || e.target.id === "tDlg") { closeChooser(); return; } // the dialog itself is only hit on its backdrop
   const dp = e.target.closest(".pick[data-dpick]");
   if (dp) {
-    const t = dp.dataset.dpick;
-    if (desk.next === "a") { if (t !== desk.b) desk.a = t; else [desk.a, desk.b] = [desk.b, desk.a]; desk.next = "b"; }
-    else { if (t !== desk.a) desk.b = t; else [desk.a, desk.b] = [desk.b, desk.a]; desk.next = "a"; }
-    desk.feat = null; rerender(); return;
+    const t = dp.dataset.dpick, side = dlgSide;
+    if (t === desk[side]) { closeChooser(); return; }
+    if (side === "a") { if (t !== desk.b) desk.a = t; else if (t !== desk.a) [desk.a, desk.b] = [desk.b, desk.a]; }
+    else { if (t !== desk.a) desk.b = t; else if (t !== desk.b) [desk.a, desk.b] = [desk.b, desk.a]; }
+    desk.feat = null; closeChooser(); rerender();
+    const back = $(`[data-chg="${side}"]`); if (back) back.focus({ preventScroll: true });
+    return;
   }
   if (e.target.closest("[data-feat]")) { desk.a = desk.b = null; rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
+  const rg = e.target.closest("[data-range]");
+  if (rg) { rec.range = rg.dataset.range; rerender(); return; }
   const ep = e.target.closest(".pick[data-epick]");
   if (ep) {
     const s = evPick[ep.dataset.ev] = evPick[ep.dataset.ev] || {}, t = ep.dataset.epick;
@@ -1764,10 +1854,16 @@ document.addEventListener("change", e => {
 });
 document.addEventListener("input", e => {
   if (e.target.id !== "dSearch") return;
-  desk.q = e.target.value;
+  desk.q = e.target.value; // only the dialog's tile grid changes while typing
   const g = $("#dGrid");
   if (g) g.innerHTML = builderTiles();
 });
+// when the chooser closes (Escape, backdrop, Close), focus goes back to the button that opened it
+document.addEventListener("close", e => {
+  if (e.target.id !== "tDlg") return;
+  const btn = $(`[data-chg="${dlgSide}"]`);
+  if (btn && (document.activeElement === document.body || !document.activeElement || e.target.contains(document.activeElement))) btn.focus({ preventScroll: true });
+}, true);
 
 document.addEventListener("pointermove", e => {
   const svg = e.target.closest && e.target.closest("svg.spark");
@@ -1792,6 +1888,29 @@ document.addEventListener("pointerleave", e => {
   if (e.target.matches && e.target.matches("svg.spark")) e.target.querySelector(".hover").setAttribute("visibility", "hidden");
 }, true);
 
-$("#snap").textContent = `Data as of ${fmtDate(DATA.as_of)}`;
+// Stats: hover the season chart to read the nearest point
+document.addEventListener("pointermove", e => {
+  const svg = e.target.closest && e.target.closest("svg.rchart");
+  if (!svg) return;
+  const pts = JSON.parse(svg.dataset.pts), [W, H, L, R] = svg.dataset.geo.split(",").map(Number);
+  const box = svg.getBoundingClientRect(), sx = (e.clientX - box.left) * W / box.width;
+  let k = 0;
+  for (let i = 1; i < pts.length; i++) if (Math.abs(pts[i][0] - sx) < Math.abs(pts[k][0] - sx)) k = i;
+  const [px, py, day, v, what] = pts[k], g = svg.querySelector(".hover");
+  g.setAttribute("visibility", "visible");
+  const ln = g.querySelector("line"); ln.setAttribute("x1", px); ln.setAttribute("x2", px);
+  const c = g.querySelector("circle"); c.setAttribute("cx", px); c.setAttribute("cy", py);
+  const tx = g.querySelector("text"), t1 = tx.querySelector(".t1"), t2 = tx.querySelector(".t2");
+  t1.textContent = `${day}: ${v}%`; t2.textContent = what;
+  const left = px > W / 2, tw = Math.max(t1.textContent.length, what.length) * 5.6 + 16;
+  const bx = left ? px - tw - 10 : px + 10, by = Math.min(Math.max(py - 40, 4), H - 48);
+  t1.setAttribute("x", bx + 8); t1.setAttribute("y", by + 15); t2.setAttribute("x", bx + 8); t2.setAttribute("y", by + 30);
+  const rc = g.querySelector("rect"); rc.setAttribute("x", bx); rc.setAttribute("y", by); rc.setAttribute("width", tw); rc.setAttribute("height", 38);
+});
+document.addEventListener("pointerleave", e => {
+  if (e.target.matches && e.target.matches("svg.rchart")) e.target.querySelector(".hover").setAttribute("visibility", "hidden");
+}, true);
+
+$("#snap").textContent =`Data as of ${fmtDate(DATA.as_of)}`;
 go();
 </script>

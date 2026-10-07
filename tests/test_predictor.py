@@ -501,6 +501,178 @@ class TestBO5(unittest.TestCase):
         self.assertAlmostEqual(s["p_2_0"] + s["p_2_1"], r["p_a_exact"], places=6)
 
 
+def _steps(log):
+    """'A bans X (permaban)' -> ('A', 'bans', 'X'); 'decider: X' -> (None, 'decider', 'X')."""
+    out = []
+    for s in log:
+        if s.startswith("decider: "):
+            out.append((None, "decider", s[9:]))
+        else:
+            side, verb, mp = s.split(" ", 2)
+            out.append((side, verb, mp.replace(" (permaban)", "")))
+    return out
+
+
+GP_MAPS_A = {"Dust2": [0.70, 20], "Mirage": [0.35, 20], "Inferno": [0.55, 15], "Nuke": [0.60, 12],
+             "Ancient": [0.45, 18], "Anubis": [0.50, 10], "Cache": [0.40, 9]}
+GP_MAPS_B = {"Dust2": [0.40, 15], "Mirage": [0.72, 22], "Inferno": [0.50, 10], "Nuke": [0.45, 14],
+             "Ancient": [0.60, 16], "Anubis": [0.55, 11], "Cache": [0.50, 8]}
+
+
+class TestVetoFormats(unittest.TestCase):
+    """BO1 / BO3 / BO5 vetoes. BO3 output must be exactly what it was."""
+
+    # BO3 vetoes and map chances before the format generalisation (2026-10-07)
+    BO3_PINNED = {
+        "Alpha vs Bravo": (['A bans Dust2', 'B bans Mirage', 'A picks Inferno', 'B picks Nuke',
+                            'A bans Ancient', 'B bans Anubis', 'decider: Cache'],
+                           [0.6159227007, 0.6159227007, 0.6159227007]),
+        "G2 vs PARIVISION": (['A bans Ancient', 'B bans Inferno (permaban)', 'A picks Mirage', 'B picks Dust2',
+                              'A bans Cache', 'B bans Anubis', 'decider: Nuke'],
+                             [0.5857183963, 0.4669758861, 0.5801946722]),
+        "Spirit vs 1WIN": (['A bans Inferno (permaban)', 'B bans Anubis', 'A picks Nuke', 'B picks Dust2',
+                            'A bans Cache', 'B bans Ancient', 'decider: Mirage'],
+                           [0.746669971, 0.6653128506, 0.7249867221]),
+        "FURIA vs Aurora": (['A bans Anubis (permaban)', 'B bans Nuke', 'A picks Inferno', 'B picks Ancient',
+                             'A bans Dust2', 'B bans Cache', 'decider: Mirage'],
+                            [0.6139269432, 0.5687414646, 0.5911389186]),
+        "Legacy vs M80": (['A bans Mirage', 'B bans Dust2', 'A picks Inferno', 'B picks Nuke',
+                           'A bans Anubis', 'B bans Ancient', 'decider: Cache'],
+                          [0.5424434821, 0.5196995793, 0.541436567]),
+    }
+
+    def test_bo3_unchanged_base_and_day4(self):
+        rs = [predict_match(base_match())] + predictor.day4_backtest()
+        for r in rs:
+            log, probs = self.BO3_PINNED[r["match"]]
+            self.assertEqual(r["veto_log"], log)
+            for x, y in zip(r["map_probs_exact"], probs):
+                self.assertAlmostEqual(x, y, places=9)
+        # the explicit and the default best_of give the same veto
+        mm =base_match(maps_a=GP_MAPS_A, maps_b=GP_MAPS_B, permaban_b="Cache")
+        self.assertEqual(predictor.simulate_veto(mm), predictor.simulate_veto(mm, best_of=3))
+
+    def test_bo1_six_bans_and_decider(self):
+        for kw in ({}, {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B}, {"permaban_a": "Nuke"}):
+            r = predict_match(base_match(**kw))
+            v = r["veto_bo1"]
+            st = _steps(v["veto_log"])
+            self.assertEqual([(s[0], s[1]) for s in st],
+                             [("A", "bans"), ("B", "bans")] * 3 + [(None, "decider")])
+            self.assertEqual(len(v["maps"]), 1)
+            self.assertEqual(v["maps"][0], st[-1][2])
+            self.assertEqual(sorted(s[2] for s in st), sorted(POOL))     # every map once
+            self.assertEqual(v["map_probs_exact"], [r["p_a_exact"]])     # series = map
+        r = predict_match(base_match(permaban_a="Nuke"))
+        self.assertEqual(r["veto_bo1"]["veto_log"][0], "A bans Nuke (permaban)")
+
+    def test_bo5_two_bans_four_picks_and_decider(self):
+        for kw in ({}, {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B}, {"permaban_b": "Dust2"}):
+            r = predict_match(base_match(**kw))
+            v = r["veto_bo5"]
+            st = _steps(v["veto_log"])
+            self.assertEqual([(s[0], s[1]) for s in st],
+                             [("A", "bans"), ("B", "bans"), ("A", "picks"), ("B", "picks"),
+                              ("A", "picks"), ("B", "picks"), (None, "decider")])
+            self.assertEqual(v["maps"], [s[2] for s in st[2:]])          # pick order, decider last
+            self.assertEqual(len(set(v["maps"])), 5)
+            self.assertEqual(len(v["map_probs_exact"]), 5)
+
+    def test_bo5_picks_follow_map_edges(self):
+        # A picks its strongest relative maps, B its own; each bans the other's best
+        v = predictor.simulate_veto(base_match(maps_a=GP_MAPS_A, maps_b=GP_MAPS_B), 5)
+        self.assertEqual(v["veto_log"][0], "A bans Mirage")   # B's biggest edge
+        self.assertEqual(v["veto_log"][1], "B bans Dust2")    # A's biggest edge
+        self.assertEqual(v["veto_log"][2], "A picks Nuke")
+        edge_a = [v["map_logits"][0], v["map_logits"][2]]
+        edge_b = [v["map_logits"][1], v["map_logits"][3]]
+        self.assertGreater(min(edge_a), max(edge_b))
+
+    def test_bo5_map_probs_imply_p_a_and_display(self):
+        for kw in ({}, {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B}, {"rating_b": 1.12},
+                   {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B, "rating_a": 1.10}):
+            r = predict_match(base_match(**kw))
+            p5 = r["veto_bo5"]["map_probs_exact"]
+            sc = predictor.series_scorelines(p5)
+            self.assertAlmostEqual(sum(sc[:3]), r["p_a_exact"], places=9)
+            ex = [r["series_probs_bo5_exact"][k] for k in predictor.BO5_KEYS]
+            for x, y in zip(sc, ex):
+                self.assertAlmostEqual(x, y, places=12)
+            shown = display_percent(ex)
+            self.assertEqual(round(sum(shown), 6), 100.0)
+            self.assertEqual([r["series_probs_bo5"][k] for k in predictor.BO5_KEYS],
+                             [v / 100 for v in shown])
+            self.assertEqual(r["map_prob_bo5_exact"], predictor.flat_map_prob(r["p_a_exact"], 5))
+
+    def test_bo5_shape_uses_map_shape(self):
+        m = base_match(maps_a=GP_MAPS_A, maps_b=GP_MAPS_B)
+        saved = CONFIG["map_shape"]
+        try:
+            CONFIG["map_shape"] = 0.0
+            flat = predict_match(m)
+            CONFIG["map_shape"] = 2.0
+            wide = predict_match(m)
+        finally:
+            CONFIG["map_shape"] = saved
+        p0 = flat["veto_bo5"]["map_probs_exact"]
+        self.assertLess(max(p0) - min(p0), 1e-9)
+        self.assertAlmostEqual(p0[0], flat["map_prob_bo5_exact"], places=9)
+        p2 = wide["veto_bo5"]["map_probs_exact"]
+        self.assertGreater(max(p2) - min(p2), 0.1)
+        self.assertEqual(flat["p_a_exact"], wide["p_a_exact"])   # shape never moves p_a
+
+    def test_underdog_pick_can_make_2_1_modal(self):
+        # flat q > 0.5 always makes 2-0 beat 2-1; a map-shaped veto can flip it
+        self.assertGreater(0.6 ** 2, 2 * 0.6 ** 2 * 0.4)
+        s = series_probs(0.80, 0.35, 0.60)          # A huge on its pick, B on its own
+        self.assertGreater(s[1], s[0])
+
+    def test_pool_sizes(self):
+        # 5 maps: BO5 has no bans; BO1 bans 4. 3 maps: no BO5 veto, flat BO5 scorelines.
+        pool5 = ["Dust2", "Mirage", "Inferno", "Nuke", "Ancient"]
+        r = predict_match(base_match(map_pool=pool5))
+        self.assertEqual([s[1] for s in _steps(r["veto_bo5"]["veto_log"])], ["picks"] * 4 + ["decider"])
+        self.assertEqual([s[1] for s in _steps(r["veto_bo1"]["veto_log"])], ["bans"] * 4 + ["decider"])
+        r = predict_match(base_match(map_pool=["Dust2", "Mirage", "Inferno"]))
+        self.assertIsNone(r["veto_bo5"])
+        q = r["map_prob_bo5_exact"]
+        for x, y in zip(predictor.series_scorelines([q] * 5),
+                        [r["series_probs_bo5_exact"][k] for k in predictor.BO5_KEYS]):
+            self.assertAlmostEqual(x, y, places=12)
+        self.assertEqual(len(r["veto_bo1"]["maps"]), 1)
+        big = POOL + ["Train", "Overpass", "Vertigo"]
+        r = predict_match(base_match(map_pool=big))
+        self.assertEqual(len(r["veto_bo5"]["maps"]), 5)
+        self.assertEqual(len(r["veto_bo1"]["veto_log"]), len(big))
+        with self.assertRaises(ValueError):
+            predictor.simulate_veto(base_match(), best_of=7)
+        with self.assertRaises(ValueError):
+            predictor.simulate_veto(base_match(map_pool=["Dust2", "Mirage", "Inferno", "Nuke"]), best_of=5)
+
+    def test_series_win_matches_scorelines(self):
+        for ps in ([0.6] * 5, [0.7, 0.4, 0.55, 0.3, 0.9], [0.2, 0.9, 0.5], [0.42]):
+            need = (len(ps) + 1) // 2
+            self.assertAlmostEqual(predictor._series_win(ps),
+                                   sum(predictor.series_scorelines(ps)[:need]), places=12)
+
+    def test_existing_schema_unchanged(self):
+        r = predict_match(base_match())
+        for k in ("match", "p_a", "p_b", "pick", "scoreline", "scoreline_prob", "confidence_interval",
+                  "band_kind", "interval_width_pp", "reliability", "logit_sd", "raw_logodds",
+                  "total_logodds", "uncertainty_shrink", "temperature", "conflict", "factor_breakdown",
+                  "veto_log", "veto_maps", "map_probs", "map_probs_exact", "veto_only_series_p_a",
+                  "veto_only_map_probs", "map_logit_shift", "series_probs", "series_probs_exact",
+                  "series_probs_bo5", "series_probs_bo5_exact", "map_prob_bo5_exact", "p_a_exact",
+                  "market_edge_pp", "market_edge_note", "warnings", "volatility"):
+            self.assertIn(k, r)
+        self.assertEqual(len(r["veto_maps"]), 3)
+        self.assertEqual(len(r["map_probs_exact"]), 3)
+        self.assertEqual(sorted(r["series_probs_bo5_exact"]), sorted(predictor.BO5_KEYS))
+        self.assertEqual(sorted(r["veto_bo1"]), ["map_probs_exact", "maps", "veto_log"])
+        self.assertEqual(sorted(r["veto_bo5"]), ["map_logit_shift", "map_probs", "map_probs_exact",
+                                                 "maps", "veto_log"])
+
+
 class TestRandomizedMonotonicity(unittest.TestCase):
     """p_a must be non-decreasing in A's rating, 30d form and last-5 form for
     every input, including opp-rating adjustment and fractional sample sizes."""

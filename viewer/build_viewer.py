@@ -115,15 +115,42 @@ def vrs_lookup(path):
     return vrs["date"], assign, info, glob
 
 
+VMAPS = []                    # map names referenced by the coded BO1 / BO5 vetoes
+_VCODE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_VSTEP = {("A", "bans"): "a", ("B", "bans"): "b", ("A", "picks"): "A", ("B", "picks"): "B"}
+
+
+def veto_code(log):
+    """A veto log as two characters per step: the step kind (a / b = A / B ban,
+    x / y = A / B permaban, A / B = A / B pick, D = decider) then the map as
+    one character indexing DATA.vmaps. 'A bans Dust2', ... -> 'a0b1A2...D6'."""
+    out = []
+    for step in log:
+        if step.startswith("decider: "):
+            kind, mp = "D", step[len("decider: "):]
+        else:
+            side, verb, mp = step.split(" ", 2)
+            kind = _VSTEP[(side, verb)]
+            if mp.endswith(" (permaban)"):
+                kind, mp = ("x" if side == "A" else "y"), mp[:-len(" (permaban)")]
+        if mp not in VMAPS:
+            VMAPS.append(mp)
+        out.append(kind + _VCODE[VMAPS.index(mp)])
+    return "".join(out)
+
+
 def compact(r, bo=3):
     """Engine output trimmed to what the page draws.
 
-    Probabilities stay at full precision. The page formats a set (the two
+    Probabilities stay at full precision, except the BO5 per-map chances
+    (p5, 5 decimals, page payload only). The page formats a set (the two
     teams, a map, the four scorelines) with largest-remainder rounding so the
-    labels add to 100.00.
+    labels add to 100.00. v1 / v5 are the BO1 / BO5 vetoes in veto_code form;
+    the BO1 map chance is p, and the BO5 maps are v5's picks and decider.
     """
     s = r["series_probs_exact"]
     fac = {f["factor"]: f["marginal_pp"] for f in r["factor_breakdown"]}
+    v5 = r.get("veto_bo5")
     return {
         "p": r["p_a_exact"],
         "b": r["confidence_interval"],
@@ -134,7 +161,9 @@ def compact(r, bo=3):
               .replace("decider: ", "D") for x in r["veto_log"]],
         "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],
         "w": r["warnings"],
-        # best-of-five matches also carry the BO5 scorelines (3-0 .. 0-3)
+        "v1": veto_code(r["veto_bo1"]["veto_log"]),
+        **({"v5": veto_code(v5["veto_log"]), "p5": [round(p, 5) for p in v5["map_probs_exact"]]} if v5 else {}),
+        # best-of-five matches also carry the exact BO5 scorelines (3-0 .. 0-3)
         **({"s5": [r["series_probs_bo5_exact"][k] for k in pr.BO5_KEYS]} if bo == 5 else {}),
     }
 
@@ -345,7 +374,7 @@ def main(out_path):
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
         "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
-        "factors": FACTORS, "vrs_date": vrs_date,
+        "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
     }
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")

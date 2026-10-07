@@ -57,6 +57,8 @@ ICON_OVERRIDES = {
     "Team Vitality": "Team Vitality 2023 darkmode.png",
     "HEROIC": "HEROIC 2024 allmode.png",
     "Luminosity Gaming": "Luminosity Gaming 2018 allmode.png",
+    "BC.Game Esports": "BC.Game Esports nov 2025 allmode.png",
+    "Nemiga Gaming": "Nemiga Gaming 2020logo.png",
 }
 _last_dl = [0.0]
 

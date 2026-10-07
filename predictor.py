@@ -402,15 +402,41 @@ def _series_a(logits, c=0.0):
     return s[0] + s[1]
 
 
+def _series_win(p_maps):
+    """Series P(A) for any odd best-of from per-map P(A). Who wins a
+    best-of-N does not depend on stopping early, so this is P(A wins a
+    majority of all N maps) -- a short convolution, cheap inside a bisection.
+    Equals sum(series_scorelines(p_maps)[:need]) up to float rounding."""
+    need = (len(p_maps) + 1) // 2
+    dist = [1.0]
+    for p in p_maps:
+        nxt = [0.0] * (len(dist) + 1)
+        for k, v in enumerate(dist):
+            nxt[k] += v * (1.0 - p)
+            nxt[k + 1] += v * p
+        dist = nxt
+    return sum(dist[need:])
+
+
 # ============================================================================
-# VETO SIMULATION -- standard BO3 veto: ban, ban, pick, pick, ban, ban, decider
-# (generalised: bans are skipped when the pool is too small, and extra
-# alternating bans are added when it is larger than 7). Each side bans the
-# map where the opponent's RELATIVE edge is largest and picks the map where
-# its own relative edge is largest. Permabans are honored as first bans.
-# Relative edge = team's shrunk map rate minus its own pool-wide average, so
-# the veto carries map-specific structure only, never overall strength.
+# VETO SIMULATION -- the standard CS2 veto for each format on a 7-map pool:
+#   BO1: A ban, B ban, A ban, B ban, A ban, B ban, decider (the one map played)
+#   BO3: A ban, B ban, A pick, B pick, A ban, B ban, decider
+#   BO5: A ban, B ban, A pick, B pick, A pick, B pick, decider
+# Generalised: bans are skipped when the pool is too small to leave room for
+# the remaining picks plus a decider, and extra alternating bans (A first)
+# are added when it is larger than 7. Each side bans the map where the
+# opponent's RELATIVE edge is largest and picks the map where its own
+# relative edge is largest. Permabans are honored as first bans. Relative
+# edge = team's shrunk map rate minus its own pool-wide average, so the veto
+# carries map-specific structure only, never overall strength. Maps are
+# played in pick order, the decider last.
 # ============================================================================
+VETO_ORDER = {
+    1: ["A_ban", "B_ban", "A_ban", "B_ban", "A_ban", "B_ban"],
+    3: ["A_ban", "B_ban", "A_pick", "B_pick", "A_ban", "B_ban"],
+    5: ["A_ban", "B_ban", "A_pick", "B_pick", "A_pick", "B_pick"],
+}
 def _team_maps(raw, pool):
     raw = raw if isinstance(raw, dict) else {}
     k = CONFIG["map_shrink_k"]
@@ -449,8 +475,17 @@ def _pool(m):
     return out
 
 
-def simulate_veto(m):
+def simulate_veto(m, best_of=3):
+    """Simulated veto for a best-of-1, -3 or -5 (see VETO_ORDER above).
+    Raises ValueError for another best_of or a pool with fewer distinct
+    maps than the series needs."""
+    if best_of not in VETO_ORDER:
+        raise ValueError(f"best_of must be 1, 3 or 5, got {best_of!r}")
     pool = _pool(m)
+    if len(pool) < best_of:
+        raise ValueError(f"map pool needs at least {best_of} distinct maps for a BO{best_of} veto, "
+                         f"got {len(pool)}: {pool}")
+    n_picks = best_of - 1
     rel_a, shr_a, ov_a = _team_maps(m.get("maps_a"), pool)
     rel_b, shr_b, ov_b = _team_maps(m.get("maps_b"), pool)
     edge = {mp: rel_a[mp] - rel_b[mp] for mp in pool}  # A's relative edge
@@ -482,11 +517,11 @@ def simulate_veto(m):
         log.append(f"{team} picks {best}")
         picks.append(best)
 
-    for act in ["A_ban", "B_ban", "A_pick", "B_pick", "A_ban", "B_ban"]:
+    for act in VETO_ORDER[best_of]:
         team, kind = act.split("_")
         if kind == "pick":
             do_pick(team)
-        elif len(remaining) - (2 - len(picks)) > 1:  # keep room for picks + decider
+        elif len(remaining) - (n_picks - len(picks)) > 1:  # keep room for picks + decider
             do_ban(team)
     turn = "A"
     while len(remaining) > 1:  # pools larger than 7: keep alternating bans
@@ -498,7 +533,7 @@ def simulate_veto(m):
     veto_maps = picks + [decider]
     map_logits = [CONFIG["map_scale"] * edge[mp] for mp in veto_maps]
     p_maps = [sigmoid(L) for L in map_logits]
-    p_series_a = _series_a(map_logits)
+    p_series_a = _series_a(map_logits) if best_of == 3 else _series_win(p_maps)
 
     # posterior variance of each per-map logit (both teams' shrinkage)
     tau2 = CONFIG["tau_map"] ** 2
@@ -507,13 +542,10 @@ def simulate_veto(m):
         na_term = 1.0 - shr_a[mp]  # = k/(n+k), 1 when no data
         nb_term = 1.0 - shr_b[mp]
         map_vars.append(tau2 * (na_term + nb_term))
-    mean_shrink = sum((shr_a[mp] + shr_b[mp]) / 2 for mp in veto_maps) / 3.0
+    mean_shrink = sum((shr_a[mp] + shr_b[mp]) / 2 for mp in veto_maps) / float(len(veto_maps))
 
-    note = (f"veto-only (pool-relative) -> {picks[0]} (A {p_maps[0]:.2%}), "
-            f"{picks[1]} (A {p_maps[1]:.2%}), decider {decider} (A {p_maps[2]:.2%}); "
-            f"veto-only series P(A)={p_series_a:.1%}")
-    s20, s21, s12, s02 = series_probs(*p_maps)
-    return {
+    out = {
+        "best_of": best_of,
         "picks": picks,
         "decider": decider,
         "maps": veto_maps,
@@ -521,12 +553,23 @@ def simulate_veto(m):
         "map_vars": map_vars,
         "p_map": p_maps,
         "p_series_a": p_series_a,
-        "p_2_0": s20, "p_2_1": s21, "p_1_2": s12, "p_0_2": s02,
         "confidence": mean_shrink,
         "overall_rate": {"a": ov_a, "b": ov_b},
-        "note": note,
         "veto_log": log,
     }
+    if best_of == 3:
+        out["note"] = (f"veto-only (pool-relative) -> {picks[0]} (A {p_maps[0]:.2%}), "
+                       f"{picks[1]} (A {p_maps[1]:.2%}), decider {decider} (A {p_maps[2]:.2%}); "
+                       f"veto-only series P(A)={p_series_a:.1%}")
+        s20, s21, s12, s02 = series_probs(*p_maps)
+        out.update({"p_2_0": s20, "p_2_1": s21, "p_1_2": s12, "p_0_2": s02})
+    else:
+        out["note"] = (f"BO{best_of} veto-only (pool-relative) -> "
+                       + ", ".join(f"{mp} (A {p:.2%})" for mp, p in zip(picks, p_maps))
+                       + (", " if picks else "") + f"decider {decider} (A {p_maps[-1]:.2%}); "
+                       f"veto-only series P(A)={p_series_a:.1%}")
+        out["scorelines"] = series_scorelines(p_maps)
+    return out
 
 
 # ============================================================================
@@ -711,12 +754,19 @@ def total_logodds(m):
 def _scoreline_maps(veto, p_target, scale):
     """Shift the veto map logits by one constant c (bisection) so the implied
     series P(A) equals the final p_a. The map SHAPE comes from the veto; the
-    level comes from the full blend, so series_probs is consistent with p_a."""
+    level comes from the full blend, so series_probs is consistent with p_a.
+    Works for any odd number of veto maps (BO3 keeps its original formula;
+    BO5 uses the same shape scale and one shift for all five maps)."""
     base = [scale * L for L in veto["map_logits"]]
+    if len(base) == 3:
+        win = _series_a
+    else:
+        def win(b, c):
+            return _series_win([sigmoid(L + c) for L in b])
     lo, hi = -60.0, 60.0
     for _ in range(200):
         mid = (lo + hi) / 2.0
-        if _series_a(base, mid) < p_target:
+        if win(base, mid) < p_target:
             lo = mid
         else:
             hi = mid
@@ -829,11 +879,30 @@ def predict_match(m):
     pa_shown, pb_shown = display_percent([p_a, p_b])
     score_shown = display_percent([s20, s21, s12, s02])
 
-    # --- BO5 (grand finals): one flat per-map chance on all five maps, set so
-    # the BO5 series P(A) equals p_a. On 44 real BO5s no map-specific or
-    # length-based alternative scored measurably better (scripts/bo5_check.py).
+    # --- BO1 veto: six alternating bans, the decider is the one map played,
+    # so its win chance is the series chance p_a.
+    veto1 = simulate_veto(m, 1)
+    veto_bo1 = {"veto_log": veto1["veto_log"], "maps": veto1["maps"], "map_probs_exact": [p_a]}
+
+    # --- BO5 (grand finals): the BO5 veto (each side picks two), its map-logit
+    # shape scaled by the same map_shape as BO3 and shifted by one constant so
+    # the BO5 series P(A) equals p_a. The scorelines come from those five
+    # chances, played in pick order with the decider last. A pool with fewer
+    # than 5 maps has no BO5 veto: then one flat chance on every map (as before).
+    # map_prob_bo5_exact stays the flat chance, for continuity.
     q5 = flat_map_prob(p_a, 5)
-    s5 = series_scorelines([q5] * 5)
+    try:
+        veto5 = simulate_veto(m, 5)
+    except ValueError:
+        veto5 = None
+    if veto5 is not None:
+        p5, c5 = _scoreline_maps(veto5, p_a, T * CONFIG["map_shape"] / k)
+        veto_bo5 = {"veto_log": veto5["veto_log"], "maps": veto5["maps"],
+                    "map_probs": [round(p, 3) for p in p5], "map_probs_exact": list(p5),
+                    "map_logit_shift": round(c5, 4)}
+    else:
+        p5, veto_bo5 = [q5] * 5, None
+    s5 = series_scorelines(p5)
     s5_shown = display_percent(s5)
     return {
         "match": f"{a_name} vs {b_name}",
@@ -872,6 +941,9 @@ def predict_match(m):
         "series_probs_bo5": {k: v / 100.0 for k, v in zip(BO5_KEYS, s5_shown)},
         "series_probs_bo5_exact": dict(zip(BO5_KEYS, s5)),
         "map_prob_bo5_exact": q5,
+        # format-specific vetoes (the BO3 fields above are the BO3 veto)
+        "veto_bo1": veto_bo1,
+        "veto_bo5": veto_bo5,   # None when the pool has fewer than 5 maps
         "p_a_exact": p_a,
         "market_edge_pp": edge,
         "market_edge_note": edge_note,
