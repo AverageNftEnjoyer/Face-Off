@@ -50062,5 +50062,69 @@
   ],
   "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398742)",
   "tier": "S"
+ },
+ {
+  "date": "2026-10-07",
+  "event": "ESL Pro League Season 24",
+  "team_a": "FURIA",
+  "team_b": "9z Team",
+  "winner": "FURIA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "FURIA"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FURIA"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398747)",
+  "tier": "S"
+ },
+ {
+  "date": "2026-10-07",
+  "event": "ESL Pro League Season 24",
+  "team_a": "PARIVISION",
+  "team_b": "Natus Vincere",
+  "winner": "PARIVISION",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Natus Vincere"
+   },
+   {
+    "map": "Cache",
+    "winner": "PARIVISION"
+   },
+   {
+    "map": "Mirage",
+    "winner": "PARIVISION"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398748)",
+  "tier": "S"
+ },
+ {
+  "date": "2026-10-07",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Spirit",
+  "team_b": "M80",
+  "winner": "Team Spirit",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Team Spirit"
+   },
+   {
+    "map": "Cache",
+    "winner": "Team Spirit"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398749)",
+  "tier": "S"
  }
 ]
