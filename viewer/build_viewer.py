@@ -211,9 +211,13 @@ def main(out_path):
         gf = [m for m in done if m["stage"] == "Grand final"]
         last = (gf or sorted(done, key=lambda m: (m["day"] or "", m["when"] or "")))[-1:] if done else []
         e["champion"] = None
+        e["runner_up"] = None
         if e["status"] == "finished" and last:
             m = last[0]
             e["champion"] = m["t1"] if m["w1"] > m["w2"] else m["t2"]
+            e["runner_up"] = m["t2"] if e["champion"] == m["t1"] else m["t1"]
+        # each team's own finish, derived from the results and the prize slots
+        e["placements"] = E.placements(e, e["status"])
 
     # ---- teams: every participant, every team in a match, plus the top active teams
     h_now = bt.History()
@@ -359,7 +363,7 @@ def main(out_path):
     for e in events:
         ev_out.append({k: e[k] for k in ("slug", "name", "start", "end", "tier", "type", "city", "country",
                                          "venue", "prize", "organizer", "swiss", "format", "prizes", "pool",
-                                         "status", "champion", "page")}
+                                         "status", "champion", "runner_up", "placements", "page")}
                       | {"participants": [{"team": t, **v} for t, v in e["participants"].items()],
                          "matches": e["matches"]})
 

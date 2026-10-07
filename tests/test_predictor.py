@@ -542,7 +542,14 @@ class TestVetoFormats(unittest.TestCase):
     }
 
     def test_bo3_unchanged_base_and_day4(self):
-        rs = [predict_match(base_match())] + predictor.day4_backtest()
+        # pinned values were taken with map_shape 0.75 before the veto refactor;
+        # run at that setting so the check still guards the refactor itself
+        saved = CONFIG["map_shape"]
+        CONFIG["map_shape"] = 0.75
+        try:
+            rs = [predict_match(base_match())] + predictor.day4_backtest()
+        finally:
+            CONFIG["map_shape"] = saved
         for r in rs:
             log, probs = self.BO3_PINNED[r["match"]]
             self.assertEqual(r["veto_log"], log)

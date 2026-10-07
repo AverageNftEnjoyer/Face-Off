@@ -144,11 +144,16 @@ CONFIG = {
     # Per-map logit for A = map_scale * (relative edge A - relative edge B),
     # where a relative edge is the team's shrunk map rate minus its own
     # pool-wide average. A 10pp relative edge each way (20pp) ~= 1.2 logit.
-    "map_shape": 0.75,
-    # Share of that veto gap kept in the three map win chances. Separate from
+    "map_shape": 1.0,
+    # Share of that veto gap kept in the per-map win chances. Separate from
     # w_veto, which only decides whether the veto moves the series winner.
-    # _scoreline_maps then adds one constant to all three logits so they still
-    # imply p_a. 0 would print the same win chance on every map.
+    # _scoreline_maps then adds one constant to all map logits so they still
+    # imply p_a, so the winner pick never depends on it. 0 would print the
+    # same win chance on every map, and the favourite's 2-0 would always be
+    # the most likely score. Product choice (2026-10-07): 1.0, so 2-1 is the
+    # most likely score in ~17% of BO3s. Held-out cost (scripts/
+    # scoreline_tradeoff.py, 612 series): scoreline log loss 1.2932 vs 1.2876
+    # flat, exact-score hit rate 39.5% vs 39.4%; the winner is unchanged.
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.

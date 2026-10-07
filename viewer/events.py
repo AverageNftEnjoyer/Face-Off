@@ -307,13 +307,20 @@ def discover(alias=None):
             depth = len(line) - len(line.lstrip("*"))
             text = re.sub(r"\{\{Abbr/Bo(\d)\}\}", r"Bo\1", line.lstrip("* "))
             text = strip_markup(text)
+            # ordinal superscripts and a comment opened on this line but closed on a later one
+            text = re.sub(r"</?sup>", "", re.sub(r"<!--.*$", "", text)).strip()
             if text:
                 fmt_lines.append([depth, text])
         prizes, place = [], 1
         for _, body in C.find_templates(txt, "Slot"):
             _, nm = C.split_params(body)
             cnt = C._int(nm.get("count")) or 1
-            usd = C._int(re.sub(r"[^\d]", "", nm.get("usdprize", "")) or None)
+            # "294687.50" or "1,250,000": drop thousands separators, keep the decimal point
+            amt = re.sub(r"[^\d.]", "", nm.get("usdprize", "").replace(",", ""))
+            try:
+                usd = round(float(amt)) if amt else None
+            except ValueError:
+                usd = None
             prizes.append({"from": place, "to": place + cnt - 1, "usd": usd})
             place += cnt
         pool = []
@@ -336,6 +343,146 @@ def discover(alias=None):
             "page": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
         })
     return events
+
+
+# ------------------------------------------------------------------ placements
+_ELIM_RANK = {"Round of 32": 995, "Round of 16": 996, "Quarterfinal": 997, "Semifinal": 998,
+              "Third-place match": 999, "Grand final": 1000}
+
+
+def _stage_family(stage):
+    """The stage a match belongs to with parallel groups and rounds folded
+    together: "Group Stage Group A, round 2" -> "Group Stage", "Stage 1 Round 4
+    Low" -> "Stage 1", "Quarterfinal" -> "Playoffs"."""
+    if stage in _ELIM_RANK:
+        return "Playoffs"
+    s = re.sub(r"\s*\bGroup [A-Z]\b", "", stage)
+    s = re.sub(r",?\s+[Rr]ound \d+.*$", "", s).strip(" ,")
+    return s or "Matches"
+
+
+def _stage_round(stage):
+    """Bracket column / Swiss round of a stage name, comparable inside one family."""
+    if stage in _ELIM_RANK:
+        return _ELIM_RANK[stage]
+    m = re.search(r"[Rr]ound (\d+)", stage)
+    return int(m.group(1)) if m else 0
+
+
+def _losses_to_exit(e, family, stage):
+    if family == "Playoffs" or stage in _ELIM_RANK:
+        return 1
+    if e.get("swiss") and re.search(r"Round \d", stage):
+        return 3
+    return 2       # double-elimination and GSL groups
+
+
+def placements(e, status):
+    """{team: {"from", "to", "label"}} -- each team's own finish, from results only.
+
+    Every eliminated team gets an exit key: the stage family of its last series
+    (families ordered by when they start), that series' round inside the family,
+    whether it won it (only the third-place match ends on a win), and how many
+    series the team played in the family (separates bracket rounds the page
+    names alike). Teams with the same key went out together. Ordered best first --
+    champion, final loser, then by exit key -- the groups are laid onto the
+    prize slots ({from, to} counts): a group takes the next places, and its label
+    is the union of the slots those places touch, so a group that does not line
+    up with one slot gets the honest wider range. Teams beyond the last slot
+    show the stage they went out in.
+
+    Live events: a team is out once it has lost as many series in its current
+    family as that format allows (1 in playoffs, 3 in Swiss, 2 in group
+    brackets) and has no series still to play; groups are laid on the slots from
+    the bottom, and stop as soon as a group does not end on a slot boundary
+    (the places above it then depend on results still to come). Everyone else
+    is "Still playing"."""
+    if status == "upcoming":
+        return {}
+    played = [m for m in e["matches"] if m["t1"] and m["t2"]]
+    done = sorted([m for m in played if m["finished"]], key=lambda m: (m["day"] or "9999", m["when"] or ""))
+    if not done:
+        return {}
+    fam_start = {}
+    for m in sorted(played, key=lambda m: (m["day"] or "9999", m["when"] or "")):
+        fam_start.setdefault(_stage_family(m["stage"]), len(fam_start))
+    by_team = {}
+    for m in done:
+        for t in (m["t1"], m["t2"]):
+            by_team.setdefault(t, []).append(m)
+    pending = {t for m in played if not m["finished"] for t in (m["t1"], m["t2"])}
+    won = lambda m, t: (m["w1"] > m["w2"]) == (m["t1"] == t)
+    slots = e["prizes"]
+    n_slots = slots[-1]["to"] if slots else 0
+
+    def label_of(a, b, fam):
+        hit = [s for s in slots if s["from"] <= b and s["to"] >= a]
+        if not hit or b > n_slots:
+            return {"label": "Play-in" if "play-in" in fam.lower() else
+                    "Playoffs" if fam == "Playoffs" else "Group stage"}
+        lo, hi = hit[0]["from"], hit[-1]["to"]
+        return {"from": lo, "to": hi}
+
+    def exit_key(t):
+        ms = by_team[t]
+        last = ms[-1]
+        fam = _stage_family(last["stage"])
+        depth = sum(1 for m in ms if _stage_family(m["stage"]) == fam)
+        return (fam_start[fam], _stage_round(last["stage"]), won(last, t), depth), fam
+
+    out = {}
+    if status == "finished":
+        final = done[-1]
+        champ = final["t1"] if won(final, final["t1"]) else final["t2"]
+        runner = final["t2"] if champ == final["t1"] else final["t1"]
+        out[champ] = {"from": 1, "to": 1}
+        out[runner] = {"from": 2, "to": 2}
+        rest = [t for t in by_team if t not in (champ, runner)]
+        groups = {}
+        for t in rest:
+            k, fam = exit_key(t)
+            groups.setdefault(k, (fam, []))[1].append(t)
+        place = 3
+        for k in sorted(groups, reverse=True):
+            fam, ts = groups[k]
+            lab = label_of(place, place + len(ts) - 1, fam)
+            for t in ts:
+                out[t] = dict(lab)
+            place += len(ts)
+    else:
+        groups = {}
+        for t, ms in by_team.items():
+            if t in pending:
+                continue
+            last = ms[-1]
+            fam = _stage_family(last["stage"])
+            losses = sum(1 for m in ms if _stage_family(m["stage"]) == fam and not won(m, t))
+            if won(last, t) or losses < _losses_to_exit(e, fam, last["stage"]):
+                continue
+            k, fam = exit_key(t)
+            groups.setdefault(k, (fam, []))[1].append(t)
+        n_teams = len(set(e["participants"]) | set(by_team))
+        place, ok = n_teams, n_teams == n_slots
+        for k in sorted(groups):
+            fam, ts = groups[k]
+            a = place - len(ts) + 1
+            lab = label_of(a, place, fam) if ok else {"label": "Eliminated"}
+            if ok and not any(s["from"] == a for s in slots):
+                ok = False       # the group is still filling; places above it are open
+            for t in ts:
+                out[t] = dict(lab)
+            place = a - 1
+        for t in set(e["participants"]) | set(by_team):
+            out.setdefault(t, {"label": "Still playing"})
+    for v in out.values():
+        if "from" in v:
+            v["label"] = _place_text(v["from"], v["to"])
+    return out
+
+
+def _place_text(a, b):
+    o = lambda n: f"{n}{'th' if 10 < n % 100 < 14 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+    return o(a) if a == b else f"{o(a)}-{o(b)}"
 
 
 def event_teams(events):

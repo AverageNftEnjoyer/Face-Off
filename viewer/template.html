@@ -156,6 +156,9 @@ button { font: inherit; color: inherit; }
 .mrow .tm.r { flex-direction: row-reverse; text-align: right; }
 .mrow .tm span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mrow .tm.lost span { color: var(--dim); font-weight: 400; }
+/* the veto tape also uses .tm; keep match rows clear of it */
+.mrow .tm { position: static; overflow: visible; min-height: 0; padding: 0; background: none; border: 0; border-radius: 0; cursor: inherit; }
+.mrow .tm::before { content: none; }
 .mrow .mid { text-align: center; font-size: var(--s2); }
 .mrow .mid.pct { font-size: var(--s-1); font-stretch: 100%; font-weight: 600; text-transform: none; color: var(--dim); }
 .mrow .tag { display: grid; justify-items: end; gap: .15rem; font-size: .72rem; color: var(--dim); white-space: nowrap; }
@@ -439,6 +442,225 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .empty { color: var(--dim); font-size: var(--s-1); padding: .5rem 0; }
 .grouptbl + .grouptbl { margin-top: .75rem; }
 .grouptbl h3 { font-size: var(--s-1); color: var(--dim); font-weight: 600; margin-bottom: .2rem; }
+
+/* ---------- v5: tournaments ----------
+   The season read as a circuit: one calendar strip with every event on its own
+   dates, the event running now pulled forward, and the finished ones as an
+   honours roll where each champion sits in its own logo colour (--tc, and the
+   page-mixed --tcd for fills). No cards for their own sake: rows on hairlines. */
+.page.ewide { max-width: 150rem; padding-inline: max(16px, 3vw); }
+body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw); }
+.evname { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; line-height: .95; }
+
+.season { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 3rem; }
+.season h1 { font-size: clamp(3rem, 7vw, 5.75rem); line-height: .8; }
+.season h1 span { color: var(--dim); font-weight: 600; }
+.tally { display: flex; flex-wrap: wrap; gap: .75rem 2.75rem; }
+.tally div { display: grid; gap: .15rem; }
+.tally b { font-stretch: 62.5%; font-weight: 800; font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: .9; }
+.tally span { color: var(--dim); font-size: var(--s-1); }
+
+.strip-wrap { overflow-x: auto; scrollbar-width: thin; border-block: 1px solid var(--line); }
+.strip { position: relative; min-width: 62rem; padding: 2.1rem 0 1.6rem; }
+.strip .mo { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); padding: .45rem .5rem; font-size: var(--s-1); color: var(--dim); white-space: nowrap; }
+.strip .mo.past { background: rgba(0, 0, 0, .12); }
+.strip .mo b { color: var(--text); font-weight: 700; }
+.strip .lanes { position: relative; display: grid; gap: .45rem; }
+.strip .lane { position: relative; height: 3.25rem; }
+.pin {
+  position: absolute; top: 0; bottom: 0; display: flex; align-items: center; gap: .45rem;
+  padding: 0 .45rem 0 .4rem; min-width: 0; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  box-shadow: inset 3px 0 0 var(--tc, var(--line));
+}
+.pin:hover, .pin:focus-visible { background: var(--raise); z-index: 3; }
+.pin > img { width: 2rem; height: 2rem; object-fit: contain; flex: none; }
+.pin .pt { display: grid; min-width: 0; }
+.pin .pt b { font-stretch: 62.5%; font-weight: 800; font-size: .95rem; line-height: 1; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pin .pt span { display: flex; align-items: center; gap: .3rem; font-size: .7rem; color: var(--dim); white-space: nowrap; overflow: hidden; }
+.pin .pt .logo { width: .95rem; height: .95rem; }
+.pin.live { border-color: var(--loss); box-shadow: inset 3px 0 0 var(--loss), 0 0 0 1px var(--loss); }
+.pin.upcoming { background: var(--bg); border-style: dashed; }
+.pin.upcoming .pt b { color: var(--dim); }
+.strip .now { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--loss); z-index: 2; pointer-events: none; }
+.strip .now span { position: absolute; bottom: .2rem; left: .45rem; font-size: .72rem; font-weight: 700; color: var(--loss); white-space: nowrap; }
+
+.marquee { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(20rem, 1fr); gap: 1.5rem 2.5rem; align-items: start; }
+.onair { display: grid; gap: 1.1rem; padding: 1.25rem 1.4rem 1.4rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); box-shadow: inset 0 3px 0 var(--loss); }
+.onair.soon { box-shadow: inset 0 3px 0 var(--ct); }
+.onair-h { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1rem 1.5rem; align-items: center; }
+.onair-h > img { width: clamp(5rem, 8vw, 7.5rem); height: auto; }
+.onair-h h2 { font-size: clamp(2rem, 3.6vw, 3.25rem); }
+.onair-h h2 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.onair .meta { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-top: .5rem; color: var(--dim); }
+.onair .meta b { color: var(--text); font-weight: 700; }
+.dayctr { display: grid; justify-items: end; text-align: right; }
+.dayctr b { font-stretch: 62.5%; font-weight: 800; font-size: clamp(3rem, 6vw, 5rem); line-height: .8; }
+.dayctr b small { font-size: .45em; color: var(--dim); font-weight: 700; }
+.dayctr span { color: var(--dim); font-size: var(--s-1); margin-top: .75rem; }
+.daytrack { display: flex; gap: 3px; }
+.daytrack i { flex: 1; height: .4rem; border-radius: 1px; background: var(--line); }
+.daytrack i.done { background: var(--dim); }
+.daytrack i.today { background: var(--loss); }
+.alive { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .6rem 1rem; align-items: center; }
+.alive > span { color: var(--dim); font-size: var(--s-1); white-space: nowrap; }
+.alive .ls { display: flex; flex-wrap: wrap; gap: .35rem .5rem; }
+.alive .ls a { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .55rem .2rem .3rem; border-radius: 3px; background: var(--bg); font-size: var(--s-1); font-weight: 700; }
+.alive .ls a:hover { background: var(--raise); }
+.alive .ls.out a { background: none; color: var(--dim); font-weight: 400; padding-inline: .2rem; }
+.alive .ls.out em { font-style: normal; color: var(--text); font-weight: 700; }
+
+.nextup { display: grid; align-content: start; }
+.nextup h2 { font-stretch: 75%; font-weight: 800; font-size: var(--s1); padding-bottom: .5rem; border-bottom: 1px solid var(--line); }
+.nu { display: grid; grid-template-columns: 3.4rem 2.75rem minmax(0, 1fr) auto; gap: .2rem .85rem; align-items: center; padding: .75rem .25rem; border-bottom: 1px solid var(--line); }
+.nu:hover { background: var(--panel); }
+.nu .dt { display: grid; justify-items: center; line-height: 1; }
+.nu .dt b { font-stretch: 62.5%; font-weight: 800; font-size: 1.9rem; }
+.nu .dt span { font-size: .72rem; color: var(--dim); }
+.nu > img, .nu > .evl-ph { width: 2.75rem; height: 2.75rem; object-fit: contain; }
+.nu .nm { display: grid; min-width: 0; }
+.nu .nm b { font-stretch: 62.5%; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; line-height: 1.05; }
+.nu .nm span { font-size: var(--s-1); color: var(--dim); }
+.nu .rt { display: grid; justify-items: end; font-size: var(--s-1); }
+.nu .rt b { font-weight: 700; }
+.nu .rt span { color: var(--dim); }
+.evl-ph { display: grid; place-items: center; background: var(--raise); border-radius: 3px; color: var(--dim); font-weight: 800; font-size: .7rem; }
+
+.results { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 23rem); gap: 1.5rem 2.5rem; align-items: start; }
+.results h2, .titles h2 { font-stretch: 75%; font-weight: 800; font-size: var(--s1); padding-bottom: .5rem; border-bottom: 1px solid var(--line); display: flex; gap: .75rem; align-items: baseline; flex-wrap: wrap; }
+.results h2 .dim, .titles h2 .dim { font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
+.roll { display: grid; }
+.roll > a {
+  display: grid; grid-template-columns: 4.25rem 3.75rem minmax(11rem, 1.25fr) minmax(15rem, 1.35fr) minmax(12rem, 1fr) 6.5rem;
+  gap: .5rem 1.1rem; align-items: center; padding: .6rem .25rem; border-bottom: 1px solid var(--line);
+}
+.roll > a:hover { background: var(--panel); }
+.roll .dt { display: grid; line-height: 1.05; }
+.roll .dt b { font-stretch: 62.5%; font-weight: 800; font-size: 1.35rem; text-transform: uppercase; }
+.roll .dt span { font-size: .72rem; color: var(--dim); }
+.roll .el { width: 3.75rem; height: 3.75rem; object-fit: contain; }
+.roll .en { display: grid; min-width: 0; gap: .15rem; }
+.roll .en b { font-stretch: 62.5%; font-weight: 800; font-size: 1.3rem; text-transform: uppercase; line-height: 1; }
+.roll .en span { font-size: var(--s-1); color: var(--dim); }
+.roll .cw { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 .8rem; align-items: center; padding: .45rem .8rem .45rem .6rem; border-radius: 3px; background: var(--tcd, var(--panel)); box-shadow: inset 4px 0 0 var(--tc, var(--line)); }
+.roll .cw .logo { width: 2.9rem; height: 2.9rem; grid-row: span 2; }
+.roll .cw b { font-stretch: 62.5%; font-weight: 800; font-size: 1.6rem; text-transform: uppercase; line-height: .95; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roll .cw span { font-size: .72rem; color: var(--dim); }
+.roll .fn { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: .55rem; align-items: center; color: var(--dim); font-size: var(--s-1); min-width: 0; }
+.roll .fn .sc { font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; color: var(--text); white-space: nowrap; }
+.roll .fn em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roll .pz { display: grid; justify-items: end; font-size: var(--s-1); }
+.roll .pz b { font-weight: 700; font-size: var(--s0); }
+.roll .pz span { color: var(--dim); }
+
+.titles { display: grid; align-content: start; }
+.trow { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: .2rem .8rem; align-items: center; padding: .65rem .25rem; border-bottom: 1px solid var(--line); }
+.trow:hover { background: var(--panel); }
+.trow .logo { width: 2.75rem; height: 2.75rem; grid-row: span 2; }
+.trow > b { font-stretch: 62.5%; font-weight: 800; font-size: 1.35rem; text-transform: uppercase; line-height: 1; }
+.trow .n { font-stretch: 62.5%; font-weight: 800; font-size: 2.6rem; line-height: .8; grid-row: span 2; color: var(--tc, var(--text)); }
+.trow .won { display: flex; flex-wrap: wrap; gap: .25rem; }
+.trow .won img { width: 1.9rem; height: 1.9rem; object-fit: contain; }
+.trow .won { grid-column: 2; }
+.trow .won .evl-ph { width: 1.4rem; height: 1.4rem; font-size: .55rem; }
+.pin > .evl-ph { width: 2rem; height: 2rem; flex: none; }
+.onair-h > .evl-ph { width: 6rem; height: 6rem; }
+.roll .el.evl-ph, .tfin .el.evl-ph { font-size: .8rem; }
+.evhero > .evlogo.evl-ph { height: clamp(6rem, 11vw, 10.5rem); font-size: 1.5rem; }
+
+/* one tournament */
+.evhero { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(17rem, 30rem); gap: 1.25rem 2.5rem; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+.evhero > .evlogo { width: clamp(6rem, 11vw, 10.5rem); height: auto; }
+.evhero h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); line-height: .85; }
+.evhero .facts { gap: .6rem 2.25rem; margin-top: 1rem; }
+.evhero .facts dd { font-size: var(--s1); font-stretch: 87.5%; }
+.evhero .facts .big dd { font-stretch: 62.5%; font-weight: 800; font-size: var(--s2); line-height: 1.1; }
+.crown { align-self: stretch; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .15rem 1.1rem; align-content: center; padding: 1.1rem 1.3rem; border-radius: var(--r); background: var(--tcd, var(--panel)); box-shadow: inset 5px 0 0 var(--tc, var(--line)); }
+.crown > .logo { width: clamp(4rem, 6vw, 5.75rem); height: clamp(4rem, 6vw, 5.75rem); grid-row: span 3; }
+.crown .lbl { font-size: var(--s-1); color: var(--dim); }
+.crown .who { font-stretch: 62.5%; font-weight: 800; font-size: clamp(1.9rem, 3vw, 2.8rem); text-transform: uppercase; line-height: .9; overflow-wrap: anywhere; }
+.crown .who:hover { text-decoration: underline; }
+.crown .sub { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; font-size: var(--s-1); color: var(--dim); }
+.crown .sub b { color: var(--text); }
+.crown.state { grid-template-columns: minmax(0, 1fr); }
+.crown.state .who { font-size: clamp(2.4rem, 4vw, 3.6rem); }
+.crown.live { box-shadow: inset 5px 0 0 var(--loss); }
+
+.evbody { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 1.5rem; align-items: start; }
+.evbody > .evside { display: grid; gap: 1.5rem; min-width: 0; }
+.evbody > .evside + .evside { grid-column: 2; }
+.evbody > section:first-child { grid-row: span 2; }
+.page.ewide .pool .maptile { aspect-ratio: 16 / 7; }
+
+.stand { display: grid; }
+.stand > div { display: grid; grid-template-columns: 4.75rem 5.5rem minmax(0, 1fr); gap: .5rem .75rem; align-items: center; padding: .4rem 0; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
+.stand > div:last-child { border-bottom: 0; }
+.stand .pl { font-stretch: 62.5%; font-weight: 800; font-size: 1.15rem; text-transform: uppercase; }
+.stand .pl.p1 { color: var(--t); }
+.stand .usd { font-weight: 700; text-align: right; }
+.stand .tms { display: flex; flex-wrap: wrap; gap: .25rem .75rem; min-width: 0; }
+.stand .tms .tlink { font-weight: 600; }
+.stand .tms .open { color: var(--dim); }
+
+/* team profile: the team's own finish at each event */
+.tfin { display: grid; }
+.tfin > a { display: grid; grid-template-columns: 6.5rem 2.75rem minmax(0, 1fr) minmax(6.5rem, auto) 6.5rem; gap: .25rem 1rem; align-items: center; padding: .55rem .25rem; border-bottom: 1px solid var(--line); }
+.tfin > a:last-child { border-bottom: 0; }
+.tfin > a:hover { background: var(--raise); }
+.tfin .dt { font-size: var(--s-1); color: var(--dim); }
+.tfin .el { width: 2.75rem; height: 2.75rem; object-fit: contain; }
+.tfin .en { display: grid; min-width: 0; }
+.tfin .en b { font-stretch: 62.5%; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; line-height: 1.05; }
+.tfin .en span { font-size: var(--s-1); color: var(--dim); }
+.plc { font-stretch: 62.5%; font-weight: 800; font-size: 1.75rem; line-height: 1; text-transform: uppercase; text-align: right; white-space: nowrap; }
+.plc.p1 { color: var(--t); }
+.plc.p2, .plc.p3 { color: var(--text); }
+.plc.deep { color: var(--dim); }
+.plc.word { font-size: 1.1rem; color: var(--dim); }
+.plc.word.on { color: var(--loss); }
+.tfin .won { text-align: right; font-size: var(--s-1); }
+.tfin .won b { font-weight: 700; }
+
+@media (max-width: 1500px) {
+  .roll > a { grid-template-columns: 4.25rem 3.25rem minmax(0, 1fr) minmax(13rem, 1.2fr) 6rem; }
+  .roll .fn { grid-column: 3 / 6; grid-row: 2; }
+  .roll .el { width: 3.25rem; height: 3.25rem; }
+}
+@media (max-width: 1200px) {
+  .results, .marquee { grid-template-columns: minmax(0, 1fr); }
+  .evhero { grid-template-columns: auto minmax(0, 1fr); }
+  .evhero .crown { grid-column: 1 / -1; }
+}
+@media (max-width: 960px) {
+  .evbody { grid-template-columns: minmax(0, 1fr); }
+  .evbody > .evside + .evside { grid-column: auto; }
+  .evbody > section:first-child { grid-row: auto; }
+}
+@media (min-width: 1700px) {
+  .evbody { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, .8fr); grid-template-rows: auto; }
+  .evbody > section:first-child { grid-row: auto; }
+  .evbody > .evside + .evside { grid-column: 3; }
+}
+@media (max-width: 760px) {
+  .onair-h { grid-template-columns: auto minmax(0, 1fr); }
+  .onair-h .dayctr { grid-column: 1 / -1; justify-items: start; text-align: left; }
+  .alive { grid-template-columns: minmax(0, 1fr); }
+  .roll > a { grid-template-columns: 3.75rem minmax(0, 1fr) auto; }
+  .roll .dt { grid-column: 1; grid-row: 1; }
+  .roll .el { display: none; }
+  .roll .en { grid-column: 2 / 4; }
+  .roll .cw { grid-column: 1 / 3; grid-row: 2; }
+  .roll .pz { grid-column: 3; grid-row: 2; }
+  .roll .fn { grid-column: 1 / -1; grid-row: 3; }
+  .evhero > .evlogo { width: 4.5rem; }
+  .tfin > a { grid-template-columns: 2.5rem minmax(0, 1fr) auto; }
+  .tfin .dt { grid-column: 2; grid-row: 2; }
+  .tfin .el { grid-row: span 2; width: 2.5rem; height: 2.5rem; }
+  .tfin .en { grid-column: 2; grid-row: 1; }
+  .tfin .plc { grid-column: 3; grid-row: 1; }
+  .tfin .won { grid-column: 3; grid-row: 2; }
+  .stand > div { grid-template-columns: 4rem 4.75rem minmax(0, 1fr); }
+}
 
 /* ---------- v4: the matchup desk ----------
    One loud element: the court, split on a slant like the Faceoff mark, each half
@@ -1304,12 +1526,158 @@ function evCard(e) {
       <span style="display:flex;gap:.5rem;align-items:center"><span class="dim">${e.prize ? "$" + esc(e.prize) : ""}</span>${statusChip(e)}</span></span>
   </a>`;
 }
+/* v5: the season as a circuit */
+const usd = n => "$" + Math.round(n).toLocaleString("en-US");
+const prizeNum = e => +String(e.prize || "").replace(/[^\d.]/g, "") || 0;
+const prizeTxt = e => prizeNum(e) ? usd(prizeNum(e)) : "";
+const whereOf = e => e.city ? `${e.city}${e.country ? ", " + e.country : ""}` : (e.type || "");
+const shortEv = n => n.replace(/^Intel Extreme Masters/, "IEM").replace(/^ESL Pro League Season/, "Pro League S")
+  .replace(/^Esports World Cup/, "EWC").replace(/^StarLadder StarSeries/, "StarSeries")
+  .replace(/^Thunderpick World Championship/, "Thunderpick WC").replace(/\s+20\d\d$/, "");
+const tcVars = t => { const c = (T[t]?.color || [])[0]; return c ? `--tc:${c};--tcd:color-mix(in srgb, ${c} 11%, var(--panel));` : ""; };
+const evImg = (e, cls = "", title = false) => IMG.events[e.slug]
+  ? `<img class="${cls}" src="${IMG.events[e.slug]}" alt="${title ? esc(e.name) : ""}"${title ? ` title="${esc(e.name)}"` : ""}>`
+  : `<span class="${cls} evl-ph"${title ? ` title="${esc(e.name)}"` : ` aria-hidden="true"`}>${esc(shortEv(e.name).split(/\s+/).map(w => w[0]).join("").slice(0, 3))}</span>`;
+const dayDiff = (a, b) => Math.round((dObj(b) - dObj(a)) / 864e5);
+const tchip = (t, extra = "") => T[t] ? `<a href="#t-${T[t].slug}">${logo(t, "sm")}${esc(t)}${extra}</a>` : `<a>${logo(t, "sm")}${esc(t)}${extra}</a>`;
+const dayRange = e => {
+  const a = dObj(e.start), b = dObj(e.end);
+  return a.getUTCMonth() === b.getUTCMonth() ? `${a.getUTCDate()}–${b.getUTCDate()}` : `${a.getUTCDate()}–${b.getUTCDate()} ${MONTHS[b.getUTCMonth()]}`;
+};
+const startsIn = e => { const d = dayDiff(DATA.as_of, e.start); return d <= 0 ? "starting" : d === 1 ? "starts tomorrow" : `in ${d} days`; };
+function finalOf(e) {
+  if (e.status !== "finished" || !e.champion) return null;
+  const done = e.matches.filter(m => m.finished && m.t1 && m.t2);
+  const gf = done.filter(m => m.stage === "Grand final");
+  const m = gf.length ? gf[gf.length - 1] : [...done].sort((x, y) => (x.day || "").localeCompare(y.day || "") || (x.when || "").localeCompare(y.when || "")).pop();
+  if (!m) return null;
+  const one = winnerOf(m) === m.t1;
+  return { m, w: winnerOf(m), l: one ? m.t2 : m.t1, sw: one ? m.w1 : m.w2, sl: one ? m.w2 : m.w1 };
+}
+// A team's own finish at an event: placement range from the build (results laid onto the prize slots)
+function finishOf(e, team) {
+  if (e.status === "upcoming") return { text: "Upcoming", cls: "word" };
+  const p = (e.placements || {})[team];
+  if (!p) return e.status === "live" ? { text: "Still playing", cls: "word on" } : { text: "No series played", cls: "word" };
+  if (p.from == null) return { text: p.label, cls: p.label === "Still playing" ? "word on" : "word" };
+  const slot = e.prizes.find(s => s.from === p.from && s.to === p.to);
+  return { text: p.from === p.to ? ordinal(p.from) : `${ordinal(p.from)}–${ordinal(p.to)}`, from: p.from, to: p.to,
+    cls: p.from <= 3 ? "p" + p.from : p.from >= 9 ? "deep" : "", usd: slot && slot.usd || 0 };
+}
+// Team profile: the team's own finish at every event it entered (never the event winner)
+function teamFinishes(team, evs) {
+  const rows = evs.map(e => ({ e, f: finishOf(e, team) }));
+  const wins = rows.filter(r => r.f.from === 1).length;
+  const top4 = rows.filter(r => r.f.from && r.f.to <= 4).length;
+  const money = rows.reduce((a, r) => a + (r.f.usd || 0), 0);
+  const note = [wins ? `${wins} title${wins > 1 ? "s" : ""}` : "", top4 ? `${top4} top-four finish${top4 > 1 ? "es" : ""}` : "",
+    money ? `${usd(money)} in prize money` : ""].filter(Boolean).join(", ");
+  return `<section class="panel"><h2>Tournaments in 2026 <span class="dim">${note || "the team's own finish at each event"}</span></h2><div class="tfin">
+    ${rows.map(({ e, f }) => `<a href="#e-${e.slug}"><span class="dt">${esc(span(e.start, e.end))}</span>${evImg(e, "el")}
+      <span class="en"><b>${esc(e.name)}</b><span>${esc(whereOf(e))}${prizeTxt(e) ? `, ${prizeTxt(e)} pool` : ""}</span></span>
+      <span class="plc ${f.cls}">${f.text}</span><span class="won">${f.usd ? `<b>${usd(f.usd)}</b>` : ""}</span></a>`).join("")}
+  </div></section>`;
+}
+
+function seasonStrip() {
+  const yr = +DATA.as_of.slice(0, 4);
+  const first = `${yr}-01-01`;
+  const last = dObj(EV.reduce((a, e) => e.end > a ? e.end : a, `${yr}-12-31`));
+  const endD = new Date(Date.UTC(last.getUTCFullYear(), last.getUTCMonth() + 1, 1));
+  const total = Math.round((endD - dObj(first)) / 864e5);
+  const x = d => dayDiff(first, d) / total * 100;
+  const months = [];
+  for (let d = new Date(Date.UTC(yr, 0, 1)); d < endD; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) months.push(d);
+  const mo = months.map((d, i) => {
+    const iso = d.toISOString().slice(0, 10), nx = (months[i + 1] || endD).toISOString().slice(0, 10);
+    return `<span class="mo${nx <= DATA.as_of ? " past" : ""}" style="left:${x(iso)}%;width:${x(nx) - x(iso)}%">${MONTHS[d.getUTCMonth()]}${d.getUTCMonth() === 0 ? ` <b>${d.getUTCFullYear()}</b>` : ""}</span>`;
+  }).join("");
+  const MINW = 36 / total * 100;                 // a pin is at least ~5 weeks wide so its name fits
+  const lanes = [], pins = [];
+  for (const e of [...EV].sort((a, b) => a.start.localeCompare(b.start))) {
+    const w = Math.max((dayDiff(e.start, e.end) + 1) / total * 100, MINW);
+    const l = Math.min(x(e.start), 100 - w);
+    let i = lanes.findIndex(r => r <= l - .25);
+    if (i < 0) { i = lanes.length; lanes.push(0); }
+    lanes[i] = l + w;
+    const sub = e.champion ? `${logo(e.champion, "sm")}${esc(e.champion)}` : e.status === "live" ? `<span class="chip live">Live</span>` : esc(span(e.start, e.end));
+    pins.push([i, `<a class="pin ${e.status}" href="#e-${e.slug}" style="left:${l}%;width:${w}%;${e.champion ? tcVars(e.champion) : ""}" title="${esc(e.name)}, ${esc(span(e.start, e.end))}${e.champion ? `, won by ${esc(e.champion)}` : ""}">${evImg(e)}<span class="pt"><b>${esc(shortEv(e.name))}</b><span>${sub}</span></span></a>`]);
+  }
+  const rows = lanes.map((_, i) => `<div class="lane">${pins.filter(p => p[0] === i).map(p => p[1]).join("")}</div>`).join("");
+  return `<div class="strip-wrap"><div class="strip" role="group" aria-label="Tournament calendar">${mo}<div class="lanes">${rows}</div>
+    <div class="now" style="left:${x(DATA.as_of)}%"><span>Today, ${fmtDay(DATA.as_of)}</span></div></div></div>`;
+}
+
+function onAir(e) {
+  const live = e.status === "live";
+  const total = dayDiff(e.start, e.end) + 1;
+  const today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 0), total);
+  const teams = evTeamsList(e), P = e.placements || {};
+  const alive = teams.filter(t => !P[t] || P[t].label === "Still playing");
+  const out = teams.filter(t => P[t] && P[t].label !== "Still playing").sort((a, b) => (P[a].from || 99) - (P[b].from || 99));
+  const byTime = (a, b) => (a.day || "9").localeCompare(b.day || "9") || (a.when || "").localeCompare(b.when || "");
+  const next = e.matches.filter(m => !m.finished && m.t1 && m.t2).sort(byTime).slice(0, 4);
+  const counter = live
+    ? `<div class="dayctr"><b>Day ${today}<small> of ${total}</small></b><span>${alive.length} of ${teams.length} teams still in</span></div>`
+    : `<div class="dayctr"><b>${Math.max(dayDiff(DATA.as_of, e.start), 0)}<small> days</small></b><span>until the first series</span></div>`;
+  return `<article class="onair${live ? "" : " soon"}">
+    <div class="onair-h">${evImg(e)}
+      <div>${statusChip(e)}<h2 class="evname" style="margin-top:.4rem"><a href="#e-${e.slug}">${esc(e.name)}</a></h2>
+        <div class="meta"><span>${esc(span(e.start, e.end))}</span>${whereOf(e) ? `<span>${esc(whereOf(e))}</span>` : ""}${prizeTxt(e) ? `<span><b>${prizeTxt(e)}</b> prize pool</span>` : ""}</div></div>
+      ${counter}</div>
+    ${live ? `<div class="daytrack" aria-hidden="true">${Array.from({ length: total }, (_, i) => `<i class="${i + 1 < today ? "done" : i + 1 === today ? "today" : ""}"></i>`).join("")}</div>` : ""}
+    ${teams.length ? `<div class="alive"><span>${live ? "Still in" : "Teams"}</span><div class="ls">${alive.map(t => tchip(t)).join("")}</div>
+      ${out.length ? `<span>Out</span><div class="ls out">${out.map(t => tchip(t, ` <em>${finishOf(e, t).text}</em>`)).join("")}</div>` : ""}</div>` : `<p class="empty">Teams to be announced.</p>`}
+    ${next.length ? `<div class="mlist">${next.map(matchRow).join("")}</div>` : ""}
+    <div class="links"><a class="btn" href="#e-${e.slug}">Matches and tables</a><a class="btn" href="#e-${e.slug}.matchup">Build a matchup</a></div>
+  </article>`;
+}
+
 function viewEvents() {
-  const live = EV.filter(e => e.status === "live"), up = EV.filter(e => e.status === "upcoming"), done = EV.filter(e => e.status === "finished").reverse();
-  const sec = (title, list, note) => list.length ? `<section class="panel"><h2>${title} <span class="dim">${note}</span></h2><div class="evgrid">${list.map(evCard).join("")}</div></section>` : "";
-  return sec("Live now", live, "matches, lineups and the model's calls") +
-    sec("Upcoming", up, "build matchups from the announced teams") +
-    sec("Finished in 2026", done, "results with the model's pre-match calls");
+  const yr = DATA.as_of.slice(0, 4);
+  const byStart = (a, b) => a.start.localeCompare(b.start);
+  const live = EV.filter(e => e.status === "live").sort(byStart);
+  const up = EV.filter(e => e.status === "upcoming").sort(byStart);
+  const done = EV.filter(e => e.status === "finished").sort(byStart).reverse();
+  const feat = live.length ? live : up.slice(0, 1);
+  const rest = up.filter(e => !feat.includes(e));
+  const season = EV.filter(e => e.start.startsWith(yr));
+  const champs = {};
+  for (const e of done) if (e.champion) (champs[e.champion] = champs[e.champion] || []).push(e);
+  const pot = season.reduce((a, e) => a + prizeNum(e), 0);
+  const tally = [[season.length, "tournaments"], [season.filter(e => e.status === "finished").length, "decided"],
+    [Object.keys(champs).length, "different champions"], [`$${(pot / 1e6).toFixed(1)}M`, "in prize pools"]];
+
+  const nu = e => {
+    const d = dObj(e.start);
+    return `<a class="nu" href="#e-${e.slug}"><span class="dt"><b>${d.getUTCDate()}</b><span>${MONTHS[d.getUTCMonth()]}${String(d.getUTCFullYear()) !== yr ? " " + d.getUTCFullYear() : ""}</span></span>
+      ${evImg(e)}<span class="nm"><b>${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
+      <span class="rt"><b>${prizeTxt(e)}</b><span>${startsIn(e)}</span></span></a>`;
+  };
+  const row = e => {
+    const f = finalOf(e), c = e.champion, d = dObj(e.start);
+    return `<a href="#e-${e.slug}" style="${c ? tcVars(c) : ""}">
+      <span class="dt"><b>${MONTHS[d.getUTCMonth()]}</b><span>${dayRange(e)}</span></span>
+      ${evImg(e, "el")}
+      <span class="en"><b>${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
+      ${c ? `<span class="cw">${logo(c)}<b>${esc(c)}</b><span>Champion</span></span>` : `<span class="cw"><span>No result recorded</span></span>`}
+      <span class="fn">${f ? `<span class="sc">${f.sw}–${f.sl}</span>${logo(f.l, "sm")}<em>over ${esc(f.l)} in the final</em>` : ""}</span>
+      <span class="pz"><b>${prizeTxt(e)}</b><span>${evTeamsList(e).length} teams</span></span></a>`;
+  };
+  const titles = Object.entries(champs).sort((a, b) => b[1].length - a[1].length || b[1][0].end.localeCompare(a[1][0].end));
+  return `
+  <header class="season"><h1 class="cond">${yr} <span>season</span></h1>
+    <div class="tally">${tally.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("")}</div></header>
+  ${seasonStrip()}
+  <div class="marquee">
+    <div style="display:grid;gap:1.5rem">${feat.map(onAir).join("") || `<p class="empty">Nothing running right now.</p>`}</div>
+    <aside class="nextup"><h2>Next up</h2>${rest.map(nu).join("") || `<p class="empty">No further tournaments announced yet.</p>`}</aside>
+  </div>
+  ${done.length ? `<div class="results">
+    <section><h2>Results <span class="dim">newest first, with the grand final score</span></h2><div class="roll">${done.map(row).join("")}</div></section>
+    <aside class="titles"><h2>Titles in ${yr} <span class="dim">event wins per team</span></h2>
+      ${titles.map(([t, list]) => `<a class="trow" href="${T[t] ? `#t-${T[t].slug}` : "#teams"}" style="${tcVars(t)}">${logo(t)}<b>${esc(t)}</b><span class="n">${list.length}</span><span class="won">${list.map(e => evImg(e, "", true)).join("")}</span></a>`).join("")}
+    </aside></div>` : ""}`;
 }
 
 /* ---------------- one tournament ---------------- */
@@ -1345,17 +1713,37 @@ function evHero(e) {
     ["Dates", span(e.start, e.end)],
     e.city ? ["Location", `${e.city}${e.country ? ", " + e.country : ""}`] : e.type ? ["Format", e.type] : null,
     e.venue ? ["Venue", e.venue] : null,
-    e.prize ? ["Prize pool", "$" + e.prize] : null,
+    prizeTxt(e) ? ["Prize pool", prizeTxt(e)] : null,
     e.organizer ? ["Organizer", e.organizer] : null,
     e.tier ? ["Tier", e.tier] : null,
   ].filter(Boolean);
-  return `<section class="hero">
-    ${IMG.events[e.slug] ? `<img class="evlogo" src="${IMG.events[e.slug]}" alt="">` : ""}
+  const n = evTeamsList(e).length;
+  if (n) facts.splice(facts.findIndex(f => f[0] === "Prize pool") + 1 || facts.length, 0, ["Teams", String(n)]);
+  const f = finalOf(e), P = e.placements || {};
+  let crown;
+  if (e.champion) {
+    const third = Object.keys(P).filter(t => P[t].from === 3);
+    crown = `<div class="crown" style="${tcVars(e.champion)}">${logo(e.champion)}
+      <span class="lbl">Champion</span>
+      ${T[e.champion] ? `<a class="who" href="#t-${T[e.champion].slug}">${esc(e.champion)}</a>` : `<span class="who">${esc(e.champion)}</span>`}
+      ${f ? `<span class="sub">Beat ${logo(f.l, "sm")}<b>${esc(f.l)}</b> ${f.sw}–${f.sl} in the final${third.length ? `; ${third.length > 1 ? "semifinalists" : "third"}: ${third.map(esc).join(", ")}` : ""}</span>` : ""}
+    </div>`;
+  } else if (e.status === "live") {
+    const total = dayDiff(e.start, e.end) + 1, today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 1), total);
+    const alive = evTeamsList(e).filter(t => !P[t] || P[t].label === "Still playing").length;
+    crown = `<div class="crown state live"><span class="lbl">Running now</span><span class="who">Day ${today} of ${total}</span><span class="sub"><b>${alive}</b> of ${n} teams still in</span></div>`;
+  } else if (e.status === "upcoming") {
+    const d = dayDiff(DATA.as_of, e.start);
+    crown = `<div class="crown state"><span class="lbl">First series</span><span class="who">${d <= 0 ? "Starting" : d === 1 ? "Tomorrow" : `In ${d} days`}</span><span class="sub">${n ? `<b>${n}</b> teams announced` : "Teams to be announced"}</span></div>`;
+  } else crown = "";
+  return `<section class="evhero">
+    ${evImg(e, "evlogo")}
     <div>
-      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap"><h1 class="cond">${esc(e.name)}</h1>${statusChip(e)}</div>
-      <dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      ${e.champion ? `<div class="champline">${logo(e.champion)}<span>${esc(e.champion)} won the title</span></div>` : ""}
+      ${statusChip(e)}
+      <h1 class="cond" style="margin-top:.5rem">${esc(e.name)}</h1>
+      <dl class="facts">${facts.map(([k, v]) => `<div class="${k === "Prize pool" || k === "Dates" ? "big" : ""}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
     </div>
+    ${crown}
   </section>`;
 }
 
@@ -1395,29 +1783,70 @@ function evMatches(e) {
     const inner = `${row(m.t1, m.w1)}${row(m.t2, m.w2)}<div class="when">${m.day ? fmtDay(m.day) : "TBA"}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</div>`;
     return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" style="display:block">${inner}</a>` : `<div class="bm">${inner}</div>`;
   };
-  const place = p => p.from === p.to ? ordinal(p.from) : `${ordinal(p.from)} to ${ordinal(p.to)}`;
   const firstTz = e.matches.find(m => m.when);
   return `
   ${e.pool.length ? `<section class="pool" aria-label="Map pool">${e.pool.map(mp => `<div class="maptile" style="${mapBg(mp)}"><span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}</small></span></div>`).join("")}</section>` : ""}
-  <div class="cols">
+  <div class="evbody">
     <section class="panel">
       <h2>Matches <span class="dim">${firstTz ? `times in ${esc(tz(firstTz.when))}; ` : ""}percentages are the model's pre-match call</span></h2>
       <div class="days" role="group" aria-label="Match day">${days.map(x => `<button type="button" data-day="${x}" data-ev="${e.slug}" aria-pressed="${x === d}"><b>${wday(x)} ${fmtDay(x)}</b><span>${e.matches.filter(m => m.day === x).length} matches</span></button>`).join("")}</div>
       <div class="mlist">${list.map(matchRow).join("")}</div>
       ${list.some(m => !m.t1 || !m.t2) ? `<p class="small dim">Opponents for open slots are set by earlier results.</p>` : ""}
     </section>
-    <div style="display:grid;gap:1.5rem">
+    <div class="evside">
       ${groups.length ? `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
         ${groups.map(([name, rows]) => `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table>
           <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th><th class="n">VRS</th></tr></thead>
           <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td><td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
         </table></div></div>`).join("")}</section>` : ""}
-      ${cols.length ? `<section class="panel"><h2>Playoffs</h2><div class="bracket" style="grid-template-columns:repeat(${Math.min(cols.length, 4)},minmax(9rem,1fr))">${cols.map(c => `<div class="bcol"><h3>${esc(c.name)}</h3>${c.list.map(bm).join("")}</div>`).join("")}</div></section>` : ""}
-      ${e.prizes.length ? `<section class="panel"><h2>Prize pool</h2><div class="prizes">${e.prizes.map(p => `<span>${place(p)}</span><b>${p.usd ? "$" + p.usd.toLocaleString("en-US") : "-"}</b>`).join("")}</div></section>` : ""}
+      ${bracketBlocks(cols).map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}</h2><div class="bracket" style="grid-template-columns:repeat(${cs.length},minmax(8.5rem,1fr))">${cs.map(c => `<div class="bcol"><h3>${esc(c.label)}</h3>${c.list.map(bm).join("")}</div>`).join("")}</div></section>`).join("")}
+    </div>
+    <div class="evside">
+      ${standings(e)}
       ${e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : ""}
       <div class="links"><a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a></div>
     </div>
   </div>`;
+}
+
+// Bracket columns split into one block per stage ("Play-In", "Group Stage Group A", "Playoffs"),
+// so a play-in, its groups and the playoffs are not squeezed into a single row of columns
+const ELIM = ["Round of 32", "Round of 16", "Quarterfinal", "Semifinal", "Third-place match", "Grand final"];
+function bracketBlocks(cols) {
+  const blocks = [];
+  for (const c of cols) {
+    const fam = ELIM.includes(c.name) ? "Playoffs" : c.name.replace(/,?\s*round \d+$/i, "").trim() || "Playoffs";
+    let b = blocks.find(b => b[0] === fam);
+    if (!b) blocks.push(b = [fam, []]);
+    const r = c.name.match(/round (\d+)$/i);
+    b[1].push({ ...c, label: r ? `Round ${r[1]}` : c.name });
+  }
+  for (const b of blocks) {           // within a block: rounds in order, the final last
+    const k = c => ELIM.includes(c.name) ? 100 + ELIM.indexOf(c.name) : +(c.name.match(/round (\d+)$/i) || [0, 0])[1];
+    b[1].sort((x, y) => k(x) - k(y));
+  }
+  return blocks;
+}
+
+// Final standings: each prize slot with its money and the teams that finished there
+function standings(e) {
+  if (!e.prizes.length) return "";
+  const P = e.placements || {};
+  const teams = Object.keys(P);
+  const sort = ts => ts.sort((a, b) => (T[b]?.elo || 0) - (T[a]?.elo || 0));
+  const chips = ts => ts.length ? sort(ts).map(t => tlink(t)).join("") : `<span class="open">${e.status === "finished" ? "" : "Open"}</span>`;
+  const row = (pl, cls, money, ts) => `<div><span class="pl ${cls}">${pl}</span><span class="usd">${money}</span><span class="tms">${chips(ts)}</span></div>`;
+  const alive = teams.filter(t => P[t].label === "Still playing");
+  const other = {};
+  for (const t of teams) if (P[t].from == null && P[t].label !== "Still playing") (other[P[t].label] = other[P[t].label] || []).push(t);
+  const title = e.status === "finished" ? "Final standings" : e.status === "live" ? "Standings so far" : "Prize pool";
+  const note = e.status === "upcoming" ? "" : e.status === "live" ? "places fill as teams are knocked out" : "places from the results; prize money per team";
+  return `<section class="panel"><h2>${title} <span class="dim">${note}</span></h2><div class="stand">
+    ${alive.length ? row("Still in", "", "", alive) : ""}
+    ${e.prizes.map(p => row(p.from === p.to ? ordinal(p.from) : `${ordinal(p.from)}–${ordinal(p.to)}`, p.from === 1 ? "p1" : "",
+      p.usd ? usd(p.usd) : "", teams.filter(t => P[t].from === p.from && P[t].to === p.to))).join("")}
+    ${Object.entries(other).map(([l, ts]) => row(esc(l), "", "", ts)).join("")}
+  </div></section>`;
 }
 
 function evTeamsList(e) {
@@ -1538,7 +1967,7 @@ function viewTeam(slugv) {
     <section class="panel"><h2>Elo over the last ${t.trace.length} series <span class="dim">hover to read</span></h2>${spark(t.trace)}
       <p class="small dim">${t.form30 == null ? "No series in the last 30 days." : `Won ${pct(t.form30)} of ${t.n30} series in the last 30 days.`} Volatility ${t.vol.toFixed(2)} (how far results have strayed from what Elo expected).</p></section>
   </div>
-  ${evs.length ? `<section class="panel"><h2>Tournaments in 2026</h2><div class="evgrid">${evs.map(evCard).join("")}</div></section>` : ""}
+  ${evs.length ? teamFinishes(n, evs) : ""}
   <div class="grid2">
     <section class="panel"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
       <div class="poolbars">${maps.map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk"><b style="width:${(v[0] * 100).toFixed(1)}%"></b><i></i></span><span>${pct(v[0])} of ${v[1]}</span></div>`).join("") || `<p class="empty">No maps in the last 90 days.</p>`}</div></section>
@@ -1568,6 +1997,8 @@ function callLog() {
       pick, opp, pickP: pickA ? pr.p : 1 - pr.p, pickShown: displayPercent([pr.p, 1 - pr.p])[pickA ? 0 : 1],
       predTeam: winOf(top) ? m.t1 : m.t2, predScore: scoreFrom(top, winOf(top)),
       score: `${Math.max(m.w1, m.w2)}-${Math.min(m.w1, m.w2)}`, hit: pick === w,
+      // bonus: the most likely exact score also happened (same winner, same score)
+      exact: (winOf(top) ? m.t1 : m.t2) === w && scoreFrom(top, winOf(top)) === `${Math.max(m.w1, m.w2)}-${Math.min(m.w1, m.w2)}`,
       pickElo: elo ? elo[pickA ? 0 : 1] : null, oppElo: elo ? elo[pickA ? 1 : 0] : null,
     });
   }
@@ -1701,7 +2132,8 @@ function viewRecord() {
   const evs = [...new Map(calls.map(c => [c.e.slug, c.e])).values()].sort((p, q) => q.start.localeCompare(p.start));
   const teams = [...new Set(calls.flatMap(c => [c.a, c.b]))].sort((p, q) => p.localeCompare(q));
   const list = calls.filter(c => (!rec.ev || c.e.slug === rec.ev) && (!rec.team || c.a === rec.team || c.b === rec.team)
-    && (!rec.res || (rec.res === "hit") === c.hit)).reverse();
+    && (!rec.res || (rec.res === "hit") === c.hit) && (!rec.exact || (rec.exact === "hit") === c.exact)).reverse();
+  const ex = calls.filter(c => c.exact).length;
   const lh = list.filter(c => c.hit).length;
   const fav = calls.filter(c => c.pickElo != null && c.pickElo >= c.oppElo), dog = calls.filter(c => c.pickElo != null && c.pickElo < c.oppElo);
   const hitsDog = dog.filter(c => c.hit).sort((p, q) => (q.oppElo - q.pickElo) - (p.oppElo - p.pickElo)).slice(0, 5);
@@ -1715,7 +2147,7 @@ function viewRecord() {
     <p class="dim" style="max-width:68ch">Every finished 2026 match on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
   </div>
   <section class="board" aria-label="Headline numbers">
-    <div class="first"><span class="lbl">Winners called right</span><span class="num cond">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span></div>
+    <div class="first"><span class="lbl">Winners called right</span><span class="num cond">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
     <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span></div>
     <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last 20 calls, oldest first:</span>
       <span class="streak">${calls.slice(-20).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
@@ -1735,14 +2167,14 @@ function viewRecord() {
     </div>
   </div>
   <section class="panel"><h2>Every call <span class="dim">showing ${Math.min(rec.limit, list.length)} of ${list.length}, ${lh} right</span></h2>
-    <div class="filters">${sel("ev", "Tournament", evs.map(e => [e.slug, e.name]))}${sel("team", "Team", teams.map(t => [t, t]))}${sel("res", "Result", [["hit", "Right"], ["miss", "Wrong"]])}</div>
+    <div class="filters">${sel("ev", "Tournament", evs.map(e => [e.slug, e.name]))}${sel("team", "Team", teams.map(t => [t, t]))}${sel("res", "Winner", [["hit", "Right"], ["miss", "Wrong"]])}${sel("exact", "Exact score", [["hit", "Right"], ["miss", "Wrong"]])}</div>
     <div class="tablewrap"><table class="log"><thead><tr><th>Date</th><th class="xw">Tournament</th><th>Match</th><th>Model's pick</th><th>Predicted</th><th>Result</th><th></th></tr></thead><tbody>
       ${list.slice(0, rec.limit).map(c => `<tr>
         <td class="dt">${isoDate(c.day)}<span class="ev evd">${esc(c.e.name)}</span></td>
         <td class="xw"><a href="#e-${c.e.slug}">${esc(c.e.name)}</a><span class="ev">${esc(c.stage || "")}</span></td>
         <td><a href="#m-${c.id}" style="display:grid;gap:.15rem">${tl(c.a, c.w === c.a)}${tl(c.b, c.w === c.b)}</a></td>
         <td><span class="tl won">${logo(c.pick, "sm")}${esc(c.pick)}</span><span class="ev">${c.pickShown}%</span></td>
-        <td>${esc(c.predTeam)} ${c.predScore}</td>
+        <td>${esc(c.predTeam)} ${c.predScore}${c.exact ? ` <span class="chip hit" title="The exact score also happened">exact</span>` : ""}</td>
         <td>${esc(c.w)} ${c.score}</td>
         <td><span class="hm ${c.hit ? "h" : "m"}">${c.hit ? "Right" : "Wrong"}</span></td></tr>`).join("") || `<tr><td colspan="7" class="empty">No calls match these filters. Clear one to see more.</td></tr>`}
     </tbody></table></div>
@@ -1778,6 +2210,7 @@ function route() {
   $("#view").classList.toggle("rwide", h === "record");
   // the top bar follows the page width so its edges line up with the content
   document.body.dataset.w = h === "record" ? "rwide" : (!h || h === "home" || h === "compare") ? "wide" : "";
+  const evWide = h === "events" || h.startsWith("e-"); $("#view").classList.toggle("ewide", evWide); if (evWide) document.body.dataset.w = "ewide";
   const v = $("#view");
   v.innerHTML = html;
   applyPair(v);
