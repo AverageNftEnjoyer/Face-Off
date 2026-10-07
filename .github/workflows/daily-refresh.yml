@@ -5,7 +5,8 @@ name: Daily data refresh
 
 on:
   schedule:
-    - cron: "17 5 * * *"     # 05:17 UTC daily (after European evening matches)
+    - cron: "17 */6 * * *"   # 00:17, 06:17, 12:17, 18:17 UTC: results and schedules reach the site same day
+    # GitHub often starts scheduled runs late (hours, on busy days); "Run workflow" is instant.
   workflow_dispatch: {}      # "Run workflow" button in the Actions tab
 
 permissions:
