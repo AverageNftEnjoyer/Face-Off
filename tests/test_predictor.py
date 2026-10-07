@@ -11,7 +11,7 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import predictor  # noqa: E402
-from predictor import CONFIG, predict_match, series_probs, total_logodds  # noqa: E402
+from predictor import CONFIG, display_percent, predict_match, series_probs, total_logodds  # noqa: E402
 
 # Mechanism tests pin the reasoned reference weights: they check HOW the
 # machinery behaves (veto scaling, shrinkage, warnings, tiers), which needs
@@ -393,6 +393,36 @@ class TestVetoPool(unittest.TestCase):
         self.assertAlmostEqual(s[0], 0.36)
         self.assertAlmostEqual(s[1], 2 * 0.36 * 0.4)
         self.assertGreater(s[0], s[1])
+
+    def test_display_percent_largest_remainder(self):
+        # Naive round-half-up of 41.6/29.5/16.3/12.6 is 42/30/16/13 = 101.
+        whole = display_percent([0.416, 0.295, 0.163, 0.126], places=0)
+        self.assertEqual(whole, [42.0, 29.0, 16.0, 13.0])
+        self.assertEqual(sum(whole), 100.0)
+        # 1/3 + 1/3 + 1/3 printed to 2 decimals is 33.33 three times = 99.99.
+        thirds = display_percent([1 / 3, 1 / 3, 1 / 3])
+        self.assertEqual(thirds, [33.34, 33.33, 33.33])
+        self.assertEqual(sum(thirds), 100.0)
+        pair = display_percent([0.504, 0.496])
+        self.assertEqual(pair, [50.40, 49.60])
+        self.assertEqual(sum(pair), 100.0)
+
+    def test_reported_probability_sets_sum_to_100(self):
+        r = predict_match(base_match())
+        shown = display_percent([r["series_probs_exact"][k]
+                                 for k in ("p_2_0", "p_2_1", "p_1_2", "p_0_2")])
+        self.assertEqual(sum(shown), 100.0)
+        self.assertEqual([round(v * 100, 2) for v in
+                          (r["series_probs"]["p_2_0"], r["series_probs"]["p_2_1"],
+                           r["series_probs"]["p_1_2"], r["series_probs"]["p_0_2"])],
+                         shown)
+        pair = display_percent([r["p_a_exact"], 1 - r["p_a_exact"]])
+        self.assertEqual(sum(pair), 100.0)
+        self.assertAlmostEqual(r["p_a"] + r["p_b"], 1.0, places=9)
+        txt = predictor.format_result(r)
+        # the four scoreline labels in the report are the same largest-remainder set
+        self.assertIn(f"{shown[0]:.2f}%", txt)
+        self.assertIn(f"{shown[3]:.2f}%", txt)
 
 
 def _rand_match(rng):

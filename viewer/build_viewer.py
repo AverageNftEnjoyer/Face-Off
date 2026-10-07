@@ -96,15 +96,20 @@ def vrs_lookup(path):
 
 
 def compact(r):
-    """Engine output trimmed to what the page draws."""
-    s = r["series_probs"]
+    """Engine output trimmed to what the page draws.
+
+    Probabilities stay at full precision. The page formats a set (the two
+    teams, a map, the four scorelines) with largest-remainder rounding so the
+    labels add to 100.00.
+    """
+    s = r["series_probs_exact"]
     fac = {f["factor"]: f["marginal_pp"] for f in r["factor_breakdown"]}
     return {
-        "p": round(r["p_a_exact"], 4),
+        "p": r["p_a_exact"],
         "b": r["confidence_interval"],
         "r": r["reliability"][0],
         "s": [s["p_2_0"], s["p_2_1"], s["p_1_2"], s["p_0_2"]],
-        "vm": r["veto_maps"], "vp": r["map_probs"],
+        "vm": r["veto_maps"], "vp": r["map_probs_exact"],
         "v": [re.sub(r"^(A|B) (bans|picks) ", lambda m: m.group(1) + ("-" if m.group(2) == "bans" else "+"), x)
               .replace("decider: ", "D") for x in r["veto_log"]],
         "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],

@@ -295,12 +295,56 @@ def _shrink(n, k):
 
 def series_probs(p1, p2, p3):
     """BO3 scorelines from per-map P(A) (map1=A pick, map2=B pick, map3=decider).
-    Returns (p_2_0, p_2_1, p_1_2, p_0_2); they sum to 1."""
+    Returns (p_2_0, p_2_1, p_1_2, p_0_2); they sum to 1.
+    Map outcomes are independent given those three probabilities."""
     p_2_0 = p1 * p2
     p_2_1 = (p1 * (1 - p2) + (1 - p1) * p2) * p3
     p_1_2 = (p1 * (1 - p2) + (1 - p1) * p2) * (1 - p3)
     p_0_2 = (1 - p1) * (1 - p2)
     return p_2_0, p_2_1, p_1_2, p_0_2
+
+
+def display_percent(probs, places=2):
+    """Largest-remainder percentages for one complete probability set.
+
+    `probs` are shares of a single whole (a scoreline, or a team and its
+    opponent). Returns one float per input, each with exactly `places`
+    decimal places, summing to exactly 100. Ties in the remainder go to the
+    earlier input. The viewer copies this rule; keep the two in step.
+    """
+    n = len(probs)
+    if n == 0:
+        return []
+    scale = 10 ** places
+    target = 100 * scale
+    weights = []
+    for p in probs:
+        if isinstance(p, bool) or not isinstance(p, (int, float)) or not math.isfinite(p) or p <= 0:
+            weights.append(0.0)
+        else:
+            weights.append(float(p))
+    total = sum(weights)
+    if total <= 0:
+        base = [0] * n
+        base[0] = target
+        return [b / scale for b in base]
+    raw = [w / total * target for w in weights]
+    base = [int(math.floor(x + 1e-9)) for x in raw]
+    leftover = target - sum(base)
+    if leftover > 0:
+        order = sorted(range(n), key=lambda i: (raw[i] - math.floor(raw[i] + 1e-9), -i), reverse=True)
+        for k in range(leftover):
+            base[order[k]] += 1
+    elif leftover < 0:
+        order = sorted(range(n), key=lambda i: (raw[i] - math.floor(raw[i] + 1e-9), i))
+        k = 0
+        while leftover < 0 and k < n:
+            i = order[k]
+            if base[i] > 0:
+                base[i] -= 1
+                leftover += 1
+            k += 1
+    return [b / scale for b in base]
 
 
 def _series_a(logits, c=0.0):
@@ -416,8 +460,8 @@ def simulate_veto(m):
         map_vars.append(tau2 * (na_term + nb_term))
     mean_shrink = sum((shr_a[mp] + shr_b[mp]) / 2 for mp in veto_maps) / 3.0
 
-    note = (f"veto-only (pool-relative) -> {picks[0]} (A {p_maps[0]:.0%}), "
-            f"{picks[1]} (A {p_maps[1]:.0%}), decider {decider} (A {p_maps[2]:.0%}); "
+    note = (f"veto-only (pool-relative) -> {picks[0]} (A {p_maps[0]:.2%}), "
+            f"{picks[1]} (A {p_maps[1]:.2%}), decider {decider} (A {p_maps[2]:.2%}); "
             f"veto-only series P(A)={p_series_a:.1%}")
     s20, s21, s12, s02 = series_probs(*p_maps)
     return {
@@ -659,7 +703,8 @@ def predict_match(m):
     s20, s21, s12, s02 = series_probs(*p_maps)
     fav_is_a = p_a >= 0.5
     fav_name = a_name if fav_is_a else b_name
-    opts = [(s20, a_name, "2-0"), (s21, a_name, "2-1"), (s12, b_name, "2-1"), (s02, b_name, "2-0")]
+    opts = [(s20, a_name, "2-0", 0), (s21, a_name, "2-1", 1),
+            (s12, b_name, "2-1", 2), (s02, b_name, "2-0", 3)]
     best = max(opts, key=lambda o: o[0])
     scoreline = f"{best[1]} {best[2]}"
 
@@ -699,10 +744,10 @@ def predict_match(m):
         edge = round((p_a - mp) * 100, 1)  # in percentage points
         if edge > 0:
             edge_note = (f"model prices {a_name} {edge:.1f}pp above the market "
-                         f"({p_a:.0%} vs {mp:.0%}) - market may be underpricing {a_name}.")
+                         f"({p_a:.2%} vs {mp:.2%}) - market may be underpricing {a_name}.")
         elif edge < 0:
             edge_note = (f"model prices {a_name} {abs(edge):.1f}pp below the market "
-                         f"({p_a:.0%} vs {mp:.0%}) - market may be overpricing {a_name}.")
+                         f"({p_a:.2%} vs {mp:.2%}) - market may be overpricing {a_name}.")
         else:
             edge_note = "model agrees with the market."
         edge_note += " Market-efficiency read only, not a recommendation."
@@ -711,7 +756,7 @@ def predict_match(m):
     warnings = []
     if reliability == "LOW":
         warnings.append(
-            f"WIDE BAND ({ci_lo:.0%}-{ci_hi:.0%}, logit sd {s:.2f}): close read "
+            f"WIDE BAND ({ci_lo:.2%}-{ci_hi:.2%}, logit sd {s:.2f}): close read "
             f"and/or small samples, missing data or volatility. Treat the point estimate with caution.")
     if vol_max > 0.6:
         warnings.append(
@@ -728,13 +773,17 @@ def predict_match(m):
             msg += f" vs '{top_for[0]}' {top_for[1]:+.2f}"
         warnings.append(msg + ".")
 
+    # Display grid: 2 decimal places on the percentage, largest remainder so a
+    # pair or a scoreline always adds to 100.00. Exact values stay unrounded.
+    pa_shown, pb_shown = display_percent([p_a, p_b])
+    score_shown = display_percent([s20, s21, s12, s02])
     return {
         "match": f"{a_name} vs {b_name}",
-        "p_a": round(p_a, 3),
-        "p_b": round(p_b, 3),
+        "p_a": pa_shown / 100.0,
+        "p_b": pb_shown / 100.0,
         "pick": fav_name,
         "scoreline": scoreline,
-        "scoreline_prob": round(best[0], 3),
+        "scoreline_prob": score_shown[best[3]] / 100.0,
         "confidence_interval": [round(ci_lo, 3), round(ci_hi, 3)],  # uncertainty band
         "band_kind": "heuristic uncertainty band (not yet coverage-validated)",
         "interval_width_pp": width_pp,
@@ -749,15 +798,16 @@ def predict_match(m):
         "veto_log": veto["veto_log"],
         "veto_maps": veto["maps"],
         "map_probs": [round(p, 3) for p in p_maps],  # final-p-consistent, per veto_maps
+        "map_probs_exact": list(p_maps),
         # veto-only view (pool-relative map edges, before blending/shrinkage):
         "veto_only_series_p_a": veto["p_series_a"],
         "veto_only_map_probs": list(veto["p_map"]),
         "map_logit_shift": round(c_shift, 4),
         "series_probs": {
-            "p_2_0": round(s20, 3),
-            "p_2_1": round(s21, 3),
-            "p_1_2": round(s12, 3),
-            "p_0_2": round(s02, 3),
+            "p_2_0": score_shown[0] / 100.0,
+            "p_2_1": score_shown[1] / 100.0,
+            "p_1_2": score_shown[2] / 100.0,
+            "p_0_2": score_shown[3] / 100.0,
         },
         "series_probs_exact": {"p_2_0": s20, "p_2_1": s21, "p_1_2": s12, "p_0_2": s02},
         "p_a_exact": p_a,
@@ -773,14 +823,19 @@ def format_result(r):
     lines = []
     a, b = r["match"].split(" vs ", 1)
     lines.append(f"### {r['match']}")
-    lines.append(f"Model: {a} {r['p_a']:.0%} / {b} {r['p_b']:.0%} "
-                 f"(uncertainty band {r['confidence_interval'][0]:.0%}-{r['confidence_interval'][1]:.0%}, "
+    pa_pct, pb_pct = display_percent([r["p_a_exact"], 1.0 - r["p_a_exact"]])
+    lines.append(f"Model: {a} {pa_pct:.2f}% / {b} {pb_pct:.2f}% "
+                 f"(uncertainty band {r['confidence_interval'][0] * 100:.2f}%-"
+                 f"{r['confidence_interval'][1] * 100:.2f}%, "
                  f"heuristic, not coverage-validated)")
+    sp_exact = r["series_probs_exact"]
+    shown = display_percent([sp_exact["p_2_0"], sp_exact["p_2_1"],
+                             sp_exact["p_1_2"], sp_exact["p_0_2"]])
+    top = max(range(4), key=lambda i: (sp_exact[["p_2_0", "p_2_1", "p_1_2", "p_0_2"][i]], -i))
     lines.append(f"Pick: {r['pick']}  |  most likely scoreline: {r['scoreline']} "
-                 f"({r['scoreline_prob']:.0%})  |  reliability: {r['reliability']}")
-    sp = r["series_probs"]
-    lines.append(f"Series: {a} 2-0 {sp['p_2_0']:.0%}, 2-1 {sp['p_2_1']:.0%} | "
-                 f"{b} 2-1 {sp['p_1_2']:.0%}, 2-0 {sp['p_0_2']:.0%}")
+                 f"({shown[top]:.2f}%)  |  reliability: {r['reliability']}")
+    lines.append(f"Series: {a} 2-0 {shown[0]:.2f}%, 2-1 {shown[1]:.2f}% | "
+                 f"{b} 2-1 {shown[2]:.2f}%, 2-0 {shown[3]:.2f}%")
     lines.append("Factor breakdown (marginal pp impact on A's final win prob):")
     for f in r["factor_breakdown"]:
         arrow = "+" if f["marginal_pp"] >= 0 else ""

@@ -462,6 +462,26 @@ const IMG = /*__IMAGES__*/null;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+// Largest remainder, same rule as predictor.display_percent: `places` decimals
+// on the percentage, and the returned strings sum to exactly 100.00.
+function displayPercent(probs, places = 2) {
+  const scale = 10 ** places, target = 100 * scale;
+  const weights = probs.map(p => (Number.isFinite(p) && p > 0) ? p : 0);
+  const total = weights.reduce((a, b) => a + b, 0);
+  let base;
+  if (!(total > 0)) {
+    base = probs.map(() => 0);
+    if (base.length) base[0] = target;
+  } else {
+    const raw = weights.map(w => w / total * target);
+    base = raw.map(x => Math.floor(x + 1e-9));
+    const left = target - base.reduce((a, b) => a + b, 0);
+    const order = raw.map((x, i) => ({ i, frac: x - Math.floor(x + 1e-9) }))
+      .sort((a, b) => b.frac - a.frac || a.i - b.i);
+    for (let k = 0; k < left; k++) base[order[k].i] += 1;
+  }
+  return base.map(b => (b / scale).toFixed(places));
+}
 const T = DATA.teams;
 // Valve Regional Standings first (that is how teams are seeded), then Elo for unranked teams
 const vrsRank = t => T[t]?.vrs?.rank ?? 1e9;
@@ -597,19 +617,20 @@ function lineupOf(team, e) {
 /* ---------------- shared match widgets ---------------- */
 function tug(pred, a, b, label) {
   const p = pred.p;
+  const [ap, bp] = displayPercent([p, 1 - p]);
   return `<div class="tug">
     <div class="ends">
-      <div><div class="cond ct">${pct(p)}</div><div class="small dim">${esc(a)}</div></div>
+      <div><div class="cond ct">${ap}%</div><div class="small dim">${esc(a)}</div></div>
       <div class="small dim" style="text-align:center">${esc(label)}</div>
-      <div style="text-align:right"><div class="cond t">${pct(1 - p)}</div><div class="small dim">${esc(b)}</div></div>
+      <div style="text-align:right"><div class="cond t">${bp}%</div><div class="small dim">${esc(b)}</div></div>
     </div>
-    <div class="bar" role="img" aria-label="${esc(`${a} ${pct(p)}, ${b} ${pct(1 - p)}; likely range for ${a} ${pct(pred.band[0])} to ${pct(pred.band[1])}`)}">
+    <div class="bar" role="img" aria-label="${esc(`${a} ${ap}%, ${b} ${bp}%; likely range for ${a} ${pct(pred.band[0], 2)} to ${pct(pred.band[1], 2)}`)}">
       <div class="fill" data-w="${(p * 100).toFixed(2)}"></div>
       <div class="band" data-l="${(pred.band[0] * 100).toFixed(2)}" data-bw="${((pred.band[1] - pred.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
       <div class="mid"></div>
     </div>
     <div class="legend">
-      <span>Hatched zone: likely range ${pct(pred.band[0])} to ${pct(pred.band[1])}</span>
+      <span>Hatched zone: likely range ${pct(pred.band[0], 2)} to ${pct(pred.band[1], 2)}</span>
       <span class="chip ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span>
     </div>
   </div>`;
@@ -649,7 +670,8 @@ function vetoView(pred, a, b) {
     const ban = s.verb === "bans", pm = played[s.map];
     const who = s.side === "A" ? a : s.side === "B" ? b : null;
     const role = s.verb === "decider" ? "Decider" : `${esc(who)} ${s.verb}`;
-    const odds = !ban && pm !== undefined ? `<span class="sc cond"><span class="ct">${pct(pm)}</span><span class="x">map win chance</span><span class="t">${pct(1 - pm)}</span></span><span class="odds"><b style="width:${(pm * 100).toFixed(1)}%"></b></span>` : "";
+    const pair = !ban && pm !== undefined ? displayPercent([pm, 1 - pm]) : null;
+    const odds = pair ? `<span class="sc cond"><span class="ct">${pair[0]}%</span><span class="x">map win chance</span><span class="t">${pair[1]}%</span></span><span class="odds"><b style="width:${(pm * 100).toFixed(1)}%"></b></span>` : "";
     return `<div class="mapcard reveal ${ban ? "ban" : ""}" style="${mapBg(s.map)};animation-delay:${i * 90}ms">
       <span class="role"><b class="${s.side === "A" ? "ct" : s.side === "B" ? "t" : ""}">${i + 1}</b> ${role}</span>
       <span class="nm cond">${esc(s.map)}</span>${odds}
@@ -665,9 +687,10 @@ function seriesScores(pred, a, b, bo = 3) {
   const rows = [["p_2_0", `${a} 2-0`, "a"], ["p_2_1", `${a} 2-1`, "a"], ["p_1_2", `${b} 2-1`, "b"], ["p_0_2", `${b} 2-0`, "b"]];
   const top = rows.reduce((m, x) => s[x[0]] > s[m] ? x[0] : m, "p_2_0");
   const mx = Math.max(...rows.map(x => s[x[0]]));
+  const shown = displayPercent(rows.map(x => s[x[0]]));
   return `<div class="panel"><h2>Series score <span class="dim">most likely: ${esc(rows.find(r => r[0] === top)[1])}</span></h2>
     ${bo !== 3 ? `<p class="small dim">Modelled as a best-of-three; this series is a best-of-${bo}.</p>` : ""}
-    ${rows.map(([k, lab, side]) => `<div class="srow ${side}${k === top ? " top" : ""}"><span>${esc(lab)}</span><span class="trk"><b style="width:${(s[k] / mx * 100).toFixed(1)}%"></b></span><span class="v">${pct(s[k])}</span></div>`).join("")}
+    ${rows.map(([k, lab, side], i) => `<div class="srow ${side}${k === top ? " top" : ""}"><span>${esc(lab)}</span><span class="trk"><b style="width:${(s[k] / mx * 100).toFixed(1)}%"></b></span><span class="v">${shown[i]}%</span></div>`).join("")}
   </div>`;
 }
 
@@ -709,7 +732,7 @@ function poolCompare(a, b, pool) {
   const ma = T[a]?.maps || {}, mb = T[b]?.maps || {};
   const cell = (m, side) => {
     const v = (side === "l" ? ma : mb)[m], w = v ? v[0] * 100 : 0;
-    return `<div class="half ${side}"><span>${v ? `${Math.round(w)}% (${v[1]})` : "no maps"}</span><span class="trk"><b style="width:${w.toFixed(1)}%"></b></span></div>`;
+    return `<div class="half ${side}"><span>${v ? `${w.toFixed(2)}% (${v[1]})` : "no maps"}</span><span class="trk"><b style="width:${w.toFixed(1)}%"></b></span></div>`;
   };
   return `<div class="panel"><h2>Map pool <span class="dim">win rate over the last 90 days (maps played)</span></h2>
     <div class="fly">${pool.map(m => `<div class="fr">${cell(m, "l")}<span class="mn cond">${esc(m)}</span>${cell(m, "r")}</div>`).join("")}</div></div>`;
@@ -777,12 +800,17 @@ function matchRow(m) {
   const pred = decode(m.pred);
   let mid, tag = "";
   if (m.finished || live) mid = `<div class="mid cond"><span class="${m.w1 > m.w2 ? "ct" : ""}">${m.w1}</span> : <span class="${m.w2 > m.w1 ? "t" : ""}">${m.w2}</span></div>`;
-  else if (pred) mid = `<div class="mid pct" title="Model's pre-match call">${pct(pred.p)} / ${pct(1 - pred.p)}</div>`;
+  else if (pred) {
+    const [ap, bp] = displayPercent([pred.p, 1 - pred.p]);
+    mid = `<div class="mid pct" title="Model's pre-match call">${ap}% / ${bp}%</div>`;
+  }
   else mid = `<div class="mid pct">vs</div>`;
   if (live) tag = `<span class="chip live">Live</span>`;
   else if (m.finished && pred) {
     const fav = pred.p >= .5 ? a : b;
-    tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${pct(Math.max(pred.p, 1 - pred.p))}">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}</span>`;
+    const pair = displayPercent([pred.p, 1 - pred.p]);
+    const favPct = pred.p >= .5 ? pair[0] : pair[1];
+    tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${favPct}%">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}</span>`;
   }
   const team = (t, side) => `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}<span>${esc(t || "To be decided")}</span></div>`;
   const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}</span></div>
@@ -935,8 +963,10 @@ function viewMatch(id) {
   }
   let verdict = "";
   if (m.finished && pred) {
-    const fav = pred.p >= .5 ? a : b, fp = Math.max(pred.p, 1 - pred.p);
-    verdict = `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, fp)}: ${fav === w ? "" : "model had "}${esc(fav)} at ${pct(fp)}</span>`;
+    const fav = pred.p >= .5 ? a : b;
+    const pair = displayPercent([pred.p, 1 - pred.p]);
+    const fp = pred.p >= .5 ? pair[0] : pair[1];
+    verdict = `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, pred.p >= .5 ? pred.p : 1 - pred.p)}: ${fav === w ? "" : "model had "}${esc(fav)} at ${fp}%</span>`;
   }
   const side = (t, cls) => T[t] ? vsSide(t, cls) : `<span class="side ${cls}">${logo(t, "xl")}<span class="cond">${esc(t)}</span></span>`;
   return `
