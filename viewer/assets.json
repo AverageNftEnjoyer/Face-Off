@@ -301,6 +301,67 @@
    "logo_path": "data/raw/liquipedia_media/d077cf34acbb447a.png",
    "logo_dark_path": "data/raw/liquipedia_media/25fb96206f02680b.png"
   },
+  "Alliance": {
+   "page": "Alliance",
+   "logo": "Alliance 2024 full allmode.png",
+   "logo_dark": "Alliance 2024 full allmode.png",
+   "location": "Sweden",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "avid",
+     "name": "Arvid Åberg",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2023-09-28"
+    },
+    {
+     "id": "twist",
+     "name": "Simon Eliasson",
+     "flag": "se",
+     "igl": true,
+     "role": "",
+     "joined": "2023-09-28"
+    },
+    {
+     "id": "upE",
+     "name": "Markus Johansson",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2024-07-26"
+    },
+    {
+     "id": "eraa",
+     "name": "Sean Knutsson",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-18"
+    },
+    {
+     "id": "bobeksde",
+     "name": "Jonatan Persson",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-12"
+    },
+    {
+     "id": "Hawk",
+     "name": "Simon Vävinggren",
+     "flag": "se",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-01-26"
+    }
+   ],
+   "icon": "Alliance 2024 allmode.png",
+   "icon_dark": "Alliance 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png"
+  },
   "Astralis": {
    "page": "Astralis",
    "logo": "Astralis 2020 full allmode.png",
@@ -667,6 +728,67 @@
    "logo_path": "data/raw/liquipedia_media/ef4dedecaa7f3587.png",
    "logo_dark_path": "data/raw/liquipedia_media/ef4dedecaa7f3587.png"
   },
+  "Betclic Apogee Esports": {
+   "page": "Betclic Apogee Esports",
+   "logo": "Betclic Apogee Esports full lightmode.png",
+   "logo_dark": "Betclic Apogee Esports full darkmode.png",
+   "location": "Portugal",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Prism",
+     "name": "Wojciech Zięba",
+     "flag": "pl",
+     "igl": true,
+     "role": "",
+     "joined": "2024-08-08"
+    },
+    {
+     "id": "Demho",
+     "name": "Patryk Tomaszewski",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2024-11-21"
+    },
+    {
+     "id": "Qlocuu",
+     "name": "Konrad Klocek",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-22"
+    },
+    {
+     "id": "Ex1st",
+     "name": "Mateusz Witman",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-22"
+    },
+    {
+     "id": "ultimate",
+     "name": "Roland Tomkowiak",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "SZPERO",
+     "name": "Grzegorz Dziamałek",
+     "flag": "pl",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-22"
+    }
+   ],
+   "icon": "Betclic Apogee Esports lightmode.png",
+   "icon_dark": "Betclic Apogee Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b7f5cc7c8ce8e01e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/32f5b6a51ba8c81e.png"
+  },
   "DENDELE CS": {
    "page": "DENDELE CS",
    "logo": "DENDELE CS allmode.png",
@@ -788,6 +910,67 @@
    "icon_dark": "EYEBALLERS 2023 allmode.png",
    "logo_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png",
    "logo_dark_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png"
+  },
+  "Eternal Fire": {
+   "page": "Eternal Fire",
+   "logo": "Eternal Fire 2023 allmode.png",
+   "logo_dark": "Eternal Fire 2023 allmode.png",
+   "location": "Hungary",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "jottAAA",
+     "name": "Samet Köklü",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-02"
+    },
+    {
+     "id": "regali",
+     "name": "Iulian Harjău",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-14"
+    },
+    {
+     "id": "MisteM",
+     "name": "Gareth Ries",
+     "flag": "za",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-15"
+    },
+    {
+     "id": "Kvem",
+     "name": "Vladyslav Korol",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "soulfly",
+     "name": "Caner Kesici",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-23"
+    },
+    {
+     "id": "Fabre",
+     "name": "Sezgin Kalaycı",
+     "flag": "tr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-09-11"
+    }
+   ],
+   "icon": "Eternal Fire 2023 allmode.png",
+   "icon_dark": "Eternal Fire 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/ea43bc100225143c.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ea43bc100225143c.png"
   },
   "FOKUS": {
    "page": "FOKUS",
@@ -1123,6 +1306,67 @@
    "logo_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png",
    "logo_dark_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png"
   },
+  "Fnatic": {
+   "page": "Fnatic",
+   "logo": "Fnatic 2020 full lightmode.png",
+   "logo_dark": "Fnatic 2020 full darkmode.png",
+   "location": "United Kingdom",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "fear",
+     "name": "Rodion Smyk",
+     "flag": "ua",
+     "igl": true,
+     "role": "",
+     "joined": "2025-01-10"
+    },
+    {
+     "id": "jambo",
+     "name": "Dmytro Semera",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2025-03-21"
+    },
+    {
+     "id": "jackasmo",
+     "name": "Mykyta Skyba",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-10"
+    },
+    {
+     "id": "cairne",
+     "name": "Artem Mushynskyi",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-01"
+    },
+    {
+     "id": "mazay",
+     "name": "Volodymyr Iorhachov",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-09"
+    },
+    {
+     "id": "Independent",
+     "name": "Miks Siliņš",
+     "flag": "lv",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-05-08"
+    }
+   ],
+   "icon": "Fnatic 2020 full lightmode.png",
+   "icon_dark": "Fnatic 2020 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b9ecba7cf61b285b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/3c99efae8430451c.png"
+  },
   "G2 Esports": {
    "page": "G2 Esports",
    "logo": "G2 Esports 2020 full lightmode.png",
@@ -1180,9 +1424,9 @@
     }
    ],
    "icon": "G2 Esports 2020 lightmode.png",
-   "icon_dark": "G2 Esports 2020 full darkmode.png",
+   "icon_dark": "G2 Esports 2020 lightmode.png",
    "logo_path": "data/raw/liquipedia_media/550f1ba0eecb0ac0.png",
-   "logo_dark_path": "data/raw/liquipedia_media/430e102872b44701.png"
+   "logo_dark_path": "data/raw/liquipedia_media/550f1ba0eecb0ac0.png"
   },
   "Gaimin Gladiators": {
    "page": "Gaimin Gladiators",
@@ -1383,10 +1627,10 @@
      "joined": "2026-10-01"
     }
    ],
-   "icon": "HEROIC 2024 full lightmode.png",
-   "icon_dark": "HEROIC 2024 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/b8852b7af0dc3789.png",
-   "logo_dark_path": "data/raw/liquipedia_media/a7a3f26731629b0e.png"
+   "icon": "HEROIC 2024 allmode.png",
+   "icon_dark": "HEROIC 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png",
+   "logo_dark_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png"
   },
   "HOTU": {
    "page": "HOTU",
@@ -1578,67 +1822,6 @@
    "icon_dark": "Imperial Esports 2025 allmode.png",
    "logo_path": "data/raw/liquipedia_media/ba01286af007964e.png",
    "logo_dark_path": "data/raw/liquipedia_media/ba01286af007964e.png"
-  },
-  "Inner Circle Esports": {
-   "page": "Inner Circle Esports",
-   "logo": "Inner Circle 2025 allmode.png",
-   "logo_dark": "Inner Circle 2025 allmode.png",
-   "location": "United Kingdom",
-   "region": "eu",
-   "roster": [
-    {
-     "id": "onic",
-     "name": "Viktor Babii",
-     "flag": "ua",
-     "igl": true,
-     "role": "",
-     "joined": "2025-09-25"
-    },
-    {
-     "id": "Dawy",
-     "name": "Davyd Bibik",
-     "flag": "ua",
-     "igl": false,
-     "role": "",
-     "joined": "2025-09-25"
-    },
-    {
-     "id": "zeRRoFIX",
-     "name": "Eduard Petrovskyi",
-     "flag": "ua",
-     "igl": false,
-     "role": "",
-     "joined": "2025-10-22"
-    },
-    {
-     "id": "cptkurtka023",
-     "name": "Arsenyi Derevynskyi",
-     "flag": "ua",
-     "igl": false,
-     "role": "",
-     "joined": "2026-01-09"
-    },
-    {
-     "id": "headtr1ck",
-     "name": "Danyyl Valitov",
-     "flag": "ua",
-     "igl": false,
-     "role": "",
-     "joined": "2026-03-14"
-    },
-    {
-     "id": "jR",
-     "name": "Dmytro Chervak",
-     "flag": "ua",
-     "igl": false,
-     "role": "Coach",
-     "joined": "2025-09-25"
-    }
-   ],
-   "icon": "Inner Circle 2025 allmode.png",
-   "icon_dark": "Inner Circle 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/5b13c04887b12e28.png",
-   "logo_dark_path": "data/raw/liquipedia_media/5b13c04887b12e28.png"
   },
   "JiJieHao": {
    "page": "JiJieHao",
@@ -1879,10 +2062,10 @@
      "joined": "2026-08-25"
     }
    ],
-   "icon": "Luminosity Gaming 2018 full lightmode.png",
-   "icon_dark": "Luminosity Gaming 2018 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/258ec0c087d097c6.png",
-   "logo_dark_path": "data/raw/liquipedia_media/8ec307406e5fd687.png"
+   "icon": "Luminosity Gaming 2018 allmode.png",
+   "icon_dark": "Luminosity Gaming 2018 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/c0747750f42ffa69.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c0747750f42ffa69.png"
   },
   "Lynn Vision Gaming": {
    "page": "Lynn Vision Gaming",
@@ -2279,6 +2462,67 @@
    "logo_path": "data/raw/liquipedia_media/44df4ee5562ff85a.png",
    "logo_dark_path": "data/raw/liquipedia_media/5730dbfbb8d0c60f.png"
   },
+  "Nemesis": {
+   "page": "Nemesis",
+   "logo": "Team Nemesis full lightmode.png",
+   "logo_dark": "Team Nemesis full darkmode.png",
+   "location": "Singapore",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "SELLTER",
+     "name": "Ivan Miroshnikov",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "Sdaim",
+     "name": "Danyyl Tupov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "tex1y",
+     "name": "Philipp Moskvitin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "mag1k3Y",
+     "name": "Alemkhan Moldakamalov",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "r3salt",
+     "name": "Evgeniy Frolov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-27"
+    },
+    {
+     "id": "brain",
+     "name": "Stepan Sivoronov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-10-05"
+    }
+   ],
+   "icon": "Team Nemesis lightmode.png",
+   "icon_dark": "Team Nemesis darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/eb439cc88f5ee107.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c95a886f3d486fc1.png"
+  },
   "Nemiga Gaming": {
    "page": "Nemiga Gaming",
    "logo": "Nemiga Gaming 2020 red full allmode.png",
@@ -2400,6 +2644,67 @@
    "icon_dark": "Ninjas in Pyjamas 2021 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/1dcb3576a6ddf162.png",
    "logo_dark_path": "data/raw/liquipedia_media/cd0cac439bd09e4b.png"
+  },
+  "Nuclear TigeRES": {
+   "page": "Nuclear TigeRES",
+   "logo": "Nuclear TigeRES full lightmode.png",
+   "logo_dark": "Nuclear TigeRES full darkmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "senka",
+     "name": "Arseniy Kozlovsky",
+     "flag": "by",
+     "igl": true,
+     "role": "",
+     "joined": "2024-10-01"
+    },
+    {
+     "id": "flouzer",
+     "name": "Ilya Selifonov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2024-10-01"
+    },
+    {
+     "id": "ayuki",
+     "name": "Egor Ershov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-14"
+    },
+    {
+     "id": "tronic",
+     "name": "Kamil Shakhov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-17"
+    },
+    {
+     "id": "Djon8",
+     "name": "Evgeniy Mudrenov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-17"
+    },
+    {
+     "id": "Polt",
+     "name": "Vadim Tsirov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-03-12"
+    }
+   ],
+   "icon": "Nuclear TigeRES lightmode.png",
+   "icon_dark": "Nuclear TigeRES darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/8413ef23c22d7554.png",
+   "logo_dark_path": "data/raw/liquipedia_media/67d2dffcaf51f317.png"
   },
   "PARIVISION": {
    "page": "PARIVISION",
@@ -2528,6 +2833,67 @@
    "logo_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png",
    "logo_dark_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png"
   },
+  "SAW": {
+   "page": "SAW",
+   "logo": "SAW 2021 full lightmode.png",
+   "logo_dark": "SAW 2021 full darkmode.png",
+   "location": "Portugal",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "ewjerkz",
+     "name": "Michel Magalhães",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "NOPEEj",
+     "name": "Filipe Dias",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "MUTiRiS",
+     "name": "Christopher Fernandes",
+     "flag": "pt",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "krazy",
+     "name": "Adones Nobre",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "story",
+     "name": "João Vieira",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "mowzassa",
+     "name": "Tiago Rodrigues",
+     "flag": "pt",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-10-13"
+    }
+   ],
+   "icon": "SAW 2021 full lightmode.png",
+   "icon_dark": "SAW 2021 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/bf3434380c4368ab.png",
+   "logo_dark_path": "data/raw/liquipedia_media/401671bb167ffff7.png"
+  },
   "SINNERS Esports": {
    "page": "SINNERS Esports",
    "logo": "SINNERS Esports full allmode.png",
@@ -2589,6 +2955,67 @@
    "logo_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png",
    "logo_dark_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png"
   },
+  "Sangal Esports": {
+   "page": "Sangal Esports",
+   "logo": "Sangal Esports 2020 allmode.png",
+   "logo_dark": "Sangal Esports 2020 allmode.png",
+   "location": "Netherlands",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "R4DYX",
+     "name": "Selman Ozan",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-11"
+    },
+    {
+     "id": "Joey",
+     "name": "Yeray Perez",
+     "flag": "es",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-02"
+    },
+    {
+     "id": "puuha",
+     "name": "Luka Eklund",
+     "flag": "fi",
+     "igl": true,
+     "role": "",
+     "joined": "2026-06-02"
+    },
+    {
+     "id": "adamS",
+     "name": "Adam Marian",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-02"
+    },
+    {
+     "id": "bnox",
+     "name": "Bartosz Niebisz",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-08"
+    },
+    {
+     "id": "Jumpy",
+     "name": "Jimmy Berndtsson",
+     "flag": "se",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-02-26"
+    }
+   ],
+   "icon": "Sangal Esports 2020 allmode.png",
+   "icon_dark": "Sangal Esports 2020 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/d4a52820eef6a773.png",
+   "logo_dark_path": "data/raw/liquipedia_media/d4a52820eef6a773.png"
+  },
   "SemperFi Esports": {
    "page": "SemperFi Esports",
    "logo": "SemperFI Esports allmode.png",
@@ -2603,6 +3030,14 @@
      "igl": false,
      "role": "",
      "joined": "2024-07-28"
+    },
+    {
+     "id": "7kick",
+     "name": "Radut Dragos Cristian",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-07"
     }
    ],
    "icon": "SemperFI Esports allmode.png",
@@ -3008,10 +3443,10 @@
      "joined": "2023-10-13"
     }
    ],
-   "icon": "Team Vitality 2026 full lightmode.png",
-   "icon_dark": "Team Vitality 2026 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/8dd7f380f8f36b5e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/bb1c12e9608b31d7.png"
+   "icon": "Team Vitality 2023 darkmode.png",
+   "icon_dark": "Team Vitality 2023 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/16e82a084935bdbf.png",
+   "logo_dark_path": "data/raw/liquipedia_media/16e82a084935bdbf.png"
   },
   "Team Voca": {
    "page": "Team Voca",

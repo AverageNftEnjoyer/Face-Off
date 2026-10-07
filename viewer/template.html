@@ -514,13 +514,18 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .tm.pick.sa { border-top-color: var(--ct); }
 .tm.pick.sb { border-top-color: var(--t); }
 .tm.dec { border-top-color: var(--text); }
-.tm.ban { filter: grayscale(1) brightness(.75); }
-.tm.ban.sa { border-top-color: color-mix(in srgb, var(--ct) 45%, var(--line)); }
-.tm.ban.sb { border-top-color: color-mix(in srgb, var(--t) 45%, var(--line)); }
-.tm.ban .tnm { text-decoration: line-through; text-decoration-thickness: 2px; }
+.tm.ban.sa { border-top-color: var(--ct); }
+.tm.ban.sb { border-top-color: var(--t); }
 .tm:hover { border-color: var(--dim); }
-.tm[aria-pressed="true"] { filter: none; outline: 2px solid var(--text); outline-offset: 1px; }
-.tm.pick .trole, .tm.dec .trole { color: var(--text); }
+.tm[aria-pressed="true"] { outline: 2px solid var(--text); outline-offset: 1px; }
+.tm .trole { color: var(--text); }
+.tm .trole i { font-style: normal; font-weight: 800; font-size: .62rem; letter-spacing: .04em; text-transform: uppercase; padding: 0 .3rem; border-radius: 3px; margin-right: .3rem; vertical-align: 1px; }
+.tm.ban .trole i { background: var(--loss); color: #fff; }
+.tm.pick .trole i { background: var(--win); color: #0b0f14; }
+.tm.dec .trole i { background: var(--text); color: var(--bg); }
+.tm .tst { display: grid; gap: .05rem; margin-top: .3rem; font-size: .7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tm .tst span { display: flex; align-items: center; gap: .3rem; min-width: 0; white-space: nowrap; }
+.tm .tst span::before { content: ""; flex: none; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
 
 .spot { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; }
 .spot .img {
@@ -560,10 +565,14 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 /* right rail */
 .rail { display: grid; gap: 1rem; position: sticky; top: 4.5rem; }
 .rail .panel > h2 { font-size: var(--s0); }
-.rail label { font-size: var(--s-1); color: var(--dim); display: grid; gap: .25rem; }
-.rail select { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .5rem .6rem; font: inherit; }
-.rail select.a { box-shadow: inset 3px 0 0 var(--ct); }
-.rail select.b { box-shadow: inset 3px 0 0 var(--t); }
+/* build a matchup: full-width logo picker under the desk */
+.builder { margin-top: 1.5rem; scroll-margin-top: 4.5rem; }
+.builder .bctl { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+.builder input[type="search"] { min-width: 0; width: 16rem; max-width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .45rem .65rem; font: inherit; font-size: var(--s-1); }
+.builder .slot { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; color: var(--text); }
+.builder .slot.a { box-shadow: inset 0 -2px 0 var(--ct); }
+.builder .slot.b { box-shadow: inset 0 -2px 0 var(--t); }
+.builder .slots .slot img { margin-left: .15rem; }
 .rlist { display: grid; }
 .rlist a { display: grid; grid-template-columns: 1.6rem 1.35rem minmax(0, 1fr) auto; gap: .5rem; align-items: center; padding: .4rem .2rem; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
 .rlist a:last-child { border-bottom: 0; }
@@ -628,6 +637,29 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .splitfig { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .splitfig div { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: .75rem .85rem; display: grid; gap: .15rem; }
 .splitfig b { font-size: var(--s3); }
+/* track record: wide-screen layout */
+.page.rwide { max-width: 136rem; padding-inline: max(16px, 3vw); }
+body[data-w="wide"] .top-in { max-width: 84rem; }
+body[data-w="rwide"] .top-in { max-width: 136rem; padding-inline: max(16px, 3vw); }
+.rec-row3, .rec-quad { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.rec-splits { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.log .xw { display: none; }
+.log td.dt { white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (min-width: 761px) {
+  .rec-row3, .rec-quad { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rec-splits { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .rq-wide { grid-column: 1 / -1; }
+}
+@media (min-width: 1400px) {
+  .rec-row3 { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, .9fr); }
+  .rec-splits { grid-column: auto; grid-template-columns: minmax(0, 1fr); }
+  .log .xw { display: table-cell; }
+  .log .evd { display: none; }
+  .log td { padding-block: .45rem; }
+}
+@media (min-width: 1800px) {
+  .rec-quad { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 
 @media (max-width: 1080px) {
   .desk { grid-template-columns: minmax(0, 1fr); }
@@ -829,11 +861,23 @@ function lineupOf(team, e) {
 }
 
 /* ---------------- shared match widgets ---------------- */
+// The win bar animates only when what it shows changes (page, teams or series format);
+// tab switches, map clicks and other re-renders of the same matchup set it in place.
+let lastBarKey = null;
 function animateBars(root) {
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    root.querySelectorAll(".bar .fill").forEach(el => { el.style.width = el.dataset.w + "%"; });
-    root.querySelectorAll(".bar .band").forEach(el => { el.style.left = el.dataset.l + "%"; el.style.width = el.dataset.bw + "%"; });
-  }));
+  const key = `${location.hash || "#home"}|${PAIR ? PAIR.join("|") : ""}|${desk.bo}`;
+  const same = key === lastBarKey;
+  lastBarKey = key;
+  const els = [...root.querySelectorAll(".bar .fill, .bar .band")];
+  const set = () => els.forEach(el => {
+    if (el.classList.contains("fill")) el.style.width = el.dataset.w + "%";
+    else { el.style.left = el.dataset.l + "%"; el.style.width = el.dataset.bw + "%"; }
+  });
+  if (!same) { requestAnimationFrame(() => requestAnimationFrame(set)); return; }
+  els.forEach(el => { el.style.transition = "none"; });
+  set();
+  if (els.length) void els[0].offsetWidth;   // commit the final widths before transitions come back
+  requestAnimationFrame(() => els.forEach(el => { el.style.transition = ""; }));
 }
 
 function playedMaps(m) {
@@ -982,7 +1026,7 @@ const winOf = x => x.a > x.b;
 const scoreFrom = (x, forA) => forA ? `${x.a}-${x.b}` : `${x.b}-${x.a}`;
 
 /* ---------------- the matchup desk ---------------- */
-const desk = { a: null, b: null, feat: null, bo: 3, tab: "overview", spot: null, key: "" };
+const desk = { a: null, b: null, feat: null, bo: 3, tab: "overview", spot: null, key: "", next: "a", q: "" };
 const DTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-to-head"], ["pools", "Map pools"]];
 const bigPct = v => { const [i, d] = String(v).split("."); return `${i}<small>.${d}%</small>`; };
 
@@ -1014,9 +1058,17 @@ function tape(pred, a, b) {
   return `<div class="tape" style="--n:${steps.length}" role="group" aria-label="Veto, in order">${steps.map((s, i) => {
     const who = s.side === "A" ? a : s.side === "B" ? b : null;
     const cls = s.verb === "bans" ? "ban" : s.verb === "picks" ? "pick" : "dec";
-    const role = s.verb === "decider" ? "Decider" : `${who} ${s.verb === "bans" ? "ban" : "pick"}`;
+    const verb = s.verb === "decider" ? "Decider" : s.verb === "bans" ? "Ban" : "Pick";
+    const role = s.verb === "decider" ? "Decider" : `${who} ${verb.toLowerCase()}`;
+    const stat = (t, c) => {
+      const v = (T[t]?.maps || {})[s.map];
+      const txt = v && v[1] ? `${(v[0] * 100).toFixed(2)}% (${v[1]})` : "-";
+      const tip = v && v[1] ? `${(v[0] * 100).toFixed(2)}% won of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "no maps";
+      return `<span class="${c}" title="${esc(`${t} on ${s.map}, last 90 days: ${tip}`)}">${txt}</span>`;
+    };
     return `<button type="button" class="tm ${cls} ${s.side === "A" ? "sa" : s.side === "B" ? "sb" : ""}" data-spot="${esc(s.map)}" aria-pressed="${s.map === desk.spot}" style="${mapBg(s.map)}" title="${esc(role)}">
-      <span class="tn">${i + 1}</span><span><span class="tnm cond">${esc(s.map)}</span><span class="trole" style="display:block">${esc(role)}</span></span></button>`;
+      <span class="tn">${i + 1}</span><span><span class="tnm cond">${esc(s.map)}</span><span class="trole" style="display:block"><i>${verb}</i>${s.verb === "decider" ? "" : esc(who)}</span>
+      <span class="tst">${stat(a, "ct")}${stat(b, "t")}</span></span></button>`;
   }).join("")}</div>`;
 }
 
@@ -1110,8 +1162,25 @@ function verdictFor(m, pred) {
   return `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}: ${fav === w ? "" : "model had "}${esc(fav)} at ${fp}%</span>`;
 }
 
+const builderTiles = () => {
+  const q = desk.q.trim().toLowerCase();
+  const list = CMP_NAMES.filter(n => !q || n.toLowerCase().includes(q));
+  return list.map(n => pickTile(n, `data-dpick="${esc(n)}" ${n === desk.a ? 'data-slot="a"' : n === desk.b ? 'data-slot="b"' : ""} aria-pressed="${n === desk.a || n === desk.b}"`)).join("")
+    || `<p class="empty">No team matches "${esc(desk.q)}".</p>`;
+};
+function builder(showingFeat) {
+  const nx = desk.next === "b" ? `<span class="t">Team 2</span>` : `<span class="ct">Team 1</span>`;
+  return `<section class="panel builder" id="build" aria-label="Build a matchup">
+    <h2>Build a matchup <span class="dim">Next click sets ${nx}</span></h2>
+    <div class="bctl"><input type="search" id="dSearch" placeholder="Filter teams" aria-label="Filter teams" value="${esc(desk.q)}" autocomplete="off">
+      <button type="button" class="btn" id="exSwap">Swap teams</button>
+      ${featuredMatch() && !showingFeat ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>
+    <div class="picker" id="dGrid">${builderTiles()}</div>
+    <div class="slots"><span>Team 1 <span class="slot a">${logo(desk.a, "sm")}${esc(desk.a)}</span></span><span>Team 2 <span class="slot b">${logo(desk.b, "sm")}${esc(desk.b)}</span></span><span>Team 1 bans first in the simulated veto.</span></div>
+  </section>`;
+}
+
 function rail() {
-  const opts = sel => CMP_NAMES.map(n => `<option ${n === sel ? "selected" : ""}>${esc(n)}</option>`).join("");
   const f = featuredMatch();
   const showingFeat = f && desk.feat === f.id && desk.a === f.t1 && desk.b === f.t2;
   const top = NAMES.filter(n => T[n].vrs).slice(0, 8);
@@ -1121,9 +1190,8 @@ function rail() {
   const calls = callLog(), hits = calls.filter(c => c.hit).length;
   return `
   <section class="panel"><h2>Build a matchup</h2>
-    <label>Blue side<select id="exA" class="a">${opts(desk.a)}</select></label>
-    <label>Gold side<select id="exB" class="b">${opts(desk.b)}</select></label>
-    <div class="links"><button type="button" class="btn" id="exSwap">Swap sides</button>${f && !showingFeat ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>
+    <p class="small dim">Pick any two teams by logo and see the model's call.</p>
+    <div class="links"><button type="button" class="btn" data-tobuild="1">Build a matchup</button>${f && !showingFeat ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>
   </section>
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
     <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
@@ -1154,10 +1222,10 @@ function viewHome() {
     o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), verdict: verdictFor(m, pred), label: "Model's call for this match" };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
-    o = { label: "Model's call today", ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Your matchup</b><span>A hypothetical series on ratings as of ${fmtDate(DATA.as_of)}</span></span></span></div>` };
+    o = { label: "Model's call today" };
   }
   PAIR = [desk.a, desk.b];
-  return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>`;
+  return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder(isFeat)}`;
 }
 
 /* ---------------- tournaments index ---------------- */
@@ -1326,9 +1394,9 @@ function evMatchup(e) {
   const asof = e.status === "finished" ? `ratings as of ${fmtDate(e.start)}, the first day of the event` : `ratings as of ${fmtDate(DATA.as_of)}`;
   return `
   <section class="panel">
-    <h2>Pick two teams from ${esc(e.name)} <span class="dim">click a logo to set the ${s.next === "a" ? `<span class="ct">blue</span>` : `<span class="t">gold</span>`} side next</span></h2>
+    <h2>Pick two teams from ${esc(e.name)} <span class="dim">next click sets ${s.next === "a" ? `<span class="ct">Team 1</span>` : `<span class="t">Team 2</span>`}</span></h2>
     <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
-    <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap sides</button></div>
+    <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap teams</button></div>
   </section>
   ${matchDesk(pred, s.a, s.b, { ev: e, label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
     ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Hypothetical series</b><span>${asof}</span></span></span></div>` })}`;
@@ -1448,7 +1516,9 @@ function wilsonJS(k, n, z = 1.959964) {
   return [Math.max(0, c - h), Math.min(1, c + h)];
 }
 const acc2 = (h, n) => n ? (h / n * 100).toFixed(2) : "-";
-const rec = { ev: "", team: "", res: "", limit: 40 };
+/* numeric ISO dates on this page: days are already "YYYY-MM-DD"; trim any time part */
+const isoDate = s => String(s || "").slice(0, 10) || "-";
+const rec ={ ev: "", team: "", res: "", limit: 40 };
 const MIN_N = 8;
 const BUCKETS = [[.5, .6, "50-60%"], [.6, .7, "60-70%"], [.7, .8, "70-80%"], [.8, .9, "80-90%"], [.9, 1.01, "90% and up"]];
 
@@ -1487,7 +1557,7 @@ function calibChart(calls) {
 function timeChart(calls) {
   const n = calls.length, w = Math.max(10, Math.min(40, Math.floor(n / 5)));
   if (n < w + 2) return `<p class="empty">Not enough finished calls to draw a trend yet.</p>`;
-  const W = 520, H = 230, L = 44, R = 14, Tp = 14, B = 34;
+  const W = 520, H = 300, L = 44, R = 14, Tp = 14, B = 34;
   const pts = [];
   let h = 0;
   for (let i = 0; i < n; i++) {
@@ -1500,7 +1570,7 @@ function timeChart(calls) {
   let g = "";
   for (let v = lo; v <= 1.0001; v += .1) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
   let lastM = "", lastX = -1e9;
-  calls.forEach((c, i) => { const mo = c.day.slice(0, 7); if (mo !== lastM) { lastM = mo; if (x(i) - lastX < 30) return; lastX = x(i); g += `<text x="${x(i)}" y="${H - 12}" font-size="11" fill="var(--dim)">${MONTHS[+mo.slice(5) - 1]}</text><line x1="${x(i)}" x2="${x(i)}" y1="${H - B}" y2="${H - B + 4}" stroke="var(--dim)"/>`; } });
+  calls.forEach((c, i) => { const mo = c.day.slice(0, 7); if (mo !== lastM) { lastM = mo; if (x(i) - lastX < 50 || x(i) > W - R - 40) return; lastX = x(i); g += `<text x="${x(i)}" y="${H - 12}" font-size="11" fill="var(--dim)">${mo}</text><line x1="${x(i)}" x2="${x(i)}" y1="${H - B}" y2="${H - B + 4}" stroke="var(--dim)"/>`; } });
   g += `<line x1="${L}" x2="${W - R}" y1="${y(all)}" y2="${y(all)}" stroke="var(--dim)" stroke-dasharray="5 5"/><text x="${L + 6}" y="${Tp + 12}" font-size="11" fill="var(--dim)">Dashed line: whole season, ${(all * 100).toFixed(2)}%</text>`;
   const line = pts.map(([i, v]) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
   g += `<polygon points="${x(pts[0][0])},${H - B} ${line} ${x(pts[pts.length - 1][0])},${H - B}" fill="var(--win)" fill-opacity=".1"/>`;
@@ -1508,7 +1578,14 @@ function timeChart(calls) {
   const lp = pts[pts.length - 1];
   g += `<circle cx="${x(lp[0])}" cy="${y(lp[1])}" r="4" fill="var(--win)"/>`;
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Share right over the last ${w} calls through the season; latest ${(lp[1] * 100).toFixed(2)}%">${g}</svg>
-    <p class="small dim">Share of the last ${w} calls that were right, after each match. Latest: ${(lp[1] * 100).toFixed(2)}%.</p>`;
+    <p class="small dim">Share of the last ${w} calls that were right, after each match. Latest: ${(lp[1] * 100).toFixed(2)}%.</p>${monthTable(calls)}`;
+}
+
+function monthTable(calls) {
+  const by = new Map();
+  for (const c of calls) { const mo = c.day.slice(0, 7) || "-", r = by.get(mo) || { n: 0, h: 0 }; r.n++; r.h += c.hit; by.set(mo, r); }
+  return `<div class="tablewrap"><table><thead><tr><th>Month</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th></tr></thead><tbody>
+    ${[...by].map(([mo, r]) => `<tr><td>${esc(mo)}</td><td class="n">${r.n}</td><td class="n">${r.h}</td><td class="n">${acc2(r.h, r.n)}%</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function leaderboard(calls) {
@@ -1521,15 +1598,15 @@ function leaderboard(calls) {
     <span class="rec">${r.h} of ${r.n}</span><span class="v">${acc2(r.h, r.n)}%</span>
     <span class="trk" title="Range consistent with ${r.n} calls: ${(lo * 100).toFixed(2)}% to ${(hi * 100).toFixed(2)}%"><span class="ci" style="left:${(lo * 100).toFixed(1)}%;width:${((hi - lo) * 100).toFixed(1)}%"></span><span class="pt" style="left:${(r.h / r.n * 100).toFixed(1)}%"></span></span></div>`; };
   const note = `<p class="small dim">Teams with at least ${MIN_N} calls. The pale band is the range that record is consistent with: the fewer the calls, the wider it gets.</p>`;
-  return rows.length ? `<div class="grid2">
+  return rows.length ? `
     <section class="panel"><h2>Reads best <span class="dim">share of calls involving the team that were right</span></h2><div class="lb best">${best.map(row).join("")}</div>${note}</section>
-    <section class="panel"><h2>Keeps it guessing <span class="dim">lowest share of right calls</span></h2><div class="lb worst">${worst.map(row).join("")}</div>${note}</section></div>`
-    : `<section class="panel"><h2>Teams</h2><p class="empty">No team has ${MIN_N} calls yet.</p></section>`;
+    <section class="panel"><h2>Keeps it guessing <span class="dim">lowest share of right calls</span></h2><div class="lb worst">${worst.map(row).join("")}</div>${note}</section>`
+    : `<section class="panel rq-wide"><h2>Teams</h2><p class="empty">No team has ${MIN_N} calls yet.</p></section>`;
 }
 
 function callCard(c, line) {
   return `<a class="callcard" href="#m-${c.id}"><span><b>${esc(line)}</b></span><span class="big cond">${c.score}</span>
-    <span class="dim">${esc(c.e.name)}, ${esc(c.stage)}, ${fmtDate(c.day)}. Model: ${esc(c.pick)} ${c.pickShown}%${c.pickElo != null ? `, rated ${c.pickElo} against ${c.oppElo}` : ""}</span></a>`;
+    <span class="dim">${esc(c.e.name)}, ${esc(c.stage)}, ${isoDate(c.day)}. Model: ${esc(c.pick)} ${c.pickShown}%${c.pickElo != null ? `, rated ${c.pickElo} against ${c.oppElo}` : ""}</span></a>`;
 }
 
 function viewRecord() {
@@ -1557,39 +1634,40 @@ function viewRecord() {
   </div>
   <section class="board" aria-label="Headline numbers">
     <div class="first"><span class="lbl">Winners called right</span><span class="num cond">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span></div>
-    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${fmtDate(calls[0].day)} to ${fmtDate(calls[n - 1].day)}</span></div>
+    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span></div>
     <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last 20 calls, oldest first:</span>
       <span class="streak">${calls.slice(-20).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
   </section>
-  <div class="grid2" style="align-items:start">
+  <div class="rec-row3">
     <section class="panel"><h2>When it says 75%, does it win 75%? <span class="dim">dots inside the pale band are within 10 points; each bar is the range for that many calls</span></h2>${calibChart(calls)}</section>
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
+    <div class="rec-splits">
+      <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
+        <div class="splitfig">
+          <div><span class="small dim">Backed the higher-rated team</span><b class="cond">${acc2(fh, fav.length)}%</b><span class="small dim">${fh} of ${fav.length} right</span></div>
+          <div><span class="small dim">Backed the lower-rated team</span><b class="cond">${acc2(dh, dog.length)}%</b><span class="small dim">${dh} of ${dog.length} right</span></div>
+        </div></section>
+      <section class="panel"><h2>By tournament</h2><div class="tablewrap"><table><thead><tr><th>Tournament</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th></tr></thead><tbody>
+        ${evs.map(e => { const cs = calls.filter(c => c.e.slug === e.slug), h = cs.filter(c => c.hit).length; return `<tr><td><a href="#e-${e.slug}">${esc(e.name)}</a></td><td class="n">${cs.length}</td><td class="n">${h}</td><td class="n">${acc2(h, cs.length)}%</td></tr>`; }).join("")}
+      </tbody></table></div></section>
+    </div>
   </div>
   <section class="panel"><h2>Every call <span class="dim">showing ${Math.min(rec.limit, list.length)} of ${list.length}, ${lh} right</span></h2>
     <div class="filters">${sel("ev", "Tournament", evs.map(e => [e.slug, e.name]))}${sel("team", "Team", teams.map(t => [t, t]))}${sel("res", "Result", [["hit", "Right"], ["miss", "Wrong"]])}</div>
-    <div class="tablewrap"><table class="log"><thead><tr><th>Date</th><th>Match</th><th>Model's pick</th><th>Predicted</th><th>Result</th><th></th></tr></thead><tbody>
+    <div class="tablewrap"><table class="log"><thead><tr><th>Date</th><th class="xw">Tournament</th><th>Match</th><th>Model's pick</th><th>Predicted</th><th>Result</th><th></th></tr></thead><tbody>
       ${list.slice(0, rec.limit).map(c => `<tr>
-        <td>${fmtDay(c.day)}<span class="ev">${esc(c.e.name)}</span></td>
+        <td class="dt">${isoDate(c.day)}<span class="ev evd">${esc(c.e.name)}</span></td>
+        <td class="xw"><a href="#e-${c.e.slug}">${esc(c.e.name)}</a><span class="ev">${esc(c.stage || "")}</span></td>
         <td><a href="#m-${c.id}" style="display:grid;gap:.15rem">${tl(c.a, c.w === c.a)}${tl(c.b, c.w === c.b)}</a></td>
         <td><span class="tl won">${logo(c.pick, "sm")}${esc(c.pick)}</span><span class="ev">${c.pickShown}%</span></td>
         <td>${esc(c.predTeam)} ${c.predScore}</td>
         <td>${esc(c.w)} ${c.score}</td>
-        <td><span class="hm ${c.hit ? "h" : "m"}">${c.hit ? "Right" : "Wrong"}</span></td></tr>`).join("") || `<tr><td colspan="6" class="empty">No calls match these filters. Clear one to see more.</td></tr>`}
+        <td><span class="hm ${c.hit ? "h" : "m"}">${c.hit ? "Right" : "Wrong"}</span></td></tr>`).join("") || `<tr><td colspan="7" class="empty">No calls match these filters. Clear one to see more.</td></tr>`}
     </tbody></table></div>
     ${list.length > rec.limit ? `<button type="button" class="btn" data-more="1">Show ${Math.min(40, list.length - rec.limit)} more</button>` : ""}
   </section>
-  ${leaderboard(calls)}
-  <div class="grid2">
-    <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
-      <div class="splitfig">
-        <div><span class="small dim">Backed the higher-rated team</span><b class="cond">${acc2(fh, fav.length)}%</b><span class="small dim">${fh} of ${fav.length} right</span></div>
-        <div><span class="small dim">Backed the lower-rated team</span><b class="cond">${acc2(dh, dog.length)}%</b><span class="small dim">${dh} of ${dog.length} right</span></div>
-      </div></section>
-    <section class="panel"><h2>By tournament</h2><div class="tablewrap"><table><thead><tr><th>Tournament</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th></tr></thead><tbody>
-      ${evs.map(e => { const cs = calls.filter(c => c.e.slug === e.slug), h = cs.filter(c => c.hit).length; return `<tr><td><a href="#e-${e.slug}">${esc(e.name)}</a></td><td class="n">${cs.length}</td><td class="n">${h}</td><td class="n">${acc2(h, cs.length)}%</td></tr>`; }).join("")}
-    </tbody></table></div></section>
-  </div>
-  <div class="grid2">
+  <div class="rec-quad">
+    ${leaderboard(calls)}
     <section class="panel"><h2>Best calls <span class="dim">backed the lower-rated team, and it won</span></h2>
       <div class="callcards">${hitsDog.map(c => callCard(c, `${c.pick} over ${c.opp}`)).join("") || `<p class="empty">The model hasn't backed a lower-rated team that went on to win yet.</p>`}</div></section>
     <section class="panel"><h2>Worst misses <span class="dim">the most confident picks that lost</span></h2>
@@ -1597,7 +1675,7 @@ function viewRecord() {
   </div>
   <footer class="foot">
     <p>Fan analytics only. Ratings are rebuilt from Liquipedia results. Tournaments, lineups, logos, map images and results come from Liquipedia (text CC BY-SA 3.0); logos and map art belong to their owners.</p>
-    <p>Snapshot ${fmtDate(DATA.as_of)}.</p>
+    <p>Snapshot ${isoDate(DATA.as_of)}.</p>
   </footer>`;
 }
 
@@ -1615,6 +1693,9 @@ function route() {
   else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = viewEvent(slug, sub); tab = "events"; }
   else html = viewHome();
   $("#view").classList.toggle("wide", !h || h === "home" || h === "compare");
+  $("#view").classList.toggle("rwide", h === "record");
+  // the top bar follows the page width so its edges line up with the content
+  document.body.dataset.w = h === "record" ? "rwide" : (!h || h === "home" || h === "compare") ? "wide" : "";
   const v = $("#view");
   v.innerHTML = html;
   applyPair(v);
@@ -1645,7 +1726,15 @@ document.addEventListener("click", e => {
   if (dt) { desk.tab = dt.dataset.dtab; rerender(); return; }
   const sp = e.target.closest("[data-spot]");
   if (sp) { desk.spot = sp.dataset.spot; rerender(); return; }
-  if (e.target.closest("#exSwap")) { [desk.a, desk.b] = [desk.b, desk.a]; rerender(); return; }
+  if (e.target.closest("#exSwap")) { [desk.a, desk.b] = [desk.b, desk.a]; desk.feat = null; rerender(); return; }
+  if (e.target.closest("[data-tobuild]")) { const bs = $("#build"); if (bs) { bs.scrollIntoView({ behavior: "smooth", block: "start" }); const q = $("#dSearch"); if (q) q.focus({ preventScroll: true }); } return; }
+  const dp = e.target.closest(".pick[data-dpick]");
+  if (dp) {
+    const t = dp.dataset.dpick;
+    if (desk.next === "a") { if (t !== desk.b) desk.a = t; else [desk.a, desk.b] = [desk.b, desk.a]; desk.next = "b"; }
+    else { if (t !== desk.a) desk.b = t; else [desk.a, desk.b] = [desk.b, desk.a]; desk.next = "a"; }
+    desk.feat = null; rerender(); return;
+  }
   if (e.target.closest("[data-feat]")) { desk.a = desk.b = null; rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
   const ep = e.target.closest(".pick[data-epick]");
@@ -1671,13 +1760,13 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.id === "exA" || t.id === "exB") {
-    const v = t.value, other = t.id === "exA" ? desk.b : desk.a;
-    if (v === other) [desk.a, desk.b] = [desk.b, desk.a];
-    else if (t.id === "exA") desk.a = v; else desk.b = v;
-    rerender(); return;
-  }
   if (t.dataset && t.dataset.rf) { rec[t.dataset.rf] = t.value; rec.limit = 40; rerender(); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id !== "dSearch") return;
+  desk.q = e.target.value;
+  const g = $("#dGrid");
+  if (g) g.innerHTML = builderTiles();
 });
 
 document.addEventListener("pointermove", e => {

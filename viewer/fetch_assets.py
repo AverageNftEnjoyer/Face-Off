@@ -51,6 +51,12 @@ ICON_OVERRIDES = {
     "FURIA": "FURIA Esports allmode.png",
     "Team Falcons": "Team Falcons 2022 allmode.png",
     "Legacy": "Legacy allmode.png",
+    # Liquipedia has no text-free icon under the infobox file name for these two;
+    # use their emblem files (no wordmark) instead
+    "G2 Esports": "G2 Esports 2020 lightmode.png",
+    "Team Vitality": "Team Vitality 2023 darkmode.png",
+    "HEROIC": "HEROIC 2024 allmode.png",
+    "Luminosity Gaming": "Luminosity Gaming 2018 allmode.png",
 }
 _last_dl = [0.0]
 
