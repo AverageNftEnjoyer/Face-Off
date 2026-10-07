@@ -888,7 +888,7 @@ def predict_match(m):
     # weights are fitted on BO3 results). The same per-map edge q is worth less
     # over one map and more over five: q = the flat per-map chance that gives
     # p_a over a BO3, then BO1 P(A) = q and BO5 P(A) = P(win 3 of 5 at q).
-    # Checked on real series (scripts/format_odds.py): on 226 BO1s the
+    # Checked on real series (scripts/series_length_check.py): on 226 BO1s the
     # favourite won 60.2%; the BO3 number said 66.0%, this says 61.1%, and a
     # logit scale fitted freely on half the BO1s (0.64) matches the one this
     # implies (0.66). On 44 BO5s it says 73.2% against 72.7% actual (too few to

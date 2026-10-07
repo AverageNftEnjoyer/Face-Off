@@ -142,6 +142,21 @@ def event_teams():
     return sorted(alias.get(c, c) for c in codes)
 
 
+def cached_imageinfo(width):
+    """Every cached imageinfo response at this thumbnail width, newest fetch
+    last. Offline runs read files from these whatever batch they were fetched
+    in (a shorter team list shifts the batches of 50, and so the cache keys)."""
+    out = []
+    if os.path.isdir(lpfetch.CACHE):
+        for fn in os.listdir(lpfetch.CACHE):
+            with open(os.path.join(lpfetch.CACHE, fn), encoding="utf-8") as f:
+                rec = json.load(f)
+            url = rec.get("url", "")
+            if "prop=imageinfo" in url and f"iiurlwidth={width}&" in url + "&":
+                out.append(rec)
+    return [r["response"] for r in sorted(out, key=lambda r: r.get("fetched", ""))]
+
+
 def imageinfo(files, width):
     """{file title: thumb url} for File: names, one API call per 50."""
     out = {}
@@ -150,16 +165,32 @@ def imageinfo(files, width):
                               "iiurlwidth": str(width), "redirects": "1",
                               "titles": "|".join("File:" + f for f in b)}, offline=OFFLINE)
         if resp is None:
-            raise SystemExit("offline: imageinfo not cached for %r" % b)
-        q = resp.get("query", {})
-        norm = {n["to"]: n["from"] for n in q.get("normalized", [])}
-        for p in q.get("pages", {}).values():
-            ii = (p.get("imageinfo") or [{}])[0]
-            url = ii.get("thumburl") or ii.get("url")
-            if url:
-                title = norm.get(p["title"], p["title"])
-                out[title[len("File:"):]] = url
-                out[p["title"][len("File:"):]] = url
+            # offline batch miss: answer from every cached response at this width
+            seen = {}
+            for r in cached_imageinfo(width):
+                seen.update(_imageinfo_urls(r))
+            missing = [f for f in b if f not in seen]
+            if missing:
+                raise SystemExit("offline: imageinfo not cached for %r" % missing)
+            out.update({f: seen[f] for f in b if seen[f]})
+            continue
+        out.update({k: v for k, v in _imageinfo_urls(resp).items() if v})
+    return out
+
+
+def _imageinfo_urls(resp):
+    """{file title (as requested and as resolved): thumb url, or None for a
+    file the response says does not exist} from one imageinfo response."""
+    out = {}
+    q = resp.get("query", {})
+    norm = {n["to"]: n["from"] for n in q.get("normalized", [])}
+    for p in q.get("pages", {}).values():
+        ii = (p.get("imageinfo") or [{}])[0]
+        url = ii.get("thumburl") or ii.get("url")
+        title = norm.get(p["title"], p["title"])
+        for t in (title, p["title"]):
+            if url or not out.get(t[len("File:"):]):
+                out[t[len("File:"):]] = url
     return out
 
 

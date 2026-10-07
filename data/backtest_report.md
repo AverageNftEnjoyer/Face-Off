@@ -4,122 +4,122 @@ Fan analytics only. Real Liquipedia results (data/SOURCES.md). Ratings are a poi
 
 ## Data
 
-- series: 5551 ({'1': 562, '3': 4921, '5': 68}) from 2023-10-16 to 2026-10-07, 419 teams
-- BO3 series: 4921; excluded (either team < 5 prior series): 1278
-- evaluated: 3643 -> train 2187 (2023-10-22..2026-04-25), test 1456 (2026-04-26..2026-10-06)
-- |rating gap| quantiles (proxy scale): q25=0.014, q50=0.030, q75=0.055, q90=0.087
+- series: 2393 ({'1': 361, '3': 1980, '5': 52}) from 2023-10-16 to 2026-10-06, 110 teams
+- BO3 series: 1980; excluded (either team < 5 prior series): 324
+- evaluated: 1656 -> train 998 (2023-10-22..2025-11-05), test 658 (2025-11-07..2026-10-06)
+- |rating gap| quantiles (proxy scale): q25=0.018, q50=0.040, q75=0.075, q90=0.115
 
 ## Temperature (fitted on train only)
 
-- T = **0.911** (engine CONFIG['temperature'] fitted on total_logodds (train))
-- train log-loss: T=1 0.6454 -> fitted 0.6450
+- T = **0.970** (engine CONFIG['temperature'] fitted on total_logodds (train))
+- train log-loss: T=1 0.6289 -> fitted 0.6288
 
 ## Test-set metrics
 
 | model | n | accuracy [95% Wilson] | Brier [95% boot] | log-loss [95% boot] | ECE10 | scoreline acc |
 |---|---|---|---|---|---|---|
-| coin_flip | 1456 | 0.500 [0.474, 0.526] | 0.2500 [0.2500, 0.2500] | 0.6931 [0.6931, 0.6931] | 0.0721 | - |
-| elo_only | 1456 | 0.598 [0.572, 0.622] | 0.2334 [0.2276, 0.2395] | 0.6589 [0.6464, 0.6720] | 0.0447 | - |
-| higher_elo_pick | 1456 | 0.598 [0.572, 0.622] | n/a | n/a | n/a | - |
-| old_engine_v1 | 1456 | 0.566 [0.540, 0.591] | 0.3324 [0.3135, 0.3518] | 1.4080 [1.2426, 1.5826] | 0.2731 | 0.267 |
-| old_engine_v1_posthoc_T | 1456 | 0.566 [0.540, 0.591] | 0.2457 [0.2409, 0.2506] | 0.6868 [0.6757, 0.6983] | 0.0649 | - |
-| new_engine | 1456 | 0.597 [0.571, 0.622] | 0.2335 [0.2270, 0.2404] | 0.6591 [0.6452, 0.6739] | 0.0472 | 0.341 |
-| new_engine_T1 | 1456 | 0.597 [0.571, 0.622] | 0.2340 [0.2270, 0.2414] | 0.6603 [0.6451, 0.6764] | 0.0495 | 0.343 |
+| coin_flip | 658 | 0.500 [0.462, 0.538] | 0.2500 [0.2500, 0.2500] | 0.6931 [0.6931, 0.6931] | 0.0486 | - |
+| elo_only | 658 | 0.646 [0.609, 0.681] | 0.2166 [0.2039, 0.2295] | 0.6232 [0.5946, 0.6533] | 0.0269 | - |
+| higher_elo_pick | 658 | 0.646 [0.609, 0.681] | n/a | n/a | n/a | - |
+| old_engine_v1 | 658 | 0.568 [0.530, 0.606] | 0.3182 [0.2907, 0.3452] | 1.1048 [0.9665, 1.2557] | 0.2677 | 0.260 |
+| old_engine_v1_posthoc_T | 658 | 0.568 [0.530, 0.606] | 0.2369 [0.2298, 0.2438] | 0.6649 [0.6489, 0.6803] | 0.0430 | - |
+| new_engine | 658 | 0.640 [0.602, 0.676] | 0.2165 [0.2031, 0.2302] | 0.6219 [0.5924, 0.6525] | 0.0420 | 0.375 |
+| new_engine_T1 | 658 | 0.640 [0.602, 0.676] | 0.2167 [0.2030, 0.2307] | 0.6224 [0.5918, 0.6536] | 0.0437 | 0.377 |
 
-Notes: coin flip accuracy is credited 0.5 per series by definition. higher_elo_pick is a hard pick (accuracy only). old_engine_v1_posthoc_T is a diagnostic, not the shipped old engine. Scoreline acc = modal BO3 scoreline from series_probs vs actual (test base rates: 2-0 0.34, 2-1 0.23, 1-2 0.20, 0-2 0.23).
+Notes: coin flip accuracy is credited 0.5 per series by definition. higher_elo_pick is a hard pick (accuracy only). old_engine_v1_posthoc_T is a diagnostic, not the shipped old engine. Scoreline acc = modal BO3 scoreline from series_probs vs actual (test base rates: 2-0 0.32, 2-1 0.23, 1-2 0.19, 0-2 0.26).
 
 ## Paired Brier differences (test, 95% paired bootstrap; negative = first model better)
 
-- new_engine - elo_only: +0.0001 [-0.0011, +0.0013]; log-loss diff +0.0002
-- new_engine - old_engine_v1: -0.0989 [-0.1148, -0.0832]; log-loss diff -0.7489
-- old_engine_v1 - elo_only: +0.0990 [+0.0827, +0.1155]; log-loss diff +0.7491
-- new_engine - coin_flip: -0.0165 [-0.0230, -0.0096]; log-loss diff -0.0340
+- new_engine - elo_only: -0.0001 [-0.0026, +0.0024]; log-loss diff -0.0013
+- new_engine - old_engine_v1: -0.1017 [-0.1250, -0.0791]; log-loss diff -0.4829
+- old_engine_v1 - elo_only: +0.1016 [+0.0786, +0.1250]; log-loss diff +0.4816
+- new_engine - coin_flip: -0.0335 [-0.0469, -0.0198]; log-loss diff -0.0712
 
 ## Reliability table: new_engine (P(team_a) bins)
 
 | bin | n | mean pred | actual |
 |---|---|---|---|
 | 0.0-0.1 | 0 | - | - |
-| 0.1-0.2 | 6 | 0.194 | 0.500 |
-| 0.2-0.3 | 73 | 0.253 | 0.260 |
-| 0.3-0.4 | 187 | 0.358 | 0.401 |
-| 0.4-0.5 | 326 | 0.456 | 0.555 |
-| 0.5-0.6 | 382 | 0.551 | 0.586 |
-| 0.6-0.7 | 302 | 0.646 | 0.659 |
-| 0.7-0.8 | 164 | 0.753 | 0.713 |
-| 0.8-0.9 | 16 | 0.805 | 0.938 |
+| 0.1-0.2 | 20 | 0.188 | 0.250 |
+| 0.2-0.3 | 68 | 0.247 | 0.265 |
+| 0.3-0.4 | 74 | 0.355 | 0.365 |
+| 0.4-0.5 | 90 | 0.446 | 0.511 |
+| 0.5-0.6 | 115 | 0.549 | 0.470 |
+| 0.6-0.7 | 107 | 0.650 | 0.664 |
+| 0.7-0.8 | 109 | 0.760 | 0.706 |
+| 0.8-0.9 | 75 | 0.811 | 0.840 |
 | 0.9-1.0 | 0 | - | - |
 
 ## Reliability table: old_engine_v1 (P(team_a) bins)
 
 | bin | n | mean pred | actual |
 |---|---|---|---|
-| 0.0-0.1 | 293 | 0.031 | 0.498 |
-| 0.1-0.2 | 120 | 0.148 | 0.567 |
-| 0.2-0.3 | 79 | 0.256 | 0.532 |
-| 0.3-0.4 | 68 | 0.344 | 0.397 |
-| 0.4-0.5 | 92 | 0.457 | 0.522 |
-| 0.5-0.6 | 81 | 0.547 | 0.568 |
-| 0.6-0.7 | 91 | 0.648 | 0.473 |
-| 0.7-0.8 | 98 | 0.749 | 0.602 |
-| 0.8-0.9 | 136 | 0.850 | 0.625 |
-| 0.9-1.0 | 398 | 0.969 | 0.676 |
+| 0.0-0.1 | 103 | 0.032 | 0.427 |
+| 0.1-0.2 | 72 | 0.142 | 0.528 |
+| 0.2-0.3 | 42 | 0.254 | 0.524 |
+| 0.3-0.4 | 34 | 0.352 | 0.382 |
+| 0.4-0.5 | 36 | 0.449 | 0.556 |
+| 0.5-0.6 | 34 | 0.558 | 0.529 |
+| 0.6-0.7 | 38 | 0.647 | 0.500 |
+| 0.7-0.8 | 43 | 0.746 | 0.465 |
+| 0.8-0.9 | 66 | 0.851 | 0.485 |
+| 0.9-1.0 | 190 | 0.967 | 0.711 |
 
 ## Reliability table: elo_only (P(team_a) bins)
 
 | bin | n | mean pred | actual |
 |---|---|---|---|
 | 0.0-0.1 | 1 | 0.063 | 0.000 |
-| 0.1-0.2 | 5 | 0.180 | 0.200 |
-| 0.2-0.3 | 42 | 0.254 | 0.238 |
-| 0.3-0.4 | 165 | 0.360 | 0.406 |
-| 0.4-0.5 | 370 | 0.455 | 0.527 |
-| 0.5-0.6 | 455 | 0.548 | 0.589 |
-| 0.6-0.7 | 293 | 0.641 | 0.669 |
-| 0.7-0.8 | 99 | 0.739 | 0.758 |
-| 0.8-0.9 | 21 | 0.851 | 0.810 |
-| 0.9-1.0 | 5 | 0.928 | 0.800 |
+| 0.1-0.2 | 21 | 0.154 | 0.143 |
+| 0.2-0.3 | 43 | 0.263 | 0.302 |
+| 0.3-0.4 | 73 | 0.353 | 0.342 |
+| 0.4-0.5 | 120 | 0.448 | 0.467 |
+| 0.5-0.6 | 133 | 0.550 | 0.519 |
+| 0.6-0.7 | 120 | 0.646 | 0.658 |
+| 0.7-0.8 | 83 | 0.751 | 0.735 |
+| 0.8-0.9 | 50 | 0.845 | 0.900 |
+| 0.9-1.0 | 14 | 0.926 | 0.714 |
 
 ## Reliability tiers / bands: new_engine
 
 | tier | n | accuracy | Brier | mean band width pp | mean conf |
 |---|---|---|---|---|---|
-| HIGH | 672 | 0.610 | 0.2283 | 26.7 | 0.637 |
-| MEDIUM | 386 | 0.578 | 0.2430 | 31.4 | 0.609 |
-| LOW | 398 | 0.593 | 0.2333 | 38.1 | 0.591 |
+| HIGH | 312 | 0.702 | 0.1923 | 26.5 | 0.711 |
+| MEDIUM | 178 | 0.635 | 0.2264 | 31.3 | 0.650 |
+| LOW | 168 | 0.530 | 0.2508 | 38.0 | 0.618 |
 
 Band-width quartiles (does a wider band mean a harder-to-call match?):
 
 | quartile | n | width pp range | Brier | accuracy |
 |---|---|---|---|---|
-| Q1 | 364 | 20.9-27.0 | 0.2268 | 0.626 |
-| Q2 | 364 | 27.0-29.9 | 0.2283 | 0.602 |
-| Q3 | 364 | 29.9-34.1 | 0.2466 | 0.569 |
-| Q4 | 364 | 34.1-56.7 | 0.2324 | 0.591 |
+| Q1 | 164 | 21.3-26.7 | 0.1885 | 0.720 |
+| Q2 | 165 | 26.7-29.8 | 0.1978 | 0.679 |
+| Q3 | 164 | 29.8-33.7 | 0.2285 | 0.634 |
+| Q4 | 165 | 33.7-52.6 | 0.2510 | 0.527 |
 
 ## Reliability tiers / bands: old_engine_v1
 
 | tier | n | accuracy | Brier | mean band width pp | mean conf |
 |---|---|---|---|---|---|
 | HIGH | 0 | - | - | - | - |
-| MEDIUM | 111 | 0.532 | 0.2900 | 35.6 | 0.678 |
-| LOW | 1345 | 0.569 | 0.3359 | 56.8 | 0.849 |
+| MEDIUM | 45 | 0.578 | 0.2926 | 36.5 | 0.711 |
+| LOW | 613 | 0.568 | 0.3200 | 56.8 | 0.845 |
 
 Band-width quartiles (does a wider band mean a harder-to-call match?):
 
 | quartile | n | width pp range | Brier | accuracy |
 |---|---|---|---|---|
-| Q1 | 364 | 25.5-48.6 | 0.2733 | 0.585 |
-| Q2 | 364 | 48.6-57.5 | 0.3095 | 0.588 |
-| Q3 | 364 | 57.5-64.0 | 0.3524 | 0.555 |
-| Q4 | 364 | 64.0-64.0 | 0.3944 | 0.536 |
+| Q1 | 164 | 30.4-49.9 | 0.2578 | 0.616 |
+| Q2 | 165 | 50.0-57.3 | 0.2795 | 0.582 |
+| Q3 | 164 | 57.4-64.0 | 0.3514 | 0.524 |
+| Q4 | 165 | 64.0-64.0 | 0.3838 | 0.552 |
 
 ## Overconfidence check (outputs >= 90% or <= 10%)
 
-- old_engine_v1 (test): 691 series (47.5%), hit-rate 0.602, mean stated conf 0.969
+- old_engine_v1 (test): 293 series (44.5%), hit-rate 0.662, mean stated conf 0.967
 - new_engine (test): 0 series (0.0%), hit-rate -, mean stated conf -
-- elo_only (test): 6 series (0.4%), hit-rate 0.833, mean stated conf 0.929
-- old_engine_v1 (all 3643 eval series): 1703 (46.7%), hit-rate 0.615, mean stated conf 0.968
+- elo_only (test): 15 series (2.3%), hit-rate 0.733, mean stated conf 0.927
+- old_engine_v1 (all 1656 eval series): 711 (42.9%), hit-rate 0.640, mean stated conf 0.967
 
 ## Feature derivation (point-in-time, only series dated strictly before the match day)
 

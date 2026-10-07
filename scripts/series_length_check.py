@@ -3,7 +3,7 @@ against real BO1 and BO5 results, as is and converted by series-length maths
 (q = the per-map chance that gives the BO3 number; BO1 = q, BO5 = win 3 of 5
 at q), plus a logit scale fitted on the first half of each format.
 
-Run from the repo root:  python scripts/format_odds.py [matches.json]
+Run from the repo root:  python scripts/series_length_check.py [matches.json]
 """
 import math
 import os

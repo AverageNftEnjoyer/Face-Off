@@ -3,22 +3,22 @@
 Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.yml).
 
 1. Discover new tournament pages. Main source: Liquipedia's tier categories
-   ("S-Tier Tournaments", "A-Tier Tournaments", "B-Tier Tournaments"), newest
-   additions first (one request per tier per run). A candidate is kept only
-   when its own infobox says S/A/B tier (`liquipediatier`), it is not a
+   ("S-Tier Tournaments", "A-Tier Tournaments"), newest additions first (one
+   request per tier per run). B-tier and lower are not tracked. A candidate is
+   kept only when its own infobox says S or A tier (`liquipediatier`), it is not a
    qualifier / showmatch / weekly / monthly / misc / points-circuit page
    (`liquipediatiertype`), it starts this year or next and it lasts at most
    events.MAX_DAYS days. A tiered sub-page of another event that is dated
    apart from it (ESL Challenger League cups, Thunderpick regional events)
    feeds that event and is skipped like a qualifier. Stage sub-pages ("<event>/Stage 1") come from one
    `allpages` listing per parent path. Second source (unchanged): `allpages`
-   listings for the tracked series. Main events and their stage pages are
+   listings for the tracked series (a page there whose own infobox names a
+   tier below A is dropped). Main events and their stage pages are
    appended to data/raw/lp_titles_selected.txt.
 2. Mark pages that can still change as stale for this run: every live
    tournament, anything that ended in the last REFRESH_DAYS days or starts in
    the next AHEAD_DAYS days, their stage pages, and the team pages of every
-   team in the S/A-tier ones (rosters, stand-ins, logos; a B-tier team's page
-   is read once, when it first appears). Everything else keeps being
+   team in them (rosters, stand-ins, logos). Everything else keeps being
    served from the cache.
 3. Rebuild, in order: data/matches.json (collect_liquipedia), data/
    roster_events.json (rosters), viewer/assets.json + new images
@@ -50,8 +50,9 @@ event_info, is_stage, SKIP_TIERTYPES = E.event_info, E.is_stage, E.SKIP_TIERTYPE
 
 REFRESH_DAYS = 3
 AHEAD_DAYS = 14        # upcoming events are re-read once they are this close
-TIER_CATEGORIES = {"S": "Category:S-Tier Tournaments", "A": "Category:A-Tier Tournaments",
-                   "B": "Category:B-Tier Tournaments"}
+# only S- and A-tier tournaments are tracked
+TIERS = ("S", "A")
+TIER_CATEGORIES = {"S": "Category:S-Tier Tournaments", "A": "Category:A-Tier Tournaments"}
 YEAR_RE = re.compile(r"(?<!\d)(19|20)\d\d(?!\d)")
 SERIES = ["Intel Extreme Masters/{y}", "BLAST/Premier/{y}", "BLAST/Open/{y}", "BLAST/Rivals/{y}",
           "BLAST/Bounty/{y}", "PGL/{y}", "StarLadder/StarSeries/{y}", "Thunderpick/World Championship/{y}",
@@ -85,7 +86,7 @@ def wanted(title, series_root, stage=False):
 
 
 def tier_members(full=False, refresh=True):
-    """[(tier letter, title, added timestamp)] from the S/A/B tier categories,
+    """[(tier letter, title, added timestamp)] from the S/A tier categories,
     newest additions first. full=False reads one page (500) per tier, enough
     for everything added since the previous run; full=True pages through the
     whole category (used once to backfill)."""
@@ -122,11 +123,11 @@ def tier_candidates(members, years, since):
 
 
 def is_main_event(info, years):
-    """S/A/B-tier, not a qualifier / showmatch / weekly / monthly / misc /
+    """S/A-tier, not a qualifier / showmatch / weekly / monthly / misc /
     points page, starting in one of `years` and no longer than MAX_DAYS.
     Undated pages wait (they are read again on later runs)."""
     tier, ttype, sd, ed = info
-    if tier not in ("S", "A", "B") or ttype.lower() in SKIP_TIERTYPES:
+    if tier not in TIERS or ttype.lower() in SKIP_TIERTYPES:
         return False
     if not sd or sd[:4] not in years:
         return False
@@ -179,7 +180,7 @@ def stage_pages(events, have, refresh=True):
 
 
 def discover_tiers(have, today, full=False):
-    """New S/A/B-tier main events (this year and next) and their stage pages."""
+    """New S/A-tier main events (this year and next) and their stage pages."""
     years = (str(today.year), str(today.year + 1))
     # pages are often created a year or more ahead: the backfill reads every
     # undated-title page added since the start of the year before last
@@ -242,7 +243,12 @@ def discover(today, soon=()):
             if not sub or (sub.count("/") == 0 and sub not in SKIP_SEGMENTS and "Qualifier" not in sub):
                 new.append(t)
                 have.add(t)
-    return selected, new
+    # series listings are not tier-filtered: drop a page whose own infobox
+    # names a tier below A (a page with no tier yet, or a stage page, stays)
+    found = new[len(mains) + len(stages):]
+    texts = page_texts(found) if found else {}
+    low = {t for t in found if event_info(texts.get(t))[0] not in ("",) + TIERS}
+    return selected, [t for t in new if t not in low]
 
 
 def stale_titles(today):
@@ -255,8 +261,6 @@ def stale_titles(today):
     for e in evs:
         if e["end"] >= cutoff and e["start"] <= ahead:
             titles.add(e["title"])
-            if e["tl"] == "B":
-                continue      # B-tier teams' pages (rosters, logos) are not re-read every run
             teams |= set(e["participants"])
             teams |= {m["t1"] for m in e["matches"] if m["t1"]} | {m["t2"] for m in e["matches"] if m["t2"]}
     selected = [l.strip() for l in open(TITLES_FILE, encoding="utf-8") if l.strip()]

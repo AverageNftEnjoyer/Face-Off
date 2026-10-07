@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Faceoff CS2 Hub</title>
+<title>FaceOff Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@50..125,300..900&display=swap">
@@ -37,11 +37,40 @@
   --s3: 2.5rem;
   --s4: clamp(2.75rem, 8vw, 4.5rem);
   --r: 6px;
+  --amber: #E5C45A;      /* Stats: 50-60% shares (between --win and --loss) */
+  --page: #141920;       /* the page itself, a shade under the panels' slate */
+  --pagew: 150rem;       /* content width; the matchup desk narrows it (body[data-w]) */
+  --gut: max(16px, 3vw);
+  --toph: 3.75rem;       /* header bar height */
 }
 
 * { box-sizing: border-box; }
-html, body { background: var(--bg); color: var(--text); }
-body { margin: 0; }
+/* Page background: a calm slate with a faint overview-map grid (as on a CS2
+   radar) that fades out down the page, and the two sides' colours glowing in
+   from opposite corners. All fixed, nothing moves. Painted on html so the
+   grid layer (body::before, z-index -1) sits above it and below the content. */
+html {
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 0%, rgba(110, 157, 226, .075), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(231, 171, 63, .05), transparent 70%),
+    linear-gradient(180deg, #19202A, var(--page) 56rem);
+  background-color: var(--page);
+}
+body { margin: 0; color: var(--text); }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(149, 161, 176, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(149, 161, 176, .055) 1px, transparent 1px),
+    linear-gradient(rgba(149, 161, 176, .028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(149, 161, 176, .028) 1px, transparent 1px),
+    repeating-radial-gradient(circle at 100% 0, transparent 0 63px, rgba(149, 161, 176, .045) 63px 64px);
+  background-size: 128px 128px, 128px 128px, 32px 32px, 32px 32px, auto;
+  background-position: -1px -1px;
+  -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .35) 60%, transparent);
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .35) 60%, transparent);
+}
 body {
   font-family: var(--face);
   font-size: var(--s0);
@@ -64,32 +93,79 @@ button { font: inherit; color: inherit; }
 .t { color: var(--t); }
 
 /* ---------- top bar ---------- */
+/* The header is the two sides meeting: a bar whose bottom rule is CT blue on
+   the left and T gold on the right, a brand block closed off by the court's
+   own slant, and section names set like map names (condensed, heavy) with a
+   slanted marker under the current one. No pills, no boxes. */
 .top {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(17, 22, 29, .9);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.top::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; pointer-events: none;
+  background: linear-gradient(90deg, var(--ct-deep), var(--ct) 30%, var(--ct) 49.5%, var(--t) 50.5%, var(--t) 70%, var(--t-deep));
+  opacity: .8;
 }
 .top-in {
-  max-width: 76rem; margin: 0 auto;
-  padding-inline: max(16px, 2.5vw);
-  display: flex; align-items: center; gap: .5rem 1.5rem; flex-wrap: wrap;
-  min-height: 3.5rem;
+  max-width: var(--pagew); margin: 0 auto; padding-inline: var(--gut);
+  display: flex; align-items: stretch; gap: 0 2.25rem;
+  min-height: var(--toph);
 }
-.brand { display: flex; align-items: center; gap: .55rem; font-stretch: 75%; font-weight: 800; font-size: var(--s1); letter-spacing: .04em; }
-.brand svg { width: 1.6rem; height: 1.6rem; }
-.tabs { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
+.brand { position: relative; display: flex; align-items: center; gap: .6rem; padding-right: 2.25rem; white-space: nowrap; }
+.brand::after { /* the court's slant closes the brand block */
+  content: ""; position: absolute; right: 0; top: .7rem; bottom: .7rem; width: 2px;
+  background: var(--line); transform: skewX(-14deg);
+}
+.brand svg { width: 1.9rem; height: 1.9rem; flex: none; }
+.bw { display: flex; align-items: baseline; gap: .35rem; line-height: 1; }
+.bw b { font-stretch: 62.5%; font-weight: 800; font-size: 1.65rem; letter-spacing: .005em; }
+.bw span { font-stretch: 87.5%; font-weight: 500; font-size: .95rem; color: var(--dim); letter-spacing: .01em; }
+.brand:hover .bw span { color: var(--text); }
+.tabs { display: flex; align-items: stretch; gap: 0 .35rem; }
 .tabs a {
-  padding: .45rem .8rem; border-radius: var(--r);
-  color: var(--dim); font-weight: 600; white-space: nowrap;
+  position: relative; display: flex; align-items: center;
+  padding: 0 .85rem; color: var(--dim); white-space: nowrap;
+  font-stretch: 75%; font-weight: 700; font-size: 1.15rem; letter-spacing: .01em;
 }
-.tabs a:hover { background: var(--panel); color: var(--text); }
-.tabs a[aria-current="page"] { background: var(--raise); color: var(--text); box-shadow: inset 0 -2px 0 var(--t); }
-.snap { margin-left: auto; font-size: var(--s-1); color: var(--dim); }
+.tabs a:hover { color: var(--text); }
+.tabs a::after { /* the slanted marker under the current section, sitting on the two-colour rule */
+  content: ""; position: absolute; left: .55rem; right: .55rem; bottom: 0; height: 4px;
+  background: var(--text); transform: skewX(-24deg) scaleX(0); transform-origin: left; z-index: 1;
+}
+.tabs a:hover::after { transform: skewX(-24deg) scaleX(.35); background: var(--dim); }
+.tabs a[aria-current="page"] { color: var(--text); }
+.tabs a[aria-current="page"]::after { transform: skewX(-24deg); background: var(--text); }
+.tabs a:focus-visible { outline-offset: -4px; }
+.snap { margin-left: auto; align-self: center; font-size: var(--s-1); color: var(--dim); white-space: nowrap; }
+.snap b { color: var(--text); font-weight: 600; }
 
-.page { max-width: 76rem; margin: 0 auto; padding-inline: max(16px, 2.5vw); padding-block: 1.5rem 4rem; display: grid; gap: 1.5rem; }
+.page { max-width: var(--pagew); margin: 0 auto; padding-inline: var(--gut); padding-block: 1.75rem 4rem; display: grid; gap: 1.5rem; }
+/* the matchup desk (home, match pages) reads best a little narrower than the data pages */
+body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
+
+/* phones: brand row scrolls away, the four sections stay pinned as an even row */
+@media (max-width: 640px) {
+  :root { --toph: 3rem; }
+  .top { top: calc(-1 * var(--toph)); }
+  .top-in { flex-wrap: wrap; gap: 0; }
+  .brand { min-height: var(--toph); padding-right: 0; }
+  .brand::after { display: none; }
+  .brand svg { width: 1.6rem; height: 1.6rem; }
+  .bw b { font-size: 1.45rem; }
+  .snap { margin-left: auto; }
+  .tabs { order: 3; flex: 1 0 100%; display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 0; margin-inline: -.55rem; border-top: 1px solid rgba(54, 65, 79, .6); }
+  .tabs a { min-height: 46px; padding: 0 .55rem; font-size: 1.08rem; justify-content: center; }
+  .tabs a::after { left: .35rem; right: .35rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tabs a::after { transition: transform .18s ease; }
+}
 
 /* ---------- generic panels ---------- */
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 1rem; display: grid; gap: .85rem; align-content: start; min-width: 0; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 1rem; display: grid; gap: .85rem; align-content: start; min-width: 0; box-shadow: 0 10px 28px -18px rgba(0, 0, 0, .7); }
+.panel > p { max-width: 80ch; }
 .panel > h2, .sec-h { font-stretch: 75%; font-weight: 800; font-size: var(--s1); letter-spacing: .02em; display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
 .panel > h2 .dim, .sec-h .dim { font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
@@ -138,6 +214,7 @@ button { font: inherit; color: inherit; }
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
   padding: .35rem .7rem; cursor: pointer; display: grid; text-align: left; min-width: 4.6rem;
 }
+.days button { flex: none; white-space: nowrap; }
 .days button b { font-weight: 700; }
 .days button span { font-size: .72rem; color: var(--dim); }
 .days button[aria-pressed="true"] { background: var(--raise); border-color: var(--t); }
@@ -324,13 +401,6 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 .res .opp { display: flex; align-items: center; gap: .4rem; min-width: 0; }
 
 .warn { border-left: 3px solid var(--loss); padding: .15rem 0 .15rem .7rem; font-size: var(--s-1); color: var(--dim); }
-/* B-tier file: loading / error notice */
-.bload p { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin: 0; }
-.bload.err { border-left: 3px solid var(--loss); }
-.spin { width: 1rem; height: 1rem; border: 2px solid var(--line); border-top-color: var(--ct); border-radius: 50%; animation: spin .8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
-.recb { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--s-1); }
 .links { display: flex; flex-wrap: wrap; gap: .5rem; }
 .btn {
   display: inline-flex; align-items: center; gap: .4rem;
@@ -399,7 +469,6 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
   .thead .big { grid-column: 1 / -1; text-align: left; }
   .fly .half span { min-width: 3.2rem; }
   .srow { grid-template-columns: 6.5rem minmax(0, 1fr) 2.75rem; }
-  .snap { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bar .fill, .bar .band, .maptile { transition: none; }
@@ -455,10 +524,9 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
    dates, the event running now pulled forward, and the finished ones as an
    honours roll where each champion sits in its own logo colour (--tc, and the
    page-mixed --tcd for fills). No cards for their own sake: rows on hairlines. */
-.page.ewide { max-width: 150rem; padding-inline: max(16px, 3vw); }
-body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw); }
+/* page widths: every page uses --pagew (see .page); body[data-w] narrows the desk */
 .evname { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; line-height: .95; }
-/* v6: tier filter + tier labels (S solid, A outlined, B dashed) */
+/* v6: tier filter + tier labels (S solid, A outlined) */
 .tierbar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; border: 0; padding: 0; margin: 0; }
 .tierbar legend { float: left; margin-right: .4rem; color: var(--dim); font-size: var(--s-1); }
 .tierbar > .dim { font-size: var(--s-1); }
@@ -470,7 +538,6 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
 .tierbox:has(input:focus-visible) { outline: 2px solid var(--text); outline-offset: 2px; }
 .tier { display: inline-grid; place-items: center; min-width: 1.15em; height: 1.15em; padding: 0 .2em; margin-right: .35em; border-radius: 2px; font-style: normal; font-stretch: 100%; font-weight: 800; font-size: .72em; line-height: 1; vertical-align: .12em; border: 1px solid var(--text); color: var(--text); }
 .tier.tS { background: var(--text); color: var(--bg); }
-.tier.tB { border-style: dashed; border-color: var(--dim); color: var(--dim); }
 .onair .tier { font-size: .8rem; vertical-align: middle; }
 
 .season { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 3rem; }
@@ -684,9 +751,8 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
 }
 
 /* ---------- v4: the matchup desk ----------
-   One loud element: the court, split on a slant like the Faceoff mark, each half
+   One loud element: the court, split on a slant like the FaceOff mark, each half
    tinted with that team's own logo colour. Everything around it stays quiet. */
-.page.wide { max-width: 84rem; }
 .page > *, .desk > *, .desk-main > * { min-width: 0; }
 .desk { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: 1.5rem; align-items: start; }
 .desk-main { display: grid; gap: 1.25rem; min-width: 0; }
@@ -704,7 +770,7 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
   border-radius: 10px; border: 1px solid var(--line);
   background: linear-gradient(104deg, var(--ct-deep) 0 49.6%, var(--bg) 49.6% 50.4%, var(--t-deep) 50.4% 100%);
 }
-.court::after { /* faint chevrons from the Faceoff mark, one per side */
+.court::after { /* faint chevrons from the FaceOff mark, one per side */
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .07;
   background:
     linear-gradient(120deg, transparent 46%, var(--ct) 46% 54%, transparent 54%) left -6rem top -2rem / 22rem 22rem no-repeat,
@@ -909,9 +975,6 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
 .chart-head { display: flex; justify-content: flex-end; }
 svg.rchart { cursor: crosshair; touch-action: pan-y; }
 /* track record: wide-screen layout */
-.page.rwide { max-width: 136rem; padding-inline: max(16px, 3vw); }
-body[data-w="wide"] .top-in { max-width: 84rem; }
-body[data-w="rwide"] .top-in { max-width: 136rem; padding-inline: max(16px, 3vw); }
 .rec-row3, .rec-quad { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
 .rec-splits { display: grid; gap: 1rem; align-content: start; min-width: 0; }
 .log .xw { display: none; }
@@ -949,13 +1012,138 @@ body[data-w="rwide"] .top-in { max-width: 136rem; padding-inline: max(16px, 3vw)
   .cctl { grid-auto-flow: column; }
   .splitfig { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- v7: wide screens, phones, Stats rows ---------- */
+/* thin dark scrollbars for every inner scroller */
+.tablewrap, .strip-wrap, .scrolly, .rec-row3 > .panel, .rec-splits > .panel, .rec-quad > .panel, .tdlg .picker {
+  scrollbar-width: thin; scrollbar-color: #3B4757 transparent;
+}
+.tablewrap::-webkit-scrollbar, .strip-wrap::-webkit-scrollbar, .rec-row3 > .panel::-webkit-scrollbar, .rec-splits > .panel::-webkit-scrollbar, .rec-quad > .panel::-webkit-scrollbar, .tdlg .picker::-webkit-scrollbar { width: 8px; height: 8px; }
+.tablewrap::-webkit-scrollbar-thumb, .strip-wrap::-webkit-scrollbar-thumb, .rec-row3 > .panel::-webkit-scrollbar-thumb, .rec-splits > .panel::-webkit-scrollbar-thumb, .rec-quad > .panel::-webkit-scrollbar-thumb, .tdlg .picker::-webkit-scrollbar-thumb { background: #3B4757; border-radius: 8px; border: 2px solid var(--panel); }
+.tablewrap::-webkit-scrollbar-track, .strip-wrap::-webkit-scrollbar-track, .rec-row3 > .panel::-webkit-scrollbar-track, .rec-splits > .panel::-webkit-scrollbar-track, .rec-quad > .panel::-webkit-scrollbar-track, .tdlg .picker::-webkit-scrollbar-track { background: transparent; }
+/* a table wider than its box shows a soft edge on the side that has more to scroll to */
+.tablewrap {
+  background:
+    linear-gradient(90deg, var(--panel) 40%, rgba(31, 38, 48, 0)) left / 2.5rem 100% no-repeat local,
+    linear-gradient(270deg, var(--panel) 40%, rgba(31, 38, 48, 0)) right / 2.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(149, 161, 176, .32), transparent) left / .8rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(149, 161, 176, .32), transparent) right / .8rem 100% no-repeat scroll;
+}
+
+/* matchup desk: on wide screens the veto, the series score and the factors sit side by side */
+.ovw { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.ovw > * { min-width: 0; }
+@media (min-width: 761px) {
+  .ovw { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ovw-veto { grid-column: 1 / -1; }
+}
+@media (min-width: 1500px) {
+  .ovw { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-areas: "veto fac" "score fac"; }
+  .ovw-veto { grid-area: veto; }
+  .ovw > :nth-child(2) { grid-area: score; }
+  .ovw > :nth-child(3) { grid-area: fac; align-self: stretch; }
+  .desk { grid-template-columns: minmax(0, 1fr) 22rem; gap: 2rem; }
+}
+.rail .rsc { font-size: 1.15rem; white-space: nowrap; }
+.rail .rsc i { font-style: normal; padding-inline: .15rem; }
+.nextm .tt .lost em { color: var(--dim); font-weight: 400; }
+@media (max-height: 999px) { .rail { position: static; } }
+
+/* team profile: roster, Elo and map pool across; finishes and results below */
+.tlay { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.tlay > * { min-width: 0; }
+@media (min-width: 761px) {
+  .tlay { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "line elo" "fin fin" "pool res"; }
+  .tlay > :first-child { grid-area: line; }
+  .tlay > .tl-elo { grid-area: elo; align-self: stretch; }
+  .tlay > .panel:has(.tfin) { grid-area: fin; }
+  .tlay > .tl-pool { grid-area: pool; }
+  .tlay > .tl-res { grid-area: res; }
+}
+@media (min-width: 1500px) {
+  .tlay { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "line elo pool" "fin fin res"; }
+  .tlay > .tl-pool { align-self: stretch; }
+}
+.tgrid { grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+
+/* Stats: modules in a row are one height; longer content scrolls inside its own panel */
+.pclegend { max-width: none; margin-top: -.5rem; }
+.pclegend span { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; margin-inline: .2rem .55rem; }
+.pclegend span:nth-of-type(3) { margin-right: 0; }
+.pclegend span::before { content: ""; width: .7rem; height: .7rem; border-radius: 2px; background: currentColor; }
+.pc-hi { color: var(--win); }
+.pc-mid { color: var(--amber); }
+.pc-lo { color: var(--loss); }
+td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
+.board .num.pc-hi, .board .num.pc-mid, .board .num.pc-lo { text-shadow: 0 0 28px color-mix(in srgb, currentColor 25%, transparent); }
+.rec-row3 { --rh: clamp(36rem, 70vh, 52rem); }
+@media (min-width: 761px) {
+  .rec-row3, .rec-quad { align-items: stretch; }
+  /* block (not grid) inside: a grid row would squeeze the charts once the panel's height is fixed */
+  .rec-row3 > .panel, .rec-splits > .panel, .rec-quad > .panel { display: block; }
+  .rec-row3 > .panel > * + *, .rec-splits > .panel > * + *, .rec-quad > .panel > * + * { margin-top: .85rem; }
+  .rec-row3 > .panel { height: var(--rh); overflow-y: auto; overscroll-behavior: contain; }
+  .rec-splits { height: 24rem; }
+  .rec-splits > .panel { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  .rec-quad > .panel { max-height: 34rem; overflow-y: auto; overscroll-behavior: contain; }
+  /* the heading stays in view while a module scrolls */
+  .rec-row3 > .panel > h2, .rec-splits > .panel > h2, .rec-quad > .panel > h2 {
+    position: sticky; top: -1rem; z-index: 2; margin: -1rem -1rem 0; padding: 1rem 1rem .6rem;
+    background: var(--panel); box-shadow: 0 1px 0 var(--line);
+  }
+}
+@media (min-width: 1400px) {
+  .rec-splits { height: var(--rh); display: flex; flex-direction: column; align-items: stretch; gap: 1rem; }
+  .rec-splits > .panel { height: auto; flex: none; }
+  .rec-splits > .panel:last-child { flex: 1 1 0; }
+}
+
+/* phones */
+@media (max-width: 640px) {
+  .dtabs { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: .25rem; }
+  .dtabs button { min-height: 44px; font-size: .95rem; }
+  /* match rows: both team names get the full width, the call or score on the right */
+  .mrow { grid-template-columns: 3.3rem minmax(0, 1fr) auto; grid-template-areas: "time a mid" "time b mid" "tag tag tag"; gap: .3rem .65rem; }
+  .mrow .time { grid-area: time; align-self: start; }
+  .mrow > .tm:not(.r) { grid-area: a; }
+  .mrow > .tm.r { grid-area: b; flex-direction: row; text-align: left; }
+  .mrow .mid { grid-area: mid; text-align: right; }
+  .mrow .mid.pct { max-width: 4.7rem; }
+  .mrow .tag { grid-area: tag; }
+  .evhero { grid-template-columns: minmax(0, 1fr); }
+  .evhero > .evlogo { width: 4rem; }
+  .strip-wrap { -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); }
+  .page .strip-hint { display: block; }
+  .strip { min-width: 112rem; }   /* wide enough that each event's name shows; opens on today */
+  .onair-h > img { width: 3.75rem; }
+  .onair { padding: 1rem; }
+}
+.strip-hint { display: none; font-size: var(--s-1); color: var(--dim); margin-top: -1rem; }
+@media (max-width: 520px) {
+  .tape { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tdlg .pick .logo.lg { width: 3rem; height: 3rem; }
+  .log td, .log th { padding-inline: .3rem; }
+  .tablewrap:has(> .log)::before { content: "Swipe the table sideways for the pick, the prediction and the result."; display: block; font-size: var(--s-1); color: var(--dim); padding-bottom: .4rem; position: sticky; left: 0; }
+}
+/* touch screens: controls at least 44px tall */
+@media (pointer: coarse) {
+  .btn, .seg button, .subtabs a, .tierbox, .days button, .filters select, .tdlg input[type="search"], .dtabs button { min-height: 44px; }
+  .subtabs a { display: inline-flex; align-items: center; }
+  .cside .cchg { min-height: 44px; padding-inline: .85rem; font-size: .8rem; }
+  .rlist a, .nextm, .res a, .alive .ls a, .stand .tms .tlink { min-height: 44px; }
+  /* links set in running text or headings: a taller hit area without moving the layout */
+  .crumb a, .cname, .crown .who { display: inline-block; padding-block: .7rem; margin-block: -.7rem; }
+  .tablewrap td a { display: inline-block; padding-block: .8rem; }
+  .log td a[href^="#m-"] { padding-block: .2rem; }
+  .lb .row .nm { padding-block: .75rem; }
+}
 </style>
 
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="#home" aria-label="Faceoff home">
+    <a class="brand" href="#home" aria-label="FaceOff Analytics, home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 6h9l-6 10 6 10H3l6-10z" fill="var(--ct)"/><path d="M29 6h-9l6 10-6 10h9l-6-10z" fill="var(--t)"/></svg>
-      <span>FACEOFF</span>
+      <span class="bw"><b>FaceOff</b> <span>Analytics</span></span>
     </a>
     <nav class="tabs" aria-label="Sections">
       <a href="#home" data-tab="home">Matchups</a>
@@ -1002,7 +1190,7 @@ const T = DATA.teams;
 const vrsRank = t => T[t]?.vrs?.rank ?? 1e9;
 const NAMES = Object.keys(T).sort((a, b) => vrsRank(a) - vrsRank(b) || (T[b].elo ?? 0) - (T[a].elo ?? 0));
 // teams with series in the data; only these have matchup predictions
-const CMP_NAMES = NAMES.filter(n => T[n].series > 0 && T[n].cmp !== false); // cmp: in DATA.pairs (B-tier-only teams are not)
+const CMP_NAMES = NAMES.filter(n => T[n].series > 0 && T[n].cmp !== false); // cmp: in DATA.pairs
 const REGION = { europe: "Europe", americas: "Americas", asia: "Asia" };
 const vrsShort = t => T[t]?.vrs ? `VRS #${T[t].vrs.rank}` : "Not in VRS";
 const vrsLine = t => !T[t] ? "No results in the data" : T[t].series ? `${vrsShort(t)}, Elo ${T[t].elo}` : `${vrsShort(t)}, no series in the data`;
@@ -1012,42 +1200,6 @@ const EV = DATA.events;
 const EV_BY = Object.fromEntries(EV.map(e => [e.slug, e]));
 const MATCH = {};
 for (const e of EV) for (const m of e.matches) MATCH[m.id] = { ...m, ev: e.slug };
-/* B-tier event bodies (matches, lineups, format, map pool) are in a separate
-   file, DATA.bfile, fetched only when B-tier content is asked for. Until then
-   each B-tier event is a light stub (lazy: 1) with its dates, prize slots,
-   champion and placements, which is all the tier counts and team pages need. */
-const BLOAD = { state: DATA.bfile ? "idle" : "done", err: "", p: null };
-const isLazy = e => !!(e && e.lazy);
-function loadB() {
-  if (BLOAD.state === "done") return Promise.resolve();
-  if (BLOAD.p) return BLOAD.p;
-  BLOAD.state = "loading"; BLOAD.err = "";
-  BLOAD.p = fetch(DATA.bfile)
-    .then(r => { if (!r.ok) throw new Error(`the server answered ${r.status}`); return r.json(); })
-    .then(j => {
-      for (const [slug, body] of Object.entries(j.events || {})) {
-        const e = EV_BY[slug];
-        if (!e) continue;
-        Object.assign(e, body);
-        delete e.lazy;
-        for (const m of e.matches) MATCH[m.id] = { ...m, ev: e.slug };
-      }
-      BLOAD.state = "done"; CALLS = null;
-    })
-    .catch(err => { BLOAD.state = "error"; BLOAD.err = String((err && err.message) || err); BLOAD.p = null; })
-    .then(() => rerender());
-  return BLOAD.p;
-}
-const bStatus = () => BLOAD.state === "error"
-  ? `<section class="panel bload err" role="alert"><p>Couldn't load the B-tier tournament data (${esc(BLOAD.err)}). Check your connection, then <button type="button" class="btn" data-bretry="1">Try again</button></p></section>`
-  : `<section class="panel bload" role="status" aria-live="polite"><p><span class="spin" aria-hidden="true"></span>Loading B-tier tournament data…</p></section>`;
-// A view that needs the B-tier file: starts the fetch if needed and returns the
-// notice to show meanwhile; null once the data is in (or not wanted).
-const needB = want => {
-  if (!want || BLOAD.state === "done") return null;
-  if (BLOAD.state === "idle") loadB();
-  return bStatus();
-};
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const dObj = s => new Date(s + "T12:00:00Z");
@@ -1499,20 +1651,18 @@ function matchDesk(pred, a, b, o = {}) {
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
   else body = `
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
-    ${pred ? `<section class="panel"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
-    <div class="grid2">${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
+    ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
+    ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
   return `${o.ctx || ""}${court(pred, a, b, o, bo)}
     <div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}">${l}</button>`).join("")}</div>
     <div class="desk-main" role="tabpanel">${body}</div>`;
 }
 
 /* ---------------- home: the desk plus the rail ---------------- */
-// The home page features S- and A-tier events only; B-tier lives on the Tournaments page.
-const topTier = m => ["S", "A"].includes(EV_BY[m.ev]?.tl || "S");
 // "live" on the home page also needs a recent date: an unfinished record from weeks ago is stale data
 const recentLive = m => isLive(m) && m.day && m.day >= daysBefore(DATA.as_of, 1);
 function featuredMatch() {
-  const all = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.pred && T[m.t1] && T[m.t2] && topTier(m));
+  const all = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.pred && T[m.t1] && T[m.t2]);
   const live = all.filter(recentLive);
   if (live.length) return live[0];
   const key = m => (m.day || "") + (m.when || "");
@@ -1577,10 +1727,20 @@ function closeChooser() {
 }
 
 function rail() {
-  const top = NAMES.filter(n => T[n].vrs).slice(0, 8);
+  const top = NAMES.filter(n => T[n].vrs).slice(0, 10);
   const keyOf = m => (m.day || "") + (m.when || "");
-  const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1) && topTier(m))
+  const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1))
     .sort((x, y) => keyOf(x).localeCompare(keyOf(y))).slice(0, 5);
+  // latest finished series, each with whether the model's pre-match pick won
+  const done = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.finished && m.day && m.w1 !== m.w2)
+    .sort((x, y) => keyOf(y).localeCompare(keyOf(x))).slice(0, 5);
+  const doneRow = m => {
+    const w = winnerOf(m), p = m.pred ? decode(m.pred).p : null, fav = p == null ? null : p >= .5 ? m.t1 : m.t2;
+    return `<a class="nextm" href="#m-${m.id}">
+      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${fmtDay(m.day)}</span>
+      <span class="tt"><span${w === m.t1 ? "" : ' class="lost"'}>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><b class="rsc cond">${m.w1}<i class="dim">:</i>${m.w2}</b><span${w === m.t2 ? "" : ' class="lost"'}><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
+      ${fav ? `<span class="small ${fav === w ? "win" : "loss"}">${missLabel(fav === w, Math.max(p, 1 - p))}</span>` : ""}</a>`;
+  };
   return `
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
     <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
@@ -1592,7 +1752,8 @@ function rail() {
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${p != null ? `<span class="mini" title="Model: ${esc(m.t1)} ${displayPercent([p, 1 - p])[0]}%"><b style="width:${(p * 100).toFixed(1)}%"></b></span>` : ""}</a>`; }).join("")
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
-  </section>`;
+  </section>
+  ${done.length ? `<section class="panel"><h2>Latest results</h2>${done.map(doneRow).join("")}</section>` : ""}`;
 }
 
 function viewHome() {
@@ -1631,10 +1792,10 @@ function evCard(e) {
 }
 /* v5: the season as a circuit */
 /* v6: tier filter (Tournaments page only). e.tl is Liquipedia's own tier
-   (liquipediatier: S / A / B); default S and A on, B off. The choice is kept in
+   (liquipediatier: S / A); both on by default. The choice is kept in
    localStorage when the browser allows it; events without a tier always show. */
-const TIERS = [["S", "S-tier"], ["A", "A-tier"], ["B", "B-tier"]];
-const TIER_DEFAULT = { S: true, A: true, B: false };
+const TIERS = [["S", "S-tier"], ["A", "A-tier"]];
+const TIER_DEFAULT = { S: true, A: true };
 const tierOn = (() => {
   const on = { ...TIER_DEFAULT };
   try {
@@ -1730,7 +1891,8 @@ function seasonStrip(EV) {
   }
   const rows = lanes.map((_, i) => `<div class="lane">${pins.filter(p => p[0] === i).map(p => p[1]).join("")}</div>`).join("");
   return `<div class="strip-wrap"><div class="strip" role="group" aria-label="Tournament calendar">${mo}<div class="lanes">${rows}</div>
-    <div class="now" style="left:${x(DATA.as_of)}%"><span>Today, ${fmtDay(DATA.as_of)}</span></div></div></div>`;
+    <div class="now" style="left:${x(DATA.as_of)}%"><span>Today, ${fmtDay(DATA.as_of)}</span></div></div></div>
+    <p class="strip-hint">Swipe the calendar sideways for the other months.</p>`;
 }
 
 function onAir(e) {
@@ -1759,8 +1921,7 @@ function onAir(e) {
 }
 
 function viewEvents() {
-  const bNote = needB(tierOn.B) || "";        // B-tier ticked: fetch its file, show S/A meanwhile
-  const EV = DATA.events.filter(e => tierShown(e) && !isLazy(e));   // the tier filter applies to everything below
+  const EV = DATA.events.filter(tierShown);   // the tier filter applies to everything below
   const yr = DATA.as_of.slice(0, 4);
   const byStart = (a, b) => a.start.localeCompare(b.start);
   const live = EV.filter(e => e.status === "live").sort(byStart);
@@ -1796,7 +1957,6 @@ function viewEvents() {
   <header class="season"><h1 class="cond">${yr} <span>season</span></h1>
     <div class="tally">${tally.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("")}</div></header>
   ${tierBar()}
-  ${bNote}
   ${EV.length ? seasonStrip(EV) : `<p class="empty">No tournaments in the selected tiers. Tick a tier above to show its events.</p>`}
   <div class="marquee">
     <div style="display:grid;gap:1.5rem">${feat.map(onAir).join("") || `<p class="empty">Nothing running right now.</p>`}</div>
@@ -2006,9 +2166,8 @@ function evTeams(e) {
 }
 
 function evMatchup(e) {
-  // B-tier events carry no matchup grid of their own: only teams in the global grid can be paired
-  const list = evTeamsList(e).filter(t => T[t] && (DATA.epairs[e.slug] || CMP_NAMES.includes(t)));
-  if (list.length < 2) return `<section class="panel"><p class="empty">${DATA.epairs[e.slug] || e.tl !== "B" ? "Matchups open once at least two teams are announced." : "Matchups are built for S- and A-tier events, and for teams that play at them; fewer than two teams here qualify."}</p></section>`;
+  const list = evTeamsList(e).filter(t => T[t]);
+  if (list.length < 2) return `<section class="panel"><p class="empty">Matchups open once at least two teams are announced.</p></section>`;
   const s = evPick[e.slug] = evPick[e.slug] || {};
   if (!s.a || !list.includes(s.a)) s.a = list[0];
   if (!s.b || !list.includes(s.b) || s.b === s.a) s.b = list.find(t => t !== s.a);
@@ -2092,16 +2251,14 @@ function viewTeam(slugv) {
         : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}
       <span class="small dim" style="margin-top:.4rem">${t.series ? `Elo ${t.elo}${t.rank ? `, ${ordinal(t.rank)} of active teams` : `, ${t.series} series in the data`}` : "No series in the data yet"}</span></div>
   </section>
-  <div class="grid2">
+  <div class="tlay">
     ${lineup(n, "a", null)}
-    <section class="panel"><h2>Elo over the last ${t.trace.length} series <span class="dim">hover to read</span></h2>${spark(t.trace)}
+    <section class="panel tl-elo"><h2>Elo over the last ${t.trace.length} series <span class="dim">hover to read</span></h2>${spark(t.trace)}
       <p class="small dim">${t.form30 == null ? "No series in the last 30 days." : `Won ${pct(t.form30)} of ${t.n30} series in the last 30 days.`} Volatility ${t.vol.toFixed(2)} (how far results have strayed from what Elo expected).</p></section>
-  </div>
   ${evs.length ? teamFinishes(n, evs) : ""}
-  <div class="grid2">
-    <section class="panel"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
+    <section class="panel tl-pool"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
       <div class="poolbars">${maps.map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk"><b style="width:${(v[0] * 100).toFixed(1)}%"></b><i></i></span><span>${pct(v[0])} of ${v[1]}</span></div>`).join("") || `<p class="empty">No maps in the last 90 days.</p>`}</div></section>
-    <section class="panel"><h2>Recent results</h2><div class="res">${t.results.map(r => `<div class="r">
+    <section class="panel tl-res"><h2>Recent results</h2><div class="res">${t.results.map(r => `<div class="r">
       <span class="wl ${r.won ? "W" : "L"}">${r.won ? "W" : "L"}</span>
       <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${esc(r.event)}, ${fmtDate(r.date)}</span></span>
       <span>${esc(r.score)}</span></div>`).join("") || `<p class="empty">No results in the data.</p>`}</div></section>
@@ -2143,9 +2300,11 @@ function wilsonJS(k, n, z = 1.959964) {
   return [Math.max(0, c - h), Math.min(1, c + h)];
 }
 const acc2 = (h, n) => n ? (h / n * 100).toFixed(2) : "-";
+// Stats colour for a share of right calls (as shown, e.g. "63.51"): above 60 green, above 50 amber, 50 and under red
+const pcc = s => { const v = parseFloat(s); return isNaN(v) ? "" : v > 60 ? "pc-hi" : v > 50 ? "pc-mid" : "pc-lo"; };
 /* numeric ISO dates on this page: days are already "YYYY-MM-DD"; trim any time part */
 const isoDate = s => String(s || "").slice(0, 10) || "-";
-const rec ={ ev: "", team: "", res: "", limit: 40, b: false };   // b: include B-tier events (their file loads on demand)
+const rec ={ ev: "", team: "", res: "", limit: 40 };
 const MIN_N = 8;
 const BUCKETS = [[.5, .6, "50-60%"], [.6, .7, "60-70%"], [.7, .8, "70-80%"], [.8, .9, "80-90%"], [.9, 1.01, "90% and up"]];
 
@@ -2177,7 +2336,7 @@ function calibChart(calls) {
   }
   const svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Calibration: stated chance of the pick against how often it won, by bucket">${g}</svg>`;
   const table = `<div class="tablewrap"><table><thead><tr><th>Model said</th><th class="n">Calls</th><th class="n">Said, on average</th><th class="n">Pick won</th></tr></thead><tbody>
-    ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n">${r.n ? (r.said * 100).toFixed(2) + "%" : "-"}</td><td class="n ${r.n && Math.abs(r.got - r.said) > .1 ? "loss" : ""}">${r.n ? `${(r.got * 100).toFixed(2)}%` : "-"}</td></tr>`).join("")}</tbody></table></div>`;
+    ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n">${r.n ? (r.said * 100).toFixed(2) + "%" : "-"}</td><td class="n ${r.n ? pcc((r.got * 100).toFixed(2)) : ""}">${r.n ? `${(r.got * 100).toFixed(2)}%` : "-"}</td></tr>`).join("")}</tbody></table></div>`;
   return svg + table;
 }
 
@@ -2198,7 +2357,7 @@ function timeChart(calls) {
   const ih = inRange.filter(c => c.hit).length;
   const seg = `<div class="seg" role="group" aria-label="Time range">${RANGES.map(([k, l]) => `<button type="button" data-range="${k}" aria-pressed="${r === k}">${l}</button>`).join("")}</div>`;
   const label = r === "all" ? "Whole season" : `Last ${r} days`;
-  const summary = `<p class="small dim">${label}: ${ih} of ${inRange.length} right${inRange.length ? ` (${acc2(ih, inRange.length)}%)` : ""}. The line is the share right over the previous ${w} calls; the dashed line is the season average. Hover the chart to read any point.</p>`;
+  const summary = `<p class="small dim">${label}: ${ih} of ${inRange.length} right${inRange.length ? ` (<b class="${pcc(acc2(ih, inRange.length))}">${acc2(ih, inRange.length)}%</b>)` : ""}. The line is the share right over the previous ${w} calls; the dashed line is the season average. Hover the chart to read any point.</p>`;
   if (pts.length < 2) return `<div class="chart-head">${seg}</div><p class="empty">Fewer than two calls in this range. Pick a longer range.</p>${summary}`;
   const W = 520, H = 300, L = 44, R = 14, Tp = 14, B = 34;
   const all = calls.filter(c => c.hit).length / n;
@@ -2229,7 +2388,7 @@ function monthTable(calls) {
   const by = new Map();
   for (const c of calls) { const mo = c.day.slice(0, 7) || "-", r = by.get(mo) || { n: 0, h: 0 }; r.n++; r.h += c.hit; by.set(mo, r); }
   return `<div class="tablewrap"><table><thead><tr><th>Month</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th></tr></thead><tbody>
-    ${[...by].map(([mo, r]) => `<tr><td>${esc(mo)}</td><td class="n">${r.n}</td><td class="n">${r.h}</td><td class="n">${acc2(r.h, r.n)}%</td></tr>`).join("")}</tbody></table></div>`;
+    ${[...by].map(([mo, r]) => `<tr><td>${esc(mo)}</td><td class="n">${r.n}</td><td class="n">${r.h}</td><td class="n ${pcc(acc2(r.h, r.n))}">${acc2(r.h, r.n)}%</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function leaderboard(calls) {
@@ -2239,7 +2398,7 @@ function leaderboard(calls) {
   const best = [...rows].sort((p, q) => q.h / q.n - p.h / p.n || q.n - p.n).slice(0, 8);
   const worst = [...rows].sort((p, q) => p.h / p.n - q.h / q.n || q.n - p.n).slice(0, 8);
   const row = r => { const [lo, hi] = wilsonJS(r.h, r.n); return `<div class="row">${logo(r.t, "sm")}<a class="nm" href="${T[r.t] ? `#t-${T[r.t].slug}` : "#record"}">${esc(r.t)}</a>
-    <span class="rec">${r.h} of ${r.n}</span><span class="v">${acc2(r.h, r.n)}%</span>
+    <span class="rec">${r.h} of ${r.n}</span><span class="v ${pcc(acc2(r.h, r.n))}">${acc2(r.h, r.n)}%</span>
     <span class="trk" title="Range consistent with ${r.n} calls: ${(lo * 100).toFixed(2)}% to ${(hi * 100).toFixed(2)}%"><span class="ci" style="left:${(lo * 100).toFixed(1)}%;width:${((hi - lo) * 100).toFixed(1)}%"></span><span class="pt" style="left:${(r.h / r.n * 100).toFixed(1)}%"></span></span></div>`; };
   const note = `<p class="small dim">Teams with at least ${MIN_N} calls. The pale band is the range that record is consistent with: the fewer the calls, the wider it gets.</p>`;
   return rows.length ? `
@@ -2254,11 +2413,8 @@ function callCard(c, line) {
 }
 
 function viewRecord() {
-  // S- and A-tier events by default; B-tier ones when ticked (their file loads first, S/A shows meanwhile)
-  const bNote = needB(rec.b) || "";
-  const calls = callLog().filter(c => rec.b || c.e.tl !== "B");
-  const tierPick = `<label class="recb"><input type="checkbox" data-recb="1"${rec.b ? " checked" : ""}> Include B-tier tournaments</label>`;
-  if (!calls.length) return `<section class="panel"><h2>Stats</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p><p>${tierPick}</p></section>${bNote}`;
+  const calls = callLog();
+  if (!calls.length) return `<section class="panel"><h2>Stats</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p></section>`;
   const n = calls.length, hits = calls.filter(c => c.hit).length;
   let k = n - 1, run = 0;
   const lastHit = calls[k].hit;
@@ -2278,27 +2434,26 @@ function viewRecord() {
   return `
   <div style="display:grid;gap:.4rem">
     <h1 class="cond" style="font-size:var(--s3)">Stats</h1>
-    <p class="dim" style="max-width:68ch">Every finished 2026 match ${rec.b && BLOAD.state === "done" ? "at S-, A- and B-tier tournaments" : "at S- and A-tier tournaments"} on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
-    <div>${tierPick}</div>
+    <p class="dim" style="max-width:68ch">Every finished 2026 match at S- and A-tier tournaments on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
   </div>
-  ${bNote}
   <section class="board" aria-label="Headline numbers">
-    <div class="first"><span class="lbl">Winners called right</span><span class="num cond">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
+    <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
     <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span></div>
     <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last 20 calls, oldest first:</span>
       <span class="streak">${calls.slice(-20).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
   </section>
+  <p class="pclegend small dim">Share of calls right, coloured by how it went: <span class="pc-hi">above 60%</span> <span class="pc-mid">50 to 60%</span> <span class="pc-lo">50% or under</span>. The model's own chance for each pick stays white: that is confidence, not a record.</p>
   <div class="rec-row3">
     <section class="panel"><h2>When it says 75%, does it win 75%? <span class="dim">dots inside the pale band are within 10 points; each bar is the range for that many calls</span></h2>${calibChart(calls)}</section>
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
     <div class="rec-splits">
       <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
         <div class="splitfig">
-          <div><span class="small dim">Backed the higher-rated team</span><b class="cond">${acc2(fh, fav.length)}%</b><span class="small dim">${fh} of ${fav.length} right</span></div>
-          <div><span class="small dim">Backed the lower-rated team</span><b class="cond">${acc2(dh, dog.length)}%</b><span class="small dim">${dh} of ${dog.length} right</span></div>
+          <div><span class="small dim">Backed the higher-rated team</span><b class="cond ${pcc(acc2(fh, fav.length))}">${acc2(fh, fav.length)}%</b><span class="small dim">${fh} of ${fav.length} right</span></div>
+          <div><span class="small dim">Backed the lower-rated team</span><b class="cond ${pcc(acc2(dh, dog.length))}">${acc2(dh, dog.length)}%</b><span class="small dim">${dh} of ${dog.length} right</span></div>
         </div></section>
       <section class="panel"><h2>By tournament</h2><div class="tablewrap"><table><thead><tr><th>Tournament</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th></tr></thead><tbody>
-        ${evs.map(e => { const cs = calls.filter(c => c.e.slug === e.slug), h = cs.filter(c => c.hit).length; return `<tr><td><a href="#e-${e.slug}">${esc(e.name)}</a></td><td class="n">${cs.length}</td><td class="n">${h}</td><td class="n">${acc2(h, cs.length)}%</td></tr>`; }).join("")}
+        ${evs.map(e => { const cs = calls.filter(c => c.e.slug === e.slug), h = cs.filter(c => c.hit).length; return `<tr><td><a href="#e-${e.slug}">${esc(e.name)}</a></td><td class="n">${cs.length}</td><td class="n">${h}</td><td class="n ${pcc(acc2(h, cs.length))}">${acc2(h, cs.length)}%</td></tr>`; }).join("")}
       </tbody></table></div></section>
     </div>
   </div>
@@ -2324,7 +2479,7 @@ function viewRecord() {
       <div class="callcards">${misses.map(c => callCard(c, `${c.pick} lost to ${c.opp}`)).join("") || `<p class="empty">No misses yet.</p>`}</div></section>
   </div>
   <footer class="foot">
-    <p>Fan analytics only. Ratings are rebuilt from Liquipedia results. Tournaments, lineups, logos, map images and results come from Liquipedia (text CC BY-SA 3.0); logos and map art belong to their owners.</p>
+    <p>FaceOff Analytics is a fan project. Ratings are rebuilt from Liquipedia results. Tournaments, lineups, logos, map images and results come from Liquipedia (text CC BY-SA 3.0); logos and map art belong to their owners.</p>
     <p>Snapshot ${isoDate(DATA.as_of)}.</p>
   </footer>`;
 }
@@ -2338,10 +2493,9 @@ function route() {
   else if (h === "events") { html = viewEvents(); tab = "events"; }
   else if (h === "teams") { html = viewTeams(); tab = "teams"; }
   else if (h === "record") { html = viewRecord(); tab = "record"; }
-  // a match not among the S/A matches may be a B-tier one: load that file first, then render
-  else if (h.startsWith("m-")) { html = needB(!MATCH[h.slice(2)]) || viewMatch(h.slice(2)); tab = "events"; }
+  else if (h.startsWith("m-")) { html = viewMatch(h.slice(2)); tab = "events"; }
   else if (h.startsWith("t-")) { html = viewTeam(h.slice(2)); tab = "teams"; }
-  else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = needB(isLazy(EV_BY[slug])) || viewEvent(slug, sub); tab = "events"; }
+  else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = viewEvent(slug, sub); tab = "events"; }
   else html = viewHome();
   $("#view").classList.toggle("wide", !h || h === "home" || h === "compare");
   $("#view").classList.toggle("rwide", h === "record");
@@ -2353,6 +2507,9 @@ function route() {
   applyPair(v);
   document.querySelectorAll(".tabs a").forEach(a => a.dataset.tab === tab ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   animateBars(v);
+  // narrow screens: the season calendar scrolls sideways; open it on today rather than on January
+  const now = v.querySelector(".strip .now"), sw = now && now.closest(".strip-wrap");
+  if (sw && sw.scrollWidth > sw.clientWidth) sw.scrollLeft = Math.max(0, now.offsetLeft - sw.clientWidth * .6);
   return h;
 }
 let lastHash = null;
@@ -2395,7 +2552,6 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest("[data-feat]")) { desk.a = desk.b = null; rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
-  if (e.target.closest("[data-bretry]")) { BLOAD.state = "idle"; rerender(); return; }
   const rg = e.target.closest("[data-range]");
   if (rg) { rec.range = rg.dataset.range; rerender(); return; }
   const ep = e.target.closest(".pick[data-epick]");
@@ -2422,11 +2578,6 @@ document.addEventListener("click", e => {
 document.addEventListener("change", e => {
   const t = e.target;
   if (t.dataset && t.dataset.rf) { rec[t.dataset.rf] = t.value; rec.limit = 40; rerender(); }
-  if (t.dataset && t.dataset.recb) {
-    rec.b = t.checked; rec.limit = 40;
-    if (!rec.b && EV_BY[rec.ev]?.tl === "B") rec.ev = "";
-    rerender(); const b = $("[data-recb]"); if (b) b.focus({ preventScroll: true });
-  }
   if (t.dataset && t.dataset.tier) { tierOn[t.dataset.tier] = t.checked; saveTiers(); rerender(); const b = $(`[data-tier="${t.dataset.tier}"]`); if (b) b.focus({ preventScroll: true }); }
 });
 document.addEventListener("input", e => {
@@ -2488,6 +2639,6 @@ document.addEventListener("pointerleave", e => {
   if (e.target.matches && e.target.matches("svg.rchart")) e.target.querySelector(".hover").setAttribute("visibility", "hidden");
 }, true);
 
-$("#snap").textContent =`Data as of ${fmtDate(DATA.as_of)}`;
+$("#snap").innerHTML = `Data as of <b>${esc(fmtDate(DATA.as_of))}</b>`;
 go();
 </script>

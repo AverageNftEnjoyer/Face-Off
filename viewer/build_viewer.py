@@ -19,9 +19,6 @@ Nothing is estimated by hand.
 Output, next to OUT.html (all names content-hashed, so they can be cached forever):
   * OUT_DIR/img/<hash>.<ext>      every logo, map image and flag the page uses
                                   (stale files in OUT_DIR/img are removed)
-  * OUT_DIR/data-b.<hash>.json    the bodies (matches, lineups, format, map pool)
-                                  of B-tier events; the page fetches it only when
-                                  B-tier content is asked for
 
 USAGE:
     python viewer/build_viewer.py OUT.html
@@ -52,8 +49,6 @@ FACTORS = ["base_strength", "form_30d", "form_last5", "head_to_head", "map_veto"
 
 
 IMG_DIR = "img"                   # beside the output html
-B_TIERS = ("B",)                  # events whose bodies go to the lazily fetched file
-B_LAZY_KEYS = ("participants", "matches", "format", "swiss", "pool")
 
 
 def _short_hash(raw):
@@ -119,22 +114,6 @@ def round_floats(o, n):
 # only change if the exact value sits within 5e-10 of a rounding edge. It cuts
 # about 0.5 MB of compressed transfer. None keeps full precision.
 PAGE_DECIMALS = 9
-
-
-def split_b_tier(ev_out):
-    """Move the heavy body of each B-tier event into a separate payload.
-
-    The page keeps a light stub per B-tier event (dates, place, prize slots,
-    champion, placements: enough for the tier counts and the team pages) and
-    fetches the rest on demand. Returns {slug: body}."""
-    lazy = {}
-    for e in ev_out:
-        if e.get("tl") in B_TIERS:
-            lazy[e["slug"]] = {k: e[k] for k in B_LAZY_KEYS}
-            for k in B_LAZY_KEYS:
-                del e[k]
-            e.update({"participants": [], "matches": [], "pool": [], "lazy": 1})
-    return lazy
 
 
 _DROP = {"team", "esports", "esport", "gaming", "clan", "club", "gg"}
@@ -311,12 +290,9 @@ def main(out_path):
     active = [t for t, g in h_now.games.items() if g and g[-1]["date"] >= as_of - timedelta(days=90)]
     rank = {t: i + 1 for i, t in enumerate(sorted(active, key=lambda t: -h_now.elo[t]))}
     top = [t for t in sorted(active, key=lambda t: -h_now.elo[t]) if len(h_now.games[t]) >= 15][:16]
-    # the matchup comparer's pool: teams at S/A-tier events (or untiered ones),
-    # the top active teams and the VRS top VRS_TOP_N. B-tier-only teams get team
-    # cards and pre-match calls for their matches, but no all-pairs grid: with
-    # hundreds of B-tier teams that grid would grow by the square.
-    major = [e for e in events if e["tl"] not in ("B", "C", "D")]
-    pool = set(E.event_teams(major)) | set(top)
+    # the matchup comparer's pool: every event team, the top active teams and
+    # the VRS top VRS_TOP_N
+    pool = set(E.event_teams(events)) | set(top)
     names = sorted(set(E.event_teams(events)) | set(top))
 
     trace = defaultdict(list)
@@ -402,7 +378,7 @@ def main(out_path):
             if m["t1"] in teams and m["t2"] in teams and m["day"]:
                 d = min(date.fromisoformat(m["day"]), as_of)
                 jobs[d].append(("match", (m, e["title"])))
-        if e["status"] == "finished" and e["tl"] not in ("B", "C", "D"):
+        if e["status"] == "finished":
             jobs[date.fromisoformat(e["start"])].append(("event", e))
     epairs = {}
     tl = Timeline(all_matches)
@@ -421,7 +397,7 @@ def main(out_path):
     # live and upcoming tournaments get their own matchup grid too, so that
     # announced stand-ins for that tournament are applied
     for e in events:
-        if e["status"] != "finished" and e["tl"] not in ("B", "C", "D"):
+        if e["status"] != "finished":
             ps = [t for t in e["participants"] if t in teams]
             epairs[e["slug"]] = {f"{a}|{b}": predict(h_today, a, b, as_of, e["title"])
                                  for a in ps for b in ps if a != b}
@@ -478,16 +454,11 @@ def main(out_path):
         for e in ev_out:
             e["matches"] = [m | {"pred": round_floats(m["pred"], PAGE_DECIMALS)} if "pred" in m else m
                             for m in e["matches"]]
-    lazy = split_b_tier(ev_out)
-    b_blob = json.dumps({"events": lazy}, separators=(",", ":"), ensure_ascii=False)
-    b_name = f"data-b.{_short_hash(b_blob.encode('utf-8'))}.json" if lazy else None
     data = {
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
         "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
-        # B-tier event bodies, fetched by the page on demand (see split_b_tier)
-        "bfile": b_name,
     }
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
@@ -496,20 +467,12 @@ def main(out_path):
     os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
-    # the B-tier file; older ones (other hashes) beside the page are removed
-    for fn in os.listdir(out_dir):
-        if re.fullmatch(r"data-b\.[0-9a-f]{16}\.json", fn) and fn != b_name:
-            os.remove(os.path.join(out_dir, fn))
-    if b_name:
-        with open(os.path.join(out_dir, b_name), "w", encoding="utf-8") as f:
-            f.write(b_blob)
     n_m = sum(len(e["matches"]) for e in events)
     n_p = sum(1 for e in events for m in e["matches"] if "pred" in m)
     print(f"wrote {out_path}: {len(events)} events, {len(teams)} teams, {n_m} matches "
           f"({n_p} pre-match calls), {len(pairs)} + {sum(len(v) for v in epairs.values())} matchups, "
           f"{len(html.encode('utf-8')) // 1024} KB (data {len(blob.encode('utf-8')) // 1024} KB); "
-          f"{len(imw.names)} images in {IMG_DIR}/ ({imw.bytes // 1024} KB, {pruned} stale removed); "
-          f"B-tier file {b_name} ({len(b_blob.encode('utf-8')) // 1024} KB, {len(lazy)} events)")
+          f"{len(imw.names)} images in {IMG_DIR}/ ({imw.bytes // 1024} KB, {pruned} stale removed)")
 
 
 if __name__ == "__main__":

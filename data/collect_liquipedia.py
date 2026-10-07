@@ -350,7 +350,7 @@ def main():
     def disp(code):
         return alias.get(code) or code
 
-    # tournament tier (S/A/B/C) from the page's own infobox; a stage page with no
+    # tournament tier (S or A) from the page's own infobox; a stage page with no
     # tier of its own takes its parent event's ("IEM/2026/Cologne/Stage 1" -> Cologne)
     tier_cache = {}
 
