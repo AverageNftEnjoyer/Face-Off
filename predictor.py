@@ -310,6 +310,49 @@ def series_probs(p1, p2, p3):
     return p_2_0, p_2_1, p_1_2, p_0_2
 
 
+BO5_KEYS = ["p_3_0", "p_3_1", "p_3_2", "p_2_3", "p_1_3", "p_0_3"]
+
+
+def series_scorelines(p_maps):
+    """Every final score of a best-of-N series, N = len(p_maps) (odd), from
+    per-map P(A); map i uses p_maps[i] and play stops once a side has
+    (N + 1) // 2 maps. Returns A's wins by margin then B's, from A's view:
+    BO3 [2-0, 2-1, 1-2, 0-2] (same values as series_probs), BO5 [3-0, 3-1,
+    3-2, 2-3, 1-3, 0-3]. Sums to 1; map outcomes are independent."""
+    n = len(p_maps)
+    if n < 1 or n % 2 == 0:
+        raise ValueError(f"best-of needs an odd number of maps, got {n}")
+    need = (n + 1) // 2
+    a_end, b_end = [0.0] * need, [0.0] * need   # indexed by the loser's map count
+    state = {(0, 0): 1.0}
+    for p in p_maps:
+        nxt = {}
+        for (i, j), pr_ in state.items():
+            for ii, jj, q in ((i + 1, j, p), (i, j + 1, 1.0 - p)):
+                if ii == need:
+                    a_end[jj] += pr_ * q
+                elif jj == need:
+                    b_end[ii] += pr_ * q
+                else:
+                    nxt[(ii, jj)] = nxt.get((ii, jj), 0.0) + pr_ * q
+        state = nxt
+    return a_end + b_end[::-1]
+
+
+def flat_map_prob(p_series, n_maps):
+    """The one per-map P(A) that, played on every map of a best-of-n_maps,
+    gives series P(A) = p_series (bisection, full precision)."""
+    need = (n_maps + 1) // 2
+    lo, hi = 0.0, 1.0
+    for _ in range(200):
+        mid = (lo + hi) / 2.0
+        if sum(series_scorelines([mid] * n_maps)[:need]) < p_series:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2.0
+
+
 def display_percent(probs, places=2):
     """Largest-remainder percentages for one complete probability set.
 
@@ -785,6 +828,13 @@ def predict_match(m):
     # pair or a scoreline always adds to 100.00. Exact values stay unrounded.
     pa_shown, pb_shown = display_percent([p_a, p_b])
     score_shown = display_percent([s20, s21, s12, s02])
+
+    # --- BO5 (grand finals): one flat per-map chance on all five maps, set so
+    # the BO5 series P(A) equals p_a. On 44 real BO5s no map-specific or
+    # length-based alternative scored measurably better (scripts/bo5_check.py).
+    q5 = flat_map_prob(p_a, 5)
+    s5 = series_scorelines([q5] * 5)
+    s5_shown = display_percent(s5)
     return {
         "match": f"{a_name} vs {b_name}",
         "p_a": pa_shown / 100.0,
@@ -818,6 +868,10 @@ def predict_match(m):
             "p_0_2": score_shown[3] / 100.0,
         },
         "series_probs_exact": {"p_2_0": s20, "p_2_1": s21, "p_1_2": s12, "p_0_2": s02},
+        # BO5 scorelines from A's view (3-0 .. 0-3); the BO3 fields above are unchanged
+        "series_probs_bo5": {k: v / 100.0 for k, v in zip(BO5_KEYS, s5_shown)},
+        "series_probs_bo5_exact": dict(zip(BO5_KEYS, s5)),
+        "map_prob_bo5_exact": q5,
         "p_a_exact": p_a,
         "market_edge_pp": edge,
         "market_edge_note": edge_note,

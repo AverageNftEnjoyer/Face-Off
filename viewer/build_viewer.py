@@ -64,11 +64,17 @@ def _norm(name):
 
 
 def vrs_lookup(path):
-    """team -> {"rank", "points", "region", "region_rank", "name"} from data/vrs.py output.
-    Matched by normalised name ("Team Vitality" == "Vitality"); ties and
-    renamed teams are settled by roster overlap (>= 3 shared players)."""
+    """(date, assign, info) from data/vrs.py output.
+
+    assign({team: roster}) -> {team: entry} matches every hub team to a global
+    VRS entry in one pass, so no entry is given to two teams: first the same
+    normalised name ("Team Vitality" == "Vitality"), then one name starting
+    the other ("Betclic Apogee Esports" / "Betclic"), then roster overlap
+    (>= 3 shared players, for renamed teams). Each pass only uses entries no
+    earlier pass claimed. info(entry) -> {"rank", "points", "name", "region",
+    "region_rank"} for the page."""
     if not os.path.exists(path):
-        return None, lambda team, roster: None
+        return None, lambda rosters: {}, lambda r: None, []
     vrs = json.load(open(path, encoding="utf-8"))
     glob = vrs["standings"].get("global", [])
     regional = {}
@@ -78,24 +84,38 @@ def vrs_lookup(path):
         for r in rows:
             regional[(r["name"], tuple(sorted(p.lower() for p in r["roster"])))] = (region, r["rank"])
 
-    def find(team, roster):
-        roster = {p.lower() for p in roster}
-        overlap = lambda r: len(roster & {p.lower() for p in r["roster"]})
-        by_name = [r for r in glob if _norm(r["name"]) == _norm(team)]
-        if by_name:
-            best = max(by_name, key=overlap)
-        else:
-            cands = [r for r in glob if overlap(r) >= 3]
-            if not cands:
-                return None
-            best = max(cands, key=lambda r: (overlap(r), -r["rank"]))
+    def info(best):
         region, rrank = regional.get((best["name"], tuple(sorted(p.lower() for p in best["roster"]))), (None, None))
         return {"rank": best["rank"], "points": best["points"], "name": best["name"],
                 "region": region, "region_rank": rrank}
-    return vrs["date"], find
+
+    def assign(rosters):
+        rosters = {t: {p.lower() for p in r} for t, r in rosters.items()}
+        overlap = lambda t, r: len(rosters[t] & {p.lower() for p in r["roster"]})
+        out, taken = {}, set()
+
+        def claim(t, cands):
+            cands = [r for r in cands if id(r) not in taken]
+            if cands:
+                best = max(cands, key=lambda r: (overlap(t, r), -r["rank"]))
+                out[t] = best
+                taken.add(id(best))
+
+        for t in sorted(rosters):
+            claim(t, [r for r in glob if _norm(r["name"]) == _norm(t)])
+        for t in sorted(x for x in rosters if x not in out):
+            k = _norm(t)
+            if len(k) >= 4:
+                claim(t, [r for r in glob if len(_norm(r["name"])) >= 4
+                          and (k.startswith(_norm(r["name"])) or _norm(r["name"]).startswith(k))])
+        for t in sorted((x for x in rosters if x not in out), key=lambda x: -len(rosters[x])):
+            claim(t, [r for r in glob if overlap(t, r) >= 3])
+        return out
+
+    return vrs["date"], assign, info, glob
 
 
-def compact(r):
+def compact(r, bo=3):
     """Engine output trimmed to what the page draws.
 
     Probabilities stay at full precision. The page formats a set (the two
@@ -114,6 +134,8 @@ def compact(r):
               .replace("decider: ", "D") for x in r["veto_log"]],
         "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],
         "w": r["warnings"],
+        # best-of-five matches also carry the BO5 scorelines (3-0 .. 0-3)
+        **({"s5": [r["series_probs_bo5_exact"][k] for k in pr.BO5_KEYS]} if bo == 5 else {}),
     }
 
 
@@ -135,11 +157,14 @@ class Timeline:
         return self.h
 
 
-def predict(h, a, b, day, title=None):
+def predict(h, a, b, day, title=None, bo=3, elo=False):
     """Engine call with point-in-time features; `title` (the tournament page)
     lets the feature builder attach stand-in / missing-IGL flags."""
     inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
-    return compact(pr.predict_match(inp))
+    out = compact(pr.predict_match(inp), bo)
+    if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
+        out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
+    return out
 
 
 def main(out_path):
@@ -189,12 +214,26 @@ def main(out_path):
                     players[pid.lower()]["flag"] = cc
 
     colors = TC.all_team_colors(assets, ROOT)
-    vrs_date, vrs_find = vrs_lookup(os.path.join(ROOT, "data", "vrs.json"))
+    vrs_date, vrs_assign, vrs_info, vrs_glob = vrs_lookup(os.path.join(ROOT, "data", "vrs.json"))
     latest_lineup = {}
     for e in events:                     # newest event lineup per team (events are date-sorted)
         for t, v in e["participants"].items():
             if v["players"]:
                 latest_lineup[t] = v["players"]
+    # VRS ranks for every team with series in the data, assigned in one pass so
+    # no rank appears on two cards. Every global top-VRS_TOP_N team gets a card:
+    # the data team it matched, else a card under its VRS name (no series yet).
+    rosters = {t: [p["id"] for p in assets["teams"].get(t, {"roster": []})["roster"]
+                   if p["role"].lower() != "coach"] + latest_lineup.get(t, [])
+               for t in set(names) | {t for t, g in h_now.games.items() if g}}
+    vrs_of = vrs_assign(rosters)
+    names = sorted(set(names) | {t for t, r in vrs_of.items() if r["rank"] <= E.VRS_TOP_N})
+    claimed = {id(r) for r in vrs_of.values()}
+    for r in vrs_glob:
+        if r["rank"] <= E.VRS_TOP_N and id(r) not in claimed and r["name"] not in vrs_of:
+            vrs_of[r["name"]] = r
+            names.append(r["name"])
+    names = sorted(set(names))
     teams = {}
     for t in names:
         rec = assets["teams"].get(t, {"roster": [], "location": "", "region": ""})
@@ -213,16 +252,17 @@ def main(out_path):
                 break
         roster = [{"id": p["id"], "coach": p["role"].lower() == "coach"} for p in rec["roster"]]
         teams[t] = {
-            "slug": E.slug(t), "elo": round(h_now.elo[t]), "rank": rank.get(t),
+            # no series in the data -> no Elo (it would only be the 1500 starting value)
+            "slug": E.slug(t), "elo": round(h_now.elo[t]) if h_now.games[t] else None, "rank": rank.get(t),
             "color": colors.get(t, [None, None]),
-            "vrs": vrs_find(t, [p["id"] for p in rec["roster"] if p["role"].lower() != "coach"]
-                            + latest_lineup.get(t, [])),
+            "vrs": vrs_info(vrs_of[t]) if t in vrs_of else None,
             "series": len(h_now.games[t]),
             "location": rec.get("location", ""), "region": rec.get("region", ""),
             "liquipedia": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
             "roster": roster,
             "form30": f.get("form30"), "n30": f.get("n30", 0), "vol": f["volatility"],
-            "maps": f["maps"], "results": results, "trace": trace[t][-40:],
+            # plain 90-day map win rates for display (the engine reads Elo-adjusted ones)
+            "maps": f["maps_raw"], "results": results, "trace": trace[t][-40:],
             "events": [e["slug"] for e in events if t in e["participants"]
                        or any(t in (m["t1"], m["t2"]) for m in e["matches"])],
         }
@@ -243,12 +283,13 @@ def main(out_path):
         for kind, obj in jobs[d]:
             if kind == "match":
                 m, title = obj
-                m["pred"] = predict(h, m["t1"], m["t2"], d, title)
+                m["pred"] = predict(h, m["t1"], m["t2"], d, title, m.get("bo") or 3, elo=True)
             else:
                 ps = [t for t in obj["participants"] if t in teams]
                 epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d, obj["title"]) for a in ps for b in ps if a != b}
     h_today = tl.at(as_of)
-    pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in names for b in names if a != b}
+    rated = [t for t in names if h_now.games[t]]   # a team with no series has nothing to predict from
+    pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in rated for b in rated if a != b}
     # live and upcoming tournaments get their own matchup grid too, so that
     # announced stand-ins for that tournament are applied
     for e in events:

@@ -189,7 +189,7 @@ def main():
     top = sorted(active, key=lambda t: -h.elo[t])[:16]
     import events as E
     evs = E.discover()
-    teams = sorted(set(E.event_teams(evs)) | set(top))
+    teams = sorted(set(E.event_teams(evs)) | set(top) | set(E.vrs_top_teams(set(h.games))))
 
     texts = {}
     for b in batched(teams, 8):

@@ -469,6 +469,38 @@ def _rand_match(rng):
     return m
 
 
+class TestBO5(unittest.TestCase):
+    """BO5 output: new fields only; the BO3 fields keep their meaning."""
+
+    def test_general_function_matches_bo3_formula(self):
+        for ps in ([0.6, 0.6, 0.6], [0.71, 0.47, 0.53], [0.2, 0.9, 0.5]):
+            for x, y in zip(predictor.series_scorelines(ps), series_probs(*ps)):
+                self.assertAlmostEqual(x, y, places=12)
+
+    def test_bo5_sums_and_series_probability(self):
+        for kw in ({}, {"rating_a": 1.08}, {"rating_b": 1.12}):
+            r = predict_match(base_match(**kw))
+            ex = [r["series_probs_bo5_exact"][k] for k in predictor.BO5_KEYS]
+            self.assertAlmostEqual(sum(ex), 1.0, places=12)
+            # BO5 win chance shown equals the engine's p_a
+            self.assertAlmostEqual(sum(ex[:3]), r["p_a_exact"], places=9)
+            shown = [r["series_probs_bo5"][k] for k in predictor.BO5_KEYS]
+            self.assertEqual(round(sum(shown) * 100, 6), 100.0)
+            self.assertEqual(shown, [v / 100 for v in display_percent(ex)])
+
+    def test_three_one_is_modal_below_two_thirds(self):
+        # flat per-map q: P(3-1)/P(3-0) = 3(1-q), so 3-1 wins exactly when q < 2/3
+        for q, modal in ((0.55, 1), (0.65, 1), (0.68, 0), (0.8, 0)):
+            s = predictor.series_scorelines([q] * 5)
+            self.assertEqual(max(range(3), key=lambda k: s[k]), modal, q)
+
+    def test_bo3_fields_unchanged(self):
+        r = predict_match(base_match(rating_a=1.05))
+        self.assertEqual(sorted(r["series_probs"]), ["p_0_2", "p_1_2", "p_2_0", "p_2_1"])
+        s = r["series_probs_exact"]
+        self.assertAlmostEqual(s["p_2_0"] + s["p_2_1"], r["p_a_exact"], places=6)
+
+
 class TestRandomizedMonotonicity(unittest.TestCase):
     """p_a must be non-decreasing in A's rating, 30d form and last-5 form for
     every input, including opp-rating adjustment and fractional sample sizes."""

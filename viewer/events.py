@@ -8,6 +8,7 @@ map pool, participants with their event lineups ({{TeamParticipants}} or the
 older {{TeamCard}}), and every {{Match}} with per-map round scores.
 """
 
+import json
 import os
 import re
 import sys
@@ -260,7 +261,15 @@ def parse_participants(txt, alias):
 
 # ------------------------------------------------------------------ events
 def discover(alias=None):
-    alias = alias if alias is not None else C.cached_aliases()
+    if alias is None:
+        alias = C.cached_aliases()
+        # a renamed team's other page name ("Inner Circle Esports") resolves to
+        # the name the match data uses ("IC Esports"), so the hub lists it once.
+        # Skipped when the source name is itself a match-data name.
+        names = set(alias.values())
+        for src, dst in C.cached_page_redirects().items():
+            if src not in names:
+                alias.setdefault(src, dst)
     titles, texts = load_texts()
     tops = [t for t in titles if not any(t != o and t.startswith(o + "/") for o in titles)]
     events, seen = [], set()
@@ -335,3 +344,35 @@ def event_teams(events):
         out |= set(e["participants"])
         out |= {m["t1"] for m in e["matches"] if m["t1"]} | {m["t2"] for m in e["matches"] if m["t2"]}
     return sorted(out)
+
+
+VRS_TOP_N = 50
+_DROP_WORDS = {"team", "esports", "esport", "gaming", "clan", "club", "gg"}
+
+
+def _team_key(name):
+    words = re.findall(r"[a-z0-9]+", name.lower())
+    return "".join(w for w in words if w not in _DROP_WORDS) or "".join(words)
+
+
+def vrs_top_teams(known, n=VRS_TOP_N, path=None):
+    """The Valve Regional Standings global top `n`, as team names the hub can
+    list: a name from `known` (the match data) when one matches -- same
+    normalised name first, then one name being the start of the other ("Betclic"
+    -> "Betclic Apogee Esports", only if exactly one known name fits) --
+    otherwise the VRS name itself (a team with no series in the data)."""
+    path = path or os.path.join(ROOT, "data", "vrs.json")
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        rows = json.load(f)["standings"].get("global", [])
+    by_key = {_team_key(k): k for k in known}
+    out = []
+    for r in sorted(rows, key=lambda r: r["rank"])[:n]:
+        key = _team_key(r["name"])
+        if key in by_key:
+            out.append(by_key[key])
+            continue
+        fits = [k for kk, k in by_key.items() if len(key) >= 4 and (kk.startswith(key) or key.startswith(kk))]
+        out.append(fits[0] if len(fits) == 1 else r["name"])
+    return out

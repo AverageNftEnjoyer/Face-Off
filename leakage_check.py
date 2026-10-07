@@ -21,10 +21,19 @@ TESTS (run on a sample of match days, or every day with --all)
      day D's features) must FAIL test 1. This proves the check has teeth.
 Exit code 0 = no leakage found, 1 = leakage (offending fields are printed).
 
-NOT COVERED (static inputs this check cannot see, documented in the report):
+  4. LINEUPS (data/lineups.json via lineup_features.py): replace every lineup
+     dated >= D with five made-up players. The stand-in and continuity
+     features of every series dated D must not change. CANARY: the same
+     features computed with day D's own lineups visible must change on at
+     least one sampled day.
+
+NOT COVERED, AND WHY IT CANNOT BE:
   data/roster_events.json is a present-day scrape of Liquipedia stand-in
-  tables keyed by tournament. It is pre-match information only if the stand-in
-  was announced before the match; the per-match lineup design in WS1 replaces it.
+  tables keyed by TOURNAMENT, with no date per stand-in. There is nothing
+  dated to scramble, so no point-in-time test can be written for it: a
+  stand-in who joined mid-event is flagged for the whole event, including
+  matches played before he joined. Treat it as unverified. data/lineups.json
+  (dated per match, test 4) is its replacement for any feature that ships.
 
 USAGE (from D:/Face-Off):  python leakage_check.py [--days 40] [--all]
 Stdlib only, deterministic.
@@ -111,6 +120,36 @@ def check_day(clean, variant_rows, day):
     return problems
 
 
+def check_lineups(matches, test_days):
+    """Test 4: lineups dated >= D must not reach day-D lineup features."""
+    import lineup_features as LF
+    lineups = LF.load()
+    if not lineups:
+        return [], 0, 0
+    clean_hist = LF.team_history(matches, lineups)
+    problems, caught, tested = [], 0, 0
+    for day in test_days:
+        todays = [m for m in matches if m["date"] == day]
+        scrambled = {k: {s: ([f"fake{i}_{s}_{k}" for i in range(5)] if v.get(s) else None) for s in ("a", "b")}
+                     if k.split("|", 1)[0] >= day else v for k, v in lineups.items()}
+        hist = LF.team_history(matches, scrambled)
+        nxt = (bt._d(day) + bt.timedelta(days=1)).isoformat()
+        any_known = False
+        hit = False
+        for m in todays:
+            for team in (m["team_a"], m["team_b"]):
+                f_clean = LF.features(clean_hist.get(team, []), day)
+                any_known |= f_clean["known"]
+                if f_clean != LF.features(hist.get(team, []), day):
+                    problems.append(f"{day} {team}: lineup features changed when lineups >= D were scrambled")
+                # canary: let day D's own (scrambled) lineups through
+                if LF.features(clean_hist.get(team, []), day) != LF.features(hist.get(team, []), nxt):
+                    hit = True
+        tested += any_known
+        caught += hit and any_known
+    return problems, caught, tested
+
+
 def sample_days(days, k):
     if k >= len(days):
         return days
@@ -147,6 +186,13 @@ def main(argv=None):
         if check_day(leaky_clean, leaky_build(scramble_from(matches, day)), day):
             caught += 1
     canary_ok = caught > 0
+
+    # 4. lineups
+    lineup_fail, lineup_caught, lineup_days = check_lineups(matches, test_days)
+    failures += lineup_fail
+    canary_ok = canary_ok and (lineup_days == 0 or lineup_caught > 0)
+    print(f"lineups: {lineup_days} days with lineup data tested, {len(lineup_fail)} leaks; "
+          f"lineup canary caught on {lineup_caught} days")
 
     print(f"scramble + truncate: {len(failures)} differing fields")
     for f in failures[:30]:

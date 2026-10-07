@@ -269,6 +269,25 @@ def cached_aliases():
     return alias
 
 
+def cached_page_redirects():
+    """Plain page redirects seen in the cache, e.g. a renamed team's old or new
+    page name -> the page Liquipedia serves ("Inner Circle Esports" ->
+    "IC Esports"). Both the exact and the lower-case source are keys, matching
+    how codes and page names are looked up. Namespaced (Template:, File:) and
+    sub-page redirects (maps, tournaments) are left out."""
+    out = {}
+    if os.path.isdir(lpfetch.CACHE):
+        for fn in sorted(os.listdir(lpfetch.CACHE)):
+            with open(os.path.join(lpfetch.CACHE, fn), encoding="utf-8") as f:
+                q = json.load(f).get("response", {}).get("query", {})
+            for r in q.get("redirects", []):
+                src, dst = r.get("from", ""), r.get("to", "")
+                if src and dst and not any(ch in src + dst for ch in ":/"):
+                    out.setdefault(src, dst)
+                    out.setdefault(src.lower(), dst)
+    return out
+
+
 def resolve_codes(codes):
     """Map team-template codes -> Liquipedia team page name.
 
