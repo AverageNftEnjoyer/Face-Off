@@ -482,8 +482,8 @@ class TestBO5(unittest.TestCase):
             r = predict_match(base_match(**kw))
             ex = [r["series_probs_bo5_exact"][k] for k in predictor.BO5_KEYS]
             self.assertAlmostEqual(sum(ex), 1.0, places=12)
-            # BO5 win chance shown equals the engine's p_a
-            self.assertAlmostEqual(sum(ex[:3]), r["p_a_exact"], places=9)
+            # BO5 scorelines add up to the BO5 win chance
+            self.assertAlmostEqual(sum(ex[:3]), r["p_a_bo5_exact"], places=9)
             shown = [r["series_probs_bo5"][k] for k in predictor.BO5_KEYS]
             self.assertEqual(round(sum(shown) * 100, 6), 100.0)
             self.assertEqual(shown, [v / 100 for v in display_percent(ex)])
@@ -569,7 +569,7 @@ class TestVetoFormats(unittest.TestCase):
             self.assertEqual(len(v["maps"]), 1)
             self.assertEqual(v["maps"][0], st[-1][2])
             self.assertEqual(sorted(s[2] for s in st), sorted(POOL))     # every map once
-            self.assertEqual(v["map_probs_exact"], [r["p_a_exact"]])     # series = map
+            self.assertEqual(v["map_probs_exact"], [r["p_a_bo1_exact"]])  # series = map
         r = predict_match(base_match(permaban_a="Nuke"))
         self.assertEqual(r["veto_bo1"]["veto_log"][0], "A bans Nuke (permaban)")
 
@@ -595,13 +595,32 @@ class TestVetoFormats(unittest.TestCase):
         edge_b = [v["map_logits"][1], v["map_logits"][3]]
         self.assertGreater(min(edge_a), max(edge_b))
 
+    def test_series_length_changes_the_odds_not_the_pick(self):
+        # same per-map edge: worth least over one map, most over five
+        for kw in ({"rating_a": 1.08}, {"rating_b": 1.12}, {"rating_a": 1.03}):
+            r = predict_match(base_match(**kw))
+            p1, p3, p5 = r["p_a_bo1_exact"], r["p_a_exact"], r["p_a_bo5_exact"]
+            q = predictor.flat_map_prob(p3, 3)
+            self.assertAlmostEqual(p1, q, places=12)
+            self.assertAlmostEqual(p5, sum(predictor.series_scorelines([q] * 5)[:3]), places=12)
+            if p3 > .5:
+                self.assertTrue(.5 < p1 < p3 < p5)
+            else:
+                self.assertTrue(.5 > p1 > p3 > p5)
+            for ci in (r["confidence_interval_bo1"], r["confidence_interval_bo5"]):
+                self.assertLessEqual(ci[0], ci[1])
+            self.assertEqual(round((r["p_a_bo1"] + display_percent([p1, 1 - p1])[1] / 100) * 100, 6), 100.0)
+        even = predict_match({})          # no data at all: a coin flip in every format
+        self.assertAlmostEqual(even["p_a_bo1_exact"], .5, places=9)
+        self.assertAlmostEqual(even["p_a_bo5_exact"], .5, places=9)
+
     def test_bo5_map_probs_imply_p_a_and_display(self):
         for kw in ({}, {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B}, {"rating_b": 1.12},
                    {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B, "rating_a": 1.10}):
             r = predict_match(base_match(**kw))
             p5 = r["veto_bo5"]["map_probs_exact"]
             sc = predictor.series_scorelines(p5)
-            self.assertAlmostEqual(sum(sc[:3]), r["p_a_exact"], places=9)
+            self.assertAlmostEqual(sum(sc[:3]), r["p_a_bo5_exact"], places=9)
             ex = [r["series_probs_bo5_exact"][k] for k in predictor.BO5_KEYS]
             for x, y in zip(sc, ex):
                 self.assertAlmostEqual(x, y, places=12)
@@ -609,7 +628,7 @@ class TestVetoFormats(unittest.TestCase):
             self.assertEqual(round(sum(shown), 6), 100.0)
             self.assertEqual([r["series_probs_bo5"][k] for k in predictor.BO5_KEYS],
                              [v / 100 for v in shown])
-            self.assertEqual(r["map_prob_bo5_exact"], predictor.flat_map_prob(r["p_a_exact"], 5))
+            self.assertEqual(r["map_prob_bo5_exact"], predictor.flat_map_prob(r["p_a_bo5_exact"], 5))
 
     def test_bo5_shape_uses_map_shape(self):
         m = base_match(maps_a=GP_MAPS_A, maps_b=GP_MAPS_B)

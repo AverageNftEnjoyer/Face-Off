@@ -1,6 +1,7 @@
 # Data sources
 
-Fetched 2026-10-06. Every record in `matches.json` comes from a real source page;
+Fetched 2026-10-06; tournament coverage widened to Liquipedia's S/A/B tiers on
+2026-10-07 (see "Tier coverage" below). Every record in `matches.json` comes from a real source page;
 nothing is invented, imputed or estimated.
 
 ## 1. Liquipedia Counter-Strike: USED (the only source of match records)
@@ -10,18 +11,48 @@ nothing is invented, imputed or estimated.
   User-Agent, accepted gzip, waited 2.5 s between `action=query` requests, and
   cached every response. `action=parse` was never used. Team-name resolution
   used 2 `action=expandtemplates` calls, spaced 30 s apart and treated with
-  the parse-level limit. In total about 90 requests were made.
+  the parse-level limit. In total about 90 requests were made. The tier expansion (2026-10-07) added about 340 `action=query`
+  requests (category listings, candidate pages 20 per request, team pages 20
+  per request, imageinfo, prefix listings; roughly half were repeat listings
+  while the discovery rules were tuned) and about 270 image downloads.
 - Content license: CC BY-SA 3.0 (Liquipedia text content). Attribution:
   "Data from Liquipedia (liquipedia.net/counterstrike), CC BY-SA 3.0".
   Derived data in this folder inherits CC BY-SA.
-- Raw responses: `raw/liquipedia/*.json` (82 files). Each file stores the request URL, the fetch
-  time and the full JSON response. The page list is in `raw/lp_titles_selected.txt` (119
-  titles), selected from the `allpages` prefix listings in `raw/lp_titles_all.txt`.
-  It covers S/A-tier main events: IEM, ESL Pro League S19-S26, BLAST Premier 2023-24,
+- Raw responses: `raw/liquipedia/*.json` (379 files on 2026-10-07). Each file stores the request URL, the fetch
+  time and the full JSON response. The page list is in `raw/lp_titles_selected.txt` (301
+  lines). The first 139 were selected from the `allpages` prefix listings in
+  `raw/lp_titles_all.txt`; the other 162 come from the tier categories (below).
+  The hand-picked part covers S/A-tier main events: IEM, ESL Pro League S19-S26, BLAST Premier 2023-24,
   BLAST Open/Rivals/Bounty 2025-26, PGL 2024-26, the CS2 Majors (Copenhagen 2024,
   Shanghai 2024, Austin 2025, Budapest 2025, Cologne 2026), Thunderpick WC,
   Esports World Cup and StarSeries. Regional qualifiers and open qualifiers are
   excluded.
+- Tier coverage (added 2026-10-07). Discovery reads Liquipedia's own tier
+  categories, `Category:S-Tier Tournaments` (504 pages), `Category:A-Tier
+  Tournaments` (828) and `Category:B-Tier Tournaments` (2709), with
+  `list=categorymembers` (500 per request, newest additions first). A title is
+  a candidate when it names 2026/2027, or names no year and was added since
+  2024-01-01. Each candidate's own infobox decides: `liquipediatier` must be
+  S/A/B (stored per event as `tl`), `liquipediatiertype` must not be Qualifier,
+  Showmatch, Weekly, Monthly, Misc or Points, `sdate` must be in 2026/2027 and
+  the event at most 45 days long (season-long leagues are left out). Regional
+  sub-pages of a tracked event ("Thunderpick/World Championship/2026/North
+  America") are regional qualifiers and skipped. A sub-page dated apart from
+  its parent with the same tier is its own event (ESL Challenger League cups,
+  "BetBoom RUSH B! Summit 2026: Part Deux"); one that overlaps it, names a
+  stage type ("Online Stage") or has no tier of its own is a stage of it
+  (`events.is_stage`). Result: 161 main events (16 S, 14 A, 131 B) and 1 stage
+  page. `scripts/daily_refresh.py` runs the same discovery every 6 hours
+  (first 500 entries per tier, 3 requests).
+  The B tier brings many teams without a Liquipedia page (306 of 526 event
+  teams) and a few team-template codes Liquipedia cannot resolve ("lavked",
+  "33"); those keep their code as the name. Event, team and sponsor names are
+  reproduced as Liquipedia writes them (several B-tier events and teams carry
+  sponsor names).
+- Forfeited maps (`score1=W|score2=FF` or the reverse) are now credited to the
+  W side; their round scores are from before the forfeit. This recovered 37
+  series in the new pages and corrected one old one: HEROIC-NiP 2024-09-03 (ESL
+  Pro League S20) goes to NiP, map 1 overturned for illegal equipment.
 - What was extracted: each `{{Match}}` template. That gives the opponents
   (team-template codes), the date (event-local, day precision) and each `{{Map}}`:
   the map name, plus the map winner from the half/overtime round scores
@@ -43,11 +74,11 @@ nothing is invented, imputed or estimated.
 ### Counts (`matches.json`)
 | | count |
 |---|---|
-| unique finished series (CS2 era, 2023-10-16 .. 2026-10-05) | 2161 |
-| BO3 / BO1 / BO5 | 1814 / 303 / 44 |
+| unique finished series (CS2 era, 2023-10-16 .. 2026-10-07) | 5551 (2167 before the tier expansion) |
+| BO3 / BO1 / BO5 | 4921 / 562 / 68 |
 | BO3 without map data | 0 |
-| maps with a winner | 4838 |
-| teams (after alias resolution) | 100 |
+| maps with a winner | 12678 |
+| teams (after alias resolution) | 419 (100 before) |
 | showmatches dropped | by section (`{{show match}}` / `{{Stage|Showmatch}}`) and by team name |
 
 `liquipedia:<page>` is recorded in `source` for every series, together with the HLTV

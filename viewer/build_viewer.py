@@ -14,13 +14,20 @@ Build the Faceoff CS2 hub: one static HTML page with
 
 Inputs: data/matches.json, cached event pages (viewer/events.py),
 viewer/assets.json (python viewer/fetch_assets.py) and predictor.py.
-Images are embedded as data: URIs. Nothing is estimated by hand.
+Nothing is estimated by hand.
+
+Output, next to OUT.html (all names content-hashed, so they can be cached forever):
+  * OUT_DIR/img/<hash>.<ext>      every logo, map image and flag the page uses
+                                  (stale files in OUT_DIR/img are removed)
+  * OUT_DIR/data-b.<hash>.json    the bodies (matches, lineups, format, map pool)
+                                  of B-tier events; the page fetches it only when
+                                  B-tier content is asked for
 
 USAGE:
     python viewer/build_viewer.py OUT.html
 """
 
-import base64
+import hashlib
 import json
 import os
 import re
@@ -44,15 +51,90 @@ N_TEAM_RESULTS = 10
 FACTORS = ["base_strength", "form_30d", "form_last5", "head_to_head", "map_veto", "roster", "stakes"]
 
 
-def data_uri(rel):
-    if not rel:
-        return None
-    path = os.path.join(ROOT, rel)
-    ext = os.path.splitext(path)[1].lower()
-    mime = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
-            ".svg": "image/svg+xml", ".webp": "image/webp"}.get(ext, "image/png")
-    with open(path, "rb") as f:
-        return f"data:{mime};base64," + base64.b64encode(f.read()).decode()
+IMG_DIR = "img"                   # beside the output html
+B_TIERS = ("B",)                  # events whose bodies go to the lazily fetched file
+B_LAZY_KEYS = ("participants", "matches", "format", "swiss", "pool")
+
+
+def _short_hash(raw):
+    return hashlib.sha256(raw).hexdigest()[:16]
+
+
+class ImageWriter:
+    """Copies each image the page uses to OUT_DIR/img/<content hash>.<ext> and
+    hands back its relative URL. Same bytes -> same file, so a logo used twice
+    is written once, and a changed logo gets a new name (safe to cache forever)."""
+
+    EXTS = {".png", ".jpg", ".jpeg", ".svg", ".webp", ".gif"}
+
+    def __init__(self, out_dir):
+        self.dir = os.path.join(out_dir, IMG_DIR)
+        os.makedirs(self.dir, exist_ok=True)
+        self.names = set()
+        self.bytes = 0
+
+    def url(self, rel):
+        if not rel:
+            return None
+        path = os.path.join(ROOT, rel)
+        ext = os.path.splitext(path)[1].lower()
+        ext = ext if ext in self.EXTS else ".png"
+        with open(path, "rb") as f:
+            raw = f.read()
+        name = _short_hash(raw) + ext
+        if name not in self.names:
+            dst = os.path.join(self.dir, name)
+            if not (os.path.exists(dst) and os.path.getsize(dst) == len(raw)):
+                with open(dst, "wb") as f:
+                    f.write(raw)
+            self.names.add(name)
+            self.bytes += len(raw)
+        return f"{IMG_DIR}/{name}"
+
+    def prune(self):
+        """Remove files in OUT_DIR/img this build did not write (only that folder)."""
+        n = 0
+        for fn in os.listdir(self.dir):
+            p = os.path.join(self.dir, fn)
+            if fn not in self.names and os.path.isfile(p):
+                os.remove(p)
+                n += 1
+        return n
+
+
+def round_floats(o, n):
+    """Copy of `o` with every float rounded to n decimals (page payload only)."""
+    if isinstance(o, float):
+        return round(o, n)
+    if isinstance(o, list):
+        return [round_floats(x, n) for x in o]
+    if isinstance(o, dict):
+        return {k: round_floats(v, n) for k, v in o.items()}
+    return o
+
+
+# Decimals kept for the probabilities in the page payload. The page shows at
+# most two decimals of a percentage (1e-4 of a probability) via largest
+# remainder; 9 decimals moves a value by at most 5e-10, so a shown figure can
+# only change if the exact value sits within 5e-10 of a rounding edge. It cuts
+# about 0.5 MB of compressed transfer. None keeps full precision.
+PAGE_DECIMALS = 9
+
+
+def split_b_tier(ev_out):
+    """Move the heavy body of each B-tier event into a separate payload.
+
+    The page keeps a light stub per B-tier event (dates, place, prize slots,
+    champion, placements: enough for the tier counts and the team pages) and
+    fetches the rest on demand. Returns {slug: body}."""
+    lazy = {}
+    for e in ev_out:
+        if e.get("tl") in B_TIERS:
+            lazy[e["slug"]] = {k: e[k] for k in B_LAZY_KEYS}
+            for k in B_LAZY_KEYS:
+                del e[k]
+            e.update({"participants": [], "matches": [], "pool": [], "lazy": 1})
+    return lazy
 
 
 _DROP = {"team", "esports", "esport", "gaming", "clan", "club", "gg"}
@@ -162,6 +244,9 @@ def compact(r, bo=3):
         "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],
         "w": r["warnings"],
         "v1": veto_code(r["veto_bo1"]["veto_log"]),
+        # win chance and likely range by series length: [BO1, BO5] (p / b above are BO3)
+        "pf": [round(r["p_a_bo1_exact"], 6), round(r["p_a_bo5_exact"], 6)],
+        "bf": [r["confidence_interval_bo1"], r["confidence_interval_bo5"]],
         **({"v5": veto_code(v5["veto_log"]), "p5": [round(p, 5) for p in v5["map_probs_exact"]]} if v5 else {}),
         # best-of-five matches also carry the exact BO5 scorelines (3-0 .. 0-3)
         **({"s5": [r["series_probs_bo5_exact"][k] for k in pr.BO5_KEYS]} if bo == 5 else {}),
@@ -226,6 +311,12 @@ def main(out_path):
     active = [t for t, g in h_now.games.items() if g and g[-1]["date"] >= as_of - timedelta(days=90)]
     rank = {t: i + 1 for i, t in enumerate(sorted(active, key=lambda t: -h_now.elo[t]))}
     top = [t for t in sorted(active, key=lambda t: -h_now.elo[t]) if len(h_now.games[t]) >= 15][:16]
+    # the matchup comparer's pool: teams at S/A-tier events (or untiered ones),
+    # the top active teams and the VRS top VRS_TOP_N. B-tier-only teams get team
+    # cards and pre-match calls for their matches, but no all-pairs grid: with
+    # hundreds of B-tier teams that grid would grow by the square.
+    major = [e for e in events if e["tl"] not in ("B", "C", "D")]
+    pool = set(E.event_teams(major)) | set(top)
     names = sorted(set(E.event_teams(events)) | set(top))
 
     trace = defaultdict(list)
@@ -260,12 +351,14 @@ def main(out_path):
                    if p["role"].lower() != "coach"] + latest_lineup.get(t, [])
                for t in set(names) | {t for t, g in h_now.games.items() if g}}
     vrs_of = vrs_assign(rosters)
+    pool |= {t for t, r in vrs_of.items() if r["rank"] <= E.VRS_TOP_N}
     names = sorted(set(names) | {t for t, r in vrs_of.items() if r["rank"] <= E.VRS_TOP_N})
     claimed = {id(r) for r in vrs_of.values()}
     for r in vrs_glob:
         if r["rank"] <= E.VRS_TOP_N and id(r) not in claimed and r["name"] not in vrs_of:
             vrs_of[r["name"]] = r
             names.append(r["name"])
+            pool.add(r["name"])
     names = sorted(set(names))
     teams = {}
     for t in names:
@@ -290,6 +383,8 @@ def main(out_path):
             "color": colors.get(t, [None, None]),
             "vrs": vrs_info(vrs_of[t]) if t in vrs_of else None,
             "series": len(h_now.games[t]),
+            # in the all-pairs matchup grid (DATA.pairs)
+            "cmp": t in pool and bool(h_now.games[t]),
             "location": rec.get("location", ""), "region": rec.get("region", ""),
             "liquipedia": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
             "roster": roster,
@@ -307,7 +402,7 @@ def main(out_path):
             if m["t1"] in teams and m["t2"] in teams and m["day"]:
                 d = min(date.fromisoformat(m["day"]), as_of)
                 jobs[d].append(("match", (m, e["title"])))
-        if e["status"] == "finished":
+        if e["status"] == "finished" and e["tl"] not in ("B", "C", "D"):
             jobs[date.fromisoformat(e["start"])].append(("event", e))
     epairs = {}
     tl = Timeline(all_matches)
@@ -321,12 +416,12 @@ def main(out_path):
                 ps = [t for t in obj["participants"] if t in teams]
                 epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d, obj["title"]) for a in ps for b in ps if a != b}
     h_today = tl.at(as_of)
-    rated = [t for t in names if h_now.games[t]]   # a team with no series has nothing to predict from
+    rated = [t for t in names if teams[t]["cmp"]]   # a team with no series has nothing to predict from
     pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in rated for b in rated if a != b}
     # live and upcoming tournaments get their own matchup grid too, so that
     # announced stand-ins for that tournament are applied
     for e in events:
-        if e["status"] != "finished":
+        if e["status"] != "finished" and e["tl"] not in ("B", "C", "D"):
             ps = [t for t in e["participants"] if t in teams]
             epairs[e["slug"]] = {f"{a}|{b}": predict(h_today, a, b, as_of, e["title"])
                                  for a in ps for b in ps if a != b}
@@ -361,37 +456,60 @@ def main(out_path):
 
     ev_out = []
     for e in events:
-        ev_out.append({k: e[k] for k in ("slug", "name", "start", "end", "tier", "type", "city", "country",
+        ev_out.append({k: e[k] for k in ("slug", "name", "start", "end", "tier", "tl", "type", "city", "country",
                                          "venue", "prize", "organizer", "swiss", "format", "prizes", "pool",
                                          "status", "champion", "runner_up", "placements", "page")}
                       | {"participants": [{"team": t, **v} for t, v in e["participants"].items()],
                          "matches": e["matches"]})
 
+    out_dir = os.path.dirname(os.path.abspath(out_path))
+    imw = ImageWriter(out_dir)
     images = {
-        "logos": {t: data_uri(assets["teams"][t]["logo_dark_path"]) for t in names
+        "logos": {t: imw.url(assets["teams"][t]["logo_dark_path"]) for t in names
                   if t in assets["teams"] and assets["teams"][t].get("logo_dark_path")},
-        "maps": {mp: data_uri(v["path"]) for mp, v in assets["maps"].items()},
-        "flags": {c: data_uri(p) for c, p in assets["flags"].items() if p},
-        "events": {s: data_uri(p) for s, p in assets["event_logos"].items() if p},
+        "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
+        "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
+        "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
     }
+    pruned = imw.prune()
+    if PAGE_DECIMALS is not None:
+        pairs = round_floats(pairs, PAGE_DECIMALS)
+        epairs = round_floats(epairs, PAGE_DECIMALS)
+        for e in ev_out:
+            e["matches"] = [m | {"pred": round_floats(m["pred"], PAGE_DECIMALS)} if "pred" in m else m
+                            for m in e["matches"]]
+    lazy = split_b_tier(ev_out)
+    b_blob = json.dumps({"events": lazy}, separators=(",", ":"), ensure_ascii=False)
+    b_name = f"data-b.{_short_hash(b_blob.encode('utf-8'))}.json" if lazy else None
     data = {
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
         "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
+        # B-tier event bodies, fetched by the page on demand (see split_b_tier)
+        "bfile": b_name,
     }
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     img = json.dumps(images, separators=(",", ":")).replace("</", "<\\/")
     html = tpl.replace("/*__DATA__*/null", blob).replace("/*__IMAGES__*/null", img)
-    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
+    # the B-tier file; older ones (other hashes) beside the page are removed
+    for fn in os.listdir(out_dir):
+        if re.fullmatch(r"data-b\.[0-9a-f]{16}\.json", fn) and fn != b_name:
+            os.remove(os.path.join(out_dir, fn))
+    if b_name:
+        with open(os.path.join(out_dir, b_name), "w", encoding="utf-8") as f:
+            f.write(b_blob)
     n_m = sum(len(e["matches"]) for e in events)
     n_p = sum(1 for e in events for m in e["matches"] if "pred" in m)
     print(f"wrote {out_path}: {len(events)} events, {len(teams)} teams, {n_m} matches "
           f"({n_p} pre-match calls), {len(pairs)} + {sum(len(v) for v in epairs.values())} matchups, "
-          f"{len(html) // 1024} KB (data {len(blob) // 1024} KB, images {len(img) // 1024} KB)")
+          f"{len(html.encode('utf-8')) // 1024} KB (data {len(blob.encode('utf-8')) // 1024} KB); "
+          f"{len(imw.names)} images in {IMG_DIR}/ ({imw.bytes // 1024} KB, {pruned} stale removed); "
+          f"B-tier file {b_name} ({len(b_blob.encode('utf-8')) // 1024} KB, {len(lazy)} events)")
 
 
 if __name__ == "__main__":

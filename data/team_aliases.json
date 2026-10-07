@@ -5,10 +5,28 @@
    "100t"
   ],
   "1w Team": [
-   "1w"
+   "1w",
+   "1win"
+  ],
+  "2007": [
+   "2007"
+  ],
+  "33": [
+   "33"
   ],
   "3DMAX": [
    "3dmax"
+  ],
+  "5star eSports": [
+   "5star",
+   "5star esports",
+   "nomads.mn"
+  ],
+  "6666 Esports": [
+   "6666"
+  ],
+  "8Sins": [
+   "8sins"
   ],
   "9INE": [
    "9ine"
@@ -16,28 +34,101 @@
   "9z Team": [
    "9z"
   ],
+  "A Fundação": [
+   "a fundação"
+  ],
+  "ALCOHOLIC gamblers anonymous": [
+   "alcoholic gamblers anonymous"
+  ],
+  "ALGO Esports": [
+   "algo"
+  ],
+  "ALLINNERS": [
+   "allinners"
+  ],
   "ALTERNATE aTTaX": [
    "attax"
+  ],
+  "AM Gaming": [
+   "am",
+   "am gaming"
   ],
   "AMKAL ESPORTS": [
    "amkal",
    "amkal esports"
   ],
+  "ARCRED": [
+   "arcred"
+  ],
+  "ASTRAL Esports": [
+   "astral",
+   "astral esports"
+  ],
   "ATOX Esports": [
    "atox",
    "atox esports"
   ],
+  "AaB esport": [
+   "aab"
+  ],
+  "Acend": [
+   "acend"
+  ],
+  "Aimclub (Romanian team)": [
+   "aimclub.ro"
+  ],
+  "Alka Esports": [
+   "alka",
+   "alka esports",
+   "alka gaming"
+  ],
+  "Alliance": [
+   "alliance"
+  ],
+  "Alpha Dominion Nation": [
+   "alpha dominion nation"
+  ],
+  "Alter Ego": [
+   "alter ego"
+  ],
+  "Alzon": [
+   "alzon"
+  ],
+  "Anteiku": [
+   "anteiku"
+  ],
   "Apeks": [
    "apeks"
+  ],
+  "Arcade Esports (Australian team)": [
+   "arcade.au"
   ],
   "Astralis": [
    "astralis"
   ],
+  "Atreides": [
+   "atreides"
+  ],
+  "Atrix Esports": [
+   "atrix"
+  ],
   "Aurora Gaming": [
    "aurora"
   ],
+  "Azuolas": [
+   "azuolas"
+  ],
   "B8": [
    "b8"
+  ],
+  "BAKS Esports": [
+   "baks"
+  ],
+  "BASEMENT BOYS": [
+   "basement boys"
+  ],
+  "BBL Esports": [
+   "bbl"
   ],
   "BC.Game Esports": [
    "bc.game"
@@ -45,14 +136,42 @@
   "BESTIA": [
    "bestia"
   ],
+  "BESTIA Academy": [
+   "bestia academy",
+   "bestia.a"
+  ],
   "BIG": [
    "big"
+  ],
+  "BIG Academy": [
+   "biga"
+  ],
+  "BIG EQUIPA": [
+   "big equipa"
+  ],
+  "BORRACHEIROS": [
+   "borracheiros"
   ],
   "BOSS": [
    "boss"
   ],
+  "BRUTE": [
+   "brute"
+  ],
+  "Back to Back": [
+   "back to back"
+  ],
+  "Bad Luck": [
+   "bad luck"
+  ],
   "Bad News Kangaroos": [
    "bnk"
+  ],
+  "Bebop": [
+   "bebop"
+  ],
+  "Benched gods": [
+   "benched gods"
   ],
   "BetBoom Team": [
    "betboom"
@@ -60,33 +179,177 @@
   "Betclic Apogee Esports": [
    "apogee"
   ],
+  "Black Phoenix": [
+   "black phoenix"
+  ],
+  "Blitzkrieg (Mexican team)": [
+   "blitzkrieg (mexican team)",
+   "blitzkrieg.mx"
+  ],
+  "Bounty Hunters Esports": [
+   "bounty.br"
+  ],
+  "Bushido Wildcats": [
+   "bw"
+  ],
+  "Butterfly (Russian team)": [
+   "butterfly",
+   "butterfly.ru"
+  ],
+  "CPC Curralzinho Esports": [
+   "curralzinho"
+  ],
+  "CSDIILIT": [
+   "csdiilit"
+  ],
+  "CTNEx": [
+   "ctnex"
+  ],
+  "CYBERSHOKE Esports": [
+   "cybershoke"
+  ],
+  "CYBERSHOKE Prospects": [
+   "cybershoke prospects"
+  ],
+  "CarritoSpain": [
+   "carritospain"
+  ],
+  "Change The Game": [
+   "ctg"
+  ],
+  "Charrados FC": [
+   "charrados fc"
+  ],
+  "Chicken Coop Esports": [
+   "chicken coop",
+   "chicken coop esports"
+  ],
   "Chinggis Warriors": [
+   "chinggis",
    "chinggis warriors"
   ],
   "Cloud9": [
    "c9",
    "cloud9"
   ],
+  "Club 333": [
+   "club 333"
+  ],
+  "Clutchain Female": [
+   "clutchain female"
+  ],
+  "Color": [
+   "color"
+  ],
   "Complexity": [
    "col",
    "complexity"
+  ],
+  "Crashers": [
+   "crashers"
+  ],
+  "Crimson Fang": [
+   "crimson fang"
+  ],
+  "DAMAJUANA": [
+   "damajuana"
   ],
   "DENDELE CS": [
    "dendele",
    "sharks",
    "sharks esports"
   ],
+  "DETONATE": [
+   "detonate"
+  ],
+  "DONSTU Esports": [
+   "donstu"
+  ],
+  "DashSkins": [
+   "dashskins"
+  ],
+  "Despedidos": [
+   "despedidos"
+  ],
+  "Diamant Esports": [
+   "diamant esports"
+  ],
+  "Drama Esports": [
+   "drama esports",
+   "drama.rs"
+  ],
+  "Drip Too Hard": [
+   "drip too hard"
+  ],
+  "Dripmen": [
+   "dripmen"
+  ],
+  "Dziuseppe": [
+   "dziuseppe"
+  ],
+  "EC BANGA": [
+   "ec banga"
+  ],
   "ECSTATIC": [
    "ecstatic"
+  ],
+  "ELITES": [
+   "elites"
+  ],
+  "EMPIRE (American team)": [
+   "empire (american team)"
   ],
   "ENCE": [
    "ence"
   ],
+  "ENCE Academy": [
+   "ence academy"
+  ],
+  "ESC Gaming": [
+   "esc",
+   "esc gaming"
+  ],
+  "EXODIA (Venezuelan team)": [
+   "exodia (venezuelan team)"
+  ],
+  "EXSAD Gaming": [
+   "exsad gaming"
+  ],
   "EYEBALLERS": [
    "eyeballers"
   ],
+  "Echo": [
+   "echo"
+  ],
+  "Ehisto Base": [
+   "ehisto base"
+  ],
   "Elevate": [
    "elevate"
+  ],
+  "Elusive (American team)": [
+   "elusive (american team)"
+  ],
+  "Endless Journey": [
+   "endless journey"
+  ],
+  "Enjoy": [
+   "enjoy.ru"
+  ],
+  "Entropy Gaming": [
+   "entropy"
+  ],
+  "Eruption": [
+   "eruption"
+  ],
+  "Esport Academy Copenhagen": [
+   "eac"
+  ],
+  "Esport Academy Copenhagen Extra": [
+   "eac extra"
+  ],
+  "Esport BERG": [
+   "esport berg"
   ],
   "Eternal Fire": [
    "ef",
@@ -95,20 +358,59 @@
   "Evil Geniuses": [
    "eg"
   ],
+  "F5 Esports": [
+   "f5 esports"
+  ],
+  "FAVBET Team": [
+   "favbet"
+  ],
+  "FC Famalicão Esports": [
+   "famalicao"
+  ],
   "FOKUS": [
    "fokus"
+  ],
+  "FOLHA AMARELA": [
+   "folha amarela"
   ],
   "FORZE Esports": [
    "forze"
   ],
+  "FORZE Reload": [
+   "forze reload"
+  ],
+  "FRZ Unit": [
+   "frz unit"
+  ],
   "FURIA": [
    "furia"
+  ],
+  "FURIA Female": [
+   "furia.fe"
   ],
   "FUT Esports": [
    "fut"
   ],
+  "FUZOS": [
+   "fuzos"
+  ],
   "FaZe Clan": [
    "faze"
+  ],
+  "Fake do Biru": [
+   "fake do biru"
+  ],
+  "Falcons Force": [
+   "falcons force"
+  ],
+  "FarmVille": [
+   "farmville"
+  ],
+  "FengDa Gaming": [
+   "fengda"
+  ],
+  "Fingers Crossed": [
+   "fingers crossed"
   ],
   "Fisher College": [
    "fisher college"
@@ -116,13 +418,28 @@
   "Fluxo": [
    "fluxo"
   ],
+  "Fluxo W7M": [
+   "fluxo w7m"
+  ],
   "FlyQuest": [
    "flyquest",
    "fq"
   ],
+  "FlyQuest RED": [
+   "flyquest red"
+  ],
   "Fnatic": [
    "fnatic",
    "fnc"
+  ],
+  "Four Magic": [
+   "four magic"
+  ],
+  "Foxtrot Esports": [
+   "foxtrot esports"
+  ],
+  "G2 Ares": [
+   "g2 ares"
   ],
   "G2 Esports": [
    "g2"
@@ -130,29 +447,106 @@
   "Gaimin Gladiators": [
    "gaimin"
   ],
+  "Galorys": [
+   "galorys"
+  ],
+  "Game Hunters": [
+   "game hunters"
+  ],
   "GamerLegion": [
    "gamerlegion",
    "gl"
   ],
+  "GenOne": [
+   "genone"
+  ],
   "Gentle Mates": [
    "gentle mates"
+  ],
+  "Glitch Agency": [
+   "glitch agency"
+  ],
+  "Gothic": [
+   "gothic"
   ],
   "Grayhound Gaming": [
    "ghg",
    "grayhound"
   ],
+  "Grindas": [
+   "grindas"
+  ],
+  "Ground Zero Gaming": [
+   "gz"
+  ],
+  "Grêmio Esports": [
+   "gremio"
+  ],
+  "Guará eSports": [
+   "guara",
+   "guara esports",
+   "guará esports"
+  ],
+  "HAVU": [
+   "havu"
+  ],
   "HEROIC": [
    "heroic"
+  ],
+  "HEROIC Academy": [
+   "heroic academy"
   ],
   "HOTU": [
    "hotu"
   ],
+  "HYPERSPIRIT": [
+   "hyperspirit"
+  ],
+  "Hashiras": [
+   "hashiras"
+  ],
+  "Haunted House": [
+   "haunted house"
+  ],
+  "HereWeGoAgain": [
+   "herewegoagain"
+  ],
+  "Hermine Esports Club": [
+   "hermine"
+  ],
+  "HighBorn": [
+   "highborn"
+  ],
+  "Honvéd Esport": [
+   "honved"
+  ],
   "Housebets": [
    "housebets"
   ],
+  "IC Academy": [
+   "ic academy"
+  ],
   "IC Esports": [
    "ic",
+   "ic esports",
    "inner circle"
+  ],
+  "IDoPieca": [
+   "idopieca"
+  ],
+  "INFINITE": [
+   "infinite",
+   "infinite.ro"
+  ],
+  "INFINITE Talent": [
+   "infinite talent"
+  ],
+  "INOX Division": [
+   "inox",
+   "inox division"
+  ],
+  "Iberian Soul": [
+   "iberian soul"
   ],
   "Imperial Esports": [
    "imp",
@@ -162,18 +556,92 @@
   "Imperial Female": [
    "imperial female"
   ],
+  "InControl": [
+   "incontrol"
+  ],
+  "Incognito (American team)": [
+   "incognito (american team)"
+  ],
+  "Insiders Esport": [
+   "insiders esport"
+  ],
+  "Iowa Stormboar": [
+   "iowa stormboar"
+  ],
+  "Isurus": [
+   "isurus"
+  ],
+  "It's a Secret": [
+   "it's a secret"
+  ],
   "JiJieHao": [
    "jijiehao",
    "jjh"
   ],
+  "Johnny Speeds": [
+   "johnny speeds"
+  ],
+  "Julie&cie": [
+   "julie&cie"
+  ],
+  "Just Players": [
+   "just players"
+  ],
   "K27": [
    "k27"
+  ],
+  "KAJO": [
+   "kajo"
   ],
   "KOI": [
    "koi"
   ],
+  "KOLESIE": [
+   "kolesie"
+  ],
+  "Kaleido Gaming": [
+   "kaleido"
+  ],
+  "Keyd Stars": [
+   "keyd",
+   "keyd stars"
+  ],
+  "Kitsune Esports": [
+   "kitsune esports"
+  ],
+  "LAGUNA": [
+   "laguna"
+  ],
+  "LUNA Esports": [
+   "luna esports"
+  ],
+  "LargadosyPelados": [
+   "largadosypelados"
+  ],
+  "Last Bullet (Chinese team)": [
+   "lb.cn"
+  ],
+  "Lazer Cats": [
+   "lazer cats"
+  ],
   "Legacy": [
    "legacy"
+  ],
+  "Leo Team": [
+   "leo team"
+  ],
+  "Life's A Game": [
+   "lag",
+   "life's a game"
+  ],
+  "Lilmix": [
+   "lilmix"
+  ],
+  "Looking for Org": [
+   "looking for org"
+  ],
+  "Low Cortisol": [
+   "low cortisol"
   ],
   "Luminosity Gaming": [
    "lg"
@@ -185,11 +653,66 @@
   "M80": [
    "m80"
   ],
+  "MAGICOS": [
+   "magicos"
+  ],
+  "MANA eSports": [
+   "mana"
+  ],
+  "MANSÃO MAROMBA": [
+   "mansao maromba"
+  ],
+  "MASONIC": [
+   "masonic"
+  ],
+  "MEIA NOITE": [
+   "meia noite"
+  ],
   "MIBR": [
    "mibr"
   ],
+  "MIBR Academy": [
+   "mibr.a"
+  ],
+  "MIBR Female": [
+   "mibr.fe"
+  ],
+  "MINLATE (European team)": [
+   "minlate.eu"
+  ],
+  "MIRA": [
+   "mira"
+  ],
+  "MONEY CREW": [
+   "money crew"
+  ],
   "MOUZ": [
    "mouz"
+  ],
+  "MOUZ NXT": [
+   "mnxt",
+   "mouz nxt"
+  ],
+  "Magna": [
+   "magna"
+  ],
+  "Mai tai": [
+   "mai tai"
+  ],
+  "Marca Registrada": [
+   "marca registrada"
+  ],
+  "Marsborne": [
+   "marsborne"
+  ],
+  "Matrix (Ukrainian team)": [
+   "matrix.ua"
+  ],
+  "Metanoia": [
+   "metanoia"
+  ],
+  "Metanoia Wolves": [
+   "metanoia wolves"
   ],
   "Metizport": [
    "metizport"
@@ -197,8 +720,32 @@
   "Mindfreak (Australian team)": [
    "mindfreak"
   ],
+  "Misa Esports": [
+   "misa"
+  ],
   "Monte": [
    "monte"
+  ],
+  "Morningstar": [
+   "morningstar"
+  ],
+  "Mousquetaires": [
+   "mousquetaires"
+  ],
+  "Mythic": [
+   "mythic"
+  ],
+  "NEW VISION": [
+   "new vision"
+  ],
+  "NEXVOID": [
+   "nexvoid"
+  ],
+  "NOMERCY (European team)": [
+   "nomercy (european team)"
+  ],
+  "NOVAQ": [
+   "novaq"
   ],
   "NRG": [
    "nrg"
@@ -206,8 +753,23 @@
   "Natus Vincere": [
    "navi"
   ],
+  "Natus Vincere Junior": [
+   "navi jr"
+  ],
+  "Nebula In Chaox": [
+   "nebula in chaox"
+  ],
   "Nemiga Gaming": [
    "nemiga"
+  ],
+  "New Legends": [
+   "new legends"
+  ],
+  "Nexus Gaming": [
+   "nexus"
+  ],
+  "Nigel Mirage": [
+   "nigel mirage"
   ],
   "Ninjas in Pyjamas": [
    "nip"
@@ -215,8 +777,24 @@
   "NoChance (Israeli team)": [
    "nochance (israeli team)"
   ],
+  "Noir Verse": [
+   "noir verse"
+  ],
+  "Nordic Partners Gaming": [
+   "nordic partners",
+   "npg"
+  ],
   "Nouns Esports": [
    "nouns"
+  ],
+  "NuTorious": [
+   "nutorious"
+  ],
+  "Nuclear TigeRES": [
+   "nuclear tigeres"
+  ],
+  "Não Copulas": [
+   "não copulas"
   ],
   "ODDIK": [
    "oddik"
@@ -224,56 +802,243 @@
   "OG": [
    "og"
   ],
+  "OLDBOYS": [
+   "oldboys"
+  ],
+  "OMEGA": [
+   "omega",
+   "omega.kz"
+  ],
+  "OUTPLAYED (Argentinian team)": [
+   "outplayed (argentinian team)"
+  ],
+  "Omnius Gaming": [
+   "omnius gaming"
+  ],
   "Onyx Ravens": [
    "onyx ravens"
+  ],
+  "Oruga": [
+   "oruga"
+  ],
+  "Outfit 49": [
+   "outfit 49"
+  ],
+  "OverKnight": [
+   "overknight"
+  ],
+  "Overtake Sector": [
+   "overtake",
+   "overtake sector"
+  ],
+  "Oxuji Esports": [
+   "oxuji"
   ],
   "PARIVISION": [
    "parivision"
   ],
+  "PEAK AGENCY": [
+   "peak agency"
+  ],
+  "PREZTiGE": [
+   "preztige"
+  ],
+  "PRIME (Portuguese team)": [
+   "prime.pt"
+  ],
+  "Partizan Esports": [
+   "partizan esports"
+  ],
   "Passion UA": [
    "passion ua"
+  ],
+  "Patins da Ferrari": [
+   "pdf"
+  ],
+  "Peladona": [
+   "peladona"
   ],
   "Pera Esports": [
    "pera"
   ],
+  "Permitta Esports": [
+   "permitta"
+  ],
+  "PhaZe (South African team)": [
+   "phaze (south african team)"
+  ],
+  "Phantom Esports": [
+   "phantom",
+   "phantom esports"
+  ],
+  "Phantom Esports Academy": [
+   "phantom academy"
+  ],
+  "Phoenix (American team)": [
+   "phoenix (american team)"
+  ],
+  "Players (Brazilian team)": [
+   "players.br"
+  ],
+  "Prestige Esport": [
+   "prestige.dk"
+  ],
+  "Prison Breakers": [
+   "prison breakers"
+  ],
+  "Procyon Team": [
+   "procyon"
+  ],
+  "Project 91 Team": [
+   "project 91 team"
+  ],
+  "PsychoFace": [
+   "psychoface"
+  ],
+  "Pugdesonesto": [
+   "pugdesonesto"
+  ],
+  "QUAZAR": [
+   "quazar"
+  ],
+  "QUINTESSÊNCIA": [
+   "quintessencia",
+   "quintessência"
+  ],
+  "QWENTRY": [
+   "qwentry"
+  ],
+  "R2 Esports Club": [
+   "r2",
+   "r2 esports club"
+  ],
   "RED Canids": [
    "red canids"
+  ],
+  "RED FEET": [
+   "red feet"
+  ],
+  "RTT100": [
+   "rtt100"
+  ],
+  "RUSTEC": [
+   "rustec"
   ],
   "Rare Atom": [
    "rare atom"
   ],
+  "ReThink": [
+   "rethink"
+  ],
+  "Realms Esports": [
+   "realms esports"
+  ],
   "Rebels Gaming": [
    "rebels gaming"
+  ],
+  "Reign Above": [
+   "reign above"
   ],
   "Rooster": [
    "rooster"
   ],
+  "Rune Eaters Esports": [
+   "rune eaters",
+   "rune eaters esports"
+  ],
   "SAW": [
    "saw"
+  ],
+  "SAW Youngsters": [
+   "saw youngsters"
   ],
   "SINNERS Esports": [
    "sinners"
   ],
+  "SINQU Esports": [
+   "sinqu"
+  ],
+  "SIXSEVEN": [
+   "sixseven"
+  ],
+  "SPARTA Esports": [
+   "sparta esports",
+   "sparta.ru"
+  ],
+  "Sakura Esports": [
+   "sakura esports"
+  ],
   "Sangal Esports": [
    "sangal"
+  ],
+  "Sangrija": [
+   "sangrija"
   ],
   "Sashi Esport": [
    "sashi"
   ],
+  "Satriales": [
+   "satriales"
+  ],
+  "Sementes do Mal": [
+   "sementes do mal"
+  ],
   "SemperFi Esports": [
    "semperfi"
+  ],
+  "Shimmer": [
+   "shimmer"
   ],
   "ShindeN": [
    "shinden"
   ],
+  "Skele": [
+   "skele"
+  ],
+  "SkinRave Esports": [
+   "skinrave"
+  ],
+  "SportsBetExpert": [
+   "sportsbetexpert"
+  ],
   "Steel Helmet": [
    "steel helmet"
+  ],
+  "Strael-Bora": [
+   "strael-bora"
+  ],
+  "Straight2Killin": [
+   "straight2killin"
+  ],
+  "Subtop De France": [
+   "subtop de france"
+  ],
+  "Surge (American team)": [
+   "surge (american team)"
+  ],
+  "Synthesis (South African team)": [
+   "synthesis.za"
+  ],
+  "TDK": [
+   "tdk"
   ],
   "THUNDERdOWNUNDER": [
    "thunderdownunder"
   ],
+  "TNC Esport": [
+   "tnc esport"
+  ],
+  "TNC Esports": [
+   "tnc esports"
+  ],
+  "TNT": [
+   "tnt"
+  ],
   "TYLOO": [
    "tyloo"
+  ],
+  "Team Aether": [
+   "team aether"
   ],
   "Team Falcons": [
    "falcons",
@@ -284,9 +1049,19 @@
    "team liquid",
    "tl"
   ],
+  "Team Nemesis": [
+   "nemesis",
+   "team nemesis"
+  ],
+  "Team Pigeons": [
+   "team pigeons"
+  ],
   "Team Spirit": [
    "spirit",
    "team spirit"
+  ],
+  "Team Spirit Academy": [
+   "spirit academy"
   ],
   "Team Venom": [
    "team venom"
@@ -296,14 +1071,48 @@
    "vitality"
   ],
   "Team Voca": [
+   "team voca",
    "voca"
   ],
   "The Huns Esports": [
    "huns"
   ],
+  "The Last Resort": [
+   "tlr"
+  ],
   "The MongolZ": [
    "mongolz",
    "the mongolz"
+  ],
+  "The MongolZ Academy": [
+   "mongolz academy"
+  ],
+  "Time Waves": [
+   "time waves"
+  ],
+  "Tricked Esport": [
+   "tricked"
+  ],
+  "Tung Tung Sahur": [
+   "tung tung sahur"
+  ],
+  "Turma do Pagode": [
+   "turma do pagode"
+  ],
+  "UNO MILLE": [
+   "uno mille"
+  ],
+  "UNiTY esports": [
+   "unity.sk"
+  ],
+  "UPGRADE Team": [
+   "upgrade team"
+  ],
+  "Unreal Nightmare": [
+   "unreal nightmare"
+  ],
+  "Ursa": [
+   "ursa"
   ],
   "VC esport": [
    "vc esport"
@@ -311,21 +1120,208 @@
   "VERTEX Esports Club": [
    "vertex"
   ],
+  "VP.Prodigy": [
+   "vpp"
+  ],
+  "Vasco eSports": [
+   "vasco"
+  ],
+  "Vexa E-Sports": [
+   "vexa"
+  ],
+  "Vexar": [
+   "vexar"
+  ],
+  "Villainous": [
+   "villainous"
+  ],
   "Virtus.pro": [
    "vp"
+  ],
+  "Västerås Esport": [
+   "vasteras esport"
+  ],
+  "WOPA Esport": [
+   "wopa"
+  ],
+  "WRAITH PCIFIC": [
+   "wraith pcific"
+  ],
+  "WW TEAM": [
+   "ww team"
+  ],
+  "Walczaki": [
+   "walczaki"
+  ],
+  "Wanted Goons": [
+   "wanted goons"
+  ],
+  "WhiteBird": [
+   "whitebird"
   ],
   "Wildcard": [
    "wildcard"
   ],
+  "XABI ALONSO": [
+   "xabi alonso"
+  ],
+  "XCLAN": [
+   "xclan"
+  ],
+  "Xept": [
+   "xept"
+  ],
+  "Yawara E-Sports": [
+   "yawara"
+  ],
+  "Young Ninjas": [
+   "yn"
+  ],
   "Zero Tenacity": [
    "z10"
   ],
+  "Zetta Games": [
+   "zetta games"
+  ],
+  "Zingaro Gaming": [
+   "zingaro gaming"
+  ],
+  "Zomblers": [
+   "zomblers"
+  ],
+  "against All authority": [
+   "aaa"
+  ],
+  "bankaPEPSI": [
+   "bankapepsi"
+  ],
+  "boomerang": [
+   "dragonclaw",
+   "oramond",
+   "vrsdelivery"
+  ],
+  "brazylijski luz": [
+   "brazylijski luz"
+  ],
+  "cswalkers": [
+   "cswalkers"
+  ],
+  "eLITenergy": [
+   "elitenergy"
+  ],
+  "ex-FAVBET Team": [
+   "ex-favbet"
+  ],
+  "ex-Fingers Crossed": [
+   "ex-fingers crossed"
+  ],
+  "ex-Flame Sharks": [
+   "ex-flame sharks"
+  ],
+  "ex-KRÜ Esports": [
+   "ex-krü esports"
+  ],
+  "ex-Keyd Stars": [
+   "ex-keyd stars"
+  ],
+  "ex-MANA eSports": [
+   "ex-mana"
+  ],
+  "ex-MIBR Academy": [
+   "ex-mibr academy"
+  ],
+  "ex-MINLATE": [
+   "ex-minlate"
+  ],
+  "ex-ODDIK": [
+   "ex-oddik"
+  ],
+  "ex-RUBY": [
+   "ex-ruby"
+  ],
+  "ex-RUSTEC": [
+   "ex-rustec"
+  ],
+  "ex-SkinRave Esports": [
+   "ex-skinrave esports"
+  ],
+  "ex-Vexa E-Sports": [
+   "ex-vexa"
+  ],
+  "ex-Young Ninjas": [
+   "ex-yn"
+  ],
+  "ex-Zero Tenacity": [
+   "ex-z10",
+   "ex-zero tenacity"
+  ],
+  "hindsight": [
+   "hindsight"
+  ],
+  "home": [
+   "home"
+  ],
+  "hypewrld": [
+   "hypewrld"
+  ],
+  "illwill": [
+   "illwill"
+  ],
+  "internet kings": [
+   "internet kings"
+  ],
+  "kONO.ECF": [
+   "kono.ecf"
+  ],
+  "lavked": [
+   "lavked"
+  ],
+  "los kogutos": [
+   "los kogutos"
+  ],
+  "lospegadinhas": [
+   "lospegadinhas"
+  ],
+  "m1x (Kosovar team)": [
+   "m1x (kosovar team)",
+   "m1x.ks"
+  ],
   "magic": [
-   "magic"
+   "magic",
+   "magic (russian team)",
+   "magic.ru"
+  ],
+  "megoshort": [
+   "megoshort"
+  ],
+  "mindshock": [
+   "mindshock"
   ],
   "paiN Gaming": [
    "pain",
    "pain gaming"
+  ],
+  "paiN Gaming Academy": [
+   "pain gaming academy",
+   "pain.a"
+  ],
+  "playersclub": [
+   "playersclub"
+  ],
+  "regain": [
+   "regain"
+  ],
+  "rottweilers": [
+   "rottweilers"
+  ],
+  "yngods": [
+   "yngods"
+  ],
+  "your end": [
+   "your end"
+  ],
+  "zajezdzacze": [
+   "zajezdzacze"
   ]
  }
 }

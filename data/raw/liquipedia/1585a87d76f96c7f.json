@@ -1,0 +1,1 @@
+{"url": "https://liquipedia.net/counterstrike/api.php?aclimit=100&acprefix=B-Tier&acprop=size&action=query&format=json&list=allcategories", "fetched": "2026-10-07T17:39:06Z", "response": {"batchcomplete": "", "query": {"allcategories": [{"size": 2709, "pages": 2709, "files": 0, "subcats": 0, "*": "B-Tier Tournaments"}]}}}

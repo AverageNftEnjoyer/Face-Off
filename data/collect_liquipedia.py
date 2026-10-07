@@ -152,6 +152,11 @@ def parse_map(s):
             return None
         mapn = MAP_NORMALIZE.get(mname.lower(), mname)
         w = _int(nm.get("winner"))
+        # a forfeited map is written score1=W|score2=FF (or the reverse); its
+        # round scores, when present, are from before the forfeit and are ignored
+        ff = (nm.get("score1", "").strip().upper(), nm.get("score2", "").strip().upper())
+        if w not in (1, 2) and ff in (("W", "FF"), ("FF", "W")):
+            w = 1 if ff[0] == "W" else 2
         if w not in (1, 2):
             s1 = _int(nm.get("score1"))
             s2 = _int(nm.get("score2"))
@@ -345,6 +350,20 @@ def main():
     def disp(code):
         return alias.get(code) or code
 
+    # tournament tier (S/A/B/C) from the page's own infobox; a stage page with no
+    # tier of its own takes its parent event's ("IEM/2026/Cologne/Stage 1" -> Cologne)
+    tier_cache = {}
+
+    def tier_of(page):
+        if page not in tier_cache:
+            m_ = re.search(r"\|\s*liquipediatier\s*=\s*([^\n|}]*)", texts.get(page, ""))
+            v = (m_.group(1).strip().lower() if m_ else "").replace("-tier", "").replace(" tier", "")
+            t = {"1": "S", "2": "A", "3": "B", "4": "C", "5": "D"}.get(v, v.upper() if v in "sabcd" and v else "")
+            if not t and "/" in page:
+                t = tier_of(page.rsplit("/", 1)[0])
+            tier_cache[page] = t
+        return tier_cache[page]
+
     # dedupe and normalize
     seen = {}
     for m in raw:
@@ -357,7 +376,8 @@ def main():
         rec = {"date": m["date"], "event": m["event"], "team_a": a, "team_b": b,
                "winner": a if m["winner"] == 1 else b, "best_of": m["best_of"],
                "maps": [{"map": x["map"], "winner": a if x["w"] == 1 else b} for x in m["maps"]],
-               "source": "liquipedia:" + m["page"] + (f" (hltv match {m['hltv']})" if m["hltv"] else "")}
+               "source": "liquipedia:" + m["page"] + (f" (hltv match {m['hltv']})" if m["hltv"] else ""),
+               "tier": tier_of(m["page"])}
         k2 = (m["date"], tuple(sorted([a, b])))
         # same pair + same date + same hltv id (or no id) -> duplicate via redirect
         dup = None

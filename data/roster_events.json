@@ -63,6 +63,18 @@
    "standin": true
   }
  },
+ "AM Gaming": {
+  "Super DraculaN/Season 1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "7kick",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
  "AMKAL ESPORTS": {
   "BLAST/Premier/2024/Fall/Showdown": {
    "missing_igl": false,
@@ -79,6 +91,28 @@
    "players": [
     [
      "shady",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Alter Ego": {
+  "ATOX Esports": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dobu",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Perfect World/Major/2024/Shanghai/Asia-Pacific": {
+   "missing_igl": false,
+   "players": [
+    [
+     "dobu",
      ""
     ]
    ],
@@ -2341,6 +2375,68 @@
    "standin": true
   }
  },
+ "HAVU": {
+  "Assembly/GameXpo/2018": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Twixie",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Invitational/2021/Summer": {
+   "missing_igl": false,
+   "players": [
+    [
+     "diSTURBED",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Elisa/Invitational/2023/Winter": {
+   "missing_igl": false,
+   "players": [
+    [
+     "airax",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Funspark/ULTI/2021/Europe/Playoffs/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "diSTURBED",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "IeSF/World Championships/2018": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Twixie",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Cup/2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "diSTURBED",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
  "HEROIC": {
   "AGO Esports": {
    "missing_igl": false,
@@ -2557,6 +2653,22 @@
    "standin": true
   }
  },
+ "INFINITE": {
+  "Logitech G Play Connect/2026": {
+   "missing_igl": false,
+   "players": [
+    [
+     "kyuubii",
+     ""
+    ],
+    [
+     "mwlky",
+     "sl3nd"
+    ]
+   ],
+   "standin": true
+  }
+ },
  "Imperial Esports": {
   "BLAST/Premier/2023/Fall/Showdown/Americas": {
    "missing_igl": false,
@@ -2623,6 +2735,18 @@
    "standin": true
   }
  },
+ "Lazer Cats": {
+  "DraculaN/Season 6": {
+   "missing_igl": false,
+   "players": [
+    [
+     "sdy",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
  "Legacy": {
   "ESL/Pro League/Season 24": {
    "missing_igl": true,
@@ -2630,6 +2754,28 @@
     [
      "bobz",
      "arT"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Lilmix": {
+  "Elisa/Invitational/2021/Summer/Regional Swiss Stage": {
+   "missing_igl": false,
+   "players": [
+    [
+     "GeT_RiGhT",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Relog Media/Spring Sweet Spring/2/Regional Group Stage": {
+   "missing_igl": false,
+   "players": [
+    [
+     "GeT_RiGhT",
+     ""
     ]
    ],
    "standin": true
@@ -3121,6 +3267,42 @@
    "standin": true
   }
  },
+ "MOUZ NXT": {
+  "BLUEJAYS": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JDC",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Into The Breach": {
+   "missing_igl": false,
+   "players": [
+    [
+     "JDC",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Pinnacle Cup/3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Jimpphat",
+     ""
+    ],
+    [
+     "JDC",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
  "Metizport": {
   "Global Esports Tour/2024/Rio de Janeiro": {
    "missing_igl": false,
@@ -3413,6 +3595,18 @@
    "players": [
     [
      "mouseTT",
+     ""
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Natus Vincere Junior": {
+  "WePlay Esports/Academy League/Season 2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "flamie",
      ""
     ]
    ],
@@ -3865,6 +4059,18 @@
    "standin": true
   }
  },
+ "Phantom Esports": {
+  "Stake Ranked/Episode 3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Kunai",
+     "cej0t"
+    ]
+   ],
+   "standin": true
+  }
+ },
  "Rooster": {
   "ESL/Challenger/2024/Atlanta": {
    "missing_igl": false,
@@ -3884,6 +4090,18 @@
     [
      "TuGuX",
      "Soulfly"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Shimmer": {
+  "ESL/Impact League/Season 4": {
+   "missing_igl": true,
+   "players": [
+    [
+     "Aidy",
+     "abby"
     ]
    ],
    "standin": true
@@ -4389,6 +4607,66 @@
    "standin": true
   }
  },
+ "Tricked Esport": {
+  "ESEA/Season 25/Premier/Europe": {
+   "missing_igl": false,
+   "players": [
+    [
+     "cadiaN",
+     "Friis"
+    ],
+    [
+     "Pimp",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Electronic Sports World Cup/2016": {
+   "missing_igl": false,
+   "players": [
+    [
+     "percy",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Farmskins/Championship/1": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Pimp",
+     ""
+    ]
+   ],
+   "standin": true
+  },
+  "Operation: Kinguin/2": {
+   "missing_igl": false,
+   "players": [
+    [
+     "HECTOz",
+     "netrick"
+    ]
+   ],
+   "standin": true
+  },
+  "Operation: Kinguin/3": {
+   "missing_igl": false,
+   "players": [
+    [
+     "percy",
+     ""
+    ],
+    [
+     "HUNDEN",
+     "netrick"
+    ]
+   ],
+   "standin": true
+  }
+ },
  "VERTEX Esports Club": {
   "ESL/Challenger/2022/Melbourne": {
    "missing_igl": false,
@@ -4554,6 +4832,32 @@
     [
      "horvy",
      "JBa"
+    ]
+   ],
+   "standin": true
+  }
+ },
+ "Young Ninjas": {
+  "Eden Esports/Malta Vibes/Knockout Series/5": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Jackinho",
+     "phzy"
+    ]
+   ],
+   "standin": true
+  },
+  "Svenska Elitserien/2021/Fall": {
+   "missing_igl": false,
+   "players": [
+    [
+     "Mann3n",
+     ""
+    ],
+    [
+     "slap",
+     ""
     ]
    ],
    "standin": true

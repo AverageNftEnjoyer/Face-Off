@@ -24,6 +24,20 @@ MAX_DAYS = 45          # longer "events" are season circuits, not tournaments
 AHEAD_DAYS = 120       # show next year's tournaments once they are this close
 
 
+_TIER_LETTER = {"1": "S", "2": "A", "3": "B", "4": "C", "5": "D"}
+
+
+def tier_letter(value):
+    """Liquipedia's `liquipediatier` as one letter: "S-Tier" / "1" -> "S",
+    "A-Tier" / "2" -> "A", "B-Tier" / "3" -> "B" (C and D likewise); "" when
+    the infobox gives no recognisable tier."""
+    v = strip_markup(value or "").strip().lower()
+    if v in _TIER_LETTER:
+        return _TIER_LETTER[v]
+    m = re.fullmatch(r"([sabcd])(?:[- ]?tier)?", v)
+    return m.group(1).upper() if m else ""
+
+
 def in_window(sd, today):
     """This calendar year's tournaments, plus any starting within AHEAD_DAYS."""
     from datetime import date, timedelta
@@ -56,6 +70,54 @@ def infobox(txt, name):
         for _, body in C.find_templates(txt or "", variant):
             return C.split_params(body)[1]
     return {}
+
+
+# liquipediatiertype values that are not a tournament main event of their own
+SKIP_TIERTYPES = {"qualifier", "showmatch", "weekly", "monthly", "misc", "points"}
+
+
+def event_info(text):
+    """(tier letter, tiertype, sdate, edate) from a page's own infobox."""
+    ib = infobox(text or "", "Infobox league")
+    return (tier_letter(ib.get("liquipediatier", "")), strip_markup(ib.get("liquipediatiertype", "")),
+            ib.get("sdate", "").strip()[:10], ib.get("edate", "").strip()[:10])
+
+
+def is_stage(sub, parent, text=None):
+    """Is a sub-page (its event_info) a stage of the parent page (its
+    event_info), or a tournament of its own?
+
+    Not a stage: a qualifier / showmatch page, or a page with a tier other
+    than the parent's (a C-tier online stage, a lower-tier regional event).
+    A stage: a page naming a stage type ("Online Stage"), a page with no tier
+    or dates of its own (HiddenDataBox stage pages), or one whose dates
+    overlap the parent's. Otherwise -- tiered, dated apart from the parent, no
+    tier type (an ESL Challenger League cup before the league finals,
+    "BetBoom RUSH B! Summit 2026: Part Deux") -- it is a tournament of its own.
+    With `text` (discovery), a page without any {{Match}} is not a stage yet."""
+    tier, ttype, sd, ed = sub
+    if ttype.lower() in SKIP_TIERTYPES or (text is not None and "{{Match" not in text):
+        return False
+    if tier and parent[0] and tier != parent[0]:
+        return False
+    if ttype or not tier or not sd or not ed or not parent[2] or not parent[3]:
+        return True
+    return sd <= parent[3] and ed >= parent[2]
+
+
+def owners(titles, texts):
+    """{title: the top-level event page it belongs to}. A page belongs to its
+    nearest listed ancestor's event when it is a stage of that ancestor
+    (is_stage), else it is a top-level event itself."""
+    have = set(titles)
+    out = {}
+    for t in sorted(titles, key=lambda t: t.count("/")):
+        anc = [t[:i] for i in range(len(t) - 1, 0, -1) if t[i] == "/" and t[:i] in have]
+        if anc and is_stage(event_info(texts.get(t)), event_info(texts.get(anc[0]))):
+            out[t] = out[anc[0]]
+        else:
+            out[t] = t
+    return out
 
 
 def load_texts():
@@ -106,6 +168,11 @@ def parse_map(body):
         name = C.MAP_NORMALIZE.get(name.lower(), name)
         s1, side1 = _rounds(nm, 1)
         s2, side2 = _rounds(nm, 2)
+        ff = (nm.get("score1", "").strip().upper(), nm.get("score2", "").strip().upper())
+        if ff in (("W", "FF"), ("FF", "W")):
+            # forfeited map: the round scores are from before the forfeit
+            return {"map": name, "s1": None, "s2": None, "w": 1 if ff[0] == "W" else 2, "side1": side1,
+                    "side2": side2, "ot": 0, "first1": None, "vod": None}
         if not (C._finished(nm.get("finished", "")) and s1 + s2 > 0 and s1 != s2):
             w = C._int(nm.get("winner"))
             if w not in (1, 2) or s1 + s2 > 0:
@@ -214,6 +281,8 @@ def parse_participants(txt, alias):
             continue
         pos, nm = C.split_params(body)
         team = (pos[0] if pos else "").strip()
+        if re.search(r"<(s|del)>", team, re.I):
+            continue      # struck-through entry: the team withdrew or was replaced
         # entries use either the team page name or a short team code ("100t")
         team = alias.get(team.lower(), team)
         # team entries carry a players= list (possibly still empty); player-type
@@ -270,8 +339,12 @@ def discover(alias=None):
         for src, dst in C.cached_page_redirects().items():
             if src not in names:
                 alias.setdefault(src, dst)
+        # a page name written in other letter case ("desi boyz") is the same team
+        for n in sorted(names):
+            alias.setdefault(n.lower(), n)
     titles, texts = load_texts()
-    tops = [t for t in titles if not any(t != o and t.startswith(o + "/") for o in titles)]
+    owner = owners(titles, texts)
+    tops = [t for t in dict.fromkeys(titles) if owner[t] == t]
     events, seen = [], set()
     for t in tops:
         txt = texts.get(t, "")
@@ -286,7 +359,7 @@ def discover(alias=None):
                 continue
         except ValueError:
             continue
-        subs = [s for s in titles if s.startswith(t + "/") and texts.get(s)]
+        subs = [s for s in dict.fromkeys(titles) if s != t and owner[s] == t and texts.get(s)]
         matches = parse_matches(t, txt, alias)
         parts = parse_participants(txt, alias)
         for s in subs:
@@ -332,7 +405,8 @@ def discover(alias=None):
             m["id"] = f"{slug(name)[:24]}-{i + 1}"
         events.append({
             "title": t, "name": name, "slug": slug(name), "start": sd, "end": ed,
-            "tier": ib.get("liquipediatier", "").strip(), "type": ib.get("type", "").strip(),
+            "tier": ib.get("liquipediatier", "").strip(), "tl": tier_letter(ib.get("liquipediatier", "")),
+            "tiertype": ib.get("liquipediatiertype", "").strip(), "type": ib.get("type", "").strip(),
             "city": strip_markup(ib.get("city", "")), "country": strip_markup(ib.get("country", "")),
             "venue": strip_markup(ib.get("venue", "")), "prize": ib.get("prizepoolusd", "").strip(),
             "organizer": strip_markup(ib.get("organizer", "")),
@@ -342,6 +416,23 @@ def discover(alias=None):
             "participants": parts, "matches": sorted(matches, key=lambda m: m["id"]),
             "page": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
         })
+    # one spelling per team across events: participant lists written in other
+    # letter case ("desi boyz", "Desi Boyz") take the match-data spelling, else
+    # the first spelling in sorted order
+    canon = {}
+    for e in events:
+        for m in e["matches"]:
+            for t in (m["t1"], m["t2"]):
+                if t:
+                    canon.setdefault(t.lower(), set()).add(t)
+    pick = {k: sorted(v)[0] for k, v in canon.items()}
+    for t in sorted({t for e in events for t in e["participants"]}):
+        pick.setdefault(t.lower(), t)
+    for e in events:
+        parts = {}
+        for t, v in e["participants"].items():
+            parts.setdefault(pick[t.lower()], v)
+        e["participants"] = parts
     return events
 
 

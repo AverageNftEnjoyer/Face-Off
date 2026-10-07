@@ -1,0 +1,1 @@
+{"url": "https://liquipedia.net/counterstrike/api.php?aclimit=100&acprefix=2026&acprop=size&action=query&format=json&list=allcategories", "fetched": "2026-10-07T17:39:09Z", "response": {"batchcomplete": "", "query": {"allcategories": [{"size": 1, "pages": 1, "files": 0, "subcats": 0, "*": "2026 Tournaments"}]}}}

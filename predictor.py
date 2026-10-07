@@ -884,24 +884,43 @@ def predict_match(m):
     pa_shown, pb_shown = display_percent([p_a, p_b])
     score_shown = display_percent([s20, s21, s12, s02])
 
+    # --- Series length changes the odds. p_a is a BO3 series probability (the
+    # weights are fitted on BO3 results). The same per-map edge q is worth less
+    # over one map and more over five: q = the flat per-map chance that gives
+    # p_a over a BO3, then BO1 P(A) = q and BO5 P(A) = P(win 3 of 5 at q).
+    # Checked on real series (scripts/format_odds.py): on 226 BO1s the
+    # favourite won 60.2%; the BO3 number said 66.0%, this says 61.1%, and a
+    # logit scale fitted freely on half the BO1s (0.64) matches the one this
+    # implies (0.66). On 44 BO5s it says 73.2% against 72.7% actual (too few to
+    # separate from the BO3 number). The pick never changes, only how sure it is.
+    q = flat_map_prob(p_a, 3)
+    p_bo1 = q
+    p_bo5 = sum(series_scorelines([q] * 5)[:3])
+    to1 = lambda x: flat_map_prob(x, 3)
+    to5 = lambda x: sum(series_scorelines([flat_map_prob(x, 3)] * 5)[:3])
+    ci_bo1 = [round(to1(ci_lo), 3), round(to1(ci_hi), 3)]
+    ci_bo5 = [round(to5(ci_lo), 3), round(to5(ci_hi), 3)]
+    p1_shown = display_percent([p_bo1, 1.0 - p_bo1])[0]
+    p5_shown = display_percent([p_bo5, 1.0 - p_bo5])[0]
+
     # --- BO1 veto: six alternating bans, the decider is the one map played,
-    # so its win chance is the series chance p_a.
+    # so its win chance is the BO1 series chance.
     veto1 = simulate_veto(m, 1)
-    veto_bo1 = {"veto_log": veto1["veto_log"], "maps": veto1["maps"], "map_probs_exact": [p_a]}
+    veto_bo1 = {"veto_log": veto1["veto_log"], "maps": veto1["maps"], "map_probs_exact": [p_bo1]}
 
     # --- BO5 (grand finals): the BO5 veto (each side picks two), its map-logit
     # shape scaled by the same map_shape as BO3 and shifted by one constant so
-    # the BO5 series P(A) equals p_a. The scorelines come from those five
+    # the BO5 series P(A) equals p_bo5. The scorelines come from those five
     # chances, played in pick order with the decider last. A pool with fewer
-    # than 5 maps has no BO5 veto: then one flat chance on every map (as before).
-    # map_prob_bo5_exact stays the flat chance, for continuity.
-    q5 = flat_map_prob(p_a, 5)
+    # than 5 maps has no BO5 veto: then one flat chance on every map.
+    # map_prob_bo5_exact is that flat chance (= q, since it gives p_bo5 over five).
+    q5 = flat_map_prob(p_bo5, 5)
     try:
         veto5 = simulate_veto(m, 5)
     except ValueError:
         veto5 = None
     if veto5 is not None:
-        p5, c5 = _scoreline_maps(veto5, p_a, T * CONFIG["map_shape"] / k)
+        p5, c5 = _scoreline_maps(veto5, p_bo5, T * CONFIG["map_shape"] / k)
         veto_bo5 = {"veto_log": veto5["veto_log"], "maps": veto5["maps"],
                     "map_probs": [round(p, 3) for p in p5], "map_probs_exact": list(p5),
                     "map_logit_shift": round(c5, 4)}
@@ -949,6 +968,9 @@ def predict_match(m):
         # format-specific vetoes (the BO3 fields above are the BO3 veto)
         "veto_bo1": veto_bo1,
         "veto_bo5": veto_bo5,   # None when the pool has fewer than 5 maps
+        # win chance by series length (p_a / confidence_interval above are BO3)
+        "p_a_bo1": p1_shown / 100.0, "p_a_bo1_exact": p_bo1, "confidence_interval_bo1": ci_bo1,
+        "p_a_bo5": p5_shown / 100.0, "p_a_bo5_exact": p_bo5, "confidence_interval_bo5": ci_bo5,
         "p_a_exact": p_a,
         "market_edge_pp": edge,
         "market_edge_note": edge_note,

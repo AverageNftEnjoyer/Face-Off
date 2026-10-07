@@ -28,6 +28,7 @@ _last = [0.0]
 FRESH_TITLES = set()
 FRESH_ALL = False          # set True to refresh every request made this run (prefix listings)
 RUN_STARTED = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+NETWORK_REQUESTS = [0]     # requests actually sent this process (cache hits excluded)
 
 
 def _key(params):
@@ -61,17 +62,20 @@ def query(params, offline=False, refresh=False):
         if r.headers.get("Content-Encoding") == "gzip":
             raw = gzip.decompress(raw)
     _last[0] = time.time()
-    global _PAGE_INDEX
-    _PAGE_INDEX = None
     resp = json.loads(raw.decode("utf-8"))
+    rec = {"url": API + "?" + qs,
+           "fetched": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+           "response": resp}
     with open(path, "w", encoding="utf-8") as f:
-        json.dump({"url": API + "?" + qs,
-                   "fetched": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                   "response": resp}, f, ensure_ascii=False)
+        json.dump(rec, f, ensure_ascii=False)
+    if _PAGE_INDEX is not None:
+        _index_add(_PAGE_INDEX, rec)
+    NETWORK_REQUESTS[0] += 1
     return resp
 
 
 _PAGE_INDEX = None
+_MISSING = {}              # title -> fetch time of a response saying the page does not exist
 
 
 def cached_pages():
@@ -82,38 +86,57 @@ def cached_pages():
     global _PAGE_INDEX
     if _PAGE_INDEX is None:
         idx = {}
+        _MISSING.clear()
         if os.path.isdir(CACHE):
-            for fn in os.listdir(CACHE):
+            for fn in sorted(os.listdir(CACHE)):
                 with open(os.path.join(CACHE, fn), encoding="utf-8") as f:
-                    rec = json.load(f)
-                q = rec.get("response", {}).get("query", {})
-                pages = {p.get("title"): p for p in q.get("pages", {}).values()}
-                alias = {r["from"]: r["to"] for r in q.get("normalized", []) + q.get("redirects", [])}
-                for title, p in pages.items():
-                    revs = p.get("revisions")
-                    if not revs:
-                        continue
-                    text = revs[0]["slots"]["main"]["*"]
-                    names = [title] + [k for k, v in alias.items() if v == title]
-                    names += [k for k, v in alias.items() if v in names]
-                    for n in names:
-                        if n not in idx or idx[n][0] < rec.get("fetched", ""):
-                            idx[n] = (rec.get("fetched", ""), text)
+                    _index_add(idx, json.load(f))
         _PAGE_INDEX = idx
     return _PAGE_INDEX
+
+
+def _index_add(idx, rec):
+    q = rec.get("response", {}).get("query", {})
+    pages = {p.get("title"): p for p in q.get("pages", {}).values()}
+    alias = {r["from"]: r["to"] for r in q.get("normalized", []) + q.get("redirects", [])}
+    for title, p in pages.items():
+        revs = p.get("revisions")
+        names = [title] + [k for k, v in alias.items() if v == title]
+        names += [k for k, v in alias.items() if v in names]
+        if "missing" in p:
+            for n in names:
+                _MISSING[n] = max(_MISSING.get(n, ""), rec.get("fetched", ""))
+            continue
+        if not revs:
+            continue
+        text = revs[0]["slots"]["main"]["*"]
+        for n in names:
+            if n not in idx or idx[n][0] < rec.get("fetched", ""):
+                idx[n] = (rec.get("fetched", ""), text)
 
 
 def wikitext(titles, offline=False, strict=True):
     """Return {title: wikitext or None} for up to 50 titles (one request).
     offline=True never touches the network. On an offline miss of the exact
     batch, pages are looked up individually in the whole cache; a title that is
-    nowhere in the cache raises (strict) or comes back None (strict=False)."""
+    nowhere in the cache raises (strict) or comes back None (strict=False).
+
+    Online, a batch whose pages are ALL already cached (in any earlier batch)
+    and not marked fresh is served from the cache too, so re-batching a title
+    list (discovery fetches 20 per request, the collectors 8) never re-fetches
+    a page. Titles a cached response reported as missing (teams without a
+    Liquipedia page) count as cached and come back None."""
+    refresh = any(t in FRESH_TITLES for t in titles)
+    if not offline and not refresh and not FRESH_ALL:
+        idx = cached_pages()
+        if all(t in idx or t in _MISSING for t in titles):
+            return {t: (idx[t][1] if t in idx else None) for t in titles}
     resp = query({"action": "query", "prop": "revisions", "rvprop": "content",
                   "rvslots": "main", "redirects": "1", "titles": "|".join(titles)},
-                 offline=offline, refresh=any(t in FRESH_TITLES for t in titles))
+                 offline=offline, refresh=refresh)
     if resp is None:
         idx = cached_pages()
-        missing = [t for t in titles if t not in idx]
+        missing = [t for t in titles if t not in idx and t not in _MISSING]
         if missing and strict:
             raise RuntimeError("offline cache miss for titles: %r" % (missing,))
         return {t: (idx[t][1] if t in idx else None) for t in titles}
@@ -126,7 +149,9 @@ def wikitext(titles, offline=False, strict=True):
         tt = norm.get(t, t)
         tt = redirect.get(tt, tt)
         p = pages.get(tt)
-        if not p or "missing" in p:
+        if not p or "missing" in p or not p.get("revisions"):
+            # missing page, or content left out because the response hit the
+            # API's size limit (the caller can ask for that page on its own)
             out[t] = None
         else:
             out[t] = p["revisions"][0]["slots"]["main"]["*"]

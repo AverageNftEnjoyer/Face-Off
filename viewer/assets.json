@@ -1,5 +1,5 @@
 {
- "fetched_for": "2026-10-07",
+ "fetched_for": "2026-10-08",
  "event": "ESL/Pro League/Season 24",
  "event_logos": {
   "intel-extreme-masters-atlanta-2026": "data/raw/liquipedia_media/af9b934d835666bb.png",
@@ -25,7 +25,152 @@
   "esports-world-cup-2026": "data/raw/liquipedia_media/c7cd916a23ad992f.png",
   "intel-extreme-masters-krak-w-2027": "data/raw/liquipedia_media/af9b934d835666bb.png",
   "blast-bounty-winter-2027": "data/raw/liquipedia_media/659fed02909a9624.png",
-  "pgl-bucharest-2027": "data/raw/liquipedia_media/6826a73c0bf39458.png"
+  "pgl-bucharest-2027": "data/raw/liquipedia_media/6826a73c0bf39458.png",
+  "fl0m-s-mythical-lan": "data/raw/liquipedia_media/a821e349b98011b1.png",
+  "cct-season-3-south-american-series-7": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "betboom-rush-b-summit-2026": "data/raw/liquipedia_media/e99d89dcc1bcb289.png",
+  "cct-season-3-european-series-13": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "circuit-x-redemption-curitiba": "data/raw/liquipedia_media/51a2024613a6947e.png",
+  "nodwin-clutch-series-4": "data/raw/liquipedia_media/02b31eb4bd76b25d.png",
+  "zhi-tech-elite-masters-2026": "data/raw/liquipedia_media/c1ac601332b325f1.png",
+  "cct-season-3-european-series-14": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "fireconter-2026-season-1": "data/raw/liquipedia_media/bdab2d0661256d2d.png",
+  "cct-season-3-south-american-series-8": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "ace-north-american-masters-spring-2026": "data/raw/liquipedia_media/29222da62dbd691b.png",
+  "ace-south-american-masters-spring-2026": "data/raw/liquipedia_media/bbf78d6744b483f6.png",
+  "res-showdown-spring-2026": "data/raw/liquipedia_media/ab37efcc7bb0c51a.png",
+  "yuqilin-pinnacle-of-battle-season-2": "data/raw/liquipedia_media/6aa04518820316ab.png",
+  "cct-season-3-european-series-15": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "esl-challenger-league-season-51-europe-cup-1": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "cct-season-3-european-series-16": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "jb-pro-league-season-2": "data/raw/liquipedia_media/8efbaeebf7c764ec.png",
+  "esl-challenger-league-season-51-north-america-cup-1": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-south-america-cup-1": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "roman-imperium-cup-v": "data/raw/liquipedia_media/6a639ab58230c8b0.png",
+  "nodwin-clutch-series-5": "data/raw/liquipedia_media/1397e5d45b1bb33f.png",
+  "cct-season-3-south-american-series-9": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "draculan-season-5": "data/raw/liquipedia_media/16c33669b1917e4b.png",
+  "betboom-rush-b-summit-2026-part-deux": "data/raw/liquipedia_media/ed7e834fd960950b.png",
+  "cct-season-3-european-series-17": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "bc-game-masters-season-1": "data/raw/liquipedia_media/08a2df373f431227.png",
+  "circuit-x-pantanal-cuiab": "data/raw/liquipedia_media/51a2024613a6947e.png",
+  "cct-season-3-european-series-18": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "dfrag-wildcard-lan-season-1": "data/raw/liquipedia_media/ed043a0439ec8acd.png",
+  "roman-imperium-cup-vi": "data/raw/liquipedia_media/6a639ab58230c8b0.png",
+  "cct-season-3-south-american-series-10": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "esl-challenger-league-season-51-europe-cup-2": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "nodwin-clutch-series-6": "data/raw/liquipedia_media/f538a8afda285c99.png",
+  "esl-challenger-league-season-51-north-america-cup-2": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-south-america-cup-2": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "cct-season-3-european-series-19": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "journey-spring-2026": "data/raw/liquipedia_media/8fe549dd6f14b9e7.png",
+  "bc-game-masters-championship-1": "data/raw/liquipedia_media/08a2df373f431227.png",
+  "ferjee-in-house-2026": "data/raw/liquipedia_media/a5a7bb644f0730e0.png",
+  "roman-imperium-cup-vii": "data/raw/liquipedia_media/6a639ab58230c8b0.png",
+  "cct-season-3-european-series-20": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "draculan-season-6": "data/raw/liquipedia_media/16c33669b1917e4b.png",
+  "esl-challenger-league-season-51-europe-cup-3": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "circuit-x-mayhem-s-o-paulo": "data/raw/liquipedia_media/51a2024613a6947e.png",
+  "stake-ranked-episode-1": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "esl-challenger-league-season-51-north-america-cup-3": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-south-america-cup-3": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "nodwin-clutch-series-7": "data/raw/liquipedia_media/6a2c732ceb2bc6fb.png",
+  "esl-challenger-league-season-51-europe-cup-4": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "cct-season-3-global-finals": "data/raw/liquipedia_media/0403813f45e1f2db.png",
+  "frag-20": "data/raw/liquipedia_media/f13f6375a1b15f93.png",
+  "odyssey-cup-brazil-2026": "data/raw/liquipedia_media/4c070fab0f5455e4.png",
+  "lorgar-rankings-season-1": "data/raw/liquipedia_media/d72de7d857b209e3.png",
+  "esl-challenger-league-season-51-north-america-cup-4": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-south-america-cup-4": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "bc-game-masters-season-2-europe-series-1": "data/raw/liquipedia_media/08a2df373f431227.png",
+  "cct-south-america-2026-series-1": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "cct-europe-2026-series-1": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "nodwin-clutch-series-8": "data/raw/liquipedia_media/a65f6d4664eb710b.png",
+  "asian-champions-league-2026": "data/raw/liquipedia_media/6f3b0f0963230f17.png",
+  "cct-south-america-2026-series-2": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "bc-game-masters-season-2-europe-series-2": "data/raw/liquipedia_media/08a2df373f431227.png",
+  "cct-europe-2026-series-2": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "cs-asia-championships-2026": "data/raw/liquipedia_media/4044dde16bda7da9.png",
+  "bc-game-masters-championship-2": "data/raw/liquipedia_media/08a2df373f431227.png",
+  "conquest-of-prague-2026": "data/raw/liquipedia_media/0c800380e75edbf5.png",
+  "cct-europe-2026-series-3": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "esl-challenger-league-season-51-asia-pacific": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-europe": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-51-north-america": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "stake-ranked-episode-2": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "nodwin-clutch-series-9": "data/raw/liquipedia_media/d865ef669bf45a4a.png",
+  "cct-europe-2026-series-4": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "rainhas-do-clutch-2026": "data/raw/liquipedia_media/15d3b524514e8523.png",
+  "super-draculan-season-1": "data/raw/liquipedia_media/020e244d50756ab2.png",
+  "cct-south-america-2026-series-3": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "xse-pro-league-2026": "data/raw/liquipedia_media/ce136df54102db29.png",
+  "res-showdown-europe-fall-2026": "data/raw/liquipedia_media/c3000e70cac0ad0d.png",
+  "res-showdown-south-america-fall-2026": "data/raw/liquipedia_media/c3000e70cac0ad0d.png",
+  "ggmedia-challenger-series-season-1": "data/raw/liquipedia_media/cd85e68c42bc8a74.png",
+  "cct-south-america-2026-series-4": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "stake-ranked-episode-3": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "cct-europe-2026-series-5": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "nodwin-clutch-series-10": "data/raw/liquipedia_media/3c5f5f0538a6c7b7.png",
+  "cct-europe-2026-series-6": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "stake-pulse-beat-i": "data/raw/liquipedia_media/516e9d58dcdef63d.png",
+  "cct-europe-2026-series-7": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "nodwin-clutch-series-11": "data/raw/liquipedia_media/7d9a6259f09fbeba.png",
+  "cct-south-america-2026-series-5": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "esl-challenger-league-season-52-north-america-cup-1": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-south-america-cup-1": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "cct-europe-2026-series-8": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "fissure-playground-3": "data/raw/liquipedia_media/364c42e456fdbfa2.png",
+  "cct-europe-2026-series-9": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "nodwin-clutch-series-12": "data/raw/liquipedia_media/f4062c1358230290.png",
+  "logitech-g-play-connect-2026": "data/raw/liquipedia_media/d4310c4b360d176b.png",
+  "stake-pulse-beat-ii": "data/raw/liquipedia_media/516e9d58dcdef63d.png",
+  "cct-south-america-2026-series-6": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "esl-challenger-league-season-52-north-america-cup-2": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-south-america-cup-2": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "1win-private-club-1": "data/raw/liquipedia_media/75ae0988e56cea91.png",
+  "ibuypower-masters-fl0m-s-mythical-lan-2026": "data/raw/liquipedia_media/9bae59029c080fca.png",
+  "vs-gaming-league-masters-2026": "data/raw/liquipedia_media/8b4500b23fe17f42.png",
+  "cct-europe-2026-series-10": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "stake-ranked-episode-4": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "journey-autumn-2026": "data/raw/liquipedia_media/0ca41134fdc9cef0.png",
+  "esl-challenger-league-season-52-north-america-cup-3": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-south-america-cup-3": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "frag-university-2026": "data/raw/liquipedia_media/c1084d43c20f3e46.png",
+  "stake-pulse-beat-iii": "data/raw/liquipedia_media/516e9d58dcdef63d.png",
+  "cct-europe-2026-series-11": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "cct-south-america-2026-series-7": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "forge-of-legends-2026": null,
+  "nodwin-clutch-series-13": "data/raw/liquipedia_media/77493d4c7541ad0f.png",
+  "logitech-g-pro-series-2026": "data/raw/liquipedia_media/545a18e11bd63407.png",
+  "1win-private-club-2": "data/raw/liquipedia_media/75ae0988e56cea91.png",
+  "draculan-season-7": "data/raw/liquipedia_media/263da0da17be3520.png",
+  "cct-europe-2026-series-12": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "dfrag-invitational-2026": "data/raw/liquipedia_media/ebb4f7a3eea7f6d0.png",
+  "stake-ranked-episode-5": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "firesports-last-chance-2026": "data/raw/liquipedia_media/ecfbd5b9f429dd31.png",
+  "gamers-club-masters-vii": "data/raw/liquipedia_media/0d2539368e99ded4.png",
+  "xse-pro-league-luoyang-2026": "data/raw/liquipedia_media/63511a2c18c10288.png",
+  "moscow-cyber-games-2026": "data/raw/liquipedia_media/348b9a6a9d58e1af.png",
+  "cct-south-america-2026-series-8": "data/raw/liquipedia_media/1c09c5c017c6ac5c.png",
+  "cct-europe-2026-series-13": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "cct-europe-2026-series-14": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "esports-nations-cup-2026": "data/raw/liquipedia_media/83733d9f840ab32f.png",
+  "nodwin-clutch-series-14": "data/raw/liquipedia_media/78eae2bcba4f058e.png",
+  "austin-lan-2026": "data/raw/liquipedia_media/8ae51d966acee0f9.png",
+  "yalla-compass-uae-2026": "data/raw/liquipedia_media/f02f3fc2ebb138ce.png",
+  "rush-brno-2026": "data/raw/liquipedia_media/6bd90e7cbaadf828.png",
+  "stake-ranked-episode-6": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "cct-europe-2026-series-15": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "cct-europe-2026-series-16": "data/raw/liquipedia_media/aa11e2626bbf8544.png",
+  "esl-challenger-league-season-52-north-america-cup-4": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-south-america-cup-4": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "svenska-elitserien-fall-2026": "data/raw/liquipedia_media/aef8f94456d35b1b.png",
+  "esl-challenger-league-season-52-europe": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-asia-pacific": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-north-america": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "esl-challenger-league-season-52-south-america": "data/raw/liquipedia_media/1118823d998ad311.png",
+  "extremesland-2026": "data/raw/liquipedia_media/ce9257e57ba430ed.png",
+  "svenska-cupen-2026": "data/raw/liquipedia_media/864675fe6b8dc90f.png"
  },
  "teams": {
   "100 Thieves": {
@@ -240,6 +385,128 @@
    "logo_path": "data/raw/liquipedia_media/8101d0f09d2a5453.png",
    "logo_dark_path": "data/raw/liquipedia_media/8101d0f09d2a5453.png"
   },
+  "5star eSports": {
+   "page": "5star eSports",
+   "logo": "5star eSports full lightmode.png",
+   "logo_dark": "5star eSports full darkmode.png",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "hoolig4n",
+     "name": "Dulguun Batsaikhan",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2024-07-??"
+    },
+    {
+     "id": "clouden",
+     "name": "Gerelt-Od Jargal",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-02-??"
+    },
+    {
+     "id": "ariucle",
+     "name": "Ariunjargal Yadam",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-??"
+    },
+    {
+     "id": "NEUZ",
+     "name": "Uuganbayar Nyam-Otgon",
+     "flag": "mn",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-??"
+    },
+    {
+     "id": "rate",
+     "name": "Tengis Boldbaatar",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-??"
+    },
+    {
+     "id": "shinobi",
+     "name": "Telmen Batzorig",
+     "flag": "mn",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-05-??"
+    }
+   ],
+   "icon": "5star eSports lightmode.png",
+   "icon_dark": "5star eSports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/12fbc3513dd65cfb.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b9ef3fd2b96ea20d.png"
+  },
+  "9INE": {
+   "page": "9INE",
+   "logo": "9INE 2025 lightmode.png",
+   "logo_dark": "9INE 2025 darkmode.png",
+   "location": "Sweden",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "raalz",
+     "name": "Rasmus Steensborg",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2024-05-22"
+    },
+    {
+     "id": "kraghen",
+     "name": "Tobias Jensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "Flayy",
+     "name": "Alan Krupa",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-03"
+    },
+    {
+     "id": "rim3",
+     "name": "Emir Dönmez",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-16"
+    },
+    {
+     "id": "b1elany",
+     "name": "Maciej Biliński",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "BERRY",
+     "name": "Danny Krüger",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-12-29"
+    }
+   ],
+   "icon": "9INE 2025 lightmode.png",
+   "icon_dark": "9INE 2025 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b02581b9f2a93150.png",
+   "logo_dark_path": "data/raw/liquipedia_media/71d98373884c7ccc.png"
+  },
   "9z Team": {
    "page": "9z Team",
    "logo": "9z Team 2024 lightmode.png",
@@ -301,6 +568,279 @@
    "logo_path": "data/raw/liquipedia_media/d077cf34acbb447a.png",
    "logo_dark_path": "data/raw/liquipedia_media/25fb96206f02680b.png"
   },
+  "ALGO Esports": {
+   "page": "ALGO Esports",
+   "logo": "ALGO allmode.png",
+   "logo_dark": "ALGO allmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [],
+   "icon": "ALGO allmode.png",
+   "icon_dark": "ALGO allmode.png",
+   "logo_path": "data/raw/liquipedia_media/dd2265cc710ee102.png",
+   "logo_dark_path": "data/raw/liquipedia_media/dd2265cc710ee102.png"
+  },
+  "ALLINNERS": {
+   "page": "ALLINNERS",
+   "logo": "ALLINNERS lightmode.png",
+   "logo_dark": "ALLINNERS darkmode.png",
+   "location": "Kazakhstan",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "Astro",
+     "name": "Ahmadi Dusmagambetov",
+     "flag": "kz",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "AykeN",
+     "name": "Danial Auken",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "Sdqw",
+     "name": "Yerbolat Mutash",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "lnKognITo",
+     "name": "Baurzhan Bakhytzhanov",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "Sorr1k",
+     "name": "Sarvar Mansurov",
+     "flag": "uz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "hpp",
+     "name": "Nurbolat Dyussembayev",
+     "flag": "kz",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-04-24"
+    }
+   ],
+   "icon": "ALLINNERS lightmode.png",
+   "icon_dark": "ALLINNERS darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/6925695a2613c35d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c287c6ff41e9b3d1.png"
+  },
+  "AM Gaming": {
+   "page": "AM Gaming",
+   "logo": "AM Gaming full allmode.png",
+   "logo_dark": "AM Gaming full allmode.png",
+   "location": "Andorra",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "FaBro",
+     "name": "Fabian Broich",
+     "flag": "de",
+     "igl": false,
+     "role": "CEO",
+     "joined": "2021-09-??"
+    }
+   ],
+   "icon": "AM Gaming full allmode.png",
+   "icon_dark": "AM Gaming full allmode.png",
+   "logo_path": "data/raw/liquipedia_media/24127f0fc1fc209a.png",
+   "logo_dark_path": "data/raw/liquipedia_media/24127f0fc1fc209a.png"
+  },
+  "ARCRED": {
+   "page": "ARCRED",
+   "logo": "ARCRED 2025 allmode.png",
+   "logo_dark": "ARCRED 2025 allmode.png",
+   "location": "Uzbekistan",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "DSSj",
+     "name": "Timur Abdullin",
+     "flag": "uz",
+     "igl": false,
+     "role": "",
+     "joined": "2020-02-06"
+    },
+    {
+     "id": "Ryujin",
+     "name": "Boris Kim",
+     "flag": "uz",
+     "igl": true,
+     "role": "",
+     "joined": "2025-01-17"
+    },
+    {
+     "id": "kumao",
+     "name": "Maksat Serik",
+     "flag": "kz",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2026-09-18"
+    },
+    {
+     "id": "icyvlone",
+     "name": "Daniel Lee",
+     "flag": "uz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "ManticorE",
+     "name": "Artem Kim",
+     "flag": "uz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "ARSPOWER",
+     "name": "Arystan Toktar",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "iksou",
+     "name": "Dmitriy Mikhaylichenko",
+     "flag": "xx",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2020-11-??"
+    }
+   ],
+   "icon": "ARCRED 2025 allmode.png",
+   "icon_dark": "ARCRED 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/ed98228cfccc2799.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ed98228cfccc2799.png"
+  },
+  "AaB esport": {
+   "page": "AaB esport",
+   "logo": "AaB esport full lightmode.png",
+   "logo_dark": "AaB esport full darkmode.png",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Few",
+     "name": "Frederik Pedersen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-31"
+    },
+    {
+     "id": "Beddy",
+     "name": "Frederik Hald",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-31"
+    },
+    {
+     "id": "noike",
+     "name": "Donat Jaseneckij",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-31"
+    },
+    {
+     "id": "Djdamecykel",
+     "name": "Emil Jørgensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-31"
+    }
+   ],
+   "icon": "AaB esport full lightmode.png",
+   "icon_dark": "AaB esport full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/3a2544901254dac4.png",
+   "logo_dark_path": "data/raw/liquipedia_media/4afd74ab00b9125d.png"
+  },
+  "Acend": {
+   "page": "Acend",
+   "logo": "Acend full lightmode.png",
+   "logo_dark": "Acend full darkmode.png",
+   "location": "Austria",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "SPELLAN",
+     "name": "Teodor Nikolov",
+     "flag": "bg",
+     "igl": true,
+     "role": "",
+     "joined": "2025-11-03"
+    },
+    {
+     "id": "Skrimo",
+     "name": "Dimitar Yanulov",
+     "flag": "bg",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-03"
+    },
+    {
+     "id": "h4rn",
+     "name": "Deyvid Benchev",
+     "flag": "bg",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-05"
+    },
+    {
+     "id": "REDSTAR",
+     "name": "Hristiyan Pironkov",
+     "flag": "bg",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-07"
+    },
+    {
+     "id": "milky",
+     "name": "Milen Iliev",
+     "flag": "bg",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-03-11"
+    }
+   ],
+   "icon": "Acend full lightmode.png",
+   "icon_dark": "Acend full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/81f946d8fbb6112e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ab913cdb2c013356.png"
+  },
+  "Aimclub": {
+   "page": "Aimclub",
+   "logo": "aimclub lightmode.png",
+   "logo_dark": "aimclub darkmode.png",
+   "location": "Romania",
+   "region": "eu",
+   "roster": [],
+   "icon": "aimclub lightmode.png",
+   "icon_dark": "aimclub darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/24d0b6ec381599fa.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b88c8d66c4133830.png"
+  },
   "Alliance": {
    "page": "Alliance",
    "logo": "Alliance 2024 full allmode.png",
@@ -361,6 +901,67 @@
    "icon_dark": "Alliance 2024 allmode.png",
    "logo_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png",
    "logo_dark_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png"
+  },
+  "Alter Ego": {
+   "page": "Alter Ego",
+   "logo": "Alter Ego 2022 allmode.png",
+   "logo_dark": "Alter Ego 2022 allmode.png",
+   "location": "Indonesia",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "BnTeT",
+     "name": "Hansel Ferdinand",
+     "flag": "id",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-31"
+    },
+    {
+     "id": "PokemoN",
+     "name": "Saad Ahmed",
+     "flag": "pk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-28"
+    },
+    {
+     "id": "laxiee",
+     "name": "Maks Andryei",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-28"
+    },
+    {
+     "id": "adeX",
+     "name": "Adelin Nica",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-28"
+    },
+    {
+     "id": "shadiy",
+     "name": "Martins Gütmanis",
+     "flag": "lv",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-28"
+    },
+    {
+     "id": "bali",
+     "name": "Andrew Joseph",
+     "flag": "id",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-07-31"
+    }
+   ],
+   "icon": "Alter Ego 2022 allmode.png",
+   "icon_dark": "Alter Ego 2022 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/3d9d4ef6c12bac88.png",
+   "logo_dark_path": "data/raw/liquipedia_media/3d9d4ef6c12bac88.png"
   },
   "Astralis": {
    "page": "Astralis",
@@ -545,6 +1146,120 @@
    "logo_path": "data/raw/liquipedia_media/5bbd3ab30fda2bde.png",
    "logo_dark_path": "data/raw/liquipedia_media/4a255c4673de3e5d.png"
   },
+  "BAKS Esports": {
+   "page": "BAKS Esports",
+   "logo": "BAKS Esports 2025 lightmode.png",
+   "logo_dark": "BAKS Esports 2025 darkmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "xdENiSZERA",
+     "name": "Denis Sklenin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-03"
+    },
+    {
+     "id": "turbo",
+     "name": "Artyom Dobryshev",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-06"
+    },
+    {
+     "id": "whisper",
+     "name": "Gadel Galimullin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-01"
+    },
+    {
+     "id": "danistzz",
+     "name": "Danil Roslyakov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-19"
+    },
+    {
+     "id": "Norwi",
+     "name": "Evgeniy Ermolin",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-20"
+    },
+    {
+     "id": "XomA",
+     "name": "Andrey Mironenko",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-26"
+    }
+   ],
+   "icon": "BAKS Esports 2025 lightmode.png",
+   "icon_dark": "BAKS Esports 2025 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/1a98bddb926b4e3b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/d091fca56168a772.png"
+  },
+  "BASEMENT BOYS": {
+   "page": "BASEMENT BOYS",
+   "logo": "BASEMENT BOYS lightmode.png",
+   "logo_dark": "BASEMENT BOYS darkmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Tr0ublE",
+     "name": "Egor Bulavin",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2025-04-09"
+    },
+    {
+     "id": "OWNER",
+     "name": "Mykhailo Lymar",
+     "flag": "ua",
+     "igl": true,
+     "role": "",
+     "joined": "2025-08-15"
+    },
+    {
+     "id": "maggent",
+     "name": "Denis Kapinus",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-13"
+    },
+    {
+     "id": "kr1vda",
+     "name": "Bohdan Kryvda",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-13"
+    },
+    {
+     "id": "kAlash",
+     "name": "Altair Asqarov",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-05"
+    }
+   ],
+   "icon": "BASEMENT BOYS lightmode.png",
+   "icon_dark": "BASEMENT BOYS darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/97501950a77307b6.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c6f0d566f74b33b2.png"
+  },
   "BC.Game Esports": {
    "page": "BC.Game Esports",
    "logo": "BC.Game Esports nov 2025 full lightmode.png",
@@ -606,6 +1321,67 @@
    "logo_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png",
    "logo_dark_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png"
   },
+  "BESTIA": {
+   "page": "BESTIA",
+   "logo": "BESTIA full lightmode.png",
+   "logo_dark": "BESTIA full darkmode.png",
+   "location": "Argentina",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "cass1n",
+     "name": "Cássio Santos",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-02-25"
+    },
+    {
+     "id": "timo",
+     "name": "Cristhian Perez",
+     "flag": "uy",
+     "igl": false,
+     "role": "",
+     "joined": "2025-03-24"
+    },
+    {
+     "id": "buda",
+     "name": "Nicolás Kramer",
+     "flag": "ar",
+     "igl": true,
+     "role": "",
+     "joined": "2025-11-13"
+    },
+    {
+     "id": "drop",
+     "name": "André Abreu",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-09"
+    },
+    {
+     "id": "kauez",
+     "name": "Kaue Kaschuk",
+     "flag": "br",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2026-09-09"
+    },
+    {
+     "id": "tge",
+     "name": "Gustavo Motta",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-22"
+    }
+   ],
+   "icon": "BESTIA lightmode.png",
+   "icon_dark": "BESTIA darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/d99b77d35449ce86.png",
+   "logo_dark_path": "data/raw/liquipedia_media/26f21ac42145bbb6.png"
+  },
   "BIG": {
    "page": "BIG",
    "logo": "BIG 2020 full lightmode.png",
@@ -666,6 +1442,153 @@
    "icon_dark": "BIG 2020 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/a599552b92209c4b.png",
    "logo_dark_path": "data/raw/liquipedia_media/9c379e7b7d2d3b68.png"
+  },
+  "BIG Academy": {
+   "page": "BIG Academy",
+   "logo": "BIG 2020 full lightmode.png",
+   "logo_dark": "BIG 2020 full darkmode.png",
+   "location": "Germany",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "prosus",
+     "name": "David Hesse",
+     "flag": "de",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-09"
+    },
+    {
+     "id": "D0nii",
+     "name": "Anton Savienkov",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-20"
+    },
+    {
+     "id": "aZe",
+     "name": "Asim Khodzhaev",
+     "flag": "tm",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-14"
+    },
+    {
+     "id": "Hrdina",
+     "name": "Nikolas Hutira",
+     "flag": "sk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-14"
+    },
+    {
+     "id": "Spiidi",
+     "name": "Timo Richter",
+     "flag": "de",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-01-20"
+    }
+   ],
+   "icon": "BIG 2020 lightmode.png",
+   "icon_dark": "BIG 2020 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/a599552b92209c4b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9c379e7b7d2d3b68.png"
+  },
+  "BIG EQUIPA": {
+   "page": "BIG EQUIPA",
+   "logo": "BIG 2020 full lightmode.png",
+   "logo_dark": "BIG 2020 full darkmode.png",
+   "location": "Germany",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Roman R.",
+     "name": "Roman Reinhardt",
+     "flag": "de",
+     "igl": false,
+     "role": "Chief of CS:GO",
+     "joined": "2022-01-12"
+    }
+   ],
+   "icon": "BIG 2020 lightmode.png",
+   "icon_dark": "BIG 2020 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/a599552b92209c4b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9c379e7b7d2d3b68.png"
+  },
+  "BOSS": {
+   "page": "BOSS",
+   "logo": "Boss CS2 allmode.png",
+   "logo_dark": "Boss CS2 allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [],
+   "icon": "Boss CS2 allmode.png",
+   "icon_dark": "Boss CS2 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/2b4ed497430b7ec9.png",
+   "logo_dark_path": "data/raw/liquipedia_media/2b4ed497430b7ec9.png"
+  },
+  "BRUTE": {
+   "page": "BRUTE",
+   "logo": "Team Brute 2020 lightmode.png",
+   "logo_dark": "Team Brute 2020 darkmode.png",
+   "location": "Czech Republic",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "hfah",
+     "name": "Oskar Wroński",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-16"
+    },
+    {
+     "id": "nbqq",
+     "name": "Vít Pohlot",
+     "flag": "cz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-20"
+    },
+    {
+     "id": "aidKiT",
+     "name": "Jane Apostoloski",
+     "flag": "mk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-28"
+    },
+    {
+     "id": "ZEDKO",
+     "name": "Jindřich Chyba",
+     "flag": "cz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-16"
+    },
+    {
+     "id": "tAk",
+     "name": "Vilius Keserauskas",
+     "flag": "lt",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2026-08-28"
+    },
+    {
+     "id": "BARBARR",
+     "name": "André Möller",
+     "flag": "se",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-20"
+    }
+   ],
+   "icon": "Team Brute 2020 lightmode.png",
+   "icon_dark": "Team Brute 2020 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/05dab9b8141767c0.png",
+   "logo_dark_path": "data/raw/liquipedia_media/defc63f013948100.png"
   },
   "BetBoom Team": {
    "page": "BetBoom Team",
@@ -789,6 +1712,360 @@
    "logo_path": "data/raw/liquipedia_media/b7f5cc7c8ce8e01e.png",
    "logo_dark_path": "data/raw/liquipedia_media/32f5b6a51ba8c81e.png"
   },
+  "Bounty Hunters Esports": {
+   "page": "Bounty Hunters Esports",
+   "logo": "Bounty Hunters Esports full lightmode.png",
+   "logo_dark": "Bounty Hunters Esports full darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "KAISER",
+     "name": "Gianfranco Pantano",
+     "flag": "ar",
+     "igl": true,
+     "role": "",
+     "joined": "2024-03-28"
+    },
+    {
+     "id": "zock",
+     "name": "Mauro Da Silva",
+     "flag": "uy",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-03"
+    },
+    {
+     "id": "ponter",
+     "name": "Gabriel Amaral",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-09"
+    },
+    {
+     "id": "pepe",
+     "name": "Pedro Inácio",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-26"
+    },
+    {
+     "id": "urban0",
+     "name": "Lucas Urbano",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-31"
+    },
+    {
+     "id": "gusihx",
+     "name": "Nicolas Rovira",
+     "flag": "ar",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-04-10"
+    }
+   ],
+   "icon": "Bounty Hunters Esports lightmode.png",
+   "icon_dark": "Bounty Hunters Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/2642b1714d8ca88d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/750c03437d57d747.png"
+  },
+  "Bushido Wildcats": {
+   "page": "Bushido Wildcats",
+   "logo": "Bushido Wildcats 2026 allmode.png",
+   "logo_dark": "Bushido Wildcats 2026 allmode.png",
+   "location": "Turkey",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "darendeli",
+     "name": "Ahmet Şengül",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-18"
+    },
+    {
+     "id": "Vej",
+     "name": "Orhan Hamarat",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-18"
+    },
+    {
+     "id": "cadnyx",
+     "name": "Kadir Tuncay",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-18"
+    },
+    {
+     "id": "cacan",
+     "name": "Mert Çaçan",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-22"
+    },
+    {
+     "id": "Muk0s",
+     "name": "Valeriy Mukovnin",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-05-22"
+    },
+    {
+     "id": "yT",
+     "name": "Yiğit Özden",
+     "flag": "tr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-09-23"
+    }
+   ],
+   "icon": "Bushido Wildcats 2026 allmode.png",
+   "icon_dark": "Bushido Wildcats 2026 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/e72e6b5d3d4f952e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/e72e6b5d3d4f952e.png"
+  },
+  "CYBERSHOKE Esports": {
+   "page": "CYBERSHOKE Esports",
+   "logo": "CYBERSHOKE Esports 2024 full lightmode.png",
+   "logo_dark": "CYBERSHOKE Esports 2024 full darkmode.png",
+   "location": "Serbia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "alpha",
+     "name": "Daniil Demin",
+     "flag": "xx",
+     "igl": true,
+     "role": "",
+     "joined": "2025-09-26"
+    },
+    {
+     "id": "Mokuj1n",
+     "name": "Roman Petrushenko",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-30"
+    },
+    {
+     "id": "Alkaren",
+     "name": "Älımjan Bıtımbai",
+     "flag": "kz",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2026-07-09"
+    },
+    {
+     "id": "nota",
+     "name": "Emil Moskvitin",
+     "flag": "ru",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2026-08-22"
+    },
+    {
+     "id": "yiksrezo",
+     "name": "Vladimir Mitrofanov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-28"
+    }
+   ],
+   "icon": "CYBERSHOKE Esports 2024 lightmode.png",
+   "icon_dark": "CYBERSHOKE Esports 2024 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/d11b4314c63b31c5.png",
+   "logo_dark_path": "data/raw/liquipedia_media/676d4e36fc9cbadd.png"
+  },
+  "CYBERSHOKE Prospects": {
+   "page": "CYBERSHOKE Prospects",
+   "logo": "CYBERSHOKE Prospects lightmode.png",
+   "logo_dark": "CYBERSHOKE Prospects darkmode.png",
+   "location": "Serbia",
+   "region": "CIS",
+   "roster": [],
+   "icon": "CYBERSHOKE Prospects lightmode.png",
+   "icon_dark": "CYBERSHOKE Prospects darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/5f03a338f3c402e5.png",
+   "logo_dark_path": "data/raw/liquipedia_media/38dcf8e9a2c38280.png"
+  },
+  "Change The Game": {
+   "page": "Change The Game",
+   "logo": "Change The Game lightmode.png",
+   "logo_dark": "Change The Game darkmode.png",
+   "location": "China",
+   "region": "China",
+   "roster": [
+    {
+     "id": "LaiKeXu",
+     "name": "Lai Kexu",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2023-03-??"
+    },
+    {
+     "id": "957",
+     "name": "Zhu Jianping",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2023-03-??"
+    },
+    {
+     "id": "Hack1ng",
+     "name": "Chen Zhijie",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2024-08-??"
+    },
+    {
+     "id": "VanceKK",
+     "name": "Wan Jingyu",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-26"
+    },
+    {
+     "id": "ProKiller",
+     "name": "Lai Haoyang",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-26"
+    }
+   ],
+   "icon": "Change The Game lightmode.png",
+   "icon_dark": "Change The Game darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/a7712b49d101d994.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c8ef82651861e353.png"
+  },
+  "Chicken Coop Esports": {
+   "page": "Chicken Coop Esports",
+   "logo": "Chicken Coop Esports 2024 full lightmode.png",
+   "logo_dark": "Chicken Coop Esports 2024 full darkmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Crisp",
+     "name": "Chad Bredeson",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-01"
+    },
+    {
+     "id": "jared",
+     "name": "Jared Habib",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-01"
+    },
+    {
+     "id": "Drop",
+     "name": "Evindar Isik",
+     "flag": "ca",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-05"
+    },
+    {
+     "id": "Wolffe",
+     "name": "Kyle Greenfield",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-28"
+    },
+    {
+     "id": "stesso",
+     "name": "Mark Sørensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-02"
+    }
+   ],
+   "icon": "Chicken Coop Esports 2024 full lightmode.png",
+   "icon_dark": "Chicken Coop Esports 2024 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/45e070ccf64a220d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/5352bdd40698e163.png"
+  },
+  "Chinggis Warriors": {
+   "page": "Chinggis Warriors",
+   "logo": "CW allmode.png",
+   "logo_dark": "CW allmode.png",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "ROUX",
+     "name": "Undrakhbayar Zolbayar",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2024-11-20"
+    },
+    {
+     "id": "yAmi",
+     "name": "Yalalt Oyunbileg",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-20"
+    },
+    {
+     "id": "hasteka",
+     "name": "Chinguun Bayarmaa",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "sk0R",
+     "name": "Tengis Batjargal",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-??"
+    },
+    {
+     "id": "tikuak",
+     "name": "Zolbayar Chimedtseren",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-27"
+    },
+    {
+     "id": "Redka",
+     "name": "Munkh-Ochir Myagmarsuren",
+     "flag": "mn",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-06-26"
+    }
+   ],
+   "icon": "CW allmode.png",
+   "icon_dark": "CW allmode.png",
+   "logo_path": "data/raw/liquipedia_media/1e40d37dc452b0ee.png",
+   "logo_dark_path": "data/raw/liquipedia_media/1e40d37dc452b0ee.png"
+  },
   "DENDELE CS": {
    "page": "DENDELE CS",
    "logo": "DENDELE CS allmode.png",
@@ -849,6 +2126,345 @@
    "icon_dark": "DENDELE CS allmode.png",
    "logo_path": "data/raw/liquipedia_media/c995ae8e184646cc.png",
    "logo_dark_path": "data/raw/liquipedia_media/c995ae8e184646cc.png"
+  },
+  "DETONATE": {
+   "page": "DETONATE",
+   "logo": "DETONATE 2024 full allmode.png",
+   "logo_dark": "DETONATE 2024 full allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "tatm",
+     "name": "Matthew Munro",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-19"
+    },
+    {
+     "id": "chante",
+     "name": "Austin Ganster",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-19"
+    },
+    {
+     "id": "carN",
+     "name": "Timothy Adams",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-28"
+    },
+    {
+     "id": "CrePoW",
+     "name": "Milan Libbrecht",
+     "flag": "be",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-26"
+    }
+   ],
+   "icon": "DETONATE 2024 allmode.png",
+   "icon_dark": "DETONATE 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/becd3762c20dc23b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/becd3762c20dc23b.png"
+  },
+  "DONSTU Esports": {
+   "page": "DONSTU Esports",
+   "logo": "Donstu Esports lightmode.png",
+   "logo_dark": "Donstu Esports darkmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "gleb86rus",
+     "name": "Gleb Eskin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-06"
+    },
+    {
+     "id": "LAKSHERi",
+     "name": "Pavel Solovyov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-06"
+    },
+    {
+     "id": "NeoLife",
+     "name": "Alexey Novakov",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-03-06"
+    },
+    {
+     "id": "Due1yant",
+     "name": "Vladislav Pavlovich",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-06"
+    },
+    {
+     "id": "phorate",
+     "name": "Daniil Varzov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-10"
+    },
+    {
+     "id": "fenvicious",
+     "name": "Yevgeniy Mitsik",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-10-??"
+    }
+   ],
+   "icon": "Donstu Esports lightmode.png",
+   "icon_dark": "Donstu Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/6310d56e33eecdb9.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b284b4437c3b788a.png"
+  },
+  "ECSTATIC": {
+   "page": "ECSTATIC",
+   "logo": "ECSTATIC 2023 allmode.png",
+   "logo_dark": "ECSTATIC 2023 allmode.png",
+   "location": "Denmark",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Skejs",
+     "name": "Rasmus Gleerup",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-11"
+    },
+    {
+     "id": "Z1noz",
+     "name": "Luca Jensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-11"
+    },
+    {
+     "id": "Inspire",
+     "name": "David Rasmussen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-11"
+    },
+    {
+     "id": "Thom",
+     "name": "Thomas Hedemann",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-11"
+    },
+    {
+     "id": "Mol011",
+     "name": "Emil Würtz",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-10-06"
+    },
+    {
+     "id": "Sinzey",
+     "name": "Martin Christensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-04-16"
+    }
+   ],
+   "icon": "ECSTATIC 2023 allmode.png",
+   "icon_dark": "ECSTATIC 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/7f9144914ccb400e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/7f9144914ccb400e.png"
+  },
+  "ENCE": {
+   "page": "ENCE",
+   "logo": "ENCE 2020 full lightmode.png",
+   "logo_dark": "ENCE 2020 full darkmode.png",
+   "location": "Finland",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "teme",
+     "name": "Teemu Korva",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "millert",
+     "name": "Aleksi Lehtopuu",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "Schwarz",
+     "name": "Giorgi Gakhokidze",
+     "flag": "ge",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "HENU",
+     "name": "Henri Ylilehto",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "joeski",
+     "name": "Joe Holmes",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-13"
+    },
+    {
+     "id": "allu",
+     "name": "Aleksi Jalli",
+     "flag": "fi",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-06-09"
+    }
+   ],
+   "icon": "ENCE 2020 full lightmode.png",
+   "icon_dark": "ENCE 2020 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/c937c76d1e0e0649.png",
+   "logo_dark_path": "data/raw/liquipedia_media/679076c5d817afe9.png"
+  },
+  "ENCE Academy": {
+   "page": "ENCE Academy",
+   "logo": "ENCE Academy dec 2023 full lightmode.png",
+   "logo_dark": "ENCE Academy dec 2023 full darkmode.png",
+   "location": "Finland",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Willkey",
+     "name": "Niklas Ojalainen",
+     "flag": "fi",
+     "igl": false,
+     "role": "General Manager",
+     "joined": "2019-09-04"
+    },
+    {
+     "id": "Woomera",
+     "name": "Eemeli Ikonen",
+     "flag": "fi",
+     "igl": false,
+     "role": "Head of Academy",
+     "joined": "2022-03-08"
+    }
+   ],
+   "icon": "ENCE Academy dec 2023 full lightmode.png",
+   "icon_dark": "ENCE Academy dec 2023 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/3e549605a420f6a2.png",
+   "logo_dark_path": "data/raw/liquipedia_media/be531ad55622112a.png"
+  },
+  "ENVY": {
+   "page": "ENVY",
+   "logo": "ENVY 2025 full lightmode.png",
+   "logo_dark": "ENVY 2025 full darkmode.png",
+   "location": "United States",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Lucky",
+     "name": "Lucas Chastang",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "Maka",
+     "name": "Bryan Canda",
+     "flag": "fr",
+     "igl": true,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "Graviti",
+     "name": "Filip Branković",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "misutaaa",
+     "name": "Kévin Rabier",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    },
+    {
+     "id": "Kursy",
+     "name": "Jeremy Gast",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-29"
+    }
+   ],
+   "icon": "ENVY 2025 full lightmode.png",
+   "icon_dark": "ENVY 2025 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/38e275533e93671e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/adbd46d7f87696f2.png"
+  },
+  "ESC Gaming": {
+   "page": "ESC Gaming",
+   "logo": "ESC Gaming 2023 full allmode.png",
+   "logo_dark": "ESC Gaming 2023 full allmode.png",
+   "location": "Germany",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Edward",
+     "name": "Ioann Sukhariev",
+     "flag": "ua",
+     "igl": false,
+     "role": "Head Manager",
+     "joined": "2025-01-10"
+    },
+    {
+     "id": "markeloff",
+     "name": "Yehor Markelov",
+     "flag": "ua",
+     "igl": false,
+     "role": "Content Creator",
+     "joined": "2023-04-10"
+    }
+   ],
+   "icon": "ESC Gaming 2023 allmode.png",
+   "icon_dark": "ESC Gaming 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/f27d6ae217511799.png",
+   "logo_dark_path": "data/raw/liquipedia_media/f27d6ae217511799.png"
   },
   "EYEBALLERS": {
    "page": "EYEBALLERS",
@@ -911,6 +2527,120 @@
    "logo_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png",
    "logo_dark_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png"
   },
+  "Elusive": {
+   "page": "Elusive",
+   "logo": "",
+   "logo_dark": "",
+   "location": "",
+   "region": "",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "Entropy Gaming": {
+   "page": "Entropy Gaming",
+   "logo": "Entropy Gaming 2020 full lightmode.png",
+   "logo_dark": "Entropy Gaming 2020 full darkmode.png",
+   "location": "Germany",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "dottie",
+     "name": "Anton Alevärn",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-08"
+    },
+    {
+     "id": "flaw",
+     "name": "Adam Gustafsson",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-08"
+    }
+   ],
+   "icon": "Entropy Gaming 2020 lightmode.png",
+   "icon_dark": "Entropy Gaming 2020 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/694c5e9682df839f.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0258bd13e1297e74.png"
+  },
+  "Eruption": {
+   "page": "Eruption",
+   "logo": "Eruption 2023 lightmode.png",
+   "logo_dark": "Eruption 2023 darkmode.png",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [],
+   "icon": "Eruption 2023 lightmode.png",
+   "icon_dark": "Eruption 2023 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/393c4866e2cd9a5a.png",
+   "logo_dark_path": "data/raw/liquipedia_media/890af1643f699514.png"
+  },
+  "Esport Academy Copenhagen": {
+   "page": "Esport Academy Copenhagen",
+   "logo": "Esport Academy Copenhagen allmode.png",
+   "logo_dark": "Esport Academy Copenhagen allmode.png",
+   "location": "Denmark",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "bekker",
+     "name": "Tobias Bekker",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "n1Xen",
+     "name": "Mikkel Borlund",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "sSen",
+     "name": "Simon Iversen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "anber",
+     "name": "Andreas Brandt",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "Fessor",
+     "name": "Frederik Sørensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-18"
+    },
+    {
+     "id": "redeye",
+     "name": "Simon Niebe",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-09-14"
+    }
+   ],
+   "icon": "Esport Academy Copenhagen allmode.png",
+   "icon_dark": "Esport Academy Copenhagen allmode.png",
+   "logo_path": "data/raw/liquipedia_media/fa2e09bcd4e75b6c.png",
+   "logo_dark_path": "data/raw/liquipedia_media/fa2e09bcd4e75b6c.png"
+  },
   "Eternal Fire": {
    "page": "Eternal Fire",
    "logo": "Eternal Fire 2023 allmode.png",
@@ -971,6 +2701,35 @@
    "icon_dark": "Eternal Fire 2023 allmode.png",
    "logo_path": "data/raw/liquipedia_media/ea43bc100225143c.png",
    "logo_dark_path": "data/raw/liquipedia_media/ea43bc100225143c.png"
+  },
+  "FAVBET Team": {
+   "page": "FAVBET Team",
+   "logo": "FAVBET Team full lightmode.png",
+   "logo_dark": "FAVBET Team full lightmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "",
+     "name": "Yevhen Yatsenko",
+     "flag": "ua",
+     "igl": false,
+     "role": "CEO",
+     "joined": "2024-05-20"
+    },
+    {
+     "id": "",
+     "name": "Bohdan Rekhteta",
+     "flag": "ua",
+     "igl": false,
+     "role": "Sports Director",
+     "joined": "2024-05-20"
+    }
+   ],
+   "icon": "FAVBET Team full lightmode.png",
+   "icon_dark": "FAVBET Team full lightmode.png",
+   "logo_path": "data/raw/liquipedia_media/ada17fe8aa6d89ed.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ada17fe8aa6d89ed.png"
   },
   "FOKUS": {
    "page": "FOKUS",
@@ -1033,6 +2792,67 @@
    "logo_path": "data/raw/liquipedia_media/4813c638d26d1eb9.png",
    "logo_dark_path": "data/raw/liquipedia_media/4813c638d26d1eb9.png"
   },
+  "FORZE Reload": {
+   "page": "FORZE Reload",
+   "logo": "FORZE Reload allmode.png",
+   "logo_dark": "FORZE Reload allmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "KusMe",
+     "name": "Vladislav Dmitriev",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2024-09-04"
+    },
+    {
+     "id": "Kaide",
+     "name": "Eduard Tatarinov",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-11"
+    },
+    {
+     "id": "HeCkBNk",
+     "name": "Kirill Nikolaevich",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-11"
+    },
+    {
+     "id": "YumsaN",
+     "name": "Vadim Toropynin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-11"
+    },
+    {
+     "id": "Lack1",
+     "name": "Viktor Boldyrev",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-11"
+    },
+    {
+     "id": "PASHANOJ",
+     "name": "Pavel Legostaev",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-01-19"
+    }
+   ],
+   "icon": "FORZE Reload allmode.png",
+   "icon_dark": "FORZE Reload allmode.png",
+   "logo_path": "data/raw/liquipedia_media/567a1a666ef22db0.png",
+   "logo_dark_path": "data/raw/liquipedia_media/567a1a666ef22db0.png"
+  },
   "FURIA": {
    "page": "FURIA",
    "logo": "FURIA Esports full lightmode.png",
@@ -1093,6 +2913,35 @@
    "icon_dark": "FURIA Esports allmode.png",
    "logo_path": "data/raw/liquipedia_media/81d1df1ebe5fa696.png",
    "logo_dark_path": "data/raw/liquipedia_media/81d1df1ebe5fa696.png"
+  },
+  "FURIA Female": {
+   "page": "FURIA Female",
+   "logo": "FURIA Esports full lightmode.png",
+   "logo_dark": "FURIA Esports full darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "",
+     "name": "Airini Bruna",
+     "flag": "br",
+     "igl": false,
+     "role": "Sports Psychologist",
+     "joined": "2021-10-01"
+    },
+    {
+     "id": "Alexia",
+     "name": "Alexia Midori",
+     "flag": "br",
+     "igl": false,
+     "role": "Manager",
+     "joined": "2023-01-20"
+    }
+   ],
+   "icon": "FURIA Esports full lightmode.png",
+   "icon_dark": "FURIA Esports full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/9a563b42866953f8.png",
+   "logo_dark_path": "data/raw/liquipedia_media/661ca9445bff7406.png"
   },
   "FUT Esports": {
    "page": "FUT Esports",
@@ -1216,6 +3065,152 @@
    "logo_path": "data/raw/liquipedia_media/cdcb73edb7065a4a.png",
    "logo_dark_path": "data/raw/liquipedia_media/96e3727a4710ea83.png"
   },
+  "Fake do Biru": {
+   "page": "Fake do Biru",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "Falcons Force": {
+   "page": "Falcons Force",
+   "logo": "Team Falcons 2022 full lightmode.png",
+   "logo_dark": "Team Falcons 2022 full darkmode.png",
+   "location": "Saudi Arabia",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "VENO",
+     "name": "Vladimir Stankovic",
+     "flag": "rs",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-15"
+    },
+    {
+     "id": "grecu",
+     "name": "Andrei Grecu",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-15"
+    },
+    {
+     "id": "clockzi",
+     "name": "Oskar Blæsbjerg",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-15"
+    },
+    {
+     "id": "Nucleonz",
+     "name": "Matej Trajkoski",
+     "flag": "mk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-15"
+    },
+    {
+     "id": "Tapewaare",
+     "name": "Sindre Ellefsen",
+     "flag": "no",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-05"
+    },
+    {
+     "id": "NaToSaphiX",
+     "name": "Niels Sillassen",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-07-06"
+    }
+   ],
+   "icon": "Team Falcons 2022 full lightmode.png",
+   "icon_dark": "Team Falcons 2022 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/de4238eab4914c8a.png",
+   "logo_dark_path": "data/raw/liquipedia_media/2eef3c70594bc47b.png"
+  },
+  "FengDa Gaming": {
+   "page": "FengDa Gaming",
+   "logo": "FengDa Gaming 2024 full allmode.png",
+   "logo_dark": "FengDa Gaming 2024 full allmode.png",
+   "location": "China",
+   "region": "China",
+   "roster": [],
+   "icon": "FengDa Gaming 2024 allmode.png",
+   "icon_dark": "FengDa Gaming 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/f0239b3be3ba02ed.png",
+   "logo_dark_path": "data/raw/liquipedia_media/f0239b3be3ba02ed.png"
+  },
+  "Fire Flux Esports": {
+   "page": "Fire Flux Esports",
+   "logo": "Fire Flux Esports lightmode full.png",
+   "logo_dark": "Fire Flux Esports darkmode full.png",
+   "location": "Turkey",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Cizzx",
+     "name": "Can Pars",
+     "flag": "tr",
+     "igl": true,
+     "role": "",
+     "joined": "2026-03-21"
+    },
+    {
+     "id": "Quality",
+     "name": "Ali Furkan Avcı",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-21"
+    },
+    {
+     "id": "xEternaLxx",
+     "name": "Eyüphan Büken",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-21"
+    },
+    {
+     "id": "zemix",
+     "name": "Semih Baykara",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-21"
+    },
+    {
+     "id": "zer0UKY",
+     "name": "Ubeyde Yalçın",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-21"
+    },
+    {
+     "id": "obyj",
+     "name": "Onur Buğra Yaman",
+     "flag": "tr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-09-20"
+    }
+   ],
+   "icon": "Fire Flux Esports lightmode full.png",
+   "icon_dark": "Fire Flux Esports darkmode full.png",
+   "logo_path": "data/raw/liquipedia_media/fc30741eb1a00b88.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8dcb69338ce45923.png"
+  },
   "Fisher College": {
    "page": "Fisher College",
    "logo": "Fisher College allmode.png",
@@ -1244,6 +3239,67 @@
    "icon_dark": "Fisher College allmode.png",
    "logo_path": "data/raw/liquipedia_media/0f46dc13f1e467f8.png",
    "logo_dark_path": "data/raw/liquipedia_media/0f46dc13f1e467f8.png"
+  },
+  "Fluxo W7M": {
+   "page": "Fluxo W7M",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Brazil",
+   "region": "south america",
+   "roster": [
+    {
+     "id": "zevy",
+     "name": "Romeu Rocco",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-12-09"
+    },
+    {
+     "id": "kye",
+     "name": "Kayke Bertolucci",
+     "flag": "br",
+     "igl": false,
+     "role": "Loan",
+     "joined": "2025-12-09"
+    },
+    {
+     "id": "exit",
+     "name": "Raphael Lacerda",
+     "flag": "br",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-20"
+    },
+    {
+     "id": "dav1deuS",
+     "name": "David Maldonado",
+     "flag": "cl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-25"
+    },
+    {
+     "id": "ltz",
+     "name": "João Bonetti",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-25"
+    },
+    {
+     "id": "Juve",
+     "name": "Gustavo Alexandre",
+     "flag": "pt",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-06"
+    }
+   ],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
   },
   "FlyQuest": {
    "page": "FlyQuest",
@@ -1306,6 +3362,59 @@
    "logo_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png",
    "logo_dark_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png"
   },
+  "FlyQuest RED": {
+   "page": "FlyQuest RED",
+   "logo": "Fly Quest RED 2023 allmode.png",
+   "logo_dark": "Fly Quest RED 2023 allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "BiBiAhn",
+     "name": "Vivienne Quach",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2023-06-01"
+    },
+    {
+     "id": "emy",
+     "name": "Emma Choe",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2024-02-29"
+    },
+    {
+     "id": "vanessa",
+     "name": "Vanessa Gideon",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2024-02-29"
+    },
+    {
+     "id": "Fawx",
+     "name": "Lydia Dalton",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-31"
+    },
+    {
+     "id": "Shakezullah",
+     "name": "Alan Hardeman",
+     "flag": "us",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-01-07"
+    }
+   ],
+   "icon": "Fly Quest RED 2023 allmode.png",
+   "icon_dark": "Fly Quest RED 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/b01fa10754289be4.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b01fa10754289be4.png"
+  },
   "Fnatic": {
    "page": "Fnatic",
    "logo": "Fnatic 2020 full lightmode.png",
@@ -1366,6 +3475,67 @@
    "icon_dark": "Fnatic 2020 full darkmode.png",
    "logo_path": "data/raw/liquipedia_media/b9ecba7cf61b285b.png",
    "logo_dark_path": "data/raw/liquipedia_media/3c99efae8430451c.png"
+  },
+  "G2 Ares": {
+   "page": "G2 Ares",
+   "logo": "G2 Esports 2020 full lightmode.png",
+   "logo_dark": "G2 Esports 2020 full darkmode.png",
+   "location": "Germany",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "hitori",
+     "name": "Artur Palyants",
+     "flag": "uz",
+     "igl": false,
+     "role": "",
+     "joined": "2024-07-17"
+    },
+    {
+     "id": "Junyme",
+     "name": "Julius Meyhoff",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-03"
+    },
+    {
+     "id": "yksjupe",
+     "name": "Juho Viitasalo",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-14"
+    },
+    {
+     "id": "SHiNE",
+     "name": "Casper Wennerberg",
+     "flag": "se",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-10"
+    },
+    {
+     "id": "TMKj",
+     "name": "Tiago Martins",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-06"
+    },
+    {
+     "id": "innersh1ne",
+     "name": "Viacheslav Britvin",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-01-15"
+    }
+   ],
+   "icon": "G2 Esports 2020 lightmode.png",
+   "icon_dark": "G2 Esports 2020 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/550f1ba0eecb0ac0.png",
+   "logo_dark_path": "data/raw/liquipedia_media/430e102872b44701.png"
   },
   "G2 Esports": {
    "page": "G2 Esports",
@@ -1465,6 +3635,67 @@
    "logo_path": "data/raw/liquipedia_media/39336a544dff6a2a.png",
    "logo_dark_path": "data/raw/liquipedia_media/39336a544dff6a2a.png"
   },
+  "Galorys": {
+   "page": "Galorys",
+   "logo": "Galorys 2023 allmode.png",
+   "logo_dark": "Galorys 2023 allmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "tomate",
+     "name": "Moisés Lima",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2024-05-27"
+    },
+    {
+     "id": "gbb",
+     "name": "Gabriel Carvalho",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-03"
+    },
+    {
+     "id": "PKL",
+     "name": "Vinícios Coelho",
+     "flag": "br",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-24"
+    },
+    {
+     "id": "detr0ittJ",
+     "name": "Patrick Carvalho",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-24"
+    },
+    {
+     "id": "destiny",
+     "name": "Lucas Bullo",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-24"
+    },
+    {
+     "id": "turner",
+     "name": "João Tournier",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-24"
+    }
+   ],
+   "icon": "Galorys 2023 allmode.png",
+   "icon_dark": "Galorys 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/0b523e11bb66a099.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0b523e11bb66a099.png"
+  },
   "GamerLegion": {
    "page": "GamerLegion",
    "logo": "GamerLegion 2026 allmode.png",
@@ -1526,6 +3757,59 @@
    "logo_path": "data/raw/liquipedia_media/55c34c738bd0b0c6.png",
    "logo_dark_path": "data/raw/liquipedia_media/55c34c738bd0b0c6.png"
   },
+  "GenOne": {
+   "page": "GenOne",
+   "logo": "GenOne full lightmode.png",
+   "logo_dark": "GenOne full darkmode.png",
+   "location": "France",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Brooxsy",
+     "name": "Hugo Di Bono",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-06"
+    },
+    {
+     "id": "Djoko",
+     "name": "Thomas Pavoni",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-23"
+    },
+    {
+     "id": "Keoz",
+     "name": "Nicolas Dgus",
+     "flag": "be",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-22"
+    },
+    {
+     "id": "bL4SEZ",
+     "name": "Elyas Amiar",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-22"
+    },
+    {
+     "id": "cHeuuuuk",
+     "name": "Pierrick Riotte",
+     "flag": "fr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-04-??"
+    }
+   ],
+   "icon": "GenOne lightmode.png",
+   "icon_dark": "GenOne darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/ab0412b17262353f.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0178a65e81a49d38.png"
+  },
   "Gentle Mates": {
    "page": "Gentle Mates",
    "logo": "Gentle Mates 2024 lightmode.png",
@@ -1570,6 +3854,128 @@
    "icon_dark": "Gentle Mates 2024 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/3a33f96e9af21bab.png",
    "logo_dark_path": "data/raw/liquipedia_media/1d9d678008e5e713.png"
+  },
+  "Ground Zero Gaming": {
+   "page": "Ground Zero Gaming",
+   "logo": "Ground Zero Gaming 2019.png",
+   "logo_dark": "Ground Zero Gaming 2019.png",
+   "location": "Australia",
+   "region": "Oceania",
+   "roster": [
+    {
+     "id": "apocdud",
+     "name": "Tom Henry",
+     "flag": "au",
+     "igl": true,
+     "role": "",
+     "joined": "2025-07-31"
+    },
+    {
+     "id": "vision",
+     "name": "Ethan Holst",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-31"
+    },
+    {
+     "id": "Omichella",
+     "name": "Jack McLoughlin",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-16"
+    },
+    {
+     "id": "HaZR",
+     "name": "Jared O'Bree",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-10"
+    },
+    {
+     "id": "sliimey",
+     "name": "Kalan Lorenzo",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-10"
+    },
+    {
+     "id": "tucks",
+     "name": "Tyler Reilly",
+     "flag": "au",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-03-31"
+    }
+   ],
+   "icon": "Ground Zero Gaming 2019.png",
+   "icon_dark": "Ground Zero Gaming 2019.png",
+   "logo_path": "data/raw/liquipedia_media/2cdfb44ca3c1e995.png",
+   "logo_dark_path": "data/raw/liquipedia_media/2cdfb44ca3c1e995.png"
+  },
+  "HAVU": {
+   "page": "HAVU",
+   "logo": "HAVU 2025 full allmode.png",
+   "logo_dark": "HAVU 2025 full allmode.png",
+   "location": "Finland",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "uli",
+     "name": "Samu Leirilaakso",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2023-08-31"
+    },
+    {
+     "id": "ottob",
+     "name": "Otto Virtanen",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "p3kko",
+     "name": "Pekko Korkalainen",
+     "flag": "fi",
+     "igl": true,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "Alxc",
+     "name": "Aleksi Lähevirta",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "8Juho8",
+     "name": "Juho Kankaanpää",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-29"
+    },
+    {
+     "id": "peku",
+     "name": "Petteri Jaakkola",
+     "flag": "fi",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-07-17"
+    }
+   ],
+   "icon": "HAVU 2025 allmode.png",
+   "icon_dark": "HAVU 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/4abe4b9d77ea8280.png",
+   "logo_dark_path": "data/raw/liquipedia_media/4abe4b9d77ea8280.png"
   },
   "HEROIC": {
    "page": "HEROIC",
@@ -1631,6 +4037,18 @@
    "icon_dark": "HEROIC 2024 allmode.png",
    "logo_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png",
    "logo_dark_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png"
+  },
+  "HEROIC Academy": {
+   "page": "HEROIC Academy",
+   "logo": "HEROIC 2024 full lightmode.png",
+   "logo_dark": "HEROIC 2024 full darkmode.png",
+   "location": "Norway",
+   "region": "Europe",
+   "roster": [],
+   "icon": "HEROIC 2024 full lightmode.png",
+   "icon_dark": "HEROIC 2024 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b8852b7af0dc3789.png",
+   "logo_dark_path": "data/raw/liquipedia_media/a7a3f26731629b0e.png"
   },
   "HOTU": {
    "page": "HOTU",
@@ -1701,6 +4119,120 @@
    "logo_path": "data/raw/liquipedia_media/d0456609bb801878.png",
    "logo_dark_path": "data/raw/liquipedia_media/375d25c7d4e33713.png"
   },
+  "HYPERSPIRIT": {
+   "page": "HYPERSPIRIT",
+   "logo": "HyperSpirit 2024 allmode.png",
+   "logo_dark": "HyperSpirit 2024 allmode.png",
+   "location": "Romania",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Ciocardau",
+     "name": "Daniel-Cătălin Purice",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2025-02-??"
+    },
+    {
+     "id": "d1maje",
+     "name": "Tudor Aparaschivei",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-07"
+    },
+    {
+     "id": "starplajerz",
+     "name": "Gyorfy Gabriel",
+     "flag": "ro",
+     "igl": true,
+     "role": "",
+     "joined": "2025-11-06"
+    },
+    {
+     "id": "Q-Q",
+     "name": "Marcus Krolak-Henriksen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-21"
+    },
+    {
+     "id": "Scr0b",
+     "name": "Rasmus Poulsen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-21"
+    },
+    {
+     "id": "Rickertje",
+     "name": "Rupert Hoop",
+     "flag": "be",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-25"
+    }
+   ],
+   "icon": "HyperSpirit 2024 allmode.png",
+   "icon_dark": "HyperSpirit 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/df797161cfe3d185.png",
+   "logo_dark_path": "data/raw/liquipedia_media/df797161cfe3d185.png"
+  },
+  "Honvéd Esport": {
+   "page": "Honvéd Esport",
+   "logo": "Honvéd Esport allmode.png",
+   "logo_dark": "Honvéd Esport allmode.png",
+   "location": "Hungary",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "noleN",
+     "name": "Nolen Vida",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "esor",
+     "name": "Alexander Tóth",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "iBALLY",
+     "name": "Balázs Török",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "1NSERT2",
+     "name": "Dominik Gerencsér",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "marTineZ",
+     "name": "Martin Vers",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    }
+   ],
+   "icon": "Honvéd Esport allmode.png",
+   "icon_dark": "Honvéd Esport allmode.png",
+   "logo_path": "data/raw/liquipedia_media/8b0cf3595727fdb8.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8b0cf3595727fdb8.png"
+  },
   "IC Esports": {
    "page": "IC Esports",
    "logo": "Inner Circle 2025 allmode.png",
@@ -1761,6 +4293,165 @@
    "icon_dark": "Inner Circle 2025 allmode.png",
    "logo_path": "data/raw/liquipedia_media/5b13c04887b12e28.png",
    "logo_dark_path": "data/raw/liquipedia_media/5b13c04887b12e28.png"
+  },
+  "INFINITE": {
+   "page": "INFINITE",
+   "logo": "Infinite Gaming allmode.png",
+   "logo_dark": "Infinite Gaming allmode.png",
+   "location": "Romania",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "kreaz",
+     "name": "Rasmus Johansson",
+     "flag": "se",
+     "igl": true,
+     "role": "",
+     "joined": "2026-03-18"
+    },
+    {
+     "id": "sl3nd",
+     "name": "Henrich Hevesi",
+     "flag": "hu",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-18"
+    },
+    {
+     "id": "Blytz",
+     "name": "Raul Gligor",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-07"
+    },
+    {
+     "id": "volt",
+     "name": "Sebastian Maloș",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-16"
+    },
+    {
+     "id": "Tionix",
+     "name": "Samy von Gehlen",
+     "flag": "de",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-11-13"
+    }
+   ],
+   "icon": "Infinite Gaming allmode.png",
+   "icon_dark": "Infinite Gaming allmode.png",
+   "logo_path": "data/raw/liquipedia_media/c87c608e6be2b518.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c87c608e6be2b518.png"
+  },
+  "INOX Division": {
+   "page": "INOX Division",
+   "logo": "INOX Division allmode.png",
+   "logo_dark": "INOX Division allmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "k1slll",
+     "name": "Nikita Kuzminov",
+     "flag": "by",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-20"
+    },
+    {
+     "id": "k0s",
+     "name": "Matvey Abramov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-20"
+    },
+    {
+     "id": "finW",
+     "name": "Aleksandr Potapov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-20"
+    },
+    {
+     "id": "gooddeph",
+     "name": "Arseniy Ponomarev",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-14"
+    },
+    {
+     "id": "Iqlity",
+     "name": "Maksim Ramanchykau",
+     "flag": "by",
+     "igl": false,
+     "role": "coach",
+     "joined": "2026-04-20"
+    }
+   ],
+   "icon": "INOX Division allmode.png",
+   "icon_dark": "INOX Division allmode.png",
+   "logo_path": "data/raw/liquipedia_media/b99dbbbec297a841.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b99dbbbec297a841.png"
+  },
+  "Iberian Soul": {
+   "page": "Iberian Soul",
+   "logo": "Iberian Soul allmode.png",
+   "logo_dark": "Iberian Soul allmode.png",
+   "location": "Spain",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "mopoz",
+     "name": "Alejandro Fernández",
+     "flag": "es",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-07"
+    },
+    {
+     "id": "dav1g",
+     "name": "David Granado",
+     "flag": "es",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-07"
+    },
+    {
+     "id": "sausol",
+     "name": "Pere Solsona",
+     "flag": "es",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-07"
+    },
+    {
+     "id": "alex",
+     "name": "Alejandro Masanet",
+     "flag": "es",
+     "igl": true,
+     "role": "",
+     "joined": "2026-08-07"
+    },
+    {
+     "id": "djL",
+     "name": "Daniel Narancic",
+     "flag": "se",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-07"
+    }
+   ],
+   "icon": "Iberian Soul allmode.png",
+   "icon_dark": "Iberian Soul allmode.png",
+   "logo_path": "data/raw/liquipedia_media/12ac8a0da0a9ffef.png",
+   "logo_dark_path": "data/raw/liquipedia_media/12ac8a0da0a9ffef.png"
   },
   "Imperial Esports": {
    "page": "Imperial Esports",
@@ -1823,6 +4514,71 @@
    "logo_path": "data/raw/liquipedia_media/ba01286af007964e.png",
    "logo_dark_path": "data/raw/liquipedia_media/ba01286af007964e.png"
   },
+  "InControl": {
+   "page": "InControl",
+   "logo": "InControl 2024 allmode.png",
+   "logo_dark": "InControl 2024 allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [],
+   "icon": "InControl 2024 allmode.png",
+   "icon_dark": "InControl 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/f16c301a6edc8ee1.png",
+   "logo_dark_path": "data/raw/liquipedia_media/f16c301a6edc8ee1.png"
+  },
+  "Isurus": {
+   "page": "Isurus",
+   "logo": "Isurus 2025 allmode.png",
+   "logo_dark": "Isurus 2025 allmode.png",
+   "location": "Argentina",
+   "region": "sa",
+   "roster": [
+    {
+     "id": "deco",
+     "name": "Marcos Amato",
+     "flag": "ar",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-27"
+    },
+    {
+     "id": "atarax1a",
+     "name": "Joaquin Biglieri",
+     "flag": "ar",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-27"
+    },
+    {
+     "id": "Hezz",
+     "name": "Leandro Barrios",
+     "flag": "ar",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-27"
+    },
+    {
+     "id": "dott1",
+     "name": "Matteo Dotti",
+     "flag": "ar",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-27"
+    },
+    {
+     "id": "pino",
+     "name": "Rodrigo Manarino",
+     "flag": "ar",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-25"
+    }
+   ],
+   "icon": "Isurus 2025 allmode.png",
+   "icon_dark": "Isurus 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/da9608710b8a1b6f.png",
+   "logo_dark_path": "data/raw/liquipedia_media/da9608710b8a1b6f.png"
+  },
   "JiJieHao": {
    "page": "JiJieHao",
    "logo": "JiJieHao International allmode.png",
@@ -1883,6 +4639,59 @@
    "icon_dark": "JiJieHao International allmode.png",
    "logo_path": "data/raw/liquipedia_media/6df5d1438990e753.png",
    "logo_dark_path": "data/raw/liquipedia_media/6df5d1438990e753.png"
+  },
+  "Johnny Speeds": {
+   "page": "Johnny Speeds",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Sweden",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "draken",
+     "name": "William Sundin",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-10"
+    },
+    {
+     "id": "hampus",
+     "name": "Hampus Poser",
+     "flag": "se",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-11"
+    },
+    {
+     "id": "Rack",
+     "name": "Elias Karttunen",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-22"
+    },
+    {
+     "id": "bsover",
+     "name": "Oliwer Ekbäck",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-22"
+    },
+    {
+     "id": "Svedjehed",
+     "name": "Leo Svedjehed",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-01"
+    }
+   ],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
   },
   "K27": {
    "page": "K27",
@@ -1945,6 +4754,242 @@
    "logo_path": "data/raw/liquipedia_media/f7efe9c7e98b22d4.png",
    "logo_dark_path": "data/raw/liquipedia_media/f7efe9c7e98b22d4.png"
   },
+  "KOLESIE": {
+   "page": "KOLESIE",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Poland",
+   "region": "Europe",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "Kaleido Gaming": {
+   "page": "Kaleido Gaming",
+   "logo": "Kaleido Gaming 2025 allmode.png",
+   "logo_dark": "Kaleido Gaming 2025 allmode.png",
+   "location": "China",
+   "region": "China",
+   "roster": [
+    {
+     "id": "SPine",
+     "name": "Long Qingsong",
+     "flag": "cn",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "rage",
+     "name": "Yu Hao",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "suki",
+     "name": "Wang Guanshen",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "SasiKi",
+     "name": "Cai Jiazhi",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    },
+    {
+     "id": "chuzhongT",
+     "name": "Song Ran",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-01"
+    }
+   ],
+   "icon": "Kaleido Gaming 2025 allmode.png",
+   "icon_dark": "Kaleido Gaming 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/f0727a8e95b3871d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/f0727a8e95b3871d.png"
+  },
+  "Keyd Stars": {
+   "page": "Keyd Stars",
+   "logo": "Keyd Stars 2022 full lightmode.png",
+   "logo_dark": "Keyd Stars 2022 full darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [],
+   "icon": "Keyd Stars 2022 full lightmode.png",
+   "icon_dark": "Keyd Stars 2022 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/7d2afaf4a43d9d48.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9e5cf02427e24032.png"
+  },
+  "Kitsune Esports": {
+   "page": "Kitsune Esports",
+   "logo": "Kitsune Esports 2023 lightmode.png",
+   "logo_dark": "Kitsune Esports 2023 darkmode.png",
+   "location": "South Africa",
+   "region": "Africa",
+   "roster": [
+    {
+     "id": "Doru",
+     "name": "Johnathan Fox",
+     "flag": "za",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "wilj",
+     "name": "Wiljahne Smith",
+     "flag": "za",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "Triton",
+     "name": "Kian Gibson",
+     "flag": "za",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "March",
+     "name": "Marchahn Smith",
+     "flag": "za",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "FROZ3N",
+     "name": "Michael Van Der Walt",
+     "flag": "za",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-17"
+    }
+   ],
+   "icon": "Kitsune Esports 2023 lightmode.png",
+   "icon_dark": "Kitsune Esports 2023 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/0006aa821693f564.png",
+   "logo_dark_path": "data/raw/liquipedia_media/480ce6eb2c6d0e59.png"
+  },
+  "LargadosyPelados": {
+   "page": "LargadosyPelados",
+   "logo": "LargadosyPelados allmode.png",
+   "logo_dark": "LargadosyPelados allmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "happ",
+     "name": "Guilherme Bento",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-30"
+    },
+    {
+     "id": "zmb",
+     "name": "Leonardo Toledo",
+     "flag": "br",
+     "igl": true,
+     "role": "",
+     "joined": "2025-08-30"
+    },
+    {
+     "id": "divine",
+     "name": "Gustavo Altapini",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-30"
+    },
+    {
+     "id": "Alisson",
+     "name": "Alisson Farias",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-30"
+    },
+    {
+     "id": "disturbed",
+     "name": "Pablo Fernandes",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-08-30"
+    }
+   ],
+   "icon": "LargadosyPelados allmode.png",
+   "icon_dark": "LargadosyPelados allmode.png",
+   "logo_path": "data/raw/liquipedia_media/8b4b45488d72290d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8b4b45488d72290d.png"
+  },
+  "Lazer Cats": {
+   "page": "Lazer Cats",
+   "logo": "Lazer Cats allmode.png",
+   "logo_dark": "Lazer Cats allmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Magic",
+     "name": "Maksym Melnychuk",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2024-07-21"
+    },
+    {
+     "id": "nikitea",
+     "name": "Nikita Chakhovskiy",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2024-08-04"
+    },
+    {
+     "id": "Kiy0o",
+     "name": "Serhii Savitskyi",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-13"
+    },
+    {
+     "id": "tripex17",
+     "name": "Denys Haponov",
+     "flag": "ua",
+     "igl": true,
+     "role": "",
+     "joined": "2026-09-18"
+    },
+    {
+     "id": "monarrrh",
+     "name": "Dmytro Shakh",
+     "flag": "ua",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-02-04"
+    }
+   ],
+   "icon": "Lazer Cats allmode.png",
+   "icon_dark": "Lazer Cats allmode.png",
+   "logo_path": "data/raw/liquipedia_media/8f6777e893d429c4.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8f6777e893d429c4.png"
+  },
   "Legacy": {
    "page": "Legacy",
    "logo": "Legacy full lightmode.png",
@@ -2005,6 +5050,181 @@
    "icon_dark": "Legacy allmode.png",
    "logo_path": "data/raw/liquipedia_media/61f3c599fbdd3554.png",
    "logo_dark_path": "data/raw/liquipedia_media/61f3c599fbdd3554.png"
+  },
+  "Leo Team": {
+   "page": "Leo Team",
+   "logo": "L&G 2023 allmode.png",
+   "logo_dark": "L&G 2023 allmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "leen",
+     "name": "Vladyslav Stepanov",
+     "flag": "ua",
+     "igl": true,
+     "role": "",
+     "joined": "2026-03-15"
+    },
+    {
+     "id": "next1me",
+     "name": "Kacper Parakowski",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-23"
+    },
+    {
+     "id": "aimy",
+     "name": "Jakub Kleczkowski",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-24"
+    },
+    {
+     "id": "Tarkky",
+     "name": "Julien Buzogany",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "drac",
+     "name": "Etienne Salaün",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "rjy",
+     "name": "Dmytryi Chumak",
+     "flag": "ua",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2023-03-24"
+    }
+   ],
+   "icon": "L&G 2023 allmode.png",
+   "icon_dark": "L&G 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/6eda73905606b9bd.png",
+   "logo_dark_path": "data/raw/liquipedia_media/6eda73905606b9bd.png"
+  },
+  "Life's A Game": {
+   "page": "Life's A Game",
+   "logo": "LAG Gaming US lightmode.png",
+   "logo_dark": "LAG Gaming US darkmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Sandman",
+     "name": "Justin Saulle",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-06"
+    },
+    {
+     "id": "djay",
+     "name": "Jonathan Dallal",
+     "flag": "ca",
+     "igl": true,
+     "role": "",
+     "joined": "2025-08-19"
+    },
+    {
+     "id": "Cryptic",
+     "name": "Matthew Whitmore",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-13"
+    },
+    {
+     "id": "Bwills",
+     "name": "Brendan Williams",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-26"
+    },
+    {
+     "id": "SLIGHT",
+     "name": "Keller Nilan",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-26"
+    }
+   ],
+   "icon": "LAG Gaming US lightmode.png",
+   "icon_dark": "LAG Gaming US darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/54409889f7ef4827.png",
+   "logo_dark_path": "data/raw/liquipedia_media/87046e510fdbd32a.png"
+  },
+  "Lilmix": {
+   "page": "Lilmix",
+   "logo": "Lilmix lightmode.png",
+   "logo_dark": "Lilmix darkmode.png",
+   "location": "Sweden",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Wonder",
+     "name": "Leo Wänlund",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-??"
+    },
+    {
+     "id": "p1ke",
+     "name": "Alfred Mellergårdh",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-15"
+    },
+    {
+     "id": "chucker",
+     "name": "Mateo Löfberg",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-15"
+    },
+    {
+     "id": "macke",
+     "name": "Marcus Hermundstad",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-15"
+    },
+    {
+     "id": "tqezo",
+     "name": "Eddie Thorstensson",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-16"
+    },
+    {
+     "id": "hechtikal",
+     "name": "Henric Öhlund",
+     "flag": "se",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-09-15"
+    }
+   ],
+   "icon": "Lilmix lightmode.png",
+   "icon_dark": "Lilmix darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/26b2ca661b5e20bf.png",
+   "logo_dark_path": "data/raw/liquipedia_media/15cdf09e22614e14.png"
   },
   "Luminosity Gaming": {
    "page": "Luminosity Gaming",
@@ -2189,6 +5409,80 @@
    "logo_path": "data/raw/liquipedia_media/f97ffb0317ee360d.png",
    "logo_dark_path": "data/raw/liquipedia_media/f97ffb0317ee360d.png"
   },
+  "MANA eSports": {
+   "page": "MANA eSports",
+   "logo": "MANA eSports full lightmode.png",
+   "logo_dark": "MANA eSports full darkmode.png",
+   "location": "Albania",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "ImmorteL",
+     "name": "Holger Cara",
+     "flag": "al",
+     "igl": false,
+     "role": "CEO & Manager",
+     "joined": "2024-11-05"
+    }
+   ],
+   "icon": "MANA eSports lightmode.png",
+   "icon_dark": "MANA eSports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/2fe06377669cada1.png",
+   "logo_dark_path": "data/raw/liquipedia_media/49fc75bd7eb37ab9.png"
+  },
+  "MASONIC": {
+   "page": "MASONIC",
+   "logo": "MASONIC 2022 full lightmode.png",
+   "logo_dark": "MASONIC 2022 full darkmode.png",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Botman",
+     "name": "Niklas Vestergaard",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2024-03-18"
+    },
+    {
+     "id": "KralleJ",
+     "name": "Kristian Jensen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-04"
+    },
+    {
+     "id": "b0RUP",
+     "name": "Johannes Borup",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-21"
+    },
+    {
+     "id": "slexa",
+     "name": "Alexander Marrup",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-29"
+    },
+    {
+     "id": "Bukhavez",
+     "name": "Jonas Vestergaard",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-28"
+    }
+   ],
+   "icon": "MASONIC 2022 lightmode.png",
+   "icon_dark": "MASONIC 2022 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/22fe3774752aad67.png",
+   "logo_dark_path": "data/raw/liquipedia_media/89b3bdfd3e6e27a4.png"
+  },
   "MIBR": {
    "page": "MIBR",
    "logo": "MIBR 2018 lightmode.png",
@@ -2243,6 +5537,88 @@
      "igl": false,
      "role": "Coach",
      "joined": "2026-01-21"
+    }
+   ],
+   "icon": "MIBR 2018 lightmode.png",
+   "icon_dark": "MIBR 2018 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/d5ef7a2670a0aa9d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/56139db092eee1cf.png"
+  },
+  "MIBR Academy": {
+   "page": "MIBR Academy",
+   "logo": "MIBR Academy lightmode.png",
+   "logo_dark": "MIBR Academy darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "Faraó",
+     "name": "Raynan Carvalho",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-03-12"
+    }
+   ],
+   "icon": "MIBR Academy lightmode.png",
+   "icon_dark": "MIBR Academy darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b895bbc663d5f207.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9cd20a00c9268703.png"
+  },
+  "MIBR Female": {
+   "page": "MIBR Female",
+   "logo": "MIBR 2018 lightmode.png",
+   "logo_dark": "MIBR 2018 darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "dani",
+     "name": "Daniele Cavallari",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2024-01-16"
+    },
+    {
+     "id": "GaBi",
+     "name": "Gabriela Maldonado",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2024-06-26"
+    },
+    {
+     "id": "yungher",
+     "name": "Giovanna Yungh",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "poppins",
+     "name": "Nadjila Sanchez",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-13"
+    },
+    {
+     "id": "olga",
+     "name": "Olga Rodrigues",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-10"
+    },
+    {
+     "id": "nax",
+     "name": "Nykolas Gorniski",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-26"
     }
    ],
    "icon": "MIBR 2018 lightmode.png",
@@ -2311,6 +5687,311 @@
    "logo_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png",
    "logo_dark_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png"
   },
+  "MOUZ NXT": {
+   "page": "MOUZ NXT",
+   "logo": "MOUZ full allmode.png",
+   "logo_dark": "MOUZ full allmode.png",
+   "location": "Germany",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "ay0k",
+     "name": "Maksims Beloglazovs",
+     "flag": "lv",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-23"
+    },
+    {
+     "id": "Nikodeon",
+     "name": "Nikolai Sørensen",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2025-07-24"
+    },
+    {
+     "id": "eSx-",
+     "name": "Sacha Dupin",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-10"
+    },
+    {
+     "id": "mixer",
+     "name": "Mikołaj Zhu",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-10"
+    },
+    {
+     "id": "deeN",
+     "name": "Denis Adamovich",
+     "flag": "lv",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-24"
+    },
+    {
+     "id": "lmbt",
+     "name": "Serhii Bezhanov",
+     "flag": "ua",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-07-03"
+    }
+   ],
+   "icon": "MOUZ allmode.png",
+   "icon_dark": "MOUZ allmode.png",
+   "logo_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png",
+   "logo_dark_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png"
+  },
+  "Marsborne": {
+   "page": "Marsborne",
+   "logo": "Marsborne logo allmode.png",
+   "logo_dark": "Marsborne logo allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Grizz",
+     "name": "Adam Golden",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-18"
+    },
+    {
+     "id": "ogwizard",
+     "name": "Bogdan Savula",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-10"
+    },
+    {
+     "id": "freshie",
+     "name": "Adam Paterson",
+     "flag": "ca",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-10"
+    },
+    {
+     "id": "WUMBO",
+     "name": "Chance Boyer",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-10"
+    },
+    {
+     "id": "nicx",
+     "name": "Nicholas Lee",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-08"
+    },
+    {
+     "id": "Lucid",
+     "name": "Hunter Tucker",
+     "flag": "us",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-01-18"
+    }
+   ],
+   "icon": "Marsborne logo allmode.png",
+   "icon_dark": "Marsborne logo allmode.png",
+   "logo_path": "data/raw/liquipedia_media/e12b6832ccb8a731.png",
+   "logo_dark_path": "data/raw/liquipedia_media/e12b6832ccb8a731.png"
+  },
+  "Metizport": {
+   "page": "Metizport",
+   "logo": "Metizport 2025 allmode.png",
+   "logo_dark": "Metizport 2025 allmode.png",
+   "location": "Estonia",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Plopski",
+     "name": "Nicolas Gonzalez",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2024-05-18"
+    },
+    {
+     "id": "MaiL09",
+     "name": "Liam Tügel",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-09"
+    },
+    {
+     "id": "forsyy",
+     "name": "David Bílý",
+     "flag": "cz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-01"
+    },
+    {
+     "id": "stanislaw",
+     "name": "Peter Jarguz",
+     "flag": "ca",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-06"
+    },
+    {
+     "id": "F1KU",
+     "name": "Maciej Miklas",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-07"
+    },
+    {
+     "id": "vinS",
+     "name": "Vincent Jozefiak",
+     "flag": "pl",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-11-04"
+    }
+   ],
+   "icon": "Metizport 2025 allmode.png",
+   "icon_dark": "Metizport 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/77a63665d42fb13e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/77a63665d42fb13e.png"
+  },
+  "Mindfreak (Australian team)": {
+   "page": "Mindfreak (Australian team)",
+   "logo": "Mindfreak full lightmode.png",
+   "logo_dark": "Mindfreak full darkmode.png",
+   "location": "Australia",
+   "region": "Oceania",
+   "roster": [
+    {
+     "id": "kairo",
+     "name": "Kai Brooks",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-19"
+    },
+    {
+     "id": "phoebe",
+     "name": "Phoebe Winter",
+     "flag": "au",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-19"
+    },
+    {
+     "id": "void",
+     "name": "Cooper Farrell",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-19"
+    },
+    {
+     "id": "lawlkay",
+     "name": "Ethan Mistica",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-28"
+    },
+    {
+     "id": "Bay",
+     "name": "Tyler Dellaca",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-06"
+    },
+    {
+     "id": "evelyn",
+     "name": "Evelyn McAllister",
+     "flag": "au",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-04-19"
+    }
+   ],
+   "icon": "Mindfreak full lightmode.png",
+   "icon_dark": "Mindfreak full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/99f6d43ea3f27968.png",
+   "logo_dark_path": "data/raw/liquipedia_media/fa1efbad685d98dd.png"
+  },
+  "Misa Esports": {
+   "page": "Misa Esports",
+   "logo": "Misa Esports 2023 full allmode.png",
+   "logo_dark": "Misa Esports 2023 full allmode.png",
+   "location": "Turkey",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Zuedsta",
+     "name": "Zübeyir Yıldırım",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-21"
+    },
+    {
+     "id": "souv",
+     "name": "Aziz Altınsoy",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-09"
+    },
+    {
+     "id": "EMSTAR",
+     "name": "Emrecan Çalışkan",
+     "flag": "tr",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "h0kz",
+     "name": "Hakan Sarıçam",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "cyber",
+     "name": "Ahmet Akpınar",
+     "flag": "tr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-20"
+    },
+    {
+     "id": "kPOWER",
+     "name": "Kubilay Makas",
+     "flag": "tr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-03"
+    }
+   ],
+   "icon": "Misa Esports 2023 allmode.png",
+   "icon_dark": "Misa Esports 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/990915ec354188c6.png",
+   "logo_dark_path": "data/raw/liquipedia_media/990915ec354188c6.png"
+  },
   "Monte": {
    "page": "Monte",
    "logo": "Monte 2022 allmode.png",
@@ -2339,6 +6020,161 @@
    "icon_dark": "Monte 2022 allmode.png",
    "logo_path": "data/raw/liquipedia_media/374e57e9008e0966.png",
    "logo_dark_path": "data/raw/liquipedia_media/374e57e9008e0966.png"
+  },
+  "Morningstar": {
+   "page": "Morningstar",
+   "logo": "Morningstar 2026 July full allmode.png",
+   "logo_dark": "Morningstar 2026 July full allmode.png",
+   "location": "China",
+   "region": "China",
+   "roster": [
+    {
+     "id": "Apraki",
+     "name": "Zheng Tim",
+     "flag": "hk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "eleGant",
+     "name": "Wang Cezheng",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "RyverS",
+     "name": "Jiang He",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "Terryyy",
+     "name": "Lee Lam Fung",
+     "flag": "hk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-08-03"
+    },
+    {
+     "id": "Freeman",
+     "name": "Cheung Wing Hei",
+     "flag": "hk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-03"
+    }
+   ],
+   "icon": "Morningstar 2026 July allmode.png",
+   "icon_dark": "Morningstar 2026 July allmode.png",
+   "logo_path": "data/raw/liquipedia_media/0567d8522ed96b29.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0567d8522ed96b29.png"
+  },
+  "Mythic": {
+   "page": "Mythic",
+   "logo": "Mythic 2017 full allmode.png",
+   "logo_dark": "Mythic 2017 full allmode.png",
+   "location": "United States",
+   "region": "na",
+   "roster": [],
+   "icon": "Mythic 2017 full allmode.png",
+   "icon_dark": "Mythic 2017 full allmode.png",
+   "logo_path": "data/raw/liquipedia_media/6aa43d50f112d8e7.png",
+   "logo_dark_path": "data/raw/liquipedia_media/6aa43d50f112d8e7.png"
+  },
+  "NEXVOID": {
+   "page": "NEXVOID",
+   "logo": "NEXVOID allmode.png",
+   "logo_dark": "NEXVOID allmode.png",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "erkaSt",
+     "name": "Erdenetsogt Gantulga",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-03"
+    },
+    {
+     "id": "AccuracyTG",
+     "name": "Otgonlkhagva Batjargal",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-03"
+    },
+    {
+     "id": "Zesta",
+     "name": "Munkhsaikhan Erdenebaatar",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-03"
+    },
+    {
+     "id": "MiQ",
+     "name": "Temuulen Byambadalai",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-05"
+    },
+    {
+     "id": "xerolte",
+     "name": "Munkhtogtokh Enkhbat",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-14"
+    },
+    {
+     "id": "Diesen",
+     "name": "Amartuvshin Ganbaatar",
+     "flag": "mn",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-03"
+    }
+   ],
+   "icon": "NEXVOID allmode.png",
+   "icon_dark": "NEXVOID allmode.png",
+   "logo_path": "data/raw/liquipedia_media/7d91a28287774cd9.png",
+   "logo_dark_path": "data/raw/liquipedia_media/7d91a28287774cd9.png"
+  },
+  "NOVAQ": {
+   "page": "NOVAQ",
+   "logo": "NOVAQ full lightmode.png",
+   "logo_dark": "NOVAQ full darkmode.png",
+   "location": "Kazakhstan",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "AdreN",
+     "name": "Däuren Qystaubaev",
+     "flag": "kz",
+     "igl": true,
+     "role": "",
+     "joined": "2026-06-17"
+    },
+    {
+     "id": "keeN",
+     "name": "Adlet Nūrseiıtov",
+     "flag": "kz",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-06-22"
+    }
+   ],
+   "icon": "NOVAQ full lightmode.png",
+   "icon_dark": "NOVAQ full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/8e3fc61be4c4b5cf.png",
+   "logo_dark_path": "data/raw/liquipedia_media/bfe73404c0e4e468.png"
   },
   "NRG": {
    "page": "NRG",
@@ -2462,66 +6298,66 @@
    "logo_path": "data/raw/liquipedia_media/44df4ee5562ff85a.png",
    "logo_dark_path": "data/raw/liquipedia_media/5730dbfbb8d0c60f.png"
   },
-  "Nemesis": {
-   "page": "Nemesis",
-   "logo": "Team Nemesis full lightmode.png",
-   "logo_dark": "Team Nemesis full darkmode.png",
-   "location": "Singapore",
-   "region": "CIS",
+  "Natus Vincere Junior": {
+   "page": "Natus Vincere Junior",
+   "logo": "Natus Vincere Junior 2021 lightmode.png",
+   "logo_dark": "Natus Vincere Junior 2021 darkmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
    "roster": [
     {
-     "id": "SELLTER",
-     "name": "Ivan Miroshnikov",
-     "flag": "ru",
+     "id": "kodak",
+     "name": "Nazar Buchma",
+     "flag": "ua",
      "igl": true,
      "role": "",
-     "joined": "2026-01-13"
+     "joined": "2025-10-01"
     },
     {
-     "id": "Sdaim",
-     "name": "Danyyl Tupov",
-     "flag": "ru",
+     "id": "Yoki",
+     "name": "Danylo Istomin",
+     "flag": "ua",
      "igl": false,
      "role": "",
-     "joined": "2026-01-13"
+     "joined": "2025-10-01"
     },
     {
-     "id": "tex1y",
-     "name": "Philipp Moskvitin",
-     "flag": "ru",
+     "id": "FAZERY",
+     "name": "David Procházka",
+     "flag": "cz",
      "igl": false,
      "role": "",
-     "joined": "2026-01-13"
+     "joined": "2025-11-10"
     },
     {
-     "id": "mag1k3Y",
-     "name": "Alemkhan Moldakamalov",
-     "flag": "kz",
+     "id": "MahaR",
+     "name": "Samuel Horáček",
+     "flag": "cz",
      "igl": false,
      "role": "",
-     "joined": "2026-01-13"
+     "joined": "2026-03-31"
     },
     {
-     "id": "r3salt",
-     "name": "Evgeniy Frolov",
-     "flag": "ru",
+     "id": "skizzyee",
+     "name": "Novica Novkovikj",
+     "flag": "mk",
      "igl": false,
      "role": "",
-     "joined": "2026-02-27"
+     "joined": "2026-03-31"
     },
     {
-     "id": "brain",
-     "name": "Stepan Sivoronov",
-     "flag": "ru",
+     "id": "snatchie",
+     "name": "Michał Rudzki",
+     "flag": "pl",
      "igl": false,
      "role": "Coach",
-     "joined": "2026-10-05"
+     "joined": "2025-10-01"
     }
    ],
-   "icon": "Team Nemesis lightmode.png",
-   "icon_dark": "Team Nemesis darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/eb439cc88f5ee107.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c95a886f3d486fc1.png"
+   "icon": "Natus Vincere Junior 2021 lightmode.png",
+   "icon_dark": "Natus Vincere Junior 2021 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/d980d4e27a12eecc.png",
+   "logo_dark_path": "data/raw/liquipedia_media/8006efefc5b41618.png"
   },
   "Nemiga Gaming": {
    "page": "Nemiga Gaming",
@@ -2583,6 +6419,67 @@
    "icon_dark": "Nemiga Gaming 2020logo.png",
    "logo_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png",
    "logo_dark_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png"
+  },
+  "Nexus Gaming": {
+   "page": "Nexus Gaming",
+   "logo": "Nexus Gaming 2020 allmode.png",
+   "logo_dark": "Nexus Gaming 2020 allmode.png",
+   "location": "Romania",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "s0und",
+     "name": "Alexandru Ștefan",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-10"
+    },
+    {
+     "id": "fNk",
+     "name": "Mihai Costache",
+     "flag": "ro",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-26"
+    },
+    {
+     "id": "Nexius",
+     "name": "Bram Campana",
+     "flag": "be",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-12"
+    },
+    {
+     "id": "shield",
+     "name": "Roberts Tipsis",
+     "flag": "lv",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-12"
+    },
+    {
+     "id": "HOLY",
+     "name": "Radu Vrânceanu",
+     "flag": "ro",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-10"
+    },
+    {
+     "id": "H4rder",
+     "name": "Cătălin Hardulea",
+     "flag": "ro",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-12-15"
+    }
+   ],
+   "icon": "Nexus Gaming 2020 allmode.png",
+   "icon_dark": "Nexus Gaming 2020 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/932c47ba74bcac2b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/932c47ba74bcac2b.png"
   },
   "Ninjas in Pyjamas": {
    "page": "Ninjas in Pyjamas",
@@ -2706,6 +6603,132 @@
    "logo_path": "data/raw/liquipedia_media/8413ef23c22d7554.png",
    "logo_dark_path": "data/raw/liquipedia_media/67d2dffcaf51f317.png"
   },
+  "ODDIK": {
+   "page": "ODDIK",
+   "logo": "ODDIK full lightmode.png",
+   "logo_dark": "ODDIK full darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [],
+   "icon": "ODDIK lightmode.png",
+   "icon_dark": "ODDIK full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/4ee246a11e6effc2.png",
+   "logo_dark_path": "data/raw/liquipedia_media/d602ef8c9e711ea0.png"
+  },
+  "OG": {
+   "page": "OG",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "spooke",
+     "name": "Olle Grundström",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-04"
+    },
+    {
+     "id": "bodyy",
+     "name": "Alexandre Pianaro",
+     "flag": "fr",
+     "igl": true,
+     "role": "Loan",
+     "joined": "2026-03-07"
+    },
+    {
+     "id": "Ex3rcice",
+     "name": "Pierre Bulinge",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-04"
+    },
+    {
+     "id": "Chuckyy",
+     "name": "Jordan Molnar",
+     "flag": "be",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-04"
+    },
+    {
+     "id": "nut nut",
+     "name": "Martin Vestergaard",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-04"
+    },
+    {
+     "id": "Lambert",
+     "name": "Lambert Prigent",
+     "flag": "fr",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-04-18"
+    }
+   ],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "OMEGA": {
+   "page": "OMEGA",
+   "logo": "OMEGA team lightmode.png",
+   "logo_dark": "OMEGA team darkmode.png",
+   "location": "Kazakhstan",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "dan4o",
+     "name": "Damir Kulshenbayev",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-29"
+    },
+    {
+     "id": "Botpa1",
+     "name": "Zhassulan Assembek",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-09"
+    },
+    {
+     "id": "adai",
+     "name": "Darhan Jeksenbai",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-09"
+    },
+    {
+     "id": "Aldikon",
+     "name": "Aldiyar Alim",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-24"
+    },
+    {
+     "id": "def1zer",
+     "name": "Sanjar Talgat",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-07"
+    }
+   ],
+   "icon": "OMEGA team lightmode.png",
+   "icon_dark": "OMEGA team darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/3d736366f9f07c8d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/afdb6676b67d2db0.png"
+  },
   "PARIVISION": {
    "page": "PARIVISION",
    "logo": "PARIVISION allmode.png",
@@ -2767,6 +6790,27 @@
    "logo_path": "data/raw/liquipedia_media/77b93cb15532f9b9.png",
    "logo_dark_path": "data/raw/liquipedia_media/77b93cb15532f9b9.png"
   },
+  "Partizan Esports": {
+   "page": "Partizan Esports",
+   "logo": "Partizan Esports 2024 lightmode.png",
+   "logo_dark": "Partizan Esports 2024 darkmode.png",
+   "location": "Serbia",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "DotlA",
+     "name": "Miloš Dotlić",
+     "flag": "rs",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-26"
+    }
+   ],
+   "icon": "Partizan Esports 2024 lightmode.png",
+   "icon_dark": "Partizan Esports 2024 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/cbb601c10220c03d.png",
+   "logo_dark_path": "data/raw/liquipedia_media/bf1dd7126381adff.png"
+  },
   "Passion UA": {
    "page": "Passion UA",
    "logo": "Passion UA 2025 lightmode.png",
@@ -2787,6 +6831,267 @@
    "icon_dark": "Passion UA 2025 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/4e1c3dd076141a2e.png",
    "logo_dark_path": "data/raw/liquipedia_media/ad4e5b21130d514c.png"
+  },
+  "Permitta Esports": {
+   "page": "Permitta Esports",
+   "logo": "Permitta Esports 2024 lightmode.png",
+   "logo_dark": "Permitta Esports darkmode.png",
+   "location": "Switzerland",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Mersin3250",
+     "name": "Kemal Tanrikulu",
+     "flag": "ch",
+     "igl": false,
+     "role": "Co-Founder, CEO",
+     "joined": "2022-04-01"
+    },
+    {
+     "id": "Silent2k4",
+     "name": "Richard Witte",
+     "flag": "de",
+     "igl": false,
+     "role": "Co-Founder, COO",
+     "joined": "2022-04-01"
+    },
+    {
+     "id": "Joshua19leu",
+     "name": "Joshua Leuthold",
+     "flag": "ch",
+     "igl": false,
+     "role": "Co-Founder, CCO",
+     "joined": "2022-04-01"
+    },
+    {
+     "id": "Nolito",
+     "name": "Wiktor Biel",
+     "flag": "pl",
+     "igl": false,
+     "role": "Head of CS",
+     "joined": "2022-12-20"
+    },
+    {
+     "id": "Ollewa",
+     "name": "Oliver Gröbke",
+     "flag": "de",
+     "igl": false,
+     "role": "Team Manager",
+     "joined": "2025-01-21"
+    }
+   ],
+   "icon": "Permitta Esports 2024 lightmode.png",
+   "icon_dark": "Permitta Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/ca1533896f05bd3e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/91d24df4b43183fd.png"
+  },
+  "Phantom Esports": {
+   "page": "Phantom Esports",
+   "logo": "Phantom Esports full lightmode.png",
+   "logo_dark": "Phantom Esports full darkmode.png",
+   "location": "Poland",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Kylar",
+     "name": "Kacper Walukiewicz",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-12"
+    },
+    {
+     "id": "KEi",
+     "name": "Kamil Pietkun",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2025-11-12"
+    },
+    {
+     "id": "TMB",
+     "name": "Thomas Bundsbæk",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-05-12"
+    },
+    {
+     "id": "nicoodoz",
+     "name": "Nico Tamjidi",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-03"
+    },
+    {
+     "id": "cej0t",
+     "name": "Jan Dyl",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-06"
+    }
+   ],
+   "icon": "Phantom Esports lightmode.png",
+   "icon_dark": "Phantom Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/6b12331060ae6d53.png",
+   "logo_dark_path": "data/raw/liquipedia_media/74034cf0a8c1b94e.png"
+  },
+  "Phoenix": {
+   "page": "Phoenix",
+   "logo": "Phoenix_Esports.png",
+   "logo_dark": "Phoenix_Esports.png",
+   "location": "Europe",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Phoenix_Esports.png",
+   "icon_dark": "Phoenix_Esports.png",
+   "logo_path": "data/raw/liquipedia_media/a01e377b01e044e2.png",
+   "logo_dark_path": "data/raw/liquipedia_media/a01e377b01e044e2.png"
+  },
+  "Prestige Esport": {
+   "page": "Prestige Esport",
+   "logo": "Prestige Esports 2026 allmode.png",
+   "logo_dark": "Prestige Esports 2026 allmode.png",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "fejtZ",
+     "name": "Kristjan Allsaar",
+     "flag": "ee",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-07"
+    },
+    {
+     "id": "qx",
+     "name": "Sander Thomas",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-05"
+    },
+    {
+     "id": "N4xx1s",
+     "name": "Noah Nielsen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-06"
+    },
+    {
+     "id": "jelo",
+     "name": "Joel Lentonen",
+     "flag": "fi",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-06"
+    },
+    {
+     "id": "oopee",
+     "name": "Olli Piispanen",
+     "flag": "fi",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-06"
+    },
+    {
+     "id": "ko5te",
+     "name": "Christoffer Kostelac",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-07"
+    }
+   ],
+   "icon": "Prestige Esports 2026 allmode.png",
+   "icon_dark": "Prestige Esports 2026 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/b393de682e277bb2.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b393de682e277bb2.png"
+  },
+  "QUAZAR": {
+   "page": "QUAZAR",
+   "logo": "QUAZAR.GG allmode.png",
+   "logo_dark": "QUAZAR.GG allmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "gehji",
+     "name": "Dmitriy Popov",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2024-07-24"
+    },
+    {
+     "id": "kaiori",
+     "name": "Egor Torzhkov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2025-05-27"
+    },
+    {
+     "id": "newt",
+     "name": "Ilya Voronov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-13"
+    },
+    {
+     "id": "Ne1XXX",
+     "name": "Artyom Borisov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-11"
+    },
+    {
+     "id": "Porya",
+     "name": "Danil Poryadin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-07"
+    },
+    {
+     "id": "44",
+     "name": "Dmitriy Dzutsev",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2024-07-24"
+    }
+   ],
+   "icon": "QUAZAR.GG allmode.png",
+   "icon_dark": "QUAZAR.GG allmode.png",
+   "logo_path": "data/raw/liquipedia_media/e085b685ac185579.png",
+   "logo_dark_path": "data/raw/liquipedia_media/e085b685ac185579.png"
+  },
+  "QWENTRY": {
+   "page": "QWENTRY",
+   "logo": "Hesta_lightmode.png",
+   "logo_dark": "Hesta_darkmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "bairrich",
+     "name": "Bair Zhamsoyevich",
+     "flag": "ru",
+     "igl": false,
+     "role": "CEO",
+     "joined": "2025-08-10"
+    }
+   ],
+   "icon": "Hesta_lightmode.png",
+   "icon_dark": "Hesta_darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/e966ef0ab32e1a8e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/e027b98addac9b58.png"
   },
   "RED Canids": {
    "page": "RED Canids",
@@ -2832,6 +7137,263 @@
    "icon_dark": "Red_Canids_logo.png",
    "logo_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png",
    "logo_dark_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png"
+  },
+  "RUSTEC": {
+   "page": "RUSTEC",
+   "logo": "Rustec allmode.png",
+   "logo_dark": "Rustec allmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "dimasszz",
+     "name": "Dmitriy Voronin",
+     "flag": "ru",
+     "igl": false,
+     "role": "Manager",
+     "joined": "2024-??-??"
+    }
+   ],
+   "icon": "Rustec allmode.png",
+   "icon_dark": "Rustec allmode.png",
+   "logo_path": "data/raw/liquipedia_media/c5bdcd04cf42ed6f.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c5bdcd04cf42ed6f.png"
+  },
+  "Rare Atom": {
+   "page": "Rare Atom",
+   "logo": "Rare Atom full allmode.png",
+   "logo_dark": "Rare Atom full allmode.png",
+   "location": "China",
+   "region": "China",
+   "roster": [
+    {
+     "id": "Summer",
+     "name": "Cai Yulun",
+     "flag": "cn",
+     "igl": true,
+     "role": "",
+     "joined": "2023-10-10"
+    },
+    {
+     "id": "L1haNg",
+     "name": "Li Yihang",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2024-04-08"
+    },
+    {
+     "id": "ChildKing",
+     "name": "Peng Junhao",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2024-04-08"
+    },
+    {
+     "id": "chengking",
+     "name": "Zu Shengxuan",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-12-11"
+    },
+    {
+     "id": "3gl",
+     "name": "Wang Guoliang",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-09"
+    },
+    {
+     "id": "Trash",
+     "name": "Tian Aojie",
+     "flag": "cn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-09"
+    },
+    {
+     "id": "Marek",
+     "name": "Huang Tzu-chi",
+     "flag": "tw",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-05-09"
+    }
+   ],
+   "icon": "Rare Atom allmode.png",
+   "icon_dark": "Rare Atom allmode.png",
+   "logo_path": "data/raw/liquipedia_media/c51daad19ab70aef.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c51daad19ab70aef.png"
+  },
+  "Rebels Gaming": {
+   "page": "Rebels Gaming",
+   "logo": "Rebels Gaming 2021 full lightmode.png",
+   "logo_dark": "Rebels Gaming 2021 full darkmode.png",
+   "location": "Spain",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "Icarus",
+     "name": "Diogo Cruz",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-11"
+    },
+    {
+     "id": "stadodo",
+     "name": "Renato Gonçalves",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-11"
+    },
+    {
+     "id": "arrozdoce",
+     "name": "Rafael Wing",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-21"
+    },
+    {
+     "id": "shr",
+     "name": "José Gil",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-21"
+    },
+    {
+     "id": "aragornN",
+     "name": "António Barbosa",
+     "flag": "pt",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-21"
+    },
+    {
+     "id": "horvy",
+     "name": "João Horvath",
+     "flag": "br",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-01"
+    }
+   ],
+   "icon": "Rebels Gaming 2021 full lightmode.png",
+   "icon_dark": "Rebels Gaming 2021 full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/ae4d01f13b0438ed.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b94a1a1a59281515.png"
+  },
+  "Rooster": {
+   "page": "Rooster",
+   "logo": "Rooster logo.png",
+   "logo_dark": "Rooster logo.png",
+   "location": "Australia",
+   "region": "Oceania",
+   "roster": [
+    {
+     "id": "chelleos",
+     "name": "Michael Hawkins",
+     "flag": "nz",
+     "igl": true,
+     "role": "",
+     "joined": "2022-10-23"
+    },
+    {
+     "id": "rekonz",
+     "name": "Daniel Mort",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-??"
+    },
+    {
+     "id": "SkulL",
+     "name": "Jordan Newland",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-??"
+    },
+    {
+     "id": "damyo",
+     "name": "Damon Portelli",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-12"
+    },
+    {
+     "id": "foggers",
+     "name": "Jayden Graham",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-??"
+    }
+   ],
+   "icon": "Rooster logo.png",
+   "icon_dark": "Rooster logo.png",
+   "logo_path": "data/raw/liquipedia_media/0ed6cf9e9d8203e3.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0ed6cf9e9d8203e3.png"
+  },
+  "Rune Eaters Esports": {
+   "page": "Rune Eaters Esports",
+   "logo": "Rune Eaters Esports lightmode.png",
+   "logo_dark": "Rune Eaters Esports darkmode.png",
+   "location": "Kazakhstan",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "forkyz",
+     "name": "Mūstafa Mäulenkūl",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-23"
+    },
+    {
+     "id": "her1tage",
+     "name": "Asanali Serikkali",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-23"
+    },
+    {
+     "id": "noni",
+     "name": "Nursultan Nyshanbek",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-04"
+    },
+    {
+     "id": "demente",
+     "name": "Danial Ismailov",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-07"
+    },
+    {
+     "id": "dukefissura",
+     "name": "Sūleimen Orazaly",
+     "flag": "kz",
+     "igl": true,
+     "role": "",
+     "joined": "2026-08-22"
+    }
+   ],
+   "icon": "Rune Eaters Esports lightmode.png",
+   "icon_dark": "Rune Eaters Esports darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/fe6fe725c0f099a0.png",
+   "logo_dark_path": "data/raw/liquipedia_media/7cb57514dbb718dd.png"
   },
   "SAW": {
    "page": "SAW",
@@ -2955,6 +7517,35 @@
    "logo_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png",
    "logo_dark_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png"
   },
+  "SPARTA Esports": {
+   "page": "SPARTA Esports",
+   "logo": "SPARTA (Russian_team) allmode.png",
+   "logo_dark": "SPARTA (Russian_team) allmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "",
+     "name": "Nikita Zdradovsky",
+     "flag": "ru",
+     "igl": false,
+     "role": "Founder",
+     "joined": "2025-06-17"
+    },
+    {
+     "id": "nightmarekii",
+     "name": "Nikita Degtiarev",
+     "flag": "ru",
+     "igl": false,
+     "role": "Team Manager",
+     "joined": "2026-03-18"
+    }
+   ],
+   "icon": "SPARTA (Russian_team) allmode.png",
+   "icon_dark": "SPARTA (Russian_team) allmode.png",
+   "logo_path": "data/raw/liquipedia_media/ffdb2d320acc0de3.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ffdb2d320acc0de3.png"
+  },
   "Sangal Esports": {
    "page": "Sangal Esports",
    "logo": "Sangal Esports 2020 allmode.png",
@@ -3016,6 +7607,67 @@
    "logo_path": "data/raw/liquipedia_media/d4a52820eef6a773.png",
    "logo_dark_path": "data/raw/liquipedia_media/d4a52820eef6a773.png"
   },
+  "Sashi Esport": {
+   "page": "Sashi Esport",
+   "logo": "Sashi Esport 2023 allmode.png",
+   "logo_dark": "Sashi Esport 2023 allmode.png",
+   "location": "Denmark",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "Zyphon",
+     "name": "Rasmus Nordfoss",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-01-03"
+    },
+    {
+     "id": "acoR",
+     "name": "Frederik Gyldstrand",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-05"
+    },
+    {
+     "id": "Anlelele",
+     "name": "Anton Huynh",
+     "flag": "vn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-20"
+    },
+    {
+     "id": "TjP",
+     "name": "Tynan Purtell",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "Hatz",
+     "name": "Jordan Bajic",
+     "flag": "au",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "HUNDEN",
+     "name": "Nicolai Petersen",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2023-07-17"
+    }
+   ],
+   "icon": "Sashi Esport 2023 allmode.png",
+   "icon_dark": "Sashi Esport 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/cd61c84002269a8b.png",
+   "logo_dark_path": "data/raw/liquipedia_media/cd61c84002269a8b.png"
+  },
   "SemperFi Esports": {
    "page": "SemperFi Esports",
    "logo": "SemperFI Esports allmode.png",
@@ -3044,6 +7696,59 @@
    "icon_dark": "SemperFI Esports allmode.png",
    "logo_path": "data/raw/liquipedia_media/732e294c875770a7.png",
    "logo_dark_path": "data/raw/liquipedia_media/732e294c875770a7.png"
+  },
+  "Shimmer": {
+   "page": "Shimmer",
+   "logo": "Shimmer 2023 allmode.png",
+   "logo_dark": "Shimmer 2023 allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "empathy",
+     "name": "Lucy Verkaik",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-02"
+    },
+    {
+     "id": "Stx",
+     "name": "Wrenna Trampel",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2026-04-02"
+    },
+    {
+     "id": "alicerawr",
+     "name": "Alice Hewitt",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-02"
+    },
+    {
+     "id": "juna",
+     "name": "Juna Rogel",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-14"
+    },
+    {
+     "id": "Serendipity",
+     "name": "Sylvie Splaver",
+     "flag": "us",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-14"
+    }
+   ],
+   "icon": "Shimmer 2023 allmode.png",
+   "icon_dark": "Shimmer 2023 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/bddca0c9b144b837.png",
+   "logo_dark_path": "data/raw/liquipedia_media/bddca0c9b144b837.png"
   },
   "ShindeN": {
    "page": "ShindeN",
@@ -3105,6 +7810,91 @@
    "icon_dark": "ShindeN darkmode.png",
    "logo_path": "data/raw/liquipedia_media/9d13e47ad540b75f.png",
    "logo_dark_path": "data/raw/liquipedia_media/28ecc6d4386597fa.png"
+  },
+  "SkinRave Esports": {
+   "page": "SkinRave Esports",
+   "logo": "SkinRave full lightmode.png",
+   "logo_dark": "SkinRave full lightmode.png",
+   "location": "Cyprus",
+   "region": "North America",
+   "roster": [],
+   "icon": "SkinRave full lightmode.png",
+   "icon_dark": "SkinRave full lightmode.png",
+   "logo_path": "data/raw/liquipedia_media/cfa866f288e3f198.png",
+   "logo_dark_path": "data/raw/liquipedia_media/cfa866f288e3f198.png"
+  },
+  "SportsBetExpert": {
+   "page": "SportsBetExpert",
+   "logo": "SportsBetExpert allmode.png",
+   "logo_dark": "SportsBetExpert allmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Peeping",
+     "name": "Jaxon Cornwell",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2026-05-02"
+    },
+    {
+     "id": "Infinite",
+     "name": "Gage Green",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "consti",
+     "name": "Kevin Yi",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-14"
+    },
+    {
+     "id": "shane",
+     "name": "Shane Dressler",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-06-05"
+    },
+    {
+     "id": "motm",
+     "name": "Ian Hardy",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-01"
+    },
+    {
+     "id": "Aureo",
+     "name": "Brennan O’Connell",
+     "flag": "us",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-06-30"
+    }
+   ],
+   "icon": "SportsBetExpert allmode.png",
+   "icon_dark": "SportsBetExpert allmode.png",
+   "logo_path": "data/raw/liquipedia_media/266971c48792cb8e.png",
+   "logo_dark_path": "data/raw/liquipedia_media/266971c48792cb8e.png"
+  },
+  "TDK": {
+   "page": "TDK",
+   "logo": "TDK_allmode.png",
+   "logo_dark": "TDK_allmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [],
+   "icon": "TDK_allmode.png",
+   "icon_dark": "TDK_allmode.png",
+   "logo_path": "data/raw/liquipedia_media/a0257e326899abfd.png",
+   "logo_dark_path": "data/raw/liquipedia_media/a0257e326899abfd.png"
   },
   "THUNDERdOWNUNDER": {
    "page": "THUNDERdOWNUNDER",
@@ -3204,6 +7994,111 @@
    "logo_path": "data/raw/liquipedia_media/ac92a4aed022059f.png",
    "logo_dark_path": "data/raw/liquipedia_media/ac92a4aed022059f.png"
   },
+  "Team Argentina": {
+   "page": "Team Argentina",
+   "logo": "Flag of Argentina.svg",
+   "logo_dark": "Flag of Argentina.svg",
+   "location": "Argentina",
+   "region": "South America",
+   "roster": [],
+   "icon": "Flag of Argentina.svg",
+   "icon_dark": "Flag of Argentina.svg",
+   "logo_path": "data/raw/liquipedia_media/7c6fd4b9b0a0c36e.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/7c6fd4b9b0a0c36e.svg"
+  },
+  "Team Australia": {
+   "page": "Team Australia",
+   "logo": "Flag of Australia.svg",
+   "logo_dark": "Flag of Australia.svg",
+   "location": "Australia",
+   "region": "Oceania",
+   "roster": [],
+   "icon": "Flag of Australia.svg",
+   "icon_dark": "Flag of Australia.svg",
+   "logo_path": "data/raw/liquipedia_media/eb3df9f56361ba00.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/eb3df9f56361ba00.svg"
+  },
+  "Team Brazil": {
+   "page": "Team Brazil",
+   "logo": "Flag of Brazil.svg",
+   "logo_dark": "Flag of Brazil.svg",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [],
+   "icon": "Flag of Brazil.svg",
+   "icon_dark": "Flag of Brazil.svg",
+   "logo_path": "data/raw/liquipedia_media/0e789fad96e3f595.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/0e789fad96e3f595.svg"
+  },
+  "Team Bulgaria": {
+   "page": "Team Bulgaria",
+   "logo": "Flag of Bulgaria.svg",
+   "logo_dark": "Flag of Bulgaria.svg",
+   "location": "Bulgaria",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Bulgaria.svg",
+   "icon_dark": "Flag of Bulgaria.svg",
+   "logo_path": "data/raw/liquipedia_media/28cf5d097d5b4266.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/28cf5d097d5b4266.svg"
+  },
+  "Team Canada": {
+   "page": "Team Canada",
+   "logo": "Flag of Canada.svg",
+   "logo_dark": "Flag of Canada.svg",
+   "location": "Canada",
+   "region": "North America",
+   "roster": [],
+   "icon": "Flag of Canada.svg",
+   "icon_dark": "Flag of Canada.svg",
+   "logo_path": "data/raw/liquipedia_media/27df63022d0b4bd8.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/27df63022d0b4bd8.svg"
+  },
+  "Team Chile": {
+   "page": "Team Chile",
+   "logo": "Flag of Chile.svg",
+   "logo_dark": "Flag of Chile.svg",
+   "location": "Chile",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "",
+     "name": "Tomas Mosqueira",
+     "flag": "cl",
+     "igl": false,
+     "role": "Manager",
+     "joined": "2026-03-26"
+    }
+   ],
+   "icon": "Flag of Chile.svg",
+   "icon_dark": "Flag of Chile.svg",
+   "logo_path": "data/raw/liquipedia_media/7c9aae18719d4589.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/7c9aae18719d4589.svg"
+  },
+  "Team China": {
+   "page": "Team China",
+   "logo": "Flag of the People's Republic of China.svg",
+   "logo_dark": "Flag of the People's Republic of China.svg",
+   "location": "China",
+   "region": "Asia",
+   "roster": [],
+   "icon": "Flag of the People's Republic of China.svg",
+   "icon_dark": "Flag of the People's Republic of China.svg",
+   "logo_path": "data/raw/liquipedia_media/7d202e6cfc6cbaa8.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/7d202e6cfc6cbaa8.svg"
+  },
+  "Team Denmark": {
+   "page": "Team Denmark",
+   "logo": "Flag of Denmark.svg",
+   "logo_dark": "Flag of Denmark.svg",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Denmark.svg",
+   "icon_dark": "Flag of Denmark.svg",
+   "logo_path": "data/raw/liquipedia_media/037d8cfa6224e5ae.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/037d8cfa6224e5ae.svg"
+  },
   "Team Falcons": {
    "page": "Team Falcons",
    "logo": "Team Falcons 2022 full lightmode.png",
@@ -3264,6 +8159,54 @@
    "icon_dark": "Team Falcons 2022 allmode.png",
    "logo_path": "data/raw/liquipedia_media/1709728531cf8385.png",
    "logo_dark_path": "data/raw/liquipedia_media/1709728531cf8385.png"
+  },
+  "Team France": {
+   "page": "Team France",
+   "logo": "Flag of France.svg",
+   "logo_dark": "Flag of France.svg",
+   "location": "France",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of France.svg",
+   "icon_dark": "Flag of France.svg",
+   "logo_path": "data/raw/liquipedia_media/f56b7d9730830e3b.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/f56b7d9730830e3b.svg"
+  },
+  "Team Germany": {
+   "page": "Team Germany",
+   "logo": "Flag of Germany.svg",
+   "logo_dark": "Flag of Germany.svg",
+   "location": "Germany",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Germany.svg",
+   "icon_dark": "Flag of Germany.svg",
+   "logo_path": "data/raw/liquipedia_media/66b85b03763651d2.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/66b85b03763651d2.svg"
+  },
+  "Team Indonesia": {
+   "page": "Team Indonesia",
+   "logo": "Flag of Indonesia.svg",
+   "logo_dark": "Flag of Indonesia.svg",
+   "location": "Indonesia",
+   "region": "Southeast Asia",
+   "roster": [],
+   "icon": "Flag of Indonesia.svg",
+   "icon_dark": "Flag of Indonesia.svg",
+   "logo_path": "data/raw/liquipedia_media/cd1a21953bcc06d9.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/cd1a21953bcc06d9.svg"
+  },
+  "Team Kazakhstan": {
+   "page": "Team Kazakhstan",
+   "logo": "Flag of Kazakhstan.svg",
+   "logo_dark": "Flag of Kazakhstan.svg",
+   "location": "Kazakhstan",
+   "region": "cis",
+   "roster": [],
+   "icon": "Flag of Kazakhstan.svg",
+   "icon_dark": "Flag of Kazakhstan.svg",
+   "logo_path": "data/raw/liquipedia_media/5e7bf6a7a1ddddb6.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/5e7bf6a7a1ddddb6.svg"
   },
   "Team Liquid": {
    "page": "Team Liquid",
@@ -3326,6 +8269,163 @@
    "logo_path": "data/raw/liquipedia_media/39b073101a191071.png",
    "logo_dark_path": "data/raw/liquipedia_media/3a47525151412b0d.png"
   },
+  "Team Lithuania": {
+   "page": "Team Lithuania",
+   "logo": "Flag of Lithuania.svg",
+   "logo_dark": "Flag of Lithuania.svg",
+   "location": "Lithuania",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Lithuania.svg",
+   "icon_dark": "Flag of Lithuania.svg",
+   "logo_path": "data/raw/liquipedia_media/81a5676b83616625.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/81a5676b83616625.svg"
+  },
+  "Team Mexico": {
+   "page": "Team Mexico",
+   "logo": "Flag of Mexico.svg",
+   "logo_dark": "Flag of Mexico.svg",
+   "location": "Mexico",
+   "region": "North America",
+   "roster": [],
+   "icon": "Flag of Mexico.svg",
+   "icon_dark": "Flag of Mexico.svg",
+   "logo_path": "data/raw/liquipedia_media/6a20e9c06a346878.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/6a20e9c06a346878.svg"
+  },
+  "Team Mongolia": {
+   "page": "Team Mongolia",
+   "logo": "Flag of Mongolia.svg",
+   "logo_dark": "Flag of Mongolia.svg",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [],
+   "icon": "Flag of Mongolia.svg",
+   "icon_dark": "Flag of Mongolia.svg",
+   "logo_path": "data/raw/liquipedia_media/27f5cc36411402c3.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/27f5cc36411402c3.svg"
+  },
+  "Team Morocco": {
+   "page": "Team Morocco",
+   "logo": "Flag of Morocco.svg",
+   "logo_dark": "Flag of Morocco.svg",
+   "location": "Morocco",
+   "region": "Africa",
+   "roster": [],
+   "icon": "Flag of Morocco.svg",
+   "icon_dark": "Flag of Morocco.svg",
+   "logo_path": "data/raw/liquipedia_media/7166ca59f41ac5a1.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/7166ca59f41ac5a1.svg"
+  },
+  "Team Nemesis": {
+   "page": "Team Nemesis",
+   "logo": "Team Nemesis full lightmode.png",
+   "logo_dark": "Team Nemesis full darkmode.png",
+   "location": "Singapore",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "SELLTER",
+     "name": "Ivan Miroshnikov",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "Sdaim",
+     "name": "Danyyl Tupov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "tex1y",
+     "name": "Philipp Moskvitin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "mag1k3Y",
+     "name": "Alemkhan Moldakamalov",
+     "flag": "kz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-01-13"
+    },
+    {
+     "id": "r3salt",
+     "name": "Evgeniy Frolov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-27"
+    },
+    {
+     "id": "brain",
+     "name": "Stepan Sivoronov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-10-05"
+    }
+   ],
+   "icon": "Team Nemesis lightmode.png",
+   "icon_dark": "Team Nemesis darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/eb439cc88f5ee107.png",
+   "logo_dark_path": "data/raw/liquipedia_media/c95a886f3d486fc1.png"
+  },
+  "Team Pigeons": {
+   "page": "Team Pigeons",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Europe",
+   "region": "Europe",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "Team Poland": {
+   "page": "Team Poland",
+   "logo": "Flag of Poland.svg",
+   "logo_dark": "Flag of Poland.svg",
+   "location": "Poland",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Poland.svg",
+   "icon_dark": "Flag of Poland.svg",
+   "logo_path": "data/raw/liquipedia_media/c05ab7224778e65a.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/c05ab7224778e65a.svg"
+  },
+  "Team Romania": {
+   "page": "Team Romania",
+   "logo": "Flag of Romania.svg",
+   "logo_dark": "Flag of Romania.svg",
+   "location": "Romania",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Romania.svg",
+   "icon_dark": "Flag of Romania.svg",
+   "logo_path": "data/raw/liquipedia_media/61750cccc6381582.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/61750cccc6381582.svg"
+  },
+  "Team South Africa": {
+   "page": "Team South Africa",
+   "logo": "Flag of South Africa.svg",
+   "logo_dark": "Flag of South Africa.svg",
+   "location": "South Africa",
+   "region": "Africa",
+   "roster": [],
+   "icon": "Flag of South Africa.svg",
+   "icon_dark": "Flag of South Africa.svg",
+   "logo_path": "data/raw/liquipedia_media/50cf6e0e15cb8722.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/50cf6e0e15cb8722.svg"
+  },
   "Team Spirit": {
    "page": "Team Spirit",
    "logo": "Team Spirit 2022 full lightmode.png",
@@ -3386,6 +8486,127 @@
    "icon_dark": "Team Spirit 2022 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/267f640458b724c4.png",
    "logo_dark_path": "data/raw/liquipedia_media/f48fcb78e0846515.png"
+  },
+  "Team Spirit Academy": {
+   "page": "Team Spirit Academy",
+   "logo": "Team Spirit Academy 2021 full lightmode.png",
+   "logo_dark": "Team Spirit Academy 2021 full darkmode.png",
+   "location": "Serbia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "Kiryasoo",
+     "name": "Kirill Solovkov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-??"
+    },
+    {
+     "id": "VILBy",
+     "name": "Vitaly Zakharyuta",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "s1nside",
+     "name": "Nikita Besedin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-17"
+    },
+    {
+     "id": "k0gaSs",
+     "name": "Kirill Emelyanov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-14"
+    },
+    {
+     "id": "Netrix",
+     "name": "David Kudziev",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-18"
+    },
+    {
+     "id": "Flash_1",
+     "name": "Vladislav Bykov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-06-10"
+    }
+   ],
+   "icon": "Team Spirit Academy 2021 lightmode.png",
+   "icon_dark": "Team Spirit Academy 2021 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/b0d30d1ff11898c1.png",
+   "logo_dark_path": "data/raw/liquipedia_media/915b829d21605d7c.png"
+  },
+  "Team Turkey": {
+   "page": "Team Turkey",
+   "logo": "Flag of Turkey.svg",
+   "logo_dark": "Flag of Turkey.svg",
+   "location": "Turkey",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of Turkey.svg",
+   "icon_dark": "Flag of Turkey.svg",
+   "logo_path": "data/raw/liquipedia_media/f60772155604d8ea.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/f60772155604d8ea.svg"
+  },
+  "Team USA": {
+   "page": "Team USA",
+   "logo": "Flag of the United States.svg",
+   "logo_dark": "Flag of the United States.svg",
+   "location": "United States",
+   "region": "North America",
+   "roster": [],
+   "icon": "Flag of the United States.svg",
+   "icon_dark": "Flag of the United States.svg",
+   "logo_path": "data/raw/liquipedia_media/582dc515a10b3aaf.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/582dc515a10b3aaf.svg"
+  },
+  "Team United Kingdom": {
+   "page": "Team United Kingdom",
+   "logo": "Flag of the United Kingdom.svg",
+   "logo_dark": "Flag of the United Kingdom.svg",
+   "location": "United Kingdom",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Flag of the United Kingdom.svg",
+   "icon_dark": "Flag of the United Kingdom.svg",
+   "logo_path": "data/raw/liquipedia_media/1db5852976f0b017.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/1db5852976f0b017.svg"
+  },
+  "Team Uzbekistan": {
+   "page": "Team Uzbekistan",
+   "logo": "Flag of Uzbekistan.svg",
+   "logo_dark": "Flag of Uzbekistan.svg",
+   "location": "Uzbekistan",
+   "region": "cis",
+   "roster": [],
+   "icon": "Flag of Uzbekistan.svg",
+   "icon_dark": "Flag of Uzbekistan.svg",
+   "logo_path": "data/raw/liquipedia_media/e4fe62473e05adda.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/e4fe62473e05adda.svg"
+  },
+  "Team Vietnam": {
+   "page": "Team Vietnam",
+   "logo": "Flag of Vietnam.svg",
+   "logo_dark": "Flag of Vietnam.svg",
+   "location": "Vietnam",
+   "region": "Southeast Asia",
+   "roster": [],
+   "icon": "Flag of Vietnam.svg",
+   "icon_dark": "Flag of Vietnam.svg",
+   "logo_path": "data/raw/liquipedia_media/3fd41c78c00d3c3a.svg",
+   "logo_dark_path": "data/raw/liquipedia_media/3fd41c78c00d3c3a.svg"
   },
   "Team Vitality": {
    "page": "Team Vitality",
@@ -3538,6 +8759,67 @@
    "logo_path": "data/raw/liquipedia_media/7e87c08871231baf.png",
    "logo_dark_path": "data/raw/liquipedia_media/7e87c08871231baf.png"
   },
+  "The Last Resort": {
+   "page": "The Last Resort",
+   "logo": "The Last Resort full lightmode.png",
+   "logo_dark": "The Last Resort full darkmode.png",
+   "location": "United Kingdom",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "arTisT",
+     "name": "Tom Clarke",
+     "flag": "ie",
+     "igl": true,
+     "role": "",
+     "joined": "2026-02-09"
+    },
+    {
+     "id": "Extinct",
+     "name": "Matas Strumila",
+     "flag": "ie",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-09"
+    },
+    {
+     "id": "Vacancy",
+     "name": "Mason Haines",
+     "flag": "gb",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-09"
+    },
+    {
+     "id": "bevve",
+     "name": "James Slinn",
+     "flag": "gb",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-09"
+    },
+    {
+     "id": "Girafffe",
+     "name": "Callum Jones",
+     "flag": "gb",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-09"
+    },
+    {
+     "id": "Dutchy",
+     "name": "John Holland",
+     "flag": "gb",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-24"
+    }
+   ],
+   "icon": "The Last Resort lightmode.png",
+   "icon_dark": "The Last Resort darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/c4c41cee077110cb.png",
+   "logo_dark_path": "data/raw/liquipedia_media/b8791ff22f4d0eaa.png"
+  },
   "The MongolZ": {
    "page": "The MongolZ",
    "logo": "The MongolZ 2024 03 allmode.png",
@@ -3598,6 +8880,194 @@
    "icon_dark": "The MongolZ 2024 03 allmode.png",
    "logo_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png",
    "logo_dark_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png"
+  },
+  "The MongolZ Academy": {
+   "page": "The MongolZ Academy",
+   "logo": "The MongolZ 2024 03 allmode.png",
+   "logo_dark": "The MongolZ 2024 03 allmode.png",
+   "location": "Mongolia",
+   "region": "Asia",
+   "roster": [
+    {
+     "id": "HAKAIII8",
+     "name": "Itgel Tsogtbayar",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-29"
+    },
+    {
+     "id": "iruX",
+     "name": "Irmuun Gankhuyag",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-29"
+    },
+    {
+     "id": "Kame",
+     "name": "Boldbaatar Ganselem",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-??"
+    },
+    {
+     "id": "M4k",
+     "name": "Bayarbat Tugs-Erdene",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2025-12-??"
+    },
+    {
+     "id": "rifle",
+     "name": "Ulambayar Dolgor",
+     "flag": "mn",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2025-06-29"
+    }
+   ],
+   "icon": "The MongolZ 2024 03 allmode.png",
+   "icon_dark": "The MongolZ 2024 03 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png",
+   "logo_dark_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png"
+  },
+  "Tricked Esport": {
+   "page": "Tricked Esport",
+   "logo": "Tricked Esport 2025 full allmode.png",
+   "logo_dark": "Tricked Esport 2025 full allmode.png",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [],
+   "icon": "Tricked Esport 2025 allmode.png",
+   "icon_dark": "Tricked Esport 2025 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/9abe22c4d696aaa8.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9abe22c4d696aaa8.png"
+  },
+  "UNO MILLE": {
+   "page": "UNO MILLE",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "UNiTY esports": {
+   "page": "UNiTY esports",
+   "logo": "UNiTY esports allmode.png",
+   "logo_dark": "UNiTY esports allmode.png",
+   "location": "Slovakia",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "M1key",
+     "name": "Jakub Krausko",
+     "flag": "sk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-08"
+    },
+    {
+     "id": "KWERTZZ",
+     "name": "Simon Horák",
+     "flag": "cz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-09"
+    },
+    {
+     "id": "2high",
+     "name": "Ahmet Baftijari",
+     "flag": "mk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-05-11"
+    },
+    {
+     "id": "Sn0w",
+     "name": "Timmy Brun",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-02"
+    },
+    {
+     "id": "Dytor",
+     "name": "Martin Handl",
+     "flag": "cz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-21"
+    },
+    {
+     "id": "replay",
+     "name": "Pavel Vaněk",
+     "flag": "cz",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-01-01"
+    }
+   ],
+   "icon": "UNiTY esports allmode.png",
+   "icon_dark": "UNiTY esports allmode.png",
+   "logo_path": "data/raw/liquipedia_media/0c1f4f8ab039b6f7.png",
+   "logo_dark_path": "data/raw/liquipedia_media/0c1f4f8ab039b6f7.png"
+  },
+  "Ursa": {
+   "page": "Ursa",
+   "logo": "Ursa_CS_allmode.png",
+   "logo_dark": "Ursa_CS_allmode.png",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "s0ft",
+     "name": "Semion Leshukov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Manager",
+     "joined": "2025-07-??"
+    }
+   ],
+   "icon": "Ursa_CS_allmode.png",
+   "icon_dark": "Ursa_CS_allmode.png",
+   "logo_path": "data/raw/liquipedia_media/876b8d49b6f505cb.png",
+   "logo_dark_path": "data/raw/liquipedia_media/876b8d49b6f505cb.png"
+  },
+  "VP.Prodigy": {
+   "page": "VP.Prodigy",
+   "logo": "VP.Prodigy allmode.png",
+   "logo_dark": "VP.Prodigy allmode.png",
+   "location": "Armenia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "S4Y4P",
+     "name": "Anton Sayapin",
+     "flag": "ru",
+     "igl": false,
+     "role": "Head of CS",
+     "joined": "2026-01-12"
+    },
+    {
+     "id": "Van Dunken$$$",
+     "name": "Damir Nermov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Project Coordinator & Team Manager",
+     "joined": "2025-06-01"
+    }
+   ],
+   "icon": "VP.Prodigy allmode.png",
+   "icon_dark": "VP.Prodigy allmode.png",
+   "logo_path": "data/raw/liquipedia_media/1e90480f53fb79d8.png",
+   "logo_dark_path": "data/raw/liquipedia_media/1e90480f53fb79d8.png"
   },
   "Virtus.pro": {
    "page": "Virtus.pro",
@@ -3660,6 +9130,157 @@
    "logo_path": "data/raw/liquipedia_media/948ad7194554a2c9.png",
    "logo_dark_path": "data/raw/liquipedia_media/948ad7194554a2c9.png"
   },
+  "WOPA Esport": {
+   "page": "WOPA Esport",
+   "logo": "WOPA Esport 2026 lightmode.png",
+   "logo_dark": "WOPA Esport 2026 darkmode.png",
+   "location": "Denmark",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Zanto",
+     "name": "André Christiansen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-07-01"
+    },
+    {
+     "id": "kwezz",
+     "name": "Oliver Rasmussen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-08"
+    },
+    {
+     "id": "sL1m3",
+     "name": "Emil Stolz",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-02-28"
+    },
+    {
+     "id": "Queenix",
+     "name": "Jonas Dideriksen",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-21"
+    },
+    {
+     "id": "Altekz",
+     "name": "Alexander Givskov",
+     "flag": "dk",
+     "igl": true,
+     "role": "",
+     "joined": "2026-09-23"
+    },
+    {
+     "id": "Dengzoe",
+     "name": "Bertil Dengsø",
+     "flag": "dk",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-01-16"
+    }
+   ],
+   "icon": "WOPA Esport 2026 lightmode.png",
+   "icon_dark": "WOPA Esport 2026 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/5828a5e8a838f282.png",
+   "logo_dark_path": "data/raw/liquipedia_media/ec2b18be400e68c4.png"
+  },
+  "WW TEAM": {
+   "page": "WW TEAM",
+   "logo": "WW Team (Russian team) 2024 allmode.png",
+   "logo_dark": "WW Team (Russian team) 2024 allmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [
+    {
+     "id": "StRoGo",
+     "name": "Ivan Shurpatov",
+     "flag": "tj",
+     "igl": false,
+     "role": "",
+     "joined": "2025-04-01"
+    },
+    {
+     "id": "m3wsu",
+     "name": "Timur Korenev",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2025-04-05"
+    },
+    {
+     "id": "kelieN",
+     "name": "Vladimir Boldyrev",
+     "flag": "ru",
+     "igl": true,
+     "role": "",
+     "joined": "2025-11-25"
+    },
+    {
+     "id": "shadowkek",
+     "name": "Maksim Pavlov",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-02-25"
+    }
+   ],
+   "icon": "WW Team (Russian team) 2024 allmode.png",
+   "icon_dark": "WW Team (Russian team) 2024 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/4e7d14ce04408f2a.png",
+   "logo_dark_path": "data/raw/liquipedia_media/4e7d14ce04408f2a.png"
+  },
+  "Walczaki": {
+   "page": "Walczaki",
+   "logo": "Walczaki lightmode.png",
+   "logo_dark": "Walczaki darkmode.png",
+   "location": "Poland",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "bajmi",
+     "name": "Wojciech Strzelczyk",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-20"
+    },
+    {
+     "id": "olimp",
+     "name": "Patryk Woźniak",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-20"
+    },
+    {
+     "id": "reiko",
+     "name": "Kamil Cegiełko",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-26"
+    },
+    {
+     "id": "sNx",
+     "name": "Rafał Snopek",
+     "flag": "pl",
+     "igl": true,
+     "role": "",
+     "joined": "2026-09-02"
+    }
+   ],
+   "icon": "Walczaki lightmode.png",
+   "icon_dark": "Walczaki darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/69f509ce7a7d8c98.png",
+   "logo_dark_path": "data/raw/liquipedia_media/44b7fcbc2a61cb95.png"
+  },
   "Wildcard": {
    "page": "Wildcard",
    "logo": "Wildcard 2024 full lightmode.png",
@@ -3720,6 +9341,451 @@
    "icon_dark": "Wildcard 2024 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/9001ee7c1ab841d3.png",
    "logo_dark_path": "data/raw/liquipedia_media/e0bc1f72cb56b28b.png"
+  },
+  "Without a Roof": {
+   "page": "Without a Roof",
+   "logo": "Without a Roof lightmode.png",
+   "logo_dark": "Without a Roof darkmode.png",
+   "location": "United States",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Stewie2K",
+     "name": "Jake Yip",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "Brehze",
+     "name": "Vincent Cayonte",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "autimatic",
+     "name": "Timothy Ta",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "FaNg",
+     "name": "Justin Coakley",
+     "flag": "ca",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "CeRq",
+     "name": "Tsvetelin Dimitrov",
+     "flag": "bg",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-11"
+    },
+    {
+     "id": "steel",
+     "name": "Joshua Nissan",
+     "flag": "ca",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-11"
+    }
+   ],
+   "icon": "Without a Roof lightmode.png",
+   "icon_dark": "Without a Roof darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/ac9a3df5682ba0f4.png",
+   "logo_dark_path": "data/raw/liquipedia_media/fe43347ddc35323f.png"
+  },
+  "Yawara E-Sports": {
+   "page": "Yawara E-Sports",
+   "logo": "Yawara_Esports_lightmode.png",
+   "logo_dark": "Yawara_Esports_darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "j0w",
+     "name": "Jonatan Sperotto",
+     "flag": "br",
+     "igl": true,
+     "role": "",
+     "joined": "2023-05-29"
+    },
+    {
+     "id": "tele",
+     "name": "Vinicius Morozini",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2024-10-16"
+    },
+    {
+     "id": "deemO",
+     "name": "Iago Henrique",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-10-29"
+    },
+    {
+     "id": "brn$",
+     "name": "Bruno de Araújo",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-15"
+    }
+   ],
+   "icon": "Yawara_Esports_lightmode.png",
+   "icon_dark": "Yawara_Esports_darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/41904a81821db9cc.png",
+   "logo_dark_path": "data/raw/liquipedia_media/9dbc8c4b2f16eb4d.png"
+  },
+  "Young Ninjas": {
+   "page": "Young Ninjas",
+   "logo": "Ninjas in Pyjamas 2021 full lightmode.png",
+   "logo_dark": "Ninjas in Pyjamas 2021 full darkmode.png",
+   "location": "Sweden",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Jed",
+     "name": "Robin Jedhammar",
+     "flag": "se",
+     "igl": false,
+     "role": "Senior Team Manager",
+     "joined": "2019-02-15"
+    }
+   ],
+   "icon": "Ninjas in Pyjamas 2021 lightmode.png",
+   "icon_dark": "Ninjas in Pyjamas 2021 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/1dcb3576a6ddf162.png",
+   "logo_dark_path": "data/raw/liquipedia_media/cd0cac439bd09e4b.png"
+  },
+  "Zomblers": {
+   "page": "Zomblers",
+   "logo": "Zomblers_allmode.png",
+   "logo_dark": "Zomblers_allmode.png",
+   "location": "USA",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "CoolComs",
+     "name": "Connor Barnes",
+     "flag": "gb",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-22"
+    },
+    {
+     "id": "CAJUN",
+     "name": "Andrew Guidroz",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2025-09-22"
+    },
+    {
+     "id": "Pose1doNN",
+     "name": "Nikolaos Antoniou",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-22"
+    },
+    {
+     "id": "twigs",
+     "name": "Cole Morad",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-14"
+    },
+    {
+     "id": "Nightlie",
+     "name": "Gabriel Yamauchi",
+     "flag": "us",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-07-01"
+    }
+   ],
+   "icon": "Zomblers_allmode.png",
+   "icon_dark": "Zomblers_allmode.png",
+   "logo_path": "data/raw/liquipedia_media/e1616cdbc0ad9d37.png",
+   "logo_dark_path": "data/raw/liquipedia_media/e1616cdbc0ad9d37.png"
+  },
+  "against All authority": {
+   "page": "against All authority",
+   "logo": "Against All authority.png",
+   "logo_dark": "Against All authority.png",
+   "location": "France",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Zidwait",
+     "name": "Yoann Wezemaël",
+     "flag": "fr",
+     "igl": false,
+     "role": "Chief Executive Officer",
+     "joined": "2013-12-31"
+    },
+    {
+     "id": "Ozstrik3r",
+     "name": "Steeve Flavigni",
+     "flag": "fr",
+     "igl": false,
+     "role": "General Manager",
+     "joined": "2025-11-19"
+    },
+    {
+     "id": "Vanomme",
+     "name": "Kenzo Vanhoye",
+     "flag": "fr",
+     "igl": false,
+     "role": "Manager",
+     "joined": "2025-11-19"
+    }
+   ],
+   "icon": "Against All authority.png",
+   "icon_dark": "Against All authority.png",
+   "logo_path": "data/raw/liquipedia_media/93e5b7421d0d79c9.png",
+   "logo_dark_path": "data/raw/liquipedia_media/93e5b7421d0d79c9.png"
+  },
+  "boomerang": {
+   "page": "boomerang",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Poland",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "suonko",
+     "name": "Kamil Węgrzynkiewicz",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-30"
+    },
+    {
+     "id": "fanatyk",
+     "name": "Dominik Barkiet",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2025-09-30"
+    },
+    {
+     "id": "Brylu",
+     "name": "Bartosz Bryl",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-17"
+    },
+    {
+     "id": "PeTeRoOo",
+     "name": "Piotr Barcik",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-05-17"
+    }
+   ],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "ex-RUBY": {
+   "page": "ex-RUBY",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "illwill": {
+   "page": "illwill",
+   "logo": "Illwill allmode.png",
+   "logo_dark": "Illwill allmode.png",
+   "location": "europe",
+   "region": "europe",
+   "roster": [],
+   "icon": "Illwill allmode.png",
+   "icon_dark": "Illwill allmode.png",
+   "logo_path": "data/raw/liquipedia_media/33691a279f991723.png",
+   "logo_dark_path": "data/raw/liquipedia_media/33691a279f991723.png"
+  },
+  "kONO.ECF": {
+   "page": "kONO.ECF",
+   "logo": "KONO.ECF full allmode.png",
+   "logo_dark": "KONO.ECF full allmode.png",
+   "location": "Ukraine",
+   "region": "Europe",
+   "roster": [
+    {
+     "id": "Konoplyanka",
+     "name": "Yevhen Konoplyanka",
+     "flag": "ua",
+     "igl": false,
+     "role": "Co-Founder, Owner",
+     "joined": "2024-03-24"
+    },
+    {
+     "id": "Walkman",
+     "name": "Oleg Shustenko",
+     "flag": "ua",
+     "igl": false,
+     "role": "Co-Founder, CEO",
+     "joined": "2024-03-24"
+    },
+    {
+     "id": "caezar",
+     "name": "Yury Tisinyuk",
+     "flag": "ua",
+     "igl": false,
+     "role": "COO",
+     "joined": "2024-07-01"
+    }
+   ],
+   "icon": "KONO.ECF allmode.png",
+   "icon_dark": "KONO.ECF allmode.png",
+   "logo_path": "data/raw/liquipedia_media/605ad6c82ce43da7.png",
+   "logo_dark_path": "data/raw/liquipedia_media/605ad6c82ce43da7.png"
+  },
+  "lavked": {
+   "page": "lavked",
+   "logo": "",
+   "logo_dark": "",
+   "location": "Russia",
+   "region": "CIS",
+   "roster": [
+    {
+     "id": "sol",
+     "name": "Kirill Simagin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-??"
+    },
+    {
+     "id": "1NVISIBLEE",
+     "name": "Danila Simagin",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-??"
+    },
+    {
+     "id": "xm1nd",
+     "name": "Ivan Dragunov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-03-??"
+    },
+    {
+     "id": "azukay",
+     "name": "Aleksandr Makarov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-??"
+    },
+    {
+     "id": "k4nfuz",
+     "name": "Vladislav Shilov",
+     "flag": "ru",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-??"
+    },
+    {
+     "id": "L1nkero",
+     "name": "Ivan Voronin",
+     "flag": "ru",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-03-??"
+    }
+   ],
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
+  },
+  "los kogutos": {
+   "page": "los kogutos",
+   "logo": "Los kogutos 2026 allmode.png",
+   "logo_dark": "Los kogutos 2026 allmode.png",
+   "location": "Poland",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "AdrieN",
+     "name": "Adrian Mucha",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "maaryy",
+     "name": "Martin Nakonieczny",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "tomiko",
+     "name": "Tomasz Uroda",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "showk",
+     "name": "Sebastian Geltz",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "ezox",
+     "name": "Patryk Topolnicki",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-05"
+    },
+    {
+     "id": "pako",
+     "name": "Kacper Maziarz",
+     "flag": "pl",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-10-05"
+    }
+   ],
+   "icon": "Los kogutos 2026 allmode.png",
+   "icon_dark": "Los kogutos 2026 allmode.png",
+   "logo_path": "data/raw/liquipedia_media/519be2ec196253dd.png",
+   "logo_dark_path": "data/raw/liquipedia_media/519be2ec196253dd.png"
   },
   "magic": {
    "page": "magic",
@@ -3842,6 +9908,92 @@
    "icon_dark": "PaiN Gaming 2023 darkmode.png",
    "logo_path": "data/raw/liquipedia_media/c0ece1e449be94ab.png",
    "logo_dark_path": "data/raw/liquipedia_media/c9181919c04b0525.png"
+  },
+  "paiN Gaming Academy": {
+   "page": "paiN Gaming Academy",
+   "logo": "PaiN Gaming 2017 lightmode.png",
+   "logo_dark": "PaiN Gaming 2017 darkmode.png",
+   "location": "Brazil",
+   "region": "South America",
+   "roster": [
+    {
+     "id": "tsug",
+     "name": "Gustavo Lima",
+     "flag": "br",
+     "igl": false,
+     "role": "",
+     "joined": "2025-06-21"
+    }
+   ],
+   "icon": "PaiN Gaming 2017 lightmode.png",
+   "icon_dark": "PaiN Gaming 2017 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/800ca8e7ce85c1af.png",
+   "logo_dark_path": "data/raw/liquipedia_media/68798f581a6179bb.png"
+  },
+  "rebels": {
+   "page": "rebels",
+   "logo": "Rebels full lightmode.png",
+   "logo_dark": "Rebels full darkmode.png",
+   "location": "Russia",
+   "region": "cis",
+   "roster": [],
+   "icon": "Rebels full lightmode.png",
+   "icon_dark": "Rebels full darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/0cc3014fcdf343e6.png",
+   "logo_dark_path": "data/raw/liquipedia_media/27405e74fcd35edb.png"
+  },
+  "regain": {
+   "page": "regain",
+   "logo": "Regain 2025 lightmode.png",
+   "logo_dark": "Regain 2025 darkmode.png",
+   "location": "USA",
+   "region": "North America",
+   "roster": [
+    {
+     "id": "Zucar",
+     "name": "Eric Zuccaro",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2025-08-29"
+    },
+    {
+     "id": "sasha",
+     "name": "Alexander Burke",
+     "flag": "us",
+     "igl": true,
+     "role": "",
+     "joined": "2025-08-29"
+    },
+    {
+     "id": "grape",
+     "name": "Brennan Greer",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-04-26"
+    },
+    {
+     "id": "fuzenko",
+     "name": "Kyryl Kotov",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-23"
+    },
+    {
+     "id": "z0mb1e",
+     "name": "Noah Velez",
+     "flag": "us",
+     "igl": false,
+     "role": "",
+     "joined": "2026-09-23"
+    }
+   ],
+   "icon": "Regain 2025 lightmode.png",
+   "icon_dark": "Regain 2025 darkmode.png",
+   "logo_path": "data/raw/liquipedia_media/9b2d1cdb15296e11.png",
+   "logo_dark_path": "data/raw/liquipedia_media/4698cb54503352f4.png"
   }
  },
  "maps": {
@@ -3907,16 +10059,21 @@
   }
  },
  "flags": {
+  "al": "data/raw/liquipedia_media/3cc7ba7c38a4f243.png",
   "ar": "data/raw/liquipedia_media/5e97579cd7dd6040.png",
   "at": "data/raw/liquipedia_media/6554bad22ce8b316.png",
   "au": "data/raw/liquipedia_media/e2fec9cb48a0916e.png",
   "ba": "data/raw/liquipedia_media/31b97e28237e5baf.png",
+  "be": "data/raw/liquipedia_media/c2fbbf99c0c35690.png",
   "bg": "data/raw/liquipedia_media/ab228a6f31035ed2.png",
   "br": "data/raw/liquipedia_media/5aa6129897c8f90b.png",
+  "bw": "data/raw/liquipedia_media/2518cc32c21e336f.png",
   "by": "data/raw/liquipedia_media/55273be24c2f6f14.png",
   "ca": "data/raw/liquipedia_media/b65341cf46a44d1f.png",
+  "ch": "data/raw/liquipedia_media/4a9053515ef5ed8b.png",
   "cl": "data/raw/liquipedia_media/725f75a928f38729.png",
   "cn": "data/raw/liquipedia_media/755a80265be817d8.png",
+  "co": "data/raw/liquipedia_media/a09dfe32fa9af6ed.png",
   "cz": "data/raw/liquipedia_media/0c07ce6aadf761e2.png",
   "de": "data/raw/liquipedia_media/05b4afb555666582.png",
   "dk": "data/raw/liquipedia_media/d85aec704df846e2.png",
@@ -3925,20 +10082,29 @@
   "fi": "data/raw/liquipedia_media/c1c211ab471246e7.png",
   "fr": "data/raw/liquipedia_media/4c2649ffc173e4a6.png",
   "gb": "data/raw/liquipedia_media/dedbdf3dd778154d.png",
+  "ge": "data/raw/liquipedia_media/d3263176a443849a.png",
   "gt": "data/raw/liquipedia_media/d668f30ccfeebd8b.png",
+  "hk": "data/raw/liquipedia_media/a9f906d3ebab994f.png",
   "hr": "data/raw/liquipedia_media/65202dfcb7d5e731.png",
   "hu": "data/raw/liquipedia_media/faed314d4722f1e4.png",
+  "id": "data/raw/liquipedia_media/90350932623d6f09.png",
+  "ie": "data/raw/liquipedia_media/1a11cf4463a31378.png",
   "il": "data/raw/liquipedia_media/2a3e847dcf2d165a.png",
   "iq": "data/raw/liquipedia_media/718fa9b51aab56d2.png",
   "kz": "data/raw/liquipedia_media/d04c1f0e29bab337.png",
   "lb": "data/raw/liquipedia_media/a26f94be28d5bf66.png",
   "lt": "data/raw/liquipedia_media/2a827613f5c6ee25.png",
   "lv": "data/raw/liquipedia_media/9f1e116658bdc766.png",
+  "md": "data/raw/liquipedia_media/f23c6455d5566c8a.png",
+  "me": "data/raw/liquipedia_media/d0e7740018d0a9ee.png",
   "mk": "data/raw/liquipedia_media/13ae0c3dac7b787d.png",
   "mn": "data/raw/liquipedia_media/f6adabf7fa00948d.png",
+  "mx": "data/raw/liquipedia_media/55db0afe38c4ca67.png",
   "nl": "data/raw/liquipedia_media/74d2fd5fa6b03aed.png",
   "no": "data/raw/liquipedia_media/5223e0d10adf51c8.png",
   "nz": "data/raw/liquipedia_media/033e45de65f47689.png",
+  "pe": "data/raw/liquipedia_media/7dec9e6d4d447eed.png",
+  "pk": "data/raw/liquipedia_media/2d42571c88bea901.png",
   "pl": "data/raw/liquipedia_media/18feaf9dc7e3772b.png",
   "ps": "data/raw/liquipedia_media/a9c2855d592cd5e4.png",
   "pt": "data/raw/liquipedia_media/568bca9394d92856.png",
@@ -3946,12 +10112,19 @@
   "rs": "data/raw/liquipedia_media/5f6e150117a81450.png",
   "ru": "data/raw/liquipedia_media/4943bc71b6aabece.png",
   "se": "data/raw/liquipedia_media/7f3632ee5d8da1a7.png",
+  "si": "data/raw/liquipedia_media/542cf241f8e43933.png",
   "sk": "data/raw/liquipedia_media/cf668776522ace2a.png",
+  "tj": "data/raw/liquipedia_media/5e7268f68b3632ff.png",
+  "tm": "data/raw/liquipedia_media/2e67915b9a6201a4.png",
   "tr": "data/raw/liquipedia_media/c1c8242de189e930.png",
+  "tw": "data/raw/liquipedia_media/af74384051762972.png",
   "ua": "data/raw/liquipedia_media/06dd6bae37ea970a.png",
   "uk": "data/raw/liquipedia_media/dedbdf3dd778154d.png",
   "us": "data/raw/liquipedia_media/4c74097c6a1a38bc.png",
   "uy": "data/raw/liquipedia_media/04f42050d40eecc3.png",
+  "uz": "data/raw/liquipedia_media/e6616d3cbd40f023.png",
+  "ve": "data/raw/liquipedia_media/4a135460e725613f.png",
+  "vn": "data/raw/liquipedia_media/4456dd6cbdcbd121.png",
   "xk": "data/raw/liquipedia_media/39e109b4e7c031cf.png",
   "xx": null,
   "za": "data/raw/liquipedia_media/7fc4b4ae6f904ae1.png"

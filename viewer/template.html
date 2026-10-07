@@ -324,6 +324,13 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 .res .opp { display: flex; align-items: center; gap: .4rem; min-width: 0; }
 
 .warn { border-left: 3px solid var(--loss); padding: .15rem 0 .15rem .7rem; font-size: var(--s-1); color: var(--dim); }
+/* B-tier file: loading / error notice */
+.bload p { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin: 0; }
+.bload.err { border-left: 3px solid var(--loss); }
+.spin { width: 1rem; height: 1rem; border: 2px solid var(--line); border-top-color: var(--ct); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+.recb { display: inline-flex; align-items: center; gap: .45rem; font-size: var(--s-1); }
 .links { display: flex; flex-wrap: wrap; gap: .5rem; }
 .btn {
   display: inline-flex; align-items: center; gap: .4rem;
@@ -451,6 +458,20 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .page.ewide { max-width: 150rem; padding-inline: max(16px, 3vw); }
 body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw); }
 .evname { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; line-height: .95; }
+/* v6: tier filter + tier labels (S solid, A outlined, B dashed) */
+.tierbar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; border: 0; padding: 0; margin: 0; }
+.tierbar legend { float: left; margin-right: .4rem; color: var(--dim); font-size: var(--s-1); }
+.tierbar > .dim { font-size: var(--s-1); }
+.tierbox { display: inline-flex; align-items: center; gap: .45rem; padding: .35rem .7rem .35rem .5rem; border: 1px solid var(--line); border-radius: 3px; background: var(--panel); cursor: pointer; font-weight: 700; user-select: none; }
+.tierbox:hover { background: var(--raise); }
+.tierbox input { margin: 0; width: 1rem; height: 1rem; accent-color: var(--text); }
+.tierbox b { font-weight: 400; color: var(--dim); font-size: var(--s-1); }
+.tierbox:has(input:checked) { border-color: var(--text); }
+.tierbox:has(input:focus-visible) { outline: 2px solid var(--text); outline-offset: 2px; }
+.tier { display: inline-grid; place-items: center; min-width: 1.15em; height: 1.15em; padding: 0 .2em; margin-right: .35em; border-radius: 2px; font-style: normal; font-stretch: 100%; font-weight: 800; font-size: .72em; line-height: 1; vertical-align: .12em; border: 1px solid var(--text); color: var(--text); }
+.tier.tS { background: var(--text); color: var(--bg); }
+.tier.tB { border-style: dashed; border-color: var(--dim); color: var(--dim); }
+.onair .tier { font-size: .8rem; vertical-align: middle; }
 
 .season { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 3rem; }
 .season h1 { font-size: clamp(3rem, 7vw, 5.75rem); line-height: .8; }
@@ -708,7 +729,12 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
 .cname { font-size: clamp(1.4rem, 3.2vw, 2.4rem); overflow-wrap: anywhere; }
 .cname:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .cmeta { color: var(--dim); }
-.cbig { font-size: clamp(3rem, 8.5vw, 5.75rem); line-height: .85; margin-top: .35rem; }
+.cbig { font-size: clamp(3rem, 8.5vw, 5.75rem); line-height: .85; margin-top: .6rem; pointer-events: none; }
+/* the big number's glyph box used to cover part of the Change button above it */
+.cside .cchg { position: relative; z-index: 2; }
+.cbelow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: -.5rem; }
+.cbelow .cb-l, .cbelow .cb-r { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+.ccentre .vsword { font-size: clamp(2rem, 5vw, 3.25rem); }
 .cbig small { font-size: .42em; font-weight: 700; }
 .cside.a .cbig { color: var(--ct); }
 .cside.b .cbig { color: var(--t); }
@@ -975,7 +1001,7 @@ const T = DATA.teams;
 const vrsRank = t => T[t]?.vrs?.rank ?? 1e9;
 const NAMES = Object.keys(T).sort((a, b) => vrsRank(a) - vrsRank(b) || (T[b].elo ?? 0) - (T[a].elo ?? 0));
 // teams with series in the data; only these have matchup predictions
-const CMP_NAMES = NAMES.filter(n => T[n].series > 0);
+const CMP_NAMES = NAMES.filter(n => T[n].series > 0 && T[n].cmp !== false); // cmp: in DATA.pairs (B-tier-only teams are not)
 const REGION = { europe: "Europe", americas: "Americas", asia: "Asia" };
 const vrsShort = t => T[t]?.vrs ? `VRS #${T[t].vrs.rank}` : "Not in VRS";
 const vrsLine = t => !T[t] ? "No results in the data" : T[t].series ? `${vrsShort(t)}, Elo ${T[t].elo}` : `${vrsShort(t)}, no series in the data`;
@@ -985,6 +1011,42 @@ const EV = DATA.events;
 const EV_BY = Object.fromEntries(EV.map(e => [e.slug, e]));
 const MATCH = {};
 for (const e of EV) for (const m of e.matches) MATCH[m.id] = { ...m, ev: e.slug };
+/* B-tier event bodies (matches, lineups, format, map pool) are in a separate
+   file, DATA.bfile, fetched only when B-tier content is asked for. Until then
+   each B-tier event is a light stub (lazy: 1) with its dates, prize slots,
+   champion and placements, which is all the tier counts and team pages need. */
+const BLOAD = { state: DATA.bfile ? "idle" : "done", err: "", p: null };
+const isLazy = e => !!(e && e.lazy);
+function loadB() {
+  if (BLOAD.state === "done") return Promise.resolve();
+  if (BLOAD.p) return BLOAD.p;
+  BLOAD.state = "loading"; BLOAD.err = "";
+  BLOAD.p = fetch(DATA.bfile)
+    .then(r => { if (!r.ok) throw new Error(`the server answered ${r.status}`); return r.json(); })
+    .then(j => {
+      for (const [slug, body] of Object.entries(j.events || {})) {
+        const e = EV_BY[slug];
+        if (!e) continue;
+        Object.assign(e, body);
+        delete e.lazy;
+        for (const m of e.matches) MATCH[m.id] = { ...m, ev: e.slug };
+      }
+      BLOAD.state = "done"; CALLS = null;
+    })
+    .catch(err => { BLOAD.state = "error"; BLOAD.err = String((err && err.message) || err); BLOAD.p = null; })
+    .then(() => rerender());
+  return BLOAD.p;
+}
+const bStatus = () => BLOAD.state === "error"
+  ? `<section class="panel bload err" role="alert"><p>Couldn't load the B-tier tournament data (${esc(BLOAD.err)}). Check your connection, then <button type="button" class="btn" data-bretry="1">Try again</button></p></section>`
+  : `<section class="panel bload" role="status" aria-live="polite"><p><span class="spin" aria-hidden="true"></span>Loading B-tier tournament data…</p></section>`;
+// A view that needs the B-tier file: starts the fetch if needed and returns the
+// notice to show meanwhile; null once the data is in (or not wanted).
+const needB = want => {
+  if (!want || BLOAD.state === "done") return null;
+  if (BLOAD.state === "idle") loadB();
+  return bStatus();
+};
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const dObj = s => new Date(s + "T12:00:00Z");
@@ -1043,7 +1105,7 @@ function logo(team, cls = "") {
   const ini = String(team || "?").replace(/^Team\s+/, "").split(/\s+/).map(w => w[0]).join("").slice(0, 3);
   return `<span class="logo logo-ph ${cls}" aria-hidden="true">${esc(team ? ini : "?")}</span>`;
 }
-const flag = cc => cc && IMG.flags[cc] ? `<img class="flag" src="${IMG.flags[cc]}" alt="${esc(cc.toUpperCase())}" title="${esc(cc.toUpperCase())}">` : `<span class="flag" aria-hidden="true"></span>`;
+const flag = cc => cc && IMG.flags[cc] ? `<img class="flag" src="${IMG.flags[cc]}" loading="lazy" alt="${esc(cc.toUpperCase())}" title="${esc(cc.toUpperCase())}">` : `<span class="flag" aria-hidden="true"></span>`;
 const mapBg = m => IMG.maps[m] ? `background-image:url('${IMG.maps[m]}')` : "";
 const tlink = (team, cls = "") => T[team]
   ? `<a class="tlink ${cls}" href="#t-${T[team].slug}">${logo(team, "sm")}<span>${esc(team)}</span></a>`
@@ -1059,8 +1121,20 @@ function decode(c) {
     maps: c.vm, map_p: c.vp, warn: c.w,
     veto: c.v.map(x => x[0] === "D" ? { verb: "decider", map: x.slice(1) } : { side: x[0], verb: x[1] === "-" ? "bans" : "picks", map: x.slice(2) }),
     factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })),
-    ...vetoFmt(c.v1, [c.p], 1), ...vetoFmt(c.v5, c.p5, 5),
+    pf: c.pf || null, bf: c.bf || null,
+    ...vetoFmt(c.v1, [c.pf ? c.pf[0] : c.p], 1), ...vetoFmt(c.v5, c.p5, 5),
   };
+}
+// Win chance and likely range for a series length. The engine's p is a BO3
+// number; the same per-map edge is worth less over one map and more over five
+// (predictor.py, "Series length changes the odds").
+function pFor(pred, bo) {
+  if (bo === 1) return pred.pf ? { p: pred.pf[0], band: pred.bf[0] } : { p: flatQ(pred.p, 3), band: pred.band.map(x => flatQ(x, 3)) };
+  if (bo === 5) {
+    const five = x => scorelines(Array(5).fill(flatQ(x, 3))).slice(0, 3).reduce((s, v) => s + v, 0);
+    return pred.pf ? { p: pred.pf[1], band: pred.bf[1] } : { p: five(pred.p), band: pred.band.map(five) };
+  }
+  return { p: pred.p, band: pred.band };
 }
 // BO1 / BO5 vetoes, coded by build_viewer.veto_code: two characters per step,
 // kind (a/b ban, x/y permaban, A/B pick, D decider) then a DATA.vmaps index.
@@ -1282,15 +1356,15 @@ function flatQ(p, n) {
 function scoreSet(pred, bo) {
   let s;
   if (bo === 3) s = [pred.score.p_2_0, pred.score.p_2_1, pred.score.p_1_2, pred.score.p_0_2];
-  else if (bo === 1) s = [pred.p, 1 - pred.p];
+  else if (bo === 1) { const p1 = pFor(pred, 1).p; s = [p1, 1 - p1]; }
   else if (bo === 5 && pred.score5) s = ["p_3_0", "p_3_1", "p_3_2", "p_2_3", "p_1_3", "p_0_3"].map(k => pred.score5[k]);
   else if (bo === 5 && pred.map_p5) {
     // the engine's BO5 per-map chances (5 decimals in the page); rescale each
-    // side so the series total is exactly the engine's win probability
-    const r = scorelines(pred.map_p5), wa = r[0] + r[1] + r[2];
-    s = r.map((x, i) => i < 3 ? x * pred.p / wa : x * (1 - pred.p) / (1 - wa));
+    // side so the series total is exactly the engine's BO5 win probability
+    const p5 = pFor(pred, 5).p, r = scorelines(pred.map_p5), wa = r[0] + r[1] + r[2];
+    s = r.map((x, i) => i < 3 ? x * p5 / wa : x * (1 - p5) / (1 - wa));
   }
-  else s = scorelines(Array(bo).fill(flatQ(pred.p, bo)));
+  else s = scorelines(Array(bo).fill(flatQ(pFor(pred, bo).p, bo)));
   const need = (bo + 1) / 2;
   return s.map((p, i) => i < need ? { a: need, b: i, p } : { a: 2 * need - 1 - i, b: need, p });
 }
@@ -1303,7 +1377,9 @@ const DTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-t
 const bigPct = v => { const [i, d] = String(v).split("."); return `${i}<small>.${d}%</small>`; };
 
 function court(pred, a, b, o, bo) {
-  const shown = pred ? displayPercent([pred.p, 1 - pred.p]) : null;
+  // the win chance for the chosen series length (BO3 is the engine's own number)
+  const F = pred ? pFor(pred, bo) : null;
+  const shown = pred ? displayPercent([F.p, 1 - F.p]) : null;
   const side = (t, cls, i) => `<div class="cside ${cls}">
       ${T[t] ? `<a href="#t-${T[t].slug}" aria-label="${esc(t)} team page">${logo(t, "xl")}</a>` : logo(t, "xl")}
       ${T[t] ? `<a class="cname cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cname cond">${esc(t)}</span>`}
@@ -1314,9 +1390,9 @@ function court(pred, a, b, o, bo) {
   const fmt = `<div class="seg" role="group" aria-label="Series format">${[1, 3, 5].map(n =>
     `<button type="button" data-bo="${n}" aria-pressed="${n === bo}" ${o.fixedBo ? "disabled" : ""}>Bo${n}</button>`).join("")}</div>`;
   const bar = pred ? `<div class="cbar">
-      <div class="bar" role="img" aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(pred.band[0], 2)} to ${pct(pred.band[1], 2)}`)}">
-        <div class="fill" data-w="${(pred.p * 100).toFixed(2)}"></div>
-        <div class="band" data-l="${(pred.band[0] * 100).toFixed(2)}" data-bw="${((pred.band[1] - pred.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
+      <div class="bar" role="img" aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
+        <div class="fill" data-w="${(F.p * 100).toFixed(2)}"></div>
+        <div class="band" data-l="${(F.band[0] * 100).toFixed(2)}" data-bw="${((F.band[1] - F.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
         <div class="mid"></div>
       </div>
       <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure.</span>
@@ -1324,8 +1400,12 @@ function court(pred, a, b, o, bo) {
     </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p></div>`;
   // a large, faint copy of each logo behind its half; the mask follows the slanted split
   const wm = (t, cls) => IMG.logos[t] ? `<div class="cwm ${cls}" aria-hidden="true"><img src="${IMG.logos[t]}" alt=""></div>` : "";
-  const ctl = o.change ? `<div class="cctl"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>` : "";
-  return `<section class="court">${wm(a, "a")}${wm(b, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}${fmt}${ctl}${o.verdict || ""}</div>${side(b, "b", 1)}${bar}</section>`;
+  // controls sit in their own row under the court, never on top of it
+  const below = `<div class="cbelow">
+    <div class="cb-l"><span class="small dim">Format</span>${fmt}${o.status || ""}${o.verdict || ""}</div>
+    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>` : ""}
+  </div>`;
+  return `<section class="court">${wm(a, "a")}${wm(b, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
 }
 
 function tape(pred, a, b, bo = 3) {
@@ -1379,17 +1459,26 @@ function spotlight(pred, a, b, bo = 3) {
   </div>`;
 }
 
+// The predicted score always agrees with the predicted winner: the picked team's most
+// likely winning score. (The single most likely exact score overall can belong to the
+// other team in a close match, e.g. pick FURIA at 50.10% while MOUZ 2-1 is the biggest tile.)
+function predictedIdx(set, p) {
+  const pickA = p >= .5;
+  let best = -1;
+  set.forEach((x, i) => { if (winOf(x) === pickA && (best < 0 || x.p > set[best].p)) best = i; });
+  return best;
+}
 function scoreTiles(pred, a, b, bo) {
   const set = scoreSet(pred, bo);
   const shown = displayPercent(set.map(x => x.p));
-  const top = set.reduce((m, x, i) => x.p > set[m].p ? i : m, 0);
+  const top = predictedIdx(set, pred.p);
   const mx = Math.max(...set.map(x => x.p));
   const t = set[top], topTeam = winOf(t) ? a : b;
   const note = bo === 1 ? "One map: the series chance is the map chance."
     : bo === 5 ? (pred.score5 || pred.map_p5 ? "Map win chances from the simulated best-of-five veto, set so the series total matches the win probability."
       : "Best-of-five: the same win chance on every map, set so the series total matches the win probability.")
     : "Map win chances from the simulated veto.";
-  return `<div class="panel"><h2>Series score <span class="dim">most likely ${esc(topTeam)} ${scoreFrom(t, winOf(t))}</span></h2>
+  return `<div class="panel"><h2>Series score <span class="dim">predicted ${esc(topTeam)} ${scoreFrom(t, winOf(t))}</span></h2>
     <div class="stiles" style="--n:${set.length}">${set.map((x, i) => {
       const sd = winOf(x) ? "a" : "b";
       return `<div class="stile ${sd}${i === top ? " top" : ""}" title="${esc(`${winOf(x) ? a : b} ${scoreFrom(x, winOf(x))}: ${shown[i]}%`)}">
@@ -1417,12 +1506,17 @@ function matchDesk(pred, a, b, o = {}) {
 }
 
 /* ---------------- home: the desk plus the rail ---------------- */
+// The home page features S- and A-tier events only; B-tier lives on the Tournaments page.
+const topTier = m => ["S", "A"].includes(EV_BY[m.ev]?.tl || "S");
+// "live" on the home page also needs a recent date: an unfinished record from weeks ago is stale data
+const recentLive = m => isLive(m) && m.day && m.day >= daysBefore(DATA.as_of, 1);
 function featuredMatch() {
-  const all = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.pred && T[m.t1] && T[m.t2]);
-  const live = all.filter(isLive);
+  const all = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.pred && T[m.t1] && T[m.t2] && topTier(m));
+  const live = all.filter(recentLive);
   if (live.length) return live[0];
   const key = m => (m.day || "") + (m.when || "");
-  const up = all.filter(m => !m.finished && m.day && m.day >= DATA.as_of).sort((x, y) => key(x).localeCompare(key(y)));
+  // as_of is the day after the last result; matches scheduled the day before it may still be unplayed
+  const up = all.filter(m => !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1)).sort((x, y) => key(x).localeCompare(key(y)));
   return up[0] || null;
 }
 function ctxFor(m, e) {
@@ -1431,15 +1525,21 @@ function ctxFor(m, e) {
     <span class="small dim">${when}</span></div>`;
 }
 function centreFor(m, a, b) {
-  if (m.finished || isLive(m)) return `<div class="score cond"><span class="${m.w1 >= m.w2 ? "ct" : "lost"}">${m.w1}</span><span class="dim">:</span><span class="${m.w2 >= m.w1 ? "t" : "lost"}">${m.w2}</span></div>
-    ${isLive(m) ? `<span class="chip live">Live in this snapshot</span>` : `<span class="small dim">Final</span>`}`;
-  return `<span class="vsword cond">vs</span><span class="chip plain">${countdown(m.when) || "Time to be announced"}</span>`;
+  // the centre of the court holds only the score (once played) or "vs"; status lives under the court
+  if (m.finished || isLive(m)) return `<div class="score cond"><span class="${m.w1 >= m.w2 ? "ct" : "lost"}">${m.w1}</span><span class="dim">:</span><span class="${m.w2 >= m.w1 ? "t" : "lost"}">${m.w2}</span></div>`;
+  return `<span class="vsword cond">vs</span>`;
+}
+function statusFor(m) {
+  if (isLive(m)) return `<span class="chip live">Live in this snapshot</span>`;
+  if (m.finished) return `<span class="chip plain">Final</span>`;
+  return `<span class="chip plain">${countdown(m.when) || "Time to be announced"}</span>`;
 }
 function verdictFor(m, pred) {
   if (!m.finished || !pred) return "";
-  const fav = pred.p >= .5 ? m.t1 : m.t2, w = winnerOf(m);
-  const pair = displayPercent([pred.p, 1 - pred.p]), fp = pred.p >= .5 ? pair[0] : pair[1];
-  return `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}: ${fav === w ? "" : "model had "}${esc(fav)} at ${fp}%</span>`;
+  const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p;
+  const fav = p >= .5 ? m.t1 : m.t2, w = winnerOf(m);
+  const pair = displayPercent([p, 1 - p]), fp = p >= .5 ? pair[0] : pair[1];
+  return `<span class="chip ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(p, 1 - p))}: ${fav === w ? "" : "model had "}${esc(fav)} at ${fp}%</span>`;
 }
 
 const builderTiles = () => {
@@ -1478,7 +1578,7 @@ function closeChooser() {
 function rail() {
   const top = NAMES.filter(n => T[n].vrs).slice(0, 8);
   const keyOf = m => (m.day || "") + (m.when || "");
-  const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= DATA.as_of)
+  const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1) && topTier(m))
     .sort((x, y) => keyOf(x).localeCompare(keyOf(y))).slice(0, 5);
   return `
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
@@ -1506,7 +1606,7 @@ function viewHome() {
   if (isFeat) {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
-    o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), verdict: verdictFor(m, pred), change: true };
+    o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
     o = { change: true, back: !!f };
@@ -1519,7 +1619,7 @@ function viewHome() {
 function evCard(e) {
   const n = new Set([...e.participants.map(p => p.team), ...e.matches.flatMap(m => [m.t1, m.t2]).filter(Boolean)]).size;
   return `<a class="evcard" href="#e-${e.slug}">
-    ${IMG.events[e.slug] ? `<img class="evl" src="${IMG.events[e.slug]}" alt="">` : `<span class="evl"></span>`}
+    ${IMG.events[e.slug] ? `<img class="evl" src="${IMG.events[e.slug]}" alt="" loading="lazy">` : `<span class="evl"></span>`}
     <span class="ename">${esc(e.name)}</span>
     <span class="emeta"><span>${span(e.start, e.end)}</span>${e.city ? `<span>${esc(e.city)}${e.country ? ", " + esc(e.country) : ""}</span>` : e.type ? `<span>${esc(e.type)}</span>` : ""}</span>
     <span class="efoot">${e.champion ? `<span class="champ">${logo(e.champion, "sm")}${esc(e.champion)} won</span>` : `<span class="dim">${n ? `${n} teams` : "Teams to be announced"}</span>`}
@@ -1527,7 +1627,29 @@ function evCard(e) {
   </a>`;
 }
 /* v5: the season as a circuit */
-const usd = n => "$" + Math.round(n).toLocaleString("en-US");
+/* v6: tier filter (Tournaments page only). e.tl is Liquipedia's own tier
+   (liquipediatier: S / A / B); default S and A on, B off. The choice is kept in
+   localStorage when the browser allows it; events without a tier always show. */
+const TIERS = [["S", "S-tier"], ["A", "A-tier"], ["B", "B-tier"]];
+const TIER_DEFAULT = { S: true, A: true, B: false };
+const tierOn = (() => {
+  const on = { ...TIER_DEFAULT };
+  try {
+    const v = JSON.parse(localStorage.getItem("faceoff.tiers") || "null");
+    if (v && typeof v === "object") for (const [k] of TIERS) if (typeof v[k] === "boolean") on[k] = v[k];
+  } catch (_) { /* no storage: defaults */ }
+  return on;
+})();
+function saveTiers() { try { localStorage.setItem("faceoff.tiers", JSON.stringify(tierOn)); } catch (_) { /* not kept */ } }
+const tierShown = e => !(e.tl in tierOn) || tierOn[e.tl];
+const tierTag = e => e.tl ? `<i class="tier t${e.tl}" title="${e.tl}-tier on Liquipedia">${e.tl}</i>` : "";
+function tierBar() {
+  const n = k => EV.filter(e => e.tl === k).length;
+  return `<fieldset class="tierbar"><legend>Show tiers</legend>${TIERS.map(([k, l]) => `<label class="tierbox t${k}">
+    <input type="checkbox" data-tier="${k}"${tierOn[k] ? " checked" : ""}><span>${l}</span><b>${n(k)}</b></label>`).join("")}
+    <span class="dim">Liquipedia's tier for each event</span></fieldset>`;
+}
+const usd = n =>"$" + Math.round(n).toLocaleString("en-US");
 const prizeNum = e => +String(e.prize || "").replace(/[^\d.]/g, "") || 0;
 const prizeTxt = e => prizeNum(e) ? usd(prizeNum(e)) : "";
 const whereOf = e => e.city ? `${e.city}${e.country ? ", " + e.country : ""}` : (e.type || "");
@@ -1536,7 +1658,7 @@ const shortEv = n => n.replace(/^Intel Extreme Masters/, "IEM").replace(/^ESL Pr
   .replace(/^Thunderpick World Championship/, "Thunderpick WC").replace(/\s+20\d\d$/, "");
 const tcVars = t => { const c = (T[t]?.color || [])[0]; return c ? `--tc:${c};--tcd:color-mix(in srgb, ${c} 11%, var(--panel));` : ""; };
 const evImg = (e, cls = "", title = false) => IMG.events[e.slug]
-  ? `<img class="${cls}" src="${IMG.events[e.slug]}" alt="${title ? esc(e.name) : ""}"${title ? ` title="${esc(e.name)}"` : ""}>`
+  ? `<img class="${cls}" src="${IMG.events[e.slug]}" loading="lazy" alt="${title ? esc(e.name) : ""}"${title ? ` title="${esc(e.name)}"` : ""}>`
   : `<span class="${cls} evl-ph"${title ? ` title="${esc(e.name)}"` : ` aria-hidden="true"`}>${esc(shortEv(e.name).split(/\s+/).map(w => w[0]).join("").slice(0, 3))}</span>`;
 const dayDiff = (a, b) => Math.round((dObj(b) - dObj(a)) / 864e5);
 const tchip = (t, extra = "") => T[t] ? `<a href="#t-${T[t].slug}">${logo(t, "sm")}${esc(t)}${extra}</a>` : `<a>${logo(t, "sm")}${esc(t)}${extra}</a>`;
@@ -1579,7 +1701,7 @@ function teamFinishes(team, evs) {
   </div></section>`;
 }
 
-function seasonStrip() {
+function seasonStrip(EV) {
   const yr = +DATA.as_of.slice(0, 4);
   const first = `${yr}-01-01`;
   const last = dObj(EV.reduce((a, e) => e.end > a ? e.end : a, `${yr}-12-31`));
@@ -1601,7 +1723,7 @@ function seasonStrip() {
     if (i < 0) { i = lanes.length; lanes.push(0); }
     lanes[i] = l + w;
     const sub = e.champion ? `${logo(e.champion, "sm")}${esc(e.champion)}` : e.status === "live" ? `<span class="chip live">Live</span>` : esc(span(e.start, e.end));
-    pins.push([i, `<a class="pin ${e.status}" href="#e-${e.slug}" style="left:${l}%;width:${w}%;${e.champion ? tcVars(e.champion) : ""}" title="${esc(e.name)}, ${esc(span(e.start, e.end))}${e.champion ? `, won by ${esc(e.champion)}` : ""}">${evImg(e)}<span class="pt"><b>${esc(shortEv(e.name))}</b><span>${sub}</span></span></a>`]);
+    pins.push([i, `<a class="pin ${e.status}" href="#e-${e.slug}" style="left:${l}%;width:${w}%;${e.champion ? tcVars(e.champion) : ""}" title="${esc(e.name)}, ${esc(span(e.start, e.end))}${e.champion ? `, won by ${esc(e.champion)}` : ""}">${evImg(e)}<span class="pt"><b>${tierTag(e)}${esc(shortEv(e.name))}</b><span>${sub}</span></span></a>`]);
   }
   const rows = lanes.map((_, i) => `<div class="lane">${pins.filter(p => p[0] === i).map(p => p[1]).join("")}</div>`).join("");
   return `<div class="strip-wrap"><div class="strip" role="group" aria-label="Tournament calendar">${mo}<div class="lanes">${rows}</div>
@@ -1622,7 +1744,7 @@ function onAir(e) {
     : `<div class="dayctr"><b>${Math.max(dayDiff(DATA.as_of, e.start), 0)}<small> days</small></b><span>until the first series</span></div>`;
   return `<article class="onair${live ? "" : " soon"}">
     <div class="onair-h">${evImg(e)}
-      <div>${statusChip(e)}<h2 class="evname" style="margin-top:.4rem"><a href="#e-${e.slug}">${esc(e.name)}</a></h2>
+      <div>${statusChip(e)} ${tierTag(e)}<h2 class="evname" style="margin-top:.4rem"><a href="#e-${e.slug}">${esc(e.name)}</a></h2>
         <div class="meta"><span>${esc(span(e.start, e.end))}</span>${whereOf(e) ? `<span>${esc(whereOf(e))}</span>` : ""}${prizeTxt(e) ? `<span><b>${prizeTxt(e)}</b> prize pool</span>` : ""}</div></div>
       ${counter}</div>
     ${live ? `<div class="daytrack" aria-hidden="true">${Array.from({ length: total }, (_, i) => `<i class="${i + 1 < today ? "done" : i + 1 === today ? "today" : ""}"></i>`).join("")}</div>` : ""}
@@ -1634,6 +1756,8 @@ function onAir(e) {
 }
 
 function viewEvents() {
+  const bNote = needB(tierOn.B) || "";        // B-tier ticked: fetch its file, show S/A meanwhile
+  const EV = DATA.events.filter(e => tierShown(e) && !isLazy(e));   // the tier filter applies to everything below
   const yr = DATA.as_of.slice(0, 4);
   const byStart = (a, b) => a.start.localeCompare(b.start);
   const live = EV.filter(e => e.status === "live").sort(byStart);
@@ -1651,7 +1775,7 @@ function viewEvents() {
   const nu = e => {
     const d = dObj(e.start);
     return `<a class="nu" href="#e-${e.slug}"><span class="dt"><b>${d.getUTCDate()}</b><span>${MONTHS[d.getUTCMonth()]}${String(d.getUTCFullYear()) !== yr ? " " + d.getUTCFullYear() : ""}</span></span>
-      ${evImg(e)}<span class="nm"><b>${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
+      ${evImg(e)}<span class="nm"><b>${tierTag(e)}${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
       <span class="rt"><b>${prizeTxt(e)}</b><span>${startsIn(e)}</span></span></a>`;
   };
   const row = e => {
@@ -1659,7 +1783,7 @@ function viewEvents() {
     return `<a href="#e-${e.slug}" style="${c ? tcVars(c) : ""}">
       <span class="dt"><b>${MONTHS[d.getUTCMonth()]}</b><span>${dayRange(e)}</span></span>
       ${evImg(e, "el")}
-      <span class="en"><b>${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
+      <span class="en"><b>${tierTag(e)}${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
       ${c ? `<span class="cw">${logo(c)}<b>${esc(c)}</b><span>Champion</span></span>` : `<span class="cw"><span>No result recorded</span></span>`}
       <span class="fn">${f ? `<span class="sc">${f.sw}–${f.sl}</span>${logo(f.l, "sm")}<em>over ${esc(f.l)} in the final</em>` : ""}</span>
       <span class="pz"><b>${prizeTxt(e)}</b><span>${evTeamsList(e).length} teams</span></span></a>`;
@@ -1668,7 +1792,9 @@ function viewEvents() {
   return `
   <header class="season"><h1 class="cond">${yr} <span>season</span></h1>
     <div class="tally">${tally.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("")}</div></header>
-  ${seasonStrip()}
+  ${tierBar()}
+  ${bNote}
+  ${EV.length ? seasonStrip(EV) : `<p class="empty">No tournaments in the selected tiers. Tick a tier above to show its events.</p>`}
   <div class="marquee">
     <div style="display:grid;gap:1.5rem">${feat.map(onAir).join("") || `<p class="empty">Nothing running right now.</p>`}</div>
     <aside class="nextup"><h2>Next up</h2>${rest.map(nu).join("") || `<p class="empty">No further tournaments announced yet.</p>`}</aside>
@@ -1877,8 +2003,9 @@ function evTeams(e) {
 }
 
 function evMatchup(e) {
-  const list = evTeamsList(e).filter(t => T[t]);
-  if (list.length < 2) return `<section class="panel"><p class="empty">Matchups open once at least two teams are announced.</p></section>`;
+  // B-tier events carry no matchup grid of their own: only teams in the global grid can be paired
+  const list = evTeamsList(e).filter(t => T[t] && (DATA.epairs[e.slug] || CMP_NAMES.includes(t)));
+  if (list.length < 2) return `<section class="panel"><p class="empty">${DATA.epairs[e.slug] || e.tl !== "B" ? "Matchups open once at least two teams are announced." : "Matchups are built for S- and A-tier events, and for teams that play at them; fewer than two teams here qualify."}</p></section>`;
   const s = evPick[e.slug] = evPick[e.slug] || {};
   if (!s.a || !list.includes(s.a)) s.a = list[0];
   if (!s.b || !list.includes(s.b) || s.b === s.a) s.b = list.find(t => t !== s.a);
@@ -1906,7 +2033,7 @@ function viewMatch(id) {
   return `
   <nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
   ${matchDesk(pred, a, b, { ev: e, fixedBo: m.bo, played: m.maps.length ? playedMaps(m) : "", ctx: ctxFor(m, e),
-    centre: centreFor(m), verdict: verdictFor(m, pred), label: "Model's pre-match call" })}
+    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), label: "Model's pre-match call" })}
   <div class="links">
     ${m.hltv ? `<a class="btn" href="https://www.hltv.org/matches/${encodeURIComponent(m.hltv)}/match" target="_blank" rel="noopener">Match on HLTV</a>` : ""}
     <a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a>
@@ -1956,7 +2083,7 @@ function viewTeam(slugv) {
   <nav class="crumb"><a href="#teams">Teams</a><span>/</span><span>${esc(n)}</span></nav>
   <section class="thead">${logo(n, "xl")}
     <div><h1 class="cond">${esc(n)}</h1><p class="dim small">${esc(t.location)}${t.region ? `, region ${esc(t.region.toUpperCase())}` : ""}</p>
-      <div class="links" style="margin-top:.6rem"><a class="btn" href="${esc(t.liquipedia)}" target="_blank" rel="noopener">Team on Liquipedia</a><a class="btn" href="#home" data-cmp="${esc(n)}">Put in a matchup</a></div></div>
+      <div class="links" style="margin-top:.6rem"><a class="btn" href="${esc(t.liquipedia)}" target="_blank" rel="noopener">Team on Liquipedia</a>${CMP_NAMES.includes(n) ? `<a class="btn" href="#home" data-cmp="${esc(n)}">Put in a matchup</a>` : ""}</div></div>
     <div class="big">${t.vrs
         ? `<span class="small dim">Valve Regional Standings</span><b class="cond">#${t.vrs.rank}</b><span class="small dim">${t.vrs.points} points${t.vrs.region ? `, ${REGION[t.vrs.region] || t.vrs.region} #${t.vrs.region_rank}` : ""}</span>`
         : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}
@@ -1987,17 +2114,18 @@ function callLog() {
   const out = [];
   for (const m of Object.values(MATCH)) {
     if (!m.finished || !m.pred || !m.t1 || !m.t2 || m.w1 === m.w2) continue;
-    const pr = decode(m.pred), w = winnerOf(m);
+    const pr = decode(m.pred), w = winnerOf(m), pf = pFor(pr, [1, 3, 5].includes(m.bo) ? m.bo : 3).p;
     const pickA = pr.p >= .5, pick = pickA ? m.t1 : m.t2, opp = pickA ? m.t2 : m.t1;
     const set = scoreSet(pr, [1, 3, 5].includes(m.bo) ? m.bo : 3);
-    const top = set[set.reduce((k, x, i) => x.p > set[k].p ? i : k, 0)];
+    const top = set[predictedIdx(set, pr.p)];
     const elo = m.pred.e || null;
     out.push({
       id: m.id, day: m.day || "", when: m.when || "", e: EV_BY[m.ev], stage: m.stage, a: m.t1, b: m.t2, w,
-      pick, opp, pickP: pickA ? pr.p : 1 - pr.p, pickShown: displayPercent([pr.p, 1 - pr.p])[pickA ? 0 : 1],
+      // the stated chance is for the format actually played (BO1 calls are less sure, BO5 more)
+      pick, opp, pickP: pickA ? pf : 1 - pf, pickShown: displayPercent([pf, 1 - pf])[pickA ? 0 : 1],
       predTeam: winOf(top) ? m.t1 : m.t2, predScore: scoreFrom(top, winOf(top)),
       score: `${Math.max(m.w1, m.w2)}-${Math.min(m.w1, m.w2)}`, hit: pick === w,
-      // bonus: the most likely exact score also happened (same winner, same score)
+      // bonus: the predicted score (the pick's most likely winning score) also happened
       exact: (winOf(top) ? m.t1 : m.t2) === w && scoreFrom(top, winOf(top)) === `${Math.max(m.w1, m.w2)}-${Math.min(m.w1, m.w2)}`,
       pickElo: elo ? elo[pickA ? 0 : 1] : null, oppElo: elo ? elo[pickA ? 1 : 0] : null,
     });
@@ -2014,7 +2142,7 @@ function wilsonJS(k, n, z = 1.959964) {
 const acc2 = (h, n) => n ? (h / n * 100).toFixed(2) : "-";
 /* numeric ISO dates on this page: days are already "YYYY-MM-DD"; trim any time part */
 const isoDate = s => String(s || "").slice(0, 10) || "-";
-const rec ={ ev: "", team: "", res: "", limit: 40 };
+const rec ={ ev: "", team: "", res: "", limit: 40, b: false };   // b: include B-tier events (their file loads on demand)
 const MIN_N = 8;
 const BUCKETS = [[.5, .6, "50-60%"], [.6, .7, "60-70%"], [.7, .8, "70-80%"], [.8, .9, "80-90%"], [.9, 1.01, "90% and up"]];
 
@@ -2123,8 +2251,11 @@ function callCard(c, line) {
 }
 
 function viewRecord() {
-  const calls = callLog();
-  if (!calls.length) return `<section class="panel"><h2>Stats</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p></section>`;
+  // S- and A-tier events by default; B-tier ones when ticked (their file loads first, S/A shows meanwhile)
+  const bNote = needB(rec.b) || "";
+  const calls = callLog().filter(c => rec.b || c.e.tl !== "B");
+  const tierPick = `<label class="recb"><input type="checkbox" data-recb="1"${rec.b ? " checked" : ""}> Include B-tier tournaments</label>`;
+  if (!calls.length) return `<section class="panel"><h2>Stats</h2><p class="empty">No finished matches with a model call in this snapshot yet. Calls appear here as soon as results come in.</p><p>${tierPick}</p></section>${bNote}`;
   const n = calls.length, hits = calls.filter(c => c.hit).length;
   let k = n - 1, run = 0;
   const lastHit = calls[k].hit;
@@ -2144,8 +2275,10 @@ function viewRecord() {
   return `
   <div style="display:grid;gap:.4rem">
     <h1 class="cond" style="font-size:var(--s3)">Stats</h1>
-    <p class="dim" style="max-width:68ch">Every finished 2026 match on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
+    <p class="dim" style="max-width:68ch">Every finished 2026 match ${rec.b && BLOAD.state === "done" ? "at S-, A- and B-tier tournaments" : "at S- and A-tier tournaments"} on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
+    <div>${tierPick}</div>
   </div>
+  ${bNote}
   <section class="board" aria-label="Headline numbers">
     <div class="first"><span class="lbl">Winners called right</span><span class="num cond">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
     <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span></div>
@@ -2202,9 +2335,10 @@ function route() {
   else if (h === "events") { html = viewEvents(); tab = "events"; }
   else if (h === "teams") { html = viewTeams(); tab = "teams"; }
   else if (h === "record") { html = viewRecord(); tab = "record"; }
-  else if (h.startsWith("m-")) { html = viewMatch(h.slice(2)); tab = "events"; }
+  // a match not among the S/A matches may be a B-tier one: load that file first, then render
+  else if (h.startsWith("m-")) { html = needB(!MATCH[h.slice(2)]) || viewMatch(h.slice(2)); tab = "events"; }
   else if (h.startsWith("t-")) { html = viewTeam(h.slice(2)); tab = "teams"; }
-  else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = viewEvent(slug, sub); tab = "events"; }
+  else if (h.startsWith("e-")) { const [slug, sub = ""] = h.slice(2).split("."); html = needB(isLazy(EV_BY[slug])) || viewEvent(slug, sub); tab = "events"; }
   else html = viewHome();
   $("#view").classList.toggle("wide", !h || h === "home" || h === "compare");
   $("#view").classList.toggle("rwide", h === "record");
@@ -2258,6 +2392,7 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest("[data-feat]")) { desk.a = desk.b = null; rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
+  if (e.target.closest("[data-bretry]")) { BLOAD.state = "idle"; rerender(); return; }
   const rg = e.target.closest("[data-range]");
   if (rg) { rec.range = rg.dataset.range; rerender(); return; }
   const ep = e.target.closest(".pick[data-epick]");
@@ -2284,6 +2419,12 @@ document.addEventListener("click", e => {
 document.addEventListener("change", e => {
   const t = e.target;
   if (t.dataset && t.dataset.rf) { rec[t.dataset.rf] = t.value; rec.limit = 40; rerender(); }
+  if (t.dataset && t.dataset.recb) {
+    rec.b = t.checked; rec.limit = 40;
+    if (!rec.b && EV_BY[rec.ev]?.tl === "B") rec.ev = "";
+    rerender(); const b = $("[data-recb]"); if (b) b.focus({ preventScroll: true });
+  }
+  if (t.dataset && t.dataset.tier) { tierOn[t.dataset.tier] = t.checked; saveTiers(); rerender(); const b = $(`[data-tier="${t.dataset.tier}"]`); if (b) b.focus({ preventScroll: true }); }
 });
 document.addEventListener("input", e => {
   if (e.target.id !== "dSearch") return;

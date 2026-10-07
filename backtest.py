@@ -59,6 +59,9 @@ DATA = os.path.join(HERE, "data")
 ELO_INIT = 1500.0
 ELO_K = 32.0
 ELO_K_BY_BO = {1: 0.75, 3: 1.0, 5: 1.25}   # BO1 results are noisier -> smaller step
+# Elo step by tournament tier (match field "tier", from the event infobox). A
+# tier missing from this table, or a match with no tier, counts in full.
+ELO_K_BY_TIER = {"S": 1.0, "A": 1.0, "B": 1.0, "C": 1.0}
 ELO_PER_RATING = 2000.0                     # rating = 1 + (elo-1500)/2000
 MIN_HISTORY = 5
 VOL_WINDOW = 10
@@ -310,7 +313,8 @@ class History:
                                   "maps": [(x["map"], x["winner"] == t,
                                             map_prob_from_series(exp, m.get("best_of", 3)))
                                            for x in m.get("maps", [])]})
-        self.elo[a], self.elo[b] = elo_update(ea, eb, a_won, m.get("best_of", 3))
+        self.elo[a], self.elo[b] = elo_update(ea, eb, a_won, m.get("best_of", 3),
+                                              k=ELO_K * ELO_K_BY_TIER.get(m.get("tier"), 1.0))
         for x in m.get("maps", []):
             self.map_dates[x["map"]].append(dt)
 
