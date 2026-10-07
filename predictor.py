@@ -107,8 +107,9 @@ CONFIG = {
     # strength was negative on both train and test, with plain map win rates
     # (-1.07 / -0.98) and with Elo-residual map rates (-0.77 / -0.38). Until a
     # map signal shows positive held-out value it does not move p_a. The veto
-    # simulation still runs and is still reported (veto_log, picks, decider);
-    # per-map probabilities are then equal and simply match p_a.
+    # simulation still runs. Per-map win chances keep that map-to-map shape
+    # (map_shape, below) and are shifted together so the series probability
+    # stays equal to p_a.
 
     # --- signal scaling and caps ---
     "signal_cap": 2.0,
@@ -143,6 +144,11 @@ CONFIG = {
     # Per-map logit for A = map_scale * (relative edge A - relative edge B),
     # where a relative edge is the team's shrunk map rate minus its own
     # pool-wide average. A 10pp relative edge each way (20pp) ~= 1.2 logit.
+    "map_shape": 0.75,
+    # Share of that veto gap kept in the three map win chances. Separate from
+    # w_veto, which only decides whether the veto moves the series winner.
+    # _scoreline_maps then adds one constant to all three logits so they still
+    # imply p_a. 0 would print the same win chance on every map.
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.
@@ -698,8 +704,10 @@ def predict_match(m):
     reliability = ("HIGH" if width_pp <= CONFIG["rel_high_width_pp"]
                    else "MEDIUM" if width_pp <= CONFIG["rel_med_width_pp"] else "LOW")
 
-    # --- scoreline: per-map probabilities consistent with the final p_a ---
-    p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["w_veto"] / k)
+    # --- scoreline: veto's map shape, level-shifted so series P(A) equals p_a ---
+    # map_shape, not w_veto: the veto weight is 0 and must not move the series
+    # winner, but the three maps still have different win chances.
+    p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["map_shape"] / k)
     s20, s21, s12, s02 = series_probs(*p_maps)
     fav_is_a = p_a >= 0.5
     fav_name = a_name if fav_is_a else b_name

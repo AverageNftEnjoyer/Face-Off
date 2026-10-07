@@ -407,6 +407,23 @@ class TestVetoPool(unittest.TestCase):
         self.assertEqual(pair, [50.40, 49.60])
         self.assertEqual(sum(pair), 100.0)
 
+    def test_map_win_chances_keep_veto_shape_when_series_weight_is_off(self):
+        # w_veto is 0, so the veto must not move the series winner. The three
+        # map win chances still follow the simulated veto, then shift together
+        # so the scoreline still implies p_a.
+        self.assertEqual(CONFIG["w_veto"], 0.0)
+        r = predict_match(base_match(
+            map_pool=["Dust2", "Mirage", "Inferno"],
+            maps_a={"Dust2": [0.75, 30], "Mirage": [0.35, 30], "Inferno": [0.50, 30]},
+            maps_b={"Dust2": [0.40, 30], "Mirage": [0.70, 30], "Inferno": [0.50, 30]},
+        ))
+        probs = r["map_probs_exact"]
+        self.assertEqual(len(set(round(p, 4) for p in probs)), 3)
+        self.assertGreater(max(probs) - min(probs), 0.02)
+        veto = next(f for f in r["factor_breakdown"] if f["factor"] == "map_veto")
+        self.assertEqual(veto["delta_logodds"], 0.0)
+        self.assertAlmostEqual(series_a(r), r["p_a_exact"], places=6)
+
     def test_reported_probability_sets_sum_to_100(self):
         r = predict_match(base_match())
         shown = display_percent([r["series_probs_exact"][k]
