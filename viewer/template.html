@@ -734,6 +734,7 @@ body[data-w="ewide"] .top-in { max-width: 150rem; padding-inline: max(16px, 3vw)
 .cside .cchg { position: relative; z-index: 2; }
 .cbelow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: -.5rem; }
 .cbelow .cb-l, .cbelow .cb-r { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+.cbelow .btn:disabled { opacity: .45; cursor: default; }
 .ccentre .vsword { font-size: clamp(2rem, 5vw, 3.25rem); }
 .cbig small { font-size: .42em; font-weight: 700; }
 .cside.a .cbig { color: var(--ct); }
@@ -1403,7 +1404,7 @@ function court(pred, a, b, o, bo) {
   // controls sit in their own row under the court, never on top of it
   const below = `<div class="cbelow">
     <div class="cb-l"><span class="small dim">Format</span>${fmt}${o.status || ""}${o.verdict || ""}</div>
-    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back ? `<button type="button" class="btn" data-feat="1">Back to the next match</button>` : ""}</div>` : ""}
+    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn" data-feat="1" ${o.back ? "" : `disabled title="Already showing the next match"`}>Back to the next match</button>` : ""}</div>` : ""}
   </div>`;
   return `<section class="court">${wm(a, "a")}${wm(b, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
 }
@@ -1597,7 +1598,8 @@ function rail() {
 function viewHome() {
   const f = featuredMatch();
   if (!desk.a || !desk.b) {
-    if (f) { desk.a = f.t1; desk.b = f.t2; desk.feat = f.id; }
+    // open on the next match in its real format; the format buttons stay free to change
+    if (f) { desk.a = f.t1; desk.b = f.t2; desk.feat = f.id; desk.bo = [1, 3, 5].includes(f.bo) ? f.bo : 3; }
     else { desk.a = CMP_NAMES[0]; desk.b = CMP_NAMES[1]; desk.feat = null; }
   }
   const m = desk.feat && MATCH[desk.feat];
@@ -1606,10 +1608,11 @@ function viewHome() {
   if (isFeat) {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
-    o = { ev: e, fixedBo: m.bo, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true };
+    // no fixedBo on the home page: Bo1 / Bo3 / Bo5 are always offered (match pages keep the real format)
+    o = { ev: e, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back: false };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
-    o = { change: true, back: !!f };
+    o = { change: true, back: f ? true : undefined };
   }
   PAIR = [desk.a, desk.b];
   return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
