@@ -5,7 +5,7 @@
 <title>FaceOff Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@50..125,300..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,300..900;1,50..125,300..900&display=swap">
 <style>
 /* Layout: a CS2-HUD style event hub. Dark slate panels like the in-game menus;
    the two sides of every matchup are coloured by CS2's own factions
@@ -15,19 +15,25 @@
    design, because the subject's own UI is dark. */
 :root {
   color-scheme: dark;
-  --bg: #171D25;         /* page: CS2 menu slate */
-  --panel: #1F2630;      /* cards, rows */
-  --raise: #28313D;      /* hover / selected */
-  --line: #36414F;       /* hairlines */
-  --text: #E8ECF1;
-  --dim: #95A1B0;
-  --ct: #6E9DE2;         /* first team: Counter-Terrorist blue */
-  --t: #E7AB3F;          /* second team: Terrorist gold */
-  --ct-deep: #2B4468;
-  --t-deep: #5A4219;
-  --win: #5BC48B;
-  --loss: #E4684F;
-  --scrim: rgba(18, 23, 30, .82);
+  /* v8: a deep teal-black base. The accent is a turf green-teal for "where you
+     are" (current section, current tab, selected map, focus), never for a team.
+     Teams keep their own logo colours (--ct first team, --t second team). */
+  --bg: #0C1618;         /* wells inside panels, rows */
+  --panel: #101C1F;      /* cards, panels */
+  --raise: #172A2E;      /* hover / selected */
+  --line: #1E3236;       /* hairlines */
+  --line2: #2A4448;      /* stronger hairline: inputs, outline buttons */
+  --text: #E4EEEC;
+  --dim: #8BA09E;
+  --acc: #2FD4A2;        /* turf teal */
+  --acc-deep: #0E3A31;
+  --ct: #6E9DE2;         /* first team (set per matchup from its logo) */
+  --t: #E7AB3F;          /* second team */
+  --ct-deep: #23405A;
+  --t-deep: #4E3B18;
+  --win: #4FCB8A;
+  --loss: #E8644E;
+  --scrim: rgba(5, 11, 13, .84);
   --hatch: rgba(232, 236, 241, .45);
   --face: "Saira", "Bahnschrift", "Arial Narrow", system-ui, sans-serif;
   --s-1: .8125rem;
@@ -36,40 +42,39 @@
   --s2: 1.75rem;
   --s3: 2.5rem;
   --s4: clamp(2.75rem, 8vw, 4.5rem);
-  --r: 6px;
+  --r: 6px;              /* small things: buttons, chips, rows */
+  --rp: 12px;            /* panels and the court */
   --amber: #E5C45A;      /* Stats: 50-60% shares (between --win and --loss) */
-  --page: #141920;       /* the page itself, a shade under the panels' slate */
+  --page: #070F11;       /* the page itself, a shade under the panels */
   --pagew: 150rem;       /* content width; the matchup desk narrows it (body[data-w]) */
   --gut: max(16px, 3vw);
-  --toph: 3.75rem;       /* header bar height */
+  --toph: 4rem;          /* header bar height */
 }
 
 * { box-sizing: border-box; }
-/* Page background: a calm slate with a faint overview-map grid (as on a CS2
-   radar) that fades out down the page, and the two sides' colours glowing in
-   from opposite corners. All fixed, nothing moves. Painted on html so the
-   grid layer (body::before, z-index -1) sits above it and below the content. */
+/* Page background: deep teal-black with a faint overview-map grid (as on a CS2
+   radar) that fades out down the page. Fixed, nothing moves. Painted on html so
+   the grid layer (body::before, z-index -1) sits above it and below the content. */
 html {
   color: var(--text);
   background:
-    radial-gradient(ellipse 70% 55% at 0% 0%, rgba(110, 157, 226, .075), transparent 70%),
-    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(231, 171, 63, .05), transparent 70%),
-    linear-gradient(180deg, #19202A, var(--page) 56rem);
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(47, 212, 162, .06), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(47, 160, 212, .035), transparent 70%),
+    linear-gradient(180deg, #0A1517, var(--page) 50rem);
   background-color: var(--page);
 }
 body { margin: 0; color: var(--text); }
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background-image:
-    linear-gradient(rgba(149, 161, 176, .055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(149, 161, 176, .055) 1px, transparent 1px),
-    linear-gradient(rgba(149, 161, 176, .028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(149, 161, 176, .028) 1px, transparent 1px),
-    repeating-radial-gradient(circle at 100% 0, transparent 0 63px, rgba(149, 161, 176, .045) 63px 64px);
-  background-size: 128px 128px, 128px 128px, 32px 32px, 32px 32px, auto;
+    linear-gradient(rgba(120, 170, 165, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 170, 165, .04) 1px, transparent 1px),
+    linear-gradient(rgba(120, 170, 165, .02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 170, 165, .02) 1px, transparent 1px);
+  background-size: 128px 128px, 128px 128px, 32px 32px, 32px 32px;
   background-position: -1px -1px;
-  -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .35) 60%, transparent);
-  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .35) 60%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .3) 55%, transparent);
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, .3) 55%, transparent);
 }
 body {
   font-family: var(--face);
@@ -83,91 +88,157 @@ a:hover { color: var(--text); }
 p { margin: 0; }
 h1, h2, h3 { margin: 0; text-wrap: balance; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--t); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
 .cond { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: .95; }
+.ital { font-style: italic; }
 .dim { color: var(--dim); }
 .small { font-size: var(--s-1); }
 .win { color: var(--win); }
 .loss { color: var(--loss); }
 .ct { color: var(--ct); }
 .t { color: var(--t); }
+.ico { width: 1em; height: 1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- top bar ---------- */
-/* The header is the two sides meeting: a bar whose bottom rule is CT blue on
-   the left and T gold on the right, a brand block closed off by the court's
-   own slant, and section names set like map names (condensed, heavy) with a
-   slanted marker under the current one. No pills, no boxes. */
-.top {
-  position: sticky; top: 0; z-index: 10;
-  background: rgba(17, 22, 29, .9);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+/* ---------- top bar ----------
+   Brand mark and an italic wordmark at the left, sections with small icons (the
+   current one underlined in the accent), a search box that finds teams, players
+   and matches, and the data date at the right. */
+header.top {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(8, 16, 18, .92);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
   padding-top: env(safe-area-inset-top, 0px);
-}
-.top::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; pointer-events: none;
-  background: linear-gradient(90deg, var(--ct-deep), var(--ct) 30%, var(--ct) 49.5%, var(--t) 50.5%, var(--t) 70%, var(--t-deep));
-  opacity: .8;
 }
 .top-in {
   max-width: var(--pagew); margin: 0 auto; padding-inline: var(--gut);
-  display: flex; align-items: stretch; gap: 0 2.25rem;
+  display: flex; align-items: stretch; gap: 0 1.75rem;
   min-height: var(--toph);
 }
-.brand { position: relative; display: flex; align-items: center; gap: .6rem; padding-right: 2.25rem; white-space: nowrap; }
-.brand::after { /* the court's slant closes the brand block */
-  content: ""; position: absolute; right: 0; top: .7rem; bottom: .7rem; width: 2px;
-  background: var(--line); transform: skewX(-14deg);
-}
-.brand svg { width: 1.9rem; height: 1.9rem; flex: none; }
-.bw { display: flex; align-items: baseline; gap: .35rem; line-height: 1; }
-.bw b { font-stretch: 62.5%; font-weight: 800; font-size: 1.65rem; letter-spacing: .005em; }
-.bw span { font-stretch: 87.5%; font-weight: 500; font-size: .95rem; color: var(--dim); letter-spacing: .01em; }
+.brand { display: flex; align-items: center; gap: .55rem; white-space: nowrap; padding-right: .5rem; }
+.brand svg { width: 2.1rem; height: 2.1rem; flex: none; }
+.bw { display: flex; align-items: baseline; gap: .45rem; line-height: 1; }
+.bw b { font-style: italic; font-stretch: 62.5%; font-weight: 900; font-size: 1.9rem; letter-spacing: .01em; text-transform: uppercase; }
+.bw span { font-stretch: 87.5%; font-weight: 500; font-size: .92rem; color: var(--dim); }
 .brand:hover .bw span { color: var(--text); }
-.tabs { display: flex; align-items: stretch; gap: 0 .35rem; }
+.tabs { display: flex; align-items: stretch; gap: 0 .25rem; }
 .tabs a {
-  position: relative; display: flex; align-items: center;
-  padding: 0 .85rem; color: var(--dim); white-space: nowrap;
-  font-stretch: 75%; font-weight: 700; font-size: 1.15rem; letter-spacing: .01em;
+  position: relative; display: flex; align-items: center; gap: .5rem;
+  padding: 0 .9rem; color: var(--dim); white-space: nowrap;
+  font-stretch: 87.5%; font-weight: 600; font-size: 1rem;
 }
+.tabs a .ico { width: 1.05rem; height: 1.05rem; }
 .tabs a:hover { color: var(--text); }
-.tabs a::after { /* the slanted marker under the current section, sitting on the two-colour rule */
-  content: ""; position: absolute; left: .55rem; right: .55rem; bottom: 0; height: 4px;
-  background: var(--text); transform: skewX(-24deg) scaleX(0); transform-origin: left; z-index: 1;
+.tabs a::after { /* accent underline under the current section, sitting on the bar's bottom rule */
+  content: ""; position: absolute; left: .55rem; right: .55rem; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0;
+  background: var(--acc); transform: scaleX(0);
 }
-.tabs a:hover::after { transform: skewX(-24deg) scaleX(.35); background: var(--dim); }
 .tabs a[aria-current="page"] { color: var(--text); }
-.tabs a[aria-current="page"]::after { transform: skewX(-24deg); background: var(--text); }
+.tabs a[aria-current="page"] .ico { color: var(--acc); }
+.tabs a[aria-current="page"]::after { transform: none; box-shadow: 0 0 14px rgba(47, 212, 162, .55); }
 .tabs a:focus-visible { outline-offset: -4px; }
-.snap { margin-left: auto; align-self: center; font-size: var(--s-1); color: var(--dim); white-space: nowrap; }
-.snap b { color: var(--text); font-weight: 600; }
+
+/* search: a combobox; results drop down under it */
+.qwrap { position: relative; margin-left: auto; align-self: center; width: min(26rem, 30vw); }
+.qfield { position: relative; display: flex; align-items: center; }
+.qfield > .ico { position: absolute; left: .75rem; width: 1rem; height: 1rem; color: var(--dim); pointer-events: none; }
+#q {
+  width: 100%; min-width: 0; height: 2.5rem; padding: 0 2.4rem 0 2.3rem;
+  background: rgba(16, 28, 31, .9); color: var(--text); border: 1px solid var(--line2); border-radius: 8px; font: inherit; font-size: .9rem;
+  -webkit-appearance: none; appearance: none;
+}
+#q::placeholder { color: var(--dim); opacity: .85; }
+#q:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(47, 212, 162, .18); }
+#q::-webkit-search-cancel-button { display: none; }
+.qkey { position: absolute; right: .55rem; font-size: .72rem; color: var(--dim); border: 1px solid var(--line2); border-radius: 4px; padding: 0 .4rem; line-height: 1.4; pointer-events: none; }
+#q:focus ~ .qkey, #q:not(:placeholder-shown) ~ .qkey { display: none; }
+.qclose { display: none; }
+#qOpen { display: none; }
+.qlist {
+  position: absolute; left: 0; right: 0; top: calc(100% + .4rem); z-index: 30;
+  max-height: min(70vh, 34rem); overflow-y: auto; overscroll-behavior: contain;
+  background: #0F1C1F; border: 1px solid var(--line2); border-radius: 10px; padding: .35rem;
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, .75);
+  scrollbar-width: thin; scrollbar-color: var(--line2) transparent;
+}
+.qlist[hidden] { display: none; }
+.qgrp { display: grid; }
+.qgrp + .qgrp { border-top: 1px solid var(--line); margin-top: .3rem; padding-top: .3rem; }
+.qgh { font-size: .72rem; color: var(--dim); padding: .3rem .55rem .15rem; font-weight: 600; }
+.qopt { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr) auto; gap: .65rem; align-items: center; padding: .4rem .55rem; border-radius: 6px; cursor: pointer; min-height: 2.75rem; }
+.qopt .logo { width: 1.6rem; height: 1.6rem; }
+.qopt .qm { display: grid; min-width: 0; line-height: 1.25; }
+.qopt .qm b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qopt .qm span { font-size: .75rem; color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qopt .qr { font-size: .75rem; color: var(--dim); white-space: nowrap; text-align: right; }
+.qopt mark { background: none; color: var(--acc); }
+.qopt[aria-selected="true"], .qopt:hover { background: var(--raise); }
+.qopt[aria-selected="true"] { box-shadow: inset 2px 0 0 var(--acc); }
+.qpl { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--raise); color: var(--dim); }
+.qpl .ico { width: .95rem; height: .95rem; }
+.qvs { display: flex; align-items: center; }
+.qvs .logo.sm { width: 1.1rem; height: 1.1rem; }
+.qvs .logo.sm + .logo.sm { margin-left: -.3rem; margin-top: .55rem; }
+.qempty { padding: .7rem .6rem; font-size: var(--s-1); color: var(--dim); }
+
+.snap { align-self: center; display: flex; align-items: center; gap: .55rem; font-size: .75rem; color: var(--dim); white-space: nowrap; line-height: 1.15; }
+.snap .ico { width: 1.25rem; height: 1.25rem; color: var(--dim); }
+.snap > span { display: grid; }
+.snap b { color: var(--text); font-weight: 600; font-size: .88rem; }
 
 .page { max-width: var(--pagew); margin: 0 auto; padding-inline: var(--gut); padding-block: 1.75rem 4rem; display: grid; gap: 1.5rem; }
 /* the matchup desk (home, match pages) reads best a little narrower than the data pages */
 body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 
+@media (max-width: 1180px) {
+  .top-in { gap: 0 1rem; }
+  .tabs a { padding: 0 .6rem; }
+  .snap .ico { display: none; }
+  .qwrap { width: min(18rem, 26vw); }
+}
+/* below 900px the search box folds into an icon that opens a full-width search row */
+@media (max-width: 900px) {
+  .qwrap { width: auto; margin-left: auto; position: static; }
+  .qfield, .qkey { display: none; }
+  #qOpen { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line2); border-radius: 8px; background: var(--panel); cursor: pointer; color: var(--text); }
+  #qOpen .ico { width: 1.15rem; height: 1.15rem; }
+  header.top.qon::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(env(safe-area-inset-top, 0px) + var(--toph)); background: #0A1517; z-index: 30; border-bottom: 1px solid var(--line); }
+  header.top.qon .qfield { display: flex; position: absolute; left: var(--gut); right: var(--gut); top: calc(env(safe-area-inset-top, 0px) + (var(--toph) - 2.7rem) / 2); z-index: 31; }
+  header.top.qon #q { height: 2.7rem; font-size: 1rem; padding-right: 3.2rem; }
+  header.top.qon .qclose { display: grid; place-items: center; position: absolute; right: .2rem; width: 2.6rem; height: 2.6rem; border: 0; background: none; color: var(--dim); cursor: pointer; }
+  header.top.qon .qclose .ico { width: 1.15rem; height: 1.15rem; }
+  .qlist { position: fixed; left: var(--gut); right: var(--gut); top: calc(env(safe-area-inset-top, 0px) + var(--toph) + .35rem); max-height: calc(100dvh - var(--toph) - 2rem); }
+}
 /* phones: brand row scrolls away, the four sections stay pinned as an even row */
 @media (max-width: 640px) {
-  :root { --toph: 3rem; }
-  .top { top: calc(-1 * var(--toph)); }
-  .top-in { flex-wrap: wrap; gap: 0; }
+  :root { --toph: 3.4rem; }
+  header.top { top: calc(-1 * var(--toph)); }
+  header.top.qon { top: 0; }
+  .top-in { flex-wrap: wrap; gap: 0 .6rem; }
   .brand { min-height: var(--toph); padding-right: 0; }
-  .brand::after { display: none; }
-  .brand svg { width: 1.6rem; height: 1.6rem; }
-  .bw b { font-size: 1.45rem; }
-  .snap { margin-left: auto; }
-  .tabs { order: 3; flex: 1 0 100%; display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 0; margin-inline: -.55rem; border-top: 1px solid rgba(54, 65, 79, .6); }
-  .tabs a { min-height: 46px; padding: 0 .55rem; font-size: 1.08rem; justify-content: center; }
+  .brand svg { width: 1.8rem; height: 1.8rem; }
+  .bw b { font-size: 1.65rem; }
+  .bw span { display: none; }
+  .snap b { font-size: .8rem; }
+  .tabs { order: 3; flex: 1 0 100%; display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 0; margin-inline: -.55rem; border-top: 1px solid var(--line); }
+  .tabs a { min-height: 46px; padding: 0 .5rem; font-size: .98rem; justify-content: center; gap: .4rem; }
   .tabs a::after { left: .35rem; right: .35rem; }
 }
+@media (max-width: 370px) { .tabs a .ico { display: none; } }
 @media (prefers-reduced-motion: no-preference) {
   .tabs a::after { transition: transform .18s ease; }
 }
 
 /* ---------- generic panels ---------- */
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 1rem; display: grid; gap: .85rem; align-content: start; min-width: 0; box-shadow: 0 10px 28px -18px rgba(0, 0, 0, .7); }
+.panel {
+  background: linear-gradient(180deg, rgba(23, 42, 46, .35), transparent 7rem), var(--panel);
+  border: 1px solid var(--line); border-radius: var(--rp); padding: 1.1rem 1.15rem; display: grid; gap: .9rem; align-content: start; min-width: 0;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .025) inset, 0 14px 32px -22px rgba(0, 0, 0, .8);
+}
 .panel > p { max-width: 80ch; }
-.panel > h2, .sec-h { font-stretch: 75%; font-weight: 800; font-size: var(--s1); letter-spacing: .02em; display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
-.panel > h2 .dim, .sec-h .dim { font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
+.panel > h2, .sec-h { font-style: italic; font-stretch: 62.5%; font-weight: 800; font-size: 1.45rem; line-height: 1.1; letter-spacing: .01em; display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+.panel > h2 .dim, .sec-h .dim { font-style: normal; font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
+.panel > h2 .tlink { font-style: normal; font-stretch: 87.5%; font-size: var(--s1); }
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .cols { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
 
@@ -403,11 +474,11 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 .warn { border-left: 3px solid var(--loss); padding: .15rem 0 .15rem .7rem; font-size: var(--s-1); color: var(--dim); }
 .links { display: flex; flex-wrap: wrap; gap: .5rem; }
 .btn {
-  display: inline-flex; align-items: center; gap: .4rem;
-  padding: .45rem .8rem; border-radius: var(--r);
-  background: var(--raise); border: 1px solid var(--line); font-weight: 600; font-size: var(--s-1); cursor: pointer;
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .45rem .85rem; border-radius: 8px;
+  background: rgba(23, 42, 46, .55); border: 1px solid var(--line2); font-weight: 600; font-size: var(--s-1); cursor: pointer;
 }
-.btn:hover { border-color: var(--dim); }
+.btn:hover { border-color: var(--dim); background: var(--raise); }
 
 /* compare picker */
 .picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: .4rem; }
@@ -750,9 +821,10 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
   .stand > div { grid-template-columns: 4rem 4.75rem minmax(0, 1fr); }
 }
 
-/* ---------- v4: the matchup desk ----------
-   One loud element: the court, split on a slant like the FaceOff mark, each half
-   tinted with that team's own logo colour. Everything around it stays quiet. */
+/* ---------- v4/v8: the matchup desk ----------
+   One loud element: the court. Each half is that team's map from the simulated
+   veto, darkened and washed in the team's own logo colour, split on a slant like
+   the FaceOff mark. Everything around it stays quiet. */
 .page > *, .desk > *, .desk-main > * { min-width: 0; }
 .desk { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: 1.5rem; align-items: start; }
 .desk-main { display: grid; gap: 1.25rem; min-width: 0; }
@@ -763,136 +835,222 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .ctx .ev span { color: var(--dim); }
 .ctx a.btn { font-weight: 600; }
 
+.logo.xs { width: .95rem; height: .95rem; }
+.logo.md { width: 2.4rem; height: 2.4rem; }
+
 .court {
+  --seam: 104deg;
   position: relative; overflow: hidden; isolation: isolate;
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem 1.25rem; align-items: end;
-  padding: clamp(1rem, 3vw, 1.75rem) clamp(1rem, 3vw, 1.75rem) 1.25rem;
-  border-radius: 10px; border: 1px solid var(--line);
-  background: linear-gradient(104deg, var(--ct-deep) 0 49.6%, var(--bg) 49.6% 50.4%, var(--t-deep) 50.4% 100%);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem 1.25rem; align-items: stretch;
+  min-height: clamp(20rem, 25vw, 26rem);
+  padding: clamp(1.1rem, 2.6vw, 2rem) clamp(1rem, 2.6vw, 2.25rem) 1.1rem;
+  border-radius: var(--rp); border: 1px solid var(--line2);
+  background: #040A0C;
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, .9);
 }
-.court::after { /* faint chevrons from the FaceOff mark, one per side */
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .07;
-  background:
-    linear-gradient(120deg, transparent 46%, var(--ct) 46% 54%, transparent 54%) left -6rem top -2rem / 22rem 22rem no-repeat,
-    linear-gradient(60deg, transparent 46%, var(--t) 46% 54%, transparent 54%) right -6rem top -2rem / 22rem 22rem no-repeat;
+/* the two backdrops: map art (--art) under a team-colour wash and a darkening scrim */
+.cbg {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-color: #0A1416;
+  background-size: cover; background-position: center; background-repeat: no-repeat;
 }
-/* faint team logos behind each half, masked to the same slanted split as the background */
-.cwm { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.cwm.a { -webkit-mask-image: linear-gradient(104deg, #000 0 49.6%, transparent 49.6%); mask-image: linear-gradient(104deg, #000 0 49.6%, transparent 49.6%); }
-.cwm.b { -webkit-mask-image: linear-gradient(104deg, transparent 50.4%, #000 50.4%); mask-image: linear-gradient(104deg, transparent 50.4%, #000 50.4%); }
-.cwm img {
-  position: absolute; top: 50%; width: auto; height: 135%; max-width: none; aspect-ratio: 1; object-fit: contain;
-  opacity: .11; filter: grayscale(.35) blur(1px); transform: translateY(-50%) rotate(-8deg);
+.cbg.a {
+  background-image:
+    linear-gradient(180deg, rgba(4, 10, 12, .1) 30%, rgba(4, 10, 12, .9) 96%),
+    linear-gradient(90deg, rgba(4, 10, 12, .62), rgba(4, 10, 12, .2) 50%, rgba(4, 10, 12, .5)),
+    radial-gradient(ellipse 55% 75% at 12% 28%, color-mix(in srgb, var(--ct) 40%, transparent), transparent 70%),
+    linear-gradient(var(--ct-deep), var(--ct-deep)),
+    var(--art, none);
+  background-blend-mode: normal, normal, normal, color, normal;
+  -webkit-mask-image: linear-gradient(var(--seam), #000 0 49.6%, transparent 49.6%); mask-image: linear-gradient(var(--seam), #000 0 49.6%, transparent 49.6%);
 }
-.cwm.a img { left: -6%; }
-.cwm.b img { right: -6%; transform: translateY(-50%) rotate(8deg); }
-.cside { display: grid; justify-items: start; gap: .3rem; min-width: 0; }
-.cside .cchg { padding: .25rem .6rem; font-size: .72rem; background: rgba(10, 14, 20, .45); }
-.cctl { display: grid; gap: .4rem; justify-items: center; }
-.cctl .btn { background: var(--bg); justify-content: center; text-align: center; }
-.cside.b { justify-items: end; text-align: right; }
-.cside .logo.xl { width: clamp(4rem, 9vw, 6rem); height: clamp(4rem, 9vw, 6rem); filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .35)); }
-.cname { font-size: clamp(1.4rem, 3.2vw, 2.4rem); overflow-wrap: anywhere; }
+.cbg.b {
+  background-image:
+    linear-gradient(180deg, rgba(4, 10, 12, .1) 30%, rgba(4, 10, 12, .9) 96%),
+    linear-gradient(270deg, rgba(4, 10, 12, .62), rgba(4, 10, 12, .2) 50%, rgba(4, 10, 12, .5)),
+    radial-gradient(ellipse 55% 75% at 88% 28%, color-mix(in srgb, var(--t) 34%, transparent), transparent 70%),
+    linear-gradient(var(--t-deep), var(--t-deep)),
+    var(--art, none);
+  background-blend-mode: normal, normal, normal, color, normal;
+  -webkit-mask-image: linear-gradient(var(--seam), transparent 50.4%, #000 50.4%); mask-image: linear-gradient(var(--seam), transparent 50.4%, #000 50.4%);
+}
+/* a lit edge along the split */
+.court::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(var(--seam), transparent 49.62%, rgba(255, 255, 255, .22) 49.75%, rgba(255, 255, 255, .22) 50.25%, transparent 50.38%);
+}
+.cside { display: grid; align-content: space-between; gap: 1.25rem; min-width: 0; }
+.chead { display: flex; align-items: center; gap: clamp(.75rem, 1.6vw, 1.4rem); min-width: 0; }
+.cside.b .chead { flex-direction: row-reverse; text-align: right; }
+.clogo { flex: none; display: block; }
+.cside .logo.xl { width: clamp(4.5rem, 7.5vw, 7.75rem); height: clamp(4.5rem, 7.5vw, 7.75rem); filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .55)); }
+.cid { display: grid; justify-items: start; gap: .35rem; min-width: 0; }
+.cside.b .cid { justify-items: end; }
+.cname {
+  font-style: italic; font-weight: 900; font-size: clamp(1.6rem, 3.1vw, 3.1rem); line-height: .92;
+  overflow-wrap: anywhere; text-shadow: 0 2px 18px rgba(0, 0, 0, .6);
+}
 .cname:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.cmeta { color: var(--dim); }
-.cbig { font-size: clamp(3rem, 8.5vw, 5.75rem); line-height: .85; margin-top: .6rem; pointer-events: none; }
-/* the big number's glyph box used to cover part of the Change button above it */
-.cside .cchg { position: relative; z-index: 2; }
-.cbelow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: -.5rem; }
+.crank { display: flex; flex-wrap: wrap; gap: .1rem .9rem; font-style: italic; font-stretch: 75%; font-weight: 800; font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.1; letter-spacing: .01em; }
+.cside.b .crank { justify-content: flex-end; }
+.cside.a .crank { color: var(--ct); }
+.cside.b .crank { color: var(--t); }
+.cside .cchg {
+  margin-top: .3rem; padding: .3rem .65rem; font-size: .78rem; gap: .45rem;
+  background: rgba(4, 10, 12, .5); border-color: rgba(228, 238, 236, .3); color: var(--text);
+  position: relative; z-index: 2;
+}
+.cside .cchg:hover { border-color: var(--text); background: rgba(4, 10, 12, .7); }
+.cside .cchg .ico { width: .95rem; height: .95rem; }
+.cpct { display: grid; justify-items: start; gap: .35rem; }
+.cside.b .cpct { justify-items: end; }
+.cbig { font-size: clamp(3.4rem, 6.6vw, 6.4rem); line-height: .82; font-weight: 900; color: var(--text); pointer-events: none; text-shadow: 0 4px 24px rgba(0, 0, 0, .5); letter-spacing: -.005em; }
+.cbig small { font-size: .5em; font-weight: 800; }
+.cside.a .cbig small { color: var(--ct); }
+.cside.b .cbig small { color: var(--t); }
+.clbl { font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(228, 238, 236, .82); }
+.ccentre { display: grid; justify-items: center; gap: .5rem; text-align: center; align-self: center; max-width: 12rem; }
+.ccentre .vsword { font-style: italic; font-weight: 900; font-size: clamp(3rem, 6.5vw, 6.5rem); color: var(--text); letter-spacing: -.02em; text-shadow: 0 6px 30px rgba(0, 0, 0, .7); }
+.ccentre .score { font-size: clamp(3rem, 7vw, 5.5rem); font-style: italic; display: flex; gap: .5rem; align-items: baseline; text-shadow: 0 6px 30px rgba(0, 0, 0, .7); }
+.ccentre .score .lost { color: var(--dim); }
+.ccentre .chip { background: var(--bg); white-space: normal; }
+.court .cbar { grid-column: 1 / -1; display: grid; gap: .55rem; }
+.court .bar { height: .95rem; border-radius: 999px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 0 22px -6px color-mix(in srgb, var(--ct) 60%, transparent); }
+.court .bar .band { border-inline-width: 1px; background: repeating-linear-gradient(120deg, rgba(4, 10, 12, .5) 0 3px, rgba(255, 255, 255, .5) 3px 6px, transparent 6px 10px); }
+.court .bar .mid { background: rgba(4, 10, 12, .8); }
+.court .legend { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .4rem 1rem; font-size: var(--s-1); color: rgba(228, 238, 236, .72); }
+.court .legend .chips { display: flex; gap: .4rem; flex-wrap: wrap; }
+.court .legend .chip { background: rgba(4, 10, 12, .6); padding: .1rem .6rem; }
+.chip.rel::before { content: ""; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
+
+.cbelow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: -.35rem; }
 .cbelow .cb-l, .cbelow .cb-r { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
 .cbelow .btn:disabled { opacity: .45; cursor: default; }
-.ccentre .vsword { font-size: clamp(2rem, 5vw, 3.25rem); }
-.cbig small { font-size: .42em; font-weight: 700; }
-.cside.a .cbig { color: var(--ct); }
-.cside.b .cbig { color: var(--t); }
-.ccentre { display: grid; justify-items: center; gap: .5rem; text-align: center; align-self: center; max-width: 10rem; }
-.desk-main > .grid2 { align-items: start; }
-.ccentre .score { font-size: clamp(2.5rem, 7vw, 4.25rem); display: flex; gap: .5rem; align-items: baseline; }
-.ccentre .score .lost { color: var(--dim); }
-.ccentre .vsword { font-size: var(--s2); color: var(--dim); }
-.ccentre .chip { background: var(--bg); white-space: normal; }
-.court .cbar { grid-column: 1 / -1; display: grid; gap: .45rem; }
-.court .bar { height: 1.15rem; border-radius: 4px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .25); }
-.court .legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .3rem 1rem; font-size: var(--s-1); color: var(--dim); }
+.btn .ico { width: .95rem; height: .95rem; }
+.btn.acc { border-color: color-mix(in srgb, var(--acc) 55%, transparent); color: var(--acc); }
+.btn.acc:hover { border-color: var(--acc); background: rgba(47, 212, 162, .08); }
 
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--bg); }
-.seg button { border: 0; background: none; padding: .2rem .7rem; border-radius: 999px; cursor: pointer; font-size: var(--s-1); font-weight: 700; color: var(--dim); }
-.seg button[aria-pressed="true"] { background: var(--raise); color: var(--text); }
+.seg { display: inline-flex; border: 1px solid var(--line2); border-radius: 8px; padding: 2px; background: var(--bg); }
+.seg button { border: 0; background: none; padding: .25rem .75rem; border-radius: 6px; cursor: pointer; font-size: var(--s-1); font-weight: 700; color: var(--dim); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--acc-deep); color: var(--acc); box-shadow: inset 0 0 0 1px rgba(47, 212, 162, .35); }
 .seg button:disabled { cursor: default; }
 .seg button:not([aria-pressed="true"]):disabled { display: none; }
 
-.dtabs { display: flex; gap: 1.5rem; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
-.dtabs button { background: none; border: 0; padding: .55rem 0; cursor: pointer; color: var(--dim); font-weight: 600; white-space: nowrap; box-shadow: inset 0 -2px 0 transparent; }
-.dtabs button:hover { color: var(--text); }
-.dtabs button[aria-selected="true"] { color: var(--text); box-shadow: inset 0 -2px 0 var(--ct); }
+/* section tabs: one connected strip of pills */
+.dtabs { display: flex; width: fit-content; max-width: 100%; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); overflow-x: auto; scrollbar-width: none; }
+.dtabs button {
+  display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap;
+  background: none; border: 1px solid transparent; border-radius: 8px; padding: .5rem 1.05rem; cursor: pointer;
+  color: var(--dim); font-weight: 600; font-size: .95rem;
+}
+.dtabs button .ico { width: 1.05rem; height: 1.05rem; }
+.dtabs button:hover { color: var(--text); background: var(--raise); }
+.dtabs button[aria-selected="true"] { color: var(--acc); background: var(--acc-deep); border-color: rgba(47, 212, 162, .3); }
+.dtabs button[aria-selected="true"] span { color: var(--text); }
 
-/* veto tape: every map of the pool in veto order; picks carry the picker's colour */
-.tape { display: grid; grid-template-columns: repeat(var(--n, 7), minmax(0, 1fr)); gap: .4rem; }
+/* veto tape: every map of the pool in veto order */
+.tape { display: grid; grid-template-columns: repeat(var(--n, 7), minmax(0, 1fr)); gap: .45rem; }
 .tm {
-  position: relative; overflow: hidden; min-height: 6.75rem; padding: .5rem .55rem;
-  display: grid; align-content: space-between; text-align: left; cursor: pointer;
-  background: var(--raise) center / cover no-repeat; border: 1px solid var(--line); border-radius: 6px;
-  border-top-width: 4px;
+  position: relative; overflow: hidden; min-height: 8.75rem; padding: .45rem .55rem .55rem;
+  display: grid; grid-template-rows: auto 1fr; text-align: left; cursor: pointer;
+  background: var(--raise) center / cover no-repeat; border: 1px solid var(--line2); border-radius: 9px;
 }
-.tm::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18, 23, 30, .35), var(--scrim) 70%); }
+.tm::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 11, 13, .1), rgba(5, 11, 13, .55) 38%, rgba(5, 11, 13, .95) 70%); transition: background .2s; }
 .tm > * { position: relative; }
-.tm .tn { font-weight: 800; font-size: .78rem; color: var(--dim); }
-.tm .tnm { font-size: var(--s1); }
-.tm .trole { font-size: .72rem; color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tm.pick.sa { border-top-color: var(--ct); }
-.tm.pick.sb { border-top-color: var(--t); }
-.tm.dec { border-top-color: var(--text); }
-.tm.ban.sa { border-top-color: var(--ct); }
-.tm.ban.sb { border-top-color: var(--t); }
-.tm:hover { border-color: var(--dim); }
-.tm[aria-pressed="true"] { outline: 2px solid var(--text); outline-offset: 1px; }
-.tm .trole { color: var(--text); }
-.tm .trole i { font-style: normal; font-weight: 800; font-size: .62rem; letter-spacing: .04em; text-transform: uppercase; padding: 0 .3rem; border-radius: 3px; margin-right: .3rem; vertical-align: 1px; }
+.tm .tn { font-weight: 800; font-size: .72rem; color: rgba(228, 238, 236, .75); }
+.tm .tbody { align-self: end; display: grid; gap: .2rem; min-width: 0; }
+.tm .tnm { font-style: italic; font-weight: 900; font-size: 1.2rem; }
+.tm .trole { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .3rem; min-width: 0; font-size: .72rem; line-height: 1.25; color: var(--text); }
+/* a narrow tile puts the team name on its own line rather than cutting it */
+.tm .trole em { font-style: normal; flex: 1 1 100%; max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
+.tm .trole i { flex: none; font-style: normal; font-weight: 800; font-size: .6rem; letter-spacing: .05em; text-transform: uppercase; padding: 0 .3rem; border-radius: 3px; line-height: 1.5; }
 .tm.ban .trole i { background: var(--loss); color: #fff; }
-.tm.pick .trole i { background: var(--win); color: #0b0f14; }
+.tm.pick .trole i { background: var(--win); color: #06100c; }
 .tm.dec .trole i { background: var(--text); color: var(--bg); }
-.tm .tst { display: grid; gap: .05rem; margin-top: .3rem; font-size: .7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.tm .tst span { display: flex; align-items: center; gap: .3rem; min-width: 0; white-space: nowrap; }
-.tm .tst span::before { content: ""; flex: none; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
+.tm .tst { display: grid; gap: .1rem; margin-top: .25rem; font-size: .72rem; font-weight: 700; }
+.tm .tst > span { display: flex; align-items: center; gap: .35rem; min-width: 0; white-space: nowrap; }
+.tm .tst > span > span { overflow: hidden; text-overflow: ellipsis; }
+.tm .tst .na { color: var(--dim); font-weight: 600; }
+.tm:hover { border-color: var(--dim); }
+.tm:hover::before { background: linear-gradient(180deg, rgba(5, 11, 13, 0), rgba(5, 11, 13, .45) 38%, rgba(5, 11, 13, .93) 70%); }
+.tm[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc), 0 0 22px -6px rgba(47, 212, 162, .7); }
 
-.spot { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; }
+.spot { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1.1rem; align-items: stretch; }
 .spot .img {
-  position: relative; min-height: 13rem; border-radius: 8px; overflow: hidden;
-  background: var(--raise) center / cover no-repeat; display: flex; align-items: flex-end; padding: .9rem 1rem;
+  position: relative; min-height: 14rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--line2);
+  background: var(--raise) center / cover no-repeat; display: flex; align-items: flex-end; padding: 1rem 1.15rem;
 }
-.spot .img::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, var(--scrim)); }
+.spot .img::before { content: ""; position: absolute; inset: 0; background: linear-gradient(200deg, transparent 35%, rgba(5, 11, 13, .9) 85%); }
 .spot .img > * { position: relative; }
-.spot .img .cond { font-size: clamp(2rem, 5vw, 3.25rem); }
-.spot .img small { display: block; font-size: var(--s-1); color: var(--dim); font-stretch: 100%; text-transform: none; font-weight: 400; }
-.spot .info { display: grid; gap: .8rem; align-content: start; }
+.sname { display: grid; gap: .3rem; }
+.sname b { font-style: italic; font-weight: 900; font-size: clamp(2.4rem, 4.6vw, 3.9rem); text-shadow: 0 3px 18px rgba(0, 0, 0, .6); }
+.sname small { font-size: .9rem; color: rgba(228, 238, 236, .85); }
+.snext {
+  position: absolute !important; right: .8rem; bottom: 1rem; width: 2.75rem; height: 3.5rem;
+  display: grid; place-items: center; cursor: pointer; color: var(--text);
+  background: rgba(5, 11, 13, .62); border: 1px solid rgba(228, 238, 236, .32); border-radius: 9px;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.snext:hover { border-color: var(--acc); color: var(--acc); }
+.snext .ico { width: 1.2rem; height: 1.2rem; }
+.spot .info { display: grid; gap: .9rem; align-content: start; }
 .spot .role { font-size: var(--s-1); color: var(--dim); }
 .mchance .nums { display: flex; justify-content: space-between; align-items: baseline; }
 .mchance .nums .cond { font-size: var(--s3); }
-.mchance .odds { height: .55rem; border-radius: 3px; overflow: hidden; background: var(--t); position: relative; margin-top: .35rem; }
+.mchance .odds { height: .55rem; border-radius: 999px; overflow: hidden; background: var(--t); position: relative; margin-top: .35rem; }
 .mchance .odds b { position: absolute; inset: 0 auto 0 0; background: var(--ct); }
-.mrec { display: grid; gap: .45rem; font-size: var(--s-1); }
-.mrec .r { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr) auto; gap: .5rem; align-items: center; }
-.mrec .trk { grid-column: 2 / -1; height: .45rem; background: var(--bg); border-radius: 3px; overflow: hidden; position: relative; }
-.mrec .trk b { display: block; height: 100%; }
+.mrec { display: grid; gap: .55rem; font-size: var(--s-1); }
+.mrec .r { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) auto; gap: .2rem .6rem; align-items: center; }
+.mrec .r .logo { width: 1.6rem; height: 1.6rem; grid-row: span 2; }
+.mrec .r > span:nth-of-type(1) { font-weight: 600; }
+.mrec .trk { grid-column: 2 / -1; height: .4rem; background: var(--bg); border-radius: 999px; overflow: hidden; position: relative; box-shadow: inset 0 0 0 1px var(--line); }
+.mrec .trk b { display: block; height: 100%; border-radius: 999px; }
 .mrec .trk i { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--dim); }
 .mrec .a b { background: var(--ct); }
 .mrec .b b { background: var(--t); }
 
-/* series score tiles */
-.stiles { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: .4rem; }
-.stile { display: grid; gap: .2rem; padding: .55rem .5rem .5rem; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; justify-items: center; text-align: center; }
-.stile b { font-size: var(--s2); }
-.stile .v { font-size: var(--s-1); color: var(--dim); }
-.stile .sb { width: 100%; height: 2.25rem; display: flex; align-items: flex-end; }
-.stile .sb i { display: block; width: 100%; border-radius: 2px 2px 0 0; }
+/* series score: team 1's winning scores | vs | team 2's */
+.stiles { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .75rem; align-items: center; container-type: inline-size; }
+/* a narrow panel drops the team name under each score: the logo already says whose it is */
+@container (max-width: 30rem) { .stile .sn { display: none; } }
+.scol { display: grid; gap: .55rem; }
+.svs { font-style: italic; font-weight: 900; font-size: 1.75rem; color: var(--acc); }
+.stile {
+  position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .35rem .8rem; align-items: center;
+  padding: .7rem .85rem .65rem; background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
+}
+.stile .logo { grid-row: span 2; }
+.stile .sx { display: grid; min-width: 0; line-height: 1.05; }
+.stile .sx b { font-size: 1.75rem; font-weight: 900; }
+.stile .sn { font-size: .75rem; color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: .15rem; }
+.stile .v { font-size: .9rem; color: var(--dim); font-weight: 600; text-align: right; }
+.stile .sb { grid-column: 2 / -1; height: .3rem; border-radius: 999px; background: var(--line); overflow: hidden; }
+.stile .sb i { display: block; height: 100%; border-radius: 999px; }
 .stile.a .sb i { background: var(--ct); }
 .stile.b .sb i { background: var(--t); }
-.stile.top { border-color: var(--text); }
-.stile.top .v { color: var(--text); font-weight: 700; }
+.stile.top { border-color: var(--acc); background: linear-gradient(180deg, rgba(47, 212, 162, .1), rgba(47, 212, 162, .02)), var(--bg); box-shadow: 0 0 24px -10px rgba(47, 212, 162, .6); }
+.stile.top .v { color: var(--text); font-weight: 800; }
+.stile .pk { position: absolute; top: -.6rem; right: .7rem; font-size: .66rem; font-weight: 800; letter-spacing: .04em; color: #04120D; background: var(--acc); border-radius: 4px; padding: 0 .4rem; line-height: 1.5; }
+
+/* what moves the number */
+.frow { display: grid; grid-template-columns: 2.4rem minmax(8.5rem, 13rem) minmax(0, 1fr) 3.5rem; gap: .9rem; align-items: center; padding: .55rem 0; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
+.frow:last-of-type { border-bottom: 0; }
+.fic { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg); color: var(--acc); }
+.fic .ico { width: 1.15rem; height: 1.15rem; }
+.frow.off .fic { color: var(--dim); }
+.frow .fl b { display: block; font-size: var(--s0); font-weight: 600; }
+.dv { height: .55rem; }
+.dv::before { top: -.35rem; bottom: -.35rem; background: var(--line2); }
+.dv b { border-radius: 999px; }
+.dv b.pos { box-shadow: 0 0 12px -2px color-mix(in srgb, var(--ct) 70%, transparent); }
+.dv b.neg { box-shadow: 0 0 12px -2px color-mix(in srgb, var(--t) 70%, transparent); }
+.frow .v { font-size: var(--s0); }
+.frow.off .v { font-weight: 400; font-size: var(--s-1); }
 
 /* right rail */
-.rail { display: grid; gap: 1rem; position: sticky; top: 4.5rem; }
-.rail .panel > h2 { font-size: var(--s0); }
+.rail { display: grid; gap: 1rem; position: sticky; top: 5rem; }
+.rail .panel > h2 { font-size: 1.35rem; }
 /* team chooser: a modal dialog opened from the court's "Change Team" buttons */
 .tdlg {
   padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--text);
@@ -909,23 +1067,31 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .tdlg .picker { overflow-y: auto; min-height: 0; flex: 1 1 auto; padding: 2px; overscroll-behavior: contain; }
 @media (max-width: 520px) { .tdlg-in { padding: .75rem; } .tdlg .picker { grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr)); } }
 .rlist { display: grid; }
-.rlist a { display: grid; grid-template-columns: 1.6rem 1.35rem minmax(0, 1fr) auto; gap: .5rem; align-items: center; padding: .4rem .2rem; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
-.rlist a:last-child { border-bottom: 0; }
+.rlist a { display: grid; grid-template-columns: 1.9rem 1.35rem minmax(0, 1fr) auto; gap: .55rem; align-items: center; padding: .42rem .45rem; border-radius: 7px; font-size: var(--s-1); }
+.rlist a + a { margin-top: 1px; }
 .rlist a:hover { background: var(--raise); }
+/* the two teams in the matchup above */
+.rlist a.on { background: linear-gradient(90deg, rgba(47, 212, 162, .1), rgba(47, 212, 162, .02)); }
+.rlist a.oa { box-shadow: inset 3px 0 0 var(--ct); }
+.rlist a.ob { box-shadow: inset 3px 0 0 var(--t); }
+.rlist a.on .nm { color: var(--text); font-weight: 700; }
 .rlist .rk { color: var(--dim); text-align: right; font-weight: 700; }
 .rlist .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .form5 { display: flex; gap: 2px; }
-.form5 i { width: .45rem; height: .9rem; border-radius: 1px; background: var(--line); }
+.form5 i { width: .42rem; height: .95rem; border-radius: 2px; background: var(--line); }
 .form5 i.W { background: var(--win); }
 .form5 i.L { background: var(--loss); }
-.nextm { display: grid; gap: .35rem; padding: .55rem 0; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
+.nextm { display: grid; gap: .4rem; padding: .65rem 0; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
 .nextm:last-child { border-bottom: 0; }
 .nextm .tt { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .4rem; align-items: center; }
 .nextm .tt span { display: flex; align-items: center; gap: .35rem; min-width: 0; font-weight: 600; }
 .nextm .tt span:last-child { justify-content: flex-end; }
 .nextm .tt em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nextm .mini { height: .3rem; border-radius: 2px; background: var(--t); overflow: hidden; }
-.nextm .mini b { display: block; height: 100%; background: var(--ct); }
+.nextm .mini { height: .22rem; border-radius: 999px; background: var(--c2, var(--t)); overflow: hidden; display: flex; }
+.nextm .mini b { display: block; height: 100%; background: var(--c1, var(--ct)); border-right: 2px solid var(--panel); }
+.rtag { justify-self: start; font-size: .75rem; font-weight: 700; padding-left: .45rem; border-left: 2px solid currentColor; line-height: 1.2; }
+.rtag.hit { color: var(--win); }
+.rtag.miss { color: var(--loss); }
 .nextm:hover .tt em { text-decoration: underline; }
 
 /* ---------- v4: track record ---------- */
@@ -1004,12 +1170,34 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
   .spot { grid-template-columns: minmax(0, 1fr); }
   .board { grid-template-columns: minmax(0, 1fr); }
   .board > div + div { border-left: 0; border-top: 1px solid var(--line); }
-  .stiles { grid-template-columns: repeat(min(var(--n), 3), minmax(0, 1fr)); }
+  /* the court on narrow screens: logo over name on each side, a smaller VS between */
+  .court { --seam: 100deg; min-height: 0; gap: 1rem .5rem; padding: 1rem .9rem .9rem; }
+  .chead, .cside.b .chead { flex-direction: column; align-items: flex-start; gap: .55rem; }
+  .cside.b .chead { align-items: flex-end; }
+  .cside .logo.xl { width: 3.6rem; height: 3.6rem; }
+  .cname { font-size: clamp(1.25rem, 5.6vw, 1.75rem); }
+  .crank { font-size: .95rem; gap: 0 .55rem; }
+  .cside .cchg { font-size: .74rem; padding: .25rem .5rem; }
+  .cbig { font-size: clamp(2.4rem, 11vw, 3.4rem); }
+  .clbl { font-size: .62rem; letter-spacing: .1em; }
+  .ccentre .vsword { font-size: 2rem; }
+  .ccentre .score { font-size: 2.4rem; }
+  .ccentre { align-self: start; margin-top: 1.4rem; }
+  .court .legend { font-size: .75rem; }
+  .frow { grid-template-columns: 2.4rem minmax(0, 1fr) 3.5rem; gap: .25rem .75rem; }
+  .frow .fic { grid-row: span 2; align-self: start; }
+  .frow .dv { grid-column: 2 / -1; grid-row: 2; }
+  .stiles { gap: .4rem; }
+  .svs { font-size: 1.15rem; }
+  .stile { grid-template-columns: auto minmax(0, 1fr); padding: .6rem .6rem .55rem; gap: .25rem .55rem; }
+  .stile .logo.md { width: 1.7rem; height: 1.7rem; grid-row: span 1; }
+  .stile .sx b { font-size: 1.35rem; }
+  .stile .sn { display: none; }
+  .stile .v { grid-column: 1 / -1; text-align: left; font-size: .8rem; }
+  .stile .sb { grid-column: 1 / -1; }
+  .stile .pk { right: .4rem; }
 }
 @media (max-width: 520px) {
-  .court { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .ccentre { grid-column: 1 / -1; grid-row: 1; justify-self: center; max-width: none; }
-  .cctl { grid-auto-flow: column; }
   .splitfig { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -1100,8 +1288,9 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 
 /* phones */
 @media (max-width: 640px) {
-  .dtabs { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: .25rem; }
-  .dtabs button { min-height: 44px; font-size: .95rem; }
+  .dtabs { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 2px; width: 100%; }
+  .dtabs button { min-height: 44px; font-size: .9rem; padding-inline: .55rem; justify-content: center; }
+  .dtabs button .ico { display: none; }
   /* match rows: both team names get the full width, the call or score on the right */
   .mrow { grid-template-columns: 3.3rem minmax(0, 1fr) auto; grid-template-areas: "time a mid" "time b mid" "tag tag tag"; gap: .3rem .65rem; }
   .mrow .time { grid-area: time; align-self: start; }
@@ -1121,6 +1310,10 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .strip-hint { display: none; font-size: var(--s-1); color: var(--dim); margin-top: -1rem; }
 @media (max-width: 520px) {
   .tape { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tm { padding-inline: .45rem; }
+  .tm .tst { font-size: .66rem; }
+  .tm .tst > span { gap: .25rem; }
+  .tm .tst .logo.xs { width: .8rem; height: .8rem; }
   .tdlg .pick .logo.lg { width: 3rem; height: 3rem; }
   .log td, .log th { padding-inline: .3rem; }
   .tablewrap:has(> .log)::before { content: "Swipe the table sideways for the pick, the prediction and the result."; display: block; font-size: var(--s-1); color: var(--dim); padding-bottom: .4rem; position: sticky; left: 0; }
@@ -1137,20 +1330,46 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   .log td a[href^="#m-"] { padding-block: .2rem; }
   .lb .row .nm { padding-block: .75rem; }
 }
+/* ---------- v8: one finish across every page ---------- */
+.hero, .thead, .tcard, .evcard, .onair, .vs, .pcard, .crown, .tray, .board { border-radius: var(--rp); }
+.mrow, .callcard, .splitfig div, .player, .pick { border-radius: 8px; }
+.thead, .hero { background: linear-gradient(180deg, rgba(23, 42, 46, .4), transparent 8rem), var(--panel); }
+.subtabs a { border-radius: 8px; }
+.subtabs a[aria-current="page"], .days button[aria-pressed="true"], .pcard .btn[aria-pressed="true"] { border-color: var(--acc); }
+.subtabs a[aria-current="page"] { background: var(--acc-deep); color: var(--text); }
+.tierbox { border-radius: 8px; }
+.tierbox:has(input:checked) { border-color: var(--acc); }
+.tierbox input { accent-color: var(--acc); }
+.search, .filters select { border-color: var(--line2); border-radius: 8px; }
+.thead h1, .season h1, .evhero h1, .onair-h h2 { font-style: italic; }
+.tcard .cond, .pcard .ph .cond { font-style: italic; }
+.tdlg { border-color: var(--line2); border-radius: var(--rp); background: #0F1C1F; }
+.tdlg-h h2 { font-style: italic; font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; }
+.pick[aria-pressed="true"] { background: var(--raise); }
 </style>
 
-<header class="top">
+<header class="top" id="top">
   <div class="top-in">
     <a class="brand" href="#home" aria-label="FaceOff Analytics, home">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 6h9l-6 10 6 10H3l6-10z" fill="var(--ct)"/><path d="M29 6h-9l6 10-6 10h9l-6-10z" fill="var(--t)"/></svg>
-      <span class="bw"><b>FaceOff</b> <span>Analytics</span></span>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10.5 3H31l-2.6 6.5H8z" fill="var(--text)"/><path d="M6.6 11.5h7.1L7.4 29H.3z" fill="var(--text)"/><path d="M14.6 13.5h11.6l-2.4 5.6H12.4z" fill="var(--acc)"/></svg>
+      <span class="bw"><b>FaceOff</b><span>Analytics</span></span>
     </a>
     <nav class="tabs" aria-label="Sections">
-      <a href="#home" data-tab="home">Matchups</a>
-      <a href="#events" data-tab="events">Tournaments</a>
-      <a href="#teams" data-tab="teams">Teams</a>
-      <a href="#record" data-tab="record">Stats</a>
+      <a href="#home" data-tab="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="7.5" height="13" rx="2"/><rect x="14" y="5.5" width="7.5" height="13" rx="2"/><path d="M12 3v18"/></svg>Matchups</a>
+      <a href="#events" data-tab="events"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/></svg>Tournaments</a>
+      <a href="#teams" data-tab="teams"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v5.2c0 4.4-3.1 7.9-7.5 9.8-4.4-1.9-7.5-5.4-7.5-9.8V6z"/></svg>Teams</a>
+      <a href="#record" data-tab="record"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 19.5V12M12 19.5V5M18.5 19.5v-9M3 19.5h18"/></svg>Stats</a>
     </nav>
+    <div class="qwrap" id="qwrap">
+      <button type="button" id="qOpen" aria-label="Search teams, players or matches" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></button>
+      <div class="qfield">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input id="q" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="qList" aria-label="Search teams, players or matches" placeholder="Search teams, players, or matches…" autocomplete="off" spellcheck="false" enterkeyhint="go">
+        <kbd class="qkey" title="Press / to search">/</kbd>
+        <button type="button" class="qclose" id="qClose" aria-label="Close search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="qlist" id="qList" role="listbox" aria-label="Search results" hidden></div>
+    </div>
     <span class="snap" id="snap"></span>
   </div>
 </header>
@@ -1165,6 +1384,24 @@ const IMG = /*__IMAGES__*/null;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+// small line icons (24px grid, stroked in currentColor)
+const svgI = d => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const ICON = {
+  swap: svgI(`<path d="M4 8.5h15l-3.5-3.5M20 15.5H5l3.5 3.5"/>`),
+  next: svgI(`<path d="M9 5l7 7-7 7"/>`),
+  user: svgI(`<circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c1-3.9 3.9-5.8 7.5-5.8s6.5 1.9 7.5 5.8"/>`),
+  overview: svgI(`<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>`),
+  lineups: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
+  h2h: svgI(`<path d="M2.5 12h7.5M6.5 8l4 4-4 4M21.5 12H14M17.5 8l-4 4 4 4"/>`),
+  pools: svgI(`<path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5l-5.5 2.5-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20"/>`),
+  base_strength: svgI(`<path d="M12 3l7.5 3v5.2c0 4.4-3.1 7.9-7.5 9.8-4.4-1.9-7.5-5.4-7.5-9.8V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>`),
+  form_30d: svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5"/>`),
+  form_last5: svgI(`<path d="M3.5 17l5-5 4 3.5 7-8M15 7.5h4.5V12"/>`),
+  head_to_head: svgI(`<path d="M2.5 12h7.5M6.5 8l4 4-4 4M21.5 12H14M17.5 8l-4 4 4 4"/>`),
+  map_veto: svgI(`<path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5l-5.5 2.5-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20"/>`),
+  roster: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
+  stakes: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
+};
 // Largest remainder, same rule as predictor.display_percent: `places` decimals
 // on the percentage, and the returned strings sum to exactly 100.00.
 function displayPercent(probs, places = 2) {
@@ -1224,7 +1461,7 @@ const LABELS = {
 const REL = { H: "Clear read", M: "Fairly clear read", L: "Close or uncertain read" };
 
 /* ---------------- team colours (from each logo, see viewer/team_colors.py) ---------------- */
-const DEFAULT_A = "#6E9DE2", DEFAULT_B = "#E7AB3F", PAGE_BG = [23, 29, 37];
+const DEFAULT_A = "#6E9DE2", DEFAULT_B = "#E7AB3F", PAGE_BG = [16, 28, 31];
 const rgbOf = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const dist = (x, y) => { const a = rgbOf(x), b = rgbOf(y); return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); };
 const deep = h => { const c = rgbOf(h); return `rgb(${c.map((v, i) => Math.round(v * .32 + PAGE_BG[i] * .68)).join(",")})`; };
@@ -1419,7 +1656,8 @@ function factors(pred, a, b) {
     const [nm, sub] = LABELS[f.factor] || [f.factor, ""];
     const pp = f.pp, off = Math.abs(pp) < 0.05;
     return `<div class="frow${off ? " off" : ""}">
-      <div><b>${esc(nm)}</b><span class="sub">${esc(sub)}</span></div>
+      <span class="fic">${ICON[f.factor] || ICON.overview}</span>
+      <div class="fl"><b>${esc(nm)}</b><span class="sub">${esc(sub)}</span></div>
       <div class="dv" aria-hidden="true">${off ? "" : `<b class="${pp > 0 ? "pos" : "neg"}" style="width:${(Math.abs(pp) / mx * 50).toFixed(2)}%"></b>`}</div>
       <div class="v ${off ? "" : pp > 0 ? "ct" : "t"}">${off ? "none" : "+" + Math.abs(pp).toFixed(1)}</div>
     </div>`;
@@ -1450,7 +1688,7 @@ function poolCompare(a, b, pool) {
   const ma = T[a]?.maps || {}, mb = T[b]?.maps || {};
   const cell = (m, side) => {
     const v = (side === "l" ? ma : mb)[m], w = v ? v[0] * 100 : 0;
-    return `<div class="half ${side}"><span>${v ? `${w.toFixed(2)}% (${v[1]})` : "no maps"}</span><span class="trk"><b style="width:${w.toFixed(1)}%"></b></span></div>`;
+    return `<div class="half ${side}"><span>${v && v[1] ? `${w.toFixed(2)}% (${v[1]})` : "N/A"}</span><span class="trk"><b style="width:${w.toFixed(1)}%"></b></span></div>`;
   };
   return `<div class="panel"><h2>Map pool <span class="dim">win rate over the last 90 days (maps played)</span></h2>
     <div class="fly">${pool.map(m => `<div class="fr">${cell(m, "l")}<span class="mn cond">${esc(m)}</span>${cell(m, "r")}</div>`).join("")}</div></div>`;
@@ -1533,12 +1771,19 @@ function court(pred, a, b, o, bo) {
   // the win chance for the chosen series length (BO3 is the engine's own number)
   const F = pred ? pFor(pred, bo) : null;
   const shown = pred ? displayPercent([F.p, 1 - F.p]) : null;
+  // rank line: Valve Regional Standings place and Elo, in the team's colour
+  const rankLine = t => !T[t] ? `<span>No results in the data</span>`
+    : `<b>${T[t].vrs ? `#${T[t].vrs.rank}` : "Unranked"}</b>${T[t].series ? `<span>ELO ${T[t].elo}</span>` : `<span>No series yet</span>`}`;
   const side = (t, cls, i) => `<div class="cside ${cls}">
-      ${T[t] ? `<a href="#t-${T[t].slug}" aria-label="${esc(t)} team page">${logo(t, "xl")}</a>` : logo(t, "xl")}
-      ${T[t] ? `<a class="cname cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cname cond">${esc(t)}</span>`}
-      <span class="small cmeta">${esc(vrsLine(t))}</span>
-      ${o.change ? `<button type="button" class="btn cchg" data-chg="${cls}" aria-haspopup="dialog" aria-label="${esc(`Change Team ${i + 1}, now ${t}`)}">Change Team ${i + 1}</button>` : ""}
-      ${shown ? `<span class="cbig cond" aria-label="${esc(t)} ${shown[i]}% to win">${bigPct(shown[i])}</span>` : ""}
+      <div class="chead">
+        ${T[t] ? `<a class="clogo" href="#t-${T[t].slug}" aria-label="${esc(t)} team page">${logo(t, "xl")}</a>` : `<span class="clogo">${logo(t, "xl")}</span>`}
+        <div class="cid">
+          ${T[t] ? `<a class="cname cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cname cond">${esc(t)}</span>`}
+          <span class="crank" title="${esc(vrsLine(t))}">${rankLine(t)}</span>
+          ${o.change ? `<button type="button" class="btn cchg" data-chg="${cls}" aria-haspopup="dialog" aria-label="${esc(`Change Team ${i + 1}, now ${t}`)}">Change Team ${i + 1}${ICON.swap}</button>` : ""}
+        </div>
+      </div>
+      ${shown ? `<div class="cpct"><span class="cbig cond" aria-label="${esc(t)} ${shown[i]}% to win">${bigPct(shown[i])}</span><span class="clbl" aria-hidden="true">Win probability</span></div>` : ""}
     </div>`;
   const fmt = `<div class="seg" role="group" aria-label="Series format">${[1, 3, 5].map(n =>
     `<button type="button" data-bo="${n}" aria-pressed="${n === bo}" ${o.fixedBo ? "disabled" : ""}>Bo${n}</button>`).join("")}</div>`;
@@ -1549,16 +1794,31 @@ function court(pred, a, b, o, bo) {
         <div class="mid"></div>
       </div>
       <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure.</span>
-        <span class="chip ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span></div>
+        <span class="chips">${o.live ? `<span class="chip live">Live</span>` : ""}<span class="chip rel ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span></span></div>
     </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p></div>`;
-  // a large, faint copy of each logo behind its half; the mask follows the slanted split
-  const wm = (t, cls) => IMG.logos[t] ? `<div class="cwm ${cls}" aria-hidden="true"><img src="${IMG.logos[t]}" alt=""></div>` : "";
+  // each half's backdrop is that team's map from the simulated veto, darkened and
+  // washed in the team's colour; the masks follow the court's slanted split
+  const ma = sideMap(pred, a, "A", bo, null), mb = sideMap(pred, b, "B", bo, ma);
+  const art = (m, cls) => `<div class="cbg ${cls}" aria-hidden="true"${m ? ` style="--art:url('${IMG.maps[m]}')"` : ""}></div>`;
+  const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
   // controls sit in their own row under the court, never on top of it
   const below = `<div class="cbelow">
     <div class="cb-l"><span class="small dim">Format</span>${fmt}${o.status || ""}${o.verdict || ""}</div>
-    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn" data-feat="1" ${o.back ? "" : `disabled title="Already showing the next match"`}>Back to the next match</button>` : ""}</div>` : ""}
+    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}</div>` : ""}
   </div>`;
-  return `<section class="court">${wm(a, "a")}${wm(b, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
+  return `<section class="court">${art(ma, "a")}${art(mb, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
+}
+// The map behind a team's half of the court: its pick in the simulated veto for this
+// format; without one (Bo1 has no picks) its most played map of the last 90 days.
+function sideMap(pred, t, side, bo, avoid) {
+  if (pred) {
+    const pk = vetoFor(pred, bo).veto.find(s => s.verb === "picks" && s.side === side && IMG.maps[s.map]);
+    if (pk && pk.map !== avoid) return pk.map;
+  }
+  const mine = Object.entries(T[t]?.maps || {}).filter(([m, v]) => v[1] > 0 && IMG.maps[m] && m !== avoid).sort((x, y) => y[1][1] - x[1][1]);
+  if (mine.length) return mine[0][0];
+  const any = Object.keys(IMG.maps).filter(m => m !== avoid);
+  return any.length ? any[side === "A" ? 0 : any.length - 1] : null;
 }
 
 function tape(pred, a, b, bo = 3) {
@@ -1571,12 +1831,12 @@ function tape(pred, a, b, bo = 3) {
     const role = s.verb === "decider" ? "Decider" : `${who} ${verb.toLowerCase()}`;
     const stat = (t, c) => {
       const v = (T[t]?.maps || {})[s.map];
-      const txt = v && v[1] ? `${(v[0] * 100).toFixed(2)}% (${v[1]})` : "-";
-      const tip = v && v[1] ? `${(v[0] * 100).toFixed(2)}% won of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "no maps";
-      return `<span class="${c}" title="${esc(`${t} on ${s.map}, last 90 days: ${tip}`)}">${txt}</span>`;
+      const txt = v && v[1] ? `${(v[0] * 100).toFixed(2)}% (${v[1]})` : "N/A";
+      const tip = v && v[1] ? `${(v[0] * 100).toFixed(2)}% won of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A: not played in the last 90 days";
+      return `<span class="${c}${v && v[1] ? "" : " na"}" title="${esc(`${t} on ${s.map}, last 90 days: ${tip}`)}">${logo(t, "xs")}<span>${txt}</span></span>`;
     };
     return `<button type="button" class="tm ${cls} ${s.side === "A" ? "sa" : s.side === "B" ? "sb" : ""}" data-spot="${esc(s.map)}" aria-pressed="${s.map === desk.spot}" style="${mapBg(s.map)}" title="${esc(role)}">
-      <span class="tn">${i + 1}</span><span><span class="tnm cond">${esc(s.map)}</span><span class="trole" style="display:block"><i>${verb}</i>${s.verb === "decider" ? "" : esc(who)}</span>
+      <span class="tn">${i + 1}</span><span class="tbody"><span class="tnm cond">${esc(s.map)}</span><span class="trole"><i>${verb}</i>${s.verb === "decider" ? "" : `<em>${esc(who)}</em>`}</span>
       <span class="tst">${stat(a, "ct")}${stat(b, "t")}</span></span></button>`;
   }).join("")}</div>`;
 }
@@ -1601,12 +1861,16 @@ function spotlight(pred, a, b, bo = 3) {
   }
   const rec = (t, cls) => {
     const v = (T[t]?.maps || {})[m];
-    const line = v && v[1] ? `${(v[0] * 100).toFixed(2)}% of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "not played in 90 days";
+    const line = v && v[1] ? `${(v[0] * 100).toFixed(2)}% of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A";
     return `<div class="r ${cls}">${logo(t, "sm")}<span>${esc(t)}</span><span>${line}</span>
       <span class="trk">${v && v[1] ? `<b style="width:${(v[0] * 100).toFixed(1)}%"></b>` : ""}<i></i></span></div>`;
   };
+  const poss = t => /s$/i.test(t) ? `${t}'` : `${t}'s`;
+  const caption = s.verb === "decider" ? "Decider" : `${poss(who)} ${s.verb === "picks" ? "pick" : "ban"}`;
+  const nxt = V.veto[(i + 1) % V.veto.length].map;
   return `<div class="spot">
-    <div class="img" style="${mapBg(m)}"><span class="cond">${esc(m)}<small>${esc(DATA.map_info[m]?.location || "")}</small></span></div>
+    <div class="img" style="${mapBg(m)}"><span class="sname"><b class="cond">${esc(m)}</b><small>${esc(caption)}</small></span>
+      ${V.veto.length > 1 ? `<button type="button" class="snext" data-spot="${esc(nxt)}" aria-label="${esc(`Next map in the veto: ${nxt}`)}" title="${esc(`Next: ${nxt}`)}">${ICON.next}</button>` : ""}</div>
     <div class="info"><p class="role">${role}</p>${chance}
       <div class="mrec"><span class="small dim">Won on ${esc(m)} in the last 90 days</span>${rec(a, "a")}${rec(b, "b")}</div></div>
   </div>`;
@@ -1631,13 +1895,19 @@ function scoreTiles(pred, a, b, bo) {
     : bo === 5 ? (pred.score5 || pred.map_p5 ? "Map win chances from the simulated best-of-five veto, set so the series total matches the win probability."
       : "Best-of-five: the same win chance on every map, set so the series total matches the win probability.")
     : "Map win chances from the simulated veto.";
+  // team A's winning scores on the left, team B's on the right, each column from the clean sweep down
+  const tile = ([x, i]) => {
+    const sd = winOf(x) ? "a" : "b", who = winOf(x) ? a : b;
+    return `<div class="stile ${sd}${i === top ? " top" : ""}" title="${esc(`${who} ${scoreFrom(x, winOf(x))}: ${shown[i]}%`)}">
+        ${logo(who, "md")}<span class="sx"><b class="cond">${scoreFrom(x, winOf(x))}</b><span class="sn">${esc(who)}</span></span>
+        <span class="v">${i === top ? `<span class="pk">Predicted</span>` : ""}${shown[i]}%</span>
+        <span class="sb"><i style="width:${(x.p / mx * 100).toFixed(1)}%"></i></span></div>`;
+  };
+  const idx = set.map((x, i) => [x, i]);
   return `<div class="panel"><h2>Series score <span class="dim">predicted ${esc(topTeam)} ${scoreFrom(t, winOf(t))}</span></h2>
-    <div class="stiles" style="--n:${set.length}">${set.map((x, i) => {
-      const sd = winOf(x) ? "a" : "b";
-      return `<div class="stile ${sd}${i === top ? " top" : ""}" title="${esc(`${winOf(x) ? a : b} ${scoreFrom(x, winOf(x))}: ${shown[i]}%`)}">
-        ${logo(winOf(x) ? a : b, "sm")}<b class="cond">${scoreFrom(x, winOf(x))}</b><span class="v">${shown[i]}%</span>
-        <span class="sb"><i style="height:${(x.p / mx * 100).toFixed(1)}%"></i></span></div>`;
-    }).join("")}</div><p class="small dim">${note}</p></div>`;
+    <div class="stiles"><div class="scol">${idx.filter(([x]) => winOf(x)).map(tile).join("")}</div>
+      <span class="svs cond" aria-hidden="true">vs</span>
+      <div class="scol">${idx.filter(([x]) => !winOf(x)).reverse().map(tile).join("")}</div></div><p class="small dim">${note}</p></div>`;
 }
 
 function matchDesk(pred, a, b, o = {}) {
@@ -1654,7 +1924,7 @@ function matchDesk(pred, a, b, o = {}) {
     ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
   return `${o.ctx || ""}${court(pred, a, b, o, bo)}
-    <div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}">${l}</button>`).join("")}</div>
+    <div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}">${ICON[k]}<span>${l}</span></button>`).join("")}</div>
     <div class="desk-main" role="tabpanel">${body}</div>`;
 }
 
@@ -1739,41 +2009,69 @@ function rail() {
     return `<a class="nextm" href="#m-${m.id}">
       <span class="small dim">${esc(EV_BY[m.ev].name)}, ${fmtDay(m.day)}</span>
       <span class="tt"><span${w === m.t1 ? "" : ' class="lost"'}>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><b class="rsc cond">${m.w1}<i class="dim">:</i>${m.w2}</b><span${w === m.t2 ? "" : ' class="lost"'}><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
-      ${fav ? `<span class="small ${fav === w ? "win" : "loss"}">${missLabel(fav === w, Math.max(p, 1 - p))}</span>` : ""}</a>`;
+      ${fav ? `<span class="rtag ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(p, 1 - p))}</span>` : ""}</a>`;
   };
+  // each coming match's bar uses that match's own two team colours
+  const split = m => {
+    const p = m.pred ? decode(m.pred).p : null;
+    if (p == null) return "";
+    const [c1, c2] = pairColors(m.t1, m.t2), sh = displayPercent([p, 1 - p]);
+    return `<span class="mini" style="--c1:${c1};--c2:${c2}" title="${esc(`Model: ${m.t1} ${sh[0]}%, ${m.t2} ${sh[1]}%`)}"><b style="width:${(p * 100).toFixed(1)}%"></b></span>`;
+  };
+  const shownTeams = PAIR || [];
   return `
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
-    <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
+    <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"${shownTeams.includes(n) ? ` class="on ${n === shownTeams[0] ? "oa" : "ob"}" title="${esc(n)} is in the matchup above"` : ""}><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
       <span class="form5" aria-label="last five: ${T[n].results.slice(0, 5).map(r => r.won ? "won" : "lost").join(", ") || "no results"}">${T[n].results.slice(0, 5).reverse().map(r => `<i class="${r.won ? "W" : "L"}"></i>`).join("")}</span></a>`).join("")}</div>
   </section>
   <section class="panel"><h2>Coming up</h2>
-    ${next.length ? next.map(m => { const p = m.pred ? decode(m.pred).p : null; return `<a class="nextm" href="#m-${m.id}">
+    ${next.length ? next.map(m => `<a class="nextm" href="#m-${m.id}">
       <span class="small dim">${esc(EV_BY[m.ev].name)}, ${m.day ? fmtDay(m.day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}</span>
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
-      ${p != null ? `<span class="mini" title="Model: ${esc(m.t1)} ${displayPercent([p, 1 - p])[0]}%"><b style="width:${(p * 100).toFixed(1)}%"></b></span>` : ""}</a>`; }).join("")
+      ${split(m)}</a>`).join("")
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
   </section>
   ${done.length ? `<section class="panel"><h2>Latest results</h2>${done.map(doneRow).join("")}</section>` : ""}`;
 }
 
+// the home page always opens on this example matchup (Team 1, Team 2)
+const HOME_PAIR = ["Team Falcons", "Team Spirit"];
+// show a scheduled match on the desk, in its real format (the format buttons stay free to change)
+function loadMatch(m) { desk.a = m.t1; desk.b = m.t2; desk.feat = m.id; desk.bo = [1, 3, 5].includes(m.bo) ? m.bo : 3; desk.spot = null; }
+function homeMatchup() {
+  const ok = n => CMP_NAMES.includes(n);
+  let [a, b] = HOME_PAIR;
+  if (!ok(a) && !ok(b)) {
+    // neither example team is in the data: the next scheduled match, else the top two
+    const f = featuredMatch();
+    if (f) { loadMatch(f); return; }
+    desk.a = CMP_NAMES[0]; desk.b = CMP_NAMES[1]; desk.feat = null; return;
+  }
+  if (!ok(a)) a = CMP_NAMES.find(n => n !== b);
+  if (!ok(b)) b = CMP_NAMES.find(n => n !== a);
+  // when the two have a meeting scheduled (Team 1 listed first), open on it with its event and date
+  const keyOf = m => (m.day || "") + (m.when || "");
+  const sched = Object.values(MATCH).filter(m => m.t1 === a && m.t2 === b && m.pred && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1))
+    .sort((x, y) => keyOf(x).localeCompare(keyOf(y)))[0];
+  if (sched) { loadMatch(sched); return; }
+  desk.a = a; desk.b = b; desk.feat = null;
+}
 function viewHome() {
   const f = featuredMatch();
-  if (!desk.a || !desk.b) {
-    // open on the next match in its real format; the format buttons stay free to change
-    if (f) { desk.a = f.t1; desk.b = f.t2; desk.feat = f.id; desk.bo = [1, 3, 5].includes(f.bo) ? f.bo : 3; }
-    else { desk.a = CMP_NAMES[0]; desk.b = CMP_NAMES[1]; desk.feat = null; }
-  }
+  if (!desk.a || !desk.b) homeMatchup();
   const m = desk.feat && MATCH[desk.feat];
   const isFeat = m && m.t1 === desk.a && m.t2 === desk.b;
+  // "Next match" is offered whenever a next match exists; it is disabled while that match is shown
+  const back = f ? !(isFeat && f.id === m.id) : undefined;
   let pred, o;
   if (isFeat) {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
     // no fixedBo on the home page: Bo1 / Bo3 / Bo5 are always offered (match pages keep the real format)
-    o = { ev: e, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back: false };
+    o = { ev: e, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back, next: f, live: recentLive(m) };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
-    o = { change: true, back: f ? true : undefined };
+    o = { change: true, back, next: f };
   }
   PAIR = [desk.a, desk.b];
   return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
@@ -2195,7 +2493,7 @@ function viewMatch(id) {
   return `
   <nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
   ${matchDesk(pred, a, b, { ev: e, fixedBo: m.bo, played: m.maps.length ? playedMaps(m) : "", ctx: ctxFor(m, e),
-    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), label: "Model's pre-match call" })}
+    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), live: isLive(m), label: "Model's pre-match call" })}
   <div class="links">
     ${m.hltv ? `<a class="btn" href="https://www.hltv.org/matches/${encodeURIComponent(m.hltv)}/match" target="_blank" rel="noopener">Match on HLTV</a>` : ""}
     <a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a>
@@ -2234,6 +2532,11 @@ function spark(trace) {
   </svg>`;
 }
 
+// the current competitive map pool: the pool of the most recent tournament that lists one
+function activePool() {
+  const e = [...EV].filter(x => x.pool && x.pool.length && x.start <= DATA.as_of).sort((p, q) => q.start.localeCompare(p.start))[0];
+  return e ? e.pool : ["Ancient", "Anubis", "Cache", "Dust2", "Inferno", "Mirage", "Nuke"];
+}
 function viewTeam(slugv) {
   const n = BY_SLUG[slugv];
   if (!n) return `<p>Team not found. <a class="btn" href="#teams">All teams</a></p>`;
@@ -2257,7 +2560,7 @@ function viewTeam(slugv) {
       <p class="small dim">${t.form30 == null ? "No series in the last 30 days." : `Won ${pct(t.form30)} of ${t.n30} series in the last 30 days.`} Volatility ${t.vol.toFixed(2)} (how far results have strayed from what Elo expected).</p></section>
   ${evs.length ? teamFinishes(n, evs) : ""}
     <section class="panel tl-pool"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
-      <div class="poolbars">${maps.map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk"><b style="width:${(v[0] * 100).toFixed(1)}%"></b><i></i></span><span>${pct(v[0])} of ${v[1]}</span></div>`).join("") || `<p class="empty">No maps in the last 90 days.</p>`}</div></section>
+      <div class="poolbars">${[...maps, ...activePool().filter(m => !maps.some(([x]) => x === m)).map(m => [m, null])].map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk">${v ? `<b style="width:${(v[0] * 100).toFixed(1)}%"></b>` : ""}<i></i></span><span${v ? "" : ` class="dim" title="Not played in the last 90 days"`}>${v ? `${pct(v[0])} of ${v[1]}` : "N/A"}</span></div>`).join("")}</div></section>
     <section class="panel tl-res"><h2>Recent results</h2><div class="res">${t.results.map(r => `<div class="r">
       <span class="wl ${r.won ? "W" : "L"}">${r.won ? "W" : "L"}</span>
       <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${esc(r.event)}, ${fmtDate(r.date)}</span></span>
@@ -2535,7 +2838,12 @@ document.addEventListener("click", e => {
   const dt = e.target.closest("[data-dtab]");
   if (dt) { desk.tab = dt.dataset.dtab; rerender(); return; }
   const sp = e.target.closest("[data-spot]");
-  if (sp) { desk.spot = sp.dataset.spot; rerender(); return; }
+  if (sp) {
+    const step = sp.classList.contains("snext");
+    desk.spot = sp.dataset.spot; rerender();
+    if (step) { const nb = $(".snext"); if (nb) nb.focus({ preventScroll: true }); } // keep stepping with the keyboard
+    return;
+  }
   if (e.target.closest("#exSwap")) { [desk.a, desk.b] = [desk.b, desk.a]; desk.feat = null; rerender(); return; }
   const chg = e.target.closest("[data-chg]");
   if (chg) { openChooser(chg.dataset.chg); return; }
@@ -2550,7 +2858,8 @@ document.addEventListener("click", e => {
     const back = $(`[data-chg="${side}"]`); if (back) back.focus({ preventScroll: true });
     return;
   }
-  if (e.target.closest("[data-feat]")) { desk.a = desk.b = null; rerender(); return; }
+  const ft = e.target.closest("[data-feat]");
+  if (ft && !ft.disabled) { const f = featuredMatch(); if (f) loadMatch(f); rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
   const rg = e.target.closest("[data-range]");
   if (rg) { rec.range = rg.dataset.range; rerender(); return; }
@@ -2639,6 +2948,137 @@ document.addEventListener("pointerleave", e => {
   if (e.target.matches && e.target.matches("svg.rchart")) e.target.querySelector(".hover").setAttribute("visibility", "hidden");
 }, true);
 
-$("#snap").innerHTML = `Data as of <b>${esc(fmtDate(DATA.as_of))}</b>`;
+/* ---------------- header search: teams, players and matches ----------------
+   A combobox: typing lists matches from three groups; arrow keys move, Enter opens,
+   Escape closes. Below 900px the box folds into an icon that opens a full-width row. */
+const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+let QIDX = null;
+function searchIndex() {
+  if (QIDX) return QIDX;
+  const teams = NAMES.map(n => ({ n, k: fold(n), alt: fold(T[n].vrs?.name || "") }));
+  // players: current rosters first, then the latest event lineup for anyone not on a roster now
+  const players = new Map();
+  const person = (id, team, extra) => { const d = DATA.players[id.toLowerCase()] || {}; return { id: d.id || id, name: d.name || "", team, ...extra }; };
+  for (const n of NAMES) for (const p of T[n].roster || []) if (!players.has(p.id.toLowerCase())) players.set(p.id.toLowerCase(), person(p.id, n, { coach: !!p.coach }));
+  for (const e of [...EV].sort((x, y) => y.start.localeCompare(x.start)))
+    for (const pt of e.participants) if (T[pt.team]) for (const id of pt.players)
+      if (!players.has(id.toLowerCase())) players.set(id.toLowerCase(), person(id, pt.team, { past: e.name }));
+  const keyOf = m => (m.day || "") + (m.when || "");
+  const matches = Object.values(MATCH).filter(m => m.t1 && m.t2).map(m => ({ m, tk: fold(`${m.t1} ${m.t2}`), k: fold(`${m.t1} ${m.t2} ${EV_BY[m.ev].name}`), key: keyOf(m) }));
+  return QIDX = { teams, players: [...players.values()].map(p => ({ ...p, k: fold(p.id), kn: fold(p.name) })), matches };
+}
+// 0: starts with the query, 1: a word starts with it, 2: contains it, -1: no match
+const qRank = (k, q) => k.startsWith(q) ? 0 : (" " + k).includes(" " + q) ? 1 : k.includes(q) ? 2 : -1;
+function hl(txt, q) {
+  const f = fold(txt), i = q ? f.indexOf(q) : -1;
+  if (i < 0 || f.length !== txt.length) return esc(txt);
+  return esc(txt.slice(0, i)) + "<mark>" + esc(txt.slice(i, i + q.length)) + "</mark>" + esc(txt.slice(i + q.length));
+}
+function searchResults(raw) {
+  const q = fold(raw).trim().replace(/\s+/g, " ");
+  if (!q) return null;
+  const X = searchIndex();
+  const teams = X.teams.map(t => ({ t, r: Math.min(...[qRank(t.k, q), qRank(t.alt, q)].map(v => v < 0 ? 9 : v)) }))
+    .filter(x => x.r < 9).sort((x, y) => x.r - y.r || vrsRank(x.t.n) - vrsRank(y.t.n)).slice(0, 5).map(x => x.t.n);
+  const nameRank = p => { const r = qRank(p.kn, q); return r < 0 ? 9 : r + 1; };   // a real-name hit ranks under a nickname hit
+  const players = X.players.map(p => ({ p, r: Math.min(qRank(p.k, q) < 0 ? 9 : qRank(p.k, q), nameRank(p)) }))
+    .filter(x => x.r < 9).sort((x, y) => x.r - y.r || (x.p.past ? 1 : 0) - (y.p.past ? 1 : 0) || vrsRank(x.p.team) - vrsRank(y.p.team)).slice(0, 5).map(x => x.p);
+  // matches: every word must appear in the two team names or the event ("falcons spirit", "navi major")
+  const words = q.split(" ").filter(w => w && w !== "vs" && w !== "v");
+  const soon = daysBefore(DATA.as_of, 1);
+  const band = m => recentLive(m) ? 0 : !m.finished && m.day && m.day >= soon ? 1 : 2;   // live, upcoming, played
+  const matches = words.length ? X.matches.filter(x => words.every(w => x.k.includes(w)))
+    // matches found by team name come before matches found only by event name
+    .sort((x, y) => (words.every(w => y.tk.includes(w)) - words.every(w => x.tk.includes(w))) || band(x.m) - band(y.m) || (band(x.m) === 1 ? x.key.localeCompare(y.key) : y.key.localeCompare(x.key))).slice(0, 6).map(x => x.m) : [];
+  return { q, teams, players, matches };
+}
+let qSel = -1;
+function renderSearch() {
+  const inp = $("#q"), list = $("#qList");
+  const R = searchResults(inp.value);
+  if (!R) { closeList(); return; }
+  const opt = (href, label, body) => ({ href, label, body });
+  const groups = [
+    ["Teams", R.teams.map(n => opt(`#t-${T[n].slug}`, `${n}, team`, `${logo(n)}<span class="qm"><b>${hl(n, R.q)}</b><span>${esc(vrsLine(n))}</span></span><span class="qr">Team</span>`))],
+    ["Players", R.players.map(p => opt(`#t-${T[p.team].slug}`, `${p.id}, ${p.team}`, `<span class="qpl">${ICON.user}</span><span class="qm"><b>${hl(p.id, R.q)}${p.coach ? ` <span class="dim">(coach)</span>` : ""}</b><span>${p.name ? `${hl(p.name, R.q)}, ` : ""}${esc(p.past ? `with ${p.team} at ${p.past}` : p.team)}</span></span>${logo(p.team, "sm")}`))],
+    ["Matches", R.matches.map(m => {
+      const st = recentLive(m) ? `<span class="loss">Live</span>` : m.finished ? `${m.w1}:${m.w2}` : m.day ? fmtDay(m.day) : "To be announced";
+      return opt(`#m-${m.id}`, `${m.t1} vs ${m.t2}, ${EV_BY[m.ev].name}`, `<span class="qvs">${logo(m.t1, "sm")}${logo(m.t2, "sm")}</span><span class="qm"><b>${hl(m.t1, R.q)} vs ${hl(m.t2, R.q)}</b><span>${esc(EV_BY[m.ev].name)}, ${esc(m.stage)}</span></span><span class="qr">${st}</span>`);
+    })],
+  ].filter(([, xs]) => xs.length);
+  let k = 0;
+  list.innerHTML = groups.length ? groups.map(([h, xs], gi) => `<div class="qgrp" role="group" aria-labelledby="qg${gi}"><div class="qgh" id="qg${gi}" role="presentation">${h}</div>${xs.map(x =>
+      `<div class="qopt" role="option" id="qo${k++}" data-href="${x.href}" aria-selected="false" aria-label="${esc(x.label)}">${x.body}</div>`).join("")}</div>`).join("")
+    : `<p class="qempty" role="presentation">Nothing matches "${esc(inp.value.trim())}". Try a team, a player's nickname or an event.</p>`;
+  list.hidden = false;
+  inp.setAttribute("aria-expanded", "true");
+  qSel = -1; inp.removeAttribute("aria-activedescendant");
+}
+function moveSel(d) {
+  const opts = [...document.querySelectorAll("#qList .qopt")];
+  if (!opts.length) return;
+  qSel = qSel < 0 ? (d > 0 ? 0 : opts.length - 1) : (qSel + d + opts.length) % opts.length;
+  opts.forEach((o, i) => o.setAttribute("aria-selected", i === qSel ? "true" : "false"));
+  opts[qSel].scrollIntoView({ block: "nearest" });
+  $("#q").setAttribute("aria-activedescendant", opts[qSel].id);
+}
+function closeList() {
+  const list = $("#qList"), inp = $("#q");
+  list.hidden = true; list.innerHTML = ""; qSel = -1;
+  inp.setAttribute("aria-expanded", "false"); inp.removeAttribute("aria-activedescendant");
+}
+function openSearch() {
+  $("#top").classList.add("qon"); $("#qOpen").setAttribute("aria-expanded", "true");
+  $("#q").focus();
+  if ($("#q").value) renderSearch();
+}
+function closeSearch(clear) {
+  closeList();
+  if (clear) $("#q").value = "";
+  const wasOpen = $("#top").classList.contains("qon");
+  $("#top").classList.remove("qon"); $("#qOpen").setAttribute("aria-expanded", "false");
+  return wasOpen;
+}
+function goSearch(opt) {
+  const href = opt.dataset.href;
+  closeSearch(true); $("#q").blur();
+  if (location.hash === href) route(); else location.hash = href.slice(1);
+}
+$("#q").addEventListener("input", renderSearch);
+$("#q").addEventListener("focus", () => { if ($("#q").value.trim()) renderSearch(); });
+$("#q").addEventListener("keydown", e => {
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if ($("#qList").hidden) renderSearch(); moveSel(e.key === "ArrowDown" ? 1 : -1); }
+  else if (e.key === "Enter") {
+    const opts = document.querySelectorAll("#qList .qopt");
+    const o = opts[qSel >= 0 ? qSel : 0];
+    if (o) { e.preventDefault(); goSearch(o); }
+  } else if (e.key === "Escape") {
+    e.preventDefault();
+    if (!$("#qList").hidden) closeList();
+    else if (closeSearch(false)) $("#qOpen").focus();
+    else { $("#q").value = ""; $("#q").blur(); }
+  }
+});
+// a click on a result must not blur the input first
+$("#qList").addEventListener("mousedown", e => e.preventDefault());
+$("#qList").addEventListener("click", e => { const o = e.target.closest(".qopt"); if (o) goSearch(o); });
+$("#q").addEventListener("blur", () => setTimeout(() => {
+  if (document.activeElement === $("#q")) return;
+  closeList();
+  // the phone search row stays open only while it has focus or text
+  if (!$("#q").value.trim() && !$("#qClose").matches(":focus")) closeSearch(false);
+}, 120));
+$("#qOpen").addEventListener("click", openSearch);
+$("#qClose").addEventListener("click", () => { closeSearch(true); $("#qOpen").focus(); });
+document.addEventListener("keydown", e => {
+  if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  if (t.closest && t.closest("input, textarea, select, [contenteditable], dialog[open]")) return;
+  e.preventDefault(); openSearch();
+});
+document.addEventListener("pointerdown", e => { if (!e.target.closest("#qwrap")) { closeList(); if (!$("#q").value.trim()) closeSearch(false); } });
+window.addEventListener("hashchange", () => closeSearch(true));
+
+$("#snap").innerHTML = `${svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>`)}<span>Data as of<b>${esc(fmtDate(DATA.as_of))}</b></span>`;
 go();
 </script>

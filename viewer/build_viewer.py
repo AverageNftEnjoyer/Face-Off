@@ -323,8 +323,12 @@ def main(out_path):
     # VRS ranks for every team with series in the data, assigned in one pass so
     # no rank appears on two cards. Every global top-VRS_TOP_N team gets a card:
     # the data team it matched, else a card under its VRS name (no series yet).
-    rosters = {t: [p["id"] for p in assets["teams"].get(t, {"roster": []})["roster"]
-                   if p["role"].lower() != "coach"] + latest_lineup.get(t, [])
+    # Player-overlap matching only for teams with their own Liquipedia squad: a
+    # national selection (e.g. Team Brazil at the Nations Cup) shares players with a
+    # club and must not inherit that club's rank. Others match by name only.
+    def own_squad(t):
+        return [p["id"] for p in assets["teams"].get(t, {"roster": []})["roster"] if p["role"].lower() != "coach"]
+    rosters = {t: own_squad(t) + (latest_lineup.get(t, []) if own_squad(t) else [])
                for t in set(names) | {t for t, g in h_now.games.items() if g}}
     vrs_of = vrs_assign(rosters)
     pool |= {t for t, r in vrs_of.items() if r["rank"] <= E.VRS_TOP_N}
@@ -335,7 +339,22 @@ def main(out_path):
             vrs_of[r["name"]] = r
             names.append(r["name"])
             pool.add(r["name"])
-    names = sorted(set(names))
+    # Only teams with a current lineup (at least one player, not just staff, on
+    # their Liquipedia team page) get a card, a page and a place in the matchup
+    # pickers. Others (national selections, a team whose players all left)
+    # keep their results in the rating history and show as plain names.
+    def has_lineup(t):
+        # Liquipedia squad first. Valve's standings' five players only when the team
+        # has no Liquipedia page at all: a Liquipedia page with no active players
+        # (e.g. 3DMAX after its players left) is newer than Valve's snapshot.
+        if t in assets["teams"]:
+            return bool(own_squad(t))
+        return bool(vrs_of.get(t, {}).get("roster"))
+    dropped = sorted(t for t in set(names) if not has_lineup(t))
+    names = sorted(t for t in set(names) if has_lineup(t))
+    pool = {t for t in pool if has_lineup(t)}
+    if dropped:
+        print(f"teams without a lineup left off the site ({len(dropped)}): {', '.join(dropped)}")
     teams = {}
     for t in names:
         rec = assets["teams"].get(t, {"roster": [], "location": "", "region": ""})
@@ -353,6 +372,8 @@ def main(out_path):
             if len(results) >= N_TEAM_RESULTS:
                 break
         roster = [{"id": p["id"], "coach": p["role"].lower() == "coach"} for p in rec["roster"]]
+        if t not in assets["teams"] and vrs_of.get(t, {}).get("roster"):
+            roster = [{"id": pid, "coach": False} for pid in vrs_of[t]["roster"]]   # from Valve's standings
         teams[t] = {
             # no series in the data -> no Elo (it would only be the 1500 starting value)
             "slug": E.slug(t), "elo": round(h_now.elo[t]) if h_now.games[t] else None, "rank": rank.get(t),
@@ -375,7 +396,10 @@ def main(out_path):
     jobs = defaultdict(list)            # day -> [callable(h, day)]
     for e in events:
         for m in e["matches"]:
-            if m["t1"] in teams and m["t2"] in teams and m["day"]:
+            # every match between two teams with results gets its pre-match call,
+            # including teams left off the site for having no current lineup, so
+            # the record on Stats is not filtered by which teams still exist
+            if m["t1"] and m["t2"] and h_now.games.get(m["t1"]) and h_now.games.get(m["t2"]) and m["day"]:
                 d = min(date.fromisoformat(m["day"]), as_of)
                 jobs[d].append(("match", (m, e["title"])))
         if e["status"] == "finished":

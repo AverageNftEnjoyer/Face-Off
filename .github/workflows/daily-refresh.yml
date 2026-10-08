@@ -6,7 +6,10 @@ name: Daily data refresh
 on:
   schedule:
     - cron: "17 */6 * * *"   # 00:17, 06:17, 12:17, 18:17 UTC: results and schedules reach the site same day
-    # GitHub often starts scheduled runs late (hours, on busy days); "Run workflow" is instant.
+    # end-of-day runs at 8 pm New York all year (GitHub cron is UTC and ignores daylight saving):
+    - cron: "7 0 * * *"      # 00:07 UTC = 8:07 pm EDT (summer); 7:07 pm EST in winter
+    - cron: "7 1 * * *"      # 01:07 UTC = 8:07 pm EST (winter); 9:07 pm EDT in summer
+    # GitHub often starts scheduled runs late (sometimes hours on busy days); "Run workflow" is instant.
   workflow_dispatch: {}      # "Run workflow" button in the Actions tab
 
 permissions:
@@ -48,4 +51,6 @@ jobs:
             exit 0
           fi
           git commit -m "Daily data refresh $(date -u +%Y-%m-%d)"
+          # someone may have pushed code while this ran: replay the data commit on top
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push
