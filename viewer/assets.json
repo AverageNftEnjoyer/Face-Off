@@ -3702,6 +3702,14 @@
      "igl": false,
      "role": "",
      "joined": "2026-10-07"
+    },
+    {
+     "id": "miwo",
+     "name": "Miro Marjanovic",
+     "flag": "me",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-08"
     }
    ],
    "icon": "SemperFI Esports allmode.png",
@@ -4547,6 +4555,14 @@
      "joined": "2026-06-15"
     },
     {
+     "id": "bexyz",
+     "name": "Davaajargal Bayarjargal",
+     "flag": "mn",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-01"
+    },
+    {
      "id": "carnage",
      "name": "Badral Purevkhuu",
      "flag": "mn",
@@ -4958,6 +4974,7 @@
   "lb": "data/raw/liquipedia_media/a26f94be28d5bf66.png",
   "lt": "data/raw/liquipedia_media/2a827613f5c6ee25.png",
   "lv": "data/raw/liquipedia_media/9f1e116658bdc766.png",
+  "me": "data/raw/liquipedia_media/d0e7740018d0a9ee.png",
   "mk": "data/raw/liquipedia_media/13ae0c3dac7b787d.png",
   "mn": "data/raw/liquipedia_media/f6adabf7fa00948d.png",
   "mx": "data/raw/liquipedia_media/55db0afe38c4ca67.png",

@@ -273,10 +273,10 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
   border-radius: var(--r); overflow: hidden; background: var(--raise) center / cover no-repeat;
   display: flex; align-items: flex-end; padding: .5rem .6rem;
   border: 1px solid var(--line);
-  transition: transform .15s ease;
 }
 .maptile::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, var(--scrim)); }
-.maptile:hover { transform: translateY(-2px); }
+/* no movement on hover: a transformed tile can be re-rasterised and look like a different photo for a moment */
+.maptile:hover { border-color: var(--dim); }
 .maptile span { position: relative; font-size: var(--s1); }
 .maptile small { position: relative; display: block; font-size: .7rem; color: var(--dim); font-stretch: 100%; text-transform: none; font-weight: 400; }
 
@@ -294,7 +294,7 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 
 .mrow {
   display: grid;
-  grid-template-columns: 4.2rem minmax(0, 1fr) 5.2rem minmax(0, 1fr) auto;
+  grid-template-columns: 4.2rem minmax(0, 1fr) minmax(6rem, 10rem) minmax(0, 1fr) auto;
   align-items: center; gap: .75rem;
   padding: .65rem .75rem;
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
@@ -310,6 +310,11 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 .mrow .tm::before { content: none; }
 .mrow .mid { text-align: center; font-size: var(--s2); }
 .mrow .mid.pct { font-size: var(--s-1); font-stretch: 100%; font-weight: 600; text-transform: none; color: var(--dim); }
+.mrow .mid.pick { display: grid; justify-items: center; gap: .1rem; font-size: var(--s-1); line-height: 1.2; min-width: 0; }
+.mrow .mid.pick .pk { display: flex; align-items: center; gap: .35rem; min-width: 0; max-width: 100%; }
+.mrow .mid.pick .pk b { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mrow .mid.pick .pp { color: var(--acc); font-weight: 800; }
+.mrow .mid.pick .logo.xs, .mrow .mid.pick .logo-ph { width: 1.1rem; height: 1.1rem; }
 .mrow .tag { display: grid; justify-items: end; gap: .15rem; font-size: .72rem; color: var(--dim); white-space: nowrap; }
 .mlist { display: grid; gap: .45rem; }
 
@@ -978,7 +983,7 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
   display: grid; grid-template-rows: auto 1fr; text-align: left; cursor: pointer;
   background: var(--raise) center / cover no-repeat; border: 1px solid var(--line2); border-radius: 9px;
 }
-.tm::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 11, 13, .1), rgba(5, 11, 13, .55) 38%, rgba(5, 11, 13, .95) 70%); transition: background .2s; }
+.tm::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 11, 13, .1), rgba(5, 11, 13, .55) 38%, rgba(5, 11, 13, .95) 70%); }
 .tm > * { position: relative; }
 .tm .tn { font-weight: 800; font-size: .72rem; color: rgba(228, 238, 236, .75); }
 .tm .tbody { align-self: end; display: grid; gap: .2rem; min-width: 0; }
@@ -1850,7 +1855,7 @@ function court(pred, a, b, o, bo) {
   // the controls sit centred under the bar, inside the court
   const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
   const ctl = `<div class="cctl"><span class="small dim">Format</span>${fmt}
-    ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}` : ""}
+    ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>` : ""}
     ${o.live ? `<span class="chip live">Live</span>` : ""}${o.verdict || ""}</div>`;
   const bar = pred ? `<div class="cbar">
       <div class="bar" role="img" title="The striped part is the range the model thinks the real chance falls in; a wider stripe means it's less sure. The white line is each team's estimated win percentage." aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
@@ -2037,7 +2042,10 @@ function openChooser(side) {
   const q = $("#dSearch"); q.value = "";
   $("#dGrid").innerHTML = builderTiles();
   if (d.showModal) d.showModal(); else d.setAttribute("open", "");
-  q.focus();
+  // type-to-filter straight away with a mouse; on touch screens don't pop the
+  // keyboard up over the logos (tap the filter box to search)
+  if (matchMedia("(pointer: fine)").matches) q.focus();
+  else { const t = $("#tDlgT"); t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
 }
 function closeChooser() {
   const d = $("#tDlg");
@@ -2325,8 +2333,10 @@ function matchRow(m) {
   let mid, tag = "";
   if (m.finished || live) mid = `<div class="mid cond"><span class="${m.w1 > m.w2 ? "ct" : ""}">${m.w1}</span> : <span class="${m.w2 > m.w1 ? "t" : ""}">${m.w2}</span></div>`;
   else if (pred) {
-    const [ap, bp] = displayPercent([pred.p, 1 - pred.p]);
-    mid = `<div class="mid pct" title="Model's pre-match call">${ap}% / ${bp}%</div>`;
+    // the model's pick for the format actually played, not both percentages
+    const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p, pickA = p >= .5, pick = pickA ? a : b;
+    const pp = displayPercent([p, 1 - p])[pickA ? 0 : 1];
+    mid = `<div class="mid pick" title="${esc(`Model's pre-match pick: ${pick} at ${pp}%`)}"><span class="small dim">Model pick</span><span class="pk">${logo(pick, "xs")}<b>${esc(pick)}</b></span><span class="pp">${pp}%</span></div>`;
   }
   else mid = `<div class="mid pct">vs</div>`;
   if (live) tag = `<span class="chip live">Live</span>`;

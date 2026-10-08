@@ -12,7 +12,9 @@ import gzip
 import hashlib
 import json
 import os
+import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -29,6 +31,13 @@ FRESH_TITLES = set()
 FRESH_ALL = False          # set True to refresh every request made this run (prefix listings)
 RUN_STARTED = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 NETWORK_REQUESTS = [0]     # requests actually sent this process (cache hits excluded)
+# Liquipedia limits requests per IP address, and GitHub's shared runners can be
+# refused (HTTP 429) on their first request. Retry after these pauses (seconds,
+# or longer if the server's Retry-After asks for it); if it still refuses, use the
+# cached copy and stay on the cache for the rest of the run.
+RETRY_BACKOFF = [30, 90, 180]
+MAX_RETRY_AFTER = 300
+_THROTTLED = [False]
 
 
 def _key(params):
@@ -52,15 +61,46 @@ def query(params, offline=False, refresh=False):
             return cached["response"]
     if offline:
         return None
-    wait = MIN_GAP - (time.time() - _last[0])
-    if wait > 0:
-        time.sleep(wait)
+    have_cache = os.path.exists(path)
+    if _THROTTLED[0] and have_cache:
+        return cached["response"]      # Liquipedia asked us to back off this run: don't push it
     req = urllib.request.Request(API + "?" + qs, headers={
         "User-Agent": UA, "Accept-Encoding": "gzip"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        raw = r.read()
-        if r.headers.get("Content-Encoding") == "gzip":
-            raw = gzip.decompress(raw)
+    raw = None
+    for attempt, backoff in enumerate(RETRY_BACKOFF + [None]):
+        wait = MIN_GAP - (time.time() - _last[0])
+        if wait > 0:
+            time.sleep(wait)
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                raw = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    raw = gzip.decompress(raw)
+            break
+        except urllib.error.HTTPError as e:
+            # 429 Too Many Requests / temporary server errors: wait as long as the
+            # server asks (Retry-After), else back off, then try again
+            _last[0] = time.time()
+            if e.code not in (429, 500, 502, 503, 504) or backoff is None:
+                if have_cache and e.code in (429, 500, 502, 503, 504):
+                    _THROTTLED[0] = True
+                    print(f"lpfetch: Liquipedia answered {e.code} after {attempt + 1} tries; "
+                          f"using the cached copy and the cache for the rest of this run", file=sys.stderr)
+                    return cached["response"]
+                raise
+            try:
+                pause = min(MAX_RETRY_AFTER, max(backoff, int(e.headers.get("Retry-After", "0"))))
+            except ValueError:
+                pause = backoff
+            print(f"lpfetch: Liquipedia answered {e.code}; waiting {pause}s before retry {attempt + 1}", file=sys.stderr)
+            time.sleep(pause)
+        except urllib.error.URLError:
+            _last[0] = time.time()
+            if backoff is None:
+                if have_cache:
+                    return cached["response"]
+                raise
+            time.sleep(backoff)
     _last[0] = time.time()
     resp = json.loads(raw.decode("utf-8"))
     rec = {"url": API + "?" + qs,
