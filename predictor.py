@@ -48,6 +48,7 @@ INPUT JSON SCHEMA (every key optional; defaults in brackets):
     h2h                       {"a_wins", "b_wins", "meetings"}    [no meetings]
                               (sample = a_wins + b_wins; "meetings" is ignored)
     maps_a, maps_b            {map: [win_rate_90d, maps_played]}  [map absent = no data]
+    maps_raw_a, maps_raw_b    same shape, plain win rates; used for map_depth   [maps_a / maps_b]
     map_pool                  list of map names                   [CONFIG["map_pool"]]
     permaban_a, permaban_b    map always banned first             [None]
     roster_a, roster_b        {"standin": bool, "missing_igl": bool}  [{}]
@@ -111,10 +112,34 @@ CONFIG = {
     # (map_shape, below) and are shifted together so the series probability
     # stays equal to p_a.
 
+    "w_depth": 0.0,
+    # Map-pool depth (number of active-pool maps played >= 3 times in 90 days
+    # and won >= 50%), difference A - B: SHOWN, NOT COUNTED. Pre-registered
+    # walk-forward test (scripts/map_depth_check.py, 1,260 held-out BO3s,
+    # logistic on the engine's log-odds + depth gap): log loss +0.0004, 95% CI
+    # [-0.0018, +0.0025]; the Elo-residual, breadth, veto-map and existing
+    # map_veto versions were also within noise. Fitted coefficient ~0.04
+    # log-odds per map (positive in every fold), i.e. strength already
+    # carries what map depth says.
+    "depth_min_maps": 3,
+    "depth_min_rate": 0.5,
+
     # --- signal scaling and caps ---
     "signal_cap": 2.0,
     # Every standardized signal (base, form30, form5, h2h, veto) is clamped to
     # [-2, +2] before weighting. This is what makes the header claim true.
+    "base_cap": 2.0,
+    # Cap on the base-strength signal alone (rating gap / rating_scale), in
+    # the same units as signal_cap: 2.0 = a 200-Elo gap, beyond which every
+    # gap gets the same ~1.59 log-odds. Kept at 2.0. Pre-registered test
+    # (scripts/mismatch_check.py, walk-forward, 1,260 held-out BO3s): caps
+    # {2,3,4,8} x shrink variants x newcomer Elo, with a temperature, picked
+    # per fold on training log loss -> OOF log loss 0.6174 vs 0.6173 shipped
+    # (CI [-0.005, +0.005]); it failed the "lower log loss" criterion, so
+    # nothing ships. Calibration by Elo gap (held-out): 250-300 Elo actual
+    # 89% (n=55) vs 81% stated, 300+ actual 85% (n=73) vs 82% stated, but
+    # 100-150 Elo actual 65% (n=216) vs 72% stated: the engine is too steep
+    # in the middle and flat at the top, and the two cancel in log loss.
     "rating_scale": 0.05,
     # A 0.05 HLTV-rating gap ~= one standardized unit of skill difference.
     "form30_scale": 0.15,
@@ -464,6 +489,20 @@ def _team_maps(raw, pool):
     return rel, shr, overall
 
 
+def map_depth(raw, pool):
+    """Number of pool maps a team played >= depth_min_maps times with a win
+    rate >= depth_min_rate. `raw` is {map: [win_rate, maps_played]}."""
+    raw = raw if isinstance(raw, dict) else {}
+    out = 0
+    for mp in pool:
+        e = raw.get(mp)
+        if isinstance(e, (list, tuple)) and len(e) >= 2:
+            if (_count(e[1]) >= CONFIG["depth_min_maps"]
+                    and _num(e[0], 0.0, 0.0, 1.0) >= CONFIG["depth_min_rate"]):
+                out += 1
+    return out
+
+
 def _pool(m):
     pool = m.get("map_pool")
     if (not isinstance(pool, (list, tuple))
@@ -594,7 +633,8 @@ def _compute(m):
     ra = _num(m.get("rating_a", 1.0), 1.0, -RATING_BOUND, RATING_BOUND)
     rb = _num(m.get("rating_b", 1.0), 1.0, -RATING_BOUND, RATING_BOUND)
     rd = ra - rb
-    sig = _cap(rd / CONFIG["rating_scale"])
+    bcap = _num(CONFIG.get("base_cap", CONFIG["signal_cap"]), CONFIG["signal_cap"], 0.0)
+    sig = _clamp(rd / CONFIG["rating_scale"], -bcap, bcap)
     d_base = CONFIG["w_base"] * sig
     if _has(m, "rating_a") and _has(m, "rating_b"):
         noise = CONFIG["w_base"] * CONFIG["rating_noise_sd"] * math.sqrt(2) / CONFIG["rating_scale"]
@@ -614,7 +654,7 @@ def _compute(m):
     # clamp as a rating-independent offset (itself clamped to the same range),
     # so it can never move the saturation point. Without opp_rating30_* we
     # cannot adjust (documented limitation).
-    cap_rd = CONFIG["signal_cap"] * CONFIG["rating_scale"]
+    cap_rd = bcap * CONFIG["rating_scale"]
     opp_note = ""
     eff_rd = _clamp(rd, -cap_rd, cap_rd)
     if _has(m, "opp_rating30_a") and _has(m, "opp_rating30_b"):
@@ -733,6 +773,19 @@ def _compute(m):
     note = ("; ".join(rnotes) if rnotes else "both full strength") + " (odds multiplier)"
     factors.append(["roster", d, (CONFIG["roster_cv"] * d) ** 2,
                     1.0 if rnotes else 0.0, note])
+
+    # 8. map-pool depth -- shown as evidence, weight 0 (no held-out signal
+    #    beyond strength, scripts/map_depth_check.py). Zero delta and zero
+    #    variance, so it never moves p_a, the band or the shrink.
+    pool = _pool(m)
+    da = map_depth(m.get("maps_raw_a", m.get("maps_a")), pool)
+    db = map_depth(m.get("maps_raw_b", m.get("maps_b")), pool)
+    d = CONFIG["w_depth"] * _cap((da - db) / 2.0) + 0.0   # + 0.0: no "-0.0" at weight 0
+    note = (f"{da} vs {db} strong maps of {len(pool)} (played >= {CONFIG['depth_min_maps']} times, "
+            f"won >= {CONFIG['depth_min_rate']:.0%}, last 90 days)"
+            + ("; not counted: no held-out effect beyond strength" if CONFIG["w_depth"] == 0 else ""))
+    factors.append(["map_depth", d, (CONFIG["weight_cv"] * d) ** 2,
+                    1.0 if (da or db) else 0.0, note])
 
     # --- combine ---
     raw = sum(f[1] for f in factors)

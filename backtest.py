@@ -24,7 +24,8 @@ FEATURES (all point-in-time, see FEATURE DOC in data/backtest_report.md)
   rating        proxy: series-level Elo (init 1500, K=32, BO-weighted K) mapped
                 linearly: rating = 1.0 + (elo - 1500) / ELO_PER_RATING (2000).
                 ~150 Elo between a top-5 and a mid team => ~0.075 rating gap.
-                NOT a real HLTV rating.
+                NOT a real HLTV rating. Teams entering the data more than 90
+                days after its start begin at 1500 - NEWCOMER_OFFSET (150).
   form30/n30    series win rate / count in the 30 days before D (absent -> key omitted)
   opp_rating30  mean proxy rating of opponents faced in those 30 days
   form5         series win rate over the last 5 series (any date < D)
@@ -63,6 +64,34 @@ ELO_K_BY_BO = {1: 0.75, 3: 1.0, 5: 1.25}   # BO1 results are noisier -> smaller 
 # tier missing from this table, or a match with no tier, counts in full.
 ELO_K_BY_TIER = {"S": 1.0, "A": 1.0}
 ELO_PER_RATING = 2000.0                     # rating = 1 + (elo-1500)/2000
+# Newcomers: a team whose first S/A series comes more than NEWCOMER_AFTER_DAYS
+# after the first series in the data starts at ELO_INIT - NEWCOMER_OFFSET
+# (S/A newcomers mostly arrive from lower tiers; every team present at the
+# start of the data still starts at ELO_INIT, so the offset is relative to the
+# established field). Its first PROVISIONAL_N series move its Elo with
+# K x PROVISIONAL_K_MULT (its opponent moves by the normal step).
+# Evidence (scripts/newcomer_check.py, pre-registered, walk-forward over
+# 91-day blocks, offset picked per fold on earlier newcomer rows): on 158
+# held-out BO3 series where a team had < 5 prior S/A series, log loss 0.6837
+# -> 0.6400 (paired 95% CI of the difference [-0.074, -0.016]), Brier 0.2451
+# -> 0.2246, accuracy 55.7% -> 60.8%; graded rows (both teams >= 5 series,
+# n=1260) log loss 0.6173 -> 0.6170 (CI [-0.005, +0.004]). Before it,
+# established teams beat newcomers far more often than Elo said (65% when
+# the established side was rated below 1500; Elo said 44%). 150 is the value
+# the walk-forward picked in 7 of 8 folds (the all-rows best, 200, costs the
+# graded rows more in-sample: 0.6305 vs 0.6279). The provisional-K variant
+# (x2 for the first 10 series) hurt graded rows and is off.
+NEWCOMER_OFFSET = 150.0
+NEWCOMER_AFTER_DAYS = 90
+# "start": the offset is the team's starting Elo (it then feeds every Elo
+# update). "feature": the Elo table is untouched; only the rating fed to the
+# engine for a late-entering team is lowered, by the offset x (MIN_HISTORY -
+# prior series) / MIN_HISTORY, fading to 0 at MIN_HISTORY series. Series
+# where both teams have >= MIN_HISTORY prior series are then unchanged.
+NEWCOMER_MODE = "start"
+NEWCOMER_FEATURE_OFFSET = 0.0
+PROVISIONAL_N = 0
+PROVISIONAL_K_MULT = 1.0
 MIN_HISTORY = 5
 VOL_WINDOW = 10
 VOL_SCALE = 2.5
@@ -292,17 +321,59 @@ def actual_scoreline(m):
     return f"{a}-{b}"
 
 
+class _EloTable(dict):
+    """Elo by team; an unseen team reads its starting value (not stored)."""
+
+    def __init__(self, hist):
+        super().__init__()
+        self.hist = hist
+
+    def __missing__(self, team):
+        return self.hist.start_elo()
+
+
 class History:
     """State built ONLY from series already folded in (all dated < current day)."""
 
     def __init__(self):
-        self.elo = defaultdict(lambda: ELO_INIT)
+        self.elo = _EloTable(self)
+        self.first_day = None            # date of the first series folded in
+        self.clock = None                # date of the series being built / folded
         self.games = defaultdict(list)   # team -> [rec]
         self.map_last = {}               # map -> last date played
         self.map_dates = defaultdict(list)
 
+    def start_elo(self):
+        """Starting Elo of a team not seen yet, at self.clock."""
+        if (NEWCOMER_OFFSET and NEWCOMER_MODE == "start" and self.first_day is not None and self.clock is not None
+                and (self.clock - self.first_day).days > NEWCOMER_AFTER_DAYS):
+            return ELO_INIT - NEWCOMER_OFFSET
+        return ELO_INIT
+
+    def is_late_entrant(self, team):
+        """True if the team's first series (or, unseen, the current clock) is
+        more than NEWCOMER_AFTER_DAYS after the first series in the data."""
+        if self.first_day is None:
+            return False
+        g = self.games[team]
+        d = g[0]["date"] if g else self.clock
+        return d is not None and (d - self.first_day).days > NEWCOMER_AFTER_DAYS
+
+    def feature_elo(self, team):
+        """Elo fed to the engine: the table value, minus the fading newcomer
+        offset in "feature" mode (see NEWCOMER_MODE)."""
+        e = self.elo[team]
+        if NEWCOMER_MODE == "feature" and NEWCOMER_FEATURE_OFFSET:
+            n = len(self.games[team])
+            if n < MIN_HISTORY and self.is_late_entrant(team):
+                e -= NEWCOMER_FEATURE_OFFSET * (MIN_HISTORY - n) / MIN_HISTORY
+        return e
+
     def add(self, m):
         a, b = m["team_a"], m["team_b"]
+        self.clock = _d(m["date"])
+        if self.first_day is None:
+            self.first_day = self.clock
         ea, eb = self.elo[a], self.elo[b]
         exp_a = elo_expected(ea, eb)
         a_won = m["winner"] == a
@@ -313,8 +384,15 @@ class History:
                                   "maps": [(x["map"], x["winner"] == t,
                                             map_prob_from_series(exp, m.get("best_of", 3)))
                                            for x in m.get("maps", [])]})
-        self.elo[a], self.elo[b] = elo_update(ea, eb, a_won, m.get("best_of", 3),
-                                              k=ELO_K * ELO_K_BY_TIER.get(m.get("tier"), 1.0))
+        k = ELO_K * ELO_K_BY_TIER.get(m.get("tier"), 1.0)
+        na, nb = elo_update(ea, eb, a_won, m.get("best_of", 3), k=k)
+        if PROVISIONAL_N and PROVISIONAL_K_MULT != 1.0:
+            # games[t] already holds this series, so len - 1 = series before it
+            if len(self.games[a]) - 1 < PROVISIONAL_N:
+                na = ea + (na - ea) * PROVISIONAL_K_MULT
+            if len(self.games[b]) - 1 < PROVISIONAL_N:
+                nb = eb + (nb - eb) * PROVISIONAL_K_MULT
+        self.elo[a], self.elo[b] = na, nb
         for x in m.get("maps", []):
             self.map_dates[x["map"]].append(dt)
 
@@ -374,12 +452,15 @@ class History:
     def features(self, m):
         a, b = m["team_a"], m["team_b"]
         dt = _d(m["date"])
+        self.clock = dt
         fa, fb = self.team_feats(a, dt), self.team_feats(b, dt)
+        ea, eb = self.feature_elo(a), self.feature_elo(b)
         inp = {"team_a": a, "team_b": b,
-               "rating_a": round(elo_to_rating(self.elo[a]), 5),
-               "rating_b": round(elo_to_rating(self.elo[b]), 5),
+               "rating_a": round(elo_to_rating(ea), 5),
+               "rating_b": round(elo_to_rating(eb), 5),
                "h2h": self.h2h(a, b, dt),
                "maps_a": fa["maps"], "maps_b": fb["maps"],
+               "maps_raw_a": fa["maps_raw"], "maps_raw_b": fb["maps_raw"],
                "map_pool": self.map_pool(dt),
                "permaban_a": None, "permaban_b": None,
                "roster_a": roster_flags(a, event_title(m)),
@@ -390,8 +471,8 @@ class History:
             for k in ("form30", "n30", "opp_rating30", "form5"):
                 if k in f:
                     inp[f"{k}_{side}"] = round(f[k], 5) if isinstance(f[k], float) else f[k]
-        meta = {"elo_a": self.elo[a], "elo_b": self.elo[b],
-                "p_elo": elo_expected(self.elo[a], self.elo[b]),
+        meta = {"elo_a": ea, "elo_b": eb,
+                "p_elo": elo_expected(ea, eb),
                 "hist_a": self.n_prior(a), "hist_b": self.n_prior(b)}
         return inp, meta
 

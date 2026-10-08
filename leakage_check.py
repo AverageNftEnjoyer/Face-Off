@@ -27,6 +27,11 @@ Exit code 0 = no leakage found, 1 = leakage (offending fields are printed).
      features computed with day D's own lineups visible must change on at
      least one sampled day.
 
+  Tests 1-2 also cover the plain 90-day map rates (input maps_raw_a/_b, used
+  for the map_depth row) and the newcomer Elo offset (backtest.NEWCOMER_*),
+  whose only inputs are the match date and the date of the first series in
+  the data. Test 5 (below) checks the offset with it switched on explicitly.
+
 NOT COVERED, AND WHY IT CANNOT BE:
   data/roster_events.json is a present-day scrape of Liquipedia stand-in
   tables keyed by TOURNAMENT, with no date per stand-in. There is nothing
@@ -193,6 +198,28 @@ def main(argv=None):
     canary_ok = canary_ok and (lineup_days == 0 or lineup_caught > 0)
     print(f"lineups: {lineup_days} days with lineup data tested, {len(lineup_fail)} leaks; "
           f"lineup canary caught on {lineup_caught} days")
+
+    # 5. newcomer Elo offset, both modes switched on explicitly (scramble + truncate)
+    saved = (bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET)
+    nc_fail, nc_moved = [], True
+    keyed = lambda rows: {(r["match"]["date"], r["match"]["id"]): (r["input"], r["meta"]) for r in rows}
+    try:
+        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = 0.0, "start", 0.0
+        off = keyed(bt.build_dataset(matches))
+        for setting in ((150.0, "start", 0.0), (0.0, "feature", 150.0)):
+            bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = setting
+            on = keyed(bt.build_dataset(matches))
+            # teeth: the setting must change at least one rating vs no offset
+            nc_moved &= any(on[k][0]["rating_a"] != off[k][0]["rating_a"] for k in on)
+            for day in test_days[::4]:
+                nc_fail += check_day(on, bt.build_dataset(scramble_from(matches, day)), day)
+                nc_fail += check_day(on, bt.build_dataset([m for m in matches if m["date"] <= day]), day)
+    finally:
+        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = saved
+    failures += nc_fail
+    print(f"newcomer offset (start 150 / feature 150): {len(nc_fail)} leaks on {len(test_days[::4])} days; "
+          f"offset changes features: {'yes' if nc_moved else 'NO (check is blind)'}")
+    canary_ok = canary_ok and nc_moved
 
     print(f"scramble + truncate: {len(failures)} differing fields")
     for f in failures[:30]:

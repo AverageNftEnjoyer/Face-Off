@@ -45,7 +45,11 @@ import team_colors as TC  # noqa: E402
 
 N_RECENT_CALLS = 20
 N_TEAM_RESULTS = 10
-FACTORS = ["base_strength", "form_30d", "form_last5", "head_to_head", "map_veto", "roster", "stakes"]
+# Rows of the "What moves the number" panel, in order. "stakes" is not shown:
+# no source has stakes data, so it is always "none". "map_depth" (shown, not
+# counted; see predictor.py w_depth) takes its place.
+FACTORS = ["base_strength", "form_30d", "form_last5", "head_to_head", "map_veto", "roster", "map_depth"]
+ROSTER_CODE = {(False, False): 0, (True, False): 1, (False, True): 2, (True, True): 3}
 
 
 IMG_DIR = "img"                   # beside the output html
@@ -250,11 +254,40 @@ class Timeline:
         return self.h
 
 
+def evidence(h, inp, day):
+    """The raw facts behind each factor row, as small integers (the page
+    writes the words). Same point-in-time state as the prediction:
+      [Elo gap A-B,
+       30-day wins, losses, Elo-expected wins x10 for A, then for B,
+       last-5 wins, losses for A, then for B,
+       head-to-head wins A, B (365 days),
+       strong maps A, B (predictor.map_depth), maps in the pool,
+       roster code A * 4 + B (0 none, 1 stand-in, 2 missing IGL, 3 both)]"""
+    lo = day - timedelta(days=30)
+    out = [round((inp["rating_a"] - inp["rating_b"]) * bt.ELO_PER_RATING)]
+    for t in (inp["team_a"], inp["team_b"]):
+        g = [r for r in h.games[t] if lo <= r["date"] < day]
+        w = sum(1 for r in g if r["won"])
+        out += [w, len(g) - w, round(10 * sum(r["exp"] for r in g))]
+    for t in (inp["team_a"], inp["team_b"]):
+        g = h.games[t][-5:]
+        w = sum(1 for r in g if r["won"])
+        out += [w, len(g) - w]
+    out += [inp["h2h"]["a_wins"], inp["h2h"]["b_wins"]]
+    pool = pr._pool(inp)
+    out += [pr.map_depth(inp.get("maps_raw_a"), pool), pr.map_depth(inp.get("maps_raw_b"), pool), len(pool)]
+    rc = [ROSTER_CODE[(bool(r.get("standin")), bool(r.get("missing_igl")))]
+          for r in (inp.get("roster_a") or {}, inp.get("roster_b") or {})]
+    out.append(rc[0] * 4 + rc[1])
+    return out
+
+
 def predict(h, a, b, day, title=None, bo=3, elo=False):
     """Engine call with point-in-time features; `title` (the tournament page)
     lets the feature builder attach stand-in / missing-IGL flags."""
     inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
     out = compact(pr.predict_match(inp), bo)
+    out["fx"] = evidence(h, inp, day)
     if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
         out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
     return out

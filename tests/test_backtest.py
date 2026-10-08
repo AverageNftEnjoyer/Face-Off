@@ -245,5 +245,49 @@ class TestRealDataSmoke(unittest.TestCase):
             self.assertTrue(0 <= r["p_a"] <= 1)
 
 
+class TestNewcomerElo(unittest.TestCase):
+    """SYNTHETIC fixtures only."""
+
+    def setUp(self):
+        self.saved = (bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET)
+
+    def tearDown(self):
+        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = self.saved
+
+    def season(self):
+        ms = [synth("2025-01-01", "Alpha", "Bravo", "Alpha", i=0),
+              synth("2025-06-01", "Alpha", "Late", "Alpha", i=1)]
+        return ms
+
+    def test_early_teams_start_at_init_late_teams_below(self):
+        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE = 150.0, "start"
+        rows = {r["match"]["id"]: r for r in bt.build_dataset(self.season())}
+        self.assertEqual(rows[0]["meta"]["elo_a"], bt.ELO_INIT)
+        self.assertEqual(rows[0]["meta"]["elo_b"], bt.ELO_INIT)
+        self.assertEqual(rows[1]["meta"]["elo_b"], bt.ELO_INIT - 150.0)
+
+    def test_offset_zero_is_plain_elo(self):
+        bt.NEWCOMER_OFFSET = 0.0
+        rows = {r["match"]["id"]: r for r in bt.build_dataset(self.season())}
+        self.assertEqual(rows[1]["meta"]["elo_b"], bt.ELO_INIT)
+
+    def test_feature_mode_leaves_elo_table_alone(self):
+        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = 0.0, "feature", 100.0
+        h = bt.History()
+        for m in self.season():
+            h.add(m)
+        self.assertEqual(h.n_prior("Late"), 1)
+        # table value is plain Elo; the feature is lowered by 100 x (5 - 1) / 5
+        self.assertAlmostEqual(h.feature_elo("Late"), h.elo["Late"] - 80.0)
+        self.assertEqual(h.feature_elo("Bravo"), h.elo["Bravo"])   # early team: no offset
+
+    def test_raw_map_rates_in_input(self):
+        rows = bt.build_dataset(synthetic_season())
+        last = rows[-1]["input"]
+        self.assertIn("maps_raw_a", last)
+        for mp, (wr, n) in last["maps_raw_a"].items():
+            self.assertTrue(0.0 <= wr <= 1.0 and n >= 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -699,6 +699,53 @@ class TestVetoFormats(unittest.TestCase):
                                                  "maps", "veto_log"])
 
 
+class TestMapDepthAndBaseCap(unittest.TestCase):
+    POOL = ["Dust2", "Mirage", "Inferno", "Nuke", "Ancient", "Anubis", "Train"]
+
+    def test_map_depth_counts(self):
+        raw = {"Dust2": [0.6, 5], "Mirage": [0.5, 3], "Nuke": [0.8, 2], "Ancient": [0.4, 9],
+               "Cache": [0.9, 9]}   # Nuke: too few maps; Ancient: below 50%; Cache: not in pool
+        self.assertEqual(predictor.map_depth(raw, self.POOL), 2)
+        self.assertEqual(predictor.map_depth(None, self.POOL), 0)
+        self.assertEqual(predictor.map_depth({"Dust2": ["junk", 5]}, self.POOL), 0)
+
+    def test_map_depth_shown_not_counted(self):
+        deep = {mp: [0.7, 6] for mp in self.POOL}
+        m1 = base_match(map_pool=self.POOL, maps_raw_a=deep, maps_raw_b={})
+        m2 = base_match(map_pool=self.POOL)
+        r1, r2 = predict_match(m1), predict_match(m2)
+        f = factor(r1, "map_depth")
+        self.assertEqual(f["delta_logodds"], 0.0)
+        self.assertEqual(f["marginal_pp"], 0.0)
+        self.assertIn("7 vs 0 strong maps", f["note"])
+        self.assertEqual(r1["p_a_exact"], r2["p_a_exact"])
+        self.assertEqual(r1["confidence_interval"], r2["confidence_interval"])
+
+    def test_base_cap_default_is_signal_cap(self):
+        self.assertEqual(CONFIG["base_cap"], CONFIG["signal_cap"])
+        r = predict_match(base_match(rating_a=1.30, rating_b=1.00))
+        self.assertAlmostEqual(factor(r, "base_strength")["delta_logodds"],
+                               round(CONFIG["w_base"] * CONFIG["signal_cap"], 3), places=3)
+
+    def test_base_cap_raises_ceiling_monotonically(self):
+        saved = CONFIG["base_cap"]
+        try:
+            ps = []
+            for cap in (2.0, 3.0, 4.0):
+                CONFIG["base_cap"] = cap
+                ps.append(predict_match(base_match(rating_a=1.25, rating_b=1.00))["p_a_exact"])
+            self.assertLess(ps[0], ps[1])
+            self.assertLess(ps[1], ps[2])
+            # below the cap nothing changes
+            CONFIG["base_cap"] = 2.0
+            a = predict_match(base_match(rating_a=1.05, rating_b=1.00))["p_a_exact"]
+            CONFIG["base_cap"] = 4.0
+            b = predict_match(base_match(rating_a=1.05, rating_b=1.00))["p_a_exact"]
+            self.assertAlmostEqual(a, b, places=12)
+        finally:
+            CONFIG["base_cap"] = saved
+
+
 class TestRandomizedMonotonicity(unittest.TestCase):
     """p_a must be non-decreasing in A's rating, 30d form and last-5 form for
     every input, including opp-rating adjustment and fractional sample sizes."""

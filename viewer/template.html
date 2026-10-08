@@ -1423,6 +1423,7 @@ const ICON = {
   map_veto: svgI(`<path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5l-5.5 2.5-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20"/>`),
   roster: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
   stakes: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
+  map_depth: svgI(`<path d="M12 3.5l8.5 4.5-8.5 4.5-8.5-4.5zM3.5 12l8.5 4.5 8.5-4.5M3.5 16l8.5 4.5 8.5-4.5"/>`),
 };
 // Largest remainder, same rule as predictor.display_percent: `places` decimals
 // on the percentage, and the returned strings sum to exactly 100.00.
@@ -1479,6 +1480,7 @@ const LABELS = {
   map_veto: ["Map pool", "Edge on the simulated veto maps"],
   roster: ["Roster", "Stand-ins and missing IGL"],
   stakes: ["Stakes", "Elimination or qualification"],
+  map_depth: ["Map pool depth", "Maps played 3+ times and won 50%+, last 90 days"],
 };
 const REL = { H: "Clear read", M: "Fairly clear read", L: "Close or uncertain read" };
 
@@ -1532,7 +1534,7 @@ function decode(c) {
     score5: c.s5 ? { p_3_0: c.s5[0], p_3_1: c.s5[1], p_3_2: c.s5[2], p_2_3: c.s5[3], p_1_3: c.s5[4], p_0_3: c.s5[5] } : null,
     maps: c.vm, map_p: c.vp, warn: c.w,
     veto: c.v.map(x => x[0] === "D" ? { verb: "decider", map: x.slice(1) } : { side: x[0], verb: x[1] === "-" ? "bans" : "picks", map: x.slice(2) }),
-    factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })),
+    factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })), fx: c.fx || null,
     pf: c.pf || null, bf: c.bf || null,
     ...vetoFmt(c.v1, [c.pf ? c.pf[0] : c.p], 1), ...vetoFmt(c.v5, c.p5, 5),
   };
@@ -1672,17 +1674,52 @@ function vetoView(pred, a, b) {
     <div class="maps" style="grid-template-columns:repeat(auto-fit,minmax(8rem,1fr))">${steps.filter(([s]) => s.verb === "bans").map(([s, i]) => card(s, i)).join("")}</div>`;
 }
 
+// One factor row's evidence from the build's fx array (see evidence() in
+// viewer/build_viewer.py for the layout). Team A is listed first.
+const ROSTER_TXT = ["", "stand-in", "missing IGL", "stand-in for the IGL"];
+function factFor(k, x, a, b) {
+  const rec = (w, l) => `${w}-${l}`;
+  if (k === "base_strength") {
+    const g = x[0];
+    return { kind: "data", text: g === 0 ? "Even Elo" : `${g > 0 ? a : b} +${Math.abs(g)} Elo${Math.abs(g) > 200 ? " (counted up to 200)" : ""}` };
+  }
+  if (k === "form_30d") {
+    const na = x[1] + x[2], nb = x[4] + x[5];
+    if (!na || !nb) return { kind: "nodata", text: `${!na && !nb ? "Neither team has" : (!na ? a : b) + " has"} no series in the last 30 days` };
+    return { kind: "data", text: `${rec(x[1], x[2])} vs ${rec(x[4], x[5])} in 30 days; Elo expected ${(x[3] / 10).toFixed(1)} vs ${(x[6] / 10).toFixed(1)} wins` };
+  }
+  if (k === "form_last5") {
+    if (!(x[7] + x[8]) || !(x[9] + x[10])) return { kind: "nodata", text: "Not enough series yet" };
+    return { kind: "data", text: `${rec(x[7], x[8])} vs ${rec(x[9], x[10])} in the last 5 series` };
+  }
+  if (k === "head_to_head") {
+    return x[11] + x[12] ? { kind: "data", text: `${rec(x[11], x[12])} in the past year` } : { kind: "nodata", text: "No meetings in the past year" };
+  }
+  if (k === "map_veto") return { kind: "info", text: "Map edges on the simulated veto; shown below, not counted (no tested effect)" };
+  if (k === "map_depth") return { kind: "info", text: `${x[13]} vs ${x[14]} strong maps of ${x[15]}; not counted (no tested effect beyond strength)` };
+  if (k === "roster") {
+    const ra = Math.floor(x[16] / 4), rb = x[16] % 4;
+    if (!ra && !rb) return { kind: "nodata", text: "No stand-ins listed" };
+    return { kind: "data", text: [ra && `${a}: ${ROSTER_TXT[ra]}`, rb && `${b}: ${ROSTER_TXT[rb]}`].filter(Boolean).join("; ") };
+  }
+  return { kind: "data", text: (LABELS[k] || ["", ""])[1] };
+}
+
 function factors(pred, a, b) {
   const fs = pred.factors;
   const mx = Math.max(4, ...fs.map(f => Math.abs(f.pp)));
   const rows = fs.map(f => {
     const [nm, sub] = LABELS[f.factor] || [f.factor, ""];
-    const pp = f.pp, off = Math.abs(pp) < 0.05;
-    return `<div class="frow${off ? " off" : ""}">
+    // ev: the raw facts behind the row (build_viewer.evidence); kind "info" =
+    // shown but not counted (no held-out effect), "nodata" = nothing to go on
+    const ev = pred.fx ? factFor(f.factor, pred.fx, a, b) : { text: sub, kind: "data" };
+    const pp = f.pp, flat = Math.abs(pp) < 0.05, off = flat || ev.kind !== "data";
+    const val = ev.kind === "info" ? "info" : ev.kind === "nodata" ? "no data" : flat ? "0.0" : "+" + Math.abs(pp).toFixed(1);
+    return `<div class="frow${off ? " off" : ""}" title="${esc(sub)}">
       <span class="fic">${ICON[f.factor] || ICON.overview}</span>
-      <div class="fl"><b>${esc(nm)}</b><span class="sub">${esc(sub)}</span></div>
+      <div class="fl"><b>${esc(nm)}</b><span class="sub">${esc(ev.text)}</span></div>
       <div class="dv" aria-hidden="true">${off ? "" : `<b class="${pp > 0 ? "pos" : "neg"}" style="width:${(Math.abs(pp) / mx * 50).toFixed(2)}%"></b>`}</div>
-      <div class="v ${off ? "" : pp > 0 ? "ct" : "t"}">${off ? "none" : "+" + Math.abs(pp).toFixed(1)}</div>
+      <div class="v ${off ? "" : pp > 0 ? "ct" : "t"}">${val}</div>
     </div>`;
   }).join("");
   const warns = pred.warn.map(w => {
