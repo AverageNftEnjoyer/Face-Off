@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FaceOff Analytics</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1518'/%3E%3Cg transform='translate(4.6 4.4) scale(.72)'%3E%3Cpath d='M10.5 3H31l-2.6 6.5H8z' fill='%23E4EEEC'/%3E%3Cpath d='M6.6 11.5h7.1L7.4 29H.3z' fill='%23E4EEEC'/%3E%3Cpath d='M14.6 13.5h11.6l-2.4 5.6H12.4z' fill='%232FD4A2'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,300..900;1,50..125,300..900&display=swap">
@@ -939,6 +940,11 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .court .legend .chip { background: rgba(4, 10, 12, .6); padding: .1rem .6rem; }
 .chip.rel::before { content: ""; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
 
+/* controls row inside the court, centred under the bar */
+.court .cctl { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem .75rem; margin-top: .35rem; }
+.court .cctl .btn { background: rgba(4, 10, 12, .55); }
+.court .cctl .btn:disabled { opacity: .45; cursor: default; }
+.court .cctl .chip { background: rgba(4, 10, 12, .6); }
 .cbelow { display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: .6rem 1rem; margin-top: -.35rem; }
 .cbelow .cb-l, .cbelow .cb-r { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
 .cbelow .btn:disabled { opacity: .45; cursor: default; }
@@ -1804,26 +1810,23 @@ function court(pred, a, b, o, bo) {
     </div>`;
   const fmt = `<div class="seg" role="group" aria-label="Series format">${[1, 3, 5].map(n =>
     `<button type="button" data-bo="${n}" aria-pressed="${n === bo}" ${o.fixedBo ? "disabled" : ""}>Bo${n}</button>`).join("")}</div>`;
+  // the controls sit centred under the bar, inside the court
+  const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
+  const ctl = `<div class="cctl"><span class="small dim">Format</span>${fmt}
+    ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}` : ""}
+    ${o.live ? `<span class="chip live">Live</span>` : ""}${o.verdict || ""}</div>`;
   const bar = pred ? `<div class="cbar">
-      <div class="bar" role="img" aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
+      <div class="bar" role="img" title="The striped part is the range the model thinks the real chance falls in; a wider stripe means it's less sure. The white line is each team's estimated win percentage." aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
         <div class="fill" data-w="${(F.p * 100).toFixed(2)}"></div>
         <div class="band" data-l="${(F.band[0] * 100).toFixed(2)}" data-bw="${((F.band[1] - F.band[0]) * 100).toFixed(2)}"
           style="left:50%;width:0;--split:${(F.band[1] > F.band[0] ? (F.p - F.band[0]) / (F.band[1] - F.band[0]) * 100 : 50).toFixed(2)}%"></div>
         <div class="mk" data-w="${(F.p * 100).toFixed(2)}"></div>
       </div>
-      <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure. The white line marks each team's estimated win percentage.</span>
-        <span class="chips">${o.live ? `<span class="chip live">Live</span>` : ""}<span class="chip rel ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span></span></div>
-    </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p></div>`;
+      ${ctl}
+    </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p>${ctl}</div>`;
   // each half's backdrop is a gradient in that team's own colour; the masks follow the slanted split
   const art = (cls) => `<div class="cbg ${cls}" aria-hidden="true"></div>`;
-  const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
-  // controls sit in their own row under the court, never on top of it
-  const below = `<div class="cbelow">
-    <div class="cb-l"><span class="small dim">Format</span>${fmt}
-    ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}` : ""}
-    ${o.verdict || ""}</div>
-  </div>`;
-  return `<section class="court">${art("a")}${art("b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
+  return `<section class="court">${art("a")}${art("b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>`;
 }
 
 // what the spotlight on screen shows, so a map click can redraw just the spotlight
@@ -2076,7 +2079,7 @@ function viewHome() {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
     // no fixedBo on the home page: Bo1 / Bo3 / Bo5 are always offered (match pages keep the real format)
-    o = { ev: e, ctx: ctxFor(m, e), centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back, next: f, live: recentLive(m) };
+    o = { ev: e, centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back, next: f, live: recentLive(m) };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
     o = { change: true, back, next: f };

@@ -344,12 +344,10 @@ def main(out_path):
     # pickers. Others (national selections, a team whose players all left)
     # keep their results in the rating history and show as plain names.
     def has_lineup(t):
-        # Liquipedia squad first. Valve's standings' five players only when the team
-        # has no Liquipedia page at all: a Liquipedia page with no active players
-        # (e.g. 3DMAX after its players left) is newer than Valve's snapshot.
-        if t in assets["teams"]:
-            return bool(own_squad(t))
-        return bool(vrs_of.get(t, {}).get("roster"))
+        # a team needs its own Liquipedia team page (logo, roster) with at least one
+        # active player; teams with no page at all (e.g. BBL Esports, Haunted House)
+        # or no active players (3DMAX after its players left) are left off the site
+        return t in assets["teams"] and bool(own_squad(t))
     dropped = sorted(t for t in set(names) if not has_lineup(t))
     names = sorted(t for t in set(names) if has_lineup(t))
     pool = {t for t in pool if has_lineup(t)}
@@ -372,8 +370,6 @@ def main(out_path):
             if len(results) >= N_TEAM_RESULTS:
                 break
         roster = [{"id": p["id"], "coach": p["role"].lower() == "coach"} for p in rec["roster"]]
-        if t not in assets["teams"] and vrs_of.get(t, {}).get("roster"):
-            roster = [{"id": pid, "coach": False} for pid in vrs_of[t]["roster"]]   # from Valve's standings
         teams[t] = {
             # no series in the data -> no Elo (it would only be the 1500 starting value)
             "slug": E.slug(t), "elo": round(h_now.elo[t]) if h_now.games[t] else None, "rank": rank.get(t),
