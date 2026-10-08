@@ -929,17 +929,21 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
    estimate, and a white line at the estimate itself */
 .court .bar {
   height: .95rem; border-radius: 999px; overflow: hidden;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--t) 92%, #fff), color-mix(in srgb, var(--t) 45%, #0B1518));
+  /* team 2's colour stays flat (so its side of the striped range matches it) and only
+     dims over the last stretch, mirroring team 1's fill which brightens toward the estimate */
+  background: linear-gradient(90deg, color-mix(in srgb, var(--t) 92%, #fff) 0 72%, color-mix(in srgb, var(--t) 62%, #0B1518) 100%);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 0 22px -6px color-mix(in srgb, var(--ct) 55%, transparent);
 }
 .court .bar .fill { background: linear-gradient(90deg, color-mix(in srgb, var(--ct) 70%, #0B1518), var(--ct)); }
+/* the likely range: the same solid team colours as the rest of the bar (team 1 up to
+   the estimate, team 2 after it) with soft, darker stripes laid over them, so it reads
+   as a textured part of the same bar rather than a separate dark block */
 .court .bar .band {
-  border: 0; background-color: #0B1518;
+  border: 0;
   background-image:
-    repeating-linear-gradient(120deg, var(--ct) 0 5px, transparent 5px 10px),
-    repeating-linear-gradient(120deg, color-mix(in srgb, var(--t) 92%, #fff) 0 5px, transparent 5px 10px);
-  background-size: var(--split, 50%) 100%, calc(100% - var(--split, 50%)) 100%;
-  background-position: left top, right top; background-repeat: no-repeat;
+    repeating-linear-gradient(120deg, rgba(4, 10, 12, .26) 0 4px, rgba(255, 255, 255, .06) 4px 5px, transparent 5px 9px),
+    linear-gradient(90deg, var(--ct) 0 var(--split, 50%), color-mix(in srgb, var(--t) 92%, #fff) var(--split, 50%) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), inset 0 -1px 0 rgba(0, 0, 0, .2);
 }
 .court .bar .mk {
   position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px;
