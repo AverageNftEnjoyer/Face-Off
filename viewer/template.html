@@ -848,30 +848,26 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
   background: #040A0C;
   box-shadow: 0 24px 60px -30px rgba(0, 0, 0, .9);
 }
-/* the two backdrops: map art (--art) under a team-colour wash and a darkening scrim */
+/* the two backdrops: each half is lit in its team's own colour from its outer
+   corner and falls off into the dark toward the seam and the bottom edge */
 .cbg {
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-color: #0A1416;
-  background-size: cover; background-position: center; background-repeat: no-repeat;
+  background-color: #060D10;
 }
 .cbg.a {
   background-image:
-    linear-gradient(180deg, rgba(4, 10, 12, .1) 30%, rgba(4, 10, 12, .9) 96%),
-    linear-gradient(90deg, rgba(4, 10, 12, .62), rgba(4, 10, 12, .2) 50%, rgba(4, 10, 12, .5)),
-    radial-gradient(ellipse 55% 75% at 12% 28%, color-mix(in srgb, var(--ct) 40%, transparent), transparent 70%),
-    linear-gradient(var(--ct-deep), var(--ct-deep)),
-    var(--art, none);
-  background-blend-mode: normal, normal, normal, color, normal;
+    linear-gradient(180deg, transparent 45%, rgba(4, 10, 12, .78) 100%),
+    radial-gradient(ellipse 75% 95% at 0% 0%, color-mix(in srgb, var(--ct) 48%, transparent), transparent 68%),
+    radial-gradient(ellipse 55% 60% at 22% 105%, color-mix(in srgb, var(--ct) 16%, transparent), transparent 72%),
+    linear-gradient(112deg, var(--ct-deep) 0%, color-mix(in srgb, var(--ct-deep) 55%, #060D10) 38%, #060D10 58%);
   -webkit-mask-image: linear-gradient(var(--seam), #000 0 49.6%, transparent 49.6%); mask-image: linear-gradient(var(--seam), #000 0 49.6%, transparent 49.6%);
 }
 .cbg.b {
   background-image:
-    linear-gradient(180deg, rgba(4, 10, 12, .1) 30%, rgba(4, 10, 12, .9) 96%),
-    linear-gradient(270deg, rgba(4, 10, 12, .62), rgba(4, 10, 12, .2) 50%, rgba(4, 10, 12, .5)),
-    radial-gradient(ellipse 55% 75% at 88% 28%, color-mix(in srgb, var(--t) 34%, transparent), transparent 70%),
-    linear-gradient(var(--t-deep), var(--t-deep)),
-    var(--art, none);
-  background-blend-mode: normal, normal, normal, color, normal;
+    linear-gradient(180deg, transparent 45%, rgba(4, 10, 12, .78) 100%),
+    radial-gradient(ellipse 75% 95% at 100% 0%, color-mix(in srgb, var(--t) 48%, transparent), transparent 68%),
+    radial-gradient(ellipse 55% 60% at 78% 105%, color-mix(in srgb, var(--t) 16%, transparent), transparent 72%),
+    linear-gradient(248deg, var(--t-deep) 0%, color-mix(in srgb, var(--t-deep) 55%, #060D10) 38%, #060D10 58%);
   -webkit-mask-image: linear-gradient(var(--seam), transparent 50.4%, #000 50.4%); mask-image: linear-gradient(var(--seam), transparent 50.4%, #000 50.4%);
 }
 /* a lit edge along the split */
@@ -915,15 +911,35 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .ccentre .score .lost { color: var(--dim); }
 .ccentre .chip { background: var(--bg); white-space: normal; }
 .court .cbar { grid-column: 1 / -1; display: grid; gap: .55rem; }
-.court .bar { height: .95rem; border-radius: 999px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 0 22px -6px color-mix(in srgb, var(--ct) 60%, transparent); }
-.court .bar .band { border-inline-width: 1px; background: repeating-linear-gradient(120deg, rgba(4, 10, 12, .5) 0 3px, rgba(255, 255, 255, .5) 3px 6px, transparent 6px 10px); }
-.court .bar .mid { background: rgba(4, 10, 12, .8); }
+/* the win bar: team 1's colour from the left, team 2's from the right (fading toward
+   its end), the likely range striped in each team's colour on its side of the
+   estimate, and a white line at the estimate itself */
+.court .bar {
+  height: .95rem; border-radius: 999px; overflow: hidden;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--t) 92%, #fff), color-mix(in srgb, var(--t) 45%, #0B1518));
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 0 22px -6px color-mix(in srgb, var(--ct) 55%, transparent);
+}
+.court .bar .fill { background: linear-gradient(90deg, color-mix(in srgb, var(--ct) 70%, #0B1518), var(--ct)); }
+.court .bar .band {
+  border: 0; background-color: #0B1518;
+  background-image:
+    repeating-linear-gradient(120deg, var(--ct) 0 5px, transparent 5px 10px),
+    repeating-linear-gradient(120deg, color-mix(in srgb, var(--t) 92%, #fff) 0 5px, transparent 5px 10px);
+  background-size: var(--split, 50%) 100%, calc(100% - var(--split, 50%)) 100%;
+  background-position: left top, right top; background-repeat: no-repeat;
+}
+.court .bar .mk {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px;
+  background: #fff; box-shadow: 0 0 0 1px rgba(4, 10, 12, .7), 0 0 8px rgba(255, 255, 255, .85);
+  transition: left .9s cubic-bezier(.2, .8, .2, 1);
+}
+@media (prefers-reduced-motion: reduce) { .court .bar .mk { transition: none; } }
 .court .legend { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .4rem 1rem; font-size: var(--s-1); color: rgba(228, 238, 236, .72); }
 .court .legend .chips { display: flex; gap: .4rem; flex-wrap: wrap; }
 .court .legend .chip { background: rgba(4, 10, 12, .6); padding: .1rem .6rem; }
 .chip.rel::before { content: ""; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
 
-.cbelow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: -.35rem; }
+.cbelow { display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: .6rem 1rem; margin-top: -.35rem; }
 .cbelow .cb-l, .cbelow .cb-r { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
 .cbelow .btn:disabled { opacity: .45; cursor: default; }
 .btn .ico { width: .95rem; height: .95rem; }
@@ -1487,7 +1503,7 @@ function applyPair(el) {
 }
 // A miss is only an "Upset" when the losing side was a clear favourite.
 const UPSET_AT = 0.75;
-const missLabel = (hit, favP) => hit ? "Model called it" : favP >= UPSET_AT ? "Upset" : "Incorrect";
+const missLabel = (hit, favP) => hit ? "Correct" : favP >= UPSET_AT ? "Upset" : "Incorrect";
 
 function logo(team, cls = "") {
   const src = IMG.logos[team];
@@ -1597,9 +1613,10 @@ function animateBars(root) {
   const key = `${location.hash || "#home"}|${PAIR ? PAIR.join("|") : ""}|${desk.bo}`;
   const same = key === lastBarKey;
   lastBarKey = key;
-  const els = [...root.querySelectorAll(".bar .fill, .bar .band")];
+  const els = [...root.querySelectorAll(".bar .fill, .bar .band, .bar .mk")];
   const set = () => els.forEach(el => {
     if (el.classList.contains("fill")) el.style.width = el.dataset.w + "%";
+    else if (el.classList.contains("mk")) el.style.left = el.dataset.w + "%";
     else { el.style.left = el.dataset.l + "%"; el.style.width = el.dataset.bw + "%"; }
   });
   if (!same) { requestAnimationFrame(() => requestAnimationFrame(set)); return; }
@@ -1790,38 +1807,29 @@ function court(pred, a, b, o, bo) {
   const bar = pred ? `<div class="cbar">
       <div class="bar" role="img" aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
         <div class="fill" data-w="${(F.p * 100).toFixed(2)}"></div>
-        <div class="band" data-l="${(F.band[0] * 100).toFixed(2)}" data-bw="${((F.band[1] - F.band[0]) * 100).toFixed(2)}" style="left:50%;width:0"></div>
-        <div class="mid"></div>
+        <div class="band" data-l="${(F.band[0] * 100).toFixed(2)}" data-bw="${((F.band[1] - F.band[0]) * 100).toFixed(2)}"
+          style="left:50%;width:0;--split:${(F.band[1] > F.band[0] ? (F.p - F.band[0]) / (F.band[1] - F.band[0]) * 100 : 50).toFixed(2)}%"></div>
+        <div class="mk" data-w="${(F.p * 100).toFixed(2)}"></div>
       </div>
-      <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure.</span>
+      <div class="legend"><span>The striped part of the bar is the range the model thinks the real chance falls in. A wider stripe means it's less sure. The white line marks each team's estimated win percentage.</span>
         <span class="chips">${o.live ? `<span class="chip live">Live</span>` : ""}<span class="chip rel ${pred.rel === "H" ? "hit" : pred.rel === "L" ? "miss" : "plain"}">${REL[pred.rel]}</span></span></div>
     </div>` : `<div class="cbar"><p class="empty">No model call: one of these teams has no results in the data.</p></div>`;
-  // each half's backdrop is that team's map from the simulated veto, darkened and
-  // washed in the team's colour; the masks follow the court's slanted split
-  const ma = sideMap(pred, a, "A", bo, null), mb = sideMap(pred, b, "B", bo, ma);
-  const art = (m, cls) => `<div class="cbg ${cls}" aria-hidden="true"${m ? ` style="--art:url('${IMG.maps[m]}')"` : ""}></div>`;
+  // each half's backdrop is a gradient in that team's own colour; the masks follow the slanted split
+  const art = (cls) => `<div class="cbg ${cls}" aria-hidden="true"></div>`;
   const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
   // controls sit in their own row under the court, never on top of it
   const below = `<div class="cbelow">
-    <div class="cb-l"><span class="small dim">Format</span>${fmt}${o.status || ""}${o.verdict || ""}</div>
-    ${o.change ? `<div class="cb-r"><button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}</div>` : ""}
+    <div class="cb-l"><span class="small dim">Format</span>${fmt}
+    ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>${o.back !== undefined ? `<button type="button" class="btn${o.back ? " acc" : ""}" data-feat="1" ${o.back ? `title="${esc(`Show the next scheduled match: ${nx}`)}"` : `disabled title="Already showing the next match"`}>Next match${ICON.next}</button>` : ""}` : ""}
+    ${o.verdict || ""}</div>
   </div>`;
-  return `<section class="court">${art(ma, "a")}${art(mb, "b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
-}
-// The map behind a team's half of the court: its pick in the simulated veto for this
-// format; without one (Bo1 has no picks) its most played map of the last 90 days.
-function sideMap(pred, t, side, bo, avoid) {
-  if (pred) {
-    const pk = vetoFor(pred, bo).veto.find(s => s.verb === "picks" && s.side === side && IMG.maps[s.map]);
-    if (pk && pk.map !== avoid) return pk.map;
-  }
-  const mine = Object.entries(T[t]?.maps || {}).filter(([m, v]) => v[1] > 0 && IMG.maps[m] && m !== avoid).sort((x, y) => y[1][1] - x[1][1]);
-  if (mine.length) return mine[0][0];
-  const any = Object.keys(IMG.maps).filter(m => m !== avoid);
-  return any.length ? any[side === "A" ? 0 : any.length - 1] : null;
+  return `<section class="court">${art("a")}${art("b")}${side(a, "a", 0)}<div class="ccentre">${o.centre || `<span class="vsword cond">vs</span>`}</div>${side(b, "b", 1)}${bar}</section>${below}`;
 }
 
+// what the spotlight on screen shows, so a map click can redraw just the spotlight
+let SPOT_ARGS = null;
 function tape(pred, a, b, bo = 3) {
+  SPOT_ARGS = [pred, a, b, bo];
   const V = vetoFor(pred, bo), steps = V.veto;
   if (!desk.spot || !steps.some(s => s.map === desk.spot)) desk.spot = V.maps[0];
   return `<div class="tape" style="--n:${steps.length}" role="group" aria-label="Veto, in order">${steps.map((s, i) => {
@@ -2840,7 +2848,16 @@ document.addEventListener("click", e => {
   const sp = e.target.closest("[data-spot]");
   if (sp) {
     const step = sp.classList.contains("snext");
-    desk.spot = sp.dataset.spot; rerender();
+    desk.spot = sp.dataset.spot;
+    // swap only the spotlight and the pressed tile: re-rendering the whole page
+    // reloaded every image and replayed the entrance animations (a visible flicker)
+    const cur = $(".spot");
+    if (cur && SPOT_ARGS) {
+      document.querySelectorAll(".tape .tm").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.spot === desk.spot)));
+      const tmp = document.createElement("div");
+      tmp.innerHTML = spotlight(...SPOT_ARGS).trim();
+      cur.replaceWith(tmp.firstElementChild);
+    } else rerender();
     if (step) { const nb = $(".snext"); if (nb) nb.focus({ preventScroll: true }); } // keep stepping with the keyboard
     return;
   }
