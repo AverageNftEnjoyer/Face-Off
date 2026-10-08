@@ -268,6 +268,11 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 .facts dl { margin: 0; display: contents; }
 
 .pool { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .5rem; }
+/* map tiles on a tournament page are buttons: click for the map's standings */
+button.maptile { width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc), 0 0 22px -6px rgba(47, 212, 162, .7); }
+.mapstand .maptbl td:nth-child(2) { min-width: 10rem; }
+.mapstand .maptbl tr:first-child td { font-weight: 700; }
 .maptile {
   position: relative; aspect-ratio: 16 / 10; max-width: 100%;
   border-radius: var(--r); overflow: hidden; background: var(--raise) center / cover no-repeat;
@@ -892,7 +897,9 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .chead { display: flex; align-items: center; gap: clamp(.75rem, 1.6vw, 1.4rem); min-width: 0; }
 .cside.b .chead { flex-direction: row-reverse; text-align: right; }
 .clogo { flex: none; display: block; }
-.cside .logo.xl { width: clamp(4.5rem, 7.5vw, 7.75rem); height: clamp(4.5rem, 7.5vw, 7.75rem); filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .55)); }
+/* no filter on the logo image: Safari can draw a drop-shadow on a freshly swapped,
+   lazily decoded transparent image as a faint box around the logo */
+.cside .logo.xl { width: clamp(4.5rem, 7.5vw, 7.75rem); height: clamp(4.5rem, 7.5vw, 7.75rem); background: none; border-radius: 0; }
 .cid { display: grid; justify-items: start; gap: .35rem; min-width: 0; }
 .cside.b .cid { justify-items: end; }
 .cname {
@@ -1408,7 +1415,6 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
       </div>
       <div class="qlist" id="qList" role="listbox" aria-label="Search results" hidden></div>
     </div>
-    <span class="snap" id="snap"></span>
   </div>
 </header>
 
@@ -1513,17 +1519,22 @@ const DEFAULT_A = "#6E9DE2", DEFAULT_B = "#E7AB3F", PAGE_BG = [16, 28, 31];
 const rgbOf = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const dist = (x, y) => { const a = rgbOf(x), b = rgbOf(y); return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); };
 const deep = h => { const c = rgbOf(h); return `rgb(${c.map((v, i) => Math.round(v * .32 + PAGE_BG[i] * .68)).join(",")})`; };
+// Each team keeps its own logo colour (Falcons green vs Aurora teal stay green and teal).
+// Only when the two are nearly the same colour (red vs red) do they split into a lighter
+// and a deeper shade of it; two white teams become white and grey.
+const mixHex = (h, to, w) => "#" + rgbOf(h).map((v, i) => Math.round(v * (1 - w) + rgbOf(to)[i] * w).toString(16).padStart(2, "0")).join("");
+const lumOf = h => { const [r, g, b] = rgbOf(h); return (.2126 * r + .7152 * g + .0722 * b) / 255; };
+const SAME_COLOUR = 45;   // RGB distance under which two colours read as one
 function pairColors(a, b) {
   const ca = (T[a]?.color || [])[0] || DEFAULT_A;
-  const [pb, sb] = T[b]?.color || [];
-  let cb = pb || DEFAULT_B;
-  if (dist(ca, cb) < 110) {
-    // too alike: the second team uses its other logo colour if that is bright
-    // enough to read on the dark page, otherwise white, gold or blue
-    const bright = c => { const [r, g, bb] = rgbOf(c); return (.2126 * r + .7152 * g + .0722 * bb) / 255 >= .45; };
-    cb = sb && bright(sb) && dist(ca, sb) >= 110 ? sb : ["#F2F4F7", DEFAULT_B, DEFAULT_A].find(c => dist(ca, c) >= 110);
-  }
-  return [ca, cb];
+  const cb = (T[b]?.color || [])[0] || DEFAULT_B;
+  if (dist(ca, cb) >= SAME_COLOUR) return [ca, cb];
+  if (lumOf(ca) > .8 && lumOf(cb) > .8) return [ca, "#8D98A2"];          // white and white: white and grey
+  // same colour family: team 1 a lighter shade, team 2 a deeper one, both still readable on the dark page
+  const light = mixHex(ca, "#FFFFFF", lumOf(ca) > .6 ? .15 : .35);
+  let deepW = .38, deepC = mixHex(cb, "#000000", deepW);
+  while (lumOf(deepC) < .16 && deepW > .1) { deepW -= .06; deepC = mixHex(cb, "#000000", deepW); }
+  return [light, deepC];
 }
 let PAIR = null;                      // set by views that show two teams head to head
 function applyPair(el) {
@@ -1539,7 +1550,9 @@ const missLabel = (hit, favP) => hit ? "Correct" : favP >= UPSET_AT ? "Upset" : 
 
 function logo(team, cls = "") {
   const src = IMG.logos[team];
-  if (src) return `<img class="logo ${cls}" src="${src}" alt="" loading="lazy">`;
+  // big logos (court, team header) load eagerly: they're on screen immediately and a
+  // lazy swap is what made Safari flash a box around them
+  if (src) return `<img class="logo ${cls}" src="${src}" alt=""${/\b(xl|lg)\b/.test(cls) ? ` decoding="sync"` : ` loading="lazy"`}>`;
   const ini = String(team || "?").replace(/^Team\s+/, "").split(/\s+/).map(w => w[0]).join("").slice(0, 3);
   return `<span class="logo logo-ph ${cls}" aria-hidden="true">${esc(team ? ini : "?")}</span>`;
 }
@@ -2346,6 +2359,55 @@ function viewEvents() {
 /* ---------------- one tournament ---------------- */
 const dayPick = {};
 const evPick = {};      // slug -> {a, b, next}
+const evMap = {};       // slug -> the map whose standings are open on that tournament page
+
+// Every team's record on one map at one tournament, from every map with a winner
+// played there so far (so day 5 includes days 1-4; it grows with each refresh).
+function mapStandings(e, mp) {
+  const by = {};
+  let maps = 0;
+  const days = new Set();
+  for (const m of e.matches) {
+    if (!m.t1 || !m.t2) continue;
+    for (const x of m.maps || []) {
+      if (x.map !== mp || (x.w !== 1 && x.w !== 2)) continue;
+      maps++; if (m.day) days.add(m.day);
+      const has = x.s1 != null && x.s2 != null;
+      for (const [t, mine, won] of [[m.t1, 1, x.w === 1], [m.t2, 2, x.w === 2]]) {
+        const r = by[t] = by[t] || { team: t, w: 0, l: 0, rf: 0, ra: 0, rounds: false };
+        if (won) r.w++; else r.l++;
+        if (has) { r.rf += mine === 1 ? x.s1 : x.s2; r.ra += mine === 1 ? x.s2 : x.s1; r.rounds = true; }
+      }
+    }
+  }
+  const rows = Object.values(by).sort((p, q) =>
+    q.w / (q.w + q.l) - p.w / (p.w + p.l) || (q.w + q.l) - (p.w + p.l) || (q.rf - q.ra) - (p.rf - p.ra) || p.team.localeCompare(q.team));
+  return { rows, maps, days: days.size };
+}
+function mapPlays(e, mp) {
+  let n = 0;
+  for (const m of e.matches) for (const x of m.maps || []) if (x.map === mp && (x.w === 1 || x.w === 2)) n++;
+  return n;
+}
+function mapPanel(e) {
+  const mp = evMap[e.slug];
+  if (!mp) return "";
+  const { rows, maps, days } = mapStandings(e, mp);
+  const body = rows.length ? `<div class="tablewrap"><table class="maptbl">
+      <thead><tr><th>#</th><th>Team</th><th class="n">Maps</th><th class="n">Won-lost</th><th class="n">Win rate</th><th class="n">Rounds</th><th class="n">Round diff</th></tr></thead>
+      <tbody>${rows.map((r, i) => {
+        const n = r.w + r.l, wr = (r.w / n * 100).toFixed(2), rd = r.rf - r.ra;
+        return `<tr><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${n}</td><td class="n">${r.w}-${r.l}</td>
+          <td class="n"><b class="${pcc(wr)}">${wr}%</b></td>
+          <td class="n">${r.rounds ? `${r.rf}-${r.ra}` : "-"}</td><td class="n ${r.rounds ? (rd > 0 ? "win" : rd < 0 ? "loss" : "") : ""}">${r.rounds ? (rd > 0 ? "+" : "") + rd : "-"}</td></tr>`;
+      }).join("")}</tbody></table></div>`
+    : `<p class="empty">Nobody has played ${esc(mp)} at ${esc(e.name)} yet. It fills in as the maps are played.</p>`;
+  return `<section class="panel mapstand" aria-live="polite">
+    <h2>${esc(mp)} at ${esc(e.name)} <span class="dim">${maps ? `best to worst, from ${maps} map${maps === 1 ? "" : "s"} played over ${days} day${days === 1 ? "" : "s"}; updates as each day's results come in` : ""}</span></h2>
+    ${body}
+    <div class="links"><button type="button" class="btn" data-evmap="${esc(mp)}" data-ev="${e.slug}">Close ${esc(mp)}</button></div>
+  </section>`;
+}
 
 function matchRow(m) {
   const a = m.t1, b = m.t2, live = isLive(m), w = winnerOf(m);
@@ -2452,7 +2514,11 @@ function evMatches(e) {
   };
   const firstTz = e.matches.find(m => m.when);
   return `
-  ${e.pool.length ? `<section class="pool" aria-label="Map pool">${e.pool.map(mp => `<div class="maptile" style="${mapBg(mp)}"><span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}</small></span></div>`).join("")}</section>` : ""}
+  ${e.pool.length ? `<section class="pool" aria-label="Map pool: choose a map to see every team's record on it at this tournament">${e.pool.map(mp => {
+    const n = mapPlays(e, mp);
+    return `<button type="button" class="maptile" data-evmap="${esc(mp)}" data-ev="${e.slug}" aria-pressed="${evMap[e.slug] === mp}" style="${mapBg(mp)}" title="${esc(`${mp}: every team's record on it at this tournament`)}">
+      <span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}${n ? `, played ${n}×` : ""}</small></span></button>`;
+  }).join("")}</section>${mapPanel(e)}` : ""}
   <div class="evbody">
     <section class="panel">
       <h2>Matches <span class="dim">${firstTz ? `times in your time zone (${esc(tz(firstTz.when))}); ` : ""}the middle column is the model's pre-match pick</span></h2>
@@ -2816,8 +2882,7 @@ function viewRecord() {
   const fh = fav.filter(c => c.hit).length, dh = dog.filter(c => c.hit).length;
   return `
   <div style="display:grid;gap:.4rem">
-    <h1 class="cond" style="font-size:var(--s3)">Stats</h1>
-    <p class="dim" style="max-width:68ch">Every finished 2026 match at S- and A-tier tournaments on this site where the model made a call. Each call uses only results from before the match day, and every row opens the match it was made for.</p>
+    <p class="small dim asof-line">Data as of <b>${esc(fmtDate(DATA.as_of))}</b></p>
   </div>
   <section class="board" aria-label="Headline numbers">
     <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
@@ -2910,6 +2975,13 @@ function rerender() {
 document.addEventListener("click", e => {
   const day = e.target.closest("[data-day]");
   if (day) { dayPick[day.dataset.ev] = day.dataset.day; rerender(); return; }
+  const em = e.target.closest("[data-evmap]");
+  if (em) {   // open / close a map's standings on a tournament page
+    evMap[em.dataset.ev] = evMap[em.dataset.ev] === em.dataset.evmap ? null : em.dataset.evmap;
+    rerender();
+    if (evMap[em.dataset.ev]) { const p = $(".mapstand"); if (p) p.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    return;
+  }
   const mc = e.target.closest("button.mapcard");
   if (mc && !e.target.closest("a")) { mc.setAttribute("aria-expanded", mc.getAttribute("aria-expanded") === "true" ? "false" : "true"); return; }
   const bo = e.target.closest("[data-bo]");
@@ -3168,6 +3240,5 @@ document.addEventListener("keydown", e => {
 document.addEventListener("pointerdown", e => { if (!e.target.closest("#qwrap")) { closeList(); if (!$("#q").value.trim()) closeSearch(false); } });
 window.addEventListener("hashchange", () => closeSearch(true));
 
-$("#snap").innerHTML = `${svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>`)}<span>Data as of<b>${esc(fmtDate(DATA.as_of))}</b></span>`;
 go();
 </script>

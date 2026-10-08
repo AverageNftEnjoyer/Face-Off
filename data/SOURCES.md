@@ -56,7 +56,15 @@ nothing is invented, imputed or estimated.
   B-tier and lower tournaments are not tracked. They were included on
   2026-10-07 (161 main events, 5,551 series) and removed the same day: their
   results are much less predictable, and the site and the engine are about
-  S- and A-tier matches. Event, team and sponsor names are reproduced
+  S- and A-tier matches. Prototype only (2026-10-08, not used by the
+  engine or the site): `python data/collect_liquipedia.py --offline --lower`
+  rebuilds `matches_lower.json` (3,158 series: 3,152 B-tier from 132 main
+  events of 2026, plus the 6-series C-tier EWC 2024 Middle East qualifier)
+  from those cached pages, listed in `raw/lp_titles_lower.txt`; no new
+  requests. A series also in `matches.json` (same day, same teams) is left
+  out. `scripts/lower_tier_check.py` tested it as rating data and found no
+  significant gain, so nothing reads it yet (`lower_tier_report.json`).
+  Event, team and sponsor names are reproduced
   as Liquipedia writes them.
 - Forfeited maps (`score1=W|score2=FF` or the reverse) are now credited to the
   W side; their round scores are from before the forfeit. One older result

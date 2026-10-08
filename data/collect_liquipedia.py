@@ -27,6 +27,12 @@ sys.path.insert(0, HERE)
 import lpfetch  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
+# --lower: build data/matches_lower.json (B-tier and below, rating data only)
+# from data/raw/lp_titles_lower.txt instead of data/matches.json
+LOWER = "--lower" in sys.argv
+LOWER_TITLES = os.path.join(HERE, "raw", "lp_titles_lower.txt")
+LOWER_OUT = os.path.join(HERE, "matches_lower.json")
+TOP_TIERS = ("S", "A")
 # Series dated after today are excluded; only decided series are parsed, so
 # today's finished matches count. Override
 # with FACEOFF_TODAY=YYYY-MM-DD to reproduce an earlier snapshot exactly.
@@ -329,9 +335,13 @@ def event_name(title, texts):
         t = t.rsplit("/", 1)[0]
 
 
-def main():
-    titles = [l.strip() for l in open(os.path.join(HERE, "raw", "lp_titles_selected.txt"),
-                                      encoding="utf-8") if l.strip()]
+def read_titles(path):
+    return [l.strip() for l in open(path, encoding="utf-8") if l.strip()]
+
+
+def build(titles):
+    """(matches, codes, disp) from the given tournament pages: de-duplicated,
+    finished series sorted by (date, event, team_a), each with its page tier."""
     texts = {}
     for i in range(0, len(titles), 8):
         batch = titles[i:i + 8]
@@ -390,6 +400,14 @@ def main():
             continue
         seen[key] = rec
     matches = sorted(seen.values(), key=lambda r: (r["date"], r["event"], r["team_a"]))
+    print(f"pages parsed: {len(texts)}  raw match records: {len(raw)}  unique finished: {len(matches)}")
+    return matches, codes, disp
+
+
+def main():
+    if LOWER:
+        return main_lower()
+    matches, codes, disp = build(read_titles(os.path.join(HERE, "raw", "lp_titles_selected.txt")))
     with open(os.path.join(HERE, "matches.json"), "w", encoding="utf-8") as f:
         json.dump(matches, f, indent=1, ensure_ascii=False)
     used = {}
@@ -403,10 +421,32 @@ def main():
     bo = {}
     for m in matches:
         bo[m["best_of"]] = bo.get(m["best_of"], 0) + 1
-    print(f"pages parsed: {len(texts)}  raw match records: {len(raw)}  unique finished: {len(matches)}")
     print("best_of counts:", bo)
     print("date range:", matches[0]["date"], "->", matches[-1]["date"])
     print("teams:", len({m['team_a'] for m in matches} | {m['team_b'] for m in matches}))
+
+
+def main_lower():
+    """data/matches_lower.json: finished series from the B-tier-and-below pages
+    in lp_titles_lower.txt. Rating data only: the site never reads this file
+    (no events, predictions or Stats come from it). A series that is also in
+    matches.json (same day, same two teams) is left out, and so is any page
+    whose own infobox says S or A tier (those belong in the main list)."""
+    if not os.path.exists(LOWER_TITLES):
+        print("no lower-tier title list; nothing to build")
+        return
+    matches, _, _ = build(read_titles(LOWER_TITLES))
+    with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
+        top = {(m["date"], tuple(sorted((m["team_a"], m["team_b"])))) for m in json.load(f)}
+    out = [m for m in matches if m["tier"] not in TOP_TIERS
+           and (m["date"], tuple(sorted((m["team_a"], m["team_b"])))) not in top]
+    with open(LOWER_OUT, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=1, ensure_ascii=False)
+    tiers = {}
+    for m in out:
+        tiers[m["tier"] or "?"] = tiers.get(m["tier"] or "?", 0) + 1
+    print(f"lower-tier series: {len(out)} {tiers}"
+          + (f" ({out[0]['date']} -> {out[-1]['date']})" if out else ""))
 
 
 if __name__ == "__main__":
