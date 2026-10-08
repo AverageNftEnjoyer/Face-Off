@@ -310,11 +310,12 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 .mrow .tm::before { content: none; }
 .mrow .mid { text-align: center; font-size: var(--s2); }
 .mrow .mid.pct { font-size: var(--s-1); font-stretch: 100%; font-weight: 600; text-transform: none; color: var(--dim); }
-.mrow .mid.pick { display: grid; justify-items: center; gap: .1rem; font-size: var(--s-1); line-height: 1.2; min-width: 0; }
-.mrow .mid.pick .pk { display: flex; align-items: center; gap: .35rem; min-width: 0; max-width: 100%; }
-.mrow .mid.pick .pk b { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mrow .mid.pick .pp { color: var(--acc); font-weight: 800; }
-.mrow .mid.pick .logo.xs, .mrow .mid.pick .logo-ph { width: 1.1rem; height: 1.1rem; }
+.mrow .mid.mpick { display: grid; justify-items: center; gap: .1rem; font-size: var(--s-1); line-height: 1.2; min-width: 0;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .35rem .6rem; }
+.mrow .mid.mpick .pk { display: flex; align-items: center; gap: .35rem; min-width: 0; max-width: 100%; }
+.mrow .mid.mpick .pk b { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mrow .mid.mpick .pp { color: var(--acc); font-weight: 800; }
+.mrow .mid.mpick .logo.xs, .mrow .mid.mpick .logo-ph { width: 1.1rem; height: 1.1rem; }
 .mrow .tag { display: grid; justify-items: end; gap: .15rem; font-size: .72rem; color: var(--dim); white-space: nowrap; }
 .mlist { display: grid; gap: .45rem; }
 
@@ -491,14 +492,17 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 .pick .pn { overflow-wrap: anywhere; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 100%; }
 .pick .pv { font-size: .68rem; color: var(--dim); }
 .vrs { display: inline-flex; align-items: baseline; gap: .3rem; font-weight: 700; color: var(--text); }
-.pick {
+/* team-picker tiles. :not(.tm): veto tiles for picked maps also carry class "pick", and a
+   `background:` shorthand here reset their map photo's size and position on hover/press
+   (the photo jumped to a zoomed, tiled crop on Mirage, Anubis, Inferno...) */
+.pick:not(.tm) {
   display: grid; justify-items: center; gap: .3rem; padding: .6rem .3rem;
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); cursor: pointer;
   font-size: .72rem; text-align: center;
 }
-.pick:hover { background: var(--raise); }
-.pick[data-slot="a"] { border-color: var(--ct); box-shadow: inset 0 -3px 0 var(--ct); background: var(--raise); }
-.pick[data-slot="b"] { border-color: var(--t); box-shadow: inset 0 -3px 0 var(--t); background: var(--raise); }
+.pick:not(.tm):hover { background: var(--raise); }
+.pick:not(.tm)[data-slot="a"] { border-color: var(--ct); box-shadow: inset 0 -3px 0 var(--ct); background: var(--raise); }
+.pick:not(.tm)[data-slot="b"] { border-color: var(--t); box-shadow: inset 0 -3px 0 var(--t); background: var(--raise); }
 .slots { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; font-size: var(--s-1); color: var(--dim); }
 
 /* teams */
@@ -778,11 +782,14 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .tfin .en b { font-stretch: 62.5%; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; line-height: 1.05; }
 .tfin .en span { font-size: var(--s-1); color: var(--dim); }
 .plc { font-stretch: 62.5%; font-weight: 800; font-size: 1.75rem; line-height: 1; text-transform: uppercase; text-align: right; white-space: nowrap; }
-.plc.p1 { color: var(--t); }
-.plc.p2, .plc.p3 { color: var(--text); }
+/* medal colours for the top three, green for events still running or coming up */
+.plc.p1 { color: #F2C14E; text-shadow: 0 0 18px rgba(242, 193, 78, .35); }
+.plc.p2 { color: #C9D3DC; text-shadow: 0 0 18px rgba(201, 211, 220, .25); }
+.plc.p3 { color: #D08A4E; text-shadow: 0 0 18px rgba(208, 138, 78, .3); }
 .plc.deep { color: var(--dim); }
 .plc.word { font-size: 1.1rem; color: var(--dim); }
-.plc.word.on { color: var(--loss); }
+.plc.word.on { font-size: 1.5rem; color: var(--win); }
+.plc.word.up { font-size: 1.5rem; }   /* larger, but keeps the original dim colour */
 .tfin .won { text-align: right; font-size: var(--s-1); }
 .tfin .won b { font-weight: 700; }
 
@@ -1372,7 +1379,7 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .tcard .cond, .pcard .ph .cond { font-style: italic; }
 .tdlg { border-color: var(--line2); border-radius: var(--rp); background: #0F1C1F; }
 .tdlg-h h2 { font-style: italic; font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; }
-.pick[aria-pressed="true"] { background: var(--raise); }
+.pick:not(.tm)[aria-pressed="true"] { background: var(--raise); }
 </style>
 
 <header class="top" id="top">
@@ -1472,9 +1479,17 @@ const fmtDay = s => { const d = dObj(s); return `${d.getUTCDate()} ${MONTHS[d.ge
 const fmtDate = s => { const d = dObj(s); return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
 const span = (a, b) => a === b ? fmtDate(a) : `${fmtDay(a)} to ${fmtDate(b)}`;
 const wday = s => WD[dObj(s).getUTCDay()];
-const clock = w => w ? w.slice(11, 16) : null;
-const TZN = { "+02:00": "CEST", "+01:00": "CET", "+00:00": "UTC", "+03:00": "MSK", "-04:00": "EDT", "-05:00": "CDT", "-07:00": "PDT", "-03:00": "BRT", "+08:00": "SGT", "+05:00": "ALMT", "+10:00": "AEST", "+04:00": "GST", "+09:00": "KST" };
-const tz = w => !w ? "" : (TZN[w.slice(19)] || w.slice(19));
+// Match times are stored with the event's UTC offset ("2026-10-09T18:00:00+02:00");
+// show them on the visitor's own clock, labelled with their own time zone.
+const whenDate = w => { const d = w ? new Date(w) : null; return d && !isNaN(d) ? d : null; };
+const clock = w => { const d = whenDate(w); return d ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null; };
+const tz = w => {
+  const d = whenDate(w); if (!d) return "";
+  try { return (new Intl.DateTimeFormat([], { timeZoneName: "short" }).formatToParts(d).find(p => p.type === "timeZoneName") || {}).value || ""; }
+  catch (e) { return ""; }
+};
+// the visitor's calendar day for a match time (can differ from the event's local day)
+const localDay = w => { const d = whenDate(w); return d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` : null; };
 const ordinal = n => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : n % 10] || "th");
 
 const LABELS = {
@@ -1994,7 +2009,8 @@ function featuredMatch() {
   return up[0] || null;
 }
 function ctxFor(m, e) {
-  const when = m.day ? `${wday(m.day)} ${fmtDate(m.day)}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}` : "Date to be announced";
+  const ld = localDay(m.when) || m.day;   // the visitor's own date when a start time is known
+  const when = ld ? `${wday(ld)} ${fmtDate(ld)}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}` : "Date to be announced";
   return `<div class="ctx"><a class="ev" href="#e-${e.slug}">${IMG.events[e.slug] ? `<img src="${IMG.events[e.slug]}" alt="">` : ""}<span style="display:grid"><b>${esc(e.name)}</b><span>${esc(m.stage)}, best of ${m.bo}</span></span></a>
     <span class="small dim">${when}</span></div>`;
 }
@@ -2082,7 +2098,7 @@ function rail() {
   </section>
   <section class="panel"><h2>Coming up</h2>
     ${next.length ? next.map(m => `<a class="nextm" href="#m-${m.id}">
-      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${m.day ? fmtDay(m.day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}</span>
+      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${(localDay(m.when) || m.day) ? fmtDay(localDay(m.when) || m.day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}</span>
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${split(m)}</a>`).join("")
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
@@ -2196,7 +2212,7 @@ function finalOf(e) {
 }
 // A team's own finish at an event: placement range from the build (results laid onto the prize slots)
 function finishOf(e, team) {
-  if (e.status === "upcoming") return { text: "Upcoming", cls: "word" };
+  if (e.status === "upcoming") return { text: "Upcoming", cls: "word up" };
   const p = (e.placements || {})[team];
   if (!p) return e.status === "live" ? { text: "Still playing", cls: "word on" } : { text: "No series played", cls: "word" };
   if (p.from == null) return { text: p.label, cls: p.label === "Still playing" ? "word on" : "word" };
@@ -2336,7 +2352,7 @@ function matchRow(m) {
     // the model's pick for the format actually played, not both percentages
     const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p, pickA = p >= .5, pick = pickA ? a : b;
     const pp = displayPercent([p, 1 - p])[pickA ? 0 : 1];
-    mid = `<div class="mid pick" title="${esc(`Model's pre-match pick: ${pick} at ${pp}%`)}"><span class="small dim">Model pick</span><span class="pk">${logo(pick, "xs")}<b>${esc(pick)}</b></span><span class="pp">${pp}%</span></div>`;
+    mid = `<div class="mid mpick" title="${esc(`Model's pre-match pick: ${pick} at ${pp}%`)}"><span class="small dim">Model pick</span><span class="pk">${logo(pick, "xs")}<b>${esc(pick)}</b></span><span class="pp">${pp}%</span></div>`;
   }
   else mid = `<div class="mid pct">vs</div>`;
   if (live) tag = `<span class="chip live">Live</span>`;
@@ -2347,7 +2363,9 @@ function matchRow(m) {
     tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${favPct}%">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}</span>`;
   }
   const team = (t, side) => `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}<span>${esc(t || "To be decided")}</span></div>`;
-  const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}</span></div>
+  // the visitor's own clock; if that falls on another calendar day than the event's, say which
+  const ld = localDay(m.when), otherDay = ld && m.day && ld !== m.day;
+  const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}${otherDay ? ` ${esc(wday(ld))}` : ""}</span></div>
     ${team(a, "")}${mid}${team(b, "r")}
     <div class="tag">${tag}<span>${esc(m.stage)}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span></div>`;
   return a && b ? `<a class="mrow" href="#m-${m.id}">${inner}</a>` : `<div class="mrow">${inner}</div>`;
@@ -2425,7 +2443,7 @@ function evMatches(e) {
   const bm = m => {
     const w = winnerOf(m);
     const row = (t, s) => `<div style="${w && t !== w ? "" : w ? "color:var(--text);font-weight:700" : ""}">${logo(t, "sm")}<span style="flex:1">${esc(t || "To be decided")}</span>${m.finished || isLive(m) ? `<b>${s}</b>` : ""}</div>`;
-    const inner = `${row(m.t1, m.w1)}${row(m.t2, m.w2)}<div class="when">${m.day ? fmtDay(m.day) : "TBA"}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</div>`;
+    const inner = `${row(m.t1, m.w1)}${row(m.t2, m.w2)}<div class="when">${(localDay(m.when) || m.day) ? fmtDay(localDay(m.when) || m.day) : "TBA"}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</div>`;
     return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" style="display:block">${inner}</a>` : `<div class="bm">${inner}</div>`;
   };
   const firstTz = e.matches.find(m => m.when);
@@ -2433,7 +2451,7 @@ function evMatches(e) {
   ${e.pool.length ? `<section class="pool" aria-label="Map pool">${e.pool.map(mp => `<div class="maptile" style="${mapBg(mp)}"><span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}</small></span></div>`).join("")}</section>` : ""}
   <div class="evbody">
     <section class="panel">
-      <h2>Matches <span class="dim">${firstTz ? `times in ${esc(tz(firstTz.when))}; ` : ""}percentages are the model's pre-match call</span></h2>
+      <h2>Matches <span class="dim">${firstTz ? `times in your time zone (${esc(tz(firstTz.when))}); ` : ""}the middle column is the model's pre-match pick</span></h2>
       <div class="days" role="group" aria-label="Match day">${days.map(x => `<button type="button" data-day="${x}" data-ev="${e.slug}" aria-pressed="${x === d}"><b>${wday(x)} ${fmtDay(x)}</b><span>${e.matches.filter(m => m.day === x).length} matches</span></button>`).join("")}</div>
       <div class="mlist">${list.map(matchRow).join("")}</div>
       ${list.some(m => !m.t1 || !m.t2) ? `<p class="small dim">Opponents for open slots are set by earlier results.</p>` : ""}
