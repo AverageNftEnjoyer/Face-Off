@@ -1,0 +1,2061 @@
+{
+ "months": {
+  "2025-12": {
+   "done": true,
+   "events": [
+    "CCT/Season 3/Europe/Series 12",
+    "DraculaN/Season 4",
+    "EXTREMESLAND/2025",
+    "NODWIN Gaming/Clutch Series/3",
+    "Odyssey Cup Asia/2025",
+    "XSE Pro League/Season 7"
+   ],
+   "qualifiers": [],
+   "stages": [],
+   "requests": 2,
+   "http_retries": 0
+  },
+  "2025-09": {
+   "done": true,
+   "events": [
+    "Birch Cup/2025",
+    "CCT/Season 3/Europe/Series 6",
+    "CCT/Season 3/Europe/Series 7",
+    "CCT/Season 3/Europe/Series 8",
+    "CCT/Season 3/South America/Series 4",
+    "DraculaN/Season 2",
+    "ESL/Challenger League/Season 50/Europe/Cup 2",
+    "ESL/Challenger League/Season 50/North America/Cup 2",
+    "ESL/Challenger League/Season 50/South America/Cup 2",
+    "Exort/Proving Grounds/Season 4",
+    "FERJEE/Rush/2025",
+    "FISSURE/Playground/2",
+    "Galaxy Battle/2025/Phase 4",
+    "LanDaLan/3",
+    "NODWIN Gaming/Clutch Series/1",
+    "Skyesports/Championship/2025",
+    "T-esports Championship/Season 4",
+    "Winline Insight/Season 8"
+   ],
+   "qualifiers": [
+    "Thunderpick/World Championship/2025/Qualifier"
+   ],
+   "stages": [
+    "Galaxy Battle/2025/Phase 4/Main Stage",
+    "Galaxy Battle/2025/Phase 4/Play-In Stage"
+   ],
+   "requests": 6,
+   "http_retries": 0
+  },
+  "2025-10": {
+   "done": true,
+   "events": [
+    "AGS CUP/2025",
+    "CCT/Season 3/Europe/Series 10",
+    "CCT/Season 3/Europe/Series 9",
+    "CCT/Season 3/South America/Series 5",
+    "CS Asia Championships/2025",
+    "ESL/Challenger League/Season 50/Europe/Cup 3",
+    "ESL/Challenger League/Season 50/Europe/Cup 4",
+    "ESL/Challenger League/Season 50/North America/Cup 3",
+    "ESL/Challenger League/Season 50/North America/Cup 4",
+    "ESL/Challenger League/Season 50/South America/Cup 3",
+    "ESL/Challenger League/Season 50/South America/Cup 4",
+    "Exort/Proving Grounds/Season 5",
+    "FRAG/2025/Philadelphia/2",
+    "MESA/Nomadic Masters/2025/Fall",
+    "Roobet Cup/2025",
+    "Winline Insight/Season 9",
+    "XSE Pro League/Season 6"
+   ],
+   "qualifiers": [],
+   "stages": [],
+   "requests": 9,
+   "http_retries": 0
+  },
+  "2025-11": {
+   "done": true,
+   "events": [
+    "CCT/Season 3/Europe/Series 11",
+    "CCT/Season 3/South America/Series 6",
+    "Circuito Brasileiro de Counter-Strike/2025/Masters/Xeque Mate",
+    "DraculaN/Season 3",
+    "ESL/Challenger League/Season 50/Asia",
+    "ESL/Challenger League/Season 50/Europe",
+    "ESL/Challenger League/Season 50/North America",
+    "ESL/Challenger League/Season 50/South America",
+    "ESL/Impact League/Season 8",
+    "Exort/Proving Grounds/Season 6",
+    "Galaxy Battle/2025/Phase 5",
+    "JB Pro League/Season 1",
+    "NODWIN Gaming/Clutch Series/2",
+    "PLAYzone/MČR/2025",
+    "Perfect World/CS Challenge/Series 2",
+    "Skyesports/World Tour/2025",
+    "Svenska Cupen/2025",
+    "YaLLa Compass/2025/Dubai"
+   ],
+   "qualifiers": [],
+   "stages": [
+    "Galaxy Battle/2025/Phase 5/Main Stage"
+   ],
+   "requests": 10,
+   "http_retries": 0
+  },
+  "2025-08": {
+   "done": true,
+   "events": [
+    "BLAST/Rising/2025/Fall/Asia",
+    "CCT/Season 3/Europe/Series 5",
+    "CCT/Season 3/South America/Series 3",
+    "Circuito FERJEE/2025",
+    "DraculaN/Season 1",
+    "ESL/Challenger League/Season 50/Europe/Cup 1",
+    "ESL/Challenger League/Season 50/North America/Cup 1",
+    "ESL/Challenger League/Season 50/South America/Cup 1",
+    "Exort/Proving Grounds/Season 3",
+    "Liga Ace Esports/North American Masters/2025/Fall",
+    "Liga Ace Esports/South American Masters/2025/Fall",
+    "Perfect World/CS Challenge/Series 1",
+    "RLG/RES/Showdown/2025/Fall",
+    "VS Gaming League/Masters/2025",
+    "YaLLa Compass/2025/Fall"
+   ],
+   "qualifiers": [
+    "StarLadder/StarSeries/2025/Fall/Europe",
+    "Thunderpick/World Championship/2025/Europe/2"
+   ],
+   "stages": [
+    "YaLLa Compass/2025/Fall/Contenders Stage",
+    "YaLLa Compass/2025/Fall/Main Stage"
+   ],
+   "requests": 6,
+   "http_retries": 0
+  },
+  "2025-05": {
+   "done": true,
+   "events": [
+    "CCT/Season 3/Europe/Series 1",
+    "CCT/Season 3/Europe/Series 2",
+    "ESL/Impact League/Season 7",
+    "Elisa/Nordic Championship/2025",
+    "Galaxy Battle/2025/Phase 2",
+    "Hero Esports/Asian Champions League/2025",
+    "LanDaLan/2",
+    "Odyssey Cup/2025/Brazil",
+    "PLAYzone/Conquest of Prague/2025",
+    "Rainbet Cup",
+    "Skyesports/Masters/2025"
+   ],
+   "qualifiers": [
+    "Thunderpick/World Championship/2025/North America/1"
+   ],
+   "stages": [],
+   "requests": 5,
+   "http_retries": 0
+  },
+  "2025-04": {
+   "done": true,
+   "events": [
+    "CCT/Season 2/Global Finals",
+    "Galaxy Battle/2025/Phase 1",
+    "MESA/Nomadic Masters/2025/Spring",
+    "YaLLa Compass/2025/Qatar",
+    "YaLLa Compass/2025/Spring"
+   ],
+   "qualifiers": [
+    "BLAST/Major/2025/Austin/Asia-Pacific",
+    "BLAST/Major/2025/Austin/China",
+    "BLAST/Major/2025/Austin/Europe",
+    "BLAST/Major/2025/Austin/Mongolia and West Asia",
+    "BLAST/Major/2025/Austin/North America",
+    "BLAST/Major/2025/Austin/Oceania and Southeast Asia",
+    "BLAST/Major/2025/Austin/South America",
+    "Thunderpick/World Championship/2025/Europe/1"
+   ],
+   "stages": [
+    "YaLLa Compass/2025/Spring/Contenders Stage",
+    "YaLLa Compass/2025/Spring/Main Stage"
+   ],
+   "requests": 2,
+   "http_retries": 0
+  },
+  "2025-06": {
+   "done": true,
+   "events": [
+    "CCT/Season 3/Europe/Series 3",
+    "CCT/Season 3/South America/Series 1",
+    "Exort/Proving Grounds/Season 1",
+    "Galaxy Battle/2025/Phase 3",
+    "Glitched/2025/Masters",
+    "Winline Insight/Season 7"
+   ],
+   "qualifiers": [
+    "Thunderpick/World Championship/2025/South America/1"
+   ],
+   "stages": [],
+   "requests": 2,
+   "http_retries": 0
+  },
+  "2025-07": {
+   "done": true,
+   "events": [
+    "CCT/Season 3/Europe/Series 4",
+    "CCT/Season 3/South America/Series 2",
+    "Exort/Proving Grounds/Season 2",
+    "FISSURE/Playground/1",
+    "Fragadelphia/19",
+    "YaLLa Compass/2025/Summer"
+   ],
+   "qualifiers": [
+    "ESL/Pro League/Season 22/Asia",
+    "ESL/Pro League/Season 22/Europe",
+    "ESL/Pro League/Season 22/North America",
+    "ESL/Pro League/Season 22/South America",
+    "StarLadder/StarSeries/2025/Fall/North America",
+    "StarLadder/StarSeries/2025/Fall/South America",
+    "Thunderpick/World Championship/2025/North America/2",
+    "Thunderpick/World Championship/2025/South America/2"
+   ],
+   "stages": [
+    "YaLLa Compass/2025/Summer/Contenders Stage",
+    "YaLLa Compass/2025/Summer/Main Stage"
+   ],
+   "requests": 2,
+   "http_retries": 0
+  },
+  "2025-03": {
+   "done": true,
+   "events": [
+    "CCT/Season 2/Europe/Series 20",
+    "DFRAG/Invitational/2025",
+    "Galaxy Battle/2025/STARTER"
+   ],
+   "qualifiers": [
+    "PGL/2025/Astana/Asia",
+    "PGL/2025/Astana/Asia/China",
+    "PGL/2025/Astana/Asia/MENA",
+    "PGL/2025/Astana/Asia/Oceania",
+    "PGL/2025/Astana/Asia/Rest of Asia",
+    "PGL/2025/Astana/Europe",
+    "PGL/2025/Astana/North America",
+    "PGL/2025/Astana/South America",
+    "PGL/2025/Bucharest/Asia",
+    "PGL/2025/Bucharest/Europe",
+    "PGL/2025/Bucharest/North America",
+    "PGL/2025/Bucharest/South America"
+   ],
+   "stages": [],
+   "requests": 2,
+   "http_retries": 0
+  },
+  "2025-01": {
+   "done": true,
+   "events": [
+    "CCT/Season 2/Europe/Series 16",
+    "CCT/Season 2/North America/Series 4",
+    "CCT/Season 2/South America/Series 6",
+    "ESL/Challenger League/Season 49/Asia",
+    "ESL/Challenger League/Season 49/Europe",
+    "ESL/Challenger League/Season 49/North America",
+    "ESL/Challenger League/Season 49/Oceania",
+    "ESL/Challenger League/Season 49/South America",
+    "ICE Invitational/2025",
+    "XSE Pro League/Season 3",
+    "YaLLa Compass/2025/Winter"
+   ],
+   "qualifiers": [],
+   "stages": [
+    "ESL/Challenger League/Season 49/Asia/Weeks 1 to 4",
+    "ESL/Challenger League/Season 49/Asia/Weeks 5 to 8",
+    "ESL/Challenger League/Season 49/North America/Weeks 1 to 5",
+    "ESL/Challenger League/Season 49/North America/Weeks 6 to 11",
+    "ESL/Challenger League/Season 49/Oceania/Weeks 1 to 4",
+    "ESL/Challenger League/Season 49/Oceania/Weeks 5 to 9",
+    "ESL/Challenger League/Season 49/South America/Weeks 1 to 5",
+    "ESL/Challenger League/Season 49/South America/Weeks 6 to 9",
+    "YaLLa Compass/2025/Winter/Contenders Stage",
+    "YaLLa Compass/2025/Winter/Main Stage"
+   ],
+   "requests": 4,
+   "http_retries": 0
+  },
+  "2025-02": {
+   "done": true,
+   "events": [
+    "BLAST/Rising/2025/Spring/Asia",
+    "CCT/Season 2/Europe/Series 17",
+    "CCT/Season 2/Europe/Series 18",
+    "CCT/Season 2/Europe/Series 19",
+    "CCT/Season 2/South America/Series 7",
+    "CCT/Season 2/South America/Series 8",
+    "Liga Ace Esports/North American Masters/2025/Spring",
+    "Liga Ace Esports/South American Masters/2025/Spring",
+    "RLG/RES/Showdown/2025/Spring",
+    "Skyesports/Souvenir/2025"
+   ],
+   "qualifiers": [
+    "Intel Extreme Masters/2025/Dallas/Asia",
+    "Intel Extreme Masters/2025/Dallas/Europe",
+    "Intel Extreme Masters/2025/Dallas/North America",
+    "Intel Extreme Masters/2025/Dallas/South America"
+   ],
+   "stages": [],
+   "requests": 4,
+   "http_retries": 0
+  },
+  "2026-09": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "1win Private Club/1/Qualifier",
+    "EXTREMESLAND/2026/Middle East",
+    "EXTREMESLAND/2026/Oceania",
+    "Intel Extreme Masters/2026/Beijing/Qualifier/Asia",
+    "Intel Extreme Masters/2026/Beijing/Qualifier/Global",
+    "Intel Extreme Masters/2026/China/Qualifier/Asia",
+    "Intel Extreme Masters/2026/China/Qualifier/Global",
+    "PGL/2026/Belgrade/Europe",
+    "PGL/2026/Belgrade/North America",
+    "PGL/2026/Belgrade/South America",
+    "PGL/2026/Masters/Asia/East Asia",
+    "PGL/2026/Masters/Asia/Oceania",
+    "PGL/2026/Masters/Asia/West Asia",
+    "PGL/2026/Masters/Europe",
+    "PGL/2026/Masters/North America",
+    "PGL/2026/Masters/South America",
+    "Stake Ranked/Episode 4/Qualifier",
+    "Stake Ranked/Episode 5/Qualifier",
+    "Thunderpick/World Championship/2026/Qualifier"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-10": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "1win Private Club/2/Qualifier",
+    "EXTREMESLAND/2026/China/Qualifier/1",
+    "EXTREMESLAND/2026/China/Qualifier/2",
+    "EXTREMESLAND/2026/Mongolia",
+    "Stake Ranked/Episode 6/Qualifier"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-07": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "BLAST/Open/2026/Fall/North America",
+    "Esports Nations Cup/2026/Eastern Europe",
+    "Esports Nations Cup/2026/North America",
+    "Esports Nations Cup/2026/South America",
+    "Esports Nations Cup/2026/Southeast Asia",
+    "Esports Nations Cup/2026/Western Europe",
+    "StarLadder/StarSeries/2026/Fall/Europe",
+    "StarLadder/StarSeries/2026/Fall/North America",
+    "StarLadder/StarSeries/2026/Fall/South America",
+    "Thunderpick/World Championship/2026/Europe/2",
+    "Thunderpick/World Championship/2026/South America/2"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-03": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "CS Asia Championships/2026/Qualifier",
+    "CS Asia Championships/2026/Qualifier/China",
+    "PGL/2026/Astana/Asia/East Asia",
+    "PGL/2026/Astana/Asia/Oceania",
+    "PGL/2026/Astana/Asia/West Asia",
+    "PGL/2026/Astana/Europe",
+    "PGL/2026/Astana/North America",
+    "PGL/2026/Astana/South America",
+    "Stake Ranked/Episode 1/Qualifier"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-11": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "EXTREMESLAND/2026/China"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-08": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Esports World Cup/2026/Qualifier",
+    "Logitech G Play Connect/2026/Qualifier"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-04": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Hero Esports/Asian Champions League/2026/Qualifier",
+    "Stake Ranked/Episode 2/Qualifier",
+    "Thunderpick/World Championship/2026/North America"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-02": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Intel Extreme Masters/2026/Atlanta/Qualifier/Americas",
+    "Intel Extreme Masters/2026/Atlanta/Qualifier/Global",
+    "PGL/2026/Bucharest/Asia",
+    "PGL/2026/Bucharest/Asia/East Asia",
+    "PGL/2026/Bucharest/Asia/Oceania",
+    "PGL/2026/Bucharest/Asia/West Asia",
+    "PGL/2026/Bucharest/Europe",
+    "PGL/2026/Bucharest/North America",
+    "PGL/2026/Bucharest/South America"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-01": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Intel Extreme Masters/2026/Brazil/Qualifier/Americas",
+    "Intel Extreme Masters/2026/Brazil/Qualifier/Global",
+    "Intel Extreme Masters/2026/Rio/Qualifier/Americas",
+    "Intel Extreme Masters/2026/Rio/Qualifier/Global"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-06": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Stake Ranked/Episode 3/Qualifier",
+    "Thunderpick/World Championship/2026/South America/1"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  },
+  "2026-05": {
+   "done": true,
+   "events": [],
+   "qualifiers": [
+    "Thunderpick/World Championship/2026/Europe/1"
+   ],
+   "stages": [],
+   "requests": 0,
+   "http_retries": 0
+  }
+ },
+ "requests": 54,
+ "http_retries": 0,
+ "log": [],
+ "requests_before": 0,
+ "retries_before": 0,
+ "plan": {
+  "b_candidates_read": 240,
+  "b_events": {
+   "EXTREMESLAND/2025": [
+    "B",
+    "",
+    "2025-12-18",
+    "2025-12-21"
+   ],
+   "CCT/Season 3/Europe/Series 7": [
+    "B",
+    "",
+    "2025-09-19",
+    "2025-10-01"
+   ],
+   "DraculaN/Season 4": [
+    "B",
+    "",
+    "2025-12-17",
+    "2025-12-21"
+   ],
+   "Odyssey Cup Asia/2025": [
+    "B",
+    "",
+    "2025-12-12",
+    "2025-12-14"
+   ],
+   "NODWIN Gaming/Clutch Series/3": [
+    "B",
+    "",
+    "2025-12-01",
+    "2025-12-18"
+   ],
+   "Winline Insight/Season 9": [
+    "B",
+    "",
+    "2025-10-20",
+    "2025-11-06"
+   ],
+   "NODWIN Gaming/Clutch Series/2": [
+    "B",
+    "",
+    "2025-11-01",
+    "2025-11-13"
+   ],
+   "Circuito Brasileiro de Counter-Strike/2025/Masters/Xeque Mate": [
+    "B",
+    "",
+    "2025-11-15",
+    "2025-11-16"
+   ],
+   "DraculaN/Season 3": [
+    "B",
+    "",
+    "2025-11-20",
+    "2025-11-23"
+   ],
+   "FRAG/2025/Philadelphia/2": [
+    "B",
+    "",
+    "2025-10-02",
+    "2025-10-05"
+   ],
+   "JB Pro League/Season 1": [
+    "B",
+    "",
+    "2025-11-11",
+    "2025-11-23"
+   ],
+   "CCT/Season 3/Europe/Series 12": [
+    "B",
+    "",
+    "2025-12-02",
+    "2025-12-14"
+   ],
+   "DraculaN/Season 1": [
+    "B",
+    "",
+    "2025-08-29",
+    "2025-08-31"
+   ],
+   "DraculaN/Season 2": [
+    "B",
+    "",
+    "2025-09-25",
+    "2025-09-28"
+   ],
+   "NODWIN Gaming/Clutch Series/1": [
+    "B",
+    "",
+    "2025-09-29",
+    "2025-10-19"
+   ],
+   "Winline Insight/Season 8": [
+    "B",
+    "",
+    "2025-09-22",
+    "2025-10-09"
+   ],
+   "Perfect World/CS Challenge/Series 2": [
+    "B",
+    "",
+    "2025-11-13",
+    "2025-11-16"
+   ],
+   "Exort/Proving Grounds/Season 6": [
+    "B",
+    "",
+    "2025-11-01",
+    "2025-11-13"
+   ],
+   "CCT/Season 3/Europe/Series 11": [
+    "B",
+    "",
+    "2025-11-11",
+    "2025-11-23"
+   ],
+   "Skyesports/Masters/2025": [
+    "B",
+    "",
+    "2025-05-26",
+    "2025-06-01"
+   ],
+   "CCT/Season 3/South America/Series 6": [
+    "B",
+    "",
+    "2025-11-03",
+    "2025-11-15"
+   ],
+   "VS Gaming League/Masters/2025": [
+    "B",
+    "",
+    "2025-08-29",
+    "2025-08-31"
+   ],
+   "Galaxy Battle/2025/Phase 5": [
+    "B",
+    "",
+    "2025-11-11",
+    "2025-12-09"
+   ],
+   "CCT/Season 3/Europe/Series 10": [
+    "B",
+    "",
+    "2025-10-28",
+    "2025-11-09"
+   ],
+   "Birch Cup/2025": [
+    "B",
+    "",
+    "2025-09-26",
+    "2025-09-28"
+   ],
+   "T-esports Championship/Season 4": [
+    "B",
+    "",
+    "2025-09-22",
+    "2025-11-15"
+   ],
+   "Svenska Cupen/2025": [
+    "B",
+    "",
+    "2025-11-12",
+    "2025-11-15"
+   ],
+   "FERJEE/Rush/2025": [
+    "B",
+    "",
+    "2025-09-27",
+    "2025-09-30"
+   ],
+   "CCT/Season 3/Europe/Series 9": [
+    "B",
+    "",
+    "2025-10-21",
+    "2025-11-02"
+   ],
+   "AGS CUP/2025": [
+    "B",
+    "",
+    "2025-10-10",
+    "2025-10-12"
+   ],
+   "CCT/Season 3/South America/Series 5": [
+    "B",
+    "",
+    "2025-10-06",
+    "2025-10-18"
+   ],
+   "YaLLa Compass/2025/Qatar": [
+    "B",
+    "",
+    "2025-04-17",
+    "2025-04-20"
+   ],
+   "Exort/Proving Grounds/Season 5": [
+    "B",
+    "",
+    "2025-10-01",
+    "2025-10-13"
+   ],
+   "LanDaLan/3": [
+    "B",
+    "",
+    "2025-09-25",
+    "2025-09-28"
+   ],
+   "CCT/Season 3/Europe/Series 8": [
+    "B",
+    "",
+    "2025-09-30",
+    "2025-10-12"
+   ],
+   "Exort/Proving Grounds/Season 4": [
+    "B",
+    "",
+    "2025-09-12",
+    "2025-09-24"
+   ],
+   "Galaxy Battle/2025/Phase 4": [
+    "B",
+    "",
+    "2025-09-09",
+    "2025-10-12"
+   ],
+   "CCT/Season 3/South America/Series 4": [
+    "B",
+    "",
+    "2025-09-04",
+    "2025-09-16"
+   ],
+   "CCT/Season 3/Europe/Series 6": [
+    "B",
+    "",
+    "2025-09-09",
+    "2025-09-21"
+   ],
+   "Perfect World/CS Challenge/Series 1": [
+    "B",
+    "",
+    "2025-08-29",
+    "2025-08-31"
+   ],
+   "Glitched/2025/Masters": [
+    "B",
+    "",
+    "2025-06-13",
+    "2025-06-15"
+   ],
+   "Exort/Proving Grounds/Season 3": [
+    "B",
+    "",
+    "2025-08-10",
+    "2025-08-22"
+   ],
+   "CCT/Season 3/South America/Series 3": [
+    "B",
+    "",
+    "2025-08-07",
+    "2025-08-19"
+   ],
+   "CCT/Season 3/Europe/Series 5": [
+    "B",
+    "",
+    "2025-08-19",
+    "2025-08-31"
+   ],
+   "ESL/Challenger League/Season 50/South America/Cup 4": [
+    "B",
+    "",
+    "2025-10-23",
+    "2025-11-15"
+   ],
+   "ESL/Challenger League/Season 50/South America/Cup 3": [
+    "B",
+    "",
+    "2025-10-05",
+    "2025-10-19"
+   ],
+   "ESL/Challenger League/Season 50/South America/Cup 2": [
+    "B",
+    "",
+    "2025-09-08",
+    "2025-09-22"
+   ],
+   "ESL/Challenger League/Season 50/South America/Cup 1": [
+    "B",
+    "",
+    "2025-08-11",
+    "2025-08-31"
+   ],
+   "ESL/Challenger League/Season 50/North America/Cup 4": [
+    "B",
+    "",
+    "2025-10-23",
+    "2025-11-15"
+   ],
+   "ESL/Challenger League/Season 50/North America/Cup 3": [
+    "B",
+    "",
+    "2025-10-05",
+    "2025-10-19"
+   ],
+   "ESL/Challenger League/Season 50/North America/Cup 2": [
+    "B",
+    "",
+    "2025-09-08",
+    "2025-09-22"
+   ],
+   "ESL/Challenger League/Season 50/North America/Cup 1": [
+    "B",
+    "",
+    "2025-08-11",
+    "2025-08-31"
+   ],
+   "ESL/Challenger League/Season 50/Europe/Cup 4": [
+    "B",
+    "",
+    "2025-10-23",
+    "2025-11-16"
+   ],
+   "ESL/Challenger League/Season 50/Europe/Cup 3": [
+    "B",
+    "",
+    "2025-10-05",
+    "2025-10-20"
+   ],
+   "ESL/Challenger League/Season 50/Europe/Cup 2": [
+    "B",
+    "",
+    "2025-09-08",
+    "2025-09-23"
+   ],
+   "ESL/Challenger League/Season 50/Europe/Cup 1": [
+    "B",
+    "",
+    "2025-08-11",
+    "2025-09-01"
+   ],
+   "Circuito FERJEE/2025": [
+    "B",
+    "",
+    "2025-08-13",
+    "2025-08-15"
+   ],
+   "CCT/Season 3/South America/Series 2": [
+    "B",
+    "",
+    "2025-07-24",
+    "2025-08-05"
+   ],
+   "CCT/Season 3/Europe/Series 4": [
+    "B",
+    "",
+    "2025-07-29",
+    "2025-08-10"
+   ],
+   "Elisa/Nordic Championship/2025": [
+    "B",
+    "",
+    "2025-05-20",
+    "2025-05-24"
+   ],
+   "Exort/Proving Grounds/Season 2": [
+    "B",
+    "",
+    "2025-07-01",
+    "2025-07-13"
+   ],
+   "Winline Insight/Season 7": [
+    "B",
+    "",
+    "2025-06-23",
+    "2025-07-22"
+   ],
+   "Fragadelphia/19": [
+    "B",
+    "",
+    "2025-07-17",
+    "2025-07-20"
+   ],
+   "CCT/Season 3/South America/Series 1": [
+    "B",
+    "",
+    "2025-06-14",
+    "2025-06-26"
+   ],
+   "Galaxy Battle/2025/Phase 3": [
+    "B",
+    "",
+    "2025-06-11",
+    "2025-06-24"
+   ],
+   "CCT/Season 3/Europe/Series 3": [
+    "B",
+    "",
+    "2025-06-10",
+    "2025-06-22"
+   ],
+   "Exort/Proving Grounds/Season 1": [
+    "B",
+    "",
+    "2025-06-06",
+    "2025-06-22"
+   ],
+   "Odyssey Cup/2025/Brazil": [
+    "B",
+    "",
+    "2025-05-13",
+    "2025-06-14"
+   ],
+   "CCT/Season 3/Europe/Series 2": [
+    "B",
+    "",
+    "2025-05-20",
+    "2025-06-01"
+   ],
+   "Rainbet Cup": [
+    "B",
+    "",
+    "2025-05-07",
+    "2025-05-19"
+   ],
+   "Galaxy Battle/2025/Phase 2": [
+    "B",
+    "",
+    "2025-05-11",
+    "2025-05-31"
+   ],
+   "LanDaLan/2": [
+    "B",
+    "",
+    "2025-05-05",
+    "2025-05-08"
+   ],
+   "Galaxy Battle/2025/STARTER": [
+    "B",
+    "",
+    "2025-03-11",
+    "2025-03-31"
+   ],
+   "Galaxy Battle/2025/Phase 1": [
+    "B",
+    "",
+    "2025-04-11",
+    "2025-05-01"
+   ],
+   "CCT/Season 3/Europe/Series 1": [
+    "B",
+    "",
+    "2025-05-06",
+    "2025-05-18"
+   ],
+   "PLAYzone/Conquest of Prague/2025": [
+    "B",
+    "",
+    "2025-05-30",
+    "2025-06-01"
+   ],
+   "PLAYzone/MČR/2025": [
+    "B",
+    "",
+    "2025-11-28",
+    "2025-11-29"
+   ],
+   "DFRAG/Invitational/2025": [
+    "B",
+    "",
+    "2025-03-20",
+    "2025-03-23"
+   ],
+   "ICE Invitational/2025": [
+    "B",
+    "",
+    "2025-01-20",
+    "2025-01-21"
+   ],
+   "ESL/Challenger League/Season 49/Oceania": [
+    "B",
+    "",
+    "2025-01-22",
+    "2025-05-04"
+   ],
+   "ESL/Challenger League/Season 50/Asia": [
+    "B",
+    "",
+    "2025-11-19",
+    "2025-11-20"
+   ],
+   "ESL/Challenger League/Season 49/Asia": [
+    "B",
+    "",
+    "2025-01-21",
+    "2025-05-04"
+   ],
+   "ESL/Challenger League/Season 50/South America": [
+    "B",
+    "",
+    "2025-11-18",
+    "2025-11-20"
+   ],
+   "ESL/Challenger League/Season 49/South America": [
+    "B",
+    "",
+    "2025-01-21",
+    "2025-05-11"
+   ],
+   "ESL/Challenger League/Season 50/North America": [
+    "B",
+    "",
+    "2025-11-19",
+    "2025-11-20"
+   ],
+   "ESL/Challenger League/Season 49/North America": [
+    "B",
+    "",
+    "2025-01-21",
+    "2025-05-11"
+   ],
+   "ESL/Challenger League/Season 50/Europe": [
+    "B",
+    "",
+    "2025-11-18",
+    "2025-11-20"
+   ],
+   "ESL/Challenger League/Season 49/Europe": [
+    "B",
+    "",
+    "2025-01-21",
+    "2025-05-11"
+   ],
+   "XSE Pro League/Season 7": [
+    "B",
+    "",
+    "2025-12-25",
+    "2025-12-28"
+   ],
+   "XSE Pro League/Season 6": [
+    "B",
+    "",
+    "2025-10-01",
+    "2025-10-02"
+   ],
+   "XSE Pro League/Season 3": [
+    "B",
+    "",
+    "2025-01-09",
+    "2025-01-12"
+   ],
+   "BLAST/Rising/2025/Fall/Asia": [
+    "B",
+    "",
+    "2025-08-01",
+    "2025-08-03"
+   ],
+   "Liga Ace Esports/South American Masters/2025/Fall": [
+    "B",
+    "",
+    "2025-08-01",
+    "2025-08-03"
+   ],
+   "Liga Ace Esports/North American Masters/2025/Fall": [
+    "B",
+    "",
+    "2025-08-01",
+    "2025-08-03"
+   ],
+   "RLG/RES/Showdown/2025/Fall": [
+    "B",
+    "",
+    "2025-08-01",
+    "2025-08-03"
+   ],
+   "BLAST/Rising/2025/Spring/Asia": [
+    "B",
+    "",
+    "2025-02-11",
+    "2025-02-13"
+   ],
+   "Liga Ace Esports/South American Masters/2025/Spring": [
+    "B",
+    "",
+    "2025-02-08",
+    "2025-02-09"
+   ],
+   "Liga Ace Esports/North American Masters/2025/Spring": [
+    "B",
+    "",
+    "2025-02-13",
+    "2025-02-14"
+   ],
+   "RLG/RES/Showdown/2025/Spring": [
+    "B",
+    "",
+    "2025-02-08",
+    "2025-02-09"
+   ],
+   "CCT/Season 2/South America/Series 8": [
+    "B",
+    "",
+    "2025-02-26",
+    "2025-03-11"
+   ],
+   "CCT/Season 2/South America/Series 7": [
+    "B",
+    "",
+    "2025-02-09",
+    "2025-02-22"
+   ],
+   "CCT/Season 2/South America/Series 6": [
+    "B",
+    "",
+    "2025-01-14",
+    "2025-02-01"
+   ],
+   "CCT/Season 2/North America/Series 4": [
+    "B",
+    "",
+    "2025-01-14",
+    "2025-02-08"
+   ],
+   "CCT/Season 2/Europe/Series 20": [
+    "B",
+    "",
+    "2025-03-03",
+    "2025-03-16"
+   ],
+   "CCT/Season 2/Europe/Series 19": [
+    "B",
+    "",
+    "2025-02-26",
+    "2025-03-11"
+   ],
+   "CCT/Season 2/Europe/Series 18": [
+    "B",
+    "",
+    "2025-02-10",
+    "2025-02-23"
+   ],
+   "CCT/Season 2/Europe/Series 17": [
+    "B",
+    "",
+    "2025-02-01",
+    "2025-02-15"
+   ],
+   "CCT/Season 2/Europe/Series 16": [
+    "B",
+    "",
+    "2025-01-20",
+    "2025-02-02"
+   ],
+   "YaLLa Compass/2025/Fall": [
+    "B",
+    "",
+    "2025-08-25",
+    "2025-09-24"
+   ],
+   "YaLLa Compass/2025/Summer": [
+    "B",
+    "",
+    "2025-07-21",
+    "2025-09-03"
+   ],
+   "YaLLa Compass/2025/Spring": [
+    "B",
+    "",
+    "2025-04-28",
+    "2025-05-27"
+   ],
+   "YaLLa Compass/2025/Winter": [
+    "B",
+    "",
+    "2025-01-13",
+    "2025-03-12"
+   ]
+  },
+  "qualifiers": {
+   "1win Private Club/1/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-09-07",
+    "2026-09-10"
+   ],
+   "1win Private Club/2/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-10-07",
+    "2026-10-10"
+   ],
+   "BLAST/Major/2025/Austin/Asia-Pacific": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/China": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/Europe": [
+    "A",
+    "Qualifier",
+    "2025-04-14",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/Mongolia and West Asia": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/North America": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/Oceania and Southeast Asia": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Major/2025/Austin/South America": [
+    "B",
+    "Qualifier",
+    "2025-04-15",
+    "2025-04-17"
+   ],
+   "BLAST/Open/2026/Fall/North America": [
+    "B",
+    "qualifier",
+    "2026-07-09",
+    "2026-07-11"
+   ],
+   "CS Asia Championships/2026/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-03-09",
+    "2026-03-12"
+   ],
+   "CS Asia Championships/2026/Qualifier/China": [
+    "C",
+    "Qualifier",
+    "2026-03-06",
+    "2026-03-08"
+   ],
+   "ESL/Pro League/Season 22/Asia": [
+    "B",
+    "Qualifier",
+    "2025-07-11",
+    "2025-07-14"
+   ],
+   "ESL/Pro League/Season 22/Europe": [
+    "A",
+    "Qualifier",
+    "2025-07-14",
+    "2025-07-17"
+   ],
+   "ESL/Pro League/Season 22/North America": [
+    "B",
+    "Qualifier",
+    "2025-07-11",
+    "2025-07-14"
+   ],
+   "ESL/Pro League/Season 22/South America": [
+    "B",
+    "Qualifier",
+    "2025-07-16",
+    "2025-07-19"
+   ],
+   "EXTREMESLAND/2026/China": [
+    "C",
+    "",
+    "2026-11-14",
+    "2026-11-15"
+   ],
+   "EXTREMESLAND/2026/China/Qualifier/1": [
+    "C",
+    "Qualifier",
+    "2026-10-17",
+    "2026-10-18"
+   ],
+   "EXTREMESLAND/2026/China/Qualifier/2": [
+    "C",
+    "Qualifier",
+    "2026-10-24",
+    "2026-11-01"
+   ],
+   "EXTREMESLAND/2026/Middle East": [
+    "C",
+    "",
+    "2026-09-25",
+    "2026-09-26"
+   ],
+   "EXTREMESLAND/2026/Mongolia": [
+    "C",
+    "",
+    "2026-10-18",
+    "2026-10-25"
+   ],
+   "EXTREMESLAND/2026/Oceania": [
+    "C",
+    "",
+    "2026-09-30",
+    "2026-10-04"
+   ],
+   "Esports Nations Cup/2026/Eastern Europe": [
+    "B",
+    "Qualifier",
+    "2026-07-17",
+    "2026-07-19"
+   ],
+   "Esports Nations Cup/2026/North America": [
+    "C",
+    "Qualifier",
+    "2026-07-17",
+    "2026-07-19"
+   ],
+   "Esports Nations Cup/2026/South America": [
+    "C",
+    "Qualifier",
+    "2026-07-17",
+    "2026-07-19"
+   ],
+   "Esports Nations Cup/2026/Southeast Asia": [
+    "C",
+    "Qualifier",
+    "2026-07-17",
+    "2026-07-19"
+   ],
+   "Esports Nations Cup/2026/Western Europe": [
+    "B",
+    "Qualifier",
+    "2026-07-17",
+    "2026-07-19"
+   ],
+   "Esports World Cup/2026/Qualifier": [
+    "B",
+    "",
+    "2026-08-07",
+    "2026-08-09"
+   ],
+   "Hero Esports/Asian Champions League/2026/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-04-30",
+    "2026-05-03"
+   ],
+   "Intel Extreme Masters/2025/Dallas/Asia": [
+    "B",
+    "Qualifier",
+    "2025-02-11",
+    "2025-02-12"
+   ],
+   "Intel Extreme Masters/2025/Dallas/Europe": [
+    "A",
+    "Qualifier",
+    "2025-02-10",
+    "2025-02-20"
+   ],
+   "Intel Extreme Masters/2025/Dallas/North America": [
+    "B",
+    "Qualifier",
+    "2025-02-11",
+    "2025-02-12"
+   ],
+   "Intel Extreme Masters/2025/Dallas/South America": [
+    "B",
+    "Qualifier",
+    "2025-02-11",
+    "2025-02-12"
+   ],
+   "Intel Extreme Masters/2026/Atlanta/Qualifier/Americas": [
+    "B",
+    "Qualifier",
+    "2026-02-10",
+    "2026-02-12"
+   ],
+   "Intel Extreme Masters/2026/Atlanta/Qualifier/Global": [
+    "A",
+    "Qualifier",
+    "2026-02-10",
+    "2026-02-12"
+   ],
+   "Intel Extreme Masters/2026/Beijing/Qualifier/Asia": [
+    "B",
+    "Qualifier",
+    "2026-09-02",
+    "2026-09-04"
+   ],
+   "Intel Extreme Masters/2026/Beijing/Qualifier/Global": [
+    "A",
+    "Qualifier",
+    "2026-09-02",
+    "2026-09-04"
+   ],
+   "Intel Extreme Masters/2026/Brazil/Qualifier/Americas": [
+    "B",
+    "Qualifier",
+    "2026-01-21",
+    "2026-01-23"
+   ],
+   "Intel Extreme Masters/2026/Brazil/Qualifier/Global": [
+    "A",
+    "Qualifier",
+    "2026-01-21",
+    "2026-01-23"
+   ],
+   "Intel Extreme Masters/2026/China/Qualifier/Asia": [
+    "B",
+    "Qualifier",
+    "2026-09-02",
+    "2026-09-04"
+   ],
+   "Intel Extreme Masters/2026/China/Qualifier/Global": [
+    "A",
+    "Qualifier",
+    "2026-09-02",
+    "2026-09-04"
+   ],
+   "Intel Extreme Masters/2026/Rio/Qualifier/Americas": [
+    "B",
+    "Qualifier",
+    "2026-01-21",
+    "2026-01-23"
+   ],
+   "Intel Extreme Masters/2026/Rio/Qualifier/Global": [
+    "A",
+    "Qualifier",
+    "2026-01-21",
+    "2026-01-23"
+   ],
+   "Logitech G Play Connect/2026/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-08-27",
+    "2026-09-05"
+   ],
+   "PGL/2025/Astana/Asia": [
+    "B",
+    "Qualifier",
+    "2025-03-31",
+    "2025-04-01"
+   ],
+   "PGL/2025/Astana/Asia/China": [
+    "C",
+    "Qualifier",
+    "2025-03-27",
+    "2025-03-30"
+   ],
+   "PGL/2025/Astana/Asia/MENA": [
+    "C",
+    "Qualifier",
+    "2025-03-27",
+    "2025-03-28"
+   ],
+   "PGL/2025/Astana/Asia/Oceania": [
+    "C",
+    "Qualifier",
+    "2025-03-27",
+    "2025-03-30"
+   ],
+   "PGL/2025/Astana/Asia/Rest of Asia": [
+    "C",
+    "Qualifier",
+    "2025-03-27",
+    "2025-03-30"
+   ],
+   "PGL/2025/Astana/Europe": [
+    "B",
+    "Qualifier",
+    "2025-03-27",
+    "2025-04-01"
+   ],
+   "PGL/2025/Astana/North America": [
+    "B",
+    "Qualifier",
+    "2025-03-27",
+    "2025-04-01"
+   ],
+   "PGL/2025/Astana/South America": [
+    "B",
+    "Qualifier",
+    "2025-03-27",
+    "2025-04-01"
+   ],
+   "PGL/2025/Bucharest/Asia": [
+    "B",
+    "Qualifier",
+    "2025-03-06",
+    "2025-03-09"
+   ],
+   "PGL/2025/Bucharest/Europe": [
+    "B",
+    "Qualifier",
+    "2025-03-07",
+    "2025-03-12"
+   ],
+   "PGL/2025/Bucharest/North America": [
+    "B",
+    "Qualifier",
+    "2025-03-05",
+    "2025-03-10"
+   ],
+   "PGL/2025/Bucharest/South America": [
+    "B",
+    "Qualifier",
+    "2025-03-07",
+    "2025-03-12"
+   ],
+   "PGL/2026/Astana/Asia/East Asia": [
+    "C",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-01"
+   ],
+   "PGL/2026/Astana/Asia/Oceania": [
+    "C",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-01"
+   ],
+   "PGL/2026/Astana/Asia/West Asia": [
+    "C",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-01"
+   ],
+   "PGL/2026/Astana/Europe": [
+    "B",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-03"
+   ],
+   "PGL/2026/Astana/North America": [
+    "B",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-03"
+   ],
+   "PGL/2026/Astana/South America": [
+    "B",
+    "Qualifier",
+    "2026-03-31",
+    "2026-04-03"
+   ],
+   "PGL/2026/Belgrade/Europe": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "PGL/2026/Belgrade/North America": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "PGL/2026/Belgrade/South America": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "PGL/2026/Bucharest/Asia": [
+    "B",
+    "Qualifier",
+    "2026-02-28",
+    "2026-03-01"
+   ],
+   "PGL/2026/Bucharest/Asia/East Asia": [
+    "C",
+    "Qualifier",
+    "2026-02-26",
+    "2026-02-27"
+   ],
+   "PGL/2026/Bucharest/Asia/Oceania": [
+    "C",
+    "Qualifier",
+    "2026-02-26",
+    "2026-02-27"
+   ],
+   "PGL/2026/Bucharest/Asia/West Asia": [
+    "C",
+    "Qualifier",
+    "2026-02-26",
+    "2026-02-27"
+   ],
+   "PGL/2026/Bucharest/Europe": [
+    "B",
+    "Qualifier",
+    "2026-02-26",
+    "2026-03-01"
+   ],
+   "PGL/2026/Bucharest/North America": [
+    "B",
+    "Qualifier",
+    "2026-02-26",
+    "2026-03-01"
+   ],
+   "PGL/2026/Bucharest/South America": [
+    "B",
+    "Qualifier",
+    "2026-02-26",
+    "2026-03-01"
+   ],
+   "PGL/2026/Masters/Asia/East Asia": [
+    "C",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-10"
+   ],
+   "PGL/2026/Masters/Asia/Oceania": [
+    "C",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-10"
+   ],
+   "PGL/2026/Masters/Asia/West Asia": [
+    "C",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-10"
+   ],
+   "PGL/2026/Masters/Europe": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "PGL/2026/Masters/North America": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "PGL/2026/Masters/South America": [
+    "B",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-12"
+   ],
+   "Stake Ranked/Episode 1/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-03-04",
+    "2026-03-08"
+   ],
+   "Stake Ranked/Episode 2/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-04-29",
+    "2026-05-03"
+   ],
+   "Stake Ranked/Episode 3/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-06-18",
+    "2026-06-21"
+   ],
+   "Stake Ranked/Episode 4/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-09-03",
+    "2026-09-06"
+   ],
+   "Stake Ranked/Episode 5/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-09-24",
+    "2026-09-27"
+   ],
+   "Stake Ranked/Episode 6/Qualifier": [
+    "B",
+    "Qualifier",
+    "2026-10-19",
+    "2026-10-22"
+   ],
+   "StarLadder/StarSeries/2025/Fall/Europe": [
+    "B",
+    "Qualifier",
+    "2025-08-13",
+    "2025-08-17"
+   ],
+   "StarLadder/StarSeries/2025/Fall/North America": [
+    "B",
+    "Qualifier",
+    "2025-07-15",
+    "2025-07-21"
+   ],
+   "StarLadder/StarSeries/2025/Fall/South America": [
+    "C",
+    "Qualifier",
+    "2025-07-15",
+    "2025-07-21"
+   ],
+   "StarLadder/StarSeries/2026/Fall/Europe": [
+    "B",
+    "Qualifier",
+    "2026-07-21",
+    "2026-07-26"
+   ],
+   "StarLadder/StarSeries/2026/Fall/North America": [
+    "C",
+    "Qualifier",
+    "2026-07-28",
+    "2026-08-02"
+   ],
+   "StarLadder/StarSeries/2026/Fall/South America": [
+    "C",
+    "Qualifier",
+    "2026-07-28",
+    "2026-08-02"
+   ],
+   "Thunderpick/World Championship/2025/Europe/1": [
+    "B",
+    "",
+    "2025-04-28",
+    "2025-05-07"
+   ],
+   "Thunderpick/World Championship/2025/Europe/2": [
+    "B",
+    "",
+    "2025-08-05",
+    "2025-08-14"
+   ],
+   "Thunderpick/World Championship/2025/North America/1": [
+    "B",
+    "",
+    "2025-05-08",
+    "2025-05-16"
+   ],
+   "Thunderpick/World Championship/2025/North America/2": [
+    "B",
+    "",
+    "2025-07-24",
+    "2025-08-01"
+   ],
+   "Thunderpick/World Championship/2025/Qualifier": [
+    "A",
+    "Qualifier",
+    "2025-09-09",
+    "2025-09-11"
+   ],
+   "Thunderpick/World Championship/2025/South America/1": [
+    "B",
+    "",
+    "2025-06-27",
+    "2025-07-02"
+   ],
+   "Thunderpick/World Championship/2025/South America/2": [
+    "B",
+    "",
+    "2025-07-08",
+    "2025-07-13"
+   ],
+   "Thunderpick/World Championship/2026/Europe/1": [
+    "B",
+    "",
+    "2026-05-23",
+    "2026-05-31"
+   ],
+   "Thunderpick/World Championship/2026/Europe/2": [
+    "B",
+    "",
+    "2026-07-25",
+    "2026-08-02"
+   ],
+   "Thunderpick/World Championship/2026/North America": [
+    "B",
+    "",
+    "2026-04-26",
+    "2026-05-03"
+   ],
+   "Thunderpick/World Championship/2026/Qualifier": [
+    "A",
+    "Qualifier",
+    "2026-09-09",
+    "2026-09-13"
+   ],
+   "Thunderpick/World Championship/2026/South America/1": [
+    "C",
+    "",
+    "2026-06-24",
+    "2026-06-28"
+   ],
+   "Thunderpick/World Championship/2026/South America/2": [
+    "B",
+    "",
+    "2026-07-08",
+    "2026-07-12"
+   ]
+  },
+  "sa_gaps": {
+   "CCT/Season 2/Global Finals": [
+    "A",
+    "",
+    "2025-04-24",
+    "2025-04-27"
+   ],
+   "CS Asia Championships/2025": [
+    "A",
+    "",
+    "2025-10-14",
+    "2025-10-19"
+   ],
+   "ESL/Impact League/Season 7": [
+    "A",
+    "",
+    "2025-05-22",
+    "2025-05-25"
+   ],
+   "ESL/Impact League/Season 8": [
+    "A",
+    "",
+    "2025-11-28",
+    "2025-11-30"
+   ],
+   "FISSURE/Playground/1": [
+    "A",
+    "",
+    "2025-07-15",
+    "2025-07-20"
+   ],
+   "FISSURE/Playground/2": [
+    "S",
+    "",
+    "2025-09-12",
+    "2025-09-21"
+   ],
+   "Hero Esports/Asian Champions League/2025": [
+    "A",
+    "",
+    "2025-05-06",
+    "2025-05-16"
+   ],
+   "MESA/Nomadic Masters/2025/Fall": [
+    "A",
+    "",
+    "2025-10-15",
+    "2025-10-19"
+   ],
+   "MESA/Nomadic Masters/2025/Spring": [
+    "A",
+    "",
+    "2025-04-30",
+    "2025-05-04"
+   ],
+   "Roobet Cup/2025": [
+    "A",
+    "",
+    "2025-10-13",
+    "2025-10-22"
+   ],
+   "Skyesports/Championship/2025": [
+    "S",
+    "",
+    "2025-09-15",
+    "2025-09-21"
+   ],
+   "Skyesports/Souvenir/2025": [
+    "A",
+    "",
+    "2025-02-27",
+    "2025-03-01"
+   ],
+   "Skyesports/World Tour/2025": [
+    "S",
+    "",
+    "2025-11-10",
+    "2025-11-16"
+   ],
+   "YaLLa Compass/2025/Dubai": [
+    "S",
+    "",
+    "2025-11-19",
+    "2025-11-23"
+   ]
+  },
+  "discovery_requests": {
+   "b": 0,
+   "qualifiers": 0,
+   "qualifier_listings": 0,
+   "gaps": 0,
+   "c_probe": 0
+  },
+  "c_probe": {
+   "newest_500_added": [
+    "2026-10-06",
+    "2026-05-29"
+   ],
+   "titles_naming_2025": 6
+  },
+  "table": [
+   {
+    "month": "2026-11",
+    "b_events": 0,
+    "qualifiers": 1,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-10",
+    "b_events": 0,
+    "qualifiers": 5,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-09",
+    "b_events": 0,
+    "qualifiers": 19,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-08",
+    "b_events": 0,
+    "qualifiers": 2,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-07",
+    "b_events": 0,
+    "qualifiers": 11,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-06",
+    "b_events": 0,
+    "qualifiers": 2,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-05",
+    "b_events": 0,
+    "qualifiers": 1,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-04",
+    "b_events": 0,
+    "qualifiers": 3,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-03",
+    "b_events": 0,
+    "qualifiers": 9,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-02",
+    "b_events": 0,
+    "qualifiers": 9,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2026-01",
+    "b_events": 0,
+    "qualifiers": 4,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 0,
+    "est_requests": 0
+   },
+   {
+    "month": "2025-12",
+    "b_events": 6,
+    "qualifiers": 0,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 1,
+    "est_requests": 2
+   },
+   {
+    "month": "2025-11",
+    "b_events": 15,
+    "qualifiers": 0,
+    "sa_gap_events": 3,
+    "stage_listings_needed": 9,
+    "est_requests": 10
+   },
+   {
+    "month": "2025-10",
+    "b_events": 14,
+    "qualifiers": 0,
+    "sa_gap_events": 3,
+    "stage_listings_needed": 9,
+    "est_requests": 10
+   },
+   {
+    "month": "2025-09",
+    "b_events": 16,
+    "qualifiers": 1,
+    "sa_gap_events": 2,
+    "stage_listings_needed": 11,
+    "est_requests": 12
+   },
+   {
+    "month": "2025-08",
+    "b_events": 15,
+    "qualifiers": 2,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 11,
+    "est_requests": 12
+   },
+   {
+    "month": "2025-07",
+    "b_events": 5,
+    "qualifiers": 8,
+    "sa_gap_events": 1,
+    "stage_listings_needed": 3,
+    "est_requests": 4
+   },
+   {
+    "month": "2025-06",
+    "b_events": 6,
+    "qualifiers": 1,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 4,
+    "est_requests": 5
+   },
+   {
+    "month": "2025-05",
+    "b_events": 9,
+    "qualifiers": 1,
+    "sa_gap_events": 2,
+    "stage_listings_needed": 7,
+    "est_requests": 8
+   },
+   {
+    "month": "2025-04",
+    "b_events": 3,
+    "qualifiers": 8,
+    "sa_gap_events": 2,
+    "stage_listings_needed": 4,
+    "est_requests": 5
+   },
+   {
+    "month": "2025-03",
+    "b_events": 3,
+    "qualifiers": 12,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 2,
+    "est_requests": 3
+   },
+   {
+    "month": "2025-02",
+    "b_events": 9,
+    "qualifiers": 4,
+    "sa_gap_events": 1,
+    "stage_listings_needed": 7,
+    "est_requests": 8
+   },
+   {
+    "month": "2025-01",
+    "b_events": 11,
+    "qualifiers": 0,
+    "sa_gap_events": 0,
+    "stage_listings_needed": 6,
+    "est_requests": 7
+   }
+  ]
+ }
+}

@@ -31,6 +31,7 @@ FRESH_TITLES = set()
 FRESH_ALL = False          # set True to refresh every request made this run (prefix listings)
 RUN_STARTED = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 NETWORK_REQUESTS = [0]     # requests actually sent this process (cache hits excluded)
+HTTP_RETRIES = [0]         # 429 / 5xx answers seen this process (each one was waited out)
 # Liquipedia limits requests per IP address, and GitHub's shared runners can be
 # refused (HTTP 429) on their first request. Retry after these pauses (seconds,
 # or longer if the server's Retry-After asks for it); if it still refuses, use the
@@ -81,6 +82,8 @@ def query(params, offline=False, refresh=False):
             # 429 Too Many Requests / temporary server errors: wait as long as the
             # server asks (Retry-After), else back off, then try again
             _last[0] = time.time()
+            if e.code in (429, 500, 502, 503, 504):
+                HTTP_RETRIES[0] += 1
             if e.code not in (429, 500, 502, 503, 504) or backoff is None:
                 if have_cache and e.code in (429, 500, 502, 503, 504):
                     _THROTTLED[0] = True

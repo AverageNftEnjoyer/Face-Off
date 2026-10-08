@@ -1,3 +1,6 @@
+1win Private Club/1/Qualifier
+1win Private Club/2/Qualifier
+AGS CUP/2025
 Austin LAN/2026
 BC.Game Masters Championship/1
 BC.Game Masters Championship/2
@@ -5,8 +8,19 @@ BC.Game Masters/Season 1
 BC.Game Masters/Season 2/Europe/Series 1
 BC.Game Masters/Season 2/Europe/Series 2
 BC.Game Masters/Season 2/North America/Series 1
+BLAST/Major/2025/Austin/Asia-Pacific
+BLAST/Major/2025/Austin/China
+BLAST/Major/2025/Austin/Europe
+BLAST/Major/2025/Austin/Mongolia and West Asia
+BLAST/Major/2025/Austin/North America
+BLAST/Major/2025/Austin/Oceania and Southeast Asia
+BLAST/Major/2025/Austin/South America
+BLAST/Open/2026/Fall/North America
+BLAST/Rising/2025/Fall/Asia
+BLAST/Rising/2025/Spring/Asia
 BetBoom/RUSH B! Summit/2026
 BetBoom/RUSH B! Summit/2026/Part Deux
+Birch Cup/2025
 CCT/2026/Europe/Series 1
 CCT/2026/Europe/Series 10
 CCT/2026/Europe/Series 11
@@ -31,6 +45,20 @@ CCT/2026/South America/Series 5
 CCT/2026/South America/Series 6
 CCT/2026/South America/Series 7
 CCT/2026/South America/Series 8
+CCT/Season 2/Europe/Series 16
+CCT/Season 2/Europe/Series 17
+CCT/Season 2/Europe/Series 18
+CCT/Season 2/Europe/Series 19
+CCT/Season 2/Europe/Series 20
+CCT/Season 2/Global Finals
+CCT/Season 2/North America/Series 4
+CCT/Season 2/South America/Series 6
+CCT/Season 2/South America/Series 7
+CCT/Season 2/South America/Series 8
+CCT/Season 3/Europe/Series 1
+CCT/Season 3/Europe/Series 10
+CCT/Season 3/Europe/Series 11
+CCT/Season 3/Europe/Series 12
 CCT/Season 3/Europe/Series 13
 CCT/Season 3/Europe/Series 14
 CCT/Season 3/Europe/Series 15
@@ -38,20 +66,73 @@ CCT/Season 3/Europe/Series 16
 CCT/Season 3/Europe/Series 17
 CCT/Season 3/Europe/Series 18
 CCT/Season 3/Europe/Series 19
+CCT/Season 3/Europe/Series 2
 CCT/Season 3/Europe/Series 20
+CCT/Season 3/Europe/Series 3
+CCT/Season 3/Europe/Series 4
+CCT/Season 3/Europe/Series 5
+CCT/Season 3/Europe/Series 6
+CCT/Season 3/Europe/Series 7
+CCT/Season 3/Europe/Series 8
+CCT/Season 3/Europe/Series 9
 CCT/Season 3/Global Finals
+CCT/Season 3/South America/Series 1
 CCT/Season 3/South America/Series 10
+CCT/Season 3/South America/Series 2
+CCT/Season 3/South America/Series 3
+CCT/Season 3/South America/Series 4
+CCT/Season 3/South America/Series 5
+CCT/Season 3/South America/Series 6
 CCT/Season 3/South America/Series 7
 CCT/Season 3/South America/Series 8
 CCT/Season 3/South America/Series 9
+CS Asia Championships/2025
+CS Asia Championships/2026/Qualifier
+CS Asia Championships/2026/Qualifier/China
 Circuit X/Mayhem/São Paulo
 Circuit X/Pantanal/Cuiabá
 Circuit X/Redemption/Curitiba
+Circuito Brasileiro de Counter-Strike/2025/Masters/Xeque Mate
+Circuito FERJEE/2025
+DFRAG/Invitational/2025
 DFRAG/Invitational/2026
 DFRAG/Wildcard LAN/Season 1
+DraculaN/Season 1
+DraculaN/Season 2
+DraculaN/Season 3
+DraculaN/Season 4
 DraculaN/Season 5
 DraculaN/Season 6
 DraculaN/Season 7
+ESL/Challenger League/Season 49/Asia
+ESL/Challenger League/Season 49/Asia/Weeks 1 to 4
+ESL/Challenger League/Season 49/Asia/Weeks 5 to 8
+ESL/Challenger League/Season 49/Europe
+ESL/Challenger League/Season 49/North America
+ESL/Challenger League/Season 49/North America/Weeks 1 to 5
+ESL/Challenger League/Season 49/North America/Weeks 6 to 11
+ESL/Challenger League/Season 49/Oceania
+ESL/Challenger League/Season 49/Oceania/Weeks 1 to 4
+ESL/Challenger League/Season 49/Oceania/Weeks 5 to 9
+ESL/Challenger League/Season 49/South America
+ESL/Challenger League/Season 49/South America/Weeks 1 to 5
+ESL/Challenger League/Season 49/South America/Weeks 6 to 9
+ESL/Challenger League/Season 50/Asia
+ESL/Challenger League/Season 50/Europe
+ESL/Challenger League/Season 50/Europe/Cup 1
+ESL/Challenger League/Season 50/Europe/Cup 2
+ESL/Challenger League/Season 50/Europe/Cup 3
+ESL/Challenger League/Season 50/Europe/Cup 4
+ESL/Challenger League/Season 50/North America
+ESL/Challenger League/Season 50/North America/Cup 1
+ESL/Challenger League/Season 50/North America/Cup 2
+ESL/Challenger League/Season 50/North America/Cup 3
+ESL/Challenger League/Season 50/North America/Cup 4
+ESL/Challenger League/Season 50/South America
+ESL/Challenger League/Season 50/South America/Cup 1
+ESL/Challenger League/Season 50/South America/Cup 2
+ESL/Challenger League/Season 50/South America/Cup 3
+ESL/Challenger League/Season 50/South America/Cup 4
 ESL/Challenger League/Season 51/Asia-Pacific
 ESL/Challenger League/Season 51/Europe
 ESL/Challenger League/Season 51/Europe/Cup 1
@@ -79,55 +160,222 @@ ESL/Challenger League/Season 52/South America/Cup 1
 ESL/Challenger League/Season 52/South America/Cup 2
 ESL/Challenger League/Season 52/South America/Cup 3
 ESL/Challenger League/Season 52/South America/Cup 4
+ESL/Impact League/Season 7
+ESL/Impact League/Season 8
+ESL/Pro League/Season 22/Asia
+ESL/Pro League/Season 22/Europe
+ESL/Pro League/Season 22/North America
+ESL/Pro League/Season 22/South America
+EXTREMESLAND/2025
+EXTREMESLAND/2026/China
+EXTREMESLAND/2026/China/Qualifier/1
+EXTREMESLAND/2026/China/Qualifier/2
+EXTREMESLAND/2026/Middle East
+EXTREMESLAND/2026/Mongolia
+EXTREMESLAND/2026/Oceania
+Elisa/Nordic Championship/2025
+Esports Nations Cup/2026/Eastern Europe
+Esports Nations Cup/2026/North America
+Esports Nations Cup/2026/South America
+Esports Nations Cup/2026/Southeast Asia
+Esports Nations Cup/2026/Western Europe
 Esports World Cup/2024/Middle East
+Esports World Cup/2026/Qualifier
+Exort/Proving Grounds/Season 1
+Exort/Proving Grounds/Season 2
+Exort/Proving Grounds/Season 3
+Exort/Proving Grounds/Season 4
+Exort/Proving Grounds/Season 5
+Exort/Proving Grounds/Season 6
 FERJEE/In House/2026
 FERJEE/Rainhas do Clutch/2026
+FERJEE/Rush/2025
+FISSURE/Playground/1
+FISSURE/Playground/2
 FRAG/20
+FRAG/2025/Philadelphia/2
 FRAG/2026/Syracuse/2
 FiReCONTER/2026/Season 1
 FiReSPORTS/Last Chance/2026
 Fl0m's Mythical LAN
+Fragadelphia/19
 GGMEDIA/Challenger Series/Season 1
+Galaxy Battle/2025/Phase 1
+Galaxy Battle/2025/Phase 2
+Galaxy Battle/2025/Phase 3
+Galaxy Battle/2025/Phase 4
+Galaxy Battle/2025/Phase 4/Main Stage
+Galaxy Battle/2025/Phase 4/Play-In Stage
+Galaxy Battle/2025/Phase 5
+Galaxy Battle/2025/Phase 5/Main Stage
+Galaxy Battle/2025/STARTER
 Galaxy Battle/LAN-Station/1
 Galaxy Battle/LAN-Station/1/Online Stage
 Gamers Club/Masters/VII
+Glitched/2025/Masters
+Hero Esports/Asian Champions League/2025
+Hero Esports/Asian Champions League/2026/Qualifier
 IBUYPOWER/Masters/2026/Fl0m's Mythical LAN
+ICE Invitational/2025
+Intel Extreme Masters/2025/Dallas/Asia
+Intel Extreme Masters/2025/Dallas/Europe
+Intel Extreme Masters/2025/Dallas/North America
+Intel Extreme Masters/2025/Dallas/South America
+Intel Extreme Masters/2026/Atlanta/Qualifier/Americas
+Intel Extreme Masters/2026/Atlanta/Qualifier/Global
+Intel Extreme Masters/2026/Beijing/Qualifier/Asia
+Intel Extreme Masters/2026/Beijing/Qualifier/Global
+Intel Extreme Masters/2026/Brazil/Qualifier/Americas
+Intel Extreme Masters/2026/Brazil/Qualifier/Global
+Intel Extreme Masters/2026/China/Qualifier/Asia
+Intel Extreme Masters/2026/China/Qualifier/Global
+Intel Extreme Masters/2026/Rio/Qualifier/Americas
+Intel Extreme Masters/2026/Rio/Qualifier/Global
+JB Pro League/Season 1
 JB Pro League/Season 2
 Journey/2026/Autumn
 Journey/2026/Spring
 LORGAR RANKINGS/Season 1
+LanDaLan/2
+LanDaLan/3
+Liga Ace Esports/North American Masters/2025/Fall
+Liga Ace Esports/North American Masters/2025/Spring
 Liga Ace Esports/North American Masters/2026/Spring
+Liga Ace Esports/South American Masters/2025/Fall
+Liga Ace Esports/South American Masters/2025/Spring
 Liga Ace Esports/South American Masters/2026/Spring
+Logitech G Play Connect/2026/Qualifier
 Logitech G Pro Series/2026
+MESA/Nomadic Masters/2025/Fall
+MESA/Nomadic Masters/2025/Spring
 Moscow Cyber Games/2026
+NODWIN Gaming/Clutch Series/1
 NODWIN Gaming/Clutch Series/10
 NODWIN Gaming/Clutch Series/11
 NODWIN Gaming/Clutch Series/12
 NODWIN Gaming/Clutch Series/13
 NODWIN Gaming/Clutch Series/14
+NODWIN Gaming/Clutch Series/2
+NODWIN Gaming/Clutch Series/3
 NODWIN Gaming/Clutch Series/4
 NODWIN Gaming/Clutch Series/5
 NODWIN Gaming/Clutch Series/6
 NODWIN Gaming/Clutch Series/7
 NODWIN Gaming/Clutch Series/8
 NODWIN Gaming/Clutch Series/9
+Odyssey Cup Asia/2025
+Odyssey Cup/2025/Brazil
 Odyssey Cup/2026/Brazil
+PGL/2025/Astana/Asia
+PGL/2025/Astana/Asia/China
+PGL/2025/Astana/Asia/MENA
+PGL/2025/Astana/Asia/Oceania
+PGL/2025/Astana/Asia/Rest of Asia
+PGL/2025/Astana/Europe
+PGL/2025/Astana/North America
+PGL/2025/Astana/South America
+PGL/2025/Bucharest/Asia
+PGL/2025/Bucharest/Europe
+PGL/2025/Bucharest/North America
+PGL/2025/Bucharest/South America
+PGL/2026/Astana/Asia/East Asia
+PGL/2026/Astana/Asia/Oceania
+PGL/2026/Astana/Asia/West Asia
+PGL/2026/Astana/Europe
+PGL/2026/Astana/North America
+PGL/2026/Astana/South America
+PGL/2026/Belgrade/Europe
+PGL/2026/Belgrade/North America
+PGL/2026/Belgrade/South America
+PGL/2026/Bucharest/Asia
+PGL/2026/Bucharest/Asia/East Asia
+PGL/2026/Bucharest/Asia/Oceania
+PGL/2026/Bucharest/Asia/West Asia
+PGL/2026/Bucharest/Europe
+PGL/2026/Bucharest/North America
+PGL/2026/Bucharest/South America
+PGL/2026/Masters/Asia/East Asia
+PGL/2026/Masters/Asia/Oceania
+PGL/2026/Masters/Asia/West Asia
+PGL/2026/Masters/Europe
+PGL/2026/Masters/North America
+PGL/2026/Masters/South America
+PLAYzone/Conquest of Prague/2025
 PLAYzone/Conquest of Prague/2026
+PLAYzone/MČR/2025
 PLAYzone/RUSH Brno/2026
+Perfect World/CS Challenge/Series 1
+Perfect World/CS Challenge/Series 2
+RLG/RES/Showdown/2025/Fall
+RLG/RES/Showdown/2025/Spring
 RLG/RES/Showdown/2026/Fall/Europe
 RLG/RES/Showdown/2026/Fall/South America
 RLG/RES/Showdown/2026/Spring
+Rainbet Cup
 Roman Imperium Cup/5
 Roman Imperium Cup/6
 Roman Imperium Cup/7
+Roobet Cup/2025
+Skyesports/Championship/2025
+Skyesports/Masters/2025
+Skyesports/Souvenir/2025
+Skyesports/World Tour/2025
 Stake Pulse/Beat I
 Stake Pulse/Beat II
 Stake Pulse/Beat III
+Stake Ranked/Episode 1/Qualifier
+Stake Ranked/Episode 2/Qualifier
+Stake Ranked/Episode 3/Qualifier
+Stake Ranked/Episode 4/Qualifier
+Stake Ranked/Episode 5/Qualifier
+Stake Ranked/Episode 6/Qualifier
+StarLadder/StarSeries/2025/Fall/Europe
+StarLadder/StarSeries/2025/Fall/North America
+StarLadder/StarSeries/2025/Fall/South America
+StarLadder/StarSeries/2026/Fall/Europe
+StarLadder/StarSeries/2026/Fall/North America
+StarLadder/StarSeries/2026/Fall/South America
 Super DraculaN/Season 1
+Svenska Cupen/2025
 Svenska Cupen/2026
 Svenska Elitserien/2026/Fall
+T-esports Championship/Season 4
+Thunderpick/World Championship/2025/Europe/1
+Thunderpick/World Championship/2025/Europe/2
+Thunderpick/World Championship/2025/North America/1
+Thunderpick/World Championship/2025/North America/2
+Thunderpick/World Championship/2025/Qualifier
+Thunderpick/World Championship/2025/South America/1
+Thunderpick/World Championship/2025/South America/2
+Thunderpick/World Championship/2026/Europe/1
+Thunderpick/World Championship/2026/Europe/2
+Thunderpick/World Championship/2026/North America
+Thunderpick/World Championship/2026/Qualifier
+Thunderpick/World Championship/2026/South America/1
+Thunderpick/World Championship/2026/South America/2
+VS Gaming League/Masters/2025
 VS Gaming League/Masters/2026
+Winline Insight/Season 7
+Winline Insight/Season 8
+Winline Insight/Season 9
 XSE Pro League/2026/Luoyang
+XSE Pro League/Season 3
+XSE Pro League/Season 6
+XSE Pro League/Season 7
 XSE Pro League/Season 8
+YaLLa Compass/2025/Dubai
+YaLLa Compass/2025/Fall
+YaLLa Compass/2025/Fall/Contenders Stage
+YaLLa Compass/2025/Fall/Main Stage
+YaLLa Compass/2025/Qatar
+YaLLa Compass/2025/Spring
+YaLLa Compass/2025/Spring/Contenders Stage
+YaLLa Compass/2025/Spring/Main Stage
+YaLLa Compass/2025/Summer
+YaLLa Compass/2025/Summer/Contenders Stage
+YaLLa Compass/2025/Summer/Main Stage
+YaLLa Compass/2025/Winter
+YaLLa Compass/2025/Winter/Contenders Stage
+YaLLa Compass/2025/Winter/Main Stage
 Yuqilin/Pinnacle of Battle/Season 2
 Zhi-Tech Elite Masters/2026

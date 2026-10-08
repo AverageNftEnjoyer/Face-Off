@@ -427,25 +427,58 @@ def main():
 
 
 def main_lower():
-    """data/matches_lower.json: finished series from the B-tier-and-below pages
-    in lp_titles_lower.txt. Rating data only: the site never reads this file
-    (no events, predictions or Stats come from it). A series that is also in
-    matches.json (same day, same two teams) is left out, and so is any page
-    whose own infobox says S or A tier (those belong in the main list)."""
+    """data/matches_lower.json: finished series from the pages in
+    lp_titles_lower.txt (B-tier main events and their stages, closed regional
+    qualifiers of S/A events, and S/A main events the hand-picked list does
+    not track). Rating data only: the site never reads this file (no events,
+    predictions or Stats come from it). A series that is also in matches.json
+    (same day, same two teams) is left out. Each series carries "kind":
+      "main"       a lower-tier (B, C) main event or a stage of one;
+      "qualifier"  a qualifier page (its own or an ancestor's infobox says
+                   liquipediatiertype=Qualifier, or it is listed as one in
+                   raw/lp_titles_lower_kinds.json); "tier" is the page's own;
+      "sa_gap"     an S/A main event listed in lp_titles_lower_kinds.json
+                   ("sa_gap") that matches.json does not track.
+    Any other page whose infobox says S or A tier is left out (it belongs in
+    the main list)."""
     if not os.path.exists(LOWER_TITLES):
         print("no lower-tier title list; nothing to build")
         return
+    kinds_path = os.path.join(HERE, "raw", "lp_titles_lower_kinds.json")
+    kinds = json.load(open(kinds_path, encoding="utf-8")) if os.path.exists(kinds_path) else {}
+    listed = {t: k for k in ("qualifier", "sa_gap") for t in kinds.get(k, [])}
+    idx = lpfetch.cached_pages()
+
+    def kind_of(page):
+        t = page
+        while True:
+            if t in listed:
+                return listed[t]
+            m_ = re.search(r"\|\s*liquipediatiertype\s*=\s*([^\n|}]*)", (idx.get(t) or ("", ""))[1])
+            if m_ and m_.group(1).strip().lower() == "qualifier":
+                return "qualifier"
+            if "/" not in t:
+                return "main"
+            t = t.rsplit("/", 1)[0]
+
     matches, _, _ = build(read_titles(LOWER_TITLES))
     with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
         top = {(m["date"], tuple(sorted((m["team_a"], m["team_b"])))) for m in json.load(f)}
-    out = [m for m in matches if m["tier"] not in TOP_TIERS
-           and (m["date"], tuple(sorted((m["team_a"], m["team_b"])))) not in top]
+    out = []
+    for m in matches:
+        m["kind"] = kind_of(m["source"][len("liquipedia:"):].split(" (hltv")[0])
+        if m["tier"] in TOP_TIERS and m["kind"] == "main":
+            continue
+        if (m["date"], tuple(sorted((m["team_a"], m["team_b"])))) in top:
+            continue
+        out.append(m)
     with open(LOWER_OUT, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)
     tiers = {}
     for m in out:
-        tiers[m["tier"] or "?"] = tiers.get(m["tier"] or "?", 0) + 1
-    print(f"lower-tier series: {len(out)} {tiers}"
+        k = (m["tier"] or "?") + ":" + m["kind"]
+        tiers[k] = tiers.get(k, 0) + 1
+    print(f"lower-tier series: {len(out)} {dict(sorted(tiers.items()))}"
           + (f" ({out[0]['date']} -> {out[-1]['date']})" if out else ""))
 
 

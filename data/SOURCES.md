@@ -56,14 +56,48 @@ nothing is invented, imputed or estimated.
   B-tier and lower tournaments are not tracked. They were included on
   2026-10-07 (161 main events, 5,551 series) and removed the same day: their
   results are much less predictable, and the site and the engine are about
-  S- and A-tier matches. Prototype only (2026-10-08, not used by the
-  engine or the site): `python data/collect_liquipedia.py --offline --lower`
-  rebuilds `matches_lower.json` (3,158 series: 3,152 B-tier from 132 main
-  events of 2026, plus the 6-series C-tier EWC 2024 Middle East qualifier)
-  from those cached pages, listed in `raw/lp_titles_lower.txt`; no new
-  requests. A series also in `matches.json` (same day, same teams) is left
-  out. `scripts/lower_tier_check.py` tested it as rating data and found no
-  significant gain, so nothing reads it yet (`lower_tier_report.json`).
+  S- and A-tier matches. Rating DATA only (not used by the engine or the
+  site, no predictions): `python data/collect_liquipedia.py --offline --lower`
+  rebuilds `matches_lower.json` from the cached pages listed in
+  `raw/lp_titles_lower.txt` (381 pages). Every series has `tier` (the
+  page's own infobox) and `kind`:
+  `main` (B-tier main events and their stages, 7,240 series), `qualifier`
+  (closed regional qualifiers of S/A events, 1,556 series; open
+  qualifiers are left out), `sa_gap` (165 series from 14 S/A main events of
+  2025 that the hand-picked S/A list does not track, e.g. Roobet Cup 2025,
+  CS Asia Championships 2025, MESA Nomadic Masters 2025; kept out of
+  `matches.json` so the engine's history is unchanged). Total 8,961 series,
+  2025-01 .. 2026-10 (plus the 6-series 2024 EWC Middle East qualifier). A
+  series also in `matches.json` (same day, same teams) is left out (none
+  overlapped). Offline rebuilds are byte-identical.
+- 2025 backfill (2026-10-08, `scripts/backfill_lower.py plan|fetch`):
+  discovery from the cached `Category:B-Tier Tournaments` listing (title
+  names 2025, or no year and added since 2024-01-01; own infobox: tier B,
+  not a qualifier/showmatch/weekly/monthly/misc/points page, sdate in 2025,
+  at most 150 days so ESL Challenger League regions count), closed
+  qualifiers from the cached `allpages` listings of the tracked S/A events
+  (2025 and 2026), S/A gap events from the S/A tier categories. Fetched
+  month by month, December back to January, at one request per 5 s:
+  20 discovery requests (240 candidate infoboxes, 20 per request), 2
+  category-size probes, 54 fetch requests (stage listings and pages), 4
+  for the builder (new team codes); 80 in all, no 429 or 5xx answer. Progress
+  and the per-month record: `raw/backfill_2025.json`; re-running continues
+  from the cache. C-tier (`Category:C-Tier Tournaments`, 15,530 pages,
+  ~115 additions a month) was sized and not fetched: about 150-200 requests
+  for mostly amateur teams that rarely meet S/A teams.
+- Per-event lineups: `python data/event_lineups.py` writes
+  `event_lineups.json` from the cached pages (no requests): the
+  participant section of each event page ({{TeamParticipants}} /
+  {{TeamCard}}), else the team page's squad history dates (join /
+  inactive / leave). Coverage: 99.8% of team-series in `matches.json`,
+  96.2% in `matches_lower.json`.
+- Evidence (`scripts/roster_rating_check.py`, pre-registered,
+  `roster_rating_report.json`): on 742 held-out S/A BO3 series after
+  2025-10-08, neither lower-tier results as Elo data (K x 0.25) nor a
+  roster-aware Elo (regress halfway to 1500 when <= 2 of 5 players carry
+  over; graded; with a K boost; combined with the lower-tier data) had a
+  log-loss CI below 0, and every variant was worse on one half of the
+  window. Nothing reads these files in the engine or on the site.
   Event, team and sponsor names are reproduced
   as Liquipedia writes them.
 - Forfeited maps (`score1=W|score2=FF` or the reverse) are now credited to the
