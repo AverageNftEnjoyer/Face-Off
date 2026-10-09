@@ -964,7 +964,20 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .chip.rel::before { content: ""; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
 
 /* controls row inside the court, centred under the bar */
-.court .cctl { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem .75rem; margin-top: .35rem; }
+/* one row under the bar: section tabs at the left (under team 1), Format + Swap at the right */
+.court .cctl { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .6rem 1rem; margin-top: .35rem; }
+.court .cctl .cctl-r { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .5rem .75rem; margin-left: auto; }
+.court .cctl .dtabs { background: rgba(4, 10, 12, .55); }
+/* the row must never be wider than the court (the tabs' natural width pushed the bar off-screen on phones) */
+.court .cbar, .court .cctl, .court .cctl .dtabs { min-width: 0; max-width: 100%; }
+.dtabs .tl-short { display: none; }
+@media (max-width: 760px) { .dtabs .tl-full { display: none; } .dtabs .tl-short { display: inline; } }
+@media (max-width: 760px) {
+  .court .cctl { flex-direction: column; align-items: stretch; }
+  .court .cctl .dtabs { width: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .court .cctl .dtabs button { padding-inline: .2rem; font-size: .82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .court .cctl .cctl-r { justify-content: center; margin-left: 0; }
+}
 .court .cctl .btn { background: rgba(4, 10, 12, .55); }
 .court .cctl .btn:disabled { opacity: .45; cursor: default; }
 .court .cctl .chip { background: rgba(4, 10, 12, .6); }
@@ -1886,9 +1899,9 @@ function court(pred, a, b, o, bo) {
     `<button type="button" data-bo="${n}" aria-pressed="${n === bo}" ${o.fixedBo ? "disabled" : ""}>Bo${n}</button>`).join("")}</div>`;
   // the controls sit centred under the bar, inside the court
   const nx = o.next ? `${o.next.t1} vs ${o.next.t2}` : "";
-  const ctl = `<div class="cctl"><span class="small dim">Format</span>${fmt}
+  const ctl = `<div class="cctl">${o.tabs || ""}<div class="cctl-r"><span class="small dim">Format</span>${fmt}
     ${o.change ? `<button type="button" class="btn" id="exSwap">${ICON.swap}Swap teams</button>` : ""}
-    ${o.live ? `<span class="chip live">Live</span>` : ""}${o.verdict || ""}</div>`;
+    ${o.live ? `<span class="chip live">Live</span>` : ""}${o.verdict || ""}</div></div>`;
   const bar = pred ? `<div class="cbar">
       <div class="bar" role="img" title="The striped part is the range the model thinks the real chance falls in; a wider stripe means it's less sure. The white line is each team's estimated win percentage." aria-label="${esc(`${a} ${shown[0]}%, ${b} ${shown[1]}%; likely range for ${a} ${pct(F.band[0], 2)} to ${pct(F.band[1], 2)}`)}">
         <div class="fill" data-w="${(F.p * 100).toFixed(2)}"></div>
@@ -2008,8 +2021,10 @@ function matchDesk(pred, a, b, o = {}) {
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
     ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
-  return `${o.ctx || ""}${court(pred, a, b, o, bo)}
-    <div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}">${ICON[k]}<span>${l}</span></button>`).join("")}</div>
+  // the section tabs ride in the court's control row (left), next to Format / Swap (right)
+  const SHORT = { h2h: "H2H", pools: "Maps" };   // phone labels, so all four tabs fit in one row
+  const tabs = `<div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}" aria-label="${esc(l)}">${ICON[k]}<span class="tl-full">${l}</span><span class="tl-short" aria-hidden="true">${SHORT[k] || l}</span></button>`).join("")}</div>`;
+  return `${o.ctx || ""}${court(pred, a, b, { ...o, tabs }, bo)}
     <div class="desk-main" role="tabpanel">${body}</div>`;
 }
 
