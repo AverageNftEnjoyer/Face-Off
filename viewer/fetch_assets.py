@@ -40,10 +40,9 @@ import lpfetch  # noqa: E402
 OFFLINE = "--offline" in sys.argv
 MEDIA = os.path.join(ROOT, "data", "raw", "liquipedia_media")
 EVENT = "ESL/Pro League/Season 24"
-# dataset map name -> Liquipedia map page
-MAP_PAGES = {"Ancient": "Ancient", "Anubis": "Anubis", "Cache": "Cache", "Dust2": "Dust II",
-             "Inferno": "Inferno", "Mirage": "Mirage", "Nuke": "Nuke",
-             "Overpass": "Overpass", "Train": "Train", "Vertigo": "Vertigo"}
+# dataset map name -> Liquipedia map page, only where the two differ
+# (any other map is looked up under its own name)
+MAP_PAGES = {"Dust2": "Dust II"}
 # square icons whose names don't follow the " full" pattern (found on Liquipedia
 # commons; each is the same mark as the team's current full logo). Vitality is
 # left on its 2026 wordmark: the only square icons predate the 2026 rebrand.
@@ -235,9 +234,15 @@ def main():
         texts.update(lpfetch.wikitext(b, offline=OFFLINE))
     recs = {t: team_record(t, texts[t]) for t in teams if texts.get(t)}
 
-    maps_txt = lpfetch.wikitext(list(MAP_PAGES.values()), offline=OFFLINE)
+    # every map that appears in the results or in a tournament's map pool gets its
+    # Liquipedia page (picture, location): a map entering the pool is picked up on
+    # the next refresh. Only names that differ from the page title need MAP_PAGES.
+    seen = {x["map"] for m in ms for x in m.get("maps", []) if x.get("map")}
+    seen |= {mp for e in evs for mp in e.get("pool", [])}
+    map_pages = {mp: MAP_PAGES.get(mp, mp) for mp in sorted(seen | set(MAP_PAGES))}
+    maps_txt = lpfetch.wikitext(list(map_pages.values()), offline=OFFLINE, strict=False)
     map_files, map_info = {}, {}
-    for mp, page in MAP_PAGES.items():
+    for mp, page in map_pages.items():
         ib = infobox(maps_txt.get(page) or "", "Infobox map")
         f = ib.get("image", "").strip()
         if f:

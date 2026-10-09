@@ -169,16 +169,29 @@ CONFIG = {
     # Per-map logit for A = map_scale * (relative edge A - relative edge B),
     # where a relative edge is the team's shrunk map rate minus its own
     # pool-wide average. A 10pp relative edge each way (20pp) ~= 1.2 logit.
-    "map_shape": 1.0,
+    "map_shape": 0.5,
     # Share of that veto gap kept in the per-map win chances. Separate from
     # w_veto, which only decides whether the veto moves the series winner.
     # _scoreline_maps then adds one constant to all map logits so they still
     # imply p_a, so the winner pick never depends on it. 0 would print the
     # same win chance on every map, and the favourite's 2-0 would always be
-    # the most likely score. Product choice (2026-10-07): 1.0, so 2-1 is the
-    # most likely score in ~17% of BO3s. Held-out cost (scripts/
-    # scoreline_tradeoff.py, 612 series): scoreline log loss 1.2932 vs 1.2876
-    # flat, exact-score hit rate 39.5% vs 39.4%; the winner is unchanged.
+    # the most likely score. Was 1.0 (product choice 2026-10-07, 2-1 predicted
+    # in ~17% of BO3s) with the old veto. With the comfort-aware veto
+    # (veto_comfort, below) teams pick maps they actually play, so map edges
+    # are bigger and 1.0 over-spreads them; 0.5 (2026-10-09) keeps 2-1 the
+    # predicted score in ~14% of BO3s and scores slightly better than the old
+    # setup on 661 held-out BO3s: scoreline log loss 1.3054 vs 1.3064, exact
+    # score 37.4% vs 37.5%. The winner is unchanged.
+    "veto_comfort": 0.8,
+    # Weight of map comfort in the simulated veto's picks and bans (see
+    # simulate_veto); comfort = maps_played / (maps_played + veto_comfort_k).
+    # Tuned on real vetoes (scripts/veto_check.py, 1,953 BO3s; chosen on the
+    # first 60%, scored on the last 40%): without it the veto was no better
+    # than chance (27.2% of picked maps right vs 28.6% random) and had a team
+    # pick a map it hadn't played in 90 days 20.1% of the time; at 0.8: 47.6%
+    # of picks and 27.9% of deciders right, unplayed picks 3.5%. Doesn't
+    # touch the series win probability (w_veto is 0).
+    "veto_comfort_k": 3.0,
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.
@@ -489,6 +502,19 @@ def _team_maps(raw, pool):
     return rel, shr, overall
 
 
+def _comfort(raw, pool):
+    """{map: n / (n + veto_comfort_k)} from a team's 90-day maps played; 0 for a
+    map it hasn't played. Used only to choose picks and bans in the veto."""
+    raw = raw if isinstance(raw, dict) else {}
+    k = CONFIG["veto_comfort_k"]
+    out = {}
+    for mp in pool:
+        e = raw.get(mp)
+        n = _count(e[1]) if isinstance(e, (list, tuple)) and len(e) >= 2 else 0.0
+        out[mp] = n / (n + k) if n > 0 else 0.0
+    return out
+
+
 def map_depth(raw, pool):
     """Number of pool maps a team played >= depth_min_maps times with a win
     rate >= depth_min_rate. `raw` is {map: [win_rate, maps_played]}."""
@@ -533,6 +559,12 @@ def simulate_veto(m, best_of=3):
     rel_a, shr_a, ov_a = _team_maps(m.get("maps_a"), pool)
     rel_b, shr_b, ov_b = _team_maps(m.get("maps_b"), pool)
     edge = {mp: rel_a[mp] - rel_b[mp] for mp in pool}  # A's relative edge
+    # Comfort: how much a team actually plays a map (90-day maps played, n/(n+k)).
+    # A map a team never plays has no record, so its edge reads as neutral and
+    # could win the pick against an opponent who is merely below average there;
+    # real teams pick maps they play and spend early bans on maps they don't.
+    comfort = {"A": _comfort(m.get("maps_a"), pool), "B": _comfort(m.get("maps_b"), pool)}
+    wc = CONFIG["veto_comfort"]
 
     remaining = list(pool)
     log = []
@@ -548,15 +580,17 @@ def simulate_veto(m, best_of=3):
             log.append(f"{team} bans {f} (permaban)")
             return
         forced_used[team] = True  # permaban only applies to the first ban
-        # A bans the map where B's edge is largest (min A edge); B the reverse.
+        # A bans the map where B's edge is largest (min A edge), or one A
+        # doesn't play (low comfort); B the reverse.
         sign = 1.0 if team == "A" else -1.0
-        best = min(remaining, key=lambda mp: sign * edge[mp])
+        best = min(remaining, key=lambda mp: sign * edge[mp] + wc * comfort[team][mp])
         remaining.remove(best)
         log.append(f"{team} bans {best}")
 
     def do_pick(team):
+        # a team picks where it has the edge AND that it actually plays
         sign = 1.0 if team == "A" else -1.0
-        best = max(remaining, key=lambda mp: sign * edge[mp])
+        best = max(remaining, key=lambda mp: sign * edge[mp] + wc * comfort[team][mp])
         remaining.remove(best)
         log.append(f"{team} picks {best}")
         picks.append(best)

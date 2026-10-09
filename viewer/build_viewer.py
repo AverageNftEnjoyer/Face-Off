@@ -512,6 +512,8 @@ def main(out_path):
         "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
+        # the live map pool (maps with recent plays), the fallback when a tournament lists none
+        "pool": h_today.map_pool(as_of),
     }
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")

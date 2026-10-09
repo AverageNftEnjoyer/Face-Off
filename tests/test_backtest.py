@@ -288,6 +288,26 @@ class TestNewcomerElo(unittest.TestCase):
         for mp, (wr, n) in last["maps_raw_a"].items():
             self.assertTrue(0.0 <= wr <= 1.0 and n >= 1)
 
+    def test_map_pool_follows_play(self):
+        """SYNTHETIC: a map that starts being played enters the pool, and one
+        nobody plays any more drops out after the 60-day window."""
+        from datetime import date
+        old = ["Ancient", "Anubis", "Cache", "Dust2", "Inferno", "Mirage", "Nuke"]
+        new = ["Ancient", "Anubis", "Dust2", "Inferno", "Mirage", "Nuke", "Overpass"]
+        h, i = bt.History(), 0
+        for pool, month in ((old, 1), (new, 4)):
+            for day in range(1, 29):
+                mp = pool[day % 7]
+                h.add(synth(f"2026-{month:02d}-{day:02d}", "Alpha", "Bravo", "Alpha",
+                            maps=[{"map": mp, "winner": "Alpha"}], bo=1, i=i))
+                i += 1
+        self.assertEqual(h.map_pool(date(2026, 2, 1)), old)
+        self.assertEqual(h.map_pool(date(2026, 5, 1)), new)
+        # team map records follow too: Overpass shows up, Cache is gone
+        maps = h.team_feats("Alpha", date(2026, 5, 1))["maps_raw"]
+        self.assertIn("Overpass", maps)
+        self.assertNotIn("Cache", maps)
+
 
 if __name__ == "__main__":
     unittest.main()

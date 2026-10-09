@@ -544,12 +544,13 @@ class TestVetoFormats(unittest.TestCase):
     def test_bo3_unchanged_base_and_day4(self):
         # pinned values were taken with map_shape 0.75 before the veto refactor;
         # run at that setting so the check still guards the refactor itself
-        saved = CONFIG["map_shape"]
-        CONFIG["map_shape"] = 0.75
+        # (and before map comfort entered the veto, so run with comfort off)
+        saved = CONFIG["map_shape"], CONFIG["veto_comfort"]
+        CONFIG["map_shape"], CONFIG["veto_comfort"] = 0.75, 0.0
         try:
             rs = [predict_match(base_match())] + predictor.day4_backtest()
         finally:
-            CONFIG["map_shape"] = saved
+            CONFIG["map_shape"], CONFIG["veto_comfort"] = saved
         for r in rs:
             log, probs = self.BO3_PINNED[r["match"]]
             self.assertEqual(r["veto_log"], log)
@@ -558,6 +559,22 @@ class TestVetoFormats(unittest.TestCase):
         # the explicit and the default best_of give the same veto
         mm =base_match(maps_a=GP_MAPS_A, maps_b=GP_MAPS_B, permaban_b="Cache")
         self.assertEqual(predictor.simulate_veto(mm), predictor.simulate_veto(mm, best_of=3))
+
+    def test_no_pick_of_a_map_the_team_never_plays(self):
+        # A has never played Nuke; B is below its own average there, which used to
+        # make Nuke look like A's best pick. With comfort, A picks a map it plays
+        # and spends a ban on Nuke instead.
+        pool = ["Ancient", "Anubis", "Dust2", "Inferno", "Mirage", "Nuke", "Train"]
+        maps_a = {"Ancient": [0.55, 8], "Anubis": [0.5, 6], "Dust2": [0.45, 9],
+                  "Inferno": [0.33, 9], "Mirage": [0.6, 10], "Train": [0.5, 5]}
+        maps_b = {mp: [0.75, 10] for mp in pool}
+        maps_b["Nuke"] = [0.57, 7]
+        for bo in (3, 5):
+            v = predictor.simulate_veto(base_match(map_pool=pool, maps_a=maps_a, maps_b=maps_b), bo)
+            a_picks = [l.split(" picks ")[1] for l in v["veto_log"] if l.startswith("A picks")]
+            self.assertTrue(a_picks)
+            self.assertNotIn("Nuke", a_picks)                        # never a map A hasn't played
+            self.assertTrue(all(mp in maps_a for mp in a_picks))
 
     def test_bo1_six_bans_and_decider(self):
         for kw in ({}, {"maps_a": GP_MAPS_A, "maps_b": GP_MAPS_B}, {"permaban_a": "Nuke"}):

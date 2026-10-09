@@ -2012,7 +2012,7 @@ function matchDesk(pred, a, b, o = {}) {
   const key = `${a}|${b}`;
   if (desk.key !== key) { desk.key = key; desk.spot = null; desk.tab = "overview"; }
   const bo = o.fixedBo && [1, 3, 5].includes(o.fixedBo) ? o.fixedBo : desk.bo;
-  const pool = (o.ev && o.ev.pool.length ? o.ev.pool : null) || ["Ancient", "Anubis", "Cache", "Dust2", "Inferno", "Mirage", "Nuke"];
+  const pool = (o.ev && o.ev.pool.length ? o.ev.pool : null) || DATA.pool;
   let body;
   if (desk.tab === "lineups") body = `<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
   else if (desk.tab === "h2h") body = `${h2hList(a, b)}<div class="grid2">${formList(a)}${formList(b)}</div>`;
@@ -2696,7 +2696,7 @@ function spark(trace) {
 // the current competitive map pool: the pool of the most recent tournament that lists one
 function activePool() {
   const e = [...EV].filter(x => x.pool && x.pool.length && x.start <= DATA.as_of).sort((p, q) => q.start.localeCompare(p.start))[0];
-  return e ? e.pool : ["Ancient", "Anubis", "Cache", "Dust2", "Inferno", "Mirage", "Nuke"];
+  return e && e.pool.length ? e.pool : DATA.pool;
 }
 function viewTeam(slugv) {
   const n = BY_SLUG[slugv];
