@@ -1113,6 +1113,41 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .mrec .a b { background: var(--ct); }
 .mrec .b b { background: var(--t); }
 
+/* pick and ban chances: one row per pool map, a bar split by who picks it / the decider */
+.vch { margin-top: 1.4rem; display: grid; gap: .6rem; }
+.vch h3 { font-size: var(--s0); font-weight: 800; display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .7rem; }
+.vch h3 .dim { font-weight: 400; }
+.vlist { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.vrow {
+  position: relative; overflow: hidden; background: var(--bg) center / cover no-repeat; border: 1px solid var(--line); border-radius: 9px;
+  padding: .55rem .75rem; display: grid; gap: .15rem .9rem; align-items: center;
+  grid-template-columns: minmax(5.5rem, 8rem) minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-areas: "nm pl bar" "nm sp ban" "nt nt nt";
+}
+.vrow::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5, 11, 13, .55), var(--scrim) 40%); }
+.vrow > * { position: relative; min-width: 0; }
+.vnm { grid-area: nm; font-style: italic; font-weight: 900; font-size: 1.3rem; }
+.vpl { grid-area: pl; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.vpl b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.vbar { grid-area: bar; display: flex; height: .6rem; border-radius: 999px; overflow: hidden; background: var(--line); }
+.vbar i { display: block; height: 100%; }
+.vbar i.ct { background: var(--ct); }
+.vbar i.t { background: var(--t); }
+.vbar i.dec { background: var(--dim); }
+.vsplit, .vban { display: flex; flex-wrap: wrap; gap: .1rem .8rem; font-variant-numeric: tabular-nums; }
+.vsplit { grid-area: sp; }
+.vban { grid-area: ban; }
+.vnotes { grid-area: nt; display: flex; flex-wrap: wrap; gap: .2rem .8rem; }
+.vmask { font-weight: 600; }
+.vmask::before { content: "\2298\00a0"; }
+.vpool { margin-top: .6rem; }
+@media (max-width: 760px) {
+  .vrow { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "nm pl" "bar bar" "sp sp" "ban ban" "nt nt"; padding: .6rem .7rem; }
+  .vpl { justify-content: flex-end; }
+  .vpl .small { display: none; }
+  .vrow::before { background: linear-gradient(90deg, rgba(5, 11, 13, .7), var(--scrim) 60%); }
+}
+
 /* series score: team 1's winning scores | vs | team 2's */
 .stiles { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .75rem; align-items: center; container-type: inline-size; }
 /* a narrow panel drops the team name under each score: the logo already says whose it is */
@@ -1640,7 +1675,7 @@ function decode(c) {
     maps: c.vm, map_p: c.vp, warn: c.w,
     veto: c.v.map(x => x[0] === "D" ? { verb: "decider", map: x.slice(1) } : { side: x[0], verb: x[1] === "-" ? "bans" : "picks", map: x.slice(2) }),
     factors: DATA.factors.map((k, i) => ({ factor: k, pp: c.f[i] })), fx: c.fx || null,
-    pf: c.pf || null, bf: c.bf || null,
+    pf: c.pf || null, bf: c.bf || null, mr: c.mr || null, vd: c.vd || null,
     ...vetoFmt(c.v1, [c.pf ? c.pf[0] : c.p], 1), ...vetoFmt(c.v5, c.p5, 5),
   };
 }
@@ -1671,11 +1706,45 @@ function vetoFmt(code, mp, n) {
 // the veto, maps and map chances shown for a series format (BO3 when the format has none)
 function vetoFor(pred, bo) {
   return bo === 1 && pred.veto1 ? { veto: pred.veto1, maps: pred.maps1, map_p: pred.map_p1 }
-    : bo === 5 && pred.veto5 ? { veto: pred.veto5, maps: pred.maps5, map_p: pred.map_p5 }
+    : bo === 5 ? (pred.veto5 ? { veto: pred.veto5, maps: pred.maps5, map_p: pred.map_p5 } : null)   // null: the pool is too small for a best-of-five
     : { veto: pred.veto, maps: pred.maps, map_p: pred.map_p };
 }
+// A team's 90-day record on a map: as of the prediction's own day when the build kept it
+// (matches, finished tournaments), else the team page's current record.
+function mapRec(pred, t, mp) {
+  const src = pred && pred.mr && pred.mr[t] ? pred.mr[t] : (T[t] || {}).maps || {};
+  const v = src[mp];
+  return v && v[1] ? v : null;
+}
+// Pick and ban chances for a format (the build's compact form, see build_viewer.vd_encode):
+// five thousandths per pool map in pool order, in two base-32 characters each.
+const B32 = "0123456789abcdefghijklmnopqrstuv";
+function vdFor(pred, bo) {
+  const c = pred && pred.vd && pred.vd[String(bo)];
+  if (!c || !c.pl || !c.m) return null;
+  const maps = [...c.pl].map(ch => (DATA.vmaps || [])[VCODE.indexOf(ch)]);
+  const k = bo === 1 ? 3 : 5;   // chances per map: a BO1 has no picks
+  const rows = maps.map((map, i) => {
+    const v = Array.from({ length: k }, (_, n) => {
+      const j = (i * k + n) * 2;
+      return (B32.indexOf(c.m[j]) * 32 + B32.indexOf(c.m[j + 1])) / 1000;
+    });
+    if (!map || v.length !== k || c.m.length !== maps.length * k * 2 || v.some(x => !(x >= 0 && x <= 1))) return null;
+    return k === 3 ? { map, pa: 0, pb: 0, dec: v[0], ba: v[1], bb: v[2], played: v[0] }
+      : { map, pa: v[0], pb: v[1], dec: v[2], ba: v[3], bb: v[4], played: v[0] + v[1] + v[2] };
+  });
+  if (rows.some(r => !r)) return null;
+  const names = s => [...(s || "")].map(ch => (DATA.vmaps || [])[VCODE.indexOf(ch)]).filter(Boolean);
+  return { rows, startA: typeof c.st === "number" ? c.st / 1000 : null,
+    masked: { a: names((c.mk || [])[0]), b: names((c.mk || [])[1]) },
+    cold: { a: (c.cd || "").includes("a"), b: (c.cd || "").includes("b") }, warn: Array.isArray(c.w) ? c.w : [] };
+}
 function matchupPred(e, a, b) {
-  if (e && DATA.epairs[e.slug] && DATA.epairs[e.slug][`${a}|${b}`]) return decode(DATA.epairs[e.slug][`${a}|${b}`]);
+  if (e && DATA.epairs[e.slug] && DATA.epairs[e.slug][`${a}|${b}`]) {
+    const p = decode(DATA.epairs[e.slug][`${a}|${b}`]);
+    if (e.status === "finished" && DATA.emr && DATA.emr[e.slug]) p.mr = DATA.emr[e.slug];   // records as of the event's first day
+    return p;
+  }
   return decode(DATA.pairs[`${a}|${b}`]);
 }
 
@@ -1760,23 +1829,66 @@ function playedMaps(m) {
   }).join("")}</div>`;
 }
 
-function vetoView(pred, a, b) {
-  const played = {};
-  pred.maps.forEach((mp, i) => { played[mp] = pred.map_p[i]; });
-  const card = (s, i) => {
-    const ban = s.verb === "bans", pm = played[s.map];
-    const who = s.side === "A" ? a : s.side === "B" ? b : null;
-    const role = s.verb === "decider" ? "Decider" : `${esc(who)} ${s.verb}`;
-    const pair = !ban && pm !== undefined ? displayPercent([pm, 1 - pm]) : null;
-    const odds = pair ? `<span class="sc cond"><span class="ct">${pair[0]}%</span><span class="x">map win chance</span><span class="t">${pair[1]}%</span></span><span class="odds"><b style="width:${(pm * 100).toFixed(1)}%"></b></span>` : "";
-    return `<div class="mapcard reveal ${ban ? "ban" : ""}" style="${mapBg(s.map)};animation-delay:${i * 90}ms">
-      <span class="role"><b class="${s.side === "A" ? "ct" : s.side === "B" ? "t" : ""}">${i + 1}</b> ${role}</span>
-      <span class="nm cond">${esc(s.map)}</span>${odds}
-    </div>`;
-  };
-  const steps = pred.veto.map((s, i) => [s, i]);
-  return `<div class="maps">${steps.filter(([s]) => s.verb !== "bans").map(([s, i]) => card(s, i)).join("")}</div>
-    <div class="maps" style="grid-template-columns:repeat(auto-fit,minmax(8rem,1fr))">${steps.filter(([s]) => s.verb === "bans").map(([s, i]) => card(s, i)).join("")}</div>`;
+// Plain-language text for the veto engine's warning codes (predictor.VETO_WARN_TEXT); an unknown
+// code is shown as its own words rather than dropped.
+function vetoWarnText(code, a, b) {
+  const m = /^(.*)_(a|b)$/.exec(code), t = m ? (m[2] === "a" ? a : b) : null;
+  const base = m ? m[1] : code;
+  if (code === "cold_start_both") return "Neither team has recent map history, so the chances are close to even across the pool.";
+  if (base === "cold_start" && t) return `${t} has no recent map history; its picks and bans follow what teams usually do.`;
+  if (base === "mask_exhausted" && t) return `${t} has not played any of the maps left at a pick step; the "not played lately" filter was lifted there.`;
+  if (base === "lineup_stale" && t) return `${t}'s lineup data is older than its last series, so lineup history was not used.`;
+  if (code === "pool_default") return "No map pool was given for this series; the usual pool is used.";
+  if (code === "pool_size_n") return "The map pool is not seven maps; the veto steps follow the standard rules for this pool size.";
+  if (code === "pool_too_large") return "The map pool is too large for exact chances; one simulated veto is shown.";
+  const w = String(code).replace(/_/g, " ").trim();
+  return w ? w[0].toUpperCase() + w.slice(1) + "." : "";
+}
+const vPct = v => v < 0.005 ? "0%" : v < 0.01 ? "<1%" : `${Math.round(v * 100)}%`;
+
+// Notes about the single simulated veto: engine warnings for the format, and any pick by a team on a
+// map the model otherwise treats as one it avoids (no games on it lately).
+function vetoNotes(pred, a, b, bo, V) {
+  const D = vdFor(pred, bo), out = [];
+  if (D) {
+    for (const w of D.warn) { const t = vetoWarnText(w, a, b); if (t) out.push(t); }
+    for (const s of V.veto) {
+      const side = s.side === "A" ? "a" : s.side === "B" ? "b" : null;
+      if (s.verb === "picks" && side && D.masked[side].includes(s.map))
+        out.push(`${side === "a" ? a : b} has not played ${s.map} lately and is unlikely to pick it; the chances below show how often that happens.`);
+    }
+  }
+  return out.map(t => `<p class="warn">${esc(t)}</p>`).join("");
+}
+
+// Pick and ban chances for each map of the pool, from the veto distribution (every legal veto,
+// weighted by how likely it is).
+function chances(pred, a, b, bo) {
+  if (bo === 5) return `<div class="vch"><h3>Pick and ban chances</h3><p class="small dim">Not available for a best-of-five: only best-of-one and best-of-three vetoes have enough past series to measure. The veto above is a single simulation.</p></div>`;
+  const D = vdFor(pred, bo);
+  const total = D ? D.rows.reduce((x, r) => x + r.played, 0) : 0;
+  if (!D || !D.rows.length || Math.abs(total - bo) > 0.2)
+    return `<div class="vch"><h3>Pick and ban chances</h3><p class="small dim">Not available for this matchup.</p></div>`;
+  const rows = [...D.rows].sort((x, y) => y.played - x.played || x.map.localeCompare(y.map));
+  const seg = (v, cls, lbl) => v > 0.0005 ? `<i class="${cls}" style="width:${(v * 100).toFixed(2)}%" title="${esc(lbl)}"></i>` : "";
+  const maskNote = r => bo === 1 ? "" : ["a", "b"].filter(k => D.masked[k].includes(r.map)).map(k =>
+    `<span class="vmask ${k === "a" ? "ct" : "t"}" title="${esc(`${k === "a" ? a : b} has no games on ${r.map} in the last 90 days, so it is not expected to pick it`)}">${esc(k === "a" ? a : b)} not expected to pick</span>`).join("");
+  const list = rows.map(r => {
+    const parts = bo === 1 ? "" : `<span class="ct">${esc(a)} picks ${vPct(r.pa)}</span><span class="t">${esc(b)} picks ${vPct(r.pb)}</span>`;
+    const lbl = `${r.map}: played ${vPct(r.played)}; ${a} ban ${vPct(r.ba)}, ${b} ban ${vPct(r.bb)}`;
+    return `<li class="vrow" style="${mapBg(r.map)}" aria-label="${esc(lbl)}">
+      <span class="vnm cond">${esc(r.map)}</span>
+      <span class="vpl"><b class="cond">${vPct(r.played)}</b><span class="small dim">${bo === 1 ? "chance it is the map played" : "chance it is played"}</span></span>
+      <span class="vbar" aria-hidden="true">${seg(r.pa, "ct", `${a} pick`)}${seg(r.pb, "t", `${b} pick`)}${seg(r.dec, "dec", "Decider")}</span>
+      <span class="vsplit small">${parts}${bo === 1 ? "" : `<span class="dim">decider ${vPct(r.dec)}</span>`}</span>
+      <span class="vban small"><span class="dim">Banned</span> <span class="ct">${esc(a)} ${vPct(r.ba)}</span><span class="t">${esc(b)} ${vPct(r.bb)}</span></span>
+      ${maskNote(r) ? `<span class="vnotes small">${maskNote(r)}</span>` : ""}
+    </li>`;
+  }).join("");
+  const first = D.startA === null ? "" : `Which team vetoes first is not known in advance: the model gives ${esc(a)} ${vPct(D.startA)} and ${esc(b)} ${vPct(1 - D.startA)}. These chances cover both cases, while the veto above assumes ${esc(a)} bans first. `;
+  return `<div class="vch"><h3>Pick and ban chances <span class="dim small">${bo === 1 ? "which map ends up played" : "how often each map is picked, left as the decider, or banned"}</span></h3>
+    <ul class="vlist">${list}</ul>
+    <p class="small dim">${first}A map's played chance is its pick chance plus its decider chance. Chances come from past vetoes and each team's recent maps, not from this event's draw.</p></div>`;
 }
 
 // One factor row's evidence from the build's fx array (see evidence() in
@@ -1975,7 +2087,10 @@ function court(pred, a, b, o, bo) {
 let SPOT_ARGS = null;
 function tape(pred, a, b, bo = 3) {
   SPOT_ARGS = [pred, a, b, bo];
-  const V = vetoFor(pred, bo), steps = V.veto;
+  const win90 = pred.mr ? "90 days before this series" : "last 90 days";
+  const V = vetoFor(pred, bo);
+  if (!V) return "";
+  const steps = V.veto;
   if (!desk.spot || !steps.some(s => s.map === desk.spot)) desk.spot = V.maps[0];
   return `<div class="tape" style="--n:${steps.length}" role="group" aria-label="Veto, in order">${steps.map((s, i) => {
     const who = s.side === "A" ? a : s.side === "B" ? b : null;
@@ -1983,10 +2098,10 @@ function tape(pred, a, b, bo = 3) {
     const verb = s.verb === "decider" ? "Decider" : s.verb === "bans" ? "Ban" : "Pick";
     const role = s.verb === "decider" ? "Decider" : `${who} ${verb.toLowerCase()}`;
     const stat = (t, c) => {
-      const v = (T[t]?.maps || {})[s.map];
-      const txt = v && v[1] ? `${(v[0] * 100).toFixed(2)}% (${v[1]})` : "N/A";
-      const tip = v && v[1] ? `${(v[0] * 100).toFixed(2)}% won of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A: not played in the last 90 days";
-      return `<span class="${c}${v && v[1] ? "" : " na"}" title="${esc(`${t} on ${s.map}, last 90 days: ${tip}`)}">${logo(t, "xs")}<span>${txt}</span></span>`;
+      const v = mapRec(pred, t, s.map);
+      const txt = v ? `${(v[0] * 100).toFixed(2)}% (${v[1]})` : "N/A";
+      const tip = v ? `${(v[0] * 100).toFixed(2)}% won of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A: not played in the 90 days before";
+      return `<span class="${c}${v ? "" : " na"}" title="${esc(`${t} on ${s.map}, ${win90}: ${tip}`)}">${logo(t, "xs")}<span>${txt}</span></span>`;
     };
     return `<button type="button" class="tm ${cls} ${s.side === "A" ? "sa" : s.side === "B" ? "sb" : ""}" data-spot="${esc(s.map)}" aria-pressed="${s.map === desk.spot}" style="${mapBg(s.map)}" title="${esc(role)}">
       <span class="tn">${i + 1}</span><span class="tbody"><span class="tnm cond">${esc(s.map)}</span><span class="trole"><i>${verb}</i>${s.verb === "decider" ? "" : `<em>${esc(who)}</em>`}</span>
@@ -1995,7 +2110,9 @@ function tape(pred, a, b, bo = 3) {
 }
 
 function spotlight(pred, a, b, bo = 3) {
-  const V = vetoFor(pred, bo), n = V.maps.length;
+  const V = vetoFor(pred, bo);
+  if (!V) return "";
+  const n = V.maps.length;
   const m = desk.spot, i = V.veto.findIndex(s => s.map === m), s = V.veto[i];
   const who = s.side === "A" ? a : s.side === "B" ? b : null;
   const k = V.maps.indexOf(m), pm = k >= 0 ? V.map_p[k] : null;
@@ -2013,10 +2130,10 @@ function spotlight(pred, a, b, bo = 3) {
       <div class="odds" role="img" aria-label="${esc(`${a} ${pair[0]}%, ${b} ${pair[1]}% on ${m}`)}"><b style="width:${(pm * 100).toFixed(2)}%"></b></div></div>`;
   }
   const rec = (t, cls) => {
-    const v = (T[t]?.maps || {})[m];
-    const line = v && v[1] ? `${(v[0] * 100).toFixed(2)}% of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A";
+    const v = mapRec(pred, t, m);
+    const line = v ? `${(v[0] * 100).toFixed(2)}% of ${v[1]} map${v[1] === 1 ? "" : "s"}` : "N/A";
     return `<div class="r ${cls}">${logo(t, "sm")}<span>${esc(t)}</span><span>${line}</span>
-      <span class="trk">${v && v[1] ? `<b style="width:${(v[0] * 100).toFixed(1)}%"></b>` : ""}<i></i></span></div>`;
+      <span class="trk">${v ? `<b style="width:${(v[0] * 100).toFixed(1)}%"></b>` : ""}<i></i></span></div>`;
   };
   const poss = t => /s$/i.test(t) ? `${t}'` : `${t}'s`;
   const caption = s.verb === "decider" ? "Decider" : `${poss(who)} ${s.verb === "picks" ? "pick" : "ban"}`;
@@ -2025,7 +2142,7 @@ function spotlight(pred, a, b, bo = 3) {
     <div class="img" style="${mapBg(m)}"><span class="sname"><b class="cond">${esc(m)}</b><small>${esc(caption)}</small></span>
       ${V.veto.length > 1 ? `<button type="button" class="snext" data-spot="${esc(nxt)}" aria-label="${esc(`Next map in the veto: ${nxt}`)}" title="${esc(`Next: ${nxt}`)}">${ICON.next}</button>` : ""}</div>
     <div class="info"><p class="role">${role}</p>${chance}
-      <div class="mrec"><span class="small dim">Won on ${esc(m)} in the last 90 days</span>${rec(a, "a")}${rec(b, "b")}</div></div>
+      <div class="mrec"><span class="small dim">Won on ${esc(m)} ${pred.mr ? "in the 90 days before this series" : "in the last 90 days"}</span>${rec(a, "a")}${rec(b, "b")}</div></div>
   </div>`;
 }
 
@@ -2063,6 +2180,13 @@ function scoreTiles(pred, a, b, bo) {
       <div class="scol">${idx.filter(([x]) => !winOf(x)).reverse().map(tile).join("")}</div></div><p class="small dim">${note}</p></div>`;
 }
 
+function vetoBody(pred, a, b, bo) {
+  const V = vetoFor(pred, bo);
+  if (!V) return `<p class="empty">This tournament's map pool has fewer than five maps, so there is no best-of-five veto to simulate. Every map gets the same win chance.</p>`;
+  const pool = [...new Set(V.veto.map(s => s.map))];
+  return `${vetoNotes(pred, a, b, bo, V)}${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}
+    <p class="small dim vpool">Simulated with ${esc(a)} banning first, from the pool of ${pool.length}: ${pool.map(esc).sort().join(", ")}.</p>`;
+}
 function matchDesk(pred, a, b, o = {}) {
   const key = `${a}|${b}`;
   if (desk.key !== key) { desk.key = key; desk.spot = null; desk.tab = "overview"; }
@@ -2074,7 +2198,7 @@ function matchDesk(pred, a, b, o = {}) {
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
   else body = `
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
-    ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">choose a map to see who it suits</span></h2>${tape(pred, a, b, bo)}${spotlight(pred, a, b, bo)}</section>
+    ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
   // the section tabs ride in the court's control row (left), next to Format / Swap (right)
   const SHORT = { h2h: "H2H", pools: "Maps" };   // phone labels, so all four tabs fit in one row

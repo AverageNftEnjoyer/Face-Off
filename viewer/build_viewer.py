@@ -223,7 +223,7 @@ def compact(r, bo=3):
         "s": [s["p_2_0"], s["p_2_1"], s["p_1_2"], s["p_0_2"]],
         "vm": r["veto_maps"], "vp": r["map_probs_exact"],
         "v": [re.sub(r"^(A|B) (bans|picks) ", lambda m: m.group(1) + ("-" if m.group(2) == "bans" else "+"), x)
-              .replace("decider: ", "D") for x in r["veto_log"]],
+              .replace(" (permaban)", "").replace("decider: ", "D") for x in r["veto_log"]],
         "f": [round(fac.get(k, 0.0), 1) for k in FACTORS],
         "w": r["warnings"],
         "v1": veto_code(r["veto_bo1"]["veto_log"]),
@@ -234,6 +234,70 @@ def compact(r, bo=3):
         # best-of-five matches also carry the exact BO5 scorelines (3-0 .. 0-3)
         **({"s5": [r["series_probs_bo5_exact"][k] for k in pr.BO5_KEYS]} if bo == 5 else {}),
     }
+
+
+# ---- veto distribution (pick / ban chances per map) -------------------------
+# predictor.veto_distribution is called here, beside predict_match: the engine's
+# veto_mode stays "point", so predict_match's own veto_dist is None. Per format
+# (BO3, BO1) the page gets, for each pool map, five chances in thousandths (two
+# base-32 characters each) in pool order: picked by A, picked by B, decider,
+# banned by A, banned by B ("played" is picks + decider). A BO1 has no picks, so
+# it carries only decider, banned by A, banned by B. BO5 has no
+# fitted distribution (predictor.CONFIG), so the page shows only its point veto.
+_B32 = "0123456789abcdefghijklmnopqrstuv"
+VD_FORMATS = (3, 1)
+VD_JOBS = []                  # (prediction dict, engine input), filled by predict()
+MARG_KEYS = {3: ("picked_a", "picked_b", "decider", "banned_a", "banned_b"),
+             1: ("decider", "banned_a", "banned_b")}
+
+
+def _vd_run(inp):
+    """{bo: raw veto distribution summary} for one engine input; a format the
+    engine cannot model (pool too small, a VetoError) is left out."""
+    out = {}
+    for bo in VD_FORMATS:
+        try:
+            d, _, _ = pr.veto_distribution(inp, bo)
+        except ValueError:      # VetoError is a ValueError
+            continue
+        pool = sorted(d["marginals"])
+        out[bo] = (pool, d["starter_a"], d["masked"], d["cold_start"], d["warnings"],
+                   [[d["marginals"][mp][k] for k in MARG_KEYS[bo]] for mp in pool])
+    return out
+
+
+def _vcode(mp):
+    if mp not in VMAPS:
+        VMAPS.append(mp)
+    return _VCODE[VMAPS.index(mp)]
+
+
+def vd_encode(raw):
+    """The compact page form of one format's veto distribution."""
+    pool, starter, masked, cold, warns, marg = raw
+    q = lambda p: _B32[min(1000, max(0, round(p * 1000))) >> 5] + _B32[min(1000, max(0, round(p * 1000))) & 31]
+    return {"pl": "".join(_vcode(mp) for mp in pool),
+            "m": "".join(q(p) for row in marg for p in row),
+            "st": round(starter * 1000),
+            "mk": ["".join(_vcode(mp) for mp in masked[t]) for t in "ab"],
+            "cd": "".join(t for t in "ab" if cold.get(t)),
+            "w": list(warns)}
+
+
+def run_vdist():
+    """Fill every queued prediction's "vd" (in parallel when fork is available)."""
+    jobs = VD_JOBS
+    inps = [i for _, i in jobs]
+    try:
+        import multiprocessing as mp
+        with mp.get_context("fork").Pool() as pool:
+            res = pool.map(_vd_run, inps, chunksize=64)
+    except (ValueError, OSError, ImportError):
+        res = [_vd_run(i) for i in inps]
+    for (out, _), raw in zip(jobs, res):
+        if raw:
+            out["vd"] = {str(bo): vd_encode(r) for bo, r in raw.items()}
+    jobs.clear()
 
 
 class Timeline:
@@ -282,12 +346,29 @@ def evidence(h, inp, day):
     return out
 
 
-def predict(h, a, b, day, title=None, bo=3, elo=False):
+def valid_pool(pool):
+    """An event's announced map pool, if it can drive a veto; else None (the live pool is used)."""
+    pool = sorted({x for x in pool or [] if isinstance(x, str) and x})
+    return pool if len(pool) >= 5 else None
+
+
+def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
     """Engine call with point-in-time features; `title` (the tournament page)
-    lets the feature builder attach stand-in / missing-IGL flags."""
+    lets the feature builder attach stand-in / missing-IGL flags. `pool` is the
+    event's own map pool: the veto must be played on the maps the event uses,
+    not on the pool inferred from recent plays. `recs` attaches each team's
+    90-day map record as of `day` (the page shows it beside the veto)."""
     inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
+    pool = valid_pool(pool)
+    if pool and pool != inp["map_pool"]:
+        inp["map_pool"] = pool
+        inp["veto_ev_a"] = h.veto_evidence(a, day, pool)
+        inp["veto_ev_b"] = h.veto_evidence(b, day, pool)
     out = compact(pr.predict_match(inp), bo)
     out["fx"] = evidence(h, inp, day)
+    if recs:
+        out["mr"] = {a: inp["maps_raw_a"], b: inp["maps_raw_b"]}
+    VD_JOBS.append((out, inp))
     if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
         out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
     return out
@@ -430,20 +511,24 @@ def main(out_path):
             # the record on Stats is not filtered by which teams still exist
             if m["t1"] and m["t2"] and h_now.games.get(m["t1"]) and h_now.games.get(m["t2"]) and m["day"]:
                 d = min(date.fromisoformat(m["day"]), as_of)
-                jobs[d].append(("match", (m, e["title"])))
+                jobs[d].append(("match", (m, e)))
         if e["status"] == "finished":
             jobs[date.fromisoformat(e["start"])].append(("event", e))
-    epairs = {}
+    epairs, emr = {}, {}
     tl = Timeline(all_matches)
     for d in sorted(jobs):
         h = tl.at(d)
         for kind, obj in jobs[d]:
             if kind == "match":
-                m, title = obj
-                m["pred"] = predict(h, m["t1"], m["t2"], d, title, m.get("bo") or 3, elo=True)
+                m, ev = obj
+                m["pred"] = predict(h, m["t1"], m["t2"], d, ev["title"], m.get("bo") or 3, elo=True,
+                                    pool=ev["pool"], recs=True)
             else:
                 ps = [t for t in obj["participants"] if t in teams]
-                epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d, obj["title"]) for a in ps for b in ps if a != b}
+                epairs[obj["slug"]] = {f"{a}|{b}": predict(h, a, b, d, obj["title"], pool=obj["pool"])
+                                       for a in ps for b in ps if a != b}
+                # map records as of that day, for the veto panel of a finished event
+                emr[obj["slug"]] = {t: h.team_feats(t, d)["maps_raw"] for t in ps}
     h_today = tl.at(as_of)
     rated = [t for t in names if teams[t]["cmp"]]   # a team with no series has nothing to predict from
     pairs = {f"{a}|{b}": predict(h_today, a, b, as_of) for a in rated for b in rated if a != b}
@@ -452,8 +537,10 @@ def main(out_path):
     for e in events:
         if e["status"] != "finished":
             ps = [t for t in e["participants"] if t in teams]
-            epairs[e["slug"]] = {f"{a}|{b}": predict(h_today, a, b, as_of, e["title"])
+            epairs[e["slug"]] = {f"{a}|{b}": predict(h_today, a, b, as_of, e["title"], pool=e["pool"])
                                  for a in ps for b in ps if a != b}
+
+    run_vdist()
 
     h2h = defaultdict(list)
     for m in reversed(all_matches):
@@ -509,7 +596,7 @@ def main(out_path):
                             for m in e["matches"]]
     data = {
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
-        "pairs": pairs, "epairs": epairs, "h2h": h2h, "recent": recent, "report": report,
+        "pairs": pairs, "epairs": epairs, "emr": emr, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
         # the live map pool (maps with recent plays), the fallback when a tournament lists none
