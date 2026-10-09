@@ -14,6 +14,18 @@ Per team, from its lineups before D (newest first):
   continuity  share of `last` who played in >= half of the team's series in
               the CONT_DAYS days before D (1.0 = the same five all along)
 No lineup history -> standin 0, continuity 1.0, known False (neutral).
+
+MANUAL OVERRIDES (data/roster_overrides.json, see load_overrides): entries
+{team, from, players[5], kind, [until], [note]} replace Valve's lineup for that
+team on series dated >= `from` (and < `until` when given), and add one row at
+`from` itself so the move is known before the team next plays. Point-in-time:
+a row dated F is only ever read by days D > F, so an override dated at or
+after D cannot change anything on day D. kind:
+  roster_change  permanent; the new five is ordinary history (core and
+                 continuity adapt as the old five ages out).
+  stand_in       temporary; the row is marked, left out of `core`, so
+                 standin is 1 and continuity drops for its players.
+No team or player names live in this code; everything is in the file.
 """
 import json
 import os
@@ -33,16 +45,89 @@ def load(path=None):
         return json.load(f).get("lineups", {})
 
 
-def team_history(matches, lineups):
-    """team -> [(date, five)] in date order, from series that have a lineup."""
+KINDS = ("roster_change", "stand_in")
+OVERRIDES_PATH = os.path.join(HERE, "data", "roster_overrides.json")
+
+
+class Five(tuple):
+    """A lineup tuple; `temporary` marks a stand_in override row."""
+    temporary = False
+
+
+def _norm(name):
+    return str(name).strip().lower()
+
+
+def parse_override(e):
+    """One raw entry -> normalised dict, or None when it is malformed
+    (scripts/roster_overrides_check.py reports why)."""
+    try:
+        if e["kind"] not in KINDS or not str(e["team"]).strip():
+            return None
+        frm = date.fromisoformat(e["from"]).isoformat()
+        until = e.get("until")
+        until = date.fromisoformat(until).isoformat() if until else None
+        players = [_norm(p) for p in e["players"]]
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return None
+    if len(players) != 5 or len(set(players)) != 5 or "" in players:
+        return None
+    if until and until <= frm:
+        return None
+    return {"team": e["team"], "from": frm, "until": until, "players": players,
+            "kind": e["kind"], "note": e.get("note", "")}
+
+
+def load_overrides(path=None):
+    """Valid entries of data/roster_overrides.json (a JSON list), by date."""
+    path = path or OVERRIDES_PATH
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        raw = json.load(f)
+    out = [o for o in (parse_override(e) for e in raw) if o]
+    return sorted(out, key=lambda o: (o["from"], o["team"]))
+
+
+def _governing(ovs, day):
+    """Latest override with from <= day < until (None if none)."""
+    hit = None
+    for o in ovs:  # sorted by `from`
+        if o["from"] <= day and (not o["until"] or day < o["until"]):
+            hit = o
+    return hit
+
+
+def _five(o):
+    f = Five(o["players"])
+    f.temporary = o["kind"] == "stand_in"
+    return f
+
+
+def team_history(matches, lineups, overrides=None):
+    """team -> [(date, five)] in date order, from series that have a lineup.
+
+    overrides: list from load_overrides(); None reads the file, [] disables.
+    """
+    if overrides is None:
+        overrides = load_overrides()
+    by_team = defaultdict(list)
+    for o in overrides:
+        by_team[o["team"]].append(o)
     hist = defaultdict(list)
     for m in sorted(matches, key=lambda m: m["date"]):
-        rec = lineups.get(f"{m['date']}|{m['team_a']}|{m['team_b']}")
-        if not rec:
-            continue
+        rec = lineups.get(f"{m['date']}|{m['team_a']}|{m['team_b']}") or {}
         for side, team in (("a", m["team_a"]), ("b", m["team_b"])):
-            if rec.get(side):
+            o = _governing(by_team.get(team, ()), m["date"])
+            if o:  # override wins over Valve for this team on this date
+                hist[team].append((m["date"], _five(o)))
+            elif rec.get(side):
                 hist[team].append((m["date"], tuple(rec[side])))
+    for team, ovs in by_team.items():
+        for o in ovs:  # the move itself, known before the team next plays
+            if not any(d == o["from"] for d, _ in hist[team]):
+                hist[team].append((o["from"], _five(o)))
+        hist[team].sort(key=lambda r: r[0])
     return hist
 
 
@@ -54,7 +139,8 @@ def features(hist_rows, day):
     last = prior[-1][1]
     recent = prior[-CORE_N:]
     count, seen = defaultdict(int), {}
-    for i, (_, five) in enumerate(recent):
+    base = [r for r in recent if not getattr(r[1], "temporary", False)] or recent
+    for i, (_, five) in enumerate(base):
         for p in five:
             count[p] += 1
             seen[p] = i
