@@ -1,6 +1,8 @@
 # Roster core (veto Phase 4) and manual roster overrides: PAUSED
 
 Status: **paused on 2026-10-09 by Jack** to focus on the Simulate Map Picks tab.
+**Update 2026-10-09:** manual roster overrides are built and merged-ready (`data/roster_overrides.json`, `scripts/roster_overrides_check.py`, loader in `lineup_features.py`). The Phase 4 roster fit was started, then **stopped by Jack's call** (small expected gain, ~3h runtime). No Phase 4 report exists; `veto_use_roster` stays `False`. Section 6 is done; Phase 4 (sections 4 and 7) remains unrun.
+
 Nothing here is switched on. `veto_use_roster` is `False` in `CONFIG` and the live
 engine is unaffected.
 
