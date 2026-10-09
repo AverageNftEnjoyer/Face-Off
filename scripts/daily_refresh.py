@@ -22,7 +22,11 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    served from the cache.
 3. Rebuild, in order: data/matches.json (collect_liquipedia), data/
    roster_events.json (rosters), viewer/assets.json + new images
-   (fetch_assets), data/vrs.json (Valve Regional Standings, from GitHub).
+   (fetch_assets), data/vrs.json (Valve Regional Standings, from GitHub),
+   data/lineups.json (per-series five-man lineups from Valve's standings
+   detail pages, incremental: only snapshots newer than the file's newest
+   one are read, so most runs download nothing; a failure here is reported
+   and never stops the refresh).
 
 The site itself is built from these files on each deploy
 (python viewer/build_viewer.py public/index.html, see vercel.json).
@@ -307,6 +311,16 @@ def main(argv=None):
     import vrs          # Valve Regional Standings (GitHub; new file roughly monthly)
     vrs.OFFLINE = False
     vrs.main()
+
+    # lineups are optional input (roster-core features): a failure here must
+    # never break the data refresh, so it is reported and the old file is kept
+    try:
+        import lineups
+        lineups.OFFLINE = False
+        lineups.main(incremental=True)
+    except (Exception, SystemExit) as e:   # noqa: BLE001
+        print(f"lineups: refresh skipped ({type(e).__name__}: {e}); data/lineups.json unchanged",
+              file=sys.stderr)
     print(f"refresh done; Liquipedia API requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
 
 

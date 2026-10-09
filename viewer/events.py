@@ -266,6 +266,9 @@ def parse_matches(title, txt, alias, stage_prefix=""):
             m["kind"] = "playoffs"
         else:
             m["stage"], m["kind"] = base, "groups"
+        # position in its bracket round (R1M3 -> 3): matches 2k-1 and 2k feed match k next round
+        if m["kind"] == "playoffs" and m["mkey"] and m["mkey"].isdigit():
+            m["slot"] = int(m["mkey"])
         for k in ("rkey", "mkey", "bracket", "sec"):
             m.pop(k)
     return raw

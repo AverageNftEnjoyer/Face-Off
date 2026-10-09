@@ -59,7 +59,11 @@ INPUT JSON SCHEMA (every key optional; defaults in brackets):
 
 import json
 import math
+import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import veto as _veto  # noqa: E402
 
 # ============================================================================
 # CONFIG -- ALL TUNABLE WEIGHTS LIVE HERE. Change these, not the code below.
@@ -192,6 +196,58 @@ CONFIG = {
     # of picks and 27.9% of deciders right, unplayed picks 3.5%. Doesn't
     # touch the series win probability (w_veto is 0).
     "veto_comfort_k": 3.0,
+
+    # --- veto distribution (veto.py, design veto-v2) ---
+    "veto_mode": "point",
+    # "point": the single simulated veto above (simulate_veto), every output
+    # exactly as before. "dist": BO3 scorelines are a mixture over the full
+    # veto distribution (veto.py), and the output gains veto_dist. Stays
+    # "point": no phase passed its gate (scripts/veto_harness.py, test window
+    # 746 held-out BO3s vs the comfort sim; data/veto_phase*_report.json):
+    # P1 myopic failed (pick-set hit +0.003, CI [-0.017, +0.023]; one series
+    # had probability 0 under the alpha-0.05 mask; scoreline CI upper +0.0020),
+    # P2 lookahead failed only the pick-set hit (+0.011, CI [-0.012, +0.035];
+    # veto log-likelihood +0.663 [+0.586, +0.737], scoreline -0.0021 [-0.0061,
+    # +0.0019], coverage 0.845, ECE 0.010), P3 habits failed only the scoreline
+    # non-regression (-0.0016, CI upper +0.0025 > +0.002).
+    "veto_mode_bo1": "point",
+    # BO1 (phase 6): "dist" adds veto_dist_bo1 (which map gets played). The
+    # BO1 win chance never depends on it. Stays "point": on 174 held-out BO1s
+    # the played-map hit was +0.017 (CI [-0.023, +0.054]) and ECE 0.035 >
+    # 0.03. BO5 always stays point (52 series, no gate possible).
+    "veto_excl_alpha": 0.01,
+    # Exclusion test: a team never picks a map it has not played once in 90
+    # days when zero plays had probability <= this at the field's play rate.
+    # The design's pre-registered default. The phase-1 inner fold chose 0.05,
+    # which gave one held-out series probability 0 (both teams masked the map
+    # that was picked); at 0.01 no train or test series is contradicted under
+    # both starters (masked-but-picked under one starter: 0.9% of test series).
+    "veto_params_bo3": {
+        "version": "veto-v2.p2", "lookahead": True, "pi": 0.2875090721175809, "temp": 1.0,
+        "alpha_ban1": 1.6539201401663866, "gamma_ban1": 7.449223575610019,
+        "alpha_ban2": -0.32497224410789893, "gamma_ban2": 1.5532098742820395,
+        "alpha_pick": 4.545925649320859, "gamma_pick": 2.627795382754427,
+    },
+    # Phase-2 fit (scripts/veto_fit.py, maximum likelihood of the played map
+    # order on 1,207 training BO3s <= 2025-11-05, starter and bans hidden):
+    # train mean log-likelihood -3.734 vs -4.310 for the smoothed comfort sim
+    # and -4.396 for a uniform legal veto. pi = P(team_a started) = 0.29.
+    # Used only when veto_mode is "dist" (opt-in; not shipped, see above).
+    "veto_params_bo1": {
+        "version": "veto-v2.p6", "lookahead": False, "pi": 0.5874694079407698, "temp": 0.6872736001783517,
+        "alpha_ban1": -1.427368213273976, "gamma_ban1": 9.999963159853081, "rho_ban1": -0.6303930493016094,
+        "alpha_ban2": 0.9622003523001881, "gamma_ban2": 2.9956862399101682, "rho_ban2": 1.6268812695269732,
+        "alpha_pick": 0.0, "gamma_pick": 0.0,
+    },
+    # Phase-6 fit on 186 training BO1s (train log-likelihood -1.708 vs -1.946
+    # uniform); temperature 0.687 fitted on the inner fold (its ECE was 0.038).
+    "veto_use_habits": False,
+    "veto_habit_k": 4.0,
+    # Phase 3 habits: team choice shares shrunk to the field with k_h
+    # pseudo-counts (posterior soft counts, 90 days, series < D).
+    "veto_use_roster": False,
+    "veto_roster_k": 4.0,
+    # Phase 4: roster-core level between team and field (lineups < D).
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.
@@ -650,6 +706,97 @@ def simulate_veto(m, best_of=3):
     return out
 
 
+VETO_WARN_TEXT = {
+    "pool_default": "no map pool given; the default pool was used",
+    "mask_exhausted_a": "team A has no history on any map left at a pick step; the pick mask was lifted",
+    "mask_exhausted_b": "team B has no history on any map left at a pick step; the pick mask was lifted",
+    "cold_start_a": "no map history for team A; its veto choices follow the field",
+    "cold_start_b": "no map history for team B; its veto choices follow the field",
+    "cold_start_both": "no map history for either team; the veto distribution is close to uniform",
+    "pool_too_large": "the pool is too large for the exact veto distribution; the single simulated veto is used",
+    "pool_size_n": "the pool is not 7 maps; the veto steps follow the standard rules for this size",
+    "lineup_stale_a": "team A's lineup data is older than its last series; the roster-core level is skipped",
+    "lineup_stale_b": "team B's lineup data is older than its last series; the roster-core level is skipped",
+}
+
+
+def veto_context(m, best_of=3):
+    """veto.Context for one input (PoolResolver + MapModel + the
+    PreferenceEstimator of each team). Uses only the veto inputs: map
+    records, the pool, veto evidence and permabans -- never ratings, h2h or
+    form (I9)."""
+    warns = []
+    if not isinstance(m.get("map_pool"), (list, tuple)) or not any(isinstance(x, str) for x in m.get("map_pool")):
+        warns.append("pool_default")
+    pool = sorted(_pool(m))
+    if len(pool) < best_of:
+        raise ValueError(f"map pool needs at least {best_of} distinct maps for a BO{best_of} veto, "
+                         f"got {len(pool)}: {pool}")
+    if len(pool) != 7:
+        warns.append("pool_size_n")
+    rel_a, _, _ = _team_maps(m.get("maps_a"), pool)
+    rel_b, _, _ = _team_maps(m.get("maps_b"), pool)
+    ell = {mp: CONFIG["map_scale"] * (rel_a[mp] - rel_b[mp]) for mp in pool}
+    use_h = bool(CONFIG.get("veto_use_habits"))
+    if use_h:
+        for t in "ab":
+            ev = m.get(f"veto_ev_{t}")
+            if not (isinstance(ev, dict) and "habit" in ev and "field" in ev):
+                # never run a different model silently: habit weights need
+                # habit evidence (backtest.History with a HabitAccumulator)
+                raise ValueError(f"veto_use_habits is on but veto_ev_{t} has no habit evidence; "
+                                 "build inputs with a History that has a HabitAccumulator")
+    prefs = {
+        "a": _veto.team_prefs(_comfort(m.get("maps_a"), pool), m.get("veto_ev_a"), pool, CONFIG, use_h),
+        "b": _veto.team_prefs(_comfort(m.get("maps_b"), pool), m.get("veto_ev_b"), pool, CONFIG, use_h),
+    }
+    if prefs["a"]["cold"] and prefs["b"]["cold"]:
+        warns.append("cold_start_both")
+    else:
+        warns += [f"cold_start_{t}" for t in "ab" if prefs[t]["cold"]]
+    if use_h and CONFIG.get("veto_use_roster"):
+        for t in "ab":
+            ev = m.get(f"veto_ev_{t}")
+            if isinstance(ev, dict) and ev.get("core_stale"):
+                warns.append(f"lineup_stale_{t}")
+    steps = _veto.format_steps(best_of, len(pool), VETO_ORDER, m.get("veto_format"))
+    pb = {"a": m.get("permaban_a"), "b": m.get("permaban_b")}
+    return _veto.Context(pool, best_of, steps, ell, prefs, pb, warns)
+
+
+def veto_params(best_of=3):
+    return CONFIG["veto_params_bo1" if best_of == 1 else "veto_params_bo3"]
+
+
+def veto_distribution(m, best_of=3):
+    """(veto_dist, internals, ctx) for one input; see veto.distribution."""
+    ctx = veto_context(m, best_of)
+    prefix = m.get("veto_prefix") if isinstance(m.get("veto_prefix"), list) else None
+    dist, internals = _veto.distribution(ctx, veto_params(best_of), prefix)
+    return dist, internals, ctx
+
+
+def veto_posterior(inp, played, w=None):
+    """Phase 3 HabitAccumulator hook: expected (choice, opportunity) counts per
+    team, kind and map under the posterior over vetoes consistent with the
+    played order. `w`: the policy weights the posterior uses (habit terms off)."""
+    w = dict(w or veto_params(3))
+    for k in ("eta_ban1", "eta_ban2", "eta_pick"):
+        w[k] = 0.0
+    ctx = veto_context(inp, 3)
+    return _veto.posterior_counts(ctx, w, played)
+
+
+def _modal_veto(ctx, internals):
+    """A simulate_veto-shaped dict for the modal sequence (frozen point fields)."""
+    maps = internals["modal_maps"]
+    map_logits = [ctx.ell["a"][ctx.idx[mp]] for mp in maps]
+    p_maps = [sigmoid(L) for L in map_logits]
+    return {"maps": maps, "map_logits": map_logits, "p_map": p_maps,
+            "p_series_a": _series_a(map_logits) if len(maps) == 3 else _series_win(p_maps),
+            "veto_log": internals["modal_log"]}
+
+
 # ============================================================================
 # FACTORS -- each returns (name, delta_logodds, variance, reliability, note)
 # ============================================================================
@@ -892,8 +1039,25 @@ def predict_match(m):
     # --- scoreline: veto's map shape, level-shifted so series P(A) equals p_a ---
     # map_shape, not w_veto: the veto weight is 0 and must not move the series
     # winner, but the three maps still have different win chances.
-    p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["map_shape"] / k)
-    s20, s21, s12, s02 = series_probs(*p_maps)
+    veto_dist = dist_shift = None
+    dist_warn = []
+    if CONFIG.get("veto_mode", "point") == "dist" and len(_pool(m)) > _veto.EXACT_MAX_POOL:
+        dist_warn = ["pool_too_large"]
+        p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["map_shape"] / k)
+        s20, s21, s12, s02 = series_probs(*p_maps)
+    elif CONFIG.get("veto_mode", "point") == "dist":
+        # BO3 scoreline as a mixture over the veto distribution (veto.py). The
+        # frozen point fields (veto_log, veto_maps, map_probs) describe the
+        # modal veto, with their own shift so series_a(map_probs) = p_a.
+        veto_dist, vint, vctx = veto_distribution(m, 3)
+        veto = dict(veto, **_modal_veto(vctx, vint))
+        p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["map_shape"] / k)
+        (s20, s21, s12, s02), dist_shift = _veto.mixture_scoreline(
+            vint["outcomes"], vctx.ell["a"], T * CONFIG["map_shape"] / k, p_a)
+        dist_warn = list(veto_dist["warnings"])
+    else:
+        p_maps, c_shift = _scoreline_maps(veto, p_a, T * CONFIG["map_shape"] / k)
+        s20, s21, s12, s02 = series_probs(*p_maps)
     fav_is_a = p_a >= 0.5
     fav_name = a_name if fav_is_a else b_name
     opts = [(s20, a_name, "2-0", 0), (s21, a_name, "2-1", 1),
@@ -965,6 +1129,8 @@ def predict_match(m):
         if top_for is not None:
             msg += f" vs '{top_for[0]}' {top_for[1]:+.2f}"
         warnings.append(msg + ".")
+    for code in dist_warn:
+        warnings.append(f"VETO NOTE ({code}): {VETO_WARN_TEXT.get(code, code)}.")
 
     # Display grid: 2 decimal places on the percentage, largest remainder so a
     # pair or a scoreline always adds to 100.00. Exact values stay unrounded.
@@ -994,6 +1160,12 @@ def predict_match(m):
     # so its win chance is the BO1 series chance.
     veto1 = simulate_veto(m, 1)
     veto_bo1 = {"veto_log": veto1["veto_log"], "maps": veto1["maps"], "map_probs_exact": [p_bo1]}
+    veto_dist_bo1 = None
+    if CONFIG.get("veto_mode_bo1", "point") == "dist" and len(_pool(m)) <= _veto.EXACT_MAX_POOL:
+        # BO1 distribution (phase 6): which map gets played. The BO1 win
+        # chance stays the flat q, so only the veto fields change.
+        veto_dist_bo1, vint1, _ = veto_distribution(m, 1)
+        veto_bo1 = {"veto_log": vint1["modal_log"], "maps": vint1["modal_maps"], "map_probs_exact": [p_bo1]}
 
     # --- BO5 (grand finals): the BO5 veto (each side picks two), its map-logit
     # shape scaled by the same map_shape as BO3 and shifted by one constant so
@@ -1063,6 +1235,11 @@ def predict_match(m):
         "market_edge_note": edge_note,
         "warnings": warnings,
         "volatility": {"a": vol_a, "b": vol_b},
+        # veto distribution (veto.py; add-only fields, None in point mode)
+        "veto_mode": CONFIG.get("veto_mode", "point"),
+        "veto_dist": veto_dist,
+        "dist_logit_shift": dist_shift,
+        "veto_dist_bo1": veto_dist_bo1,
     }
 
 

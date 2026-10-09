@@ -32,6 +32,15 @@ Exit code 0 = no leakage found, 1 = leakage (offending fields are printed).
   whose only inputs are the match date and the date of the first series in
   the data. Test 5 (below) checks the offset with it switched on explicitly.
 
+  6. VETO (veto.py): the whole veto_dist (outcomes, marginals, masks,
+     warnings) of every BO1/BO3 series dated D, as canonical JSON with repr
+     floats, must be bit-identical under SCRAMBLE and TRUNCATE (tests 1-2
+     already cover its inputs veto_ev_a/_b, and with habits on, the
+     HabitAccumulator state). CANARIES: an exclusion set computed with day
+     D's own plays must change at least one mask on at least one sampled
+     day; with CONFIG["veto_use_habits"] on, an accumulator that counts day D
+     before predicting day D must fail the scramble check.
+
 NOT COVERED, AND WHY IT CANNOT BE:
   data/roster_events.json is a present-day scrape of Liquipedia stand-in
   tables keyed by TOURNAMENT, with no date per stand-in. There is nothing
@@ -44,6 +53,7 @@ USAGE (from D:/Face-Off):  python leakage_check.py [--days 40] [--all]
 Stdlib only, deterministic.
 """
 import argparse
+import json
 import copy
 import os
 import sys
@@ -76,11 +86,11 @@ def scramble_from(matches, day):
     return out
 
 
-def leaky_build(matches):
+def leaky_build(matches, history_factory=None):
     """CANARY ONLY: folds each day into history BEFORE computing that day's
     features, i.e. the bug the check must catch."""
     ms = sorted(matches, key=lambda m: (m["date"], m.get("id", 0)))
-    h = bt.History()
+    h = history_factory() if history_factory else bt.History()
     out = []
     i = 0
     while i < len(ms):
@@ -155,6 +165,82 @@ def check_lineups(matches, test_days):
     return problems, caught, tested
 
 
+def _veto_dumps(rows, day, build=None):
+    """Canonical JSON (repr floats) of veto_dist for every series dated `day`,
+    keyed by match id. BO1 and BO3 series; BO5 stays on the point veto."""
+    import predictor as pr
+    out = {}
+    for r in rows:
+        m = r["match"]
+        if m["date"] != day or m.get("best_of") not in (1, 3):
+            continue
+        try:
+            dist, _, _ = pr.veto_distribution(r["input"], m["best_of"])
+        except ValueError as e:
+            dist = {"error": str(e)}
+        out[m["id"]] = json.dumps(dist, sort_keys=True, default=repr)
+    return out
+
+
+def check_veto(matches, test_days, history_factory=None, n_habit_days=4):
+    """Test 6. Returns (problems, days where the exclusion canary changed a
+    mask, habit canary status: "off" | "caught" | "BLIND")."""
+    import predictor as pr
+    import veto as V
+    problems = []
+    if history_factory is not None:
+        sys.path.insert(0, os.path.join(HERE, "scripts"))
+        import veto_harness as H
+        build = lambda ms: H.build_dataset(ms, history_factory)   # noqa: E731
+        days = test_days[:: max(1, len(test_days) // n_habit_days)][:n_habit_days]
+    else:
+        build = bt.build_dataset
+        days = test_days
+    clean_rows = build(matches)
+    for day in days:
+        clean = _veto_dumps(clean_rows, day)
+        for name, variant in (("scramble", scramble_from(matches, day)),
+                              ("truncate", [m for m in matches if m["date"] <= day])):
+            got = _veto_dumps(build(variant), day)
+            for mid, s in clean.items():
+                if got.get(mid) != s:
+                    problems.append(f"{day} match {mid}: veto_dist differs under {name}")
+    # exclusion canary: evidence that sees day D's own plays
+    caught = 0
+    h = bt.History()
+    ms = sorted(matches, key=lambda m: (m["date"], m["id"]))
+    i = 0
+    alpha = pr.CONFIG["veto_excl_alpha"]
+    for day in test_days:
+        while i < len(ms) and ms[i]["date"] <= day:
+            h.add(ms[i])
+            i += 1
+        dt = bt._d(day)
+        leak_dt = dt + bt.timedelta(days=1)
+        pool = h.map_pool(dt)
+        hit = False
+        for m in ms:
+            if m["date"] != day:
+                continue
+            for t in (m["team_a"], m["team_b"]):
+                ok = V.exclusion_set(h.veto_evidence(t, dt, pool), pool, alpha)
+                bad = V.exclusion_set(h.veto_evidence(t, leak_dt, pool), pool, alpha)
+                hit |= ok != bad
+        caught += hit
+    # habit canary (phase 3): only when habits are switched on
+    status = "off"
+    if pr.CONFIG.get("veto_use_habits") and history_factory is not None:
+        status = "BLIND"
+        for day in test_days[:: max(1, len(test_days) // n_habit_days)][:n_habit_days]:
+            # the bug the check must catch: day D counted (<= D) and folded in first
+            a = _veto_dumps(leaky_build(matches, lambda: history_factory(leaky=True)), day)
+            b = _veto_dumps(leaky_build(scramble_from(matches, day), lambda: history_factory(leaky=True)), day)
+            if a != b:
+                status = "caught"
+                break
+    return problems, caught, status
+
+
 def sample_days(days, k):
     if k >= len(days):
         return days
@@ -166,6 +252,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="strict pre-match feature check")
     ap.add_argument("--days", type=int, default=40, help="match days to test (evenly spaced)")
     ap.add_argument("--all", action="store_true", help="test every match day (slow)")
+    ap.add_argument("--roster", action="store_true", help="with --habits: phase-4 roster-core level on too")
+    ap.add_argument("--habits", action="store_true",
+                    help="also run test 6 with the phase-3 HabitAccumulator on (slow; 4 days)")
     a = ap.parse_args(argv)
 
     matches = bt.load_matches()
@@ -220,6 +309,37 @@ def main(argv=None):
     print(f"newcomer offset (start 150 / feature 150): {len(nc_fail)} leaks on {len(test_days[::4])} days; "
           f"offset changes features: {'yes' if nc_moved else 'NO (check is blind)'}")
     canary_ok = canary_ok and nc_moved
+
+    # 6. veto distribution (veto.py): the whole veto_dist of every day-D series
+    #    must be bit-identical under SCRAMBLE and TRUNCATE; canaries: an
+    #    exclusion set computed with day D's own plays must change a mask, and
+    #    (with habits on) an accumulator that folds day D in first must fail.
+    v_fail, excl_caught, habit_status = check_veto(matches, test_days)
+    if a.habits:
+        import predictor as pr
+        sys.path.insert(0, os.path.join(HERE, "scripts"))
+        import veto_fit as F
+        import veto_harness as H
+        rep = H.read_report()
+        saved = dict(pr.CONFIG)
+        try:
+            ph = "p4" if a.roster else "p3"
+            pr.CONFIG.update(veto_use_habits=True, veto_habit_k=rep["phases"]["p3"]["grid_value"],
+                             veto_params_bo3=rep["phases"][ph]["params"])
+            if a.roster:
+                pr.CONFIG.update(veto_use_roster=True, veto_roster_k=rep["phases"]["p4"]["grid_value"])
+            hv_fail, _, habit_status = check_veto(matches, test_days,
+                                                  F.history_factory(rep["phases"]["p2"]["params"],
+                                                                    roster=a.roster))
+        finally:
+            pr.CONFIG.clear()
+            pr.CONFIG.update(saved)
+        print(f"veto_dist with habits: {len(hv_fail)} differing distributions")
+        v_fail += hv_fail
+    failures += v_fail
+    canary_ok = canary_ok and excl_caught > 0 and habit_status in ("off", "caught")
+    print(f"veto_dist: {len(v_fail)} differing distributions on {len(test_days)} days; exclusion canary "
+          f"changed a mask on {excl_caught} days; habit canary: {habit_status}")
 
     print(f"scramble + truncate: {len(failures)} differing fields")
     for f in failures[:30]:

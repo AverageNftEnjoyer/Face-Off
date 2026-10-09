@@ -160,7 +160,7 @@ header.top {
   max-height: min(70vh, 34rem); overflow-y: auto; overscroll-behavior: contain;
   background: #0F1C1F; border: 1px solid var(--line2); border-radius: 10px; padding: .35rem;
   box-shadow: 0 24px 50px -12px rgba(0, 0, 0, .75);
-  scrollbar-width: thin; scrollbar-color: var(--line2) transparent;
+  scrollbar-width: thin;
 }
 .qlist[hidden] { display: none; }
 .qgrp { display: grid; }
@@ -299,7 +299,7 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 
 .mrow {
   display: grid;
-  grid-template-columns: 4.2rem minmax(0, 1fr) minmax(6rem, 10rem) minmax(0, 1fr) auto;
+  grid-template-columns: 4.2rem minmax(0, 1fr) minmax(8.5rem, 11.5rem) minmax(0, 1fr) auto;
   align-items: center; gap: .75rem;
   padding: .65rem .75rem;
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--r);
@@ -315,12 +315,21 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 .mrow .tm::before { content: none; }
 .mrow .mid { text-align: center; font-size: var(--s2); }
 .mrow .mid.pct { font-size: var(--s-1); font-stretch: 100%; font-weight: 600; text-transform: none; color: var(--dim); }
-.mrow .mid.mpick { display: grid; justify-items: center; gap: .1rem; font-size: var(--s-1); line-height: 1.2; min-width: 0;
-  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .35rem .6rem; }
-.mrow .mid.mpick .pk { display: flex; align-items: center; gap: .35rem; min-width: 0; max-width: 100%; }
-.mrow .mid.mpick .pk b { font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mrow .mid.mpick .pp { color: var(--acc); font-weight: 800; }
-.mrow .mid.mpick .logo.xs, .mrow .mid.mpick .logo-ph { width: 1.1rem; height: 1.1rem; }
+/* the model's call for an unplayed match: the pick, its most likely score, the chance and a
+   bar that grows from the picked team's side */
+.mrow .mid.mpick { display: grid; gap: .3rem; min-width: 0; text-align: left; font-size: var(--s-1); line-height: 1.15;
+  background: linear-gradient(180deg, var(--raise), var(--bg)); border: 1px solid var(--line2); border-radius: 8px; padding: .45rem .6rem .5rem; }
+.mrow .mid.mpick .mpl { font-size: .62rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--dim); }
+.mrow .mid.mpick .pk { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.mrow .mid.mpick .pk b { flex: 1; min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mrow .mid.mpick .psc { flex: none; font-family: var(--face); font-stretch: 85%; font-weight: 800; font-size: .95rem; letter-spacing: .02em;
+  padding: 0 .4rem; border-radius: 4px; background: var(--acc-deep); color: var(--acc); font-variant-numeric: tabular-nums; }
+.mrow .mid.mpick .logo.xs, .mrow .mid.mpick .logo-ph { width: 1.15rem; height: 1.15rem; flex: none; }
+.mrow .mid.mpick .pbar { display: flex; align-items: center; gap: .45rem; }
+.mrow .mid.mpick .pbar s { flex: 1; display: flex; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; text-decoration: none; }
+.mrow .mid.mpick .pbar s i { display: block; height: 100%; background: var(--acc); border-radius: 2px; }
+.mrow .mid.mpick .pbar s.r { justify-content: flex-end; }
+.mrow .mid.mpick .pp { color: var(--acc); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mrow .tag { display: grid; justify-items: end; gap: .15rem; font-size: .72rem; color: var(--dim); white-space: nowrap; }
 .mlist { display: grid; gap: .45rem; }
 
@@ -344,14 +353,50 @@ tr.out td:first-child { box-shadow: inset 3px 0 0 var(--loss); }
 tr.out .tlink { color: var(--dim); }
 .tablewrap { overflow-x: auto; }
 
-/* bracket */
-.bracket { display: grid; grid-template-columns: repeat(3, minmax(9rem, 1fr)); gap: .75rem; overflow-x: auto; }
-.bcol { display: grid; gap: .5rem; align-content: space-around; }
-.bcol h3 { font-size: var(--s-1); color: var(--dim); font-weight: 600; }
-.bm { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); font-size: var(--s-1); }
-.bm div { display: flex; align-items: center; gap: .4rem; padding: .3rem .5rem; color: var(--dim); }
-.bm div + div { border-top: 1px solid var(--line); }
-.bm .when { font-size: .7rem; color: var(--dim); padding: .25rem .5rem; border-top: 1px solid var(--line); }
+/* bracket: one column per round. A single-elimination tree (each round half the one before)
+   is laid out by bracket slot and joined with elbow lines; finished matches light their line. */
+.evbody + .panel, .evbody ~ .panel { margin-top: 1.5rem; }
+.bracket { --bgap: 1.6rem; display: grid; column-gap: var(--bgap); row-gap: 1.1rem; overflow-x: auto; padding: .1rem .1rem .3rem; }
+.bcol { display: flex; flex-direction: column; min-width: 0; }
+.bcol h3, .bthird h3 { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; margin: 0 0 .55rem;
+  padding-bottom: .35rem; border-bottom: 1px solid var(--line);
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+.bcol h3 small, .bthird h3 small { font-weight: 600; letter-spacing: .04em; text-transform: none; opacity: .8; }
+.bslots { flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: .6rem; }
+.bracket.tree .bslots { gap: 0; }
+.bracket.tree .bslot { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: .35rem 0; position: relative; }
+.bracket.tree .bcol.out .bslot::after { content: ""; position: absolute; right: calc(var(--bgap) / -2); width: calc(var(--bgap) / 2);
+  border: 0 solid var(--line2); pointer-events: none; }
+.bracket.tree .bcol.out .bslot:nth-child(odd)::after { top: 50%; bottom: 0; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 7px; }
+.bracket.tree .bcol.out .bslot:nth-child(even)::after { top: 0; bottom: 50%; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 7px; }
+.bracket.tree .bcol.out .bslot.done::after { border-color: color-mix(in srgb, var(--acc) 55%, var(--line2)); }
+.bracket.tree .bcol.in .bslot::before { content: ""; position: absolute; left: calc(var(--bgap) / -2); width: calc(var(--bgap) / 2); top: 50%;
+  border-top: 2px solid var(--line2); pointer-events: none; }
+.bracket.tree .bcol.in .bslot.fed::before { border-top-color: color-mix(in srgb, var(--acc) 55%, var(--line2)); }
+.bthird { align-self: start; }
+/* a tree four or more matches deep has room for the third-place match under the final */
+.bcol.hasthird { position: relative; }
+.bcol.hasthird .bthird { position: absolute; left: 0; right: 0; bottom: 0; }
+.bm { display: block; position: relative; background: var(--bg); border: 1px solid var(--line2); border-radius: 8px; font-size: var(--s-1); overflow: hidden;
+  transition: border-color .15s, background .15s; }
+a.bm:hover { border-color: var(--acc); background: var(--raise); }
+.bm .bt { display: flex; align-items: center; gap: .45rem; min-height: 2.15rem; padding: .3rem .55rem; color: var(--text); }
+.bm .bt + .bt { border-top: 1px solid var(--line); }
+.bm .bt .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.bm .bt.tbd { color: var(--dim); }
+.bm .bt.tbd .nm { font-weight: 400; font-style: italic; }
+.bm .bt.lost { color: var(--dim); }
+.bm .bt.lost .nm { font-weight: 400; }
+.bm .bt.won { box-shadow: inset 3px 0 0 var(--acc); }
+.bm .bt.won .nm { font-weight: 800; }
+.bm .bt .sc { flex: none; min-width: 1.6rem; text-align: center; font-family: var(--face); font-weight: 800; font-size: .95rem;
+  font-variant-numeric: tabular-nums; padding: .05rem .3rem; border-radius: 4px; background: var(--panel); }
+.bm .bt.won .sc { background: var(--acc-deep); color: var(--acc); }
+.bm .bt .bp { flex: none; font-size: .7rem; font-weight: 700; color: var(--dim); font-variant-numeric: tabular-nums; }
+.bm .bt .bp.pk { color: var(--acc); }
+.bm .when { display: flex; justify-content: space-between; gap: .4rem; font-size: .68rem; color: var(--dim); padding: .22rem .55rem;
+  border-top: 1px solid var(--line); background: var(--panel); }
+.bm .when .chip { font-size: .62rem; padding: 0 .4rem; }
 
 .prizes { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .25rem 1rem; font-size: var(--s-1); }
 .prizes b { font-weight: 700; text-align: right; }
@@ -1260,13 +1305,20 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
 }
 
 /* ---------- v7: wide screens, phones, Stats rows ---------- */
-/* thin dark scrollbars for every inner scroller */
+/* thin dark scrollbars for every scroller, page included: invisible at rest, shown while that
+   element scrolls (JS adds .sb-on for ~1 s after each scroll event) */
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; transition: scrollbar-color .35s; }
+.sb-on { scrollbar-color: #3B4757 transparent; }
 .tablewrap, .strip-wrap, .scrolly, .rec-row3 > .panel, .rec-splits > .panel, .rec-quad > .panel, .tdlg .picker {
-  scrollbar-width: thin; scrollbar-color: #3B4757 transparent;
+  scrollbar-width: thin;
 }
 .tablewrap::-webkit-scrollbar, .strip-wrap::-webkit-scrollbar, .rec-row3 > .panel::-webkit-scrollbar, .rec-splits > .panel::-webkit-scrollbar, .rec-quad > .panel::-webkit-scrollbar, .tdlg .picker::-webkit-scrollbar { width: 8px; height: 8px; }
-.tablewrap::-webkit-scrollbar-thumb, .strip-wrap::-webkit-scrollbar-thumb, .rec-row3 > .panel::-webkit-scrollbar-thumb, .rec-splits > .panel::-webkit-scrollbar-thumb, .rec-quad > .panel::-webkit-scrollbar-thumb, .tdlg .picker::-webkit-scrollbar-thumb { background: #3B4757; border-radius: 8px; border: 2px solid var(--panel); }
+.tablewrap::-webkit-scrollbar-thumb, .strip-wrap::-webkit-scrollbar-thumb, .rec-row3 > .panel::-webkit-scrollbar-thumb, .rec-splits > .panel::-webkit-scrollbar-thumb, .rec-quad > .panel::-webkit-scrollbar-thumb, .tdlg .picker::-webkit-scrollbar-thumb { background: transparent; border-radius: 8px; border: 2px solid var(--panel); }
 .tablewrap::-webkit-scrollbar-track, .strip-wrap::-webkit-scrollbar-track, .rec-row3 > .panel::-webkit-scrollbar-track, .rec-splits > .panel::-webkit-scrollbar-track, .rec-quad > .panel::-webkit-scrollbar-track, .tdlg .picker::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+.sb-on::-webkit-scrollbar-thumb { background: #3B4757; }
 /* a table wider than its box shows a soft edge on the side that has more to scroll to */
 .tablewrap {
   background:
@@ -1356,6 +1408,9 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   .mrow > .tm.r { grid-area: b; flex-direction: row; text-align: left; }
   .mrow .mid { grid-area: mid; text-align: right; }
   .mrow .mid.pct { max-width: 4.7rem; }
+  .mrow .mid.mpick { width: 6.6rem; padding: .4rem .5rem; }
+  .mrow .mid.mpick .pk b { display: none; }
+  .mrow .mid.mpick .pk { justify-content: space-between; }
   .mrow .tag { grid-area: tag; }
   .evhero { grid-template-columns: minmax(0, 1fr); }
   .evhero > .evlogo { width: 4rem; }
@@ -2430,10 +2485,16 @@ function matchRow(m) {
   let mid, tag = "";
   if (m.finished || live) mid = `<div class="mid cond"><span class="${m.w1 > m.w2 ? "ct" : ""}">${m.w1}</span> : <span class="${m.w2 > m.w1 ? "t" : ""}">${m.w2}</span></div>`;
   else if (pred) {
-    // the model's pick for the format actually played, not both percentages
-    const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p, pickA = p >= .5, pick = pickA ? a : b;
+    // the model's pick for the format actually played, its most likely winning score and the chance
+    const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
+    const p = pFor(pred, bo).p, pickA = p >= .5, pick = pickA ? a : b;
     const pp = displayPercent([p, 1 - p])[pickA ? 0 : 1];
-    mid = `<div class="mid mpick" title="${esc(`Model's pre-match pick: ${pick} at ${pp}%`)}"><span class="small dim">Model pick</span><span class="pk">${logo(pick, "xs")}<b>${esc(pick)}</b></span><span class="pp">${pp}%</span></div>`;
+    const set = scoreSet(pred, bo), top = set[predictedIdx(set, p)];
+    const sc = bo === 1 ? "" : scoreFrom(top, pickA).replace("-", "–");
+    mid = `<div class="mid mpick" title="${esc(`Model's pre-match pick: ${pick}${sc ? ` ${sc}` : ""}, ${pp}% to win the series`)}">
+      <span class="mpl">Model pick</span>
+      <span class="pk">${logo(pick, "xs")}<b>${esc(pick)}</b>${sc ? `<span class="psc">${sc}</span>` : ""}</span>
+      <span class="pbar"><s class="${pickA ? "" : "r"}"><i style="width:${pp}%"></i></s><span class="pp">${pp}%</span></span></div>`;
   }
   else mid = `<div class="mid pct">vs</div>`;
   if (live) tag = `<span class="chip live">Live</span>`;
@@ -2522,10 +2583,20 @@ function evMatches(e) {
     c.list.push(m);
   }
   const bm = m => {
-    const w = winnerOf(m);
-    const row = (t, s) => `<div style="${w && t !== w ? "" : w ? "color:var(--text);font-weight:700" : ""}">${logo(t, "sm")}<span style="flex:1">${esc(t || "To be decided")}</span>${m.finished || isLive(m) ? `<b>${s}</b>` : ""}</div>`;
-    const inner = `${row(m.t1, m.w1)}${row(m.t2, m.w2)}<div class="when">${(localDay(m.when) || m.day) ? fmtDay(localDay(m.when) || m.day) : "TBA"}${m.when ? `, ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</div>`;
-    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" style="display:block">${inner}</a>` : `<div class="bm">${inner}</div>`;
+    const w = winnerOf(m), live = isLive(m), played = m.finished || live;
+    const pred = !played && m.t1 && m.t2 ? decode(m.pred) : null;
+    const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
+    const pp = pred ? (p => ({ p, s: displayPercent([p, 1 - p]) }))(pFor(pred, bo).p) : null;
+    const row = (t, s, i) => {
+      const cls = !t ? "tbd" : w ? (t === w ? "won" : "lost") : "";
+      const right = played ? `<b class="sc">${s}</b>`
+        : pp ? `<span class="bp${(pp.p >= .5) === (i === 0) ? " pk" : ""}">${pp.s[i]}%</span>` : "";
+      return `<div class="bt ${cls}">${logo(t, "sm")}<span class="nm">${esc(t || "To be decided")}</span>${right}</div>`;
+    };
+    const day = localDay(m.when) || m.day;
+    const when = `${day ? `${wday(day)} ${fmtDay(day)}` : "TBA"}${m.when ? `, ${clock(m.when)}` : ""}`;
+    const inner = `${row(m.t1, m.w1, 0)}${row(m.t2, m.w2, 1)}<div class="when"><span>${when}</span>${live ? `<span class="chip live">Live</span>` : ""}</div>`;
+    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" title="${pp ? esc(`Model's pre-match chances: ${m.t1} ${pp.s[0]}%, ${m.t2} ${pp.s[1]}%`) : ""}">${inner}</a>` : `<div class="bm">${inner}</div>`;
   };
   const firstTz = e.matches.find(m => m.when);
   return `
@@ -2547,14 +2618,14 @@ function evMatches(e) {
           <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th><th class="n">VRS</th></tr></thead>
           <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td><td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
         </table></div></div>`).join("")}</section>` : ""}
-      ${bracketBlocks(cols).map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}</h2><div class="bracket" style="grid-template-columns:repeat(${cs.length},minmax(8.5rem,1fr))">${cs.map(c => `<div class="bcol"><h3>${esc(c.label)}</h3>${c.list.map(bm).join("")}</div>`).join("")}</div></section>`).join("")}
     </div>
     <div class="evside">
       ${standings(e)}
       ${e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : ""}
       <div class="links"><a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a></div>
     </div>
-  </div>`;
+  </div>
+  ${bracketBlocks(cols).map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}${cs.some(c => c.list.some(m => !m.finished && !isLive(m) && m.t1 && m.t2 && m.pred)) ? ` <span class="dim">percentages are the model's pre-match chances</span>` : ""}</h2>${bracketHtml(cs, bm)}</section>`).join("")}`;
 }
 
 // Bracket columns split into one block per stage ("Play-In", "Group Stage Group A", "Playoffs"),
@@ -2574,6 +2645,30 @@ function bracketBlocks(cols) {
     b[1].sort((x, y) => k(x) - k(y));
   }
   return blocks;
+}
+
+// One bracket block. When every round has half the matches of the one before (a single-
+// elimination tree) the matches go in bracket-slot order, so matches 2k-1 and 2k sit beside
+// the match k they feed, and CSS draws the joining lines. The third-place match sits under the final.
+function bracketHtml(cs, bm) {
+  const bySlot = l => [...l].sort((x, y) => (x.slot ?? 1e3) - (y.slot ?? 1e3));
+  const rounds = cs.filter(c => c.name !== "Third-place match").map(c => ({ ...c, list: bySlot(c.list) }));
+  const third = cs.filter(c => c.name === "Third-place match");
+  const n = Math.max(1, rounds.length);
+  const tree = rounds.length > 1 && rounds.every((c, i) => !i || c.list.length * 2 === rounds[i - 1].list.length);
+  const head = c => {
+    const bos = [...new Set(c.list.map(m => m.bo))];
+    return `<h3>${esc(c.label)}${bos.length === 1 ? `<small>Bo${bos[0]}</small>` : ""}</h3>`;
+  };
+  // a line lights up once the match it leaves is decided
+  const col = (c, i) => `<div class="bcol${tree && i < n - 1 ? " out" : ""}${tree && i > 0 ? " in" : ""}">${head(c)}<div class="bslots">${c.list.map((m, j) => {
+    const fed = i > 0 && tree && [2 * j, 2 * j + 1].some(k => rounds[i - 1].list[k]?.finished);
+    return `<div class="bslot${m.finished ? " done" : ""}${fed ? " fed" : ""}">${bm(m)}</div>`;
+  }).join("")}</div></div>`;
+  const tp = third.map(c => `<div class="bthird" style="grid-column:${n}">${head(c)}${bySlot(c.list).map(bm).join("")}</div>`).join("");
+  const tuck = tp && tree && rounds[0].list.length >= 4;
+  const cols = rounds.map(col).map((h, i) => tuck && i === n - 1 ? h.replace('class="bcol', 'class="bcol hasthird').replace(/<\/div>$/, tp + "</div>") : h);
+  return `<div class="bracket${tree ? " tree" : ""}" style="grid-template-columns:repeat(${n},minmax(10.5rem,17rem))">${cols.join("")}${tuck ? "" : tp}</div>`;
 }
 
 // Final standings: each prize slot with its money and the teams that finished there
@@ -2980,6 +3075,17 @@ function go() {
   const h = route();
   if (h !== lastHash) { window.scrollTo(0, 0); lastHash = h; }
 }
+// scrollbars show only while something scrolls (capture: scroll events do not bubble)
+(() => {
+  const timers = new WeakMap();
+  addEventListener("scroll", e => {
+    const el = e.target === document ? document.documentElement : e.target;
+    if (!el || !el.classList) return;
+    el.classList.add("sb-on");
+    clearTimeout(timers.get(el));
+    timers.set(el, setTimeout(() => el.classList.remove("sb-on"), 900));
+  }, true);
+})();
 window.addEventListener("hashchange", go);
 
 function rerender() {

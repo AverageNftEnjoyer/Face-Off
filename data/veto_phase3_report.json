@@ -1,0 +1,151 @@
+{
+ "phase": "p3",
+ "data_hashes": {
+  "matches.json": "98d3e24cf141852a94b879aa1be9a096d2ff915ce2e550803bc06d7e7f76ecb8",
+  "lineups.json": "573a08c0a1660770c29d95264a21cdebe1512a1c93134ace4359e05e1e52a3f2"
+ },
+ "rows": {
+  "kept": 1953
+ },
+ "split": {
+  "train_end": "2025-11-05",
+  "test_start": "2025-11-07",
+  "train": 1207,
+  "test": 746
+ },
+ "params": {
+  "alpha_ban1": 2.033664713439575,
+  "alpha_ban2": -0.20156457048239346,
+  "alpha_pick": 4.334853598125765,
+  "eta_ban1": 1.0185928637418429,
+  "eta_ban2": 0.33835839052390215,
+  "eta_pick": 0.6824052046670674,
+  "gamma_ban1": 4.530757888356842,
+  "gamma_ban2": 1.6082521031287111,
+  "gamma_pick": 1.4321062210093656,
+  "lookahead": true,
+  "pi": 0.28574486055052367,
+  "temp": 1.0,
+  "version": "veto-v2.p3"
+ },
+ "config_overrides": {
+  "veto_excl_alpha": 0.01,
+  "veto_use_habits": true,
+  "veto_habit_k": 4.0
+ },
+ "reference": {
+  "model": "comfort sim (point), eps-smoothed",
+  "eps_pi_fit_on_train": {
+   "eps": 0.9060590365811745,
+   "pi": 0.23521744987488774,
+   "train_loglik": -4.309507311050974
+  },
+  "test": {
+   "n": 746,
+   "hit": 0.47788203753351205,
+   "hit_n": 746,
+   "ll": -4.267894005511056,
+   "ll_n": 746,
+   "dec_hit": 0.2797427652733119,
+   "dec_hit_n": 311,
+   "unplayed": 0.036193029490616625,
+   "unplayed_n": 746
+  }
+ },
+ "candidate": {
+  "test": {
+   "n": 746,
+   "hit": 0.5040214477211796,
+   "hit_n": 746,
+   "ll": -3.517622018244266,
+   "ll_n": 746,
+   "dec_hit": 0.22186495176848875,
+   "dec_hit_n": 311,
+   "cov80": 0.8364611260053619,
+   "cov80_n": 746,
+   "cov80_mass": 0.8131409548031147,
+   "cov80_mass_n": 746,
+   "cov01": 0.9959785522788204,
+   "cov01_n": 746,
+   "unplayed": 0.05026809651474531,
+   "unplayed_n": 746,
+   "attributed": 0.0,
+   "attributed_n": 746,
+   "zero_prob": 0.0,
+   "zero_prob_n": 746,
+   "masked_but_picked": 0.00938337801608579,
+   "masked_but_picked_n": 746,
+   "ece_played": 0.010339199254426393
+  },
+  "train": {
+   "n": 1207,
+   "hit": 0.4743164871582436,
+   "hit_n": 1207,
+   "ll": -3.6690449688291626,
+   "ll_n": 1207,
+   "dec_hit": 0.26506024096385544,
+   "dec_hit_n": 498,
+   "cov80": 0.8044739022369511,
+   "cov80_n": 1207,
+   "cov80_mass": 0.8116998087433378,
+   "cov80_mass_n": 1207,
+   "cov01": 0.9975144987572494,
+   "cov01_n": 1207,
+   "unplayed": 0.056338028169014086,
+   "unplayed_n": 1207,
+   "attributed": 0.0,
+   "attributed_n": 1207,
+   "zero_prob": 0.0,
+   "zero_prob_n": 1207,
+   "masked_but_picked": 0.008285004142502071,
+   "masked_but_picked_n": 1207,
+   "ece_played": 0.00561259863083519
+  }
+ },
+ "test_evaluations": 5,
+ "pick_set_hit_diff": {
+  "diff": 0.02613941018766756,
+  "ci95": [
+   0.004392386530014641,
+   0.049863387978142076
+  ],
+  "n": 746
+ },
+ "loglik_diff": {
+  "diff": 0.7502719872667902,
+  "ci95": [
+   0.672093522326567,
+   0.8280269371819108
+  ],
+  "n": 746
+ },
+ "decider_hit_diff": {
+  "diff": -0.05787781350482315,
+  "ci95": [
+   -0.11935483870967742,
+   -0.003289473684210526
+  ],
+  "n": 311
+ },
+ "scoreline_logloss": {
+  "new": 1.3044053790267003,
+  "ref": 1.306017738699615,
+  "diff": {
+   "diff": -0.0016123596729146125,
+   "ci95": [
+    -0.005527884238629192,
+    0.0024746487880941337
+   ],
+   "n": 746
+  }
+ },
+ "checks": {
+  "pick_set_hit": true,
+  "loglik": true,
+  "coverage80": true,
+  "ece_played": true,
+  "scoreline_logloss": false,
+  "I6_p_a_identical": true
+ },
+ "passed": false
+}

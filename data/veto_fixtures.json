@@ -1,0 +1,42 @@
+{
+ "source": "symptom report 2026-10-09",
+ "note": "Real vetoes of three ESL Pro League Season 24 series on 2026-10-09, as stated in the owner's symptom report. Unknown steps are null. Predictions use History of series dated before 2026-10-09.",
+ "date": "2026-10-09",
+ "event_title": "ESL/Pro League/Season 24",
+ "fixtures": [
+  {
+   "id": "R1",
+   "team_a": "1w Team",
+   "team_b": "Aurora Gaming",
+   "best_of": 3,
+   "source": "symptom report 2026-10-09",
+   "picks": {"a": "Dust2", "b": null},
+   "first_bans": {"a": null, "b": null},
+   "decider": null,
+   "played": null
+  },
+  {
+   "id": "R2",
+   "team_a": "Team Vitality",
+   "team_b": "PARIVISION",
+   "best_of": 3,
+   "source": "symptom report 2026-10-09",
+   "picks": {"a": null, "b": "Inferno"},
+   "first_bans": {"a": null, "b": "Nuke"},
+   "first_ban_note": "PARIVISION first-banned Nuke at the event",
+   "decider": null,
+   "played": null
+  },
+  {
+   "id": "R3",
+   "team_a": "FURIA",
+   "team_b": "MOUZ",
+   "best_of": 3,
+   "source": "symptom report 2026-10-09",
+   "picks": {"a": "Nuke", "b": "Inferno"},
+   "first_bans": {"a": "Cache", "b": "Anubis"},
+   "decider": "Ancient",
+   "played": ["Nuke", "Inferno", "Ancient"]
+  }
+ ]
+}

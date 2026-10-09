@@ -1,0 +1,153 @@
+{
+ "phase": "p6",
+ "data_hashes": {
+  "matches.json": "98d3e24cf141852a94b879aa1be9a096d2ff915ce2e550803bc06d7e7f76ecb8",
+  "lineups.json": "573a08c0a1660770c29d95264a21cdebe1512a1c93134ace4359e05e1e52a3f2"
+ },
+ "rows": {
+  "kept": 360
+ },
+ "split": {
+  "train_end": "2025-11-05",
+  "test_start": "2025-11-07",
+  "train": 186,
+  "test": 174
+ },
+ "params": {
+  "alpha_ban1": -1.427368213273976,
+  "alpha_ban2": 0.9622003523001881,
+  "alpha_pick": 0.0,
+  "gamma_ban1": 9.999963159853081,
+  "gamma_ban2": 2.9956862399101682,
+  "gamma_pick": 0.0,
+  "lookahead": false,
+  "pi": 0.5874694079407698,
+  "rho_ban1": -0.6303930493016094,
+  "rho_ban2": 1.6268812695269732,
+  "temp": 0.6872736001783517,
+  "version": "veto-v2.p6"
+ },
+ "config_overrides": {
+  "veto_excl_alpha": 0.01
+ },
+ "reference": {
+  "model": "comfort sim (point), eps-smoothed",
+  "eps_pi_fit_on_train": {
+   "eps": 0.8692671316939559,
+   "pi": 0.5000001026515511,
+   "train_loglik": -1.9072534727642478
+  },
+  "test": {
+   "n": 174,
+   "hit": 0.2471264367816092,
+   "hit_n": 174,
+   "ll": -1.899305822352584,
+   "ll_n": 174
+  }
+ },
+ "ablation": {
+  "c": 3.7902890781408614,
+  "pi": 0.892419532364159,
+  "train_loglik": -1.7440580973340716,
+  "test": {
+   "n": 174,
+   "hit": 0.25287356321839083,
+   "hit_n": 174,
+   "ll": -1.8217425289179179,
+   "ll_n": 174,
+   "cov80": 0.7988505747126436,
+   "cov80_n": 174,
+   "cov80_mass": 0.8678390349950129,
+   "cov80_mass_n": 174,
+   "cov01": 0.9827586206896551,
+   "cov01_n": 174,
+   "zero_prob": 0.0,
+   "zero_prob_n": 174,
+   "ece_played": 0.01991280489518653
+  }
+ },
+ "candidate": {
+  "test": {
+   "n": 174,
+   "hit": 0.26436781609195403,
+   "hit_n": 174,
+   "ll": -1.8189772887433429,
+   "ll_n": 174,
+   "cov80": 0.7701149425287356,
+   "cov80_n": 174,
+   "cov80_mass": 0.8780322164370427,
+   "cov80_mass_n": 174,
+   "cov01": 0.9770114942528736,
+   "cov01_n": 174,
+   "zero_prob": 0.0,
+   "zero_prob_n": 174,
+   "ece_played": 0.035296834322262466
+  },
+  "train": {
+   "n": 186,
+   "hit": 0.27419354838709675,
+   "hit_n": 186,
+   "ll": -1.7232727275328434,
+   "ll_n": 186,
+   "cov80": 0.8118279569892473,
+   "cov80_n": 186,
+   "cov80_mass": 0.8710904596684536,
+   "cov80_mass_n": 186,
+   "cov01": 0.9946236559139785,
+   "cov01_n": 186,
+   "zero_prob": 0.0,
+   "zero_prob_n": 186,
+   "ece_played": 0.01889693225714222
+  }
+ },
+ "metric_notes": {
+  "ece_played": "conditional on the realised series length (decider counted only on 2-1 series)",
+  "coverage80": "80% highest-probability set of ordered (map 1, map 2) pairs",
+  "reference_hit": "comfort sim of the more likely starter under its fitted pi"
+ },
+ "test_evaluations": 8,
+ "pick_set_hit_diff": {
+  "diff": 0.017241379310344827,
+  "ci95": [
+   -0.022988505747126436,
+   0.053763440860215055
+  ],
+  "n": 174
+ },
+ "loglik_diff": {
+  "diff": 0.08032853360924143,
+  "ci95": [
+   -0.0502411340998853,
+   0.2059904368514542
+  ],
+  "n": 174
+ },
+ "decider_hit_diff": null,
+ "pick_set_hit_diff_vs_ablation": {
+  "diff": 0.011494252873563218,
+  "ci95": [
+   -0.03804347826086957,
+   0.06134969325153374
+  ],
+  "n": 174
+ },
+ "loglik_diff_vs_ablation": {
+  "diff": 0.0027652401745752644,
+  "ci95": [
+   -0.09275229200553399,
+   0.09204156263098515
+  ],
+  "n": 174
+ },
+ "decider_hit_diff_vs_ablation": null,
+ "checks": {
+  "pick_set_hit": false,
+  "loglik": false,
+  "pick_set_hit_vs_ablation": false,
+  "loglik_vs_ablation": false,
+  "coverage80": true,
+  "ece_played": false,
+  "zero_prob": true
+ },
+ "passed": false
+}

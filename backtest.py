@@ -106,6 +106,9 @@ POOL_SIZE = 7
 # plain 90-day win rates (the original behaviour; the veto factor was
 # anti-predictive with these, see fit_weights.py).
 MAP_RATES = "residual"
+# Window of the veto evidence (exclusion test in veto.py): the same 90 days as
+# the per-map records the veto already uses.
+VETO_EV_DAYS = 90
 EPS = 1e-12
 
 
@@ -332,6 +335,96 @@ class _EloTable(dict):
         return self.hist.start_elo()
 
 
+class HabitAccumulator:
+    """Veto phase 3: online team ban / pick habits (design ADR-8).
+
+    When a BO3 series dated D is folded in, its posterior over the vetoes
+    consistent with the played map order is computed from veto inputs of D
+    (every one of them filters on dates < D) by `posterior_fn(inp, played)`
+    -> {"a": {kind: {map: [c, o]}}, "b": ...} (expected choice counts c and
+    opportunity counts o). Evidence for (team, D) sums records dated < D
+    only: the team's own within VETO_EV_DAYS, the field's over all series
+    < D. `leaky=True` is the leakage canary (records dated <= D count)."""
+
+    KINDS = ("ban1", "pick", "ban2")
+
+    def __init__(self, posterior_fn, leaky=False, core_fn=None):
+        self.post = posterior_fn
+        self.leaky = leaky
+        self.core_fn = core_fn           # (team, dt) -> (core five or None, stale)
+        self.recs = defaultdict(list)    # team -> [(date, counts)]
+        self.recs_all = []               # (date, five or None, counts): roster-core level (phase 4)
+        self.snap_dates = []             # field totals after all records dated <= snap_dates[i]
+        self.snaps = []
+        self.total = {k: {} for k in self.KINDS}
+
+    def on_add(self, h, m, inp):
+        if m.get("best_of") != 3 or len(m.get("maps") or []) < 2:
+            return
+        played = [x["map"] for x in m["maps"]]
+        pool = inp.get("map_pool") or []
+        if any(p not in pool for p in played) or len(set(played)) != len(played):
+            return
+        counts = self.post(inp, played)
+        if counts is None:
+            return
+        dt = _d(m["date"])
+        if self.snap_dates and dt < self.snap_dates[-1]:
+            raise ValueError("HabitAccumulator needs series folded in date order")
+        for side, team in (("a", m["team_a"]), ("b", m["team_b"])):
+            self.recs[team].append((dt, counts[side]))
+            self.recs_all.append((dt, h.lineup_of(m, side), counts[side]))
+            for k in self.KINDS:
+                tk = self.total[k]
+                for mp, (c, o) in (counts[side].get(k) or {}).items():
+                    cur = tk.setdefault(mp, [0.0, 0.0])
+                    cur[0] += c
+                    cur[1] += o
+        snap = {k: {mp: list(v) for mp, v in self.total[k].items()} for k in self.KINDS}
+        if self.snap_dates and self.snap_dates[-1] == dt:
+            self.snaps[-1] = snap
+        else:
+            self.snap_dates.append(dt)
+            self.snaps.append(snap)
+
+    def _ok(self, d, dt):
+        return d <= dt if self.leaky else d < dt
+
+    @staticmethod
+    def _sum(recs, pool):
+        out = {k: {mp: [0.0, 0.0] for mp in sorted(pool)} for k in HabitAccumulator.KINDS}
+        for _, c in recs:
+            for k in HabitAccumulator.KINDS:
+                ck = c.get(k) or {}
+                for mp in out[k]:
+                    v = ck.get(mp)
+                    if v:
+                        out[k][mp][0] += v[0]
+                        out[k][mp][1] += v[1]
+        return out
+
+    def evidence(self, team, dt, pool):
+        lo = dt - timedelta(days=VETO_EV_DAYS)
+        own = [r for r in self.recs.get(team, []) if lo <= r[0] and self._ok(r[0], dt)]
+        snap = None
+        for d, sn in zip(reversed(self.snap_dates), reversed(self.snaps)):
+            if self._ok(d, dt):
+                snap = sn
+                break
+        field = {k: {mp: list((snap or {}).get(k, {}).get(mp, [0.0, 0.0])) for mp in sorted(pool)}
+                 for k in self.KINDS}
+        out = {"habit": self._sum(own, pool), "field": field, "habit_n": len(own)}
+        if self.core_fn is not None:
+            core, stale = self.core_fn(team, dt)
+            if core:
+                rs = [(d, c) for d, five, c in self.recs_all
+                      if five and lo <= d and self._ok(d, dt) and len(core & five) >= 3]
+                out["core"] = self._sum(rs, pool)
+                out["core_n"] = len(rs)
+            out["core_stale"] = bool(stale) or not core
+        return out
+
+
 class History:
     """State built ONLY from series already folded in (all dated < current day)."""
 
@@ -342,6 +435,17 @@ class History:
         self.games = defaultdict(list)   # team -> [rec]
         self.map_last = {}               # map -> last date played
         self.map_dates = defaultdict(list)
+        # veto evidence (veto.py): every folded series with the pool of its own
+        # date and the maps played; per-date caches of the pool and of the
+        # field's play rates. A cached date stays valid while only series dated
+        # >= it are added (see _invalidate).
+        self.vseries = []                # (date, pool frozenset, played frozenset, bo)
+        self.vteam = defaultdict(list)   # team -> indexes into vseries
+        self._pool_cache = {}
+        self._rate_cache = {}
+        self.habits = None               # optional HabitAccumulator (veto phase 3)
+        self.lineups = None              # optional {"date|a|b": {"a": five, "b": five}} (veto phase 4)
+        self.lineup_hist = defaultdict(list)
 
     def start_elo(self):
         """Starting Elo of a team not seen yet, at self.clock."""
@@ -371,6 +475,11 @@ class History:
 
     def add(self, m):
         a, b = m["team_a"], m["team_b"]
+        if self.habits is not None:
+            # veto inputs of D filter on dates < D, so same-day series already
+            # folded in cannot reach them
+            inp, _ = self.features(m)
+            self.habits.on_add(self, m, inp)
         self.clock = _d(m["date"])
         if self.first_day is None:
             self.first_day = self.clock
@@ -393,8 +502,101 @@ class History:
             if len(self.games[b]) - 1 < PROVISIONAL_N:
                 nb = eb + (nb - eb) * PROVISIONAL_K_MULT
         self.elo[a], self.elo[b] = na, nb
+        if self.lineups is not None:
+            for side, t in (("a", a), ("b", b)):
+                five = self.lineup_of(m, side)
+                if five:
+                    self.lineup_hist[t].append((dt, five))
+        pool_dt = self.pool_at(dt)       # pool of this series' own date (series < dt)
+        self._invalidate(dt)
         for x in m.get("maps", []):
             self.map_dates[x["map"]].append(dt)
+        self.vseries.append((dt, pool_dt, frozenset(x["map"] for x in m.get("maps", [])),
+                             m.get("best_of", 3)))
+        for t in (a, b):
+            self.vteam[t].append(len(self.vseries) - 1)
+
+    # ------------------------------------------------------------ veto evidence
+    def lineup_of(self, m, side):
+        if not self.lineups:
+            return None
+        rec = self.lineups.get(f"{m['date']}|{m['team_a']}|{m['team_b']}") or {}
+        return frozenset(rec[side]) if rec.get(side) else None
+
+    def core_five(self, team, dt, core_n=8):
+        """(core five, stale) from the team's lineups dated < dt, with the
+        lineup_features rule (most appearances in its last core_n lineups,
+        ties to the most recent). stale: its last series is newer than its
+        last lineup (failure mode lineup_stale_X)."""
+        prior = [(d, f) for d, f in self.lineup_hist.get(team, []) if d < dt]
+        if not prior:
+            return None, True
+        recent = prior[-core_n:]
+        count, seen = defaultdict(int), {}
+        for i, (_, five) in enumerate(recent):
+            for p in five:
+                count[p] += 1
+                seen[p] = i
+        core = frozenset(sorted(count, key=lambda p: (-count[p], -seen[p], p))[:5])
+        last_series = max((r["date"] for r in self.games.get(team, []) if r["date"] < dt), default=None)
+        return core, last_series is not None and last_series > prior[-1][0]
+
+    def _invalidate(self, dt):
+        """A series dated dt changes pools / rates only for dates > dt."""
+        for c in (self._pool_cache, self._rate_cache):
+            if c and max(c) > dt:
+                for k in [k for k in c if k > dt]:
+                    del c[k]
+
+    def pool_at(self, dt):
+        """map_pool(dt), cached."""
+        p = self._pool_cache.get(dt)
+        if p is None:
+            p = frozenset(self.map_pool(dt))
+            self._pool_cache[dt] = p
+        return p
+
+    def field_rates(self, dt):
+        """{map: share of series in the VETO_EV_DAYS days before dt, with that
+        map in their own date's pool, in which it was played}. Series < dt."""
+        r = self._rate_cache.get(dt)
+        if r is None:
+            lo = dt - timedelta(days=VETO_EV_DAYS)
+            n, k = defaultdict(int), defaultdict(int)
+            for d, pool, played, _ in reversed(self.vseries):
+                if d >= dt:
+                    continue
+                if d < lo:
+                    break
+                for mp in pool:
+                    n[mp] += 1
+                    k[mp] += mp in played
+            r = {mp: k[mp] / n[mp] for mp in n}
+            self._rate_cache[dt] = r
+        return r
+
+    def veto_evidence(self, team, dt, pool):
+        """Point-in-time evidence for the veto's exclusion test (veto.py):
+        over the team's series in the VETO_EV_DAYS days before dt, per pool
+        map: [series where it was played, series with it in their pool,
+        sum of log(1 - field play rate at that series' date)]."""
+        lo = dt - timedelta(days=VETO_EV_DAYS)
+        js = [self.vseries[j] for j in self.vteam.get(team, []) if lo <= self.vseries[j][0] < dt]
+        out = {}
+        for mp in sorted(pool):
+            plays = n_pool = 0
+            lp = 0.0
+            for d, jpool, played, _ in js:
+                plays += mp in played
+                if mp in jpool:
+                    n_pool += 1
+                    rate = min(self.field_rates(d).get(mp, 0.0), 1.0 - 1e-9)
+                    lp += math.log(1.0 - rate)
+            out[mp] = [plays, n_pool, lp]
+        ev = {"n": len(js), "maps": out}
+        if self.habits is not None:
+            ev.update(self.habits.evidence(team, dt, pool))
+        return ev
 
     def n_prior(self, team):
         return len(self.games[team])
@@ -455,13 +657,16 @@ class History:
         self.clock = dt
         fa, fb = self.team_feats(a, dt), self.team_feats(b, dt)
         ea, eb = self.feature_elo(a), self.feature_elo(b)
+        pool = self.map_pool(dt)
         inp = {"team_a": a, "team_b": b,
                "rating_a": round(elo_to_rating(ea), 5),
                "rating_b": round(elo_to_rating(eb), 5),
                "h2h": self.h2h(a, b, dt),
                "maps_a": fa["maps"], "maps_b": fb["maps"],
                "maps_raw_a": fa["maps_raw"], "maps_raw_b": fb["maps_raw"],
-               "map_pool": self.map_pool(dt),
+               "map_pool": pool,
+               "veto_ev_a": self.veto_evidence(a, dt, pool),
+               "veto_ev_b": self.veto_evidence(b, dt, pool),
                "permaban_a": None, "permaban_b": None,
                "roster_a": roster_flags(a, event_title(m)),
                "roster_b": roster_flags(b, event_title(m)),

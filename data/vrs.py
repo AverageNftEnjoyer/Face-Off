@@ -39,9 +39,20 @@ def _get(url, api=False):
         return r.read().decode("utf-8")
 
 
+_TREE = []
+
+
+def tree():
+    """The repository tree (one GitHub API call per process; data/lineups.py
+    reuses it when both run in the same daily refresh)."""
+    if not _TREE:
+        _TREE.append(json.loads(_get(TREE_URL, api=True)))
+    return _TREE[0]
+
+
 def latest_paths():
-    tree = json.loads(_get(TREE_URL, api=True))
-    files = [t["path"] for t in tree.get("tree", []) if t["path"].startswith("live/")]
+    tree_ = tree()
+    files = [t["path"] for t in tree_.get("tree", []) if t["path"].startswith("live/")]
     dated = {}
     for p in files:
         m = re.search(r"standings_(global|europe|americas|asia)_(\d{4}_\d{2}_\d{2})\.md$", p)

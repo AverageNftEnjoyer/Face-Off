@@ -1,0 +1,70 @@
+{
+ "phase": "p0",
+ "data_hashes": {
+  "matches.json": "98d3e24cf141852a94b879aa1be9a096d2ff915ce2e550803bc06d7e7f76ecb8",
+  "lineups.json": "573a08c0a1660770c29d95264a21cdebe1512a1c93134ace4359e05e1e52a3f2"
+ },
+ "rows": {
+  "kept": 1953,
+  "pool_mismatch": 30
+ },
+ "split": {
+  "train_end": "2025-11-05",
+  "test_start": "2025-11-07",
+  "train": 1207,
+  "test": 746
+ },
+ "reference_comfort_sim": {
+  "eps_pi_fit_on_train": {
+   "eps": 0.9060590365811745,
+   "pi": 0.23521744987488774,
+   "train_loglik": -4.309507311050974
+  },
+  "train": {
+   "n": 1207,
+   "hit": 0.4631317315658658,
+   "hit_n": 1207,
+   "ll": -4.309507311050974,
+   "ll_n": 1207,
+   "dec_hit": 0.2289156626506024,
+   "dec_hit_n": 498,
+   "unplayed": 0.04888152444076222,
+   "unplayed_n": 1207
+  },
+  "test": {
+   "n": 746,
+   "hit": 0.47788203753351205,
+   "hit_n": 746,
+   "ll": -4.267894005511056,
+   "ll_n": 746,
+   "dec_hit": 0.2797427652733119,
+   "dec_hit_n": 311,
+   "unplayed": 0.036193029490616625,
+   "unplayed_n": 746
+  }
+ },
+ "uniform_legal_veto": {
+  "train_loglik": -4.396405270998912,
+  "test_loglik": -4.408628319043429
+ },
+ "comfort_off_test": {
+  "hit": 0.27412868632707776,
+  "dec_hit": 0.10610932475884244
+ },
+ "chance": {
+  "pick_set_hit": 0.2857142857142857,
+  "decider_hit": 0.14285714285714285
+ },
+ "sanity_veto_check": {
+  "veto_check": [
+   0.47570332480818417,
+   0.2787878787878788
+  ],
+  "harness": [
+   0.47570332480818417,
+   0.2787878787878788
+  ],
+  "max_abs_diff": 0.0
+ },
+ "test_evaluations": 1
+}

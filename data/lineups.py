@@ -25,10 +25,19 @@ Output: data/lineups.json
 Player ids are lower-cased.
 
 Raw files are cached in data/raw/valve/details/ (gitignored); --offline uses
-only the cache. Requests: one cached tree + raw.githubusercontent.com files,
-spaced REQUEST_GAP seconds.
+only the cache (and the cached tree). Online, the repository tree is read
+fresh (one GitHub API call, shared with data/vrs.py in the same process),
+then raw.githubusercontent.com files are fetched, spaced REQUEST_GAP seconds.
 
-USAGE (from the repo root):  python data/lineups.py [--offline]
+--incremental (used by scripts/daily_refresh.py): keep data/lineups.json and
+read only the Valve snapshots published after the newest one it records.
+Series with both sides already known are left alone; new series, and sides
+still missing, are filled from the new snapshots' rows. With no new snapshot
+nothing is downloaded and the file is not rewritten. Valve publishes about
+once a month, so series played after the newest snapshot get their lineups
+when the next one appears.
+
+USAGE (from the repo root):  python data/lineups.py [--offline] [--incremental]
 """
 import json
 import os
@@ -45,6 +54,7 @@ sys.path.insert(0, os.path.join(ROOT, "viewer"))
 import vrs  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
+INCREMENTAL = "--incremental" in sys.argv
 TREE = os.path.join(HERE, "raw", "valve", "valve_tree.json")
 CACHE = os.path.join(HERE, "raw", "valve", "details")
 OUT = os.path.join(HERE, "lineups.json")
@@ -62,28 +72,34 @@ def norm(name):
 
 
 def tree_paths():
-    if os.path.exists(TREE):
+    if OFFLINE:
+        if not os.path.exists(TREE):
+            raise SystemExit("offline: no cached Valve tree (data/raw/valve/valve_tree.json)")
         with open(TREE, encoding="utf-8") as f:
             t = json.load(f)
-    elif OFFLINE:
-        raise SystemExit("offline: no cached Valve tree (data/raw/valve/valve_tree.json)")
     else:
-        t = json.loads(vrs._get(vrs.TREE_URL, api=True))
+        t = vrs.tree()
         os.makedirs(os.path.dirname(TREE), exist_ok=True)
         with open(TREE, "w", encoding="utf-8") as f:
             json.dump(t, f)
     return [x["path"] for x in (t["tree"] if isinstance(t, dict) else t)]
 
 
-def pick_snapshots(paths):
+def pick_snapshots(paths, after=""):
+    """Snapshots to read; after: only those dated later than this one."""
     snaps = sorted({p.split("/")[3] for p in paths
-                    if p.startswith("live/") and p.count("/") == 4 and "/details/" in p})
+                    if p.startswith("live/") and p.count("/") == 4 and "/details/" in p
+                    and p.split("/")[3] > after})
     # one per calendar month (the first), then every SNAPSHOT_STEP-th, always the latest
     monthly, seen = [], set()
     for s in snaps:
         if s[:7] not in seen:
             seen.add(s[:7])
             monthly.append(s)
+    if after:
+        # incremental: the newest snapshot, then every SNAPSHOT_STEP-th back
+        # (one snapshot when the last run was a month or two ago)
+        return sorted(monthly[::-1][::SNAPSHOT_STEP])
     chosen = monthly[::SNAPSHOT_STEP]
     if monthly and monthly[-1] not in chosen:
         chosen.append(monthly[-1])
@@ -124,7 +140,8 @@ def parse_detail(txt):
     return team, rows
 
 
-def main():
+def main(incremental=None):
+    incremental = INCREMENTAL if incremental is None else incremental
     with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
         matches = json.load(f)
     ours = {}
@@ -133,8 +150,16 @@ def main():
             ours.setdefault(norm(t), t)
     ours.update({k: v for k, v in SLUG_ALIAS.items()})
 
+    old = {"snapshots": [], "lineups": {}}
+    if incremental and os.path.exists(OUT):
+        with open(OUT, encoding="utf-8") as f:
+            old = json.load(f)
     paths = tree_paths()
-    snaps = pick_snapshots(paths)
+    snaps = pick_snapshots(paths, after=max(old["snapshots"], default=""))
+    if not snaps:
+        print(f"lineups: no Valve snapshot newer than {max(old['snapshots'], default='-')}; "
+              f"data/lineups.json unchanged ({len(old['lineups'])} series)")
+        return
     wanted = [p for p in paths if p.startswith("live/") and "/details/" in p and p.endswith(".md")
               and p.split("/")[3] in snaps
               and norm(p.rsplit("/", 1)[1].split("--")[1].replace("_", " ")) in ours]
@@ -163,20 +188,26 @@ def main():
                 best = (gap, five)
         return best[1] if best else None
 
-    out, both = {}, 0
+    out, both, added = dict(old["lineups"]), 0, 0
     for m in matches:
-        d0 = date.fromisoformat(m["date"])
         a, b = m["team_a"], m["team_b"]
-        la = find(a, b, m["winner"] == a, d0)
-        lb = find(b, a, m["winner"] == b, d0)
-        if la or lb:
-            out[f"{m['date']}|{a}|{b}"] = {"a": la, "b": lb}
-            both += bool(la and lb)
+        key = f"{m['date']}|{a}|{b}"
+        prev = out.get(key) or {"a": None, "b": None}
+        if prev["a"] and prev["b"]:
+            continue
+        d0 = date.fromisoformat(m["date"])
+        la = prev["a"] or find(a, b, m["winner"] == a, d0)
+        lb = prev["b"] or find(b, a, m["winner"] == b, d0)
+        if (la or lb) and (la, lb) != (prev["a"], prev["b"]):
+            out[key] = {"a": la, "b": lb}
+            added += 1
+    both = sum(1 for v in out.values() if v["a"] and v["b"])
     covered = [m for m in matches if m["date"] >= "2024-02-01"]
     print(f"lineups: {len(out)} series with at least one side, {both} with both "
-          f"(of {len(covered)} series since 2024-02-01)")
+          f"(of {len(covered)} series since 2024-02-01); {added} new or filled this run")
     with open(OUT, "w", encoding="utf-8") as f:
-        json.dump({"source": f"https://github.com/{vrs.REPO}", "snapshots": snaps,
+        json.dump({"source": f"https://github.com/{vrs.REPO}",
+                   "snapshots": sorted(set(old["snapshots"]) | set(snaps)),
                    "lineups": out}, f, indent=0, ensure_ascii=False, sort_keys=True)
     print("wrote data/lineups.json")
 

@@ -1,0 +1,140 @@
+{
+ "phase": "p1",
+ "data_hashes": {
+  "matches.json": "98d3e24cf141852a94b879aa1be9a096d2ff915ce2e550803bc06d7e7f76ecb8",
+  "lineups.json": "573a08c0a1660770c29d95264a21cdebe1512a1c93134ace4359e05e1e52a3f2"
+ },
+ "rows": {
+  "kept": 1953
+ },
+ "split": {
+  "train_end": "2025-11-05",
+  "test_start": "2025-11-07",
+  "train": 1207,
+  "test": 746
+ },
+ "params": {
+  "alpha_ban1": 0.10572892311111673,
+  "alpha_ban2": 0.8362676174403381,
+  "alpha_pick": 1.347829568580184,
+  "gamma_ban1": 7.090485869381762,
+  "gamma_ban2": 2.9269631434721406,
+  "gamma_pick": 2.6472416761328583,
+  "lookahead": false,
+  "pi": 0.2887324525228,
+  "rho_ban1": 1.7116629342030243,
+  "rho_ban2": 0.5175343461244624,
+  "temp": 1.0,
+  "version": "veto-v2.p1"
+ },
+ "config_overrides": {
+  "veto_excl_alpha": 0.05
+ },
+ "reference": {
+  "model": "comfort sim (point), eps-smoothed",
+  "eps_pi_fit_on_train": {
+   "eps": 0.9060590365811745,
+   "pi": 0.23521744987488774,
+   "train_loglik": -4.309507311050974
+  },
+  "test": {
+   "n": 746,
+   "hit": 0.47788203753351205,
+   "hit_n": 746,
+   "ll": -4.267894005511056,
+   "ll_n": 746,
+   "dec_hit": 0.2797427652733119,
+   "dec_hit_n": 311,
+   "unplayed": 0.036193029490616625,
+   "unplayed_n": 746
+  }
+ },
+ "candidate": {
+  "test": {
+   "n": 746,
+   "hit": 0.48056300268096513,
+   "hit_n": 746,
+   "ll": -Infinity,
+   "ll_n": 746,
+   "dec_hit": 0.2797427652733119,
+   "dec_hit_n": 311,
+   "cov80": 0.8378016085790885,
+   "cov80_n": 746,
+   "cov80_mass": 0.8127599444825544,
+   "cov80_mass_n": 746,
+   "cov01": 0.9986595174262735,
+   "cov01_n": 746,
+   "unplayed": 0.0435656836461126,
+   "unplayed_n": 746,
+   "attributed": 0.0,
+   "attributed_n": 746,
+   "ece_played": 0.013903634794836639
+  },
+  "train": {
+   "n": 1207,
+   "hit": 0.4647887323943662,
+   "hit_n": 1207,
+   "ll": -3.715646643714335,
+   "ll_n": 1207,
+   "dec_hit": 0.24899598393574296,
+   "dec_hit_n": 498,
+   "cov80": 0.8135874067937034,
+   "cov80_n": 1207,
+   "cov80_mass": 0.8120892701437666,
+   "cov80_mass_n": 1207,
+   "cov01": 0.9983429991714996,
+   "cov01_n": 1207,
+   "unplayed": 0.05095277547638774,
+   "unplayed_n": 1207,
+   "attributed": 0.0,
+   "attributed_n": 1207,
+   "ece_played": 0.008725213750705485
+  }
+ },
+ "test_evaluations": 2,
+ "pick_set_hit_diff": {
+  "diff": 0.002680965147453083,
+  "ci95": [
+   -0.0167427701674277,
+   0.023287671232876714
+  ],
+  "n": 746
+ },
+ "loglik_diff": {
+  "diff": -Infinity,
+  "ci95": [
+   -Infinity,
+   0.7325082162869941
+  ],
+  "n": 746
+ },
+ "decider_hit_diff": {
+  "diff": 0.0,
+  "ci95": [
+   -0.04983388704318937,
+   0.045774647887323945
+  ],
+  "n": 311
+ },
+ "scoreline_logloss": {
+  "new": 1.3041161101120085,
+  "ref": 1.306017738699615,
+  "diff": {
+   "diff": -0.0019016285876065839,
+   "ci95": [
+    -0.0056534798960312365,
+    0.002035873366742292
+   ],
+   "n": 746
+  }
+ },
+ "checks": {
+  "pick_set_hit": false,
+  "loglik": false,
+  "coverage80": true,
+  "ece_played": true,
+  "scoreline_logloss": false,
+  "I6_p_a_identical": true
+ },
+ "passed": false
+}

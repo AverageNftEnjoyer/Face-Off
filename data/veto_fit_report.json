@@ -1,0 +1,423 @@
+{
+ "data_hashes": {
+  "lineups.json": "573a08c0a1660770c29d95264a21cdebe1512a1c93134ace4359e05e1e52a3f2",
+  "matches.json": "98d3e24cf141852a94b879aa1be9a096d2ff915ce2e550803bc06d7e7f76ecb8"
+ },
+ "notes": [
+  "After test evaluation 2 (p1 gate, which showed one held-out series with probability 0 at the inner-fold exclusion alpha 0.05), the alpha for p2, p3, p6 (and p4) was overridden to 0.01, the design default. That choice was made AFTER seeing a test result. Evaluations 6+ re-score every phase with a mechanical train-only rule (veto_fit.MASK_CAP: reject alphas with any zero-probability training series or >1% masked-but-picked) and the ablation reference added after an independent review."
+ ],
+ "phases": {
+  "p1": {
+   "config_overrides": {},
+   "config_snapshot": {
+    "map_scale": 6.0,
+    "map_shape": 0.5,
+    "map_shrink_k": 10.0,
+    "temperature": 1.0,
+    "veto_comfort": 0.8,
+    "veto_comfort_k": 3.0
+   },
+   "converged": true,
+   "excl_alpha": 0.01,
+   "grid_key": "veto_excl_alpha",
+   "grid_value": 0.01,
+   "history": [
+    -3.7201710529883343,
+    -3.71936645405695,
+    -3.7192522105613732,
+    -3.7192363923545475,
+    -3.719234832861748,
+    -3.7192346729520147
+   ],
+   "inner_grid": [
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.712344992273207,
+     "inner_val_loglik": -3.7433591111759874,
+     "rejected": false,
+     "sweeps": 6,
+     "veto_excl_alpha": 0.001
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.7131449887889216,
+     "inner_val_loglik": -3.740943782475231,
+     "rejected": false,
+     "sweeps": 6,
+     "veto_excl_alpha": 0.005
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.713045149482929,
+     "inner_val_loglik": -3.7396735257399727,
+     "rejected": false,
+     "sweeps": 6,
+     "veto_excl_alpha": 0.01
+    },
+    {
+     "rejected": true,
+     "train_masked_but_picked": 0.014084507042253521,
+     "train_zero_prob_series": 0,
+     "veto_excl_alpha": 0.02
+    },
+    {
+     "rejected": true,
+     "train_masked_but_picked": 0.027340513670256836,
+     "train_zero_prob_series": 0,
+     "veto_excl_alpha": 0.05
+    },
+    {
+     "rejected": true,
+     "train_masked_but_picked": 0.04308202154101077,
+     "train_zero_prob_series": 1,
+     "veto_excl_alpha": 0.1
+    }
+   ],
+   "n_inner_fit": 884,
+   "n_inner_val": 323,
+   "n_train": 1207,
+   "params": {
+    "alpha_ban1": 0.08534628553278593,
+    "alpha_ban2": 0.8261955158709038,
+    "alpha_pick": 1.3453326507137842,
+    "gamma_ban1": 7.220192124409158,
+    "gamma_ban2": 2.8742704719041923,
+    "gamma_pick": 2.759731977840815,
+    "lookahead": false,
+    "pi": 0.2888287195021243,
+    "rho_ban1": 1.7554582828408993,
+    "rho_ban2": 0.49614168405239367,
+    "temp": 1.0,
+    "version": "veto-v2.p1"
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "seconds": 1537.0,
+   "sweeps": 5,
+   "train_loglik": -3.7192346729520147,
+   "version": "veto-v2.p1"
+  },
+  "p1_alpha005_superseded": {
+   "config_overrides": {},
+   "config_snapshot": {
+    "map_scale": 6.0,
+    "map_shape": 0.5,
+    "map_shrink_k": 10.0,
+    "temperature": 1.0,
+    "veto_comfort": 0.8,
+    "veto_comfort_k": 3.0
+   },
+   "converged": true,
+   "excl_alpha": 0.05,
+   "grid_key": "veto_excl_alpha",
+   "grid_value": 0.05,
+   "history": [
+    -3.7165584253554558,
+    -3.71577952750504,
+    -3.715664614859071,
+    -3.715648581422027,
+    -3.7156468615930947,
+    -3.7156466437143365
+   ],
+   "inner_grid": [
+    {
+     "converged": true,
+     "excl_alpha": 0.001,
+     "inner_fit_loglik": -3.712344992273207,
+     "inner_val_loglik": -3.7433591111759874,
+     "sweeps": 6
+    },
+    {
+     "converged": true,
+     "excl_alpha": 0.005,
+     "inner_fit_loglik": -3.7131449887889216,
+     "inner_val_loglik": -3.740943782475231,
+     "sweeps": 6
+    },
+    {
+     "converged": true,
+     "excl_alpha": 0.01,
+     "inner_fit_loglik": -3.713045149482929,
+     "inner_val_loglik": -3.7396735257399727,
+     "sweeps": 6
+    },
+    {
+     "converged": true,
+     "excl_alpha": 0.02,
+     "inner_fit_loglik": -3.7114538587890453,
+     "inner_val_loglik": -3.738012250637243,
+     "sweeps": 7
+    },
+    {
+     "converged": true,
+     "excl_alpha": 0.05,
+     "inner_fit_loglik": -3.709827236296348,
+     "inner_val_loglik": -3.7349806269909247,
+     "sweeps": 7
+    },
+    {
+     "converged": false,
+     "excl_alpha": 0.1,
+     "inner_fit_loglik": -Infinity,
+     "inner_val_loglik": -4.095102706287763,
+     "sweeps": 50
+    }
+   ],
+   "n_inner_fit": 884,
+   "n_inner_val": 323,
+   "n_train": 1207,
+   "note": "original p1 fit (inner-fold alpha 0.05); superseded by the mechanical alpha rule; its gate is veto_phase1a_report.json",
+   "params": {
+    "alpha_ban1": 0.10572892311111673,
+    "alpha_ban2": 0.8362676174403381,
+    "alpha_pick": 1.347829568580184,
+    "gamma_ban1": 7.090485869381762,
+    "gamma_ban2": 2.9269631434721406,
+    "gamma_pick": 2.6472416761328583,
+    "lookahead": false,
+    "pi": 0.2887324525228,
+    "rho_ban1": 1.7116629342030243,
+    "rho_ban2": 0.5175343461244624,
+    "temp": 1.0,
+    "version": "veto-v2.p1"
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "seconds": 1228.4,
+   "sweeps": 5,
+   "train_loglik": -3.7156466437143365,
+   "version": "veto-v2.p1"
+  },
+  "p2": {
+   "config_overrides": {
+    "veto_excl_alpha": 0.01
+   },
+   "config_snapshot": {
+    "map_scale": 6.0,
+    "map_shape": 0.5,
+    "map_shrink_k": 10.0,
+    "temperature": 1.0,
+    "veto_comfort": 0.8,
+    "veto_comfort_k": 3.0
+   },
+   "converged": true,
+   "excl_alpha": 0.01,
+   "grid_key": "veto_excl_alpha",
+   "grid_value": 0.01,
+   "history": [
+    -3.734508628530014,
+    -3.7338178375698314,
+    -3.733670714172814,
+    -3.733651846178695,
+    -3.733649968129523,
+    -3.733649782313551
+   ],
+   "inner_grid": [
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.7266409038454604,
+     "inner_val_loglik": -3.756041348719324,
+     "sweeps": 6,
+     "veto_excl_alpha": 0.01
+    }
+   ],
+   "n_inner_fit": 884,
+   "n_inner_val": 323,
+   "n_train": 1207,
+   "params": {
+    "alpha_ban1": 1.6539201401663866,
+    "alpha_ban2": -0.32497224410789893,
+    "alpha_pick": 4.545925649320859,
+    "gamma_ban1": 7.449223575610019,
+    "gamma_ban2": 1.5532098742820395,
+    "gamma_pick": 2.627795382754427,
+    "lookahead": true,
+    "pi": 0.2875090721175809,
+    "temp": 1.0,
+    "version": "veto-v2.p2"
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "seconds": 3222.9,
+   "sweeps": 5,
+   "train_loglik": -3.733649782313551,
+   "version": "veto-v2.p2"
+  },
+  "p3": {
+   "config_overrides": {
+    "veto_excl_alpha": 0.01,
+    "veto_use_habits": true
+   },
+   "config_snapshot": {
+    "map_scale": 6.0,
+    "map_shape": 0.5,
+    "map_shrink_k": 10.0,
+    "temperature": 1.0,
+    "veto_comfort": 0.8,
+    "veto_comfort_k": 3.0
+   },
+   "converged": true,
+   "excl_alpha": 0.01,
+   "grid_key": "veto_habit_k",
+   "grid_value": 4.0,
+   "history": [
+    -3.692739993527142,
+    -3.6721785066651425,
+    -3.6696276829564867,
+    -3.6691404417123477,
+    -3.669059691119312,
+    -3.6690471917572722,
+    -3.669045278035376,
+    -3.6690449688291644
+   ],
+   "inner_grid": [
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.6830884545727938,
+     "inner_val_loglik": -3.7301761683041947,
+     "sweeps": 3,
+     "veto_habit_k": 1.0
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.6807308219862245,
+     "inner_val_loglik": -3.729658515776655,
+     "sweeps": 3,
+     "veto_habit_k": 2.0
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.6793150682419493,
+     "inner_val_loglik": -3.72948189430767,
+     "sweeps": 3,
+     "veto_habit_k": 4.0
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.6790687976254017,
+     "inner_val_loglik": -3.729819154236408,
+     "sweeps": 3,
+     "veto_habit_k": 8.0
+    },
+    {
+     "converged": true,
+     "inner_fit_loglik": -3.6799339768854016,
+     "inner_val_loglik": -3.730732803740687,
+     "sweeps": 3,
+     "veto_habit_k": 16.0
+    }
+   ],
+   "n_inner_fit": 884,
+   "n_inner_val": 323,
+   "n_train": 1207,
+   "params": {
+    "alpha_ban1": 2.033664713439575,
+    "alpha_ban2": -0.20156457048239346,
+    "alpha_pick": 4.334853598125765,
+    "eta_ban1": 1.0185928637418429,
+    "eta_ban2": 0.33835839052390215,
+    "eta_pick": 0.6824052046670674,
+    "gamma_ban1": 4.530757888356842,
+    "gamma_ban2": 1.6082521031287111,
+    "gamma_pick": 1.4321062210093656,
+    "lookahead": true,
+    "pi": 0.28574486055052367,
+    "temp": 1.0,
+    "version": "veto-v2.p3"
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "seconds": 4809.0,
+   "sweeps": 7,
+   "train_loglik": -3.6690449688291644,
+   "version": "veto-v2.p3"
+  },
+  "p6": {
+   "config_overrides": {},
+   "config_snapshot": {
+    "map_scale": 6.0,
+    "map_shape": 0.5,
+    "map_shrink_k": 10.0,
+    "temperature": 1.0,
+    "veto_comfort": 0.8,
+    "veto_comfort_k": 3.0
+   },
+   "converged": true,
+   "excl_alpha": 0.01,
+   "grid_key": "veto_excl_alpha",
+   "grid_value": 0.01,
+   "history": [
+    -1.713769341129727,
+    -1.7080141606184138,
+    -1.7075707273254694,
+    -1.7075587131035521,
+    -1.707557834357163
+   ],
+   "inner_grid": [
+    {
+     "converged": true,
+     "inner_fit_loglik": -1.7542637667690624,
+     "inner_val_loglik": -1.5830827856573235,
+     "sweeps": 14,
+     "veto_excl_alpha": 0.01
+    }
+   ],
+   "n_inner_fit": 142,
+   "n_inner_val": 44,
+   "n_train": 186,
+   "params": {
+    "alpha_ban1": -1.427368213273976,
+    "alpha_ban2": 0.9622003523001881,
+    "alpha_pick": 0.0,
+    "gamma_ban1": 9.999963159853081,
+    "gamma_ban2": 2.9956862399101682,
+    "gamma_pick": 0.0,
+    "lookahead": false,
+    "pi": 0.5874694079407698,
+    "rho_ban1": -0.6303930493016094,
+    "rho_ban2": 1.6268812695269732,
+    "temp": 0.6872736001783517,
+    "version": "veto-v2.p6"
+   },
+   "rows": {
+    "kept": 360,
+    "pool_mismatch": 1
+   },
+   "seconds": 772.2,
+   "sweeps": 4,
+   "temperature_fit": {
+    "fold": "inner validation (last 25% of training dates, 44 BO1 series)",
+    "inner_val_ece_after": 0.0108,
+    "reason": "inner-fold ECE 0.038 > 0.03 at temp 1"
+   },
+   "train_loglik": -1.707557834357163,
+   "version": "veto-v2.p6"
+  }
+ },
+ "split": {
+  "inner_frac": 0.25,
+  "test_start": "2025-11-07",
+  "train_end": "2025-11-05"
+ },
+ "test_evaluation_log": [
+  "p0 baselines on test",
+  "p1 gate on test",
+  "p6 gate on test",
+  "p2 gate on test",
+  "p3 gate on test",
+  "p1 gate on test (re-gate: mechanical alpha + ablation reference + zero_prob check)",
+  "p2 gate on test (re-gate: ablation reference + zero_prob check (alpha 0.01 now from the mechanical rule))",
+  "p6 gate on test (re-gate: ablation reference + zero_prob check (alpha 0.01 now from the mechanical rule))",
+  "p3 gate on test (re-gate: ablation reference + zero_prob + leakage (habits) in gate)"
+ ],
+ "test_evaluations": 9,
+ "version": "veto-v2"
+}
