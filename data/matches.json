@@ -52606,5 +52606,30 @@
   ],
   "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398751)",
   "tier": "S"
+ },
+ {
+  "match_id": "f4df2c2a4e70",
+  "date": "2026-10-10",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Vitality",
+  "team_b": "Aurora Gaming",
+  "winner": "Team Vitality",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Aurora Gaming"
+   },
+   {
+    "map": "Cache",
+    "winner": "Team Vitality"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Team Vitality"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398754)",
+  "tier": "S"
  }
 ]
