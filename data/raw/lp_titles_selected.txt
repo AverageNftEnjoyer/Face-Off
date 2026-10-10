@@ -166,3 +166,4 @@ FISSURE/Playground/8
 FISSURE/Playground/9
 BLAST/Rivals/2027
 Perfect World/Major/2027/Shanghai
+CS Asia Championships/2027

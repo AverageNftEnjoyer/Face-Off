@@ -52608,6 +52608,31 @@
   "tier": "S"
  },
  {
+  "match_id": "cd43f65dea55",
+  "date": "2026-10-10",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Spirit",
+  "team_b": "MOUZ",
+  "winner": "MOUZ",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "MOUZ"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Team Spirit"
+   },
+   {
+    "map": "Nuke",
+    "winner": "MOUZ"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398755)",
+  "tier": "S"
+ },
+ {
   "match_id": "f4df2c2a4e70",
   "date": "2026-10-10",
   "event": "ESL Pro League Season 24",
