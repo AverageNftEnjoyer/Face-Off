@@ -34,7 +34,17 @@ The site itself is built from these files on each deploy
 All requests go through data/lpfetch.py: descriptive User-Agent, gzip, at most
 one request every 2.5 s, no action=parse. A typical run is 15-50 requests.
 
-USAGE (from the repo root):  python scripts/daily_refresh.py [--dry-run]
+LIVE MODE (python scripts/daily_refresh.py --live, run every 10 minutes by
+.github/workflows/live-refresh.yml): only while a tracked tournament is on (its
+dates, one day either side) the event's pages are read again and matches.json is
+rebuilt, 1-3 requests and no assets. Outside a tournament it exits at once.
+
+A page that was meant to be refreshed but could only be served from the cache
+(Liquipedia refused us) is retried after a pause and, if it stays stale, listed
+in data/refresh_status.json so the workflow fails loudly instead of reporting a
+green run with old results.
+
+USAGE (from the repo root):  python scripts/daily_refresh.py [--dry-run] [--live]
 """
 
 import os
@@ -273,10 +283,85 @@ def stale_titles(today):
     return titles, teams, soon
 
 
+STATUS_FILE = os.path.join(ROOT, "data", "refresh_status.json")
+LIVE_WINDOW_DAYS = 1       # a tournament counts as live this many days before it starts / after it ends
+RETRY_PAUSES = (120, 240)  # seconds to wait before asking Liquipedia again for pages it refused us
+
+
+def live_titles(today):
+    """Pages of tracked tournaments that are on now (+/- LIVE_WINDOW_DAYS), with
+    their stage pages."""
+    lo = (today - timedelta(days=LIVE_WINDOW_DAYS)).isoformat()
+    hi = (today + timedelta(days=LIVE_WINDOW_DAYS)).isoformat()
+    titles = {e["title"] for e in E.discover() if e["start"] <= hi and e["end"] >= lo}
+    selected = [l.strip() for l in open(TITLES_FILE, encoding="utf-8") if l.strip()]
+    return titles | {s for s in selected for t in list(titles) if s.startswith(t + "/")}
+
+
+def stale_live(live):
+    """Live pages that a refresh asked for and only the cache could answer."""
+    served = set()
+    for entry in lpfetch.STALE_SERVED:
+        served |= set(str(entry).split("|"))
+    return sorted(t for t in live if t in served)
+
+
+def refresh_live(live, collect):
+    """Refresh the live pages, rebuild matches.json, and retry pages Liquipedia
+    refused; returns the live pages still stale afterwards."""
+    import time
+    import collect_liquipedia
+    lpfetch.FRESH_TITLES |= live
+    lpfetch.STALE_SERVED.clear()
+    collect()
+    stale = stale_live(live)
+    for pause in RETRY_PAUSES:
+        if not stale:
+            break
+        print(f"live pages still stale after the refresh: {stale}; trying again in {pause}s")
+        time.sleep(pause)
+        lpfetch._THROTTLED[0] = False
+        lpfetch.STALE_SERVED.clear()
+        lpfetch.RUN_STARTED = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())  # a copy fetched now counts as fresh
+        collect()
+        stale = stale_live(live)
+    return stale
+
+
+def write_status(stale, live):
+    """data/refresh_status.json: written only when it changes, so quiet runs
+    commit nothing. The workflow fails the run when `stale_pages` is not empty."""
+    import json
+    new = {"ok": not stale, "stale_pages": stale}
+    try:
+        old = json.load(open(STATUS_FILE, encoding="utf-8"))
+    except (OSError, ValueError):
+        old = None
+    if old != new:
+        with open(STATUS_FILE, "w", encoding="utf-8") as f:
+            json.dump(new, f, indent=1)
+            f.write("\n")
+    if stale:
+        print(f"STALE: could not refresh {len(stale)} live tournament page(s): {stale}", file=sys.stderr)
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     dry = "--dry-run" in argv
     today = date.today()
+
+    if "--live" in argv:
+        live = live_titles(today)
+        if not live:
+            print("no tracked tournament is live: nothing to do")
+            return
+        print(f"live tournament pages: {sorted(live)}")
+        import collect_liquipedia
+        collect_liquipedia.OFFLINE = False
+        stale = refresh_live(live, collect_liquipedia.main)
+        write_status(stale, live)
+        print(f"live refresh done; Liquipedia API requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
+        return
 
     # stale pages come from the CURRENT cache, before new titles are appended
     titles, teams, soon = stale_titles(today)
@@ -298,7 +383,11 @@ def main(argv=None):
 
     import collect_liquipedia
     collect_liquipedia.OFFLINE = False
-    collect_liquipedia.main()
+    live = live_titles(today)
+    stale = refresh_live(live, collect_liquipedia.main) if live else []
+    if not live:
+        collect_liquipedia.main()
+    write_status(stale, live)
 
     import rosters
     rosters.OFFLINE = False

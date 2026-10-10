@@ -39,6 +39,11 @@ HTTP_RETRIES = [0]         # 429 / 5xx answers seen this process (each one was w
 RETRY_BACKOFF = [30, 90, 180]
 MAX_RETRY_AFTER = 300
 _THROTTLED = [False]
+# Requests where a refresh was wanted but the cached copy was served instead
+# (throttled, or Liquipedia unreachable). The caller decides what that means: a
+# live tournament page in this list is stale and must be retried or reported,
+# never passed off as fresh (scripts/daily_refresh.py).
+STALE_SERVED = []
 
 
 def _key(params):
@@ -64,6 +69,7 @@ def query(params, offline=False, refresh=False):
         return None
     have_cache = os.path.exists(path)
     if _THROTTLED[0] and have_cache:
+        STALE_SERVED.append(params.get("titles") or qs)
         return cached["response"]      # Liquipedia asked us to back off this run: don't push it
     req = urllib.request.Request(API + "?" + qs, headers={
         "User-Agent": UA, "Accept-Encoding": "gzip"})
@@ -89,6 +95,7 @@ def query(params, offline=False, refresh=False):
                     _THROTTLED[0] = True
                     print(f"lpfetch: Liquipedia answered {e.code} after {attempt + 1} tries; "
                           f"using the cached copy and the cache for the rest of this run", file=sys.stderr)
+                    STALE_SERVED.append(params.get("titles") or qs)
                     return cached["response"]
                 raise
             try:
@@ -101,6 +108,7 @@ def query(params, offline=False, refresh=False):
             _last[0] = time.time()
             if backoff is None:
                 if have_cache:
+                    STALE_SERVED.append(params.get("titles") or qs)
                     return cached["response"]
                 raise
             time.sleep(backoff)

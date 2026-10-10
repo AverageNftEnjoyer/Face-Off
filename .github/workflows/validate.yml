@@ -1,0 +1,50 @@
+# The check that the updates actually happened. It does not update anything
+# itself: it compares Liquipedia, the repo and the deployed site, starts the
+# live refresh when the data is behind, and turns the run red so a problem is
+# seen the same hour instead of the next day.
+#
+# It is scheduled apart from the refreshes on purpose (a missed refresh and a
+# missed check would have to coincide), and every 30 minutes.
+name: Validate freshness
+
+on:
+  schedule:
+    - cron: "5,35 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  actions: write      # to start the live refresh
+
+concurrency:
+  group: validate
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Compare Liquipedia, the repo and the deployed site
+        id: check
+        continue-on-error: true
+        run: python scripts/validate_freshness.py
+
+      - name: Start the live refresh when the data is behind
+        if: steps.check.outputs.needs_refresh == 'true'
+        run: gh workflow run live-refresh.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Fail the run when anything is behind
+        if: steps.check.outcome == 'failure'
+        run: |
+          echo "Something is behind: see the check step above (exit code ${{ steps.check.outputs.code }})."
+          exit 1

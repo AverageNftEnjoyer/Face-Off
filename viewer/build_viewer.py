@@ -346,6 +346,7 @@ def evidence(h, inp, day):
     return out
 
 
+<<<<<<< HEAD
 def valid_pool(pool):
     """An event's announced map pool, if it can drive a veto; else None (the live pool is used)."""
     pool = sorted({x for x in pool or [] if isinstance(x, str) and x})
@@ -353,6 +354,23 @@ def valid_pool(pool):
 
 
 def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
+=======
+def veto_edges(inp):
+    """What the page's Simulate Map Picks tab needs to re-run the veto and re-price the
+    maps: ve = team A's relative edge on each pool map (the engine's own, in pool order =
+    DATA.pool), vs = the factor that turns an edge into the scoreline's map logit
+    (map_scale * T * map_shape / k, exactly as predictor._scoreline_maps uses it)."""
+    pool = pr._pool(inp)
+    rel_a, _, _ = pr._team_maps(inp.get("maps_a"), pool)
+    rel_b, _, _ = pr._team_maps(inp.get("maps_b"), pool)
+    C = pr._compute(inp)
+    scale = C["T"] * pr.CONFIG["map_shape"] / C["shrink_k"]
+    return {"ve": [round(rel_a[mp] - rel_b[mp], 5) for mp in pool],
+            "vs": round(pr.CONFIG["map_scale"] * scale, 6)}
+
+
+def predict(h, a, b, day, title=None, bo=3, elo=False):
+>>>>>>> 8e98d29 (Job Runner Patches)
     """Engine call with point-in-time features; `title` (the tournament page)
     lets the feature builder attach stand-in / missing-IGL flags. `pool` is the
     event's own map pool: the veto must be played on the maps the event uses,
@@ -366,9 +384,13 @@ def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
         inp["veto_ev_b"] = h.veto_evidence(b, day, pool)
     out = compact(pr.predict_match(inp), bo)
     out["fx"] = evidence(h, inp, day)
+<<<<<<< HEAD
     if recs:
         out["mr"] = {a: inp["maps_raw_a"], b: inp["maps_raw_b"]}
     VD_JOBS.append((out, inp))
+=======
+    out.update(veto_edges(inp))
+>>>>>>> 8e98d29 (Job Runner Patches)
     if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
         out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
     return out
@@ -599,6 +621,8 @@ def main(out_path):
         "pairs": pairs, "epairs": epairs, "emr": emr, "h2h": h2h, "recent": recent, "report": report,
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
+        # veto comfort, so the page can finish a half-chosen veto the way the engine does
+        "vcfg": [pr.CONFIG["veto_comfort"], pr.CONFIG["veto_comfort_k"]],
         # the live map pool (maps with recent plays), the fallback when a tournament lists none
         "pool": h_today.map_pool(as_of),
     }

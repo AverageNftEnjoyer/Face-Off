@@ -1,0 +1,68 @@
+# While a tracked tournament is on, refresh its results every 10 minutes so the
+# standings, brackets, predictions and the next-match module follow the event.
+# Outside a tournament the job finds nothing live and ends in seconds without
+# touching Liquipedia. The full daily refresh (daily-refresh.yml) stays the
+# source of everything else: new events, rosters, images, Valve standings.
+#
+# GitHub's schedule is best effort: runs start late and some are skipped, which
+# is why this runs every 10 minutes (a skipped run costs at most one more wait)
+# and why "Run workflow" exists as the manual push.
+name: Live tournament refresh
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# the same queue as the daily refresh: two runs never write the cache together
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Refresh the live tournament pages (1 to 3 requests; exits at once when nothing is live)
+        run: python scripts/daily_refresh.py --live
+
+      - name: Check the site builds
+        run: |
+          if git diff --quiet -- data; then
+            echo "No data changes."
+            exit 0
+          fi
+          python viewer/build_viewer.py public/index.html
+
+      - name: Commit and push changed data
+        run: |
+          git config user.name "faceoff-refresh-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "Live data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push
+
+      - name: Fail loudly if a live page could not be refreshed
+        run: |
+          python - <<'PY'
+          import json, sys
+          s = json.load(open("data/refresh_status.json", encoding="utf-8"))
+          if s.get("stale_pages"):
+              print("Liquipedia refused these live pages, the site still shows older results:", s["stale_pages"])
+              sys.exit(1)
+          PY

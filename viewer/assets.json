@@ -1,5 +1,5 @@
 {
- "fetched_for": "2026-10-08",
+ "fetched_for": "2026-10-10",
  "event": "ESL/Pro League/Season 24",
  "event_logos": {
   "intel-extreme-masters-atlanta-2026": "data/raw/liquipedia_media/af9b934d835666bb.png",
@@ -578,22 +578,6 @@
      "joined": "2023-06-22"
     },
     {
-     "id": "jabbi",
-     "name": "Jakob Nygaard",
-     "flag": "dk",
-     "igl": false,
-     "role": "",
-     "joined": "2023-11-24"
-    },
-    {
-     "id": "HooXi",
-     "name": "Rasmus Nielsen",
-     "flag": "dk",
-     "igl": true,
-     "role": "",
-     "joined": "2025-06-18"
-    },
-    {
      "id": "phzy",
      "name": "Love Smidebrant",
      "flag": "se",
@@ -995,48 +979,7 @@
    "logo_dark": "Change The Game darkmode.png",
    "location": "China",
    "region": "China",
-   "roster": [
-    {
-     "id": "LaiKeXu",
-     "name": "Lai Kexu",
-     "flag": "cn",
-     "igl": false,
-     "role": "",
-     "joined": "2023-03-??"
-    },
-    {
-     "id": "957",
-     "name": "Zhu Jianping",
-     "flag": "cn",
-     "igl": false,
-     "role": "",
-     "joined": "2023-03-??"
-    },
-    {
-     "id": "Hack1ng",
-     "name": "Chen Zhijie",
-     "flag": "cn",
-     "igl": false,
-     "role": "",
-     "joined": "2024-08-??"
-    },
-    {
-     "id": "VanceKK",
-     "name": "Wan Jingyu",
-     "flag": "cn",
-     "igl": false,
-     "role": "",
-     "joined": "2025-06-26"
-    },
-    {
-     "id": "ProKiller",
-     "name": "Lai Haoyang",
-     "flag": "cn",
-     "igl": false,
-     "role": "",
-     "joined": "2026-01-26"
-    }
-   ],
+   "roster": [],
    "icon": "Change The Game lightmode.png",
    "icon_dark": "Change The Game darkmode.png",
    "logo_path": "data/raw/liquipedia_media/a7712b49d101d994.png",

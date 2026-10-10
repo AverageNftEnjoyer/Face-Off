@@ -50126,5 +50126,85 @@
   ],
   "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398749)",
   "tier": "S"
+ },
+ {
+  "date": "2026-10-09",
+  "event": "ESL Pro League Season 24",
+  "team_a": "1w Team",
+  "team_b": "Aurora Gaming",
+  "winner": "Aurora Gaming",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Aurora Gaming"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Aurora Gaming"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398750)",
+  "tier": "S"
+ },
+ {
+  "date": "2026-10-09",
+  "event": "ESL Pro League Season 24",
+  "team_a": "FURIA",
+  "team_b": "MOUZ",
+  "winner": "MOUZ",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "MOUZ"
+   },
+   {
+    "map": "Inferno",
+    "winner": "MOUZ"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398752)",
+  "tier": "S"
+ },
+ {
+  "date": "2026-10-09",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Falcons",
+  "team_b": "Team Spirit",
+  "winner": "Team Spirit",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Team Spirit"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Team Spirit"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398753)",
+  "tier": "S"
+ },
+ {
+  "date": "2026-10-09",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Vitality",
+  "team_b": "PARIVISION",
+  "winner": "Team Vitality",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Team Vitality"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Team Vitality"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398751)",
+  "tier": "S"
  }
 ]

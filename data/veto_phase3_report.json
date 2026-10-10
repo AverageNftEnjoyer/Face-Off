@@ -42,14 +42,43 @@
   },
   "test": {
    "n": 746,
-   "hit": 0.47788203753351205,
+   "hit": 0.4812332439678284,
    "hit_n": 746,
    "ll": -4.267894005511056,
    "ll_n": 746,
-   "dec_hit": 0.2797427652733119,
+   "dec_hit": 0.2347266881028939,
    "dec_hit_n": 311,
    "unplayed": 0.036193029490616625,
-   "unplayed_n": 746
+   "unplayed_n": 746,
+   "hit_starter_a": 0.47788203753351205,
+   "hit_starter_a_n": 746
+  }
+ },
+ "ablation": {
+  "c": 5.573396389403802,
+  "pi": 0.29243936445256463,
+  "train_loglik": -3.7978831732909866,
+  "test": {
+   "n": 746,
+   "hit": 0.4832439678284182,
+   "hit_n": 746,
+   "ll": -3.691229697312743,
+   "ll_n": 746,
+   "dec_hit": 0.2315112540192926,
+   "dec_hit_n": 311,
+   "cov80": 0.824396782841823,
+   "cov80_n": 746,
+   "cov80_mass": 0.8116573092786881,
+   "cov80_mass_n": 746,
+   "cov01": 0.9986595174262735,
+   "cov01_n": 746,
+   "unplayed": 0.03485254691689008,
+   "unplayed_n": 746,
+   "zero_prob": 0.0,
+   "zero_prob_n": 746,
+   "masked_but_picked": 0.00938337801608579,
+   "masked_but_picked_n": 746,
+   "ece_played": 0.014575888672942613
   }
  },
  "candidate": {
@@ -69,8 +98,6 @@
    "cov01_n": 746,
    "unplayed": 0.05026809651474531,
    "unplayed_n": 746,
-   "attributed": 0.0,
-   "attributed_n": 746,
    "zero_prob": 0.0,
    "zero_prob_n": 746,
    "masked_but_picked": 0.00938337801608579,
@@ -93,8 +120,6 @@
    "cov01_n": 1207,
    "unplayed": 0.056338028169014086,
    "unplayed_n": 1207,
-   "attributed": 0.0,
-   "attributed_n": 1207,
    "zero_prob": 0.0,
    "zero_prob_n": 1207,
    "masked_but_picked": 0.008285004142502071,
@@ -102,12 +127,17 @@
    "ece_played": 0.00561259863083519
   }
  },
- "test_evaluations": 5,
+ "metric_notes": {
+  "ece_played": "conditional on the realised series length (decider counted only on 2-1 series)",
+  "coverage80": "80% highest-probability set of ordered (map 1, map 2) pairs",
+  "reference_hit": "comfort sim of the more likely starter under its fitted pi"
+ },
+ "test_evaluations": 9,
  "pick_set_hit_diff": {
-  "diff": 0.02613941018766756,
+  "diff": 0.022788203753351208,
   "ci95": [
-   0.004392386530014641,
-   0.049863387978142076
+   0.001968503937007874,
+   0.046954314720812185
   ],
   "n": 746
  },
@@ -120,16 +150,41 @@
   "n": 746
  },
  "decider_hit_diff": {
-  "diff": -0.05787781350482315,
+  "diff": -0.012861736334405145,
   "ci95": [
-   -0.11935483870967742,
-   -0.003289473684210526
+   -0.06514657980456026,
+   0.039660056657223795
+  ],
+  "n": 311
+ },
+ "pick_set_hit_diff_vs_ablation": {
+  "diff": 0.020777479892761394,
+  "ci95": [
+   0.0006802721088435374,
+   0.04304635761589404
+  ],
+  "n": 746
+ },
+ "loglik_diff_vs_ablation": {
+  "diff": 0.17360767906847757,
+  "ci95": [
+   0.13403001996615338,
+   0.21544775009558564
+  ],
+  "n": 746
+ },
+ "decider_hit_diff_vs_ablation": {
+  "diff": -0.00964630225080386,
+  "ci95": [
+   -0.05862068965517241,
+   0.03313253012048193
   ],
   "n": 311
  },
  "scoreline_logloss": {
   "new": 1.3044053790267003,
   "ref": 1.306017738699615,
+  "ablation": 1.3035445277668258,
   "diff": {
    "diff": -0.0016123596729146125,
    "ci95": [
@@ -137,15 +192,34 @@
     0.0024746487880941337
    ],
    "n": 746
+  },
+  "diff_vs_ablation": {
+   "diff": 0.0008608512598745352,
+   "ci95": [
+    -2.9017087189956623e-05,
+    0.001726696579063078
+   ],
+   "n": 746
   }
+ },
+ "leakage_check": {
+  "differing_distributions": 0,
+  "exclusion_canary_days": 11,
+  "habit_canary": "caught",
+  "days_with_habits": 4
  },
  "checks": {
   "pick_set_hit": true,
   "loglik": true,
+  "pick_set_hit_vs_ablation": true,
+  "loglik_vs_ablation": true,
   "coverage80": true,
   "ece_played": true,
+  "zero_prob": true,
   "scoreline_logloss": false,
-  "I6_p_a_identical": true
+  "scoreline_logloss_vs_ablation": true,
+  "I6_p_a_identical": true,
+  "leakage": true
  },
  "passed": false
 }
