@@ -343,8 +343,6 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 /* staleness badge: one shared component, bundle-owned values, always visible */
 .stale { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .1rem .6rem; font-size: .72rem; color: var(--dim); border: 1px dashed var(--line); white-space: nowrap; }
 .stale b { color: var(--text); font-weight: 700; }
-.top .stale { margin-left: .6rem; }
-.desk-stale { margin: .4rem 0 .2rem; }
 
 /* standings */
 table { border-collapse: collapse; width: 100%; font-size: var(--s-1); }
@@ -1499,6 +1497,70 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .tdlg { border-color: var(--line2); border-radius: var(--rp); background: #0F1C1F; }
 .tdlg-h h2 { font-style: italic; font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; }
 .pick:not(.tm)[aria-pressed="true"] { background: var(--raise); }
+
+/* ---------- Ask FaceOff chat, settings and alerts ---------- */
+.hbtn { display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; flex: none; margin-left: .5rem; padding: 0;
+  background: transparent; color: var(--dim); border: 1px solid transparent; border-radius: 10px; cursor: pointer; }
+.hbtn:hover, .hbtn:focus-visible { color: var(--text); border-color: var(--line2); background: var(--raise); }
+.hbtn .ico { width: 1.25rem; height: 1.25rem; }
+.chat-fab { position: fixed; z-index: 60; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1rem; border-radius: 999px; cursor: pointer;
+  background: var(--acc); color: #04130E; border: 0; font: inherit; font-weight: 800; font-size: var(--s-1);
+  box-shadow: 0 8px 28px -8px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .08) inset; }
+.chat-fab:hover { filter: brightness(1.08); }
+.chat-fab .ico { width: 1.15rem; height: 1.15rem; stroke: currentColor; }
+.chat-fab[aria-expanded="true"] { display: none; }
+.chat { position: fixed; z-index: 70; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  width: min(27rem, calc(100vw - 32px)); height: min(40rem, 78vh); display: flex; flex-direction: column; min-height: 0;
+  background: var(--panel); border: 1px solid var(--line2); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .8); }
+.chat[hidden] { display: none; }
+.chat-h { display: flex; align-items: center; gap: .25rem; padding: .6rem .6rem .6rem .9rem; border-bottom: 1px solid var(--line); background: var(--bg); }
+.chat-h b { font-size: var(--s0); white-space: nowrap; }
+.chat-h .chat-sub { margin-right: auto; margin-left: .5rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-h .hbtn { margin-left: 0; }
+.chat-log { flex: 1; min-height: 0; overflow-y: auto; padding: .8rem .9rem; display: flex; flex-direction: column; gap: .6rem; overscroll-behavior: contain; }
+.cmsg { max-width: 92%; padding: .55rem .75rem; border-radius: 12px; font-size: var(--s-1); line-height: 1.45; overflow-wrap: anywhere; }
+.cmsg.u { align-self: flex-end; background: var(--acc-deep); color: var(--text); border-bottom-right-radius: 4px; }
+.cmsg.a { align-self: flex-start; background: var(--raise); border-bottom-left-radius: 4px; }
+.cmsg.err { align-self: stretch; max-width: none; background: color-mix(in srgb, var(--loss) 18%, var(--bg)); border: 1px solid color-mix(in srgb, var(--loss) 50%, var(--line)); }
+.cmsg ul { margin: .3rem 0; padding-left: 1.1rem; }
+.cmsg .cursor::after { content: ""; display: inline-block; width: .5rem; height: 1em; margin-left: 2px; vertical-align: -2px; background: var(--acc); animation: pulse 1s steps(2) infinite; }
+.chat-sugg { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chat-sugg button { background: var(--bg); color: var(--text); border: 1px solid var(--line2); border-radius: 999px; padding: .35rem .7rem; font: inherit; font-size: .78rem; cursor: pointer; text-align: left; }
+.chat-sugg button:hover { border-color: var(--acc); }
+.chat-f { display: flex; gap: .5rem; align-items: flex-end; padding: .6rem .7rem; border-top: 1px solid var(--line); background: var(--bg); }
+.chat-f textarea { flex: 1; min-width: 0; resize: none; max-height: 7rem; background: var(--panel); color: var(--text); border: 1px solid var(--line2);
+  border-radius: 10px; padding: .55rem .65rem; font: inherit; font-size: var(--s-1); line-height: 1.35; }
+.chat-f textarea:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.chat-note { margin: 0; padding: 0 .9rem .6rem; background: var(--bg); font-size: .68rem; color: var(--dim); }
+.sdlg { width: min(34rem, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 0; border: 1px solid var(--line2); border-radius: 14px;
+  background: var(--panel); color: var(--text); overflow: hidden; }
+.sdlg[open] { display: flex; flex-direction: column; }
+.sdlg::backdrop { background: rgba(5, 8, 12, .72); }
+.sdlg form { display: flex; flex-direction: column; min-height: 0; }
+.sdlg-h { display: flex; align-items: center; justify-content: space-between; padding: .8rem 1rem; border-bottom: 1px solid var(--line); }
+.sdlg-h h2 { margin: 0; font-size: var(--s1); }
+.sdlg-b { padding: .9rem 1rem; display: grid; gap: .9rem; overflow-y: auto; min-height: 0; }
+.sdlg fieldset { margin: 0; padding: 0; border: 0; display: grid; gap: .6rem; }
+.sdlg legend { padding: 0; margin-bottom: .3rem; font-weight: 800; font-size: var(--s0); }
+.sdlg label.f { display: grid; gap: .25rem; font-size: var(--s-1); color: var(--dim); }
+.sdlg input[type="text"], .sdlg input[type="password"], .sdlg input[type="url"], .sdlg input[type="number"], .sdlg select {
+  width: 100%; min-width: 0; background: var(--bg); color: var(--text); border: 1px solid var(--line2); border-radius: var(--r); padding: .5rem .6rem; font: inherit; }
+.sdlg input:focus-visible, .sdlg select:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.sdlg .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.sdlg .chk { display: flex; gap: .55rem; align-items: flex-start; font-size: var(--s-1); color: var(--text); }
+.sdlg .chk input { margin-top: .2rem; }
+.sdlg .hint { margin: 0; font-size: .74rem; color: var(--dim); line-height: 1.4; }
+.sdlg-f { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; padding: .8rem 1rem; border-top: 1px solid var(--line); background: var(--bg); }
+.sdlg .keyrow { display: grid; grid-template-columns: 1fr auto; gap: .4rem; }
+.sdlg .teamchips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.sdlg .teamchips .chip { cursor: pointer; background: var(--acc-deep); color: var(--text); border-color: var(--acc); }
+@media (max-width: 640px) {
+  .chat { right: 0; left: 0; bottom: 0; width: auto; height: 82vh; border-radius: 14px 14px 0 0; }
+  .sdlg .row2 { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .cmsg .cursor::after { animation: none; } }
 </style>
 
 <header class="top" id="top">
@@ -1523,10 +1585,109 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
       </div>
       <div class="qlist" id="qList" role="listbox" aria-label="Search results" hidden></div>
     </div>
+    <button type="button" class="hbtn" id="setOpen" aria-label="Settings" title="Settings" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
 </header>
 
 <main class="page" id="view" tabindex="-1"></main>
+
+<button type="button" class="chat-fab" id="chatFab" aria-label="Ask FaceOff, the assistant" aria-expanded="false" aria-controls="chat">
+  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20.5l1.5-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+  <span>Ask FaceOff</span>
+</button>
+
+<section class="chat" id="chat" role="dialog" aria-label="Ask FaceOff" hidden>
+  <header class="chat-h">
+    <b>Ask FaceOff</b>
+    <span class="chat-sub small dim" id="chatSub">answers from this site's data</span>
+    <button type="button" class="hbtn" id="chatClear" aria-label="Clear the conversation" title="Clear the conversation"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></svg></button>
+    <button type="button" class="hbtn" id="chatSet" aria-label="Open settings" title="Settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    <button type="button" class="hbtn" id="chatClose" aria-label="Close the chat" title="Close"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </header>
+  <div class="chat-log" id="chatLog" role="log" aria-live="polite" aria-label="Conversation"></div>
+  <form class="chat-f" id="chatForm" autocomplete="off">
+    <textarea id="chatIn" rows="1" maxlength="1200" placeholder="Ask about a team, a matchup or a map…" aria-label="Your question" enterkeyhint="send"></textarea>
+    <button type="submit" class="btn" id="chatSend">Send</button>
+  </form>
+  <p class="chat-note">Answers use only this site's data and your own API key. Win chances are model estimates, not betting advice.</p>
+</section>
+
+<dialog class="sdlg" id="setDlg" aria-labelledby="setT">
+  <form method="dialog" id="setForm">
+    <div class="sdlg-h">
+      <h2 id="setT">Settings</h2>
+      <button type="button" class="hbtn" id="setX" aria-label="Close settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="sdlg-b">
+      <fieldset>
+        <legend>Ask FaceOff (AI assistant)</legend>
+        <p class="hint">Bring your own key. The chat talks straight from your browser to the provider you pick; nothing goes through this site. The key is kept only in this browser.</p>
+        <div class="row2">
+          <label class="f">Provider
+            <select id="aiProv" name="provider">
+              <option value="anthropic">Anthropic (Claude)</option>
+              <option value="openai">OpenAI or compatible</option>
+            </select>
+          </label>
+          <label class="f">Model
+            <input type="text" id="aiModel" name="model" list="aiModels" autocomplete="off" spellcheck="false">
+            <datalist id="aiModels"></datalist>
+          </label>
+        </div>
+        <label class="f">API key
+          <span class="keyrow">
+            <input type="password" id="aiKey" name="key" autocomplete="off" spellcheck="false" placeholder="paste your key">
+            <button type="button" class="btn" id="aiKeyShow" aria-pressed="false">Show</button>
+          </span>
+        </label>
+        <label class="f">Base URL <span class="dim">(optional: OpenRouter, a local model, a proxy)</span>
+          <input type="url" id="aiBase" name="base" autocomplete="off" spellcheck="false" placeholder="https://api.openai.com/v1">
+        </label>
+        <div class="row2">
+          <label class="f">Answer length
+            <select id="aiStyle" name="style">
+              <option value="concise">Concise</option>
+              <option value="detailed">Detailed</option>
+            </select>
+          </label>
+          <label class="f">Answer delivery
+            <select id="aiStream" name="stream">
+              <option value="1">Stream as it is written</option>
+              <option value="0">Show when complete</option>
+            </select>
+          </label>
+        </div>
+        <label class="chk"><input type="checkbox" id="aiRemember" name="remember"> <span>Remember on this device. Untick to keep the key only until you close the tab.</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Alerts</legend>
+        <p class="hint">Alerts fire while this page is open: a reminder before a followed team's match and a note when its result lands.</p>
+        <label class="f">Follow teams
+          <input type="text" id="alAdd" list="alTeams" autocomplete="off" placeholder="Type a team and press Enter">
+          <datalist id="alTeams"></datalist>
+        </label>
+        <div class="teamchips" id="alChips" aria-live="polite"></div>
+        <div class="row2">
+          <label class="f">Reminder lead time (minutes)
+            <input type="number" id="alLead" min="0" max="180" step="5" inputmode="numeric">
+          </label>
+          <label class="chk" style="align-self:end"><input type="checkbox" id="alResults"> <span>Tell me results</span></label>
+        </div>
+        <label class="chk"><input type="checkbox" id="alBrowser"> <span>Browser notification <span class="dim" id="alBrowserNote"></span></span></label>
+        <label class="f">Discord webhook <span class="dim">(optional: posts the alert to your channel)</span>
+          <input type="url" id="alDiscord" autocomplete="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/…">
+        </label>
+        <div><button type="button" class="btn" id="alTest">Send a test alert</button> <span class="small dim" id="alTestNote"></span></div>
+      </fieldset>
+      <p class="hint" id="setStatus" role="status"></p>
+    </div>
+    <div class="sdlg-f">
+      <button type="button" class="btn" id="aiClearKey">Clear key</button>
+      <button type="button" class="btn" id="setCancel">Cancel</button>
+      <button type="submit" class="btn" id="setSave" style="background:var(--acc);color:#04130E;font-weight:800">Save</button>
+    </div>
+  </form>
+</dialog>
 
 <script>
 const DATA = /*__DATA__*/null;
@@ -2222,7 +2383,7 @@ function matchDesk(pred, a, b, o = {}) {
   // the section tabs ride in the court's control row (left), next to Format / Swap (right)
   const SHORT = { h2h: "H2H", pools: "Maps" };   // phone labels, so all four tabs fit in one row
   const tabs = `<div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}" aria-label="${esc(l)}">${ICON[k]}<span class="tl-full">${l}</span><span class="tl-short" aria-hidden="true">${SHORT[k] || l}</span></button>`).join("")}</div>`;
-  return `${o.ctx || ""}<div class="desk-stale">${staleBadge(true)}</div>${court(pred, a, b, { ...o, tabs }, bo)}
+  return `${o.ctx || ""}${court(pred, a, b, { ...o, tabs }, bo)}
     <div class="desk-main" role="tabpanel">${body}</div>`;
 }
 
@@ -3504,8 +3665,525 @@ document.addEventListener("keydown", e => {
 document.addEventListener("pointerdown", e => { if (!e.target.closest("#qwrap")) { closeList(); if (!$("#q").value.trim()) closeSearch(false); } });
 window.addEventListener("hashchange", () => closeSearch(true));
 
-// header badge: every page carries the bundle vintage (injected after all helpers exist)
-document.getElementById("qwrap").insertAdjacentHTML("beforebegin", staleBadge(false));
+/* ---------------- Ask FaceOff: settings, chat and alerts ----------------
+   Everything runs in the visitor's browser. The chat sends one request straight to the LLM
+   provider the visitor chose, with their own key; this site has no server and sees neither.
+   The model is given a compact context built from this page's own data (teams named in the
+   question, the matchup's win chance and likely scores, head-to-head, upcoming fixtures). */
+(() => {
+  const AI_KEY = "faceoff.ai.v1", AL_KEY = "faceoff.alerts.v1";
+  const AI_DEF = { provider: "anthropic", model: "claude-sonnet-5-5", key: "", base: "", style: "concise", stream: true, remember: true };
+  const AL_DEF = { teams: [], lead: 15, results: true, browser: false, discord: "", seen: {}, sent: {}, primed: false };
+  const MODELS = {
+    anthropic: ["claude-sonnet-5-5", "claude-opus-5-5", "claude-haiku-4-5-20251001"],
+    openai: ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini"],
+  };
+  const DISCORD_RE = /^https:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api\/webhooks\//;
+  const el = id => document.getElementById(id);
+
+  /* ---------- storage ---------- */
+  const readStore = (area, key) => { try { return JSON.parse(window[area].getItem(key) || "null"); } catch { return null; } };
+  const aiLoad = () => ({ ...AI_DEF, ...(readStore("localStorage", AI_KEY) || {}), ...(readStore("sessionStorage", AI_KEY) || {}) });
+  function aiSave(c) {
+    const keep = c.remember ? "localStorage" : "sessionStorage", drop = c.remember ? "sessionStorage" : "localStorage";
+    try { window[keep].setItem(AI_KEY, JSON.stringify(c)); window[drop].removeItem(AI_KEY); } catch { /* storage blocked: settings last for this page view only */ }
+  }
+  const alLoad = () => ({ ...AL_DEF, ...(readStore("localStorage", AL_KEY) || {}) });
+  const alSave = a => { try { localStorage.setItem(AL_KEY, JSON.stringify(a)); } catch { /* ignore */ } };
+
+  /* ---------- context from the page's own data ---------- */
+  const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  let NAMES = null, PLAYERS = null;
+  function nameIndex() {
+    if (NAMES) return NAMES;
+    NAMES = [];
+    for (const t of Object.keys(T)) {
+      const full = norm(t), short = full.replace(/^team /, "");
+      for (const k of new Set([full, short])) if (k.length >= 2) NAMES.push([k, t]);
+    }
+    NAMES.sort((a, b) => b[0].length - a[0].length);
+    PLAYERS = {};
+    for (const [t, x] of Object.entries(T)) {
+      for (const p of x.roster || []) {
+        const nm = norm((DATA.players[p.id.toLowerCase()] || {}).name || p.id);
+        const id = norm(p.id);
+        for (const k of [id, nm]) if (k.length >= 3 && !(k in PLAYERS)) PLAYERS[k] = t;
+      }
+    }
+    return NAMES;
+  }
+  function teamsIn(text) {
+    let q = " " + norm(text) + " ";
+    const out = [];
+    for (const [k, t] of nameIndex()) {
+      const needle = " " + k + " ";
+      if (q.includes(needle)) {
+        if (!out.includes(t)) out.push(t);
+        q = q.split(needle).join("  ");
+      }
+      if (out.length >= 4) return out;
+    }
+    for (const w of q.split(" ")) {
+      const t = w.length >= 3 && PLAYERS[w];
+      if (t && !out.includes(t) && out.length < 4) out.push(t);
+    }
+    return out;
+  }
+  const PC = x => (x * 100).toFixed(1) + "%";
+  function fixtureLine(f) {
+    const p = f.prediction;
+    return `${f.day || "TBA"} ${f.event}, ${f.stage}: ${f.team_a} vs ${f.team_b} (Bo${f.best_of}); ${f.team_a} win chance ${PC(p.win_prob_a)}, most likely score ${p.modal_scoreline}`;
+  }
+  function teamCard(t) {
+    const x = T[t];
+    if (!x) return { team: t, note: "no data" };
+    const maps = Object.entries(x.maps || {}).filter(([, v]) => v && v[1]).sort((a, b) => b[1][1] - a[1][1])
+      .map(([m, v]) => `${m} ${Math.round(v[0] * 100)}% over ${v[1]} played`);
+    return {
+      team: t,
+      valve_rank: x.vrs ? x.vrs.rank : null,
+      elo: x.elo,
+      series_in_data: x.series,
+      series_won_last_30_days: x.form30 == null ? null : `${Math.round(x.form30 * 100)}% of ${x.n30}`,
+      players: (x.roster || []).map(p => ((DATA.players[p.id.toLowerCase()] || {}).name || p.id) + (p.coach ? " (coach)" : "")),
+      last_results: (x.results || []).slice(0, 6).map(r => `${r.date} ${r.won ? "won" : "lost"} ${r.score} vs ${r.opp} (${r.event})`),
+      maps_last_90_days: maps.slice(0, 8),
+      upcoming: FIXTURES.filter(f => f.team_a === t || f.team_b === t).slice(0, 3).map(fixtureLine),
+    };
+  }
+  function matchupCard(a, b) {
+    let pred = null;
+    try { pred = matchupPred(null, a, b); } catch { /* no pair */ }
+    const out = { team_a: a, team_b: b };
+    if (pred) {
+      const p3 = pFor(pred, 3).p;
+      out.win_chance_best_of_3 = { [a]: PC(p3), [b]: PC(1 - p3) };
+      out.win_chance_best_of_1 = { [a]: PC(pFor(pred, 1).p) };
+      out.win_chance_best_of_5 = { [a]: PC(pFor(pred, 5).p) };
+      out.likely_scores_bo3 = scoreSet(pred, 3).map(x => `${winOf(x) ? a : b} ${scoreFrom(x, winOf(x))}: ${PC(x.p)}`);
+      out.simulated_veto = (pred.veto || []).map(s => s.verb === "decider" ? `decider ${s.map}`
+        : `${s.side === "A" ? a : b} ${s.verb === "bans" ? "bans" : "picks"} ${s.map}`);
+      out.reliability = pred.rel;
+    } else out.note = "no model call for this pair (a team has no lineup or results in the data)";
+    const h = (DATA.h2h[[a, b].sort().join("|")] || []).slice(0, 6);
+    out.head_to_head_recent = h.map(x => `${x.date}: ${x.winner} won${x.score ? " " + x.score : ""} (${x.event})`);
+    return out;
+  }
+  function buildContext(text, teams) {
+    const ctx = {
+      data_through: META.data_through,
+      note: "win chances are the model's pre-match estimates; elo is a series-level rating",
+      teams: teams.map(teamCard),
+    };
+    if (teams.length >= 2) ctx.matchup = matchupCard(teams[0], teams[1]);
+    if (teams.length === 3 || teams.length === 4) ctx.other_pairs = [matchupCard(teams[0], teams[2])];
+    if (!teams.length || /\b(top|best|rank|ranking|favou?rite|strongest)\b/i.test(text)) {
+      ctx.top_teams_by_elo = Object.entries(T).filter(([, x]) => x.series && x.elo != null).sort((a, b) => b[1].elo - a[1].elo)
+        .slice(0, 12).map(([t, x]) => `${t} (elo ${x.elo}${x.vrs ? ", valve rank " + x.vrs.rank : ""})`);
+    }
+    if (!teams.length || /\b(next|today|tomorrow|upcoming|schedule|play|when|semifinal|final)\b/i.test(text)) {
+      ctx.upcoming_fixtures = FIXTURES.slice(0, 8).map(fixtureLine);
+    }
+    if (/\b(accura|track|right|correct|how good|reliab)/i.test(text) && DATA.report && DATA.report.models) {
+      const m = DATA.report.models.new_engine;
+      if (m) ctx.model_track_record = { accuracy: m.accuracy, brier: m.brier, held_out_series: DATA.report.data && DATA.report.data.test };
+    }
+    return JSON.stringify(ctx);
+  }
+  const SYSTEM = style => [
+    "You are Ask FaceOff, the assistant inside FaceOff Analytics, a fan-analytics site for professional Counter-Strike 2.",
+    "Answer only from the CONTEXT block below. If it does not hold the answer, say so plainly and point to the page that would (Matchups, Tournaments, Teams or Stats). Never invent results, rosters, ranks, maps or probabilities.",
+    "Probabilities are the model's pre-match win chances: estimates with uncertainty, never certainties. Say 'win chance'. Do not give betting advice, wager picks, odds or stake suggestions; if asked for them, decline in one sentence and offer the analysis instead.",
+    style === "detailed"
+      ? "Be thorough but organised: short paragraphs or bullet points, naming the maps, scores and dates you rely on."
+      : "Be brief: two to five sentences or a short list. Lead with the answer.",
+    "Write plain text. You may use **bold** for the key figure and '- ' bullets.",
+  ].join("\n");
+
+  /* ---------- provider calls ---------- */
+  async function httpError(res) {
+    let msg = "";
+    try { const j = await res.json(); msg = (j.error && (j.error.message || j.error)) || j.message || ""; } catch { /* no body */ }
+    const hint = res.status === 401 || res.status === 403 ? "The provider rejected the key; check it in Settings."
+      : res.status === 429 ? "Rate limit or quota reached; try again shortly."
+      : res.status === 404 ? "Model or URL not found; check the model name and base URL." : "";
+    return new Error(`${res.status}${msg ? ": " + msg : ""}${hint ? " " + hint : ""}`.trim());
+  }
+  async function readSSE(res, onData) {
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let i;
+      while ((i = buf.search(/\r?\n\r?\n/)) >= 0) {
+        const block = buf.slice(0, i);
+        buf = buf.slice(i).replace(/^\r?\n\r?\n/, "");
+        for (const line of block.split(/\r?\n/)) if (line.startsWith("data:")) onData(line.slice(5).trim());
+      }
+    }
+  }
+  async function aiAsk(cfg, system, messages, onDelta, signal) {
+    const stream = !!cfg.stream;
+    if (cfg.provider === "anthropic") {
+      const base = (cfg.base || "https://api.anthropic.com").replace(/\/+$/, "");
+      const res = await fetch(base + "/v1/messages", {
+        method: "POST", signal,
+        headers: { "content-type": "application/json", "x-api-key": cfg.key, "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true" },
+        body: JSON.stringify({ model: cfg.model, max_tokens: cfg.style === "detailed" ? 1600 : 700, system, messages, stream }),
+      });
+      if (!res.ok) throw await httpError(res);
+      if (!stream) {
+        const j = await res.json();
+        onDelta((j.content || []).map(b => b.text || "").join(""));
+        return;
+      }
+      await readSSE(res, d => {
+        let ev;
+        try { ev = JSON.parse(d); } catch { return; }
+        if (ev.type === "content_block_delta" && ev.delta && ev.delta.text) onDelta(ev.delta.text);
+        else if (ev.type === "error") throw new Error((ev.error && ev.error.message) || "The provider reported an error.");
+      });
+      return;
+    }
+    const base = (cfg.base || "https://api.openai.com/v1").replace(/\/+$/, "");
+    const res = await fetch(base + "/chat/completions", {
+      method: "POST", signal,
+      headers: { "content-type": "application/json", authorization: "Bearer " + cfg.key },
+      body: JSON.stringify({ model: cfg.model, stream, max_tokens: cfg.style === "detailed" ? 1600 : 700,
+        messages: [{ role: "system", content: system }, ...messages] }),
+    });
+    if (!res.ok) throw await httpError(res);
+    if (!stream) {
+      const j = await res.json();
+      onDelta((j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || "");
+      return;
+    }
+    await readSSE(res, d => {
+      if (d === "[DONE]") return;
+      let ev;
+      try { ev = JSON.parse(d); } catch { return; }
+      const t = ev.choices && ev.choices[0] && ev.choices[0].delta && ev.choices[0].delta.content;
+      if (t) onDelta(t);
+    });
+  }
+
+  /* ---------- the chat panel ---------- */
+  const panel = el("chat"), fab = el("chatFab"), log = el("chatLog"), input = el("chatIn"), sendBtn = el("chatSend");
+  let hist = [], busy = false, ctrl = null, lastTeams = [];
+
+  // plain text -> safe HTML: escape first, then **bold**, "- " bullets, line breaks
+  function mdLite(text) {
+    const lines = esc(text).split(/\r?\n/);
+    let html = "", inList = false;
+    for (const raw of lines) {
+      const line = raw.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+      const m = /^\s*[-*]\s+(.*)$/.exec(line);
+      if (m) { if (!inList) { html += "<ul>"; inList = true; } html += `<li>${m[1]}</li>`; }
+      else { if (inList) { html += "</ul>"; inList = false; } html += line ? `<div>${line}</div>` : "<div>&nbsp;</div>"; }
+    }
+    return html + (inList ? "</ul>" : "");
+  }
+  function addMsg(kind, text, live) {
+    const d = document.createElement("div");
+    d.className = "cmsg " + kind;
+    if (kind === "u") d.textContent = text;
+    else d.innerHTML = mdLite(text);
+    if (live) d.classList.add("cursor");
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+  function paint(d, text, live) {
+    d.innerHTML = mdLite(text);
+    d.classList.toggle("cursor", !!live);
+    log.scrollTop = log.scrollHeight;
+  }
+  function setBusy(b) {
+    busy = b;
+    sendBtn.textContent = b ? "Stop" : "Send";
+    input.disabled = false;
+  }
+  function suggestions() {
+    const f = FIXTURES[0];
+    const top = Object.entries(T).filter(([, x]) => x.series && x.elo != null).sort((a, b) => b[1].elo - a[1].elo).map(x => x[0]);
+    const a = f ? f.team_a : top[0], b = f ? f.team_b : top[1];
+    return [
+      a && b ? `How do ${a} and ${b} match up?` : "Who are the top teams right now?",
+      a ? `Which maps does ${a} play best?` : "What are the strongest maps right now?",
+      "Who are the top 5 teams by rating?",
+      "What matches are coming up?",
+    ];
+  }
+  function welcome() {
+    log.textContent = "";
+    const cfg = aiLoad();
+    const d = addMsg("a", cfg.key
+      ? "Ask me about any team, player, map or matchup. I answer from this site's data, as of " + fmtDate(META.data_through) + "."
+      : "I answer questions about teams, matchups and maps from this site's data. To chat, add your own API key in Settings; it is kept only in this browser.");
+    if (!cfg.key) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "btn"; b.textContent = "Open settings"; b.style.marginTop = ".5rem";
+      b.addEventListener("click", openSettings);
+      d.appendChild(document.createElement("br")); d.appendChild(b);
+    }
+    const s = document.createElement("div");
+    s.className = "chat-sugg";
+    for (const q of suggestions()) {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = q;
+      b.addEventListener("click", () => { input.value = q; submit(); });
+      s.appendChild(b);
+    }
+    log.appendChild(s);
+  }
+  function openChat() {
+    if (!panel.hidden) return;
+    panel.hidden = false;
+    fab.setAttribute("aria-expanded", "true");
+    if (!lastTeams.length && desk && desk.a && desk.b) lastTeams = [desk.a, desk.b];
+    if (!log.children.length) welcome();
+    el("chatSub").textContent = aiLoad().key ? "answers from this site's data" : "add an API key in Settings to chat";
+    input.focus();
+  }
+  function closeChat() {
+    panel.hidden = true;
+    fab.setAttribute("aria-expanded", "false");
+    fab.focus();
+  }
+  async function submit() {
+    if (busy) { if (ctrl) ctrl.abort(); return; }
+    const text = input.value.trim();
+    if (!text) return;
+    const cfg = aiLoad();
+    input.value = ""; autosize();
+    log.querySelectorAll(".chat-sugg").forEach(n => n.remove());
+    addMsg("u", text);
+    if (!cfg.key) {
+      addMsg("err", "No API key yet. Add yours in Settings (the gear), then ask again.");
+      return;
+    }
+    const found = teamsIn(text);
+    if (found.length) lastTeams = found;
+    const system = SYSTEM(cfg.style) + "\n\nCONTEXT (this site's data, JSON):\n" + buildContext(text, found.length ? found : lastTeams);
+    const msgs = [...hist.slice(-8), { role: "user", content: text }];
+    const bubble = addMsg("a", "", true);
+    ctrl = new AbortController();
+    setBusy(true);
+    let full = "";
+    try {
+      await aiAsk(cfg, system, msgs, d => { full += d; paint(bubble, full, true); }, ctrl.signal);
+      paint(bubble, full || "The model returned no text.", false);
+      hist.push({ role: "user", content: text }, { role: "assistant", content: full });
+    } catch (e) {
+      if (e && e.name === "AbortError") paint(bubble, full ? full + "\n\n(stopped)" : "(stopped)", false);
+      else {
+        bubble.remove();
+        const net = e instanceof TypeError;
+        addMsg("err", net
+          ? "Could not reach the provider. Check your connection, the base URL, and that the provider allows requests from a browser."
+          : String((e && e.message) || e));
+      }
+    } finally {
+      ctrl = null;
+      setBusy(false);
+    }
+  }
+  function autosize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 112) + "px";
+  }
+  fab.addEventListener("click", openChat);
+  el("chatClose").addEventListener("click", closeChat);
+  el("chatSet").addEventListener("click", openSettings);
+  el("chatClear").addEventListener("click", () => { if (ctrl) ctrl.abort(); hist = []; welcome(); });
+  el("chatForm").addEventListener("submit", e => { e.preventDefault(); submit(); });
+  input.addEventListener("input", autosize);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); submit(); }
+  });
+  panel.addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); closeChat(); } });
+
+  /* ---------- settings dialog ---------- */
+  const dlg = el("setDlg");
+  let draftTeams = [];
+  function fillModels(provider) {
+    el("aiModels").innerHTML = MODELS[provider].map(m => `<option value="${esc(m)}"></option>`).join("");
+    el("aiBase").placeholder = provider === "anthropic" ? "https://api.anthropic.com" : "https://api.openai.com/v1";
+  }
+  function paintChips() {
+    el("alChips").innerHTML = draftTeams.length
+      ? draftTeams.map(t => `<button type="button" class="chip" data-rm="${esc(t)}" title="Stop following ${esc(t)}">${esc(t)} &times;</button>`).join("")
+      : `<span class="small dim">No teams followed yet.</span>`;
+  }
+  function openSettings() {
+    const c = aiLoad(), a = alLoad();
+    el("aiProv").value = c.provider;
+    fillModels(c.provider);
+    el("aiModel").value = c.model;
+    el("aiKey").value = c.key; el("aiKey").type = "password"; el("aiKeyShow").textContent = "Show"; el("aiKeyShow").setAttribute("aria-pressed", "false");
+    el("aiBase").value = c.base;
+    el("aiStyle").value = c.style;
+    el("aiStream").value = c.stream ? "1" : "0";
+    el("aiRemember").checked = !!c.remember;
+    draftTeams = [...a.teams];
+    el("alLead").value = a.lead;
+    el("alResults").checked = !!a.results;
+    el("alBrowser").checked = !!a.browser && "Notification" in window && Notification.permission === "granted";
+    el("alBrowserNote").textContent = !("Notification" in window) ? "(not supported in this browser)"
+      : Notification.permission === "denied" ? "(blocked in your browser settings)" : "";
+    el("alDiscord").value = a.discord;
+    el("alTeams").innerHTML = Object.keys(T).sort().map(t => `<option value="${esc(t)}"></option>`).join("");
+    el("alTestNote").textContent = ""; el("setStatus").textContent = "";
+    paintChips();
+    if (!dlg.open) dlg.showModal();
+  }
+  function addTeamFromField() {
+    const v = el("alAdd").value.trim();
+    if (!v) return;
+    const hit = Object.keys(T).find(t => norm(t) === norm(v)) || (nameIndex().find(([k]) => k === norm(v)) || [])[1];
+    if (!hit) { el("setStatus").textContent = `No team called "${v}" in the data.`; return; }
+    if (!draftTeams.includes(hit)) draftTeams.push(hit);
+    el("alAdd").value = ""; el("setStatus").textContent = ""; paintChips();
+  }
+  el("alAdd").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addTeamFromField(); } });
+  el("alAdd").addEventListener("change", addTeamFromField);
+  el("alChips").addEventListener("click", e => {
+    const b = e.target.closest("[data-rm]");
+    if (b) { draftTeams = draftTeams.filter(t => t !== b.dataset.rm); paintChips(); }
+  });
+  el("aiProv").addEventListener("change", () => {
+    const p = el("aiProv").value;
+    fillModels(p);
+    const cur = el("aiModel").value.trim();
+    if (!cur || Object.values(MODELS).some(l => l.includes(cur))) el("aiModel").value = MODELS[p][0];
+  });
+  el("aiKeyShow").addEventListener("click", () => {
+    const shown = el("aiKey").type === "text";
+    el("aiKey").type = shown ? "password" : "text";
+    el("aiKeyShow").textContent = shown ? "Show" : "Hide";
+    el("aiKeyShow").setAttribute("aria-pressed", String(!shown));
+  });
+  el("aiClearKey").addEventListener("click", () => {
+    el("aiKey").value = "";
+    const c = aiLoad(); c.key = ""; aiSave(c);
+    el("setStatus").textContent = "Key removed from this browser.";
+    if (!panel.hidden) { hist = []; welcome(); el("chatSub").textContent = "add an API key in Settings to chat"; }
+  });
+  const closeSettings = () => { if (dlg.open) dlg.close(); };
+  el("setX").addEventListener("click", closeSettings);
+  el("setCancel").addEventListener("click", closeSettings);
+  dlg.addEventListener("click", e => { if (e.target === dlg) closeSettings(); });
+  el("setForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const prov = el("aiProv").value;
+    const base = el("aiBase").value.trim();
+    if (base && !/^https?:\/\//i.test(base)) { el("setStatus").textContent = "The base URL must start with https:// (or http:// for a local model)."; return; }
+    const hook = el("alDiscord").value.trim();
+    if (hook && !DISCORD_RE.test(hook)) { el("setStatus").textContent = "That does not look like a Discord webhook URL."; return; }
+    aiSave({
+      provider: prov, model: el("aiModel").value.trim() || MODELS[prov][0], key: el("aiKey").value.trim(), base,
+      style: el("aiStyle").value, stream: el("aiStream").value === "1", remember: el("aiRemember").checked,
+    });
+    let wantBrowser = el("alBrowser").checked;
+    if (wantBrowser && "Notification" in window && Notification.permission === "default") {
+      try { await Notification.requestPermission(); } catch { /* ignore */ }
+    }
+    if (wantBrowser && !("Notification" in window && Notification.permission === "granted")) wantBrowser = false;
+    const a = alLoad();
+    alSave({ ...a, teams: draftTeams, lead: Math.max(0, Math.min(180, +el("alLead").value || 0)),
+      results: el("alResults").checked, browser: wantBrowser, discord: hook });
+    el("setStatus").textContent = "Saved.";
+    el("chatSub").textContent = aiLoad().key ? "answers from this site's data" : "add an API key in Settings to chat";
+    if (!panel.hidden && !hist.length) welcome();
+    startAlerts();
+    setTimeout(closeSettings, 350);
+  });
+  el("setOpen").addEventListener("click", openSettings);
+
+  /* ---------- alerts ---------- */
+  async function deliver(a, title, body) {
+    const sent = [];
+    if (a.browser && "Notification" in window && Notification.permission === "granted") {
+      try { new Notification(title, { body, tag: title }); sent.push("browser"); } catch { /* ignore */ }
+    }
+    if (a.discord && DISCORD_RE.test(a.discord)) {
+      try {
+        const r = await fetch(a.discord, { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ content: `**${title}**\n${body}`, allowed_mentions: { parse: [] } }) });
+        if (r.ok) sent.push("Discord");
+      } catch { /* ignore */ }
+    }
+    return sent;
+  }
+  el("alTest").addEventListener("click", async () => {
+    const hook = el("alDiscord").value.trim();
+    if (hook && !DISCORD_RE.test(hook)) { el("alTestNote").textContent = "Not a Discord webhook URL."; return; }
+    let browser = el("alBrowser").checked;
+    if (browser && "Notification" in window && Notification.permission === "default") {
+      try { await Notification.requestPermission(); } catch { /* ignore */ }
+    }
+    browser = browser && "Notification" in window && Notification.permission === "granted";
+    const sent = await deliver({ browser, discord: hook }, "FaceOff test alert", "Alerts for your followed teams will arrive like this.");
+    el("alTestNote").textContent = sent.length ? "Sent via " + sent.join(" and ") + "." : "Nothing was sent: tick browser notifications (and allow them) or add a webhook.";
+  });
+  const alertsOn = a => a.teams.length && (a.browser || a.discord);
+  async function checkReminders() {
+    const a = alLoad();
+    if (!alertsOn(a)) return;
+    const now = Date.now();
+    let changed = false;
+    for (const m of Object.values(MATCH)) {
+      if (m.finished || !m.t1 || !m.t2 || !m.when) continue;
+      if (!a.teams.includes(m.t1) && !a.teams.includes(m.t2)) continue;
+      const start = Date.parse(m.when);
+      if (!(start > 0)) continue;
+      const key = "r" + m.id;
+      if (a.sent[key] || now < start - a.lead * 60000 || now > start + 10 * 60000) continue;
+      a.sent[key] = now; changed = true;
+      const mins = Math.max(0, Math.round((start - now) / 60000));
+      const pred = m.pred ? decode(m.pred) : null;
+      const pick = pred ? (() => { const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p; return `. Model: ${p >= 0.5 ? m.t1 : m.t2} ${PC(Math.max(p, 1 - p))} to win`; })() : "";
+      const ev = EV_BY[m.ev];
+      await deliver(a, `${m.t1} vs ${m.t2} ${mins ? "starts in " + mins + " min" : "is starting"}`, `${ev ? ev.name + ", " : ""}${m.stage}${pick}`);
+    }
+    if (changed) alSave(a);
+  }
+  async function checkResults() {
+    const a = alLoad();
+    if (!alertsOn(a) || !a.results) return;
+    let st;
+    try {
+      const r = await fetch("status.json?ts=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return;
+      st = await r.json();
+    } catch { return; }
+    const fresh = a.primed ? (st.results || []).filter(x => !a.seen[x.id]) : [];
+    for (const x of st.results || []) a.seen[x.id] = 1;
+    a.primed = true;
+    const ids = Object.keys(a.seen);
+    if (ids.length > 400) for (const k of ids.slice(0, ids.length - 400)) delete a.seen[k];
+    alSave(a);
+    for (const x of fresh) {
+      if (!a.teams.includes(x.team_a) && !a.teams.includes(x.team_b)) continue;
+      const loser = x.winner === x.team_a ? x.team_b : x.team_a;
+      await deliver(a, `${x.winner} beat ${loser} ${x.series_score}`, `${x.event}${x.stage ? ", " + x.stage : ""}`);
+    }
+  }
+  let alTimers = [];
+  function startAlerts() {
+    alTimers.forEach(clearInterval);
+    alTimers = [];
+    if (!alertsOn(alLoad())) return;
+    checkReminders();
+    alTimers.push(setInterval(checkReminders, 30000));
+    checkResults();
+    alTimers.push(setInterval(checkResults, 5 * 60000));
+  }
+  startAlerts();
+})();
 
 go();
 </script>

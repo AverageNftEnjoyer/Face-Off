@@ -29,6 +29,7 @@ import json
 import os
 import re
 import sys
+import time
 from collections import defaultdict
 from datetime import date, timedelta
 from typing import Any
@@ -43,6 +44,7 @@ import backtest as bt  # noqa: E402
 import events as E  # noqa: E402
 import predictor as pr  # noqa: E402
 import team_colors as TC  # noqa: E402
+import veto_cache as vc  # noqa: E402
 
 N_RECENT_CALLS = 20
 N_TEAM_RESULTS = 10
@@ -285,19 +287,58 @@ def vd_encode(raw):
             "w": list(warns)}
 
 
+def vd_cache_path():
+    return os.environ.get("FACEOFF_VD_CACHE_FILE") or os.path.join(ROOT, "data", "veto_dist_cache.json")
+
+
 def run_vdist():
-    """Fill every queued prediction's "vd" (in parallel when fork is available)."""
+    """Fill every queued prediction's "vd". Content-addressed cache first, in the
+    parent (viewer/veto_cache.py; FACEOFF_NO_VD_CACHE=1 turns it off); only the
+    distinct misses go to the workers (fork pool where available, else serial),
+    and results are merged back in queue order."""
+    t0 = time.time()
     jobs = VD_JOBS
     inps = [i for _, i in jobs]
-    try:
-        import multiprocessing as mp
-        with mp.get_context("fork").Pool() as pool:
-            res = pool.map(_vd_run, inps, chunksize=64)
-    except (ValueError, OSError, ImportError):
-        res = [_vd_run(i) for i in inps]
-    for (out, _), raw in zip(jobs, res):
+    on = not os.environ.get("FACEOFF_NO_VD_CACHE")
+    cache = vc.VetoCache(vd_cache_path(), vc.fingerprint(pr, pr._veto, VD_FORMATS, MARG_KEYS) if on else "",
+                         VD_FORMATS, MARG_KEYS, enabled=on)
+    keys = [vc.input_key(i) if on else None for i in inps]
+    res: list = [None] * len(inps)
+    todo = []                      # input indexes to compute: first of each distinct missing key
+    first = {}                     # key -> index in todo
+    follow = []                    # (input index, todo index) for repeats of a missing key
+    hits = 0
+    for n, k in enumerate(keys):
+        got = cache.get(k)
+        if got is not None:
+            res[n] = got
+            hits += 1
+        elif k is not None and k in first:
+            follow.append((n, first[k]))
+        else:
+            if k is not None:
+                first[k] = len(todo)
+            todo.append(n)
+    work = [inps[n] for n in todo]
+    out: list = []
+    if work:
+        try:
+            import multiprocessing as mp
+            with mp.get_context("fork").Pool() as pool:
+                out = pool.map(_vd_run, work, chunksize=64)
+        except (ValueError, OSError, ImportError):
+            out = [_vd_run(i) for i in work]
+    for n, r in zip(todo, out):
+        res[n] = r
+        cache.put(keys[n], r)
+    for n, t in follow:
+        res[n] = out[t]
+    for (o, _), raw in zip(jobs, res):
         if raw:
-            out["vd"] = {str(bo): vd_encode(r) for bo, r in raw.items()}
+            o["vd"] = {str(bo): vd_encode(r) for bo, r in raw.items()}
+    kept = cache.save(set(keys)) if on else 0
+    print(f"veto distributions: {len(inps)} inputs, {hits} cache hits, {len(todo)} computed, "
+          f"{len(follow)} repeats; cache {'off' if not on else f'{kept} entries'}; {time.time() - t0:.1f}s")
     jobs.clear()
 
 
