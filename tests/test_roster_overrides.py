@@ -98,6 +98,7 @@ class DateCutoff(unittest.TestCase):
     def test_players_normalised_lowercase(self):
         o = LF.parse_override({"team": "Alpha", "from": day(1), "kind": "stand_in",
                                "players": [" O1", "O2", "o3", "o4", "o5"]})
+        assert o is not None
         self.assertEqual(o["players"][0], "o1")
 
 

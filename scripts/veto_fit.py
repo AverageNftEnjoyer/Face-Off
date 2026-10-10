@@ -27,6 +27,7 @@ import multiprocessing as mp
 import os
 import sys
 import time
+from typing import Any
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -72,6 +73,7 @@ def _init(ctxs, obs):
 
 def _chunk(args):
     w, lo, hi = args
+    assert _CTX is not None and _OBS is not None
     return [veto.loglik(_CTX[i], w, _OBS[i])[0] for i in range(lo, hi)]
 
 
@@ -161,7 +163,7 @@ def history_factory(w_post, roster=False):
     lineups = LF.load() if roster else None
 
     def make(leaky=False):
-        h = bt.History()
+        h: Any = bt.History()
         h.habits = bt.HabitAccumulator(lambda inp, pl: pr.veto_posterior(inp, pl, w_post), leaky=leaky,
                                        core_fn=h.core_five if roster else None)
         if roster:
@@ -244,6 +246,7 @@ def fit_phase(phase, rows, procs, best_of=3, ctx_fn=None, warm=None, excl_grid=N
         log(f"{grid_key} {a}: inner fit {v:.6f}, inner val {vv:.6f} ({time.time() - t0:.0f}s)")
         if best is None or vv > best[1]:
             best = (a, vv, w)
+    assert best is not None
     a = best[0]
     obj = Objective(contexts(train, a, best_of, ctx_fn, grid_key), [r["played"] for r in train], procs)
     try:
@@ -344,9 +347,9 @@ def main(argv=None):
             rr = rep["phases"][a.ref]
             ref = {"params": rr["params"],
                    "overrides": dict(rr.get("config_overrides", {}), **{rr["grid_key"]: rr["grid_value"]})}
-        leak = None
+        leak_fn = None
         if a.phase in ("p3", "p4"):
-            def leak():
+            def _leak_check():
                 import leakage_check as LC
                 import backtest as bt
                 saved_c = copy.deepcopy(pr.CONFIG)
@@ -363,7 +366,8 @@ def main(argv=None):
                 ok = not probs and excl > 0 and status == "caught"
                 return ok, {"differing_distributions": len(probs), "exclusion_canary_days": excl,
                             "habit_canary": status, "days_with_habits": 4}
-        g = H.gate(a.phase, res["params"], over_g, out, rows, best_of, ref_model=ref, leakage_fn=leak,
+            leak_fn = _leak_check
+        g = H.gate(a.phase, res["params"], over_g, out, rows, best_of, ref_model=ref, leakage_fn=leak_fn,
                    note=a.note)
         print(json.dumps({k: g[k] for k in ("checks", "passed", "pick_set_hit_diff", "loglik_diff")}, indent=1))
     return 0

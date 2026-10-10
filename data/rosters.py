@@ -36,6 +36,16 @@ import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
+# --candidate: write data/roster_events.candidate.json instead of the live file.
+# Roster changes are SUPERVISED: the candidate is diffed against the live file
+# by scripts/roster_watch.py, and a human promotes it only after review.
+# Auto-applying roster changes corrupts everything downstream, so the daily
+# refresh never writes the live file directly.
+CANDIDATE = "--candidate" in sys.argv
+
+
+def out_name():
+    return "roster_events.candidate.json" if CANDIDATE else "roster_events.json"
 LINK = re.compile(r"\[\[([^|\]]+)(?:\|[^\]]*)?\]\]")
 
 
@@ -92,12 +102,12 @@ def main():
     ms = json.load(open(os.path.join(HERE, "matches.json"), encoding="utf-8"))
     teams = sorted({m["team_a"] for m in ms} | {m["team_b"] for m in ms})
     out, texts = build(teams)
-    with open(os.path.join(HERE, "roster_events.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(HERE, out_name()), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False, sort_keys=True)
     n_rows = sum(len(v) for v in out.values())
     n_igl = sum(1 for v in out.values() for e in v.values() if e["missing_igl"])
     print(f"team pages {len(texts)}/{len(teams)}; teams with stand-ins {len(out)}; "
-          f"team-tournament stand-in events {n_rows} ({n_igl} covering the IGL)")
+          f"team-tournament stand-in events {n_rows} ({n_igl} covering the IGL); wrote {out_name()}")
 
 
 if __name__ == "__main__":

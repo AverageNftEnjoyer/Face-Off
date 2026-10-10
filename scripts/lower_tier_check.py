@@ -64,6 +64,7 @@ import json
 import os
 import sys
 from datetime import timedelta
+from typing import Any
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -129,7 +130,7 @@ class LowerHistory(bt.History):
 def build(top, lower, w=None, mode="none"):
     """Rows for the S/A series only, like bt.build_dataset, with lower-tier
     series folded in after each day's S/A series."""
-    h = bt.History() if w is None else LowerHistory(w, form=(mode == "form"))
+    h: Any = bt.History() if w is None else LowerHistory(w, form=(mode == "form"))
     by_day = {}
     for m in sorted(top, key=lambda m: (m["date"], m.get("id", 0))):
         by_day.setdefault(m["date"], ([], []))[0].append(m)
@@ -223,6 +224,7 @@ def main(argv=None):
             ys = {view: [wf.label(byid[i]) for i in lst] for view, lst in ids.items()}
         ratings[name] = {t: round(bt.elo_to_rating(h.elo[t]), 4) for t in
                          ("FaZe Clan", "Team Vitality", "Fnatic", "Eternal Fire", "Natus Vincere")}
+    assert ys is not None
     for name, _, _ in VARIANTS:
         v = {}
         for view in ids:

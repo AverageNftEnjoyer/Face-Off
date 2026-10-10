@@ -81,7 +81,7 @@ def data(mode):
     train, test = bt.chrono_split(ev, 0.6)
     keep = lambda rs: [r for r in rs if bt.actual_scoreline(r["match"])]
     train, test = keep(train), keep(test)
-    y = lambda rs: [L3.index(bt.actual_scoreline(r["match"])) for r in rs]
+    y = lambda rs: [L3.index(bt.actual_scoreline(r["match"]) or "") for r in rs]
     bo5, y5 = [], []
     for r in rows:
         m = r["match"]
@@ -154,10 +154,12 @@ def bo5_row(ds, ys):
 
 def main():
     for stream in (sys.stdout,):
-        try:
-            stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
+        reconfigure = getattr(stream, "reconfigure", None)   # absent on a redirected stream
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="replace")
+            except (AttributeError, ValueError):
+                pass
     print(f"shipped CONFIG: map_shape {pr.CONFIG['map_shape']}, map_scale {pr.CONFIG['map_scale']}, "
           f"w_veto {pr.CONFIG['w_veto']}")
     for mode in ("residual", "raw"):

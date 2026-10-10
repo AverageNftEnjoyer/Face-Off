@@ -21,7 +21,9 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    team in them (rosters, stand-ins, logos). Everything else keeps being
    served from the cache.
 3. Rebuild, in order: data/matches.json (collect_liquipedia), data/
-   roster_events.json (rosters), viewer/assets.json + new images
+   roster_events.candidate.json (rosters --candidate: SUPERVISED, a human
+   promotes it to roster_events.json after reviewing scripts/roster_watch.py's
+   diff), viewer/assets.json + new images
    (fetch_assets), data/vrs.json (Valve Regional Standings, from GitHub),
    data/lineups.json (per-series five-man lineups from Valve's standings
    detail pages, incremental: only snapshots newer than the file's newest
@@ -61,6 +63,7 @@ import lpfetch  # noqa: E402
 import events as E  # noqa: E402
 
 event_info, is_stage, SKIP_TIERTYPES = E.event_info, E.is_stage, E.SKIP_TIERTYPES
+sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
 REFRESH_DAYS = 3
 AHEAD_DAYS = 14        # upcoming events are re-read once they are this close
@@ -391,7 +394,19 @@ def main(argv=None):
 
     import rosters
     rosters.OFFLINE = False
+    # SUPERVISED roster flow: the refresh only stages a candidate; a human
+    # promotes it after reviewing the roster_watch diff. Auto-applying roster
+    # changes corrupts every downstream prediction.
+    rosters.CANDIDATE = True
     rosters.main()
+
+    import roster_watch
+    rc = roster_watch.main()
+    if rc == 1:
+        print("roster changes need human review: see data/roster_diff.md "
+              "(the live roster_events.json is unchanged)", file=sys.stderr)
+    elif rc == 2:
+        print("roster_watch found no candidate to diff", file=sys.stderr)
 
     import fetch_assets
     fetch_assets.OFFLINE = False

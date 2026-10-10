@@ -60,15 +60,15 @@ def main():
     train, test = bt.chrono_split(ev, 0.6)
     keep = lambda rs: [r for r in rs if bt.actual_scoreline(r["match"])]
     train, test = keep(train), keep(test)
-    y_tr = [LABELS.index(bt.actual_scoreline(r["match"])) for r in train]
-    y_te = [LABELS.index(bt.actual_scoreline(r["match"])) for r in test]
+    y_tr = [LABELS.index(bt.actual_scoreline(r["match"]) or "") for r in train]
+    y_te = [LABELS.index(bt.actual_scoreline(r["match"]) or "") for r in test]
 
     print(f"train {len(train)}  test {len(test)}  (BO3 with a known scoreline)")
     print("map_shape  train scoreline log loss")
     tr_scores = {s: logloss(dists(train, s), y_tr) for s in SHAPES}
     for s in SHAPES:
         print(f"  {s:4.2f}     {tr_scores[s]:.6f}")
-    best = min(tr_scores, key=tr_scores.get)
+    best = min(tr_scores, key=lambda s: tr_scores[s])
     print(f"chosen on train: map_shape {best}")
 
     flat, chosen, shipped = dists(test, 0.0), dists(test, best), dists(test, pr.CONFIG["map_shape"])

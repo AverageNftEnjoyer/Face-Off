@@ -268,7 +268,7 @@ CFG0 = copy.deepcopy(pr.CONFIG)
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n\n")[0])
     ap.add_argument("--evaluate", action="store_true", help="also score current vs fitted on the TEST split")
     args = ap.parse_args(argv)
 

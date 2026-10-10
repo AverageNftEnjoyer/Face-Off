@@ -117,6 +117,7 @@ def cached_listings():
         q = rec["response"].get("query", {})
         if "allpages" in q:
             m = re.search(r"apprefix=([^&]*)", rec["url"])
+            assert m is not None
             out[up.unquote_plus(m.group(1))] = [p["title"] for p in q["allpages"]]
     return out
 

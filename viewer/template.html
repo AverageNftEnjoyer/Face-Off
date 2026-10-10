@@ -340,6 +340,11 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 .chip.hit { color: var(--win); }
 .chip.miss { color: var(--loss); }
 .chip.plain { color: var(--dim); }
+/* staleness badge: one shared component, bundle-owned values, always visible */
+.stale { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .1rem .6rem; font-size: .72rem; color: var(--dim); border: 1px dashed var(--line); white-space: nowrap; }
+.stale b { color: var(--text); font-weight: 700; }
+.top .stale { margin-left: .6rem; }
+.desk-stale { margin: .4rem 0 .2rem; }
 
 /* standings */
 table { border-collapse: collapse; width: 100%; font-size: var(--s-1); }
@@ -1526,6 +1531,20 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 <script>
 const DATA = /*__DATA__*/null;
 const IMG = /*__IMAGES__*/null;
+const FIXTURES = /*__FIXTURES__*/null;   // upcoming matches, expanded prediction form (bundle schema v1)
+const RESULTS = /*__RESULTS__*/null;     // recent results with model verdicts (bundle schema v1)
+const META = /*__META__*/null;           // {bundle_version, generated_at, data_through, data_hash, vrs_date}
+
+/* Bundle contract: refuse to render a bundle whose schema version we don't understand. */
+if (!META || META.bundle_version !== 1 || !DATA || !FIXTURES || !RESULTS) {
+  document.getElementById("view").innerHTML = `<section class="panel"><h2>Data unavailable</h2>
+    <p class="dim">This page build's data bundle (v${META && META.bundle_version}) isn't supported by this page version. The site needs a fresh build from a compatible bundle.</p></section>`;
+  throw new Error("unsupported bundle: refusing to render");
+}
+
+/* Shared staleness badge: one component, bundle-owned values, rendered verbatim.
+   data_through is the last match date ingested; generated_at is the bundle build time. */
+const staleBadge = (long) => `<span class="stale" title="Bundle v${META.bundle_version} · built ${esc(META.generated_at)} · data hash ${esc(META.data_hash)}">data through <b>${esc(fmtDate(META.data_through))}</b>${long ? ` · built ${esc(META.generated_at)}` : ""}</span>`;
 
 /* ---------------- basics ---------------- */
 const $ = s => document.querySelector(s);
@@ -2203,7 +2222,7 @@ function matchDesk(pred, a, b, o = {}) {
   // the section tabs ride in the court's control row (left), next to Format / Swap (right)
   const SHORT = { h2h: "H2H", pools: "Maps" };   // phone labels, so all four tabs fit in one row
   const tabs = `<div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}" aria-label="${esc(l)}">${ICON[k]}<span class="tl-full">${l}</span><span class="tl-short" aria-hidden="true">${SHORT[k] || l}</span></button>`).join("")}</div>`;
-  return `${o.ctx || ""}${court(pred, a, b, { ...o, tabs }, bo)}
+  return `${o.ctx || ""}<div class="desk-stale">${staleBadge(true)}</div>${court(pred, a, b, { ...o, tabs }, bo)}
     <div class="desk-main" role="tabpanel">${body}</div>`;
 }
 
@@ -3116,7 +3135,7 @@ function viewRecord() {
   const fh = fav.filter(c => c.hit).length, dh = dog.filter(c => c.hit).length;
   return `
   <div style="display:grid;gap:.4rem">
-    <p class="small dim asof-line">Data as of <b>${esc(fmtDate(DATA.as_of))}</b></p>
+    <p class="small dim asof-line">${staleBadge(true)}</p>
   </div>
   <section class="board" aria-label="Headline numbers">
     <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
@@ -3484,6 +3503,9 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("pointerdown", e => { if (!e.target.closest("#qwrap")) { closeList(); if (!$("#q").value.trim()) closeSearch(false); } });
 window.addEventListener("hashchange", () => closeSearch(true));
+
+// header badge: every page carries the bundle vintage (injected after all helpers exist)
+document.getElementById("qwrap").insertAdjacentHTML("beforebegin", staleBadge(false));
 
 go();
 </script>

@@ -86,7 +86,17 @@ def main():
         paths = {r: f"standings_{r}_{d}.md" for r in REGIONS if os.path.exists(os.path.join(CACHE, f"standings_{r}_{d}.md"))}
     else:
         d, paths = latest_paths()
-    out = {"date": d.replace("_", "-"), "source": f"https://github.com/{REPO}", "standings": {}}
+    tree_sha = None
+    if not OFFLINE:
+        # pin the exact repo state we read: the tree SHA is the ref.
+        tree_sha = tree().get("sha")
+    else:
+        try:
+            tree_sha = json.load(open(os.path.join(HERE, "vrs.json"), encoding="utf-8")).get("tree_sha")
+        except (OSError, ValueError):
+            pass
+    out = {"date": d.replace("_", "-"), "source": f"https://github.com/{REPO}",
+           "tree_sha": tree_sha, "standings": {}}
     for region, path in paths.items():
         local = os.path.join(CACHE, os.path.basename(path))
         if not os.path.exists(local) and not OFFLINE:

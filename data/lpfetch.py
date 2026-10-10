@@ -59,6 +59,7 @@ def query(params, offline=False, refresh=False):
     os.makedirs(CACHE, exist_ok=True)
     k, qs = _key(params)
     path = os.path.join(CACHE, k + ".json")
+    cached = {}
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             cached = json.load(f)
@@ -113,6 +114,7 @@ def query(params, offline=False, refresh=False):
                 raise
             time.sleep(backoff)
     _last[0] = time.time()
+    assert raw is not None
     resp = json.loads(raw.decode("utf-8"))
     rec = {"url": API + "?" + qs,
            "fetched": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

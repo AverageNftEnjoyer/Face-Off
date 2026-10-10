@@ -71,7 +71,7 @@ def map_rounds(blob):
                 vals = [C._int(nm[k]) for k in keys]
                 if any(v is None for v in vals):
                     return None
-                return sum(vals)
+                return sum(v for v in vals if v is not None)
             s1, s2 = tot(1), tot(2)
         w = C._int(nm.get("winner"))
         if w not in (1, 2):
@@ -488,7 +488,9 @@ def main():
             role = role_of(r["elo"][a], r["elo"][m["team_b"]])
             if role == "even":
                 continue
-            y = labels[bt.actual_scoreline(m)]
+            sc = bt.actual_scoreline(m)
+            assert sc is not None
+            y = labels[sc]
             b = binomial(q)
             if constrain:
                 p_series = b[0] + b[1]

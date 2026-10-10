@@ -9,6 +9,7 @@ import math
 import os
 import sys
 import unittest
+from typing import Any
 from datetime import date, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -177,7 +178,7 @@ class TestSoftAvoid(Cfg, unittest.TestCase):
 class TestRosterDiscount(Cfg, unittest.TestCase):
     def hist(self, fives, start=0, gap=5):
         """History with one team's series; fives[i] is its lineup in series i."""
-        h = bt.History()
+        h: Any = bt.History()
         h.lineups = {}
         for i, five in enumerate(fives):
             m = series(i, start + i * gap, "A", "B", ["m1", "m2"])

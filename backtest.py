@@ -829,6 +829,7 @@ def chrono_split(rows, frac=0.6):
 # ============================================================================
 def load_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
+    assert spec is not None and spec.loader is not None
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -867,7 +868,7 @@ def modal_scoreline(r):
     if not sp:
         return None
     opts = {"2-0": sp["p_2_0"], "2-1": sp["p_2_1"], "1-2": sp["p_1_2"], "0-2": sp["p_0_2"]}
-    return max(opts, key=opts.get)
+    return max(opts, key=lambda k: opts[k])
 
 
 # ============================================================================
@@ -1155,7 +1156,7 @@ def write_reports(rep):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
+    ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[1])
     ap.add_argument("--matches", default=None)
     ap.add_argument("--min-history", type=int, default=MIN_HISTORY)
     ap.add_argument("--train-frac", type=float, default=0.6)

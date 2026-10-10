@@ -1,6 +1,7 @@
 """Tests for the refresh pipeline's stale-page handling (data/lpfetch.py,
 scripts/daily_refresh.py). Everything is SYNTHETIC: a temporary cache and a
 fake network; nothing touches Liquipedia or data/."""
+import email.message
 import io
 import json
 import os
@@ -46,7 +47,7 @@ class TestStaleServed(unittest.TestCase):
     def test_throttled_refresh_is_reported_not_hidden(self):
         params = {"action": "query", "prop": "revisions", "titles": "Alpha Cup|Alpha Cup/Playoffs"}
         self._cache(params, {"old": True})
-        err = urllib.error.HTTPError("u", 429, "Too Many Requests", {}, io.BytesIO(b""))
+        err = urllib.error.HTTPError("u", 429, "Too Many Requests", email.message.Message(), io.BytesIO(b""))
         with mock.patch.object(urllib.request, "urlopen", side_effect=err):
             got = lpfetch.query(params, refresh=True)
         self.assertEqual(got, {"old": True})              # the old copy is still returned...
@@ -63,8 +64,8 @@ class TestStaleServed(unittest.TestCase):
             def __enter__(self):
                 return self
 
-            def __exit__(self, *a):
-                return False
+            def __exit__(self, *a) -> None:
+                return None
         with mock.patch.object(urllib.request, "urlopen", return_value=R(body)):
             got = lpfetch.query(params, refresh=True)
         self.assertEqual(got, {"new": True})
@@ -105,8 +106,8 @@ class TestValidate(unittest.TestCase):
             def __enter__(self):
                 return self
 
-            def __exit__(self, *a):
-                return False
+            def __exit__(self, *a) -> None:
+                return None
         page = b'<script>const DATA = {"as_of":"2026-10-10","data_hash":"0123456789ab","events":[]}</script>'
         with mock.patch.object(urllib.request, "urlopen", return_value=R(page)):
             self.assertEqual(vf.site_hash("http://x/"), "0123456789ab")

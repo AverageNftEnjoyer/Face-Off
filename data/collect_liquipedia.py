@@ -20,7 +20,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -36,7 +36,7 @@ TOP_TIERS = ("S", "A")
 # Series dated after today are excluded; only decided series are parsed, so
 # today's finished matches count. Override
 # with FACEOFF_TODAY=YYYY-MM-DD to reproduce an earlier snapshot exactly.
-TODAY = os.environ.get("FACEOFF_TODAY") or datetime.utcnow().strftime("%Y-%m-%d")
+TODAY = os.environ.get("FACEOFF_TODAY") or datetime.now(timezone.utc).strftime("%Y-%m-%d")
 CS2_START = "2023-09-27"   # CS2 official release; earlier matches are CS:GO
 
 MAP_NORMALIZE = {"dust ii": "Dust2", "dust2": "Dust2", "de_dust2": "Dust2",
@@ -175,7 +175,8 @@ def parse_map(s):
                 v2 = [_int(nm[k]) for k in keys2]
                 if None in v1 or None in v2:
                     return None
-                s1, s2 = sum(v1), sum(v2)
+                s1 = sum(v for v in v1 if v is not None)
+                s2 = sum(v for v in v2 if v is not None)
             if s1 == s2:
                 return None
             w = 1 if s1 > s2 else 2
@@ -246,13 +247,23 @@ def parse_page(title, text):
                 winner = mw
             elif a is not None and b is not None and need and max(a, b) >= need:
                 winner = 1 if a > b else 2
-            if winner and maps and (w1 + w2) < need:
+            if winner and maps and need is not None and (w1 + w2) < need:
                 maps_complete = False
         if not winner or not date:
             continue
         out.append({"date": date, "page": title, "c1": c1, "c2": c2, "winner": winner,
                     "best_of": bo, "maps": maps, "hltv": nm.get("hltv")})
     return out
+
+
+def stable_match_id(date, team_a, team_b, event, hltv):
+    """Deterministic 12-hex ID for a series, stable across rebuilds: the same
+    real-world series always gets the same ID, so re-runs, backfills and the
+    data gates can key on it. Teams are order-canonical (sorted)."""
+    import hashlib
+    a, b = sorted([team_a, team_b])
+    raw = "|".join([date, a, b, event or "", hltv or ""])
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12]
 
 
 def _parse_expansion(wikitext, alias):
@@ -336,7 +347,8 @@ def event_name(title, texts):
 
 
 def read_titles(path):
-    return [l.strip() for l in open(path, encoding="utf-8") if l.strip()]
+    with open(path, encoding="utf-8") as f:
+        return [l.strip() for l in f if l.strip()]
 
 
 def build(titles):
@@ -383,7 +395,8 @@ def build(titles):
         key = (m["date"], tuple(sorted([a, b])), m["hltv"] or "")
         if m["date"] < CS2_START or m["date"] > TODAY:   # only decided series reach here, so today's finished matches are kept
             continue
-        rec = {"date": m["date"], "event": m["event"], "team_a": a, "team_b": b,
+        rec = {"match_id": stable_match_id(m["date"], a, b, m["event"], m["hltv"] or ""),
+               "date": m["date"], "event": m["event"], "team_a": a, "team_b": b,
                "winner": a if m["winner"] == 1 else b, "best_of": m["best_of"],
                "maps": [{"map": x["map"], "winner": a if x["w"] == 1 else b} for x in m["maps"]],
                "source": "liquipedia:" + m["page"] + (f" (hltv match {m['hltv']})" if m["hltv"] else ""),

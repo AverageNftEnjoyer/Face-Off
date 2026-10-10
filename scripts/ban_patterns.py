@@ -153,6 +153,13 @@ def spearman(x, y):
     return num / den if den else None
 
 
+def _spearman_defined(x, y):
+    """spearman() for call sites that already require >= 4 points; never None there."""
+    r = spearman(x, y)
+    assert r is not None
+    return r
+
+
 def holm(pvals):
     """Holm-adjusted p-values (same order)."""
     n = len(pvals)
@@ -450,7 +457,7 @@ def series_posterior(s, W, G, pi_a, want=True):
     return tot, marg
 
 
-def em_fit(series, kappa=KAPPA, iters=8, weights=None, kinds=KINDS, init=None, verbose=False):
+def em_fit(series, kappa: float | dict = KAPPA, iters=8, weights=None, kinds=KINDS, init=None, verbose=False):
     """EM / MM fit of team weight vectors (shrunk toward the field) and the
     starter prior, on `series` (valid BO3 with 7-map pools).
     weights: optional per-series weight (recency decay). Returns dict with
@@ -463,7 +470,8 @@ def em_fit(series, kappa=KAPPA, iters=8, weights=None, kinds=KINDS, init=None, v
     if init:
         G = {k: dict(init["G"][k]) for k in KINDS}
         W = {t: {k: (dict(v) if v is not None else None) for k, v in kv.items()} for t, kv in init["W"].items()}
-    ll = None
+    ll = 0.0
+    wsum = 0.0
     for it in range(iters):
         # accumulators: team -> kind -> map -> [count, exposure]; field likewise
         acc = defaultdict(lambda: {k: defaultdict(lambda: [0.0, 0.0]) for k in KINDS})
@@ -1653,12 +1661,12 @@ def q3(ctx, rep):
             ch_k = 5 - len(five & prev)
             same_run = same_run + 1 if ch_k == 0 else 0
             recent = ch[max(0, i - 8):i]
-            cnt, seen = Counter(), {}
+            pcnt, seen = Counter(), {}
             for j, (_, f, _) in enumerate(recent):
                 for pl in f:
-                    cnt[pl] += 1
+                    pcnt[pl] += 1
                     seen[pl] = j
-            core = frozenset(sorted(cnt, key=lambda pl: (-cnt[pl], -seen[pl], pl))[:5])
+            core = frozenset(sorted(pcnt, key=lambda pl: (-pcnt[pl], -seen[pl], pl))[:5])
             desc[(k, team)] = {"change": ch_k, "since": same_run, "gap": o - ch[i - 1][0], "core_overlap": len(five & core)}
     # main-only habit machinery (so history matches the lineup coverage)
     vmain = [s for s in ctx.valid if s["src"] == "main"]
@@ -1849,6 +1857,7 @@ def fit_eval(train, test, cols, l2_grid=(1.0, 10.0, 100.0), inner_frac=0.25):
             ll = logloss([sigmoid(sum(u * v for u, v in zip(b, x))) for x in X(val_)], [r["y"] for r in val_])
             if best is None or ll < best[0]:
                 best = (ll, l2)
+        assert best is not None
         l2 = best[1]
     else:
         l2 = 1.0
@@ -2119,6 +2128,7 @@ def q5(ctx, rep):
             continue
         rs = sorted(rs, key=lambda r: r["ord"])
         d = agg(rs)
+        assert d is not None
         eng = [(r["hit_a"] + r["hit_b"]) / 2 for r in rs]
         hab = [r["hab"] for r in rs]
         days = [r["ord"] for r in rs]
@@ -2152,14 +2162,14 @@ def q5(ctx, rep):
     both = [(d.get("pick_top_share_recent"), d["engine_hit_starter_avg"], d["habit_baseline_hit"]) for t, d in cand if d.get("pick_top_share_recent") is not None]
     if len(both) >= 8:
         sp = {"n_teams": len(both),
-              "spearman_pick_concentration_vs_engine_hit": round(spearman([x[0] for x in both], [x[1] for x in both]), 3),
-              "spearman_pick_concentration_vs_habit_baseline_hit": round(spearman([x[0] for x in both], [x[2] for x in both]), 3)}
+              "spearman_pick_concentration_vs_engine_hit": round(_spearman_defined([x[0] for x in both], [x[1] for x in both]), 3),
+              "spearman_pick_concentration_vs_habit_baseline_hit": round(_spearman_defined([x[0] for x in both], [x[2] for x in both]), 3)}
     for lab, key in (("pick_entropy", "pick_entropy_norm_recent"), ("roster_changes_365d", "changes_last_365d")):
         pairs = [(d[key], d["engine_minus_field_top2"]["mean"]) for t, d in cand if d.get(key) is not None]
         if len(pairs) >= 8:
             if sp is None:
                 sp = {}
-            sp["spearman_%s_vs_engine_minus_field" % lab] = round(spearman([x[0] for x in pairs], [x[1] for x in pairs]), 3)
+            sp["spearman_%s_vs_engine_minus_field" % lab] = round(_spearman_defined([x[0] for x in pairs], [x[1] for x in pairs]), 3)
             sp["n_teams_" + lab] = len(pairs)
     # reasons
     def reasons(d):

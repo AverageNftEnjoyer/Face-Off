@@ -75,6 +75,7 @@ def main():
         print(f"{w:6.2f}   {a[0]:.3f}          {a[1]:.3f}    {a[2]:.3f}           | {b[0]:.3f}          {b[1]:.3f}    {b[2]:.3f}")
         if best is None or a[0] + a[1] > best[1]:
             best = (w, a[0] + a[1])
+    assert best is not None
     print(f"chosen on train (picks-hit + decider-hit): veto_comfort = {best[0]}")
     # chance level: a random two of the seven maps would hit about 2/7 per pick slot
     print("chance level: picks-hit ~0.286, decider ~0.143")

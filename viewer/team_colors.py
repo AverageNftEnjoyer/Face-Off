@@ -48,6 +48,8 @@ def read_png(path):
             idat += body
         elif typ == b"IEND":
             break
+    if w is None or h is None or depth is None or ctype is None:
+        return None          # no IHDR chunk: not a PNG we can read
     if interlace or depth not in (8, 16) or ctype not in (0, 2, 3, 4, 6):
         if not (ctype == 3 and depth in (1, 2, 4, 8)) or interlace:
             return None

@@ -175,6 +175,7 @@ class RosterHistory(bt.History):
         c = continuity(self.window[team], L)
         r = regression_share(self.cfg, c)
         if r > 0:
+            assert c is not None            # r > 0 only when a continuity score exists
             before = self.elo[team]
             self.elo[team] = bt.ELO_INIT + (1 - r) * (before - bt.ELO_INIT)
             self.window[team].clear()
@@ -355,6 +356,7 @@ def main(argv=None):
             rep["resets"][name] = {"n": len(h.log), "n_sa": sum(1 for x in h.log if x[5] != "lower"),
                                    "examples": [x for x in h.log if x[0] >= "2025-01-01"][:400]}
         print(f"  built {name}: resets {len(h.log)}")
+    assert ys is not None
     for name, _ in VARIANTS:
         v = {}
         for view in ids:

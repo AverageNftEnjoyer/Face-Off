@@ -935,7 +935,8 @@ def _compute(m):
     factors.append(["form_last5", d, var, sh5, note])
 
     # 4. head-to-head -- tiny samples, shrunk, residual vs rating expectation
-    h = m.get("h2h") if isinstance(m.get("h2h"), dict) else {}
+    h2h_in = m.get("h2h")
+    h = h2h_in if isinstance(h2h_in, dict) else {}
     aw = _count(h.get("a_wins", 0))
     bw = _count(h.get("b_wins", 0))
     n = aw + bw
@@ -1042,8 +1043,8 @@ def _scoreline_maps(veto, p_target, scale):
     if len(base) == 3:
         win = _series_a
     else:
-        def win(b, c):
-            return _series_win([sigmoid(L + c) for L in b])
+        def win(logits, c=0.0):
+            return _series_win([sigmoid(L + c) for L in logits])
     lo, hi = -60.0, 60.0
     for _ in range(200):
         mid = (lo + hi) / 2.0
@@ -1419,10 +1420,12 @@ def main():
     # Windows consoles default to a legacy code page; force UTF-8 so any
     # non-ASCII team names print correctly (report text itself is ASCII).
     for stream in (sys.stdout, sys.stderr):
-        try:
-            stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
+        reconfigure = getattr(stream, "reconfigure", None)   # absent on a redirected stream
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="replace")
+            except (AttributeError, ValueError):
+                pass
     if len(sys.argv) > 1 and sys.argv[1] == "--test":
         for r in day4_backtest():
             print(format_result(r))

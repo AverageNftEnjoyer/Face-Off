@@ -44,6 +44,7 @@ import os
 import pickle
 import sys
 import time
+from typing import Any
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -128,7 +129,7 @@ def factory(w_post, cache):
     lineups = {}
 
     def make(leaky=False):
-        h = bt.History()
+        h: Any = bt.History()
         if pr.CONFIG.get("veto_roster_discount"):
             if not lineups:
                 lineups.update(LF.load())
@@ -252,6 +253,7 @@ def cmd_fit(a):
         return
     key, grid = GRIDS[change] if change != "combined" else (None, None)
     if a.stage == "grid":
+        assert key is not None and grid is not None
         hp = {key: type(grid[0])(a.grid)}
         over = overrides(change, hp)
         rows, _ = build_rows(over, w_post, cache)
@@ -267,6 +269,7 @@ def cmd_fit(a):
     if change == "combined":
         hp = chosen_hp("combined")
     else:
+        assert grid is not None
         for g in grid:
             p = os.path.join(tmp_dir(), f"grid_{change}_{g}.json")
             with open(p, encoding="utf-8") as f:
@@ -333,13 +336,16 @@ def cmd_gate(a):
            "reference_phase3": {"test": S_p3},
            "candidate": {"test": S_new, "train": H.summarize(new_tr)},
            "test_evaluations": n_eval}
-    res["pick_set_hit_diff"] = H.paired(test, new, ref, "hit")
-    res["loglik_diff"] = H.paired(test, new, ref, "ll")
+    pick_diff = H.paired(test, new, ref, "hit")
+    ll_diff = H.paired(test, new, ref, "ll")
+    assert pick_diff is not None and ll_diff is not None
+    res["pick_set_hit_diff"] = pick_diff
+    res["loglik_diff"] = ll_diff
     res["decider_hit_diff"] = H.paired(test, new, ref, "dec_hit")
     res["pick_set_hit_diff_vs_phase3"] = H.paired(test, new, p3, "hit")
     res["loglik_diff_vs_phase3"] = H.paired(test, new, p3, "ll")
-    checks = {"pick_set_hit": res["pick_set_hit_diff"]["ci95"][0] > 0,
-              "loglik": res["loglik_diff"]["ci95"][0] > 0 and math.isfinite(res["loglik_diff"]["diff"]),
+    checks = {"pick_set_hit": pick_diff["ci95"][0] > 0,
+              "loglik": ll_diff["ci95"][0] > 0 and math.isfinite(ll_diff["diff"]),
               "coverage80": 0.75 <= S_new.get("cov80", 0) <= 0.85,
               "ece_played": S_new.get("ece_played", 1) <= 0.03,
               "zero_prob": S_new.get("zero_prob", 1) == 0}
@@ -347,6 +353,7 @@ def cmd_gate(a):
     cfg_new["veto_params_bo3"] = w
     sn, sr, i6 = H.scoreline_rows(test, cfg_new, cfg_ref)
     d = H.paired(test, sn, sr, "sll")
+    assert d is not None
     res["scoreline_logloss"] = {"new": H.summarize_key(sn, "sll"), "ref": H.summarize_key(sr, "sll"), "diff": d}
     checks["scoreline_logloss"] = d["ci95"][1] < 0.002
     checks["I6_p_a_identical"] = bool(i6)

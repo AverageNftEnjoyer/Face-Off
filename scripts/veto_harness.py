@@ -43,6 +43,7 @@ import math
 import os
 import random
 import sys
+from typing import Any
 from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -302,6 +303,7 @@ def row_metrics(r, dist, internals, ll, best_of=3):
     up = n = 0
     for j in range(best_of - 1):
         mp = ctx_pool[modal[j]]
+        assert best_pk is not None
         side = best_pk[j]
         raw = r["input"].get("maps_a" if side == "a" else "maps_b") or {}
         e = raw.get(mp)
@@ -364,7 +366,7 @@ def ece(pairs, n_bins=10):
 
 
 def summarize(res):
-    out = {"n": len(res)}
+    out: dict[str, Any] = {"n": len(res)}
     for k in ("hit", "ll", "dec_hit", "cov80", "cov80_mass", "cov01", "unplayed", "hit_starter_a",
               "zero_prob", "masked_but_picked"):
         vals = [x[k] for x in res if k in x]
@@ -635,6 +637,7 @@ def gate(phase, w, cfg_overrides, out_path, rows=None, best_of=3, ctx_fn=None, r
         sa, _, i6b = scoreline_rows(test, cfg_abl, cfg_ref)
         d = paired(test, sn, sr, "sll")
         da = paired(test, sn, sa, "sll")
+        assert d is not None and da is not None
         rep["scoreline_logloss"] = {"new": summarize_key(sn, "sll"), "ref": summarize_key(sr, "sll"),
                                     "ablation": summarize_key(sa, "sll"), "diff": d, "diff_vs_ablation": da}
         checks["scoreline_logloss"] = d["ci95"][1] < 0.002

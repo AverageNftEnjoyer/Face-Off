@@ -162,6 +162,7 @@ def simulate_veto(m):
             edge = (wb - wa) if team == "A" else (wa - wb)
             if edge > bestv:
                 bestv, best = edge, mp
+        assert best is not None
         remaining.remove(best)
         log.append(f"{team} bans {best}")
 
@@ -173,6 +174,7 @@ def simulate_veto(m):
             edge = (wa - wb) if team == "A" else (wb - wa)
             if edge > bestv:
                 bestv, best = edge, mp
+        assert best is not None
         remaining.remove(best)
         log.append(f"{team} picks {best}")
         return best

@@ -30,6 +30,7 @@ Deterministic: maps are iterated by index in sorted pool order, no randomness.
 Stdlib only.
 """
 import math
+from typing import Any
 
 VERSION = "veto-v2"
 ROLES = ("S", "O")
@@ -372,7 +373,8 @@ class Tree:
             return ps[0]
         return series_win(ps)
 
-    def node(self, t, R, picks):
+    def node(self, t, R, picks) -> Any:
+        # leaf: (value, None); inner node: (value, choices, forced)
         key = (t, R, picks)
         got = self.memo.get(key)
         if got is not None:
@@ -422,7 +424,7 @@ class Tree:
                 vs = None
                 us = [c[i] * self.inv_t for i, _ in kids]
             probs = _softmax(us)
-        v = sum(p * x for p, x in zip(probs, vs)) if self.look else 0.0
+        v = sum(p * x for p, x in zip(probs, vs or [])) if self.look else 0.0
         res = (v, [(i, p, ch) for (i, ch), p in zip(kids, probs)], bool(forced))
         self.memo[key] = res
         return res
@@ -626,9 +628,9 @@ def _viterbi(tree, target):
     decider). Ties: higher probability first, then sorted map names (map
     indices follow sorted names)."""
     ctx = tree.ctx
-    best = {tree.root(): (1.0, ())}
+    best: dict = {tree.root(): (1.0, ())}
     for t in range(len(ctx.steps)):
-        nxt = {}
+        nxt: dict = {}
         for st in sorted(best):
             p0, path = best[st]
             _, choices, forced = tree.node(*st)

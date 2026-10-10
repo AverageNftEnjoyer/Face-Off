@@ -7,6 +7,12 @@
 # GitHub's schedule is best effort: runs start late and some are skipped, which
 # is why this runs every 10 minutes (a skipped run costs at most one more wait)
 # and why "Run workflow" exists as the manual push.
+#
+# This job commits DATA only, after the same quality gates as the daily run.
+# It does not rebuild the site: Vercel does that on every push (buildCommand
+# builds the bundle first), and the daily run keeps the pre-commit build check.
+# Skipping the ~5 min bundle build here keeps a live update at about 1 minute
+# from Liquipedia to the repo.
 name: Live tournament refresh
 
 on:
@@ -16,6 +22,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 # the same queue as the daily refresh: two runs never write the cache together
 concurrency:
@@ -36,13 +43,16 @@ jobs:
       - name: Refresh the live tournament pages (1 to 3 requests; exits at once when nothing is live)
         run: python scripts/daily_refresh.py --live
 
-      - name: Check the site builds
+      - name: Data quality gates
+        id: gates
         run: |
           if git diff --quiet -- data; then
             echo "No data changes."
+            echo '{"passed": true, "note": "no data changes"}' > /tmp/gates.json
             exit 0
           fi
-          python viewer/build_viewer.py public/index.html
+          set -o pipefail
+          python scripts/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
 
       - name: Commit and push changed data
         run: |
@@ -56,6 +66,30 @@ jobs:
           git commit -m "Live data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push
+
+      - name: Open an issue when the gates fail
+        if: failure() && steps.gates.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create data-pipeline --color B60205 --description "Automated data pipeline alerts" 2>/dev/null || true
+          {
+            echo "The data quality gates failed on a live refresh; nothing was published. Run: $RUN_URL"
+            echo
+            echo '```json'
+            head -c 60000 /tmp/gates.json
+            echo
+            echo '```'
+          } > /tmp/issue.md
+          existing=$(gh issue list --label data-pipeline --state open --search "Data gates failed in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue.md
+          else
+            gh issue create --title "Data gates failed - publish blocked ($(date -u +%Y-%m-%d))" \
+              --body-file /tmp/issue.md --label data-pipeline
+          fi
 
       - name: Fail loudly if a live page could not be refreshed
         run: |

@@ -31,8 +31,9 @@ import re
 import sys
 from collections import defaultdict
 from datetime import date, timedelta
+from typing import Any
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE =os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "data"))
@@ -101,7 +102,7 @@ class ImageWriter:
         return n
 
 
-def round_floats(o, n):
+def round_floats(o: Any, n: int) -> Any:
     """Copy of `o` with every float rounded to n decimals (page payload only)."""
     if isinstance(o, float):
         return round(o, n)
@@ -303,7 +304,7 @@ def run_vdist():
 class Timeline:
     """Fold series day by day so a prediction for day D sees only days < D."""
 
-    def __init__(self, matches):
+    def __init__(self, matches: Any):
         self.ms = sorted(matches, key=lambda m: m["date"])
         self.h = bt.History()
         self.i = 0
@@ -346,7 +347,6 @@ def evidence(h, inp, day):
     return out
 
 
-<<<<<<< HEAD
 def valid_pool(pool):
     """An event's announced map pool, if it can drive a veto; else None (the live pool is used)."""
     pool = sorted({x for x in pool or [] if isinstance(x, str) and x})
@@ -354,23 +354,6 @@ def valid_pool(pool):
 
 
 def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
-=======
-def veto_edges(inp):
-    """What the page's Simulate Map Picks tab needs to re-run the veto and re-price the
-    maps: ve = team A's relative edge on each pool map (the engine's own, in pool order =
-    DATA.pool), vs = the factor that turns an edge into the scoreline's map logit
-    (map_scale * T * map_shape / k, exactly as predictor._scoreline_maps uses it)."""
-    pool = pr._pool(inp)
-    rel_a, _, _ = pr._team_maps(inp.get("maps_a"), pool)
-    rel_b, _, _ = pr._team_maps(inp.get("maps_b"), pool)
-    C = pr._compute(inp)
-    scale = C["T"] * pr.CONFIG["map_shape"] / C["shrink_k"]
-    return {"ve": [round(rel_a[mp] - rel_b[mp], 5) for mp in pool],
-            "vs": round(pr.CONFIG["map_scale"] * scale, 6)}
-
-
-def predict(h, a, b, day, title=None, bo=3, elo=False):
->>>>>>> 8e98d29 (Job Runner Patches)
     """Engine call with point-in-time features; `title` (the tournament page)
     lets the feature builder attach stand-in / missing-IGL flags. `pool` is the
     event's own map pool: the veto must be played on the maps the event uses,
@@ -384,19 +367,24 @@ def predict(h, a, b, day, title=None, bo=3, elo=False):
         inp["veto_ev_b"] = h.veto_evidence(b, day, pool)
     out = compact(pr.predict_match(inp), bo)
     out["fx"] = evidence(h, inp, day)
-<<<<<<< HEAD
     if recs:
         out["mr"] = {a: inp["maps_raw_a"], b: inp["maps_raw_b"]}
     VD_JOBS.append((out, inp))
-=======
-    out.update(veto_edges(inp))
->>>>>>> 8e98d29 (Job Runner Patches)
     if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
         out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
     return out
 
 
-def main(out_path):
+def build_data():
+    """Compute everything the site needs. Returns (data, info).
+
+    `data` is the page/bundle payload (what used to be inlined as DATA).
+    `info` carries build context the HTML writer needs (assets, names, ...).
+    Pure function of data/matches.json + cached pages + assets: no model math
+    lives here, only orchestration. Deterministic for identical inputs
+    (bundle builds pin generated_at via FACEOFF_GENERATED_AT for byte-exact
+    reproducibility).
+    """
     assets = json.load(open(os.path.join(HERE, "assets.json"), encoding="utf-8"))
     all_matches = sorted(bt.load_matches(), key=lambda m: m["date"])
     events = sorted(E.discover(), key=lambda e: e["start"])
@@ -600,16 +588,6 @@ def main(out_path):
                       | {"participants": [{"team": t, **v} for t, v in e["participants"].items()],
                          "matches": e["matches"]})
 
-    out_dir = os.path.dirname(os.path.abspath(out_path))
-    imw = ImageWriter(out_dir)
-    images = {
-        "logos": {t: imw.url(assets["teams"][t]["logo_dark_path"]) for t in names
-                  if t in assets["teams"] and assets["teams"][t].get("logo_dark_path")},
-        "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
-        "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
-        "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
-    }
-    pruned = imw.prune()
     if PAGE_DECIMALS is not None:
         pairs = round_floats(pairs, PAGE_DECIMALS)
         epairs = round_floats(epairs, PAGE_DECIMALS)
@@ -626,17 +604,116 @@ def main(out_path):
         # the live map pool (maps with recent plays), the fallback when a tournament lists none
         "pool": h_today.map_pool(as_of),
     }
+    info = {
+        "assets": assets, "names": names, "events": events, "teams": teams,
+        "pairs": pairs, "epairs": epairs,
+        "as_of": as_of.isoformat(), "data_through": last_day.isoformat(),
+    }
+    return data, info
+
+
+SUPPORTED_BUNDLE_VERSION = 1
+BUNDLE_NAME = "data-bundle.json"
+
+
+def load_bundle(path):
+    """Load and validate the data bundle. Fails LOUD on any problem.
+
+    The viewer renders exclusively from the bundle (schema: docs/bundle-schema.md).
+    A missing, corrupt, or foreign-version bundle must never silently fall back to
+    inline computation or partial numbers — the build fails and the previously
+    deployed page (built from the last good bundle) keeps serving.
+    """
+    if not os.path.exists(path):
+        raise SystemExit(
+            f"bundle not found: {path}\n"
+            "Run `python viewer/build_bundle.py` first — it emits the versioned bundle. "
+            "The viewer renders exclusively from the bundle; inline computation is disabled.")
+    try:
+        with open(path, encoding="utf-8") as f:
+            bundle = json.load(f)
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError) as ex:
+        raise SystemExit(f"bundle unreadable: {path}: {ex}\nRefusing to build from a corrupt bundle.")
+    ver = bundle.get("bundle_version")
+    if ver != SUPPORTED_BUNDLE_VERSION:
+        raise SystemExit(
+            f"bundle version {ver!r} not understood (this viewer supports v{SUPPORTED_BUNDLE_VERSION}). "
+            "Refusing to render a bundle whose schema it doesn't understand.")
+    for key in ("generated_at", "data_through", "data_hash", "fixtures", "results", "data"):
+        if key not in bundle:
+            raise SystemExit(f"bundle missing required key {key!r}. Refusing to build.")
+    return bundle
+
+
+def drift_check(tpl, bundle):
+    """Fail if template.html references a top-level bundle field that doesn't exist.
+
+    Catches typos and stale fields at build time instead of shipping undefined
+    values to the page.
+    """
+    problems = []
+    for key in sorted(set(re.findall(r"\bDATA\.([A-Za-z_][A-Za-z0-9_]*)", tpl))):
+        if key not in bundle["data"]:
+            problems.append(f"DATA.{key}")
+    for key in sorted(set(re.findall(r"\bMETA\.([A-Za-z_][A-Za-z0-9_]*)", tpl))):
+        if key not in ("bundle_version", "generated_at", "data_through", "data_hash", "vrs_date"):
+            problems.append(f"META.{key}")
+    for const in ("FIXTURES", "RESULTS"):
+        if f"/*__{const}__*/" not in tpl:
+            problems.append(f"missing placeholder /*__{const}__*/")
+    if problems:
+        raise SystemExit("schema drift: template references unknown bundle fields:\n  "
+                         + "\n  ".join(problems))
+
+
+def main(out_path):
+    # --- bundle contract -----------------------------------------------------
+    # The viewer renders EXCLUSIVELY from viewer/data-bundle.json (schema:
+    # docs/bundle-schema.md). build_data() is kept for the bundle emitter
+    # (viewer/build_bundle.py); this writer never computes inline. If the bundle
+    # is missing, corrupt, or a version we don't understand, load_bundle() FAILS
+    # LOUD — a broken build must never silently publish stale or partial numbers.
+    # The previously deployed page (built from the last good bundle) keeps serving.
+    bundle = load_bundle(os.path.join(HERE, BUNDLE_NAME))
+    data = bundle["data"]
+    meta = {k: bundle[k] for k in ("bundle_version", "generated_at",
+                                   "data_through", "data_hash", "vrs_date")}
+    assets = json.load(open(os.path.join(HERE, "assets.json"), encoding="utf-8"))
+    names = sorted(data["teams"])
+    events, teams = data["events"], data["teams"]
+    pairs, epairs = data["pairs"], data["epairs"]
+    out_dir = os.path.dirname(os.path.abspath(out_path))
+    imw = ImageWriter(out_dir)
+    images = {
+        "logos": {t: imw.url(assets["teams"][t]["logo_dark_path"]) for t in names
+                  if t in assets["teams"] and assets["teams"][t].get("logo_dark_path")},
+        "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
+        "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
+        "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
+    }
+    pruned = imw.prune()
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
+    drift_check(tpl, bundle)
     blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     img = json.dumps(images, separators=(",", ":")).replace("</", "<\\/")
-    html = tpl.replace("/*__DATA__*/null", blob).replace("/*__IMAGES__*/null", img)
+    fix = json.dumps(bundle["fixtures"], separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    res = json.dumps(bundle["results"], separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    met = json.dumps(meta, separators=(",", ":")).replace("</", "<\\/")
+    html = (tpl.replace("/*__DATA__*/null", blob)
+               .replace("/*__IMAGES__*/null", img)
+               .replace("/*__FIXTURES__*/null", fix)
+               .replace("/*__RESULTS__*/null", res)
+               .replace("/*__META__*/null", met))
     os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     n_m = sum(len(e["matches"]) for e in events)
     n_p = sum(1 for e in events for m in e["matches"] if "pred" in m)
-    print(f"wrote {out_path}: {len(events)} events, {len(teams)} teams, {n_m} matches "
+    print(f"wrote {out_path}: bundle v{bundle['bundle_version']} "
+          f"(data through {bundle['data_through']}, generated {bundle['generated_at']}): "
+          f"{len(events)} events, {len(teams)} teams, {n_m} matches "
           f"({n_p} pre-match calls), {len(pairs)} + {sum(len(v) for v in epairs.values())} matchups, "
+          f"{len(bundle['fixtures'])} fixtures, {len(bundle['results'])} results, "
           f"{len(html.encode('utf-8')) // 1024} KB (data {len(blob.encode('utf-8')) // 1024} KB); "
           f"{len(imw.names)} images in {IMG_DIR}/ ({imw.bytes // 1024} KB, {pruned} stale removed)")
 

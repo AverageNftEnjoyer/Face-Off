@@ -449,7 +449,7 @@ class TestOct9Fixtures(unittest.TestCase):
     def test_r1_1win_dust2(self):
         f = self.fx["R1"]
         pk = self.pick_marg("R1", "a")
-        self.assertEqual(max(sorted(pk), key=pk.get), f["picks"]["a"])
+        self.assertEqual(max(sorted(pk), key=lambda k: pk[k]), f["picks"]["a"])
         ctx = self.dist["R1"][2]
         unplayed = [mp for mp in ctx.pool if not (self.inp["R1"]["maps_a"].get(mp) or [0, 0])[1]]
         self.assertTrue(unplayed)
@@ -459,7 +459,7 @@ class TestOct9Fixtures(unittest.TestCase):
             self.assertGreater(pk[f["picks"]["a"]], pk[mp])
         bans = {mp: v["banned_a"] for mp, v in self.dist["R1"][0]["marginals"].items()}
         opp_best = max(sorted(ctx.pool), key=lambda mp: -ctx.ell["a"][ctx.idx[mp]])
-        self.assertEqual(max(sorted(bans), key=bans.get), opp_best)
+        self.assertEqual(max(sorted(bans), key=lambda k: bans[k]), opp_best)
 
     def test_r2_parivision(self):
         f = self.fx["R2"]
@@ -475,9 +475,9 @@ class TestOct9Fixtures(unittest.TestCase):
                     self.assertNotEqual(ctx.pool[b_pick], nb)
             del tree
         pk = self.pick_marg("R2", "b")
-        self.assertEqual(max(sorted(pk), key=pk.get), f["picks"]["b"])
+        self.assertEqual(max(sorted(pk), key=lambda k: pk[k]), f["picks"]["b"])
         fb = {mp: v["first_ban_b"] for mp, v in d["marginals"].items()}
-        self.assertEqual(max(sorted(fb), key=fb.get), nb)
+        self.assertEqual(max(sorted(fb), key=lambda k: fb[k]), nb)
         self.assertTrue(ctx.masked["a"])           # Vitality's never-played map is masked too
         for mp in ctx.masked["a"]:
             self.assertEqual(d["marginals"][mp]["picked_a"], 0.0)
