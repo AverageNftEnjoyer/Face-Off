@@ -391,20 +391,29 @@ class HabitAccumulator:
         return d <= dt if self.leaky else d < dt
 
     @staticmethod
-    def _sum(recs, pool):
+    def _sum(recs, pool, weight=None):
+        """Sum of (c, o) counts over `recs`; `weight(date)` scales each record
+        (veto phase 7: recency decay / roster discount). None = equal weights."""
         out = {k: {mp: [0.0, 0.0] for mp in sorted(pool)} for k in HabitAccumulator.KINDS}
-        for _, c in recs:
+        for d, c in recs:
+            w = 1.0 if weight is None else weight(d)
             for k in HabitAccumulator.KINDS:
                 ck = c.get(k) or {}
                 for mp in out[k]:
                     v = ck.get(mp)
                     if v:
-                        out[k][mp][0] += v[0]
-                        out[k][mp][1] += v[1]
+                        if weight is None:
+                            out[k][mp][0] += v[0]
+                            out[k][mp][1] += v[1]
+                        else:
+                            out[k][mp][0] += w * v[0]
+                            out[k][mp][1] += w * v[1]
         return out
 
-    def evidence(self, team, dt, pool):
-        lo = dt - timedelta(days=VETO_EV_DAYS)
+    def evidence(self, team, dt, pool, weight=None, horizon=None):
+        """`weight(record_date)` and `horizon` (days) are the phase-7 options:
+        both None reproduces the equal-weight VETO_EV_DAYS window exactly."""
+        lo = dt - timedelta(days=VETO_EV_DAYS if horizon is None else horizon)
         own = [r for r in self.recs.get(team, []) if lo <= r[0] and self._ok(r[0], dt)]
         snap = None
         for d, sn in zip(reversed(self.snap_dates), reversed(self.snaps)):
@@ -413,7 +422,7 @@ class HabitAccumulator:
                 break
         field = {k: {mp: list((snap or {}).get(k, {}).get(mp, [0.0, 0.0])) for mp in sorted(pool)}
                  for k in self.KINDS}
-        out = {"habit": self._sum(own, pool), "field": field, "habit_n": len(own)}
+        out = {"habit": self._sum(own, pool, weight), "field": field, "habit_n": len(own)}
         if self.core_fn is not None:
             core, stale = self.core_fn(team, dt)
             if core:
@@ -446,6 +455,7 @@ class History:
         self.habits = None               # optional HabitAccumulator (veto phase 3)
         self.lineups = None              # optional {"date|a|b": {"a": five, "b": five}} (veto phase 4)
         self.lineup_hist = defaultdict(list)
+        self.ev_cfg = None               # veto phase-7 evidence options; None = predictor.CONFIG (see _cfg)
 
     def start_elo(self):
         """Starting Elo of a team not seen yet, at self.clock."""
@@ -575,11 +585,76 @@ class History:
             self._rate_cache[dt] = r
         return r
 
+    # ------------------------------------------------ phase 7: weighted evidence
+    def _cfg(self):
+        """Evidence options: self.ev_cfg, else the CONFIG of the imported
+        `predictor` (read at call time; absent -> every option off)."""
+        if self.ev_cfg is not None:
+            return self.ev_cfg
+        p = sys.modules.get("predictor")
+        return getattr(p, "CONFIG", {}) if p is not None else {}
+
+    def roster_events(self, team, dt, floor, recover):
+        """(events, stale) for the roster-change discount. events = [(change
+        date, factor)]: a lineup that differs from the team's previous one in
+        n players (first seen in the series dated `change date`) multiplies the
+        weight of every evidence record dated BEFORE that date by
+        1 - (1 - floor) * min(1, n / 2) * max(0, 1 - (k - 1) / recover), k = the
+        team's series played with the new lineup so far (1 right after the
+        change, full weight again from k = recover + 1). Lineups dated < dt
+        only. stale: the team's last series is newer than its last lineup (or it
+        has no lineup): no discount, same rule as core_five."""
+        hist = [(d, f) for d, f in self.lineup_hist.get(team, []) if d < dt]
+        if not hist:
+            return [], True
+        last_series = next((r["date"] for r in reversed(self.games.get(team, [])) if r["date"] < dt), None)
+        if last_series is not None and last_series > hist[-1][0]:
+            return [], True
+        n = len(hist)
+        out = []
+        for i in range(max(1, n - recover), n):
+            changed = 5 - len(hist[i - 1][1] & hist[i][1])
+            if changed <= 0:
+                continue
+            k = n - i
+            f = 1.0 - (1.0 - floor) * min(1.0, changed / 2.0) * max(0.0, 1.0 - (k - 1) / float(recover))
+            out.append((hist[i][0], f))
+        return out, False
+
+    def record_weights(self, team, dt, cfg):
+        """(weight(record_date) or None, horizon days, roster_stale). None when
+        no phase-7 option is on (legacy equal weights over VETO_EV_DAYS)."""
+        hl = cfg.get("veto_decay_halflife")
+        roster = bool(cfg.get("veto_roster_discount"))
+        if not hl and not roster:
+            return None, VETO_EV_DAYS, False
+        events, stale = ([], False)
+        if roster:
+            events, stale = self.roster_events(team, dt, float(cfg.get("veto_roster_floor", 0.4)),
+                                               int(cfg.get("veto_roster_recover", 8)))
+
+        def weight(d):
+            x = 0.5 ** ((dt - d).days / float(hl)) if hl else 1.0
+            for c, f in events:
+                if d < c:
+                    x *= f
+            return x
+        horizon = int(cfg.get("veto_decay_horizon", 180)) if hl else VETO_EV_DAYS
+        return weight, horizon, stale
+
     def veto_evidence(self, team, dt, pool):
         """Point-in-time evidence for the veto's exclusion test (veto.py):
         over the team's series in the VETO_EV_DAYS days before dt, per pool
         map: [series where it was played, series with it in their pool,
-        sum of log(1 - field play rate at that series' date)]."""
+        sum of log(1 - field play rate at that series' date)].
+
+        Phase 7 (CONFIG veto_decay_halflife / veto_roster_discount /
+        veto_soft_avoid, all off by default): adds ev["wmaps"], the same
+        counts with each series weighted by recency decay and the roster-change
+        discount, over the decay horizon: per map [weighted plays, weighted
+        series with the map in the pool, weighted sum of log(1 - rate),
+        weighted expected plays (sum of rate), raw plays]. The legacy "maps"
+        stay as they were. Series dated < dt only."""
         lo = dt - timedelta(days=VETO_EV_DAYS)
         js = [self.vseries[j] for j in self.vteam.get(team, []) if lo <= self.vseries[j][0] < dt]
         out = {}
@@ -594,8 +669,31 @@ class History:
                     lp += math.log(1.0 - rate)
             out[mp] = [plays, n_pool, lp]
         ev = {"n": len(js), "maps": out}
+        cfg = self._cfg()
+        weight, horizon, stale = self.record_weights(team, dt, cfg)
+        if weight is not None or cfg.get("veto_soft_avoid"):
+            wlo = dt - timedelta(days=horizon)
+            jw = [self.vseries[j] for j in self.vteam.get(team, []) if wlo <= self.vseries[j][0] < dt]
+            ws = [1.0 if weight is None else weight(d) for d, _, _, _ in jw]
+            wm = {}
+            for mp in sorted(pool):
+                pw = nw = lw = ew = 0.0
+                raw = 0
+                for (d, jpool, played, _), w in zip(jw, ws):
+                    if mp in played:
+                        pw += w
+                        raw += 1
+                    if mp in jpool:
+                        nw += w
+                        rate = min(self.field_rates(d).get(mp, 0.0), 1.0 - 1e-9)
+                        lw += w * math.log(1.0 - rate)
+                        ew += w * rate
+                wm[mp] = [pw, nw, lw, ew, raw]
+            ev["wmaps"] = wm
+            if cfg.get("veto_roster_discount"):
+                ev["roster_stale"] = stale
         if self.habits is not None:
-            ev.update(self.habits.evidence(team, dt, pool))
+            ev.update(self.habits.evidence(team, dt, pool, weight, horizon if weight is not None else None))
         return ev
 
     def n_prior(self, team):

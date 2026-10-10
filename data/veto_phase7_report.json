@@ -1,0 +1,906 @@
+{
+ "phase": "p7",
+ "split": {
+  "train_end": "2025-11-05",
+  "test_start": "2025-11-07"
+ },
+ "data_hashes": {
+  "matches.json": "f34d18e81624c876b0c7d81aae87fd2d35782727c26723004ab38a986f86baf8",
+  "lineups.json": "36ad8349997995b064a6e70c60918a0bf4933a109bcf6129a09db8e803ba6621"
+ },
+ "candidates": {
+  "decay": {
+   "change": "decay",
+   "hp": {
+    "halflife": 120
+   },
+   "overrides": {
+    "veto_excl_alpha": 0.01,
+    "veto_use_habits": true,
+    "veto_habit_k": 4.0,
+    "veto_decay_halflife": 120
+   },
+   "params": {
+    "alpha_ban1": 2.033664713439575,
+    "alpha_ban2": -0.20156457048239346,
+    "alpha_pick": 4.334853598125765,
+    "eta_ban1": 1.1215061774829653,
+    "eta_ban2": 0.6230589874905363,
+    "eta_pick": 0.8784938225170346,
+    "gamma_ban1": 4.530757888356842,
+    "gamma_ban2": 1.6082521031287111,
+    "gamma_pick": 1.4321062210093656,
+    "lookahead": true,
+    "pi": 0.28574486055052367,
+    "temp": 1.0,
+    "version": "veto-v2.p7.decay",
+    "zeta_ban1": 0.0,
+    "zeta_ban2": 0.0,
+    "zeta_pick": 0.0
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "split": {
+    "train": 1207,
+    "test": 746
+   },
+   "reference_shipped": {
+    "test": {
+     "n": 746,
+     "hit": 0.4812332439678284,
+     "hit_n": 746,
+     "ll": -4.267894005511056,
+     "ll_n": 746,
+     "dec_hit": 0.2347266881028939,
+     "dec_hit_n": 311,
+     "unplayed": 0.036193029490616625,
+     "unplayed_n": 746,
+     "hit_starter_a": 0.47788203753351205,
+     "hit_starter_a_n": 746
+    },
+    "eps_pi_fit_on_train": {
+     "eps": 0.9060590365811745,
+     "pi": 0.23521744987488774,
+     "train_loglik": -4.309507311050974
+    }
+   },
+   "reference_phase3": {
+    "test": {
+     "n": 746,
+     "hit": 0.5040214477211796,
+     "hit_n": 746,
+     "ll": -3.517622018244265,
+     "ll_n": 746,
+     "dec_hit": 0.22186495176848875,
+     "dec_hit_n": 311,
+     "cov80": 0.8364611260053619,
+     "cov80_n": 746,
+     "cov80_mass": 0.8131409548031147,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.05026809651474531,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.00938337801608579,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010339199254426393
+    }
+   },
+   "candidate": {
+    "test": {
+     "n": 746,
+     "hit": 0.5120643431635389,
+     "hit_n": 746,
+     "ll": -3.4911194507915804,
+     "ll_n": 746,
+     "dec_hit": 0.20257234726688103,
+     "dec_hit_n": 311,
+     "cov80": 0.8284182305630027,
+     "cov80_n": 746,
+     "cov80_mass": 0.8129355141742032,
+     "cov80_mass_n": 746,
+     "cov01": 0.9946380697050938,
+     "cov01_n": 746,
+     "unplayed": 0.05026809651474531,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.010723860589812333,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010201855007006811
+    },
+    "train": {
+     "n": 1207,
+     "hit": 0.48053024026512015,
+     "hit_n": 1207,
+     "ll": -3.628341434600955,
+     "ll_n": 1207,
+     "dec_hit": 0.2710843373493976,
+     "dec_hit_n": 498,
+     "cov80": 0.8044739022369511,
+     "cov80_n": 1207,
+     "cov80_mass": 0.8123515387308566,
+     "cov80_mass_n": 1207,
+     "cov01": 0.9950289975144988,
+     "cov01_n": 1207,
+     "unplayed": 0.0579950289975145,
+     "unplayed_n": 1207,
+     "zero_prob": 0.0,
+     "zero_prob_n": 1207,
+     "masked_but_picked": 0.00579950289975145,
+     "masked_but_picked_n": 1207,
+     "ece_played": 0.01150495328223539
+    }
+   },
+   "test_evaluations": 12,
+   "pick_set_hit_diff": {
+    "diff": 0.030831099195710455,
+    "ci95": [
+     0.007623888182973317,
+     0.055232558139534885
+    ],
+    "n": 746
+   },
+   "loglik_diff": {
+    "diff": 0.7767745547194757,
+    "ci95": [
+     0.6953957708526599,
+     0.8590865234359785
+    ],
+    "n": 746
+   },
+   "decider_hit_diff": {
+    "diff": -0.03215434083601286,
+    "ci95": [
+     -0.08383233532934131,
+     0.019230769230769232
+    ],
+    "n": 311
+   },
+   "pick_set_hit_diff_vs_phase3": {
+    "diff": 0.00804289544235925,
+    "ci95": [
+     -0.006675567423230975,
+     0.022972972972972974
+    ],
+    "n": 746
+   },
+   "loglik_diff_vs_phase3": {
+    "diff": 0.026502567452685317,
+    "ci95": [
+     0.004168272607111958,
+     0.04593828851607329
+    ],
+    "n": 746
+   },
+   "scoreline_logloss": {
+    "new": 1.3041583794407725,
+    "ref": 1.306017738699615,
+    "diff": {
+     "diff": -0.0018593592588424192,
+     "ci95": [
+      -0.005875837070512637,
+      0.0022368259775144227
+     ],
+     "n": 746
+    }
+   },
+   "checks": {
+    "pick_set_hit": true,
+    "loglik": true,
+    "coverage80": true,
+    "ece_played": true,
+    "zero_prob": true,
+    "scoreline_logloss": false,
+    "I6_p_a_identical": true
+   },
+   "passed": false,
+   "fit": {
+    "inner_grid": [
+     {
+      "hp": {
+       "halflife": 45
+      },
+      "inner_fit": -3.618988015165204,
+      "inner_val": -3.6901701273941665
+     },
+     {
+      "hp": {
+       "halflife": 60
+      },
+      "inner_fit": -3.6139532703229733,
+      "inner_val": -3.6873156296425176
+     },
+     {
+      "hp": {
+       "halflife": 90
+      },
+      "inner_fit": -3.609682102721497,
+      "inner_val": -3.686596528399435
+     },
+     {
+      "hp": {
+       "halflife": 120
+      },
+      "inner_fit": -3.6093366846123036,
+      "inner_val": -3.6864889555905243
+     }
+    ],
+    "base_inner": null,
+    "free": [
+     "eta_ban1",
+     "eta_ban2",
+     "eta_pick"
+    ],
+    "train_loglik": -3.6283414346009564,
+    "seconds": 1729.5,
+    "n_train": 1207
+   }
+  },
+  "soft": {
+   "change": "soft",
+   "hp": {
+    "habit_k_ban": 1.0
+   },
+   "overrides": {
+    "veto_excl_alpha": 0.01,
+    "veto_use_habits": true,
+    "veto_habit_k": 4.0,
+    "veto_soft_avoid": true,
+    "veto_habit_k_ban": 1.0
+   },
+   "params": {
+    "alpha_ban1": 2.033664713439575,
+    "alpha_ban2": -0.20156457048239346,
+    "alpha_pick": 4.334853598125765,
+    "eta_ban1": 0.7082039324993692,
+    "eta_ban2": 0.2949016875157726,
+    "eta_pick": 0.6824052046670674,
+    "gamma_ban1": 4.530757888356842,
+    "gamma_ban2": 1.6082521031287111,
+    "gamma_pick": 1.4321062210093656,
+    "lookahead": true,
+    "pi": 0.28574486055052367,
+    "temp": 1.0,
+    "version": "veto-v2.p7.soft",
+    "zeta_ban1": 0.34752415750147203,
+    "zeta_ban2": -0.18344550751409044,
+    "zeta_pick": -0.06577808748212441
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "split": {
+    "train": 1207,
+    "test": 746
+   },
+   "reference_shipped": {
+    "test": {
+     "n": 746,
+     "hit": 0.4812332439678284,
+     "hit_n": 746,
+     "ll": -4.267894005511056,
+     "ll_n": 746,
+     "dec_hit": 0.2347266881028939,
+     "dec_hit_n": 311,
+     "unplayed": 0.036193029490616625,
+     "unplayed_n": 746,
+     "hit_starter_a": 0.47788203753351205,
+     "hit_starter_a_n": 746
+    },
+    "eps_pi_fit_on_train": {
+     "eps": 0.9060590365811745,
+     "pi": 0.23521744987488774,
+     "train_loglik": -4.309507311050974
+    }
+   },
+   "reference_phase3": {
+    "test": {
+     "n": 746,
+     "hit": 0.5040214477211796,
+     "hit_n": 746,
+     "ll": -3.517622018244265,
+     "ll_n": 746,
+     "dec_hit": 0.22186495176848875,
+     "dec_hit_n": 311,
+     "cov80": 0.8364611260053619,
+     "cov80_n": 746,
+     "cov80_mass": 0.8131409548031147,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.05026809651474531,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.00938337801608579,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010339199254426393
+    }
+   },
+   "candidate": {
+    "test": {
+     "n": 746,
+     "hit": 0.5033512064343163,
+     "hit_n": 746,
+     "ll": -3.518168442345788,
+     "ll_n": 746,
+     "dec_hit": 0.2315112540192926,
+     "dec_hit_n": 311,
+     "cov80": 0.8378016085790885,
+     "cov80_n": 746,
+     "cov80_mass": 0.8130736510056781,
+     "cov80_mass_n": 746,
+     "cov01": 0.9973190348525469,
+     "cov01_n": 746,
+     "unplayed": 0.048927613941018765,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.0,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010000568254098684
+    },
+    "train": {
+     "n": 1207,
+     "hit": 0.4755592377796189,
+     "hit_n": 1207,
+     "ll": -3.6689543541821683,
+     "ll_n": 1207,
+     "dec_hit": 0.25100401606425704,
+     "dec_hit_n": 498,
+     "cov80": 0.8011599005799502,
+     "cov80_n": 1207,
+     "cov80_mass": 0.8117984544521656,
+     "cov80_mass_n": 1207,
+     "cov01": 0.9983429991714996,
+     "cov01_n": 1207,
+     "unplayed": 0.056338028169014086,
+     "unplayed_n": 1207,
+     "zero_prob": 0.0,
+     "zero_prob_n": 1207,
+     "masked_but_picked": 0.0,
+     "masked_but_picked_n": 1207,
+     "ece_played": 0.007871946220966878
+    }
+   },
+   "test_evaluations": 11,
+   "pick_set_hit_diff": {
+    "diff": 0.022117962466487937,
+    "ci95": [
+     0.0007132667617689016,
+     0.046365914786967416
+    ],
+    "n": 746
+   },
+   "loglik_diff": {
+    "diff": 0.7497255631652676,
+    "ci95": [
+     0.6716407487736934,
+     0.827492840595393
+    ],
+    "n": 746
+   },
+   "decider_hit_diff": {
+    "diff": -0.003215434083601286,
+    "ci95": [
+     -0.05673758865248227,
+     0.049019607843137254
+    ],
+    "n": 311
+   },
+   "pick_set_hit_diff_vs_phase3": {
+    "diff": -0.0006702412868632708,
+    "ci95": [
+     -0.006206896551724138,
+     0.00501432664756447
+    ],
+    "n": 746
+   },
+   "loglik_diff_vs_phase3": {
+    "diff": -0.0005464241015227741,
+    "ci95": [
+     -0.006832812697238035,
+     0.006023233931108282
+    ],
+    "n": 746
+   },
+   "scoreline_logloss": {
+    "new": 1.304477433964779,
+    "ref": 1.306017738699615,
+    "diff": {
+     "diff": -0.0015403047348360305,
+     "ci95": [
+      -0.005467654661577659,
+      0.0025180807490018716
+     ],
+     "n": 746
+    }
+   },
+   "checks": {
+    "pick_set_hit": true,
+    "loglik": true,
+    "coverage80": true,
+    "ece_played": true,
+    "zero_prob": true,
+    "scoreline_logloss": false,
+    "I6_p_a_identical": true
+   },
+   "passed": false,
+   "fit": {
+    "inner_grid": [
+     {
+      "hp": {
+       "habit_k_ban": 1.0
+      },
+      "inner_fit": -3.652581496559554,
+      "inner_val": -3.725044756633218
+     },
+     {
+      "hp": {
+       "habit_k_ban": 2.0
+      },
+      "inner_fit": -3.65395025938173,
+      "inner_val": -3.7272872270167583
+     },
+     {
+      "hp": {
+       "habit_k_ban": 4.0
+      },
+      "inner_fit": -3.6566898086360955,
+      "inner_val": -3.7285507012364443
+     },
+     {
+      "hp": {
+       "habit_k_ban": 8.0
+      },
+      "inner_fit": -3.6605081050360964,
+      "inner_val": -3.731037668904878
+     }
+    ],
+    "base_inner": null,
+    "free": [
+     "eta_ban1",
+     "eta_ban2",
+     "eta_pick",
+     "zeta_ban1",
+     "zeta_ban2",
+     "zeta_pick"
+    ],
+    "train_loglik": -3.668954354182171,
+    "seconds": 1926.9,
+    "n_train": 1207
+   }
+  },
+  "roster": {
+   "change": "roster",
+   "hp": {
+    "floor": 0.5
+   },
+   "overrides": {
+    "veto_excl_alpha": 0.01,
+    "veto_use_habits": true,
+    "veto_habit_k": 4.0,
+    "veto_roster_discount": true,
+    "veto_roster_floor": 0.5
+   },
+   "params": {
+    "alpha_ban1": 2.033664713439575,
+    "alpha_ban2": -0.20156457048239346,
+    "alpha_pick": 4.334853598125765,
+    "eta_ban1": 1.068883707497266,
+    "eta_ban2": 0.34752415750147203,
+    "eta_pick": 0.7082039324993692,
+    "gamma_ban1": 4.530757888356842,
+    "gamma_ban2": 1.6082521031287111,
+    "gamma_pick": 1.4321062210093656,
+    "lookahead": true,
+    "pi": 0.28574486055052367,
+    "temp": 1.0,
+    "version": "veto-v2.p7.roster",
+    "zeta_ban1": 0.0,
+    "zeta_ban2": 0.0,
+    "zeta_pick": 0.0
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "split": {
+    "train": 1207,
+    "test": 746
+   },
+   "reference_shipped": {
+    "test": {
+     "n": 746,
+     "hit": 0.4812332439678284,
+     "hit_n": 746,
+     "ll": -4.267894005511056,
+     "ll_n": 746,
+     "dec_hit": 0.2347266881028939,
+     "dec_hit_n": 311,
+     "unplayed": 0.036193029490616625,
+     "unplayed_n": 746,
+     "hit_starter_a": 0.47788203753351205,
+     "hit_starter_a_n": 746
+    },
+    "eps_pi_fit_on_train": {
+     "eps": 0.9060590365811745,
+     "pi": 0.23521744987488774,
+     "train_loglik": -4.309507311050974
+    }
+   },
+   "reference_phase3": {
+    "test": {
+     "n": 746,
+     "hit": 0.5040214477211796,
+     "hit_n": 746,
+     "ll": -3.517622018244265,
+     "ll_n": 746,
+     "dec_hit": 0.22186495176848875,
+     "dec_hit_n": 311,
+     "cov80": 0.8364611260053619,
+     "cov80_n": 746,
+     "cov80_mass": 0.8131409548031147,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.05026809651474531,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.00938337801608579,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010339199254426393
+    }
+   },
+   "candidate": {
+    "test": {
+     "n": 746,
+     "hit": 0.5040214477211796,
+     "hit_n": 746,
+     "ll": -3.5149200091312687,
+     "ll_n": 746,
+     "dec_hit": 0.22186495176848875,
+     "dec_hit_n": 311,
+     "cov80": 0.8310991957104558,
+     "cov80_n": 746,
+     "cov80_mass": 0.8126490325108799,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.049597855227882036,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.006702412868632708,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010364673517372363
+    },
+    "train": {
+     "n": 1207,
+     "hit": 0.4743164871582436,
+     "hit_n": 1207,
+     "ll": -3.666115450874616,
+     "ll_n": 1207,
+     "dec_hit": 0.26305220883534136,
+     "dec_hit_n": 498,
+     "cov80": 0.8036454018227009,
+     "cov80_n": 1207,
+     "cov80_mass": 0.8116382583539156,
+     "cov80_mass_n": 1207,
+     "cov01": 0.9975144987572494,
+     "cov01_n": 1207,
+     "unplayed": 0.05592377796188898,
+     "unplayed_n": 1207,
+     "zero_prob": 0.0,
+     "zero_prob_n": 1207,
+     "masked_but_picked": 0.006628003314001657,
+     "masked_but_picked_n": 1207,
+     "ece_played": 0.0067772555276427926
+    }
+   },
+   "test_evaluations": 10,
+   "pick_set_hit_diff": {
+    "diff": 0.022788203753351208,
+    "ci95": [
+     0.0018963337547408343,
+     0.04681404421326398
+    ],
+    "n": 746
+   },
+   "loglik_diff": {
+    "diff": 0.7529739963797871,
+    "ci95": [
+     0.6748506821670499,
+     0.8316205162629261
+    ],
+    "n": 746
+   },
+   "decider_hit_diff": {
+    "diff": -0.012861736334405145,
+    "ci95": [
+     -0.06506849315068493,
+     0.03987730061349693
+    ],
+    "n": 311
+   },
+   "pick_set_hit_diff_vs_phase3": {
+    "diff": 0.0,
+    "ci95": [
+     -0.0027137042062415195,
+     0.0027434842249657062
+    ],
+    "n": 746
+   },
+   "loglik_diff_vs_phase3": {
+    "diff": 0.0027020091129968072,
+    "ci95": [
+     5.622169579255417e-05,
+     0.005573430670403698
+    ],
+    "n": 746
+   },
+   "scoreline_logloss": {
+    "new": 1.3044382039005558,
+    "ref": 1.306017738699615,
+    "diff": {
+     "diff": -0.0015795347990591097,
+     "ci95": [
+      -0.00549082833523292,
+      0.0025035967328697465
+     ],
+     "n": 746
+    }
+   },
+   "checks": {
+    "pick_set_hit": true,
+    "loglik": true,
+    "coverage80": true,
+    "ece_played": true,
+    "zero_prob": true,
+    "scoreline_logloss": false,
+    "I6_p_a_identical": true
+   },
+   "passed": false,
+   "fit": {
+    "inner_grid": [
+     {
+      "hp": {
+       "floor": 0.5
+      },
+      "inner_fit": -3.6501639350536994,
+      "inner_val": -3.7129276546646635
+     }
+    ],
+    "base_inner": null,
+    "free": [
+     "eta_ban1",
+     "eta_ban2",
+     "eta_pick"
+    ],
+    "train_loglik": -3.6661154508746128,
+    "seconds": 877.1,
+    "n_train": 1207
+   }
+  },
+  "combined": {
+   "change": "combined",
+   "hp": {
+    "halflife": 120,
+    "habit_k_ban": 1.0,
+    "floor": 0.5
+   },
+   "overrides": {
+    "veto_excl_alpha": 0.01,
+    "veto_use_habits": true,
+    "veto_habit_k": 4.0,
+    "veto_decay_halflife": 120,
+    "veto_soft_avoid": true,
+    "veto_habit_k_ban": 1.0,
+    "veto_roster_discount": true,
+    "veto_roster_floor": 0.5
+   },
+   "params": {
+    "alpha_ban1": 2.033664713439575,
+    "alpha_ban2": -0.20156457048239346,
+    "alpha_pick": 4.334853598125765,
+    "eta_ban1": 0.6555814625136697,
+    "eta_ban2": 0.48529157249600413,
+    "eta_pick": 0.8784938225170346,
+    "gamma_ban1": 4.530757888356842,
+    "gamma_ban2": 1.6082521031287111,
+    "gamma_pick": 1.4321062210093656,
+    "lookahead": true,
+    "pi": 0.28574486055052367,
+    "temp": 1.0,
+    "version": "veto-v2.p7.combined",
+    "zeta_ban1": 0.7608264024850685,
+    "zeta_ban2": -0.1509230324909571,
+    "zeta_pick": 0.07198932751240777
+   },
+   "rows": {
+    "kept": 1953,
+    "pool_mismatch": 30
+   },
+   "split": {
+    "train": 1207,
+    "test": 746
+   },
+   "reference_shipped": {
+    "test": {
+     "n": 746,
+     "hit": 0.4812332439678284,
+     "hit_n": 746,
+     "ll": -4.267894005511056,
+     "ll_n": 746,
+     "dec_hit": 0.2347266881028939,
+     "dec_hit_n": 311,
+     "unplayed": 0.036193029490616625,
+     "unplayed_n": 746,
+     "hit_starter_a": 0.47788203753351205,
+     "hit_starter_a_n": 746
+    },
+    "eps_pi_fit_on_train": {
+     "eps": 0.9060590365811745,
+     "pi": 0.23521744987488774,
+     "train_loglik": -4.309507311050974
+    }
+   },
+   "reference_phase3": {
+    "test": {
+     "n": 746,
+     "hit": 0.5040214477211796,
+     "hit_n": 746,
+     "ll": -3.517622018244265,
+     "ll_n": 746,
+     "dec_hit": 0.22186495176848875,
+     "dec_hit_n": 311,
+     "cov80": 0.8364611260053619,
+     "cov80_n": 746,
+     "cov80_mass": 0.8131409548031147,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.05026809651474531,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.00938337801608579,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.010339199254426393
+    }
+   },
+   "candidate": {
+    "test": {
+     "n": 746,
+     "hit": 0.5127345844504021,
+     "hit_n": 746,
+     "ll": -3.4786436754260075,
+     "ll_n": 746,
+     "dec_hit": 0.2057877813504823,
+     "dec_hit_n": 311,
+     "cov80": 0.82171581769437,
+     "cov80_n": 746,
+     "cov80_mass": 0.8133716260658959,
+     "cov80_mass_n": 746,
+     "cov01": 0.9959785522788204,
+     "cov01_n": 746,
+     "unplayed": 0.04825737265415549,
+     "unplayed_n": 746,
+     "zero_prob": 0.0,
+     "zero_prob_n": 746,
+     "masked_but_picked": 0.0,
+     "masked_but_picked_n": 746,
+     "ece_played": 0.011968341122232183
+    },
+    "train": {
+     "n": 1207,
+     "hit": 0.4863297431648716,
+     "hit_n": 1207,
+     "ll": -3.618171451547721,
+     "ll_n": 1207,
+     "dec_hit": 0.25903614457831325,
+     "dec_hit_n": 498,
+     "cov80": 0.7887323943661971,
+     "cov80_n": 1207,
+     "cov80_mass": 0.8123620263334812,
+     "cov80_mass_n": 1207,
+     "cov01": 0.9942004971002486,
+     "cov01_n": 1207,
+     "unplayed": 0.05758077879038939,
+     "unplayed_n": 1207,
+     "zero_prob": 0.0,
+     "zero_prob_n": 1207,
+     "masked_but_picked": 0.0,
+     "masked_but_picked_n": 1207,
+     "ece_played": 0.014018843604942231
+    }
+   },
+   "test_evaluations": 13,
+   "pick_set_hit_diff": {
+    "diff": 0.03150134048257373,
+    "ci95": [
+     0.009180790960451978,
+     0.0560625814863103
+    ],
+    "n": 746
+   },
+   "loglik_diff": {
+    "diff": 0.7892503300850482,
+    "ci95": [
+     0.7097930447661304,
+     0.8727875195053927
+    ],
+    "n": 746
+   },
+   "decider_hit_diff": {
+    "diff": -0.028938906752411574,
+    "ci95": [
+     -0.08333333333333333,
+     0.023178807947019868
+    ],
+    "n": 311
+   },
+   "pick_set_hit_diff_vs_phase3": {
+    "diff": 0.00871313672922252,
+    "ci95": [
+     -0.0050798258345428155,
+     0.023148148148148147
+    ],
+    "n": 746
+   },
+   "loglik_diff_vs_phase3": {
+    "diff": 0.03897834281825794,
+    "ci95": [
+     0.022344871505238912,
+     0.0556841583562683
+    ],
+    "n": 746
+   },
+   "scoreline_logloss": {
+    "new": 1.3042540058993564,
+    "ref": 1.306017738699615,
+    "diff": {
+     "diff": -0.001763732800258559,
+     "ci95": [
+      -0.005784166177957061,
+      0.0023398451696470647
+     ],
+     "n": 746
+    }
+   },
+   "checks": {
+    "pick_set_hit": true,
+    "loglik": true,
+    "coverage80": true,
+    "ece_played": true,
+    "zero_prob": true,
+    "scoreline_logloss": false,
+    "I6_p_a_identical": true
+   },
+   "passed": false,
+   "fit": {
+    "inner_grid": [],
+    "base_inner": null,
+    "free": [
+     "eta_ban1",
+     "eta_ban2",
+     "eta_pick",
+     "zeta_ban1",
+     "zeta_ban2",
+     "zeta_pick"
+    ],
+    "train_loglik": -3.6181714515477186,
+    "seconds": 1955.6,
+    "n_train": 1207
+   }
+  }
+ },
+ "enabled": []
+}

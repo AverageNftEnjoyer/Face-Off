@@ -248,6 +248,35 @@ CONFIG = {
     "veto_use_roster": False,
     "veto_roster_k": 4.0,
     # Phase 4: roster-core level between team and field (lineups < D).
+    # Phase 7 (scripts/veto_phase7.py, data/veto_phase7_report.json): three
+    # evidence options, each OFF until it passes its gates. They change the
+    # evidence History builds (backtest.History reads these keys) and the
+    # exclusion / habit terms of the veto distribution only; the point veto,
+    # p_a and the frozen fields never see them. Stay OFF: every candidate
+    # (each change alone and combined) passed all gates except the scoreline
+    # non-regression (CI upper +0.0022..+0.0025 > +0.002, as phase 3); see
+    # data/veto_phase7_report.json.
+    "veto_decay_halflife": None,
+    # Days. Replaces the equal-weight 90-day window of the exclusion test and
+    # the habit counts by weights 0.5 ** (age / halflife) over
+    # veto_decay_horizon days. None = the flat 90-day window.
+    "veto_decay_horizon": 180,
+    "veto_soft_avoid": False,
+    # True: the binary zero-plays exclusion is replaced by a soft avoid score
+    # (veto.avoid_scores) weighted by the fitted zeta_* policy weights.
+    "veto_habit_k_ban": None,
+    # Habit / avoid shrinkage for ban kinds; None = veto_habit_k for every
+    # kind. The pick kind uses veto_pick_shrink_mult times this.
+    "veto_pick_shrink_mult": 4.0,
+    "veto_roster_discount": False,
+    # True: habit and exclusion evidence dated before a lineup change is
+    # multiplied by a factor that is veto_roster_floor right after a change of
+    # 2+ players (halfway for 1) and returns to 1 over veto_roster_recover
+    # series. Lineups dated < D only (data/lineups.json); a team whose lineup
+    # data is older than its last series gets no discount and a
+    # lineup_stale_X warning. Independent of veto_use_roster (stays False).
+    "veto_roster_floor": 0.4,
+    "veto_roster_recover": 8,
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.
@@ -720,7 +749,7 @@ VETO_WARN_TEXT = {
 }
 
 
-def veto_context(m, best_of=3):
+def veto_context(m, best_of=3, legacy=False):
     """veto.Context for one input (PoolResolver + MapModel + the
     PreferenceEstimator of each team). Uses only the veto inputs: map
     records, the pool, veto evidence and permabans -- never ratings, h2h or
@@ -746,10 +775,23 @@ def veto_context(m, best_of=3):
                 # habit evidence (backtest.History with a HabitAccumulator)
                 raise ValueError(f"veto_use_habits is on but veto_ev_{t} has no habit evidence; "
                                  "build inputs with a History that has a HabitAccumulator")
+    if not legacy and (CONFIG.get("veto_decay_halflife") or CONFIG.get("veto_roster_discount")
+                       or CONFIG.get("veto_soft_avoid")):
+        for t in "ab":
+            ev = m.get(f"veto_ev_{t}")
+            if not (isinstance(ev, dict) and ev.get("wmaps") is not None):
+                # same rule as the habits: never run a different model silently
+                raise ValueError(f"a phase-7 veto option is on but veto_ev_{t} has no weighted evidence; "
+                                 "build inputs with backtest.History under the same CONFIG")
     prefs = {
-        "a": _veto.team_prefs(_comfort(m.get("maps_a"), pool), m.get("veto_ev_a"), pool, CONFIG, use_h),
-        "b": _veto.team_prefs(_comfort(m.get("maps_b"), pool), m.get("veto_ev_b"), pool, CONFIG, use_h),
+        "a": _veto.team_prefs(_comfort(m.get("maps_a"), pool), m.get("veto_ev_a"), pool, CONFIG, use_h, legacy),
+        "b": _veto.team_prefs(_comfort(m.get("maps_b"), pool), m.get("veto_ev_b"), pool, CONFIG, use_h, legacy),
     }
+    if not legacy and CONFIG.get("veto_roster_discount"):
+        for t in "ab":
+            ev = m.get(f"veto_ev_{t}")
+            if isinstance(ev, dict) and ev.get("roster_stale"):
+                warns.append(f"lineup_stale_{t}")
     if prefs["a"]["cold"] and prefs["b"]["cold"]:
         warns.append("cold_start_both")
     else:
@@ -781,9 +823,9 @@ def veto_posterior(inp, played, w=None):
     team, kind and map under the posterior over vetoes consistent with the
     played order. `w`: the policy weights the posterior uses (habit terms off)."""
     w = dict(w or veto_params(3))
-    for k in ("eta_ban1", "eta_ban2", "eta_pick"):
+    for k in ("eta_ban1", "eta_ban2", "eta_pick", "zeta_ban1", "zeta_ban2", "zeta_pick"):
         w[k] = 0.0
-    ctx = veto_context(inp, 3)
+    ctx = veto_context(inp, 3, legacy=True)
     return _veto.posterior_counts(ctx, w, played)
 
 

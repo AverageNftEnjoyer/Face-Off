@@ -416,8 +416,12 @@
   "p1 gate on test (re-gate: mechanical alpha + ablation reference + zero_prob check)",
   "p2 gate on test (re-gate: ablation reference + zero_prob check (alpha 0.01 now from the mechanical rule))",
   "p6 gate on test (re-gate: ablation reference + zero_prob check (alpha 0.01 now from the mechanical rule))",
-  "p3 gate on test (re-gate: ablation reference + zero_prob + leakage (habits) in gate)"
+  "p3 gate on test (re-gate: ablation reference + zero_prob + leakage (habits) in gate)",
+  "p7 roster gate on test",
+  "p7 soft gate on test",
+  "p7 decay gate on test",
+  "p7 combined gate on test"
  ],
- "test_evaluations": 9,
+ "test_evaluations": 13,
  "version": "veto-v2"
 }

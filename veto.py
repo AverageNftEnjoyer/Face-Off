@@ -149,13 +149,32 @@ def format_steps(best_of, n_pool, veto_order, veto_format=None):
 # ============================================================================
 # PreferenceEstimator -- (team, D) only
 # ============================================================================
-def exclusion_set(evidence, pool, alpha_excl):
+EXCL_PLAY_EPS = 0.25   # weighted plays below this count as "no plays" (phase 7); one equal-weight play is 1.0
+
+
+def exclusion_set(evidence, pool, alpha_excl, weighted=False):
     """E_X: maps with zero plays in the window whose zero count would be
     unlikely (prob <= alpha_excl) if the team played them at the field's
     point-in-time rate. evidence = {"maps": {map: [plays, n_pool_series,
-    log_p0]}} from backtest.History (series dated < D only)."""
+    log_p0]}} from backtest.History (series dated < D only).
+
+    weighted=True (phase 7) reads evidence["wmaps"] instead: every series is
+    weighted by recency decay and the roster-change discount, "zero plays" is
+    weighted plays < EXCL_PLAY_EPS (so an old or discounted play no longer
+    protects a map) and the zero-count probability is exp(weighted sum of
+    log(1 - rate)). With all weights 1 this is the baseline rule."""
     if not isinstance(evidence, dict) or not alpha_excl or alpha_excl <= 0:
         return set()
+    if weighted and evidence.get("wmaps") is not None:
+        out = set()
+        la = math.log(alpha_excl)
+        for mp in pool:
+            e = evidence["wmaps"].get(mp)
+            if not isinstance(e, (list, tuple)) or len(e) < 5:
+                continue
+            if e[0] < EXCL_PLAY_EPS and e[1] > 0 and e[2] <= la:
+                out.add(mp)
+        return out
     ev = evidence.get("maps") or {}
     out = set()
     la = math.log(alpha_excl)
@@ -166,6 +185,38 @@ def exclusion_set(evidence, pool, alpha_excl):
         plays, n_pool, log_p0 = e[0], e[1], e[2]
         if plays == 0 and n_pool > 0 and log_p0 <= la:
             out.add(mp)
+    return out
+
+
+def shrink_k(cfg):
+    """{kind: pseudo-count} for habit shares and avoid scores. Default: the
+    phase-3 veto_habit_k for every kind. With veto_habit_k_ban set (phase 7),
+    ban kinds use it and the pick kind uses veto_pick_shrink_mult times as
+    much (pick habits carry about a quarter of the held-out information)."""
+    kh = float(cfg.get("veto_habit_k", 4.0))
+    kb = cfg.get("veto_habit_k_ban")
+    if kb is None:
+        return {k: kh for k in KINDS}
+    kb = float(kb)
+    return {"ban1": kb, "ban2": kb, "pick": kb * float(cfg.get("veto_pick_shrink_mult", 4.0))}
+
+
+def avoid_scores(evidence, pool, cfg):
+    """Phase 7 soft avoid score: per kind and map, log((E + k) / (P + k)) with
+    P the (decayed, roster-discounted) plays of the team and E the plays the
+    field's play rate would have given it over the same series; k as in
+    shrink_k. Positive = played less than the field (avoided), negative =
+    played more; 0 with no evidence. Reads evidence["wmaps"]."""
+    out = {k: {mp: 0.0 for mp in pool} for k in KINDS}
+    wm = evidence.get("wmaps") if isinstance(evidence, dict) else None
+    if not wm:
+        return out
+    ks = shrink_k(cfg)
+    for k in KINDS:
+        for mp in pool:
+            e = wm.get(mp)
+            if isinstance(e, (list, tuple)) and len(e) >= 5:
+                out[k][mp] = math.log((e[3] + ks[k]) / (e[0] + ks[k]))
     return out
 
 
@@ -182,10 +233,11 @@ def habit_scores(evidence, pool, cfg):
     hab = evidence.get("habit") or {}
     field = evidence.get("field") or {}
     core = evidence.get("core") if not evidence.get("core_stale") else None
-    kh = float(cfg.get("veto_habit_k", 4.0))
+    khs = shrink_k(cfg)
     kr = float(cfg.get("veto_roster_k", 4.0))
     use_core = bool(cfg.get("veto_use_roster", False)) and isinstance(core, dict)
     for k in KINDS:
+        kh = khs[k]
         fk = field.get(k) or {}
         hk = hab.get(k) or {}
         ck = (core or {}).get(k) or {} if use_core else {}
@@ -203,14 +255,21 @@ def habit_scores(evidence, pool, cfg):
     return out
 
 
-def team_prefs(comfort, evidence, pool, cfg, use_habits=False):
-    """PreferenceEstimator for one team: {"kappa", "excl", "habit", "cold"}.
-    Depends only on the team's own inputs (I8)."""
-    excl = exclusion_set(evidence, pool, cfg.get("veto_excl_alpha", 0.0))
+def team_prefs(comfort, evidence, pool, cfg, use_habits=False, plain=False):
+    """PreferenceEstimator for one team: {"kappa", "excl", "habit", "avoid",
+    "cold"}. Depends only on the team's own inputs (I8). Phase 7: with
+    evidence["wmaps"] present the exclusion test uses the weighted counts; with
+    cfg veto_soft_avoid the binary exclusion is replaced by the soft avoid
+    scores ("avoid", None otherwise). plain=True ignores all of it (the
+    posterior that labels past vetoes for the habit counts is always plain)."""
+    has_w = (not plain) and isinstance(evidence, dict) and evidence.get("wmaps") is not None
+    soft = has_w and bool(cfg.get("veto_soft_avoid"))
+    excl = set() if soft else exclusion_set(evidence, pool, cfg.get("veto_excl_alpha", 0.0), weighted=has_w)
+    avoid = avoid_scores(evidence, pool, cfg) if soft else None
     hab = habit_scores(evidence, pool, cfg) if use_habits else {k: {mp: 0.0 for mp in pool} for k in KINDS}
     n_series = evidence.get("n", 0) if isinstance(evidence, dict) else 0
     cold = (not any(v > 0 for v in comfort.values())) and not n_series
-    return {"kappa": dict(comfort), "excl": excl, "habit": hab, "cold": cold}
+    return {"kappa": dict(comfort), "excl": excl, "habit": hab, "avoid": avoid, "cold": cold}
 
 
 # ============================================================================
@@ -233,6 +292,9 @@ class Context:
         self.excl = {t: [mp in prefs[t]["excl"] for mp in self.pool] for t in "ab"}
         self.hab = {t: {k: [prefs[t]["habit"][k].get(mp, 0.0) for mp in self.pool] for k in KINDS}
                     for t in "ab"}
+        self.has_avoid = any(prefs[t].get("avoid") for t in "ab")
+        self.avoid = {t: {k: [(prefs[t].get("avoid") or {}).get(k, {}).get(mp, 0.0) for mp in self.pool]
+                          for k in KINDS} for t in "ab"} if self.has_avoid else None
         self.cold = {t: bool(prefs[t]["cold"]) for t in "ab"}
         self.masked = {t: sorted(prefs[t]["excl"]) for t in "ab"}
         pb = permaban or {}
@@ -293,6 +355,10 @@ class Tree:
                         c = [-g * kap[i] + e * hab[i] for i in range(n)]
                     else:
                         c = [-a * ell[i] - g * kap[i] + r * kapo[i] + e * hab[i] for i in range(n)]
+                z = float(w.get(f"zeta_{k}", 0.0))
+                if z and ctx.has_avoid:      # phase 7: soft avoid (bans want it, picks shun it)
+                    av = ctx.avoid[t][k]
+                    c = [c[i] + (-z if k == "pick" else z) * av[i] for i in range(n)]
                 self.const[(t, k)] = c
         # leaf value: P(S wins | q = sigmoid(ell_S)) on the played maps
         q = [_sigmoid(x) for x in ctx.ell[sigma]]
