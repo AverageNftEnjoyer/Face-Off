@@ -10,8 +10,8 @@ Fetch the viewer's visual assets and roster data from Liquipedia, politely.
     so we download small images (logos ~160px, maps ~640px, flags ~36px)
 
 All API calls go through data/lpfetch.py (descriptive UA, >= 2.5 s apart,
-cached under data/raw/liquipedia/). Image downloads are cached under
-data/raw/liquipedia_media/ and spaced >= 1.5 s apart. Writes
+cached under data/raw/pages/). Image downloads are cached under
+data/raw/media/ and spaced >= 1.5 s apart. Writes
 viewer/assets.json (no image bytes; the build step embeds them).
 
 Logos and map images are the property of their owners (team trademarks,
@@ -38,7 +38,7 @@ import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
-MEDIA = os.path.join(ROOT, "data", "raw", "liquipedia_media")
+MEDIA = os.path.join(ROOT, "data", "raw", "media")
 EVENT = "ESL/Pro League/Season 24"
 # dataset map name -> Liquipedia map page, only where the two differ
 # (any other map is looked up under its own name)

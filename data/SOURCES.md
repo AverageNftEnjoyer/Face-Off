@@ -18,12 +18,12 @@ nothing is invented, imputed or estimated.
   request, imageinfo, prefix listings; roughly half were repeat listings while
   the discovery rules were tuned) and about 270 image downloads. Part of that
   covered B-tier events, which were tracked for one day and then dropped (see
-  below); their cached responses stay in `raw/liquipedia/` but nothing reads
+  below); their cached responses stay in `raw/pages/` but nothing reads
   them.
 - Content license: CC BY-SA 3.0 (Liquipedia text content). Attribution:
   "Data from Liquipedia (liquipedia.net/counterstrike), CC BY-SA 3.0".
   Derived data in this folder inherits CC BY-SA.
-- Raw responses: `raw/liquipedia/*.json` (380 files on 2026-10-07). Each file stores the request URL, the fetch
+- Raw responses: `raw/pages/*.json` (380 files on 2026-10-07). Each file stores the request URL, the fetch
   time and the full JSON response. The page list is in `raw/lp_titles_selected.txt` (168
   lines). The first 138 were selected from the `allpages` prefix listings in
   `raw/lp_titles_all.txt`; the other 30 come from the tier categories (below).
@@ -133,8 +133,9 @@ nothing is invented, imputed or estimated.
 | tournaments on the site (2026 and the next 120 days) | 41 (27 S-tier, 14 A-tier) |
 | showmatches dropped | by section (`{{show match}}` / `{{Stage|Showmatch}}`) and by team name |
 
-`liquipedia:<page>` is recorded in `source` for every series, together with the HLTV
-match id that Liquipedia links. Nothing was fetched from HLTV.
+Every series records the event page it was read from (`event_page`) and, when the
+page prints one, its external match number (`ext_match_id`, also used to drop
+duplicates).
 
 ### Normalization
 - Team names: Liquipedia team-template codes (`vit`, `navi`, `tl`, ...) are resolved to the

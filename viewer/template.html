@@ -2637,8 +2637,8 @@ function evCard(e) {
   </a>`;
 }
 /* v5: the season as a circuit */
-/* v6: tier filter (Tournaments page only). e.tl is Liquipedia's own tier
-   (liquipediatier: S / A); both on by default. The choice is kept in
+/* v6: tier filter (Tournaments page only). e.tl is the event's own tier
+   (S / A); both on by default. The choice is kept in
    localStorage when the browser allows it; events without a tier always show. */
 const TIERS = [["S", "S-tier"], ["A", "A-tier"]];
 const TIER_DEFAULT = { S: true, A: true };
@@ -2652,12 +2652,12 @@ const tierOn = (() => {
 })();
 function saveTiers() { try { localStorage.setItem("faceoff.tiers", JSON.stringify(tierOn)); } catch (_) { /* not kept */ } }
 const tierShown = e => !(e.tl in tierOn) || tierOn[e.tl];
-const tierTag = e => e.tl ? `<i class="tier t${e.tl}" title="${e.tl}-tier on Liquipedia">${e.tl}</i>` : "";
+const tierTag = e => e.tl ? `<i class="tier t${e.tl}" title="${e.tl}-tier event">${e.tl}</i>` : "";
 function tierBar() {
   const n = k => EV.filter(e => e.tl === k).length;
   return `<fieldset class="tierbar"><legend>Show tiers</legend>${TIERS.map(([k, l]) => `<label class="tierbox t${k}">
     <input type="checkbox" data-tier="${k}"${tierOn[k] ? " checked" : ""}><span>${l}</span><b>${n(k)}</b></label>`).join("")}
-    <span class="dim">Liquipedia's tier for each event</span></fieldset>`;
+    <span class="dim">Tier of each event</span></fieldset>`;
 }
 const usd = n =>"$" + Math.round(n).toLocaleString("en-US");
 const prizeNum = e => +String(e.prize || "").replace(/[^\d.]/g, "") || 0;
@@ -3011,7 +3011,6 @@ function evMatches(e) {
     <div class="evside">
       ${standings(e)}
       ${e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : ""}
-      <div class="links"><a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a></div>
     </div>
   </div>
   ${bracketBlocks(cols).map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}${cs.some(c => c.list.some(m => !m.finished && !isLive(m) && m.t1 && m.t2 && m.pred)) ? ` <span class="dim">percentages are the model's pre-match chances</span>` : ""}</h2>${bracketHtml(cs, bm)}</section>`).join("")}`;
@@ -3138,11 +3137,7 @@ function viewMatch(id) {
   return `
   <nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
   ${matchDesk(pred, a, b, { ev: e, fixedBo: m.bo, played: m.maps.length ? playedMaps(m) : "", ctx: ctxFor(m, e),
-    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), live: isLive(m), label: "Model's pre-match call" })}
-  <div class="links">
-    ${m.hltv ? `<a class="btn" href="https://www.hltv.org/matches/${encodeURIComponent(m.hltv)}/match" target="_blank" rel="noopener">Match on HLTV</a>` : ""}
-    <a class="btn" href="${esc(e.page)}" target="_blank" rel="noopener">Tournament on Liquipedia</a>
-  </div>`;
+    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), live: isLive(m), label: "Model's pre-match call" })}`;
 }
 function countdown(when) {
   if (!when) return "";
@@ -3193,7 +3188,7 @@ function viewTeam(slugv) {
   <nav class="crumb"><a href="#teams">Teams</a><span>/</span><span>${esc(n)}</span></nav>
   <section class="thead">${logo(n, "xl")}
     <div><h1 class="cond">${esc(n)}</h1><p class="dim small">${esc(t.location)}${t.region ? `, region ${esc(t.region.toUpperCase())}` : ""}</p>
-      <div class="links" style="margin-top:.6rem"><a class="btn" href="${esc(t.liquipedia)}" target="_blank" rel="noopener">Team on Liquipedia</a>${CMP_NAMES.includes(n) ? `<a class="btn" href="#home" data-cmp="${esc(n)}">Put in a matchup</a>` : ""}</div></div>
+      ${CMP_NAMES.includes(n) ? `<div class="links" style="margin-top:.6rem"><a class="btn" href="#home" data-cmp="${esc(n)}">Put in a matchup</a></div>` : ""}</div>
     <div class="big">${t.vrs
         ? `<span class="small dim">Valve Regional Standings</span><b class="cond">#${t.vrs.rank}</b><span class="small dim">${t.vrs.points} points${t.vrs.region ? `, ${REGION[t.vrs.region] || t.vrs.region} #${t.vrs.region_rank}` : ""}</span>`
         : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}

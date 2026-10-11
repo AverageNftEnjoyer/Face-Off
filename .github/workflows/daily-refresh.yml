@@ -57,6 +57,9 @@ jobs:
       - name: Check the site builds
         run: python viewer/build_viewer.py public/index.html
 
+      - name: Build the SQLite copy (data/faceoff.db)
+        run: python scripts/build_db.py
+
       - name: Commit and push changed data
         run: |
           git config user.name "faceoff-refresh-bot"

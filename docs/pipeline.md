@@ -53,6 +53,18 @@ viewer/build_viewer.py ──► static HTML (bundle inlined: DATA + FIXTURES +
  foreign-version bundle)
 ```
 
+## SQLite copy for querying (`data/faceoff.db`)
+
+`scripts/build_db.py` rebuilds `data/faceoff.db` from `data/*.json` after the
+gates pass, in both refresh workflows, and it is committed with the data. It is
+a read-only convenience copy: nothing in the pipeline reads it, and
+`matches.json` stays the source of truth. Tables: `matches`, `maps`,
+`elo_history` (point-in-time series Elo before / after every series), `teams`,
+`lineups`, `standins`, `vrs_standings`, `lower_matches`, `lower_maps`; views
+`team_matches` (one row per team per series) and `team_map_stats`. Every table
+and column is described in `schema_doc` (`SELECT * FROM schema_doc`). The file
+is replaced only when its bytes change, so an unchanged input never commits.
+
 ## Schedules (`.github/workflows/`)
 
 | Workflow | Cadence | Job |

@@ -54,6 +54,9 @@ jobs:
           set -o pipefail
           python scripts/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
 
+      - name: Build the SQLite copy (data/faceoff.db)
+        run: python scripts/build_db.py
+
       - name: Commit and push changed data
         run: |
           git config user.name "faceoff-refresh-bot"

@@ -544,7 +544,6 @@ def build_data():
             # in the all-pairs matchup grid (DATA.pairs)
             "cmp": t in pool and bool(h_now.games[t]),
             "location": rec.get("location", ""), "region": rec.get("region", ""),
-            "liquipedia": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
             "roster": roster,
             "form30": f.get("form30"), "n30": f.get("n30", 0), "vol": f["volatility"],
             # plain 90-day map win rates for display (the engine reads Elo-adjusted ones)
@@ -625,7 +624,7 @@ def build_data():
     for e in events:
         ev_out.append({k: e[k] for k in ("slug", "name", "start", "end", "tier", "tl", "type", "city", "country",
                                          "venue", "prize", "organizer", "swiss", "format", "prizes", "pool",
-                                         "status", "champion", "runner_up", "placements", "page")}
+                                         "status", "champion", "runner_up", "placements")}
                       | {"participants": [{"team": t, **v} for t, v in e["participants"].items()],
                          "matches": e["matches"]})
 

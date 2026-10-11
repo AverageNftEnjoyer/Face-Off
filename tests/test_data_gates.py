@@ -30,7 +30,7 @@ def good_match(i, date="2026-10-09", a="Team A", b="Team B", winner=None):
             "event": "Some Event", "stage": "Final", "best_of": 3, "tier": "S",
             "winner": w, "score_a": 2, "score_b": 0,
             "maps": [{"map": "Mirage", "winner": w}, {"map": "Nuke", "winner": w}],
-            "source": "liquipedia:X"}
+            "event_page": "X", "ext_match_id": None}
 
 
 def _dump(obj, path):

@@ -137,8 +137,7 @@ def load(path=OUT):
 
 
 def page_of(m):
-    src = m.get("source") or ""
-    return src[len("liquipedia:"):].split(" (hltv")[0] if src.startswith("liquipedia:") else m.get("event_title")
+    return m.get("event_page") or m.get("event_title")
 
 
 def lineup(store, team, page, day):

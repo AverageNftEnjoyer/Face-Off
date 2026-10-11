@@ -2,47 +2,47 @@
  "fetched_for": "2026-10-12",
  "event": "ESL/Pro League/Season 24",
  "event_logos": {
-  "intel-extreme-masters-atlanta-2026": "data/raw/liquipedia_media/af9b934d835666bb.png",
-  "intel-extreme-masters-beijing-2026": "data/raw/liquipedia_media/af9b934d835666bb.png",
-  "intel-extreme-masters-rio-2026": "data/raw/liquipedia_media/af9b934d835666bb.png",
-  "intel-extreme-masters-cologne-major-2026": "data/raw/liquipedia_media/e0ecf1cb003c7002.png",
-  "intel-extreme-masters-krak-w-2026": "data/raw/liquipedia_media/66dc2521564255ba.png",
-  "esl-pro-league-season-23": "data/raw/liquipedia_media/67dae7e09f0aea0b.png",
-  "esl-pro-league-season-24": "data/raw/liquipedia_media/d353441cd92a634e.png",
-  "blast-open-fall-2026": "data/raw/liquipedia_media/f8ca50fc6cccff50.png",
-  "blast-open-spring-2026": "data/raw/liquipedia_media/9d2c29004c718498.png",
-  "blast-bounty-summer-2026": "data/raw/liquipedia_media/0e6cd1788e28bd59.png",
-  "blast-bounty-winter-2026": "data/raw/liquipedia_media/0e6cd1788e28bd59.png",
-  "blast-rivals-fall-2026": "data/raw/liquipedia_media/27aeec1d9aade6a3.png",
-  "blast-rivals-spring-2026": "data/raw/liquipedia_media/0d96b30ee426e537.png",
-  "pgl-astana-2026": "data/raw/liquipedia_media/8d2384bf2da0d48a.png",
-  "pgl-masters-bucharest-2026": "data/raw/liquipedia_media/8dc6e4f0cb136567.png",
-  "pgl-bucharest-2026": "data/raw/liquipedia_media/8c1590704611f3dc.png",
-  "pgl-cluj-napoca-2026": "data/raw/liquipedia_media/79c232d3acf24c60.png",
-  "pgl-major-singapore-2026": "data/raw/liquipedia_media/e82d6e38d644c3de.png",
-  "starladder-starseries-fall-2026": "data/raw/liquipedia_media/ab59d01940e9026c.png",
-  "thunderpick-world-championship-2026": "data/raw/liquipedia_media/80952d123b0b5b19.png",
-  "esports-world-cup-2026": "data/raw/liquipedia_media/c7cd916a23ad992f.png",
-  "intel-extreme-masters-krak-w-2027": "data/raw/liquipedia_media/af9b934d835666bb.png",
-  "blast-bounty-winter-2027": "data/raw/liquipedia_media/659fed02909a9624.png",
-  "pgl-bucharest-2027": "data/raw/liquipedia_media/6826a73c0bf39458.png",
-  "stake-ranked-episode-1": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
-  "asian-champions-league-2026": "data/raw/liquipedia_media/6f3b0f0963230f17.png",
-  "cs-asia-championships-2026": "data/raw/liquipedia_media/4044dde16bda7da9.png",
-  "stake-ranked-episode-2": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
-  "xse-pro-league-2026": "data/raw/liquipedia_media/ce136df54102db29.png",
-  "stake-ranked-episode-3": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
-  "fissure-playground-3": "data/raw/liquipedia_media/364c42e456fdbfa2.png",
-  "logitech-g-play-connect-2026": "data/raw/liquipedia_media/d4310c4b360d176b.png",
-  "1win-private-club-1": "data/raw/liquipedia_media/75ae0988e56cea91.png",
-  "stake-ranked-episode-4": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
+  "intel-extreme-masters-atlanta-2026": "data/raw/media/af9b934d835666bb.png",
+  "intel-extreme-masters-beijing-2026": "data/raw/media/af9b934d835666bb.png",
+  "intel-extreme-masters-rio-2026": "data/raw/media/af9b934d835666bb.png",
+  "intel-extreme-masters-cologne-major-2026": "data/raw/media/e0ecf1cb003c7002.png",
+  "intel-extreme-masters-krak-w-2026": "data/raw/media/66dc2521564255ba.png",
+  "esl-pro-league-season-23": "data/raw/media/67dae7e09f0aea0b.png",
+  "esl-pro-league-season-24": "data/raw/media/d353441cd92a634e.png",
+  "blast-open-fall-2026": "data/raw/media/f8ca50fc6cccff50.png",
+  "blast-open-spring-2026": "data/raw/media/9d2c29004c718498.png",
+  "blast-bounty-summer-2026": "data/raw/media/0e6cd1788e28bd59.png",
+  "blast-bounty-winter-2026": "data/raw/media/0e6cd1788e28bd59.png",
+  "blast-rivals-fall-2026": "data/raw/media/27aeec1d9aade6a3.png",
+  "blast-rivals-spring-2026": "data/raw/media/0d96b30ee426e537.png",
+  "pgl-astana-2026": "data/raw/media/8d2384bf2da0d48a.png",
+  "pgl-masters-bucharest-2026": "data/raw/media/8dc6e4f0cb136567.png",
+  "pgl-bucharest-2026": "data/raw/media/8c1590704611f3dc.png",
+  "pgl-cluj-napoca-2026": "data/raw/media/79c232d3acf24c60.png",
+  "pgl-major-singapore-2026": "data/raw/media/e82d6e38d644c3de.png",
+  "starladder-starseries-fall-2026": "data/raw/media/ab59d01940e9026c.png",
+  "thunderpick-world-championship-2026": "data/raw/media/80952d123b0b5b19.png",
+  "esports-world-cup-2026": "data/raw/media/c7cd916a23ad992f.png",
+  "intel-extreme-masters-krak-w-2027": "data/raw/media/af9b934d835666bb.png",
+  "blast-bounty-winter-2027": "data/raw/media/659fed02909a9624.png",
+  "pgl-bucharest-2027": "data/raw/media/6826a73c0bf39458.png",
+  "stake-ranked-episode-1": "data/raw/media/a5ff6c95529a0315.png",
+  "asian-champions-league-2026": "data/raw/media/6f3b0f0963230f17.png",
+  "cs-asia-championships-2026": "data/raw/media/4044dde16bda7da9.png",
+  "stake-ranked-episode-2": "data/raw/media/a5ff6c95529a0315.png",
+  "xse-pro-league-2026": "data/raw/media/ce136df54102db29.png",
+  "stake-ranked-episode-3": "data/raw/media/a5ff6c95529a0315.png",
+  "fissure-playground-3": "data/raw/media/364c42e456fdbfa2.png",
+  "logitech-g-play-connect-2026": "data/raw/media/d4310c4b360d176b.png",
+  "1win-private-club-1": "data/raw/media/75ae0988e56cea91.png",
+  "stake-ranked-episode-4": "data/raw/media/a5ff6c95529a0315.png",
   "forge-of-legends-2026": null,
-  "1win-private-club-2": "data/raw/liquipedia_media/75ae0988e56cea91.png",
-  "stake-ranked-episode-5": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
-  "esports-nations-cup-2026": "data/raw/liquipedia_media/83733d9f840ab32f.png",
-  "yalla-compass-uae-2026": "data/raw/liquipedia_media/f02f3fc2ebb138ce.png",
-  "stake-ranked-episode-6": "data/raw/liquipedia_media/a5ff6c95529a0315.png",
-  "extremesland-2026": "data/raw/liquipedia_media/ce9257e57ba430ed.png"
+  "1win-private-club-2": "data/raw/media/75ae0988e56cea91.png",
+  "stake-ranked-episode-5": "data/raw/media/a5ff6c95529a0315.png",
+  "esports-nations-cup-2026": "data/raw/media/83733d9f840ab32f.png",
+  "yalla-compass-uae-2026": "data/raw/media/f02f3fc2ebb138ce.png",
+  "stake-ranked-episode-6": "data/raw/media/a5ff6c95529a0315.png",
+  "extremesland-2026": "data/raw/media/ce9257e57ba430ed.png"
  },
  "teams": {
   "100 Thieves": {
@@ -103,8 +103,8 @@
    ],
    "icon": "100 Thieves lightmode.png",
    "icon_dark": "100 Thieves darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/02cb9b83adefe87b.png",
-   "logo_dark_path": "data/raw/liquipedia_media/288cce1e991c658a.png"
+   "logo_path": "data/raw/media/02cb9b83adefe87b.png",
+   "logo_dark_path": "data/raw/media/288cce1e991c658a.png"
   },
   "1w Team": {
    "page": "1w Team",
@@ -172,8 +172,8 @@
    ],
    "icon": "1win Team 2024 allmode.png",
    "icon_dark": "1win Team 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/7fb8b0b82a4b66b2.png",
-   "logo_dark_path": "data/raw/liquipedia_media/7fb8b0b82a4b66b2.png"
+   "logo_path": "data/raw/media/7fb8b0b82a4b66b2.png",
+   "logo_dark_path": "data/raw/media/7fb8b0b82a4b66b2.png"
   },
   "33": {
    "page": "33",
@@ -233,8 +233,8 @@
    ],
    "icon": "BET-M 33 allmode.png",
    "icon_dark": "BET-M 33 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/1ce2e06597fdb40d.png",
-   "logo_dark_path": "data/raw/liquipedia_media/1ce2e06597fdb40d.png"
+   "logo_path": "data/raw/media/1ce2e06597fdb40d.png",
+   "logo_dark_path": "data/raw/media/1ce2e06597fdb40d.png"
   },
   "3DMAX": {
    "page": "3DMAX",
@@ -254,8 +254,8 @@
    ],
    "icon": "3DMAX 2024 allmode.png",
    "icon_dark": "3DMAX 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/8101d0f09d2a5453.png",
-   "logo_dark_path": "data/raw/liquipedia_media/8101d0f09d2a5453.png"
+   "logo_path": "data/raw/media/8101d0f09d2a5453.png",
+   "logo_dark_path": "data/raw/media/8101d0f09d2a5453.png"
   },
   "5star eSports": {
    "page": "5star eSports",
@@ -315,8 +315,8 @@
    ],
    "icon": "5star eSports lightmode.png",
    "icon_dark": "5star eSports darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/12fbc3513dd65cfb.png",
-   "logo_dark_path": "data/raw/liquipedia_media/b9ef3fd2b96ea20d.png"
+   "logo_path": "data/raw/media/12fbc3513dd65cfb.png",
+   "logo_dark_path": "data/raw/media/b9ef3fd2b96ea20d.png"
   },
   "9INE": {
    "page": "9INE",
@@ -376,8 +376,8 @@
    ],
    "icon": "9INE 2025 lightmode.png",
    "icon_dark": "9INE 2025 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/b02581b9f2a93150.png",
-   "logo_dark_path": "data/raw/liquipedia_media/71d98373884c7ccc.png"
+   "logo_path": "data/raw/media/b02581b9f2a93150.png",
+   "logo_dark_path": "data/raw/media/71d98373884c7ccc.png"
   },
   "9z Team": {
    "page": "9z Team",
@@ -437,8 +437,8 @@
    ],
    "icon": "9z Team 2024 lightmode.png",
    "icon_dark": "9z Team 2024 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/d077cf34acbb447a.png",
-   "logo_dark_path": "data/raw/liquipedia_media/25fb96206f02680b.png"
+   "logo_path": "data/raw/media/d077cf34acbb447a.png",
+   "logo_dark_path": "data/raw/media/25fb96206f02680b.png"
   },
   "Alliance": {
    "page": "Alliance",
@@ -498,8 +498,8 @@
    ],
    "icon": "Alliance 2024 allmode.png",
    "icon_dark": "Alliance 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png",
-   "logo_dark_path": "data/raw/liquipedia_media/63c76a23ce145f5b.png"
+   "logo_path": "data/raw/media/63c76a23ce145f5b.png",
+   "logo_dark_path": "data/raw/media/63c76a23ce145f5b.png"
   },
   "Alter Ego": {
    "page": "Alter Ego",
@@ -559,8 +559,8 @@
    ],
    "icon": "Alter Ego 2022 allmode.png",
    "icon_dark": "Alter Ego 2022 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/3d9d4ef6c12bac88.png",
-   "logo_dark_path": "data/raw/liquipedia_media/3d9d4ef6c12bac88.png"
+   "logo_path": "data/raw/media/3d9d4ef6c12bac88.png",
+   "logo_dark_path": "data/raw/media/3d9d4ef6c12bac88.png"
   },
   "Astralis": {
    "page": "Astralis",
@@ -604,8 +604,8 @@
    ],
    "icon": "Astralis 2020 allmode.png",
    "icon_dark": "Astralis 2020 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/cbdffc6eca9bcabc.png",
-   "logo_dark_path": "data/raw/liquipedia_media/cbdffc6eca9bcabc.png"
+   "logo_path": "data/raw/media/cbdffc6eca9bcabc.png",
+   "logo_dark_path": "data/raw/media/cbdffc6eca9bcabc.png"
   },
   "Aurora Gaming": {
    "page": "Aurora Gaming",
@@ -665,8 +665,8 @@
    ],
    "icon": "Aurora Gaming 2025 allmode.png",
    "icon_dark": "Aurora Gaming 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/96e059888697bbea.png",
-   "logo_dark_path": "data/raw/liquipedia_media/96e059888697bbea.png"
+   "logo_path": "data/raw/media/96e059888697bbea.png",
+   "logo_dark_path": "data/raw/media/96e059888697bbea.png"
   },
   "B8": {
    "page": "B8",
@@ -726,8 +726,8 @@
    ],
    "icon": "B8 lightmode.png",
    "icon_dark": "B8 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/5bbd3ab30fda2bde.png",
-   "logo_dark_path": "data/raw/liquipedia_media/4a255c4673de3e5d.png"
+   "logo_path": "data/raw/media/5bbd3ab30fda2bde.png",
+   "logo_dark_path": "data/raw/media/4a255c4673de3e5d.png"
   },
   "BC.Game Esports": {
    "page": "BC.Game Esports",
@@ -787,8 +787,8 @@
    ],
    "icon": "BC.Game Esports nov 2025 allmode.png",
    "icon_dark": "BC.Game Esports nov 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/d8aec708b44e5f4e.png"
+   "logo_path": "data/raw/media/d8aec708b44e5f4e.png",
+   "logo_dark_path": "data/raw/media/d8aec708b44e5f4e.png"
   },
   "BIG": {
    "page": "BIG",
@@ -848,8 +848,8 @@
    ],
    "icon": "BIG 2020 lightmode.png",
    "icon_dark": "BIG 2020 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/a599552b92209c4b.png",
-   "logo_dark_path": "data/raw/liquipedia_media/9c379e7b7d2d3b68.png"
+   "logo_path": "data/raw/media/a599552b92209c4b.png",
+   "logo_dark_path": "data/raw/media/9c379e7b7d2d3b68.png"
   },
   "BetBoom Team": {
    "page": "BetBoom Team",
@@ -909,8 +909,8 @@
    ],
    "icon": "BetBoom Team 2024 allmode.png",
    "icon_dark": "BetBoom Team 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/ef4dedecaa7f3587.png",
-   "logo_dark_path": "data/raw/liquipedia_media/ef4dedecaa7f3587.png"
+   "logo_path": "data/raw/media/ef4dedecaa7f3587.png",
+   "logo_dark_path": "data/raw/media/ef4dedecaa7f3587.png"
   },
   "Betclic Apogee Esports": {
    "page": "Betclic Apogee Esports",
@@ -970,8 +970,8 @@
    ],
    "icon": "Betclic Apogee Esports lightmode.png",
    "icon_dark": "Betclic Apogee Esports darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/b7f5cc7c8ce8e01e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/32f5b6a51ba8c81e.png"
+   "logo_path": "data/raw/media/b7f5cc7c8ce8e01e.png",
+   "logo_dark_path": "data/raw/media/32f5b6a51ba8c81e.png"
   },
   "Change The Game": {
    "page": "Change The Game",
@@ -982,8 +982,8 @@
    "roster": [],
    "icon": "Change The Game lightmode.png",
    "icon_dark": "Change The Game darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/a7712b49d101d994.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c8ef82651861e353.png"
+   "logo_path": "data/raw/media/a7712b49d101d994.png",
+   "logo_dark_path": "data/raw/media/c8ef82651861e353.png"
   },
   "Chinggis Warriors": {
    "page": "Chinggis Warriors",
@@ -1043,8 +1043,8 @@
    ],
    "icon": "CW allmode.png",
    "icon_dark": "CW allmode.png",
-   "logo_path": "data/raw/liquipedia_media/1e40d37dc452b0ee.png",
-   "logo_dark_path": "data/raw/liquipedia_media/1e40d37dc452b0ee.png"
+   "logo_path": "data/raw/media/1e40d37dc452b0ee.png",
+   "logo_dark_path": "data/raw/media/1e40d37dc452b0ee.png"
   },
   "DENDELE CS": {
    "page": "DENDELE CS",
@@ -1104,8 +1104,8 @@
    ],
    "icon": "DENDELE CS allmode.png",
    "icon_dark": "DENDELE CS allmode.png",
-   "logo_path": "data/raw/liquipedia_media/c995ae8e184646cc.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c995ae8e184646cc.png"
+   "logo_path": "data/raw/media/c995ae8e184646cc.png",
+   "logo_dark_path": "data/raw/media/c995ae8e184646cc.png"
   },
   "EYEBALLERS": {
    "page": "EYEBALLERS",
@@ -1165,8 +1165,8 @@
    ],
    "icon": "EYEBALLERS 2023 allmode.png",
    "icon_dark": "EYEBALLERS 2023 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png",
-   "logo_dark_path": "data/raw/liquipedia_media/4d4ad312a4c44108.png"
+   "logo_path": "data/raw/media/4d4ad312a4c44108.png",
+   "logo_dark_path": "data/raw/media/4d4ad312a4c44108.png"
   },
   "Eternal Fire": {
    "page": "Eternal Fire",
@@ -1226,8 +1226,8 @@
    ],
    "icon": "Eternal Fire 2023 allmode.png",
    "icon_dark": "Eternal Fire 2023 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/ea43bc100225143c.png",
-   "logo_dark_path": "data/raw/liquipedia_media/ea43bc100225143c.png"
+   "logo_path": "data/raw/media/ea43bc100225143c.png",
+   "logo_dark_path": "data/raw/media/ea43bc100225143c.png"
   },
   "FOKUS": {
    "page": "FOKUS",
@@ -1287,8 +1287,8 @@
    ],
    "icon": "FOKUS allmode.png",
    "icon_dark": "FOKUS allmode.png",
-   "logo_path": "data/raw/liquipedia_media/4813c638d26d1eb9.png",
-   "logo_dark_path": "data/raw/liquipedia_media/4813c638d26d1eb9.png"
+   "logo_path": "data/raw/media/4813c638d26d1eb9.png",
+   "logo_dark_path": "data/raw/media/4813c638d26d1eb9.png"
   },
   "FURIA": {
    "page": "FURIA",
@@ -1348,8 +1348,8 @@
    ],
    "icon": "FURIA Esports allmode.png",
    "icon_dark": "FURIA Esports allmode.png",
-   "logo_path": "data/raw/liquipedia_media/81d1df1ebe5fa696.png",
-   "logo_dark_path": "data/raw/liquipedia_media/81d1df1ebe5fa696.png"
+   "logo_path": "data/raw/media/81d1df1ebe5fa696.png",
+   "logo_dark_path": "data/raw/media/81d1df1ebe5fa696.png"
   },
   "FUT Esports": {
    "page": "FUT Esports",
@@ -1409,8 +1409,8 @@
    ],
    "icon": "Futbolist 2021 lightmode.png",
    "icon_dark": "Futbolist 2021 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/f1bae90bc426b0ef.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f7189b792a1b63b5.png"
+   "logo_path": "data/raw/media/f1bae90bc426b0ef.png",
+   "logo_dark_path": "data/raw/media/f7189b792a1b63b5.png"
   },
   "FaZe Clan": {
    "page": "FaZe Clan",
@@ -1470,8 +1470,8 @@
    ],
    "icon": "FaZe Esports 2026 lightmode.png",
    "icon_dark": "FaZe Esports 2026 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/cdcb73edb7065a4a.png",
-   "logo_dark_path": "data/raw/liquipedia_media/96e3727a4710ea83.png"
+   "logo_path": "data/raw/media/cdcb73edb7065a4a.png",
+   "logo_dark_path": "data/raw/media/96e3727a4710ea83.png"
   },
   "Fisher College": {
    "page": "Fisher College",
@@ -1499,8 +1499,8 @@
    ],
    "icon": "Fisher College allmode.png",
    "icon_dark": "Fisher College allmode.png",
-   "logo_path": "data/raw/liquipedia_media/0f46dc13f1e467f8.png",
-   "logo_dark_path": "data/raw/liquipedia_media/0f46dc13f1e467f8.png"
+   "logo_path": "data/raw/media/0f46dc13f1e467f8.png",
+   "logo_dark_path": "data/raw/media/0f46dc13f1e467f8.png"
   },
   "FlyQuest": {
    "page": "FlyQuest",
@@ -1560,8 +1560,8 @@
    ],
    "icon": "FlyQuest 2021 allmode.png",
    "icon_dark": "FlyQuest 2021 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png",
-   "logo_dark_path": "data/raw/liquipedia_media/53d7070dfa9d719d.png"
+   "logo_path": "data/raw/media/53d7070dfa9d719d.png",
+   "logo_dark_path": "data/raw/media/53d7070dfa9d719d.png"
   },
   "Fnatic": {
    "page": "Fnatic",
@@ -1621,8 +1621,8 @@
    ],
    "icon": "Fnatic 2020 full lightmode.png",
    "icon_dark": "Fnatic 2020 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/b9ecba7cf61b285b.png",
-   "logo_dark_path": "data/raw/liquipedia_media/3c99efae8430451c.png"
+   "logo_path": "data/raw/media/b9ecba7cf61b285b.png",
+   "logo_dark_path": "data/raw/media/3c99efae8430451c.png"
   },
   "G2 Esports": {
    "page": "G2 Esports",
@@ -1682,8 +1682,8 @@
    ],
    "icon": "G2 Esports 2020 lightmode.png",
    "icon_dark": "G2 Esports 2020 lightmode.png",
-   "logo_path": "data/raw/liquipedia_media/550f1ba0eecb0ac0.png",
-   "logo_dark_path": "data/raw/liquipedia_media/550f1ba0eecb0ac0.png"
+   "logo_path": "data/raw/media/550f1ba0eecb0ac0.png",
+   "logo_dark_path": "data/raw/media/550f1ba0eecb0ac0.png"
   },
   "Gaimin Gladiators": {
    "page": "Gaimin Gladiators",
@@ -1719,8 +1719,8 @@
    ],
    "icon": "Gladiators 2022 allmode.png",
    "icon_dark": "Gladiators 2022 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/39336a544dff6a2a.png",
-   "logo_dark_path": "data/raw/liquipedia_media/39336a544dff6a2a.png"
+   "logo_path": "data/raw/media/39336a544dff6a2a.png",
+   "logo_dark_path": "data/raw/media/39336a544dff6a2a.png"
   },
   "GamerLegion": {
    "page": "GamerLegion",
@@ -1780,8 +1780,8 @@
    ],
    "icon": "GamerLegion 2026 allmode.png",
    "icon_dark": "GamerLegion 2026 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/55c34c738bd0b0c6.png",
-   "logo_dark_path": "data/raw/liquipedia_media/55c34c738bd0b0c6.png"
+   "logo_path": "data/raw/media/55c34c738bd0b0c6.png",
+   "logo_dark_path": "data/raw/media/55c34c738bd0b0c6.png"
   },
   "Gentle Mates": {
    "page": "Gentle Mates",
@@ -1825,8 +1825,8 @@
    ],
    "icon": "Gentle Mates 2024 lightmode.png",
    "icon_dark": "Gentle Mates 2024 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/3a33f96e9af21bab.png",
-   "logo_dark_path": "data/raw/liquipedia_media/1d9d678008e5e713.png"
+   "logo_path": "data/raw/media/3a33f96e9af21bab.png",
+   "logo_dark_path": "data/raw/media/1d9d678008e5e713.png"
   },
   "Ground Zero Gaming": {
    "page": "Ground Zero Gaming",
@@ -1886,8 +1886,8 @@
    ],
    "icon": "Ground Zero Gaming 2019.png",
    "icon_dark": "Ground Zero Gaming 2019.png",
-   "logo_path": "data/raw/liquipedia_media/2cdfb44ca3c1e995.png",
-   "logo_dark_path": "data/raw/liquipedia_media/2cdfb44ca3c1e995.png"
+   "logo_path": "data/raw/media/2cdfb44ca3c1e995.png",
+   "logo_dark_path": "data/raw/media/2cdfb44ca3c1e995.png"
   },
   "HEROIC": {
    "page": "HEROIC",
@@ -1947,8 +1947,8 @@
    ],
    "icon": "HEROIC 2024 allmode.png",
    "icon_dark": "HEROIC 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png",
-   "logo_dark_path": "data/raw/liquipedia_media/d9e39b6d1df1f8c4.png"
+   "logo_path": "data/raw/media/d9e39b6d1df1f8c4.png",
+   "logo_dark_path": "data/raw/media/d9e39b6d1df1f8c4.png"
   },
   "HOTU": {
    "page": "HOTU",
@@ -2016,8 +2016,8 @@
    ],
    "icon": "HOTU 2022 lightmode.png",
    "icon_dark": "HOTU 2022 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/d0456609bb801878.png",
-   "logo_dark_path": "data/raw/liquipedia_media/375d25c7d4e33713.png"
+   "logo_path": "data/raw/media/d0456609bb801878.png",
+   "logo_dark_path": "data/raw/media/375d25c7d4e33713.png"
   },
   "IC Esports": {
    "page": "IC Esports",
@@ -2077,8 +2077,8 @@
    ],
    "icon": "Inner Circle 2025 allmode.png",
    "icon_dark": "Inner Circle 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/5b13c04887b12e28.png",
-   "logo_dark_path": "data/raw/liquipedia_media/5b13c04887b12e28.png"
+   "logo_path": "data/raw/media/5b13c04887b12e28.png",
+   "logo_dark_path": "data/raw/media/5b13c04887b12e28.png"
   },
   "INFINITE": {
    "page": "INFINITE",
@@ -2130,8 +2130,8 @@
    ],
    "icon": "Infinite Gaming allmode.png",
    "icon_dark": "Infinite Gaming allmode.png",
-   "logo_path": "data/raw/liquipedia_media/c87c608e6be2b518.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c87c608e6be2b518.png"
+   "logo_path": "data/raw/media/c87c608e6be2b518.png",
+   "logo_dark_path": "data/raw/media/c87c608e6be2b518.png"
   },
   "Imperial Esports": {
    "page": "Imperial Esports",
@@ -2191,8 +2191,8 @@
    ],
    "icon": "Imperial Esports 2025 allmode.png",
    "icon_dark": "Imperial Esports 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/ba01286af007964e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/ba01286af007964e.png"
+   "logo_path": "data/raw/media/ba01286af007964e.png",
+   "logo_dark_path": "data/raw/media/ba01286af007964e.png"
   },
   "JiJieHao": {
    "page": "JiJieHao",
@@ -2252,8 +2252,8 @@
    ],
    "icon": "JiJieHao International allmode.png",
    "icon_dark": "JiJieHao International allmode.png",
-   "logo_path": "data/raw/liquipedia_media/6df5d1438990e753.png",
-   "logo_dark_path": "data/raw/liquipedia_media/6df5d1438990e753.png"
+   "logo_path": "data/raw/media/6df5d1438990e753.png",
+   "logo_dark_path": "data/raw/media/6df5d1438990e753.png"
   },
   "K27": {
    "page": "K27",
@@ -2313,8 +2313,8 @@
    ],
    "icon": "K27 allmode.png",
    "icon_dark": "K27 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/f7efe9c7e98b22d4.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f7efe9c7e98b22d4.png"
+   "logo_path": "data/raw/media/f7efe9c7e98b22d4.png",
+   "logo_dark_path": "data/raw/media/f7efe9c7e98b22d4.png"
   },
   "Kaleido Gaming": {
    "page": "Kaleido Gaming",
@@ -2366,8 +2366,8 @@
    ],
    "icon": "Kaleido Gaming 2025 allmode.png",
    "icon_dark": "Kaleido Gaming 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/f0727a8e95b3871d.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f0727a8e95b3871d.png"
+   "logo_path": "data/raw/media/f0727a8e95b3871d.png",
+   "logo_dark_path": "data/raw/media/f0727a8e95b3871d.png"
   },
   "Legacy": {
    "page": "Legacy",
@@ -2427,8 +2427,8 @@
    ],
    "icon": "Legacy allmode.png",
    "icon_dark": "Legacy allmode.png",
-   "logo_path": "data/raw/liquipedia_media/61f3c599fbdd3554.png",
-   "logo_dark_path": "data/raw/liquipedia_media/61f3c599fbdd3554.png"
+   "logo_path": "data/raw/media/61f3c599fbdd3554.png",
+   "logo_dark_path": "data/raw/media/61f3c599fbdd3554.png"
   },
   "Luminosity Gaming": {
    "page": "Luminosity Gaming",
@@ -2488,8 +2488,8 @@
    ],
    "icon": "Luminosity Gaming 2018 allmode.png",
    "icon_dark": "Luminosity Gaming 2018 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/c0747750f42ffa69.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c0747750f42ffa69.png"
+   "logo_path": "data/raw/media/c0747750f42ffa69.png",
+   "logo_dark_path": "data/raw/media/c0747750f42ffa69.png"
   },
   "Lynn Vision Gaming": {
    "page": "Lynn Vision Gaming",
@@ -2549,8 +2549,8 @@
    ],
    "icon": "Lynn Vision Gaming 2024 allmode.png",
    "icon_dark": "Lynn Vision Gaming 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/f178098ce5db66de.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f178098ce5db66de.png"
+   "logo_path": "data/raw/media/f178098ce5db66de.png",
+   "logo_dark_path": "data/raw/media/f178098ce5db66de.png"
   },
   "M80": {
    "page": "M80",
@@ -2610,8 +2610,8 @@
    ],
    "icon": "M80 2023 allmode.png",
    "icon_dark": "M80 2023 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/f97ffb0317ee360d.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f97ffb0317ee360d.png"
+   "logo_path": "data/raw/media/f97ffb0317ee360d.png",
+   "logo_dark_path": "data/raw/media/f97ffb0317ee360d.png"
   },
   "MIBR": {
    "page": "MIBR",
@@ -2671,8 +2671,8 @@
    ],
    "icon": "MIBR 2018 lightmode.png",
    "icon_dark": "MIBR 2018 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/d5ef7a2670a0aa9d.png",
-   "logo_dark_path": "data/raw/liquipedia_media/56139db092eee1cf.png"
+   "logo_path": "data/raw/media/d5ef7a2670a0aa9d.png",
+   "logo_dark_path": "data/raw/media/56139db092eee1cf.png"
   },
   "MOUZ": {
    "page": "MOUZ",
@@ -2732,8 +2732,8 @@
    ],
    "icon": "MOUZ allmode.png",
    "icon_dark": "MOUZ allmode.png",
-   "logo_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png",
-   "logo_dark_path": "data/raw/liquipedia_media/4fdaf3d20d06ec87.png"
+   "logo_path": "data/raw/media/4fdaf3d20d06ec87.png",
+   "logo_dark_path": "data/raw/media/4fdaf3d20d06ec87.png"
   },
   "Metizport": {
    "page": "Metizport",
@@ -2793,8 +2793,8 @@
    ],
    "icon": "Metizport 2025 allmode.png",
    "icon_dark": "Metizport 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/77a63665d42fb13e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/77a63665d42fb13e.png"
+   "logo_path": "data/raw/media/77a63665d42fb13e.png",
+   "logo_dark_path": "data/raw/media/77a63665d42fb13e.png"
   },
   "Monte": {
    "page": "Monte",
@@ -2822,8 +2822,8 @@
    ],
    "icon": "Monte 2022 allmode.png",
    "icon_dark": "Monte 2022 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/374e57e9008e0966.png",
-   "logo_dark_path": "data/raw/liquipedia_media/374e57e9008e0966.png"
+   "logo_path": "data/raw/media/374e57e9008e0966.png",
+   "logo_dark_path": "data/raw/media/374e57e9008e0966.png"
   },
   "NEXVOID": {
    "page": "NEXVOID",
@@ -2883,8 +2883,8 @@
    ],
    "icon": "NEXVOID allmode.png",
    "icon_dark": "NEXVOID allmode.png",
-   "logo_path": "data/raw/liquipedia_media/7d91a28287774cd9.png",
-   "logo_dark_path": "data/raw/liquipedia_media/7d91a28287774cd9.png"
+   "logo_path": "data/raw/media/7d91a28287774cd9.png",
+   "logo_dark_path": "data/raw/media/7d91a28287774cd9.png"
   },
   "NRG": {
    "page": "NRG",
@@ -2944,8 +2944,8 @@
    ],
    "icon": "NRG 2024 lightmode.png",
    "icon_dark": "NRG 2024 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/965aa0db2d3e5faf.png",
-   "logo_dark_path": "data/raw/liquipedia_media/8fb41f84612e09bd.png"
+   "logo_path": "data/raw/media/965aa0db2d3e5faf.png",
+   "logo_dark_path": "data/raw/media/8fb41f84612e09bd.png"
   },
   "Natus Vincere": {
    "page": "Natus Vincere",
@@ -3005,8 +3005,8 @@
    ],
    "icon": "Natus Vincere 2021 lightmode.png",
    "icon_dark": "Natus Vincere 2021 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/44df4ee5562ff85a.png",
-   "logo_dark_path": "data/raw/liquipedia_media/5730dbfbb8d0c60f.png"
+   "logo_path": "data/raw/media/44df4ee5562ff85a.png",
+   "logo_dark_path": "data/raw/media/5730dbfbb8d0c60f.png"
   },
   "Nemiga Gaming": {
    "page": "Nemiga Gaming",
@@ -3066,8 +3066,8 @@
    ],
    "icon": "Nemiga Gaming 2020logo.png",
    "icon_dark": "Nemiga Gaming 2020logo.png",
-   "logo_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png",
-   "logo_dark_path": "data/raw/liquipedia_media/8a7b5e851b5a588b.png"
+   "logo_path": "data/raw/media/8a7b5e851b5a588b.png",
+   "logo_dark_path": "data/raw/media/8a7b5e851b5a588b.png"
   },
   "Ninjas in Pyjamas": {
    "page": "Ninjas in Pyjamas",
@@ -3127,8 +3127,8 @@
    ],
    "icon": "Ninjas in Pyjamas 2021 lightmode.png",
    "icon_dark": "Ninjas in Pyjamas 2021 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/1dcb3576a6ddf162.png",
-   "logo_dark_path": "data/raw/liquipedia_media/cd0cac439bd09e4b.png"
+   "logo_path": "data/raw/media/1dcb3576a6ddf162.png",
+   "logo_dark_path": "data/raw/media/cd0cac439bd09e4b.png"
   },
   "Nuclear TigeRES": {
    "page": "Nuclear TigeRES",
@@ -3188,8 +3188,8 @@
    ],
    "icon": "Nuclear TigeRES lightmode.png",
    "icon_dark": "Nuclear TigeRES darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/8413ef23c22d7554.png",
-   "logo_dark_path": "data/raw/liquipedia_media/67d2dffcaf51f317.png"
+   "logo_path": "data/raw/media/8413ef23c22d7554.png",
+   "logo_dark_path": "data/raw/media/67d2dffcaf51f317.png"
   },
   "PARIVISION": {
    "page": "PARIVISION",
@@ -3249,8 +3249,8 @@
    ],
    "icon": "PARIVISION allmode.png",
    "icon_dark": "PARIVISION allmode.png",
-   "logo_path": "data/raw/liquipedia_media/77b93cb15532f9b9.png",
-   "logo_dark_path": "data/raw/liquipedia_media/77b93cb15532f9b9.png"
+   "logo_path": "data/raw/media/77b93cb15532f9b9.png",
+   "logo_dark_path": "data/raw/media/77b93cb15532f9b9.png"
   },
   "Passion UA": {
    "page": "Passion UA",
@@ -3270,8 +3270,8 @@
    ],
    "icon": "Passion UA 2025 lightmode.png",
    "icon_dark": "Passion UA 2025 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/4e1c3dd076141a2e.png",
-   "logo_dark_path": "data/raw/liquipedia_media/ad4e5b21130d514c.png"
+   "logo_path": "data/raw/media/4e1c3dd076141a2e.png",
+   "logo_dark_path": "data/raw/media/ad4e5b21130d514c.png"
   },
   "Phantom Esports": {
    "page": "Phantom Esports",
@@ -3323,8 +3323,8 @@
    ],
    "icon": "Phantom Esports lightmode.png",
    "icon_dark": "Phantom Esports darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/6b12331060ae6d53.png",
-   "logo_dark_path": "data/raw/liquipedia_media/74034cf0a8c1b94e.png"
+   "logo_path": "data/raw/media/6b12331060ae6d53.png",
+   "logo_dark_path": "data/raw/media/74034cf0a8c1b94e.png"
   },
   "RED Canids": {
    "page": "RED Canids",
@@ -3368,8 +3368,8 @@
    ],
    "icon": "Red_Canids_logo.png",
    "icon_dark": "Red_Canids_logo.png",
-   "logo_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png",
-   "logo_dark_path": "data/raw/liquipedia_media/d5cb96d27ce0cba5.png"
+   "logo_path": "data/raw/media/d5cb96d27ce0cba5.png",
+   "logo_dark_path": "data/raw/media/d5cb96d27ce0cba5.png"
   },
   "Rare Atom": {
    "page": "Rare Atom",
@@ -3437,8 +3437,8 @@
    ],
    "icon": "Rare Atom allmode.png",
    "icon_dark": "Rare Atom allmode.png",
-   "logo_path": "data/raw/liquipedia_media/c51daad19ab70aef.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c51daad19ab70aef.png"
+   "logo_path": "data/raw/media/c51daad19ab70aef.png",
+   "logo_dark_path": "data/raw/media/c51daad19ab70aef.png"
   },
   "SAW": {
    "page": "SAW",
@@ -3498,8 +3498,8 @@
    ],
    "icon": "SAW 2021 full lightmode.png",
    "icon_dark": "SAW 2021 full darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/bf3434380c4368ab.png",
-   "logo_dark_path": "data/raw/liquipedia_media/401671bb167ffff7.png"
+   "logo_path": "data/raw/media/bf3434380c4368ab.png",
+   "logo_dark_path": "data/raw/media/401671bb167ffff7.png"
   },
   "SINNERS Esports": {
    "page": "SINNERS Esports",
@@ -3559,8 +3559,8 @@
    ],
    "icon": "SINNERS Esports allmode.png",
    "icon_dark": "SINNERS Esports allmode.png",
-   "logo_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png",
-   "logo_dark_path": "data/raw/liquipedia_media/4b87366f3bc47c79.png"
+   "logo_path": "data/raw/media/4b87366f3bc47c79.png",
+   "logo_dark_path": "data/raw/media/4b87366f3bc47c79.png"
   },
   "Sangal Esports": {
    "page": "Sangal Esports",
@@ -3620,8 +3620,8 @@
    ],
    "icon": "Sangal Esports 2020 allmode.png",
    "icon_dark": "Sangal Esports 2020 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/d4a52820eef6a773.png",
-   "logo_dark_path": "data/raw/liquipedia_media/d4a52820eef6a773.png"
+   "logo_path": "data/raw/media/d4a52820eef6a773.png",
+   "logo_dark_path": "data/raw/media/d4a52820eef6a773.png"
   },
   "SemperFi Esports": {
    "page": "SemperFi Esports",
@@ -3657,8 +3657,8 @@
    ],
    "icon": "SemperFI Esports allmode.png",
    "icon_dark": "SemperFI Esports allmode.png",
-   "logo_path": "data/raw/liquipedia_media/732e294c875770a7.png",
-   "logo_dark_path": "data/raw/liquipedia_media/732e294c875770a7.png"
+   "logo_path": "data/raw/media/732e294c875770a7.png",
+   "logo_dark_path": "data/raw/media/732e294c875770a7.png"
   },
   "ShindeN": {
    "page": "ShindeN",
@@ -3718,8 +3718,8 @@
    ],
    "icon": "ShindeN lightmode.png",
    "icon_dark": "ShindeN darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/9d13e47ad540b75f.png",
-   "logo_dark_path": "data/raw/liquipedia_media/28ecc6d4386597fa.png"
+   "logo_path": "data/raw/media/9d13e47ad540b75f.png",
+   "logo_dark_path": "data/raw/media/28ecc6d4386597fa.png"
   },
   "THUNDERdOWNUNDER": {
    "page": "THUNDERdOWNUNDER",
@@ -3755,8 +3755,8 @@
    ],
    "icon": "THUNDERdOWNUNDER 2026 allmode.png",
    "icon_dark": "THUNDERdOWNUNDER 2026 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/147f459d56baf6a6.png",
-   "logo_dark_path": "data/raw/liquipedia_media/147f459d56baf6a6.png"
+   "logo_path": "data/raw/media/147f459d56baf6a6.png",
+   "logo_dark_path": "data/raw/media/147f459d56baf6a6.png"
   },
   "TYLOO": {
    "page": "TYLOO",
@@ -3816,8 +3816,8 @@
    ],
    "icon": "TyLoo 2016 allmode.png",
    "icon_dark": "TyLoo 2016 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/ac92a4aed022059f.png",
-   "logo_dark_path": "data/raw/liquipedia_media/ac92a4aed022059f.png"
+   "logo_path": "data/raw/media/ac92a4aed022059f.png",
+   "logo_dark_path": "data/raw/media/ac92a4aed022059f.png"
   },
   "Team Argentina": {
    "page": "Team Argentina",
@@ -3828,8 +3828,8 @@
    "roster": [],
    "icon": "Flag of Argentina.svg",
    "icon_dark": "Flag of Argentina.svg",
-   "logo_path": "data/raw/liquipedia_media/7c6fd4b9b0a0c36e.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/7c6fd4b9b0a0c36e.svg"
+   "logo_path": "data/raw/media/7c6fd4b9b0a0c36e.svg",
+   "logo_dark_path": "data/raw/media/7c6fd4b9b0a0c36e.svg"
   },
   "Team Australia": {
    "page": "Team Australia",
@@ -3840,8 +3840,8 @@
    "roster": [],
    "icon": "Flag of Australia.svg",
    "icon_dark": "Flag of Australia.svg",
-   "logo_path": "data/raw/liquipedia_media/eb3df9f56361ba00.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/eb3df9f56361ba00.svg"
+   "logo_path": "data/raw/media/eb3df9f56361ba00.svg",
+   "logo_dark_path": "data/raw/media/eb3df9f56361ba00.svg"
   },
   "Team Brazil": {
    "page": "Team Brazil",
@@ -3852,8 +3852,8 @@
    "roster": [],
    "icon": "Flag of Brazil.svg",
    "icon_dark": "Flag of Brazil.svg",
-   "logo_path": "data/raw/liquipedia_media/0e789fad96e3f595.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/0e789fad96e3f595.svg"
+   "logo_path": "data/raw/media/0e789fad96e3f595.svg",
+   "logo_dark_path": "data/raw/media/0e789fad96e3f595.svg"
   },
   "Team Bulgaria": {
    "page": "Team Bulgaria",
@@ -3864,8 +3864,8 @@
    "roster": [],
    "icon": "Flag of Bulgaria.svg",
    "icon_dark": "Flag of Bulgaria.svg",
-   "logo_path": "data/raw/liquipedia_media/28cf5d097d5b4266.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/28cf5d097d5b4266.svg"
+   "logo_path": "data/raw/media/28cf5d097d5b4266.svg",
+   "logo_dark_path": "data/raw/media/28cf5d097d5b4266.svg"
   },
   "Team Canada": {
    "page": "Team Canada",
@@ -3876,8 +3876,8 @@
    "roster": [],
    "icon": "Flag of Canada.svg",
    "icon_dark": "Flag of Canada.svg",
-   "logo_path": "data/raw/liquipedia_media/27df63022d0b4bd8.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/27df63022d0b4bd8.svg"
+   "logo_path": "data/raw/media/27df63022d0b4bd8.svg",
+   "logo_dark_path": "data/raw/media/27df63022d0b4bd8.svg"
   },
   "Team Chile": {
    "page": "Team Chile",
@@ -3897,8 +3897,8 @@
    ],
    "icon": "Flag of Chile.svg",
    "icon_dark": "Flag of Chile.svg",
-   "logo_path": "data/raw/liquipedia_media/7c9aae18719d4589.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/7c9aae18719d4589.svg"
+   "logo_path": "data/raw/media/7c9aae18719d4589.svg",
+   "logo_dark_path": "data/raw/media/7c9aae18719d4589.svg"
   },
   "Team China": {
    "page": "Team China",
@@ -3909,8 +3909,8 @@
    "roster": [],
    "icon": "Flag of the People's Republic of China.svg",
    "icon_dark": "Flag of the People's Republic of China.svg",
-   "logo_path": "data/raw/liquipedia_media/7d202e6cfc6cbaa8.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/7d202e6cfc6cbaa8.svg"
+   "logo_path": "data/raw/media/7d202e6cfc6cbaa8.svg",
+   "logo_dark_path": "data/raw/media/7d202e6cfc6cbaa8.svg"
   },
   "Team Denmark": {
    "page": "Team Denmark",
@@ -3921,8 +3921,8 @@
    "roster": [],
    "icon": "Flag of Denmark.svg",
    "icon_dark": "Flag of Denmark.svg",
-   "logo_path": "data/raw/liquipedia_media/037d8cfa6224e5ae.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/037d8cfa6224e5ae.svg"
+   "logo_path": "data/raw/media/037d8cfa6224e5ae.svg",
+   "logo_dark_path": "data/raw/media/037d8cfa6224e5ae.svg"
   },
   "Team Falcons": {
    "page": "Team Falcons",
@@ -3982,8 +3982,8 @@
    ],
    "icon": "Team Falcons 2022 allmode.png",
    "icon_dark": "Team Falcons 2022 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/1709728531cf8385.png",
-   "logo_dark_path": "data/raw/liquipedia_media/1709728531cf8385.png"
+   "logo_path": "data/raw/media/1709728531cf8385.png",
+   "logo_dark_path": "data/raw/media/1709728531cf8385.png"
   },
   "Team France": {
    "page": "Team France",
@@ -3994,8 +3994,8 @@
    "roster": [],
    "icon": "Flag of France.svg",
    "icon_dark": "Flag of France.svg",
-   "logo_path": "data/raw/liquipedia_media/f56b7d9730830e3b.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/f56b7d9730830e3b.svg"
+   "logo_path": "data/raw/media/f56b7d9730830e3b.svg",
+   "logo_dark_path": "data/raw/media/f56b7d9730830e3b.svg"
   },
   "Team Germany": {
    "page": "Team Germany",
@@ -4006,8 +4006,8 @@
    "roster": [],
    "icon": "Flag of Germany.svg",
    "icon_dark": "Flag of Germany.svg",
-   "logo_path": "data/raw/liquipedia_media/66b85b03763651d2.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/66b85b03763651d2.svg"
+   "logo_path": "data/raw/media/66b85b03763651d2.svg",
+   "logo_dark_path": "data/raw/media/66b85b03763651d2.svg"
   },
   "Team Indonesia": {
    "page": "Team Indonesia",
@@ -4018,8 +4018,8 @@
    "roster": [],
    "icon": "Flag of Indonesia.svg",
    "icon_dark": "Flag of Indonesia.svg",
-   "logo_path": "data/raw/liquipedia_media/cd1a21953bcc06d9.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/cd1a21953bcc06d9.svg"
+   "logo_path": "data/raw/media/cd1a21953bcc06d9.svg",
+   "logo_dark_path": "data/raw/media/cd1a21953bcc06d9.svg"
   },
   "Team Kazakhstan": {
    "page": "Team Kazakhstan",
@@ -4030,8 +4030,8 @@
    "roster": [],
    "icon": "Flag of Kazakhstan.svg",
    "icon_dark": "Flag of Kazakhstan.svg",
-   "logo_path": "data/raw/liquipedia_media/5e7bf6a7a1ddddb6.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/5e7bf6a7a1ddddb6.svg"
+   "logo_path": "data/raw/media/5e7bf6a7a1ddddb6.svg",
+   "logo_dark_path": "data/raw/media/5e7bf6a7a1ddddb6.svg"
   },
   "Team Liquid": {
    "page": "Team Liquid",
@@ -4091,8 +4091,8 @@
    ],
    "icon": "Team Liquid 2024 lightmode.png",
    "icon_dark": "Team Liquid 2024 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/39b073101a191071.png",
-   "logo_dark_path": "data/raw/liquipedia_media/3a47525151412b0d.png"
+   "logo_path": "data/raw/media/39b073101a191071.png",
+   "logo_dark_path": "data/raw/media/3a47525151412b0d.png"
   },
   "Team Lithuania": {
    "page": "Team Lithuania",
@@ -4103,8 +4103,8 @@
    "roster": [],
    "icon": "Flag of Lithuania.svg",
    "icon_dark": "Flag of Lithuania.svg",
-   "logo_path": "data/raw/liquipedia_media/81a5676b83616625.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/81a5676b83616625.svg"
+   "logo_path": "data/raw/media/81a5676b83616625.svg",
+   "logo_dark_path": "data/raw/media/81a5676b83616625.svg"
   },
   "Team Mexico": {
    "page": "Team Mexico",
@@ -4115,8 +4115,8 @@
    "roster": [],
    "icon": "Flag of Mexico.svg",
    "icon_dark": "Flag of Mexico.svg",
-   "logo_path": "data/raw/liquipedia_media/6a20e9c06a346878.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/6a20e9c06a346878.svg"
+   "logo_path": "data/raw/media/6a20e9c06a346878.svg",
+   "logo_dark_path": "data/raw/media/6a20e9c06a346878.svg"
   },
   "Team Mongolia": {
    "page": "Team Mongolia",
@@ -4127,8 +4127,8 @@
    "roster": [],
    "icon": "Flag of Mongolia.svg",
    "icon_dark": "Flag of Mongolia.svg",
-   "logo_path": "data/raw/liquipedia_media/27f5cc36411402c3.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/27f5cc36411402c3.svg"
+   "logo_path": "data/raw/media/27f5cc36411402c3.svg",
+   "logo_dark_path": "data/raw/media/27f5cc36411402c3.svg"
   },
   "Team Morocco": {
    "page": "Team Morocco",
@@ -4139,8 +4139,8 @@
    "roster": [],
    "icon": "Flag of Morocco.svg",
    "icon_dark": "Flag of Morocco.svg",
-   "logo_path": "data/raw/liquipedia_media/7166ca59f41ac5a1.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/7166ca59f41ac5a1.svg"
+   "logo_path": "data/raw/media/7166ca59f41ac5a1.svg",
+   "logo_dark_path": "data/raw/media/7166ca59f41ac5a1.svg"
   },
   "Team Nemesis": {
    "page": "Team Nemesis",
@@ -4200,8 +4200,8 @@
    ],
    "icon": "Team Nemesis lightmode.png",
    "icon_dark": "Team Nemesis darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/eb439cc88f5ee107.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c95a886f3d486fc1.png"
+   "logo_path": "data/raw/media/eb439cc88f5ee107.png",
+   "logo_dark_path": "data/raw/media/c95a886f3d486fc1.png"
   },
   "Team Poland": {
    "page": "Team Poland",
@@ -4212,8 +4212,8 @@
    "roster": [],
    "icon": "Flag of Poland.svg",
    "icon_dark": "Flag of Poland.svg",
-   "logo_path": "data/raw/liquipedia_media/c05ab7224778e65a.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/c05ab7224778e65a.svg"
+   "logo_path": "data/raw/media/c05ab7224778e65a.svg",
+   "logo_dark_path": "data/raw/media/c05ab7224778e65a.svg"
   },
   "Team Romania": {
    "page": "Team Romania",
@@ -4224,8 +4224,8 @@
    "roster": [],
    "icon": "Flag of Romania.svg",
    "icon_dark": "Flag of Romania.svg",
-   "logo_path": "data/raw/liquipedia_media/61750cccc6381582.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/61750cccc6381582.svg"
+   "logo_path": "data/raw/media/61750cccc6381582.svg",
+   "logo_dark_path": "data/raw/media/61750cccc6381582.svg"
   },
   "Team South Africa": {
    "page": "Team South Africa",
@@ -4236,8 +4236,8 @@
    "roster": [],
    "icon": "Flag of South Africa.svg",
    "icon_dark": "Flag of South Africa.svg",
-   "logo_path": "data/raw/liquipedia_media/50cf6e0e15cb8722.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/50cf6e0e15cb8722.svg"
+   "logo_path": "data/raw/media/50cf6e0e15cb8722.svg",
+   "logo_dark_path": "data/raw/media/50cf6e0e15cb8722.svg"
   },
   "Team Spirit": {
    "page": "Team Spirit",
@@ -4297,8 +4297,8 @@
    ],
    "icon": "Team Spirit 2022 lightmode.png",
    "icon_dark": "Team Spirit 2022 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/267f640458b724c4.png",
-   "logo_dark_path": "data/raw/liquipedia_media/f48fcb78e0846515.png"
+   "logo_path": "data/raw/media/267f640458b724c4.png",
+   "logo_dark_path": "data/raw/media/f48fcb78e0846515.png"
   },
   "Team Turkey": {
    "page": "Team Turkey",
@@ -4309,8 +4309,8 @@
    "roster": [],
    "icon": "Flag of Turkey.svg",
    "icon_dark": "Flag of Turkey.svg",
-   "logo_path": "data/raw/liquipedia_media/f60772155604d8ea.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/f60772155604d8ea.svg"
+   "logo_path": "data/raw/media/f60772155604d8ea.svg",
+   "logo_dark_path": "data/raw/media/f60772155604d8ea.svg"
   },
   "Team USA": {
    "page": "Team USA",
@@ -4321,8 +4321,8 @@
    "roster": [],
    "icon": "Flag of the United States.svg",
    "icon_dark": "Flag of the United States.svg",
-   "logo_path": "data/raw/liquipedia_media/582dc515a10b3aaf.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/582dc515a10b3aaf.svg"
+   "logo_path": "data/raw/media/582dc515a10b3aaf.svg",
+   "logo_dark_path": "data/raw/media/582dc515a10b3aaf.svg"
   },
   "Team United Kingdom": {
    "page": "Team United Kingdom",
@@ -4333,8 +4333,8 @@
    "roster": [],
    "icon": "Flag of the United Kingdom.svg",
    "icon_dark": "Flag of the United Kingdom.svg",
-   "logo_path": "data/raw/liquipedia_media/1db5852976f0b017.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/1db5852976f0b017.svg"
+   "logo_path": "data/raw/media/1db5852976f0b017.svg",
+   "logo_dark_path": "data/raw/media/1db5852976f0b017.svg"
   },
   "Team Uzbekistan": {
    "page": "Team Uzbekistan",
@@ -4345,8 +4345,8 @@
    "roster": [],
    "icon": "Flag of Uzbekistan.svg",
    "icon_dark": "Flag of Uzbekistan.svg",
-   "logo_path": "data/raw/liquipedia_media/e4fe62473e05adda.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/e4fe62473e05adda.svg"
+   "logo_path": "data/raw/media/e4fe62473e05adda.svg",
+   "logo_dark_path": "data/raw/media/e4fe62473e05adda.svg"
   },
   "Team Vietnam": {
    "page": "Team Vietnam",
@@ -4357,8 +4357,8 @@
    "roster": [],
    "icon": "Flag of Vietnam.svg",
    "icon_dark": "Flag of Vietnam.svg",
-   "logo_path": "data/raw/liquipedia_media/3fd41c78c00d3c3a.svg",
-   "logo_dark_path": "data/raw/liquipedia_media/3fd41c78c00d3c3a.svg"
+   "logo_path": "data/raw/media/3fd41c78c00d3c3a.svg",
+   "logo_dark_path": "data/raw/media/3fd41c78c00d3c3a.svg"
   },
   "Team Vitality": {
    "page": "Team Vitality",
@@ -4418,8 +4418,8 @@
    ],
    "icon": "Team Vitality 2023 darkmode.png",
    "icon_dark": "Team Vitality 2023 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/16e82a084935bdbf.png",
-   "logo_dark_path": "data/raw/liquipedia_media/16e82a084935bdbf.png"
+   "logo_path": "data/raw/media/16e82a084935bdbf.png",
+   "logo_dark_path": "data/raw/media/16e82a084935bdbf.png"
   },
   "Team Voca": {
    "page": "Team Voca",
@@ -4463,8 +4463,8 @@
    ],
    "icon": "Team Voca lightmode.png",
    "icon_dark": "Team Voca lightmode.png",
-   "logo_path": "data/raw/liquipedia_media/9818f584b3804d2f.png",
-   "logo_dark_path": "data/raw/liquipedia_media/9818f584b3804d2f.png"
+   "logo_path": "data/raw/media/9818f584b3804d2f.png",
+   "logo_dark_path": "data/raw/media/9818f584b3804d2f.png"
   },
   "The Huns Esports": {
    "page": "The Huns Esports",
@@ -4516,8 +4516,8 @@
    ],
    "icon": "The Huns Esports 2025 allmode.png",
    "icon_dark": "The Huns Esports 2025 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/7e87c08871231baf.png",
-   "logo_dark_path": "data/raw/liquipedia_media/7e87c08871231baf.png"
+   "logo_path": "data/raw/media/7e87c08871231baf.png",
+   "logo_dark_path": "data/raw/media/7e87c08871231baf.png"
   },
   "The MongolZ": {
    "page": "The MongolZ",
@@ -4577,8 +4577,8 @@
    ],
    "icon": "The MongolZ 2024 03 allmode.png",
    "icon_dark": "The MongolZ 2024 03 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png",
-   "logo_dark_path": "data/raw/liquipedia_media/6c20cc9a2af33e0c.png"
+   "logo_path": "data/raw/media/6c20cc9a2af33e0c.png",
+   "logo_dark_path": "data/raw/media/6c20cc9a2af33e0c.png"
   },
   "Virtus.pro": {
    "page": "Virtus.pro",
@@ -4638,8 +4638,8 @@
    ],
    "icon": "Virtus.pro 2019 allmode.png",
    "icon_dark": "Virtus.pro 2019 allmode.png",
-   "logo_path": "data/raw/liquipedia_media/948ad7194554a2c9.png",
-   "logo_dark_path": "data/raw/liquipedia_media/948ad7194554a2c9.png"
+   "logo_path": "data/raw/media/948ad7194554a2c9.png",
+   "logo_dark_path": "data/raw/media/948ad7194554a2c9.png"
   },
   "Wildcard": {
    "page": "Wildcard",
@@ -4699,8 +4699,8 @@
    ],
    "icon": "Wildcard 2024 lightmode.png",
    "icon_dark": "Wildcard 2024 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/9001ee7c1ab841d3.png",
-   "logo_dark_path": "data/raw/liquipedia_media/e0bc1f72cb56b28b.png"
+   "logo_path": "data/raw/media/9001ee7c1ab841d3.png",
+   "logo_dark_path": "data/raw/media/e0bc1f72cb56b28b.png"
   },
   "magic": {
    "page": "magic",
@@ -4760,8 +4760,8 @@
    ],
    "icon": "Magic (Russian team) allmode.png",
    "icon_dark": "Magic (Russian team) allmode.png",
-   "logo_path": "data/raw/liquipedia_media/3f708a4e83988085.png",
-   "logo_dark_path": "data/raw/liquipedia_media/3f708a4e83988085.png"
+   "logo_path": "data/raw/media/3f708a4e83988085.png",
+   "logo_dark_path": "data/raw/media/3f708a4e83988085.png"
   },
   "paiN Gaming": {
    "page": "paiN Gaming",
@@ -4821,128 +4821,128 @@
    ],
    "icon": "PaiN Gaming 2023 lightmode.png",
    "icon_dark": "PaiN Gaming 2023 darkmode.png",
-   "logo_path": "data/raw/liquipedia_media/c0ece1e449be94ab.png",
-   "logo_dark_path": "data/raw/liquipedia_media/c9181919c04b0525.png"
+   "logo_path": "data/raw/media/c0ece1e449be94ab.png",
+   "logo_dark_path": "data/raw/media/c9181919c04b0525.png"
   }
  },
  "maps": {
   "Ancient": {
    "file": "AncientASite.jpg",
-   "path": "data/raw/liquipedia_media/6237004db72fc63c.jpg",
+   "path": "data/raw/media/6237004db72fc63c.jpg",
    "theme": "Rainforest",
    "location": "Mexico"
   },
   "Anubis": {
    "file": "CS2AnubisWater.jpg",
-   "path": "data/raw/liquipedia_media/d15117f2091716ba.jpg",
+   "path": "data/raw/media/d15117f2091716ba.jpg",
    "theme": "Desert",
    "location": "Egypt"
   },
   "Cache": {
    "file": "CS2 de cache.png",
-   "path": "data/raw/liquipedia_media/3d320c847cc3ed2c.png",
+   "path": "data/raw/media/3d320c847cc3ed2c.png",
    "theme": "Industrial",
    "location": "Chernobyl"
   },
   "Dust2": {
    "file": "CS2 Dust 2 A Site.jpg",
-   "path": "data/raw/liquipedia_media/d07da68273d3e178.jpg",
+   "path": "data/raw/media/d07da68273d3e178.jpg",
    "theme": "Desert",
    "location": "Morocco"
   },
   "Inferno": {
    "file": "De infernoCS2BSite.jpeg",
-   "path": "data/raw/liquipedia_media/fbafb00feb25528c.jpeg",
+   "path": "data/raw/media/fbafb00feb25528c.jpeg",
    "theme": "Live Village",
    "location": "Italy"
   },
   "Mirage": {
    "file": "CS2_Mirage_A_site_behind_triple.jpg",
-   "path": "data/raw/liquipedia_media/8a7b2d02f561c732.jpg",
+   "path": "data/raw/media/8a7b2d02f561c732.jpg",
    "theme": "Suburban",
    "location": "Morocco"
   },
   "Nuke": {
    "file": "CS2 Nuke Outside.jpeg",
-   "path": "data/raw/liquipedia_media/ef692499c23087da.jpeg",
+   "path": "data/raw/media/ef692499c23087da.jpeg",
    "theme": "Industrial",
    "location": "Tennessee"
   },
   "Overpass": {
    "file": "CS2OverpassConnector.jpg",
-   "path": "data/raw/liquipedia_media/d352677a0e82d6eb.jpg",
+   "path": "data/raw/media/d352677a0e82d6eb.jpg",
    "theme": "Urban",
    "location": "Berlin"
   },
   "Train": {
    "file": "CS2 de train.png",
-   "path": "data/raw/liquipedia_media/5710236f741643c7.png",
+   "path": "data/raw/media/5710236f741643c7.png",
    "theme": "Industrial",
    "location": "Russia"
   },
   "Vertigo": {
    "file": "CS2VertigoASite.jpeg",
-   "path": "data/raw/liquipedia_media/b3c54f0981d7b00c.jpeg",
+   "path": "data/raw/media/b3c54f0981d7b00c.jpeg",
    "theme": "Urban",
    "location": "United States"
   }
  },
  "flags": {
-  "ar": "data/raw/liquipedia_media/5e97579cd7dd6040.png",
-  "at": "data/raw/liquipedia_media/6554bad22ce8b316.png",
-  "au": "data/raw/liquipedia_media/e2fec9cb48a0916e.png",
-  "ba": "data/raw/liquipedia_media/31b97e28237e5baf.png",
-  "be": "data/raw/liquipedia_media/c2fbbf99c0c35690.png",
-  "bg": "data/raw/liquipedia_media/ab228a6f31035ed2.png",
-  "br": "data/raw/liquipedia_media/5aa6129897c8f90b.png",
-  "by": "data/raw/liquipedia_media/55273be24c2f6f14.png",
-  "ca": "data/raw/liquipedia_media/b65341cf46a44d1f.png",
-  "cl": "data/raw/liquipedia_media/725f75a928f38729.png",
-  "cn": "data/raw/liquipedia_media/755a80265be817d8.png",
-  "cz": "data/raw/liquipedia_media/0c07ce6aadf761e2.png",
-  "de": "data/raw/liquipedia_media/05b4afb555666582.png",
-  "dk": "data/raw/liquipedia_media/d85aec704df846e2.png",
-  "ee": "data/raw/liquipedia_media/f6069512ca1501cb.png",
-  "es": "data/raw/liquipedia_media/6cd038b88adad962.png",
-  "fi": "data/raw/liquipedia_media/c1c211ab471246e7.png",
-  "fr": "data/raw/liquipedia_media/4c2649ffc173e4a6.png",
-  "gb": "data/raw/liquipedia_media/dedbdf3dd778154d.png",
-  "gt": "data/raw/liquipedia_media/d668f30ccfeebd8b.png",
-  "hr": "data/raw/liquipedia_media/65202dfcb7d5e731.png",
-  "hu": "data/raw/liquipedia_media/faed314d4722f1e4.png",
-  "id": "data/raw/liquipedia_media/90350932623d6f09.png",
-  "il": "data/raw/liquipedia_media/2a3e847dcf2d165a.png",
-  "iq": "data/raw/liquipedia_media/718fa9b51aab56d2.png",
-  "kz": "data/raw/liquipedia_media/d04c1f0e29bab337.png",
-  "lb": "data/raw/liquipedia_media/a26f94be28d5bf66.png",
-  "lt": "data/raw/liquipedia_media/2a827613f5c6ee25.png",
-  "lv": "data/raw/liquipedia_media/9f1e116658bdc766.png",
-  "me": "data/raw/liquipedia_media/d0e7740018d0a9ee.png",
-  "mk": "data/raw/liquipedia_media/13ae0c3dac7b787d.png",
-  "mn": "data/raw/liquipedia_media/f6adabf7fa00948d.png",
-  "mx": "data/raw/liquipedia_media/55db0afe38c4ca67.png",
-  "nl": "data/raw/liquipedia_media/74d2fd5fa6b03aed.png",
-  "no": "data/raw/liquipedia_media/5223e0d10adf51c8.png",
-  "nz": "data/raw/liquipedia_media/033e45de65f47689.png",
-  "pk": "data/raw/liquipedia_media/2d42571c88bea901.png",
-  "pl": "data/raw/liquipedia_media/18feaf9dc7e3772b.png",
-  "ps": "data/raw/liquipedia_media/a9c2855d592cd5e4.png",
-  "pt": "data/raw/liquipedia_media/568bca9394d92856.png",
-  "ro": "data/raw/liquipedia_media/bc891c98b7a55439.png",
-  "rs": "data/raw/liquipedia_media/5f6e150117a81450.png",
-  "ru": "data/raw/liquipedia_media/4943bc71b6aabece.png",
-  "se": "data/raw/liquipedia_media/7f3632ee5d8da1a7.png",
-  "sk": "data/raw/liquipedia_media/cf668776522ace2a.png",
-  "tr": "data/raw/liquipedia_media/c1c8242de189e930.png",
-  "tw": "data/raw/liquipedia_media/af74384051762972.png",
-  "ua": "data/raw/liquipedia_media/06dd6bae37ea970a.png",
-  "uk": "data/raw/liquipedia_media/dedbdf3dd778154d.png",
-  "us": "data/raw/liquipedia_media/4c74097c6a1a38bc.png",
-  "uy": "data/raw/liquipedia_media/04f42050d40eecc3.png",
-  "uz": "data/raw/liquipedia_media/e6616d3cbd40f023.png",
-  "vn": "data/raw/liquipedia_media/4456dd6cbdcbd121.png",
-  "xk": "data/raw/liquipedia_media/39e109b4e7c031cf.png",
+  "ar": "data/raw/media/5e97579cd7dd6040.png",
+  "at": "data/raw/media/6554bad22ce8b316.png",
+  "au": "data/raw/media/e2fec9cb48a0916e.png",
+  "ba": "data/raw/media/31b97e28237e5baf.png",
+  "be": "data/raw/media/c2fbbf99c0c35690.png",
+  "bg": "data/raw/media/ab228a6f31035ed2.png",
+  "br": "data/raw/media/5aa6129897c8f90b.png",
+  "by": "data/raw/media/55273be24c2f6f14.png",
+  "ca": "data/raw/media/b65341cf46a44d1f.png",
+  "cl": "data/raw/media/725f75a928f38729.png",
+  "cn": "data/raw/media/755a80265be817d8.png",
+  "cz": "data/raw/media/0c07ce6aadf761e2.png",
+  "de": "data/raw/media/05b4afb555666582.png",
+  "dk": "data/raw/media/d85aec704df846e2.png",
+  "ee": "data/raw/media/f6069512ca1501cb.png",
+  "es": "data/raw/media/6cd038b88adad962.png",
+  "fi": "data/raw/media/c1c211ab471246e7.png",
+  "fr": "data/raw/media/4c2649ffc173e4a6.png",
+  "gb": "data/raw/media/dedbdf3dd778154d.png",
+  "gt": "data/raw/media/d668f30ccfeebd8b.png",
+  "hr": "data/raw/media/65202dfcb7d5e731.png",
+  "hu": "data/raw/media/faed314d4722f1e4.png",
+  "id": "data/raw/media/90350932623d6f09.png",
+  "il": "data/raw/media/2a3e847dcf2d165a.png",
+  "iq": "data/raw/media/718fa9b51aab56d2.png",
+  "kz": "data/raw/media/d04c1f0e29bab337.png",
+  "lb": "data/raw/media/a26f94be28d5bf66.png",
+  "lt": "data/raw/media/2a827613f5c6ee25.png",
+  "lv": "data/raw/media/9f1e116658bdc766.png",
+  "me": "data/raw/media/d0e7740018d0a9ee.png",
+  "mk": "data/raw/media/13ae0c3dac7b787d.png",
+  "mn": "data/raw/media/f6adabf7fa00948d.png",
+  "mx": "data/raw/media/55db0afe38c4ca67.png",
+  "nl": "data/raw/media/74d2fd5fa6b03aed.png",
+  "no": "data/raw/media/5223e0d10adf51c8.png",
+  "nz": "data/raw/media/033e45de65f47689.png",
+  "pk": "data/raw/media/2d42571c88bea901.png",
+  "pl": "data/raw/media/18feaf9dc7e3772b.png",
+  "ps": "data/raw/media/a9c2855d592cd5e4.png",
+  "pt": "data/raw/media/568bca9394d92856.png",
+  "ro": "data/raw/media/bc891c98b7a55439.png",
+  "rs": "data/raw/media/5f6e150117a81450.png",
+  "ru": "data/raw/media/4943bc71b6aabece.png",
+  "se": "data/raw/media/7f3632ee5d8da1a7.png",
+  "sk": "data/raw/media/cf668776522ace2a.png",
+  "tr": "data/raw/media/c1c8242de189e930.png",
+  "tw": "data/raw/media/af74384051762972.png",
+  "ua": "data/raw/media/06dd6bae37ea970a.png",
+  "uk": "data/raw/media/dedbdf3dd778154d.png",
+  "us": "data/raw/media/4c74097c6a1a38bc.png",
+  "uy": "data/raw/media/04f42050d40eecc3.png",
+  "uz": "data/raw/media/e6616d3cbd40f023.png",
+  "vn": "data/raw/media/4456dd6cbdcbd121.png",
+  "xk": "data/raw/media/39e109b4e7c031cf.png",
   "xx": null,
-  "za": "data/raw/liquipedia_media/7fc4b4ae6f904ae1.png"
+  "za": "data/raw/media/7fc4b4ae6f904ae1.png"
  }
 }

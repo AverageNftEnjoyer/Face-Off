@@ -256,14 +256,9 @@ def roster_events():
 
 
 def event_title(m):
-    """Tournament page of a match: 'source' is 'liquipedia:<page>[ (hltv match N)]';
-    the viewer passes 'event_title' directly."""
-    if m.get("event_title"):
-        return m["event_title"]
-    src = m.get("source") or ""
-    if not src.startswith("liquipedia:"):
-        return None
-    return src[len("liquipedia:"):].split(" (hltv")[0]
+    """Tournament page of a match ('event_page'); the viewer passes
+    'event_title' directly."""
+    return m.get("event_title") or m.get("event_page")
 
 
 def roster_flags(team, title):

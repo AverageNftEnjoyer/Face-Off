@@ -130,16 +130,11 @@ def _score_count(maps):
 
 
 def hltv_of(m):
-    src = m.get("source") or ""
-    hit = re.search(r"hltv match (\d+)", src)
-    return hit.group(1) if hit else None
+    return m.get("ext_match_id")
 
 
 def page_of(m):
-    src = m.get("source") or ""
-    if not src.startswith("liquipedia:"):
-        return None
-    return src[len("liquipedia:"):].split(" (hltv")[0]
+    return m.get("event_page")
 
 
 def attach_scores(m, by_hltv, by_pair):

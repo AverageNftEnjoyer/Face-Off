@@ -244,8 +244,7 @@ def parse_matches(title, txt, alias, stage_prefix=""):
         raw.append({"t1": t1, "t2": t2, "day": day, "when": when, "sec": sec,
                     "rkey": key.group(1) if key else None, "mkey": key.group(2) if key else None,
                     "bracket": bkt[-1] if bkt else None,
-                    "bo": bo, "finished": finished, "w1": w1, "w2": w2, "maps": maps,
-                    "hltv": nm.get("hltv", "").strip() or None})
+                    "bo": bo, "finished": finished, "w1": w1, "w2": w2, "maps": maps})
     # name bracket rounds: single-elimination brackets ("Bracket/8") count back from the final
     by_bracket = {}
     for m in raw:
@@ -417,7 +416,6 @@ def discover(alias=None):
             "swiss": "swiss" in (fmt.group(1).lower() if fmt else "") or "SwissTable" in txt,
             "format": fmt_lines, "prizes": prizes, "pool": pool,
             "participants": parts, "matches": sorted(matches, key=lambda m: m["id"]),
-            "page": "https://liquipedia.net/counterstrike/" + t.replace(" ", "_"),
         })
     # one spelling per team across events: participant lists written in other
     # letter case ("desi boyz", "Desi Boyz") take the match-data spelling, else

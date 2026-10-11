@@ -49,7 +49,7 @@ sys.path.insert(0, ROOT)
 
 REQUIRED = {
     "match_id": str, "date": str, "event": str, "team_a": str, "team_b": str,
-    "winner": str, "maps": list, "source": str, "tier": str,
+    "winner": str, "maps": list, "event_page": str, "tier": str,
 }
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ID_RE = re.compile(r"^[0-9a-f]{12}$")
@@ -100,10 +100,12 @@ def ensure_ids(matches):
     from collect_liquipedia import stable_match_id  # noqa: E402
     for m in matches:
         if "match_id" not in m:
-            src = m.get("source") or ""
-            hltv = src.split("hltv match ")[-1].rstrip(")") if "hltv match" in src else ""
+            ext = m.get("ext_match_id") or ""
+            src = m.get("source") or ""          # baselines written before event_page / ext_match_id
+            if not ext and "hltv match" in src:
+                ext = src.split("hltv match ")[-1].rstrip(")")
             m["match_id"] = stable_match_id(
-                m["date"], m["team_a"], m["team_b"], m.get("event") or "", hltv)
+                m["date"], m["team_a"], m["team_b"], m.get("event") or "", ext)
     return matches
 
 

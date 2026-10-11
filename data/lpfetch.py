@@ -5,7 +5,7 @@ Terms followed (https://liquipedia.net/api-terms-of-use):
   * <= 1 request per 2 seconds for action=query (we use 2.5 s)
   * action=parse is NOT used (it has a 30 s limit); we read raw wikitext
     via action=query&prop=revisions instead.
-  * every response is cached under data/raw/liquipedia/ and never re-fetched.
+  * every response is cached under data/raw/pages/ and never re-fetched.
 Stdlib only.
 """
 import gzip
@@ -21,7 +21,7 @@ import urllib.request
 API = "https://liquipedia.net/counterstrike/api.php"
 UA = ("FaceOff-CS2-insights/0.2 (non-commercial fan analytics; "
       "https://github.com/AverageNftEnjoyer/Face-Off; python-urllib; low volume, cached)")
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "raw", "liquipedia")
+CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "raw", "pages")
 MIN_GAP = 2.5
 _last = [0.0]
 # Daily refresh (scripts/daily_refresh.py): pages named here are re-fetched

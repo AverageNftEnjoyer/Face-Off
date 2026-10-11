@@ -224,7 +224,8 @@ class TestRealDataSmoke(unittest.TestCase):
         self.assertGreater(len(ms), 300)
         for m in ms:
             self.assertIn(m["winner"], (m["team_a"], m["team_b"]))
-            self.assertTrue(m["source"].startswith("liquipedia:"))
+            self.assertTrue(m["event_page"])
+            self.assertNotIn("source", m)
             if m["best_of"] == 3 and m["maps"]:
                 self.assertIn(bt.actual_scoreline(m), ("2-0", "2-1", "1-2", "0-2"))
         dates = [m["date"] for m in ms]

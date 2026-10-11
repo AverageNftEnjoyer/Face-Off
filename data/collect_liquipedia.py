@@ -5,7 +5,7 @@ Usage (from D:/Face-Off):  python data/collect_liquipedia.py [--offline]
 Pipeline
   1. read page titles from data/raw/lp_titles_selected.txt
   2. fetch raw wikitext (action=query&prop=revisions, cached in
-     data/raw/liquipedia/, polite rate limit -- see lpfetch.py)
+     data/raw/pages/, polite rate limit -- see lpfetch.py)
   3. parse every {{Match ...}} template: opponents, date, per-map results
   4. resolve Liquipedia team-template codes (e.g. "tl") to team names via
      the Template:TeamShort/<code> redirects (also cached)
@@ -399,7 +399,7 @@ def build(titles):
                "date": m["date"], "event": m["event"], "team_a": a, "team_b": b,
                "winner": a if m["winner"] == 1 else b, "best_of": m["best_of"],
                "maps": [{"map": x["map"], "winner": a if x["w"] == 1 else b} for x in m["maps"]],
-               "source": "liquipedia:" + m["page"] + (f" (hltv match {m['hltv']})" if m["hltv"] else ""),
+               "event_page": m["page"], "ext_match_id": m["hltv"] or None,
                "tier": tier_of(m["page"])}
         k2 = (m["date"], tuple(sorted([a, b])))
         # same pair + same date + same hltv id (or no id) -> duplicate via redirect
@@ -479,7 +479,7 @@ def main_lower():
         top = {(m["date"], tuple(sorted((m["team_a"], m["team_b"])))) for m in json.load(f)}
     out = []
     for m in matches:
-        m["kind"] = kind_of(m["source"][len("liquipedia:"):].split(" (hltv")[0])
+        m["kind"] = kind_of(m["event_page"])
         if m["tier"] in TOP_TIERS and m["kind"] == "main":
             continue
         if (m["date"], tuple(sorted((m["team_a"], m["team_b"])))) in top:
