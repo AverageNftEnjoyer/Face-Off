@@ -64,6 +64,36 @@ viewer/build_viewer.py ──► static HTML (bundle inlined: DATA + FIXTURES +
 Concurrency: refresh workflows share one queue (`daily-refresh` group) — two runs
 never write the cache together.
 
+## Veto distribution cache
+
+`data/veto_dist_cache.json` (committed; Vercel's clean checkout reads it) caches
+the per-matchup pick / ban chances that `viewer/build_viewer.py::run_vdist`
+otherwise enumerates (about 80% of a bundle build, ~13,500 veto trees). A warm
+build only recomputes matchups whose veto inputs changed.
+
+- **Key**: sha1 of the canonical JSON of exactly the fields
+  `predictor.veto_distribution` reads: `map_pool, maps_a, maps_b, veto_ev_a,
+  veto_ev_b, veto_format, permaban_a, permaban_b, veto_prefix` (whole values,
+  floats by repr). Ratings, h2h, form, rosters and names are not read by the
+  veto, so a rating-only change is a hit.
+- **Fingerprint** (file header): sha1 of `veto.py` (line endings normalised),
+  the source of the predictor functions on the veto path, every `CONFIG`
+  `veto_*` / `map_*` entry, `VETO_ORDER`, the VD formats and the cache layout.
+  Any difference discards the whole file, so a model or CONFIG change can never
+  serve a stale answer.
+- **Pruning / writes**: after each build only the entries used by that build
+  are kept; the file is written atomically (temp file + replace), one entry per
+  line with sorted keys so daily diffs stay small. A corrupt, foreign-version or
+  other-fingerprint file is ignored with a one-line warning, never fatal.
+- **Output is identical** cached or not (the file stores chances in thousandths,
+  the precision the page encoding keeps).
+- `FACEOFF_NO_VD_CACHE=1` disables reading and writing. `FACEOFF_VD_CACHE_FILE`
+  points a build at another cache file (tests, experiments).
+- The last line of `run_vdist` reports inputs, hits, computed and seconds.
+- The cache is refreshed by whatever run builds the bundle and commits `data/`
+  (the daily refresh, or a developer build); a build that only renders the
+  committed data never needs to recompute.
+
 ## Failure philosophy
 
 - Silent on success, LOUD on failure. A green run must mean the live data is current.
@@ -82,3 +112,22 @@ never write the cache together.
   behind one function; structural parse failures fail the job loudly.
 - **HLTV** has no official API; it is not scraped. Liquipedia lag is accepted and
   labeled via `data_through`.
+
+## When Liquipedia refuses the runner
+
+GitHub's hosted runners share IP addresses, and Liquipedia rate-limits by address, so a
+request can be refused (HTTP 429) even at one request per run.
+
+- A **live** run (`daily_refresh.py --live`, every 10 minutes) makes one short retry and
+  stops. It never waits in a loop: the next scheduled run is the retry. (An earlier
+  version waited out three rounds of backoff and held the shared queue for 22 minutes.)
+- A **daily** run waits once (2 minutes) and retries, then reports.
+- Pages that stayed stale are written to `data/refresh_status.json` with `stale_since`,
+  the time the outage started. The file only changes when an outage starts or ends, so
+  it does not commit on every run.
+- `daily_refresh.py --check-status --max-stale-minutes N` is the last workflow step. The
+  live workflow uses 30: a single refusal is only a warning, and the run turns red once
+  the pages have been stale for 30 minutes. The daily workflow uses 0 (fail at once).
+- Backstop while a tournament is on and GitHub is being refused: run
+  `python scripts/daily_refresh.py --live` from your own machine (a home address is not
+  rate-limited the same way), then commit and push the changed `data/` files.

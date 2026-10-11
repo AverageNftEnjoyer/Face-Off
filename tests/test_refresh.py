@@ -88,9 +88,124 @@ class TestStaleServed(unittest.TestCase):
                 self.assertEqual(os.path.getmtime(dr.STATUS_FILE), first - 100)
                 dr.write_status(["Alpha Cup"], {"Alpha Cup"})
                 with open(dr.STATUS_FILE, encoding="utf-8") as f:
-                    self.assertEqual(json.load(f), {"ok": False, "stale_pages": ["Alpha Cup"]})
+                    st = json.load(f)
+                self.assertEqual((st["ok"], st["stale_pages"]), (False, ["Alpha Cup"]))
+                self.assertRegex(st["stale_since"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
             finally:
                 dr.STATUS_FILE = saved
+
+
+class TestOutageClock(unittest.TestCase):
+    """A refusal by Liquipedia must not email you every 10 minutes: the status file
+    remembers WHEN pages first went stale and the run turns red only after a while."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.saved = dr.STATUS_FILE
+        dr.STATUS_FILE = os.path.join(self.tmp.name, "status.json")
+
+    def tearDown(self):
+        dr.STATUS_FILE = self.saved
+        self.tmp.cleanup()
+
+    def _write(self, obj):
+        with open(dr.STATUS_FILE, "w", encoding="utf-8") as f:
+            json.dump(obj, f)
+
+    def _read(self):
+        with open(dr.STATUS_FILE, encoding="utf-8") as f:
+            return json.load(f)
+
+    def test_stale_since_is_kept_while_the_outage_lasts(self):
+        self._write({"ok": False, "stale_pages": ["Alpha Cup"], "stale_since": "2026-10-10T20:00:00Z"})
+        before = os.path.getmtime(dr.STATUS_FILE)
+        dr.write_status(["Alpha Cup"], {"Alpha Cup"})
+        self.assertEqual(self._read()["stale_since"], "2026-10-10T20:00:00Z")
+        self.assertEqual(os.path.getmtime(dr.STATUS_FILE), before)     # unchanged: nothing to commit
+
+    def test_outage_end_clears_the_clock(self):
+        self._write({"ok": False, "stale_pages": ["Alpha Cup"], "stale_since": "2026-10-10T20:00:00Z"})
+        dr.write_status([], set())
+        self.assertEqual(self._read(), {"ok": True, "stale_pages": [], "stale_since": None})
+
+    def test_check_status_waits_before_failing(self):
+        from datetime import datetime, timezone
+        self._write({"ok": False, "stale_pages": ["Alpha Cup"], "stale_since": "2026-10-10T20:00:00Z"})
+        at = lambda h, m: datetime(2026, 10, 10, h, m, tzinfo=timezone.utc)   # noqa: E731
+        with mock.patch("builtins.print"):
+            self.assertEqual(dr.check_status(30, now=at(20, 10)), 0)    # 10 min: warning only
+            self.assertEqual(dr.check_status(30, now=at(20, 45)), 1)    # 45 min: red
+            self.assertEqual(dr.check_status(0, now=at(20, 1)), 1)      # the daily run fails at once
+
+    def test_check_status_ok_and_missing_file(self):
+        with mock.patch("builtins.print"):
+            self.assertEqual(dr.check_status(30), 0)                    # no file: nothing known to be stale
+            self._write({"ok": True, "stale_pages": [], "stale_since": None})
+            self.assertEqual(dr.check_status(0), 0)
+
+    def test_live_refresh_does_not_wait_between_tries(self):
+        # one pass, no sleeping loop: the next scheduled run is the retry
+        calls = []
+        lpfetch.STALE_SERVED[:] = []
+
+        def collect():
+            calls.append(1)
+            lpfetch.STALE_SERVED.append("Alpha Cup")
+        with mock.patch("time.sleep") as sleep:
+            stale = dr.refresh_live({"Alpha Cup"}, collect, pauses=())
+        self.assertEqual((stale, len(calls)), (["Alpha Cup"], 1))
+        sleep.assert_not_called()
+
+
+class TestMatchWindows(unittest.TestCase):
+    """Liquipedia is only asked while a match is due, under way or overdue."""
+
+    def _ev(self, *matches):
+        return {"title": "Alpha Cup", "start": "2026-10-01", "end": "2026-10-20",
+                "matches": [dict({"finished": False, "when": None, "day": None}, **m) for m in matches]}
+
+    def _at(self, h, m=0, day=10):
+        from datetime import datetime, timezone
+        return datetime(2026, 10, day, h, m, tzinfo=timezone.utc)
+
+    def test_quiet_hours_do_not_ask(self):
+        ev = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10"})
+        self.assertFalse(dr.match_window_active(ev, self._at(3)))        # 3 a.m., match tonight
+        self.assertFalse(dr.match_window_active(ev, self._at(12)))       # long before the lead time
+
+    def test_window_opens_before_and_closes_after(self):
+        ev = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10"})
+        self.assertFalse(dr.match_window_active(ev, self._at(17, 20)))   # 40 min before
+        self.assertTrue(dr.match_window_active(ev, self._at(17, 35)))    # inside the 30 min lead
+        self.assertTrue(dr.match_window_active(ev, self._at(20, 30)))    # under way
+        self.assertTrue(dr.match_window_active(ev, self._at(21, 59)))    # still overdue, within 4 h
+        self.assertFalse(dr.match_window_active(ev, self._at(22, 5)))    # given up
+
+    def test_finished_matches_never_count(self):
+        ev = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10", "finished": True})
+        self.assertFalse(dr.match_window_active(ev, self._at(18, 30)))
+
+    def test_time_zone_offsets_are_respected(self):
+        ev = self._ev({"when": "2026-10-10T20:00:00+02:00", "day": "2026-10-10"})   # 18:00 UTC
+        self.assertTrue(dr.match_window_active(ev, self._at(18, 10)))
+        self.assertFalse(dr.match_window_active(ev, self._at(23)))
+
+    def test_match_with_a_date_but_no_time_counts_all_that_day(self):
+        ev = self._ev({"day": "2026-10-10"})
+        self.assertTrue(dr.match_window_active(ev, self._at(3)))
+        self.assertFalse(dr.match_window_active(ev, self._at(3, day=11)))
+
+    def test_live_titles_only_returns_tournaments_in_a_window(self):
+        from datetime import date
+        busy = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10"})
+        idle = dict(self._ev({"when": "2026-10-10T23:00:00+00:00", "day": "2026-10-10"}), title="Beta Cup")
+        with mock.patch.object(dr.E, "discover", return_value=[busy, idle]):
+            got = dr.live_titles(date(2026, 10, 10), now=self._at(18, 10))
+            self.assertIn("Alpha Cup", got)
+            self.assertNotIn("Beta Cup", got)
+            self.assertEqual(dr.live_titles(date(2026, 10, 10), now=self._at(3)), set())
+            forced = dr.live_titles(date(2026, 10, 10), now=self._at(3), force=True)
+            self.assertTrue({"Alpha Cup", "Beta Cup"} <= forced)
 
 
 class TestValidate(unittest.TestCase):

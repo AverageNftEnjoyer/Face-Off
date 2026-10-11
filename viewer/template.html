@@ -1230,6 +1230,18 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .nextm .tt em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nextm .mini { height: .22rem; border-radius: 999px; background: var(--c2, var(--t)); overflow: hidden; display: flex; }
 .nextm .mini b { display: block; height: 100%; background: var(--c1, var(--ct)); border-right: 2px solid var(--panel); }
+.cu { gap: .5rem; padding: .8rem 0; }
+.cu .cu-pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem .6rem; align-items: center; background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: .55rem .7rem; }
+.cu .cu-pick small { display: block; font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: .15rem; }
+.cu .cu-who > span { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.cu .cu-who b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--s0); }
+.cu .cu-pct { font-size: 1.9rem; font-weight: 900; line-height: 1; color: var(--acc); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cu .cu-pct small { display: inline; font-size: .5em; margin: 0; letter-spacing: 0; text-transform: none; color: inherit; }
+.cu .cu-score { grid-column: 1 / -1; display: flex; align-items: baseline; gap: .5rem; border-top: 1px solid var(--line); padding-top: .4rem; margin-top: .15rem; }
+.cu .cu-score small { margin: 0; }
+.cu .cu-score b { font-size: 1.25rem; font-weight: 900; color: var(--text); line-height: 1; }
+.cu .cu-score i { font-style: normal; font-size: .74rem; color: var(--dim); margin-left: auto; }
 .rtag { justify-self: start; font-size: .75rem; font-weight: 700; padding-left: .45rem; border-left: 2px solid currentColor; line-height: 1.2; }
 .rtag.hit { color: var(--win); }
 .rtag.miss { color: var(--loss); }
@@ -1534,31 +1546,64 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   border-radius: 10px; padding: .55rem .65rem; font: inherit; font-size: var(--s-1); line-height: 1.35; }
 .chat-f textarea:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
 .chat-note { margin: 0; padding: 0 .9rem .6rem; background: var(--bg); font-size: .68rem; color: var(--dim); }
-.sdlg { width: min(34rem, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 0; border: 1px solid var(--line2); border-radius: 14px;
+.sdlg { width: min(30rem, calc(100vw - 24px)); max-height: min(44rem, calc(100vh - 24px)); padding: 0; border: 1px solid var(--line2); border-radius: 14px;
   background: var(--panel); color: var(--text); overflow: hidden; }
+.sdlg.narrow { width: min(22rem, calc(100vw - 24px)); }
 .sdlg[open] { display: flex; flex-direction: column; }
 .sdlg::backdrop { background: rgba(5, 8, 12, .72); }
-.sdlg form { display: flex; flex-direction: column; min-height: 0; }
-.sdlg-h { display: flex; align-items: center; justify-content: space-between; padding: .8rem 1rem; border-bottom: 1px solid var(--line); }
+.sdlg form { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.sdlg-h { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem .75rem 1.25rem; }
 .sdlg-h h2 { margin: 0; font-size: var(--s1); }
-.sdlg-b { padding: .9rem 1rem; display: grid; gap: .9rem; overflow-y: auto; min-height: 0; }
-.sdlg fieldset { margin: 0; padding: 0; border: 0; display: grid; gap: .6rem; }
-.sdlg legend { padding: 0; margin-bottom: .3rem; font-weight: 800; font-size: var(--s0); }
-.sdlg label.f { display: grid; gap: .25rem; font-size: var(--s-1); color: var(--dim); }
+.sdlg-h .hbtn { margin: 0; }
+.sdlg-tabs { display: flex; gap: .25rem; padding: 0 1.25rem; border-bottom: 1px solid var(--line); }
+.sdlg-tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--dim); font: inherit; font-weight: 700; padding: .55rem .75rem; margin-bottom: -1px; cursor: pointer; }
+.sdlg-tabs button:hover { color: var(--text); }
+.sdlg-tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--acc); }
+.sdlg-tabs button:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; border-radius: 6px 6px 0 0; }
+.sdlg-b { padding: 1.1rem 1.25rem .6rem; overflow-y: auto; min-height: 0; display: grid; gap: 1rem; align-content: start; }
+.sdlg .pan { display: grid; gap: 1rem; }
+.sdlg .pan[hidden] { display: none; }
+.sdlg .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; align-items: start; }
+.sdlg .f { display: grid; gap: .35rem; min-width: 0; }
+.sdlg .f[hidden] { display: none; }
+.sdlg .f > span, .sdlg .f > label > span, .sdlg legend { font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--dim); }
 .sdlg input[type="text"], .sdlg input[type="password"], .sdlg input[type="url"], .sdlg input[type="number"], .sdlg select {
-  width: 100%; min-width: 0; background: var(--bg); color: var(--text); border: 1px solid var(--line2); border-radius: var(--r); padding: .5rem .6rem; font: inherit; }
-.sdlg input:focus-visible, .sdlg select:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
-.sdlg .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
-.sdlg .chk { display: flex; gap: .55rem; align-items: flex-start; font-size: var(--s-1); color: var(--text); }
-.sdlg .chk input { margin-top: .2rem; }
-.sdlg .hint { margin: 0; font-size: .74rem; color: var(--dim); line-height: 1.4; }
-.sdlg-f { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; padding: .8rem 1rem; border-top: 1px solid var(--line); background: var(--bg); }
-.sdlg .keyrow { display: grid; grid-template-columns: 1fr auto; gap: .4rem; }
+  width: 100%; min-width: 0; height: 2.5rem; box-sizing: border-box; background: var(--bg); color: var(--text);
+  border: 1px solid var(--line2); border-radius: 8px; padding: 0 .7rem; font: inherit; font-size: var(--s-1); }
+.sdlg select { appearance: none; padding-right: 2rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--dim) 50%), linear-gradient(135deg, var(--dim) 50%, transparent 50%);
+  background-position: calc(100% - 1.05rem) 1.05rem, calc(100% - .75rem) 1.05rem; background-size: .35rem .35rem; background-repeat: no-repeat; }
+.sdlg input:focus-visible, .sdlg select:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; border-color: var(--acc); }
+.sdlg .inrow { display: flex; gap: .5rem; align-items: center; }
+.sdlg .inrow input { flex: 1; }
+.sdlg .inrow.end { margin-top: -.2rem; }
+.sdlg .btn.sm { height: 2.5rem; padding: 0 .85rem; flex: none; }
+.sdlg .sw { display: flex; align-items: center; gap: .6rem; font-size: var(--s-1); color: var(--text); min-height: 2.5rem; }
+.sdlg .sw.end { align-self: end; }
+.sdlg .sw input { width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--acc); flex: none; }
+.sdlg .sw .st { margin-left: auto; }
+.sdlg fieldset.how { margin: 0; padding: .6rem .85rem .8rem; border: 1px solid var(--line); border-radius: 10px; display: grid; gap: .1rem; }
+.sdlg fieldset.how legend { padding: 0 .35rem; }
+.sdlg .adv { border-top: 1px solid var(--line); padding-top: .8rem; display: grid; gap: .9rem; }
+.sdlg .adv > summary { cursor: pointer; color: var(--dim); font-size: var(--s-1); font-weight: 700; list-style: none; }
+.sdlg .adv > summary::before { content: "\25B8"; display: inline-block; margin-right: .45rem; transition: transform .15s; }
+.sdlg .adv[open] > summary::before { transform: rotate(90deg); }
+.sdlg .adv[open] > summary { margin-bottom: .1rem; }
+.sdlg .st { font-size: .74rem; color: var(--dim); line-height: 1.3; }
+.sdlg .st.ok { color: var(--win); }
+.sdlg .st.bad { color: var(--loss); }
+.sdlg .msg { min-height: 1.1rem; margin: 0; }
 .sdlg .teamchips { display: flex; flex-wrap: wrap; gap: .35rem; }
-.sdlg .teamchips .chip { cursor: pointer; background: var(--acc-deep); color: var(--text); border-color: var(--acc); }
+.sdlg .teamchips:empty { display: none; }
+.sdlg .teamchips .chip { cursor: pointer; background: var(--acc-deep); color: var(--text); border-color: var(--acc); font: inherit; font-size: .74rem; font-weight: 700; }
+.sdlg-f { display: flex; align-items: center; gap: .5rem; padding: .8rem 1.25rem; border-top: 1px solid var(--line); background: var(--bg); }
+.sdlg-f .sp { flex: 1; }
+.sdlg .btn.pri { background: var(--acc); color: #04130E; border-color: var(--acc); font-weight: 800; }
+.sdlg .lnk { background: none; border: 0; padding: 0; color: var(--dim); font: inherit; font-size: .78rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.sdlg .lnk:hover, .sdlg .lnk.armed { color: var(--loss); }
 @media (max-width: 640px) {
   .chat { right: 0; left: 0; bottom: 0; width: auto; height: 82vh; border-radius: 14px 14px 0 0; }
-  .sdlg .row2 { grid-template-columns: 1fr; }
+  .sdlg .g2 { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .cmsg .cursor::after { animation: none; } }
 </style>
@@ -1613,79 +1658,99 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 </section>
 
 <dialog class="sdlg" id="setDlg" aria-labelledby="setT">
-  <form method="dialog" id="setForm">
-    <div class="sdlg-h">
+  <form method="dialog" id="setForm" novalidate>
+    <header class="sdlg-h">
       <h2 id="setT">Settings</h2>
       <button type="button" class="hbtn" id="setX" aria-label="Close settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="sdlg-tabs" role="tablist" aria-label="Settings sections">
+      <button type="button" role="tab" id="tabAi" aria-selected="true" aria-controls="panAi">Assistant</button>
+      <button type="button" role="tab" id="tabAl" aria-selected="false" aria-controls="panAl" tabindex="-1">Alerts</button>
     </div>
     <div class="sdlg-b">
-      <fieldset>
-        <legend>Ask FaceOff (AI assistant)</legend>
-        <p class="hint">Bring your own key. The chat talks straight from your browser to the provider you pick; nothing goes through this site. The key is kept only in this browser.</p>
-        <div class="row2">
-          <label class="f">Provider
+      <section id="panAi" role="tabpanel" aria-labelledby="tabAi" class="pan">
+        <div class="g2">
+          <label class="f"><span>Provider</span>
             <select id="aiProv" name="provider">
               <option value="anthropic">Anthropic (Claude)</option>
               <option value="openai">OpenAI or compatible</option>
             </select>
           </label>
-          <label class="f">Model
+          <label class="f"><span>Model</span>
             <input type="text" id="aiModel" name="model" list="aiModels" autocomplete="off" spellcheck="false">
             <datalist id="aiModels"></datalist>
           </label>
         </div>
-        <label class="f">API key
-          <span class="keyrow">
-            <input type="password" id="aiKey" name="key" autocomplete="off" spellcheck="false" placeholder="paste your key">
-            <button type="button" class="btn" id="aiKeyShow" aria-pressed="false">Show</button>
-          </span>
+        <div class="f">
+          <label for="aiKey"><span>API key</span></label>
+          <div class="inrow">
+            <input type="password" id="aiKey" name="key" autocomplete="off" spellcheck="false" placeholder="Paste your key">
+            <button type="button" class="btn sm" id="aiKeyShow" aria-pressed="false">Show</button>
+          </div>
+          <small class="st" id="keySt"></small>
+        </div>
+        <label class="sw"><input type="checkbox" id="aiLock"><span>Lock with a passphrase</span></label>
+        <label class="f" id="passRow" hidden><span>Passphrase</span>
+          <input type="password" id="aiPass" autocomplete="new-password" spellcheck="false">
         </label>
-        <label class="f">Base URL <span class="dim">(optional: OpenRouter, a local model, a proxy)</span>
-          <input type="url" id="aiBase" name="base" autocomplete="off" spellcheck="false" placeholder="https://api.openai.com/v1">
-        </label>
-        <div class="row2">
-          <label class="f">Answer length
-            <select id="aiStyle" name="style">
-              <option value="concise">Concise</option>
-              <option value="detailed">Detailed</option>
-            </select>
+        <div class="g2">
+          <label class="f"><span>Answer length</span>
+            <select id="aiStyle" name="style"><option value="concise">Concise</option><option value="detailed">Detailed</option></select>
           </label>
-          <label class="f">Answer delivery
-            <select id="aiStream" name="stream">
-              <option value="1">Stream as it is written</option>
-              <option value="0">Show when complete</option>
-            </select>
+          <label class="f"><span>Delivery</span>
+            <select id="aiStream" name="stream"><option value="1">Stream live</option><option value="0">When complete</option></select>
           </label>
         </div>
-        <label class="chk"><input type="checkbox" id="aiRemember" name="remember"> <span>Remember on this device. Untick to keep the key only until you close the tab.</span></label>
-      </fieldset>
-      <fieldset>
-        <legend>Alerts</legend>
-        <p class="hint">Alerts fire while this page is open: a reminder before a followed team's match and a note when its result lands.</p>
-        <label class="f">Follow teams
-          <input type="text" id="alAdd" list="alTeams" autocomplete="off" placeholder="Type a team and press Enter">
+        <details class="adv">
+          <summary>Advanced</summary>
+          <label class="f"><span>Base URL</span>
+            <input type="url" id="aiBase" name="base" autocomplete="off" spellcheck="false" placeholder="Provider default">
+          </label>
+          <label class="sw"><input type="checkbox" id="aiRemember" name="remember"><span>Remember on this device</span></label>
+        </details>
+      </section>
+      <section id="panAl" role="tabpanel" aria-labelledby="tabAl" class="pan" hidden>
+        <div class="f">
+          <label for="alAdd"><span>Follow teams</span></label>
+          <input type="text" id="alAdd" list="alTeams" autocomplete="off" placeholder="Type a team, press Enter">
           <datalist id="alTeams"></datalist>
-        </label>
-        <div class="teamchips" id="alChips" aria-live="polite"></div>
-        <div class="row2">
-          <label class="f">Reminder lead time (minutes)
+          <div class="teamchips" id="alChips" aria-live="polite"></div>
+        </div>
+        <div class="g2">
+          <label class="f"><span>Remind me (minutes before)</span>
             <input type="number" id="alLead" min="0" max="180" step="5" inputmode="numeric">
           </label>
-          <label class="chk" style="align-self:end"><input type="checkbox" id="alResults"> <span>Tell me results</span></label>
+          <label class="sw end"><input type="checkbox" id="alResults"><span>Result alerts</span></label>
         </div>
-        <label class="chk"><input type="checkbox" id="alBrowser"> <span>Browser notification <span class="dim" id="alBrowserNote"></span></span></label>
-        <label class="f">Discord webhook <span class="dim">(optional: posts the alert to your channel)</span>
-          <input type="url" id="alDiscord" autocomplete="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/…">
-        </label>
-        <div><button type="button" class="btn" id="alTest">Send a test alert</button> <span class="small dim" id="alTestNote"></span></div>
-      </fieldset>
-      <p class="hint" id="setStatus" role="status"></p>
+        <fieldset class="how">
+          <legend>Deliver by</legend>
+          <label class="sw"><input type="checkbox" id="alBrowser"><span>Browser notification</span><small class="st" id="alBrowserNote"></small></label>
+          <label class="sw"><input type="checkbox" id="alDiscordOn"><span>Discord webhook</span></label>
+          <label class="f" id="hookRow" hidden><span>Webhook URL</span>
+            <input type="password" id="alDiscord" autocomplete="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/…">
+          </label>
+        </fieldset>
+        <div class="inrow end"><button type="button" class="btn sm" id="alTest">Send test alert</button><small class="st" id="alTestNote"></small></div>
+      </section>
+      <p class="st msg" id="setStatus" role="status"></p>
     </div>
-    <div class="sdlg-f">
-      <button type="button" class="btn" id="aiClearKey">Clear key</button>
+    <footer class="sdlg-f">
+      <button type="button" class="lnk" id="setWipe">Clear saved data</button>
+      <span class="sp"></span>
       <button type="button" class="btn" id="setCancel">Cancel</button>
-      <button type="submit" class="btn" id="setSave" style="background:var(--acc);color:#04130E;font-weight:800">Save</button>
+      <button type="submit" class="btn pri" id="setSave">Save</button>
+    </footer>
+  </form>
+</dialog>
+
+<dialog class="sdlg narrow" id="unlockDlg" aria-labelledby="unlockT">
+  <form method="dialog" id="unlockForm" novalidate>
+    <header class="sdlg-h"><h2 id="unlockT">Unlock</h2></header>
+    <div class="sdlg-b">
+      <label class="f"><span>Passphrase</span><input type="password" id="unlockPass" autocomplete="current-password" spellcheck="false"></label>
+      <p class="st msg" id="unlockMsg" role="status"></p>
     </div>
+    <footer class="sdlg-f"><span class="sp"></span><button type="button" class="btn" id="unlockCancel">Cancel</button><button type="submit" class="btn pri">Unlock</button></footer>
   </form>
 </dialog>
 
@@ -2481,6 +2546,29 @@ function rail() {
     const [c1, c2] = pairColors(m.t1, m.t2), sh = displayPercent([p, 1 - p]);
     return `<span class="mini" style="--c1:${c1};--c2:${c2}" title="${esc(`Model: ${m.t1} ${sh[0]}%, ${m.t2} ${sh[1]}%`)}"><b style="width:${(p * 100).toFixed(1)}%"></b></span>`;
   };
+  // a coming match: when, the two teams, the model's pick with its win chance and projected score, then the split bar
+  const upcoming = m => {
+    const pred = m.pred ? decode(m.pred) : null;
+    let pickBox = "";
+    if (pred) {
+      const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
+      const p = pFor(pred, bo).p, pickA = p >= .5, pick = pickA ? m.t1 : m.t2;
+      const pp = displayPercent([p, 1 - p])[pickA ? 0 : 1];
+      const set = scoreSet(pred, bo), top = set[predictedIdx(set, p)];
+      const sc = bo === 1 ? "" : scoreFrom(top, pickA).replace("-", "\u2013");
+      const scp = displayPercent(set.map(x => x.p))[set.indexOf(top)];
+      pickBox = `<span class="cu-pick" title="${esc(`Model pick: ${pick} at ${pp}% to win the series${sc ? ", most likely score " + sc + " (" + scp + "%)" : ""}`)}">
+        <span class="cu-who"><small>Model pick</small><span>${logo(pick, "sm")}<b>${esc(pick)}</b></span></span>
+        <span class="cu-pct cond">${bigPct(pp)}</span>
+        ${sc ? `<span class="cu-score"><small>Projected score</small><b class="cond">${sc}</b><i>${scp}% likely</i></span>` : ""}
+      </span>`;
+    }
+    const day = localDay(m.when) || m.day;
+    return `<a class="nextm cu" href="#m-${m.id}">
+      <span class="small dim cu-when">${esc(EV_BY[m.ev].name)}, ${day ? fmtDay(day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span>
+      <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
+      ${pickBox}${split(m)}</a>`;
+  };
   const shownTeams = PAIR || [];
   return `
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
@@ -2488,10 +2576,7 @@ function rail() {
       <span class="form5" aria-label="last five: ${T[n].results.slice(0, 5).map(r => r.won ? "won" : "lost").join(", ") || "no results"}">${T[n].results.slice(0, 5).reverse().map(r => `<i class="${r.won ? "W" : "L"}"></i>`).join("")}</span></a>`).join("")}</div>
   </section>
   <section class="panel"><h2>Coming up</h2>
-    ${next.length ? next.map(m => `<a class="nextm" href="#m-${m.id}">
-      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${(localDay(m.when) || m.day) ? fmtDay(localDay(m.when) || m.day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}</span>
-      <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
-      ${split(m)}</a>`).join("")
+    ${next.length ? next.map(upcoming).join("")
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
   </section>
   ${done.length ? `<section class="panel"><h2>Latest results</h2>${done.map(doneRow).join("")}</section>` : ""}`;
@@ -3668,12 +3753,15 @@ window.addEventListener("hashchange", () => closeSearch(true));
 /* ---------------- Ask FaceOff: settings, chat and alerts ----------------
    Everything runs in the visitor's browser. The chat sends one request straight to the LLM
    provider the visitor chose, with their own key; this site has no server and sees neither.
-   The model is given a compact context built from this page's own data (teams named in the
-   question, the matchup's win chance and likely scores, head-to-head, upcoming fixtures). */
+   Secrets (the API key and the Discord webhook) are never stored as plain text: they are
+   sealed with AES-GCM through the browser's Web Crypto. By default the encryption key is a
+   non-extractable key kept in IndexedDB on this device; with a passphrase it is derived from
+   the passphrase (PBKDF2, 310,000 rounds) and nothing on the device can open it without it.
+   The model is given a compact context built from this page's own data. */
 (() => {
-  const AI_KEY = "faceoff.ai.v1", AL_KEY = "faceoff.alerts.v1";
-  const AI_DEF = { provider: "anthropic", model: "claude-sonnet-5-5", key: "", base: "", style: "concise", stream: true, remember: true };
-  const AL_DEF = { teams: [], lead: 15, results: true, browser: false, discord: "", seen: {}, sent: {}, primed: false };
+  const AI_KEY = "faceoff.ai.v1", AL_KEY = "faceoff.alerts.v1", VAULT_KEY = "faceoff.vault.v1";
+  const AI_DEF = { provider: "anthropic", model: "claude-sonnet-5-5", base: "", style: "concise", stream: true, remember: true };
+  const AL_DEF = { teams: [], lead: 15, results: true, browser: false, discord: false, seen: {}, sent: {}, primed: false };
   const MODELS = {
     anthropic: ["claude-sonnet-5-5", "claude-opus-5-5", "claude-haiku-4-5-20251001"],
     openai: ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini"],
@@ -3681,15 +3769,117 @@ window.addEventListener("hashchange", () => closeSearch(true));
   const DISCORD_RE = /^https:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api\/webhooks\//;
   const el = id => document.getElementById(id);
 
-  /* ---------- storage ---------- */
+  /* ---------- plain settings (no secrets) ---------- */
   const readStore = (area, key) => { try { return JSON.parse(window[area].getItem(key) || "null"); } catch { return null; } };
   const aiLoad = () => ({ ...AI_DEF, ...(readStore("localStorage", AI_KEY) || {}), ...(readStore("sessionStorage", AI_KEY) || {}) });
   function aiSave(c) {
-    const keep = c.remember ? "localStorage" : "sessionStorage", drop = c.remember ? "sessionStorage" : "localStorage";
-    try { window[keep].setItem(AI_KEY, JSON.stringify(c)); window[drop].removeItem(AI_KEY); } catch { /* storage blocked: settings last for this page view only */ }
+    const { key: _drop, ...plain } = c;
+    const keep = plain.remember ? "localStorage" : "sessionStorage", drop = plain.remember ? "sessionStorage" : "localStorage";
+    try { window[keep].setItem(AI_KEY, JSON.stringify(plain)); window[drop].removeItem(AI_KEY); } catch { /* storage blocked */ }
   }
   const alLoad = () => ({ ...AL_DEF, ...(readStore("localStorage", AL_KEY) || {}) });
-  const alSave = a => { try { localStorage.setItem(AL_KEY, JSON.stringify(a)); } catch { /* ignore */ } };
+  const alSave = a => { const { discord, ...rest } = a; try { localStorage.setItem(AL_KEY, JSON.stringify({ ...rest, discord: !!discord })); } catch { /* ignore */ } };
+
+  /* ---------- the vault: AES-GCM sealed secrets ---------- */
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const b64 = u8 => btoa(String.fromCharCode(...u8));
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const cryptoOk = () => !!(window.isSecureContext && window.crypto && crypto.subtle && window.indexedDB);
+  let secrets = { key: "", webhook: "" };   // opened secrets, in memory only
+  let sessionPass = "";                     // the passphrase while the page is open, never stored
+  let vaultMode = "none";                   // none | device | pass
+  let locked = false;                       // a passphrase vault that has not been opened yet
+
+  function idb() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open("faceoff-vault", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("k");
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function deviceKey(create) {
+    const db = await idb();
+    const got = await new Promise((res, rej) => { const q = db.transaction("k").objectStore("k").get("device"); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+    if (got || !create) { db.close(); return got || null; }
+    const k = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+    await new Promise((res, rej) => { const t = db.transaction("k", "readwrite"); t.objectStore("k").put(k, "device"); t.oncomplete = res; t.onerror = () => rej(t.error); });
+    db.close();
+    return k;
+  }
+  async function passKey(pass, salt) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }
+  const vaultBlob = () => readStore("localStorage", VAULT_KEY) || readStore("sessionStorage", VAULT_KEY);
+  function vaultWipe() { try { localStorage.removeItem(VAULT_KEY); sessionStorage.removeItem(VAULT_KEY); } catch { /* ignore */ } }
+  async function seal(obj, pass, remember) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const blob = { v: 1, mode: pass ? "pass" : "device", iv: b64(iv) };
+    let key;
+    if (pass) { const salt = crypto.getRandomValues(new Uint8Array(16)); blob.salt = b64(salt); key = await passKey(pass, salt); }
+    else key = await deviceKey(true);
+    blob.ct = b64(new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(obj)))));
+    const keep = remember ? "localStorage" : "sessionStorage", drop = remember ? "sessionStorage" : "localStorage";
+    try { window[keep].setItem(VAULT_KEY, JSON.stringify(blob)); window[drop].removeItem(VAULT_KEY); } catch { /* ignore */ }
+  }
+  async function openBlob(blob, pass) {
+    const key = blob.mode === "pass" ? await passKey(pass, unb64(blob.salt)) : await deviceKey(false);
+    if (!key) throw new Error("no device key");
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(blob.iv) }, key, unb64(blob.ct));
+    return JSON.parse(dec.decode(plain));
+  }
+  async function vaultInit() {
+    // one-time move of a key saved as plain text by an earlier version
+    const old = [readStore("localStorage", AI_KEY), readStore("sessionStorage", AI_KEY)].find(o => o && o.key);
+    const oldAl = readStore("localStorage", AL_KEY);
+    const legacy = { key: (old && old.key) || "", webhook: oldAl && typeof oldAl.discord === "string" ? oldAl.discord : "" };
+    const blob = vaultBlob();
+    vaultMode = blob ? blob.mode : "none";
+    if (blob && cryptoOk()) {
+      if (blob.mode === "pass") locked = true;
+      else { try { secrets = { ...secrets, ...(await openBlob(blob)) }; } catch { vaultWipe(); vaultMode = "none"; } }
+    }
+    if ((legacy.key || legacy.webhook) && cryptoOk() && !locked) {
+      secrets = { key: secrets.key || legacy.key, webhook: secrets.webhook || legacy.webhook };
+      try {
+        await seal(secrets, "", aiLoad().remember);
+        vaultMode = "device";
+        aiSave(aiLoad()); if (oldAl) alSave({ ...AL_DEF, ...oldAl });
+      } catch { /* leave it as it was */ }
+    }
+    refreshChatState();
+  }
+  async function unlockWith(pass) {
+    const blob = vaultBlob();
+    if (!blob) return false;
+    try { secrets = { ...secrets, ...(await openBlob(blob, pass)) }; sessionPass = pass; locked = false; return true; } catch { return false; }
+  }
+  // asks for the passphrase when the vault is locked; resolves true once the secrets are open
+  function promptUnlock() {
+    return new Promise(resolve => {
+      const d = el("unlockDlg"), input = el("unlockPass"), msg = el("unlockMsg");
+      input.value = ""; msg.textContent = ""; msg.className = "st msg";
+      let done = false;
+      const finish = ok => { if (done) return; done = true; d.removeEventListener("close", onClose); if (d.open) d.close(); resolve(ok); };
+      const onClose = () => finish(!locked);
+      d.addEventListener("close", onClose);
+      el("unlockForm").onsubmit = async e => {
+        e.preventDefault();
+        msg.textContent = "Checking…";
+        if (await unlockWith(input.value)) { refreshChatState(); finish(true); }
+        else { msg.textContent = "That passphrase did not open it."; msg.className = "st msg bad"; input.select(); }
+      };
+      el("unlockCancel").onclick = () => finish(false);
+      d.showModal();
+      input.focus();
+    });
+  }
+  async function needSecrets() {
+    if (locked && !(await promptUnlock())) return null;
+    return secrets;
+  }
+  const hasKey = () => !!(secrets.key || locked);
 
   /* ---------- context from the page's own data ---------- */
   const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -3810,12 +4000,12 @@ window.addEventListener("hashchange", () => closeSearch(true));
     return new Error(`${res.status}${msg ? ": " + msg : ""}${hint ? " " + hint : ""}`.trim());
   }
   async function readSSE(res, onData) {
-    const reader = res.body.getReader(), dec = new TextDecoder();
+    const reader = res.body.getReader(), dc = new TextDecoder();
     let buf = "";
     for (;;) {
       const { value, done } = await reader.read();
       if (done) break;
-      buf += dec.decode(value, { stream: true });
+      buf += dc.decode(value, { stream: true });
       let i;
       while ((i = buf.search(/\r?\n\r?\n/)) >= 0) {
         const block = buf.slice(0, i);
@@ -3901,11 +4091,7 @@ window.addEventListener("hashchange", () => closeSearch(true));
     d.classList.toggle("cursor", !!live);
     log.scrollTop = log.scrollHeight;
   }
-  function setBusy(b) {
-    busy = b;
-    sendBtn.textContent = b ? "Stop" : "Send";
-    input.disabled = false;
-  }
+  function setBusy(b) { busy = b; sendBtn.textContent = b ? "Stop" : "Send"; }
   function suggestions() {
     const f = FIXTURES[0];
     const top = Object.entries(T).filter(([, x]) => x.series && x.elo != null).sort((a, b) => b[1].elo - a[1].elo).map(x => x[0]);
@@ -3919,11 +4105,10 @@ window.addEventListener("hashchange", () => closeSearch(true));
   }
   function welcome() {
     log.textContent = "";
-    const cfg = aiLoad();
-    const d = addMsg("a", cfg.key
+    const d = addMsg("a", hasKey()
       ? "Ask me about any team, player, map or matchup. I answer from this site's data, as of " + fmtDate(META.data_through) + "."
-      : "I answer questions about teams, matchups and maps from this site's data. To chat, add your own API key in Settings; it is kept only in this browser.");
-    if (!cfg.key) {
+      : "I answer questions about teams, matchups and maps from this site's data. Add your own API key in Settings to start.");
+    if (!hasKey()) {
       const b = document.createElement("button");
       b.type = "button"; b.className = "btn"; b.textContent = "Open settings"; b.style.marginTop = ".5rem";
       b.addEventListener("click", openSettings);
@@ -3939,13 +4124,16 @@ window.addEventListener("hashchange", () => closeSearch(true));
     }
     log.appendChild(s);
   }
+  function refreshChatState() {
+    el("chatSub").textContent = locked ? "locked: unlock with your passphrase" : hasKey() ? "answers from this site's data" : "add an API key in Settings";
+  }
   function openChat() {
     if (!panel.hidden) return;
     panel.hidden = false;
     fab.setAttribute("aria-expanded", "true");
     if (!lastTeams.length && desk && desk.a && desk.b) lastTeams = [desk.a, desk.b];
     if (!log.children.length) welcome();
-    el("chatSub").textContent = aiLoad().key ? "answers from this site's data" : "add an API key in Settings to chat";
+    refreshChatState();
     input.focus();
   }
   function closeChat() {
@@ -3957,14 +4145,15 @@ window.addEventListener("hashchange", () => closeSearch(true));
     if (busy) { if (ctrl) ctrl.abort(); return; }
     const text = input.value.trim();
     if (!text) return;
-    const cfg = aiLoad();
     input.value = ""; autosize();
     log.querySelectorAll(".chat-sugg").forEach(n => n.remove());
     addMsg("u", text);
-    if (!cfg.key) {
-      addMsg("err", "No API key yet. Add yours in Settings (the gear), then ask again.");
+    const sec = hasKey() ? await needSecrets() : null;
+    if (!sec || !sec.key) {
+      addMsg("err", locked ? "Unlock with your passphrase to chat." : "No API key yet. Add yours in Settings (the gear), then ask again.");
       return;
     }
+    const cfg = { ...aiLoad(), key: sec.key };
     const found = teamsIn(text);
     if (found.length) lastTeams = found;
     const system = SYSTEM(cfg.style) + "\n\nCONTEXT (this site's data, JSON):\n" + buildContext(text, found.length ? found : lastTeams);
@@ -4008,22 +4197,46 @@ window.addEventListener("hashchange", () => closeSearch(true));
 
   /* ---------- settings dialog ---------- */
   const dlg = el("setDlg");
-  let draftTeams = [];
+  let draftTeams = [], wipeArmed = false;
+  const say = (text, kind) => { const n = el("setStatus"); n.textContent = text; n.className = "st msg" + (kind ? " " + kind : ""); };
+  function showTab(which) {
+    for (const [tab, pan] of [["tabAi", "panAi"], ["tabAl", "panAl"]]) {
+      const on = (tab === "tabAi") === (which === "ai");
+      el(tab).setAttribute("aria-selected", String(on));
+      el(tab).tabIndex = on ? 0 : -1;
+      el(pan).hidden = !on;
+    }
+  }
+  el("tabAi").addEventListener("click", () => showTab("ai"));
+  el("tabAl").addEventListener("click", () => showTab("al"));
+  el("tabAi").parentElement.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const ai = el("tabAi").getAttribute("aria-selected") === "true"; showTab(ai ? "al" : "ai"); el(ai ? "tabAl" : "tabAi").focus(); }
+  });
   function fillModels(provider) {
     el("aiModels").innerHTML = MODELS[provider].map(m => `<option value="${esc(m)}"></option>`).join("");
     el("aiBase").placeholder = provider === "anthropic" ? "https://api.anthropic.com" : "https://api.openai.com/v1";
   }
   function paintChips() {
-    el("alChips").innerHTML = draftTeams.length
-      ? draftTeams.map(t => `<button type="button" class="chip" data-rm="${esc(t)}" title="Stop following ${esc(t)}">${esc(t)} &times;</button>`).join("")
-      : `<span class="small dim">No teams followed yet.</span>`;
+    el("alChips").innerHTML = draftTeams.map(t => `<button type="button" class="chip" data-rm="${esc(t)}" title="Stop following ${esc(t)}">${esc(t)} &times;</button>`).join("");
   }
-  function openSettings() {
+  function paintKeyState() {
+    const n = el("keySt");
+    if (!cryptoOk()) { n.textContent = "Encryption is unavailable here, so the key is kept for this tab only."; n.className = "st bad"; }
+    else if (locked) { n.textContent = "Locked with your passphrase."; n.className = "st"; }
+    else if (secrets.key) { n.textContent = vaultMode === "pass" ? "Saved, encrypted with your passphrase." : "Saved, encrypted on this device."; n.className = "st ok"; }
+    else { n.textContent = ""; n.className = "st"; }
+  }
+  function syncPassRow() { el("passRow").hidden = !el("aiLock").checked; }
+  function syncHookRow() { el("hookRow").hidden = !el("alDiscordOn").checked; }
+  async function openSettings() {
+    if (locked && !(await promptUnlock())) return;
     const c = aiLoad(), a = alLoad();
+    showTab("ai");
     el("aiProv").value = c.provider;
     fillModels(c.provider);
     el("aiModel").value = c.model;
-    el("aiKey").value = c.key; el("aiKey").type = "password"; el("aiKeyShow").textContent = "Show"; el("aiKeyShow").setAttribute("aria-pressed", "false");
+    el("aiKey").value = secrets.key; el("aiKey").type = "password"; el("aiKeyShow").textContent = "Show"; el("aiKeyShow").setAttribute("aria-pressed", "false");
+    el("aiLock").checked = vaultMode === "pass"; el("aiPass").value = ""; syncPassRow();
     el("aiBase").value = c.base;
     el("aiStyle").value = c.style;
     el("aiStream").value = c.stream ? "1" : "0";
@@ -4032,21 +4245,22 @@ window.addEventListener("hashchange", () => closeSearch(true));
     el("alLead").value = a.lead;
     el("alResults").checked = !!a.results;
     el("alBrowser").checked = !!a.browser && "Notification" in window && Notification.permission === "granted";
-    el("alBrowserNote").textContent = !("Notification" in window) ? "(not supported in this browser)"
-      : Notification.permission === "denied" ? "(blocked in your browser settings)" : "";
-    el("alDiscord").value = a.discord;
+    el("alBrowserNote").textContent = !("Notification" in window) ? "not supported" : Notification.permission === "denied" ? "blocked in the browser" : "";
+    el("alDiscordOn").checked = !!(a.discord && secrets.webhook);
+    el("alDiscord").value = secrets.webhook; syncHookRow();
     el("alTeams").innerHTML = Object.keys(T).sort().map(t => `<option value="${esc(t)}"></option>`).join("");
-    el("alTestNote").textContent = ""; el("setStatus").textContent = "";
-    paintChips();
+    el("alTestNote").textContent = ""; say("");
+    wipeArmed = false; el("setWipe").textContent = "Clear saved data"; el("setWipe").classList.remove("armed");
+    paintKeyState(); paintChips();
     if (!dlg.open) dlg.showModal();
   }
   function addTeamFromField() {
     const v = el("alAdd").value.trim();
     if (!v) return;
     const hit = Object.keys(T).find(t => norm(t) === norm(v)) || (nameIndex().find(([k]) => k === norm(v)) || [])[1];
-    if (!hit) { el("setStatus").textContent = `No team called "${v}" in the data.`; return; }
+    if (!hit) { say(`No team called "${v}" in the data.`, "bad"); return; }
     if (!draftTeams.includes(hit)) draftTeams.push(hit);
-    el("alAdd").value = ""; el("setStatus").textContent = ""; paintChips();
+    el("alAdd").value = ""; say(""); paintChips();
   }
   el("alAdd").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addTeamFromField(); } });
   el("alAdd").addEventListener("change", addTeamFromField);
@@ -4054,6 +4268,8 @@ window.addEventListener("hashchange", () => closeSearch(true));
     const b = e.target.closest("[data-rm]");
     if (b) { draftTeams = draftTeams.filter(t => t !== b.dataset.rm); paintChips(); }
   });
+  el("aiLock").addEventListener("change", () => { syncPassRow(); if (el("aiLock").checked) el("aiPass").focus(); });
+  el("alDiscordOn").addEventListener("change", () => { syncHookRow(); if (el("alDiscordOn").checked) el("alDiscord").focus(); });
   el("aiProv").addEventListener("change", () => {
     const p = el("aiProv").value;
     fillModels(p);
@@ -4066,52 +4282,64 @@ window.addEventListener("hashchange", () => closeSearch(true));
     el("aiKeyShow").textContent = shown ? "Show" : "Hide";
     el("aiKeyShow").setAttribute("aria-pressed", String(!shown));
   });
-  el("aiClearKey").addEventListener("click", () => {
-    el("aiKey").value = "";
-    const c = aiLoad(); c.key = ""; aiSave(c);
-    el("setStatus").textContent = "Key removed from this browser.";
-    if (!panel.hidden) { hist = []; welcome(); el("chatSub").textContent = "add an API key in Settings to chat"; }
+  el("setWipe").addEventListener("click", () => {
+    if (!wipeArmed) { wipeArmed = true; el("setWipe").textContent = "Click again to clear everything"; el("setWipe").classList.add("armed"); return; }
+    vaultWipe();
+    for (const k of [AI_KEY, AL_KEY]) { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch { /* ignore */ } }
+    if (cryptoOk()) { try { indexedDB.deleteDatabase("faceoff-vault"); } catch { /* ignore */ } }
+    secrets = { key: "", webhook: "" }; sessionPass = ""; vaultMode = "none"; locked = false;
+    startAlerts(); hist = []; if (!panel.hidden) welcome(); refreshChatState();
+    wipeArmed = false; el("setWipe").textContent = "Clear saved data"; el("setWipe").classList.remove("armed");
+    openSettings();
+    say("Everything saved on this device was removed.", "ok");
   });
   const closeSettings = () => { if (dlg.open) dlg.close(); };
   el("setX").addEventListener("click", closeSettings);
   el("setCancel").addEventListener("click", closeSettings);
   dlg.addEventListener("click", e => { if (e.target === dlg) closeSettings(); });
+  el("unlockDlg").addEventListener("click", e => { if (e.target === el("unlockDlg")) el("unlockCancel").click(); });
   el("setForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const prov = el("aiProv").value;
-    const base = el("aiBase").value.trim();
-    if (base && !/^https?:\/\//i.test(base)) { el("setStatus").textContent = "The base URL must start with https:// (or http:// for a local model)."; return; }
-    const hook = el("alDiscord").value.trim();
-    if (hook && !DISCORD_RE.test(hook)) { el("setStatus").textContent = "That does not look like a Discord webhook URL."; return; }
-    aiSave({
-      provider: prov, model: el("aiModel").value.trim() || MODELS[prov][0], key: el("aiKey").value.trim(), base,
-      style: el("aiStyle").value, stream: el("aiStream").value === "1", remember: el("aiRemember").checked,
-    });
+    const prov = el("aiProv").value, base = el("aiBase").value.trim();
+    if (base && !/^https?:\/\//i.test(base)) { say("The base URL must start with https:// (or http:// for a local model).", "bad"); return; }
+    const key = el("aiKey").value.trim();
+    const useHook = el("alDiscordOn").checked, hook = el("alDiscord").value.trim();
+    if (useHook && !DISCORD_RE.test(hook)) { say("That is not a Discord webhook URL.", "bad"); return; }
+    const wantLock = el("aiLock").checked;
+    const pass = wantLock ? (el("aiPass").value || sessionPass) : "";
+    if (wantLock && !pass) { say("Enter a passphrase, or untick the lock.", "bad"); showTab("ai"); el("aiPass").focus(); return; }
+    const remember = el("aiRemember").checked;
+    aiSave({ provider: prov, model: el("aiModel").value.trim() || MODELS[prov][0], base, style: el("aiStyle").value, stream: el("aiStream").value === "1", remember });
+    secrets = { key, webhook: useHook ? hook : "" };
+    if (!key && !secrets.webhook) { vaultWipe(); vaultMode = "none"; sessionPass = ""; }
+    else if (cryptoOk()) {
+      try { await seal(secrets, pass, remember); vaultMode = pass ? "pass" : "device"; sessionPass = pass; locked = false; }
+      catch { say("Could not encrypt on this device, so nothing secret was saved.", "bad"); return; }
+    } else vaultMode = "none";
     let wantBrowser = el("alBrowser").checked;
     if (wantBrowser && "Notification" in window && Notification.permission === "default") {
       try { await Notification.requestPermission(); } catch { /* ignore */ }
     }
     if (wantBrowser && !("Notification" in window && Notification.permission === "granted")) wantBrowser = false;
-    const a = alLoad();
-    alSave({ ...a, teams: draftTeams, lead: Math.max(0, Math.min(180, +el("alLead").value || 0)),
-      results: el("alResults").checked, browser: wantBrowser, discord: hook });
-    el("setStatus").textContent = "Saved.";
-    el("chatSub").textContent = aiLoad().key ? "answers from this site's data" : "add an API key in Settings to chat";
+    alSave({ ...alLoad(), teams: draftTeams, lead: Math.max(0, Math.min(180, +el("alLead").value || 0)),
+      results: el("alResults").checked, browser: wantBrowser, discord: !!secrets.webhook });
+    paintKeyState(); say("Saved.", "ok");
+    refreshChatState();
     if (!panel.hidden && !hist.length) welcome();
     startAlerts();
-    setTimeout(closeSettings, 350);
+    setTimeout(closeSettings, 400);
   });
   el("setOpen").addEventListener("click", openSettings);
 
   /* ---------- alerts ---------- */
-  async function deliver(a, title, body) {
+  async function deliver(a, hook, title, body) {
     const sent = [];
     if (a.browser && "Notification" in window && Notification.permission === "granted") {
       try { new Notification(title, { body, tag: title }); sent.push("browser"); } catch { /* ignore */ }
     }
-    if (a.discord && DISCORD_RE.test(a.discord)) {
+    if (hook && DISCORD_RE.test(hook)) {
       try {
-        const r = await fetch(a.discord, { method: "POST", headers: { "content-type": "application/json" },
+        const r = await fetch(hook, { method: "POST", headers: { "content-type": "application/json" },
           body: JSON.stringify({ content: `**${title}**\n${body}`, allowed_mentions: { parse: [] } }) });
         if (r.ok) sent.push("Discord");
       } catch { /* ignore */ }
@@ -4119,17 +4347,17 @@ window.addEventListener("hashchange", () => closeSearch(true));
     return sent;
   }
   el("alTest").addEventListener("click", async () => {
-    const hook = el("alDiscord").value.trim();
+    const hook = el("alDiscordOn").checked ? el("alDiscord").value.trim() : "";
     if (hook && !DISCORD_RE.test(hook)) { el("alTestNote").textContent = "Not a Discord webhook URL."; return; }
     let browser = el("alBrowser").checked;
     if (browser && "Notification" in window && Notification.permission === "default") {
       try { await Notification.requestPermission(); } catch { /* ignore */ }
     }
     browser = browser && "Notification" in window && Notification.permission === "granted";
-    const sent = await deliver({ browser, discord: hook }, "FaceOff test alert", "Alerts for your followed teams will arrive like this.");
-    el("alTestNote").textContent = sent.length ? "Sent via " + sent.join(" and ") + "." : "Nothing was sent: tick browser notifications (and allow them) or add a webhook.";
+    const sent = await deliver({ browser }, hook, "FaceOff test alert", "Alerts for your followed teams arrive like this.");
+    el("alTestNote").textContent = sent.length ? "Sent via " + sent.join(" and ") + "." : "Nothing sent: pick a delivery method first.";
   });
-  const alertsOn = a => a.teams.length && (a.browser || a.discord);
+  const alertsOn = a => a.teams.length && (a.browser || (a.discord && (secrets.webhook || locked)));
   async function checkReminders() {
     const a = alLoad();
     if (!alertsOn(a)) return;
@@ -4147,7 +4375,7 @@ window.addEventListener("hashchange", () => closeSearch(true));
       const pred = m.pred ? decode(m.pred) : null;
       const pick = pred ? (() => { const p = pFor(pred, [1, 3, 5].includes(m.bo) ? m.bo : 3).p; return `. Model: ${p >= 0.5 ? m.t1 : m.t2} ${PC(Math.max(p, 1 - p))} to win`; })() : "";
       const ev = EV_BY[m.ev];
-      await deliver(a, `${m.t1} vs ${m.t2} ${mins ? "starts in " + mins + " min" : "is starting"}`, `${ev ? ev.name + ", " : ""}${m.stage}${pick}`);
+      await deliver(a, secrets.webhook, `${m.t1} vs ${m.t2} ${mins ? "starts in " + mins + " min" : "is starting"}`, `${ev ? ev.name + ", " : ""}${m.stage}${pick}`);
     }
     if (changed) alSave(a);
   }
@@ -4169,7 +4397,7 @@ window.addEventListener("hashchange", () => closeSearch(true));
     for (const x of fresh) {
       if (!a.teams.includes(x.team_a) && !a.teams.includes(x.team_b)) continue;
       const loser = x.winner === x.team_a ? x.team_b : x.team_a;
-      await deliver(a, `${x.winner} beat ${loser} ${x.series_score}`, `${x.event}${x.stage ? ", " + x.stage : ""}`);
+      await deliver(a, secrets.webhook, `${x.winner} beat ${loser} ${x.series_score}`, `${x.event}${x.stage ? ", " + x.stage : ""}`);
     }
   }
   let alTimers = [];
@@ -4182,7 +4410,7 @@ window.addEventListener("hashchange", () => closeSearch(true));
     checkResults();
     alTimers.push(setInterval(checkResults, 5 * 60000));
   }
-  startAlerts();
+  vaultInit().then(startAlerts);
 })();
 
 go();

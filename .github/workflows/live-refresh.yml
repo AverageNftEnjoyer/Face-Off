@@ -1,11 +1,11 @@
-# While a tracked tournament is on, refresh its results every 10 minutes so the
+# While a tracked tournament is on, refresh its results every 15 minutes, while a match is due or on, so the
 # standings, brackets, predictions and the next-match module follow the event.
 # Outside a tournament the job finds nothing live and ends in seconds without
 # touching Liquipedia. The full daily refresh (daily-refresh.yml) stays the
 # source of everything else: new events, rosters, images, Valve standings.
 #
 # GitHub's schedule is best effort: runs start late and some are skipped, which
-# is why this runs every 10 minutes (a skipped run costs at most one more wait)
+# is why this runs every 15 minutes (a skipped run costs at most one more wait)
 # and why "Run workflow" exists as the manual push.
 #
 # This job commits DATA only, after the same quality gates as the daily run.
@@ -17,7 +17,7 @@ name: Live tournament refresh
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -32,7 +32,7 @@ concurrency:
 jobs:
   live:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
 
@@ -91,12 +91,7 @@ jobs:
               --body-file /tmp/issue.md --label data-pipeline
           fi
 
+      # a refused page is retried by the next scheduled run (15 min); the run only turns red once
+      # pages have been stale for 30 minutes, so one refusal does not email you every 15 minutes
       - name: Fail loudly if a live page could not be refreshed
-        run: |
-          python - <<'PY'
-          import json, sys
-          s = json.load(open("data/refresh_status.json", encoding="utf-8"))
-          if s.get("stale_pages"):
-              print("Liquipedia refused these live pages, the site still shows older results:", s["stale_pages"])
-              sys.exit(1)
-          PY
+        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 30

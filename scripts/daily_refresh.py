@@ -52,7 +52,7 @@ USAGE (from the repo root):  python scripts/daily_refresh.py [--dry-run] [--live
 import os
 import re
 import sys
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -288,15 +288,52 @@ def stale_titles(today):
 
 STATUS_FILE = os.path.join(ROOT, "data", "refresh_status.json")
 LIVE_WINDOW_DAYS = 1       # a tournament counts as live this many days before it starts / after it ends
-RETRY_PAUSES = (120, 240)  # seconds to wait before asking Liquipedia again for pages it refused us
+RETRY_PAUSES = (120,)      # full daily run: wait this long (seconds) before asking Liquipedia again for refused pages
+# Live runs fire every 10 minutes, so the next run IS the retry: one short try,
+# no waiting loop. (A patient loop held the shared queue for 22 minutes when
+# Liquipedia refused the runner's address.)
+LIVE_RETRY_BACKOFF = [20]
+LIVE_MAX_RETRY_AFTER = 60
+STALE_FAIL_MINUTES = 30    # live runs turn red only after pages have been stale this long
 
 
-def live_titles(today):
-    """Pages of tracked tournaments that are on now (+/- LIVE_WINDOW_DAYS), with
-    their stage pages."""
+MATCH_LEAD = timedelta(minutes=30)   # start asking this long before a match is due
+MATCH_TAIL = timedelta(hours=4)      # ...and keep asking until this long after its start (Bo5 + delays)
+
+
+def match_window_active(ev, now):
+    """True while one of the event's unfinished matches is about to start, is under
+    way, or is overdue (started less than MATCH_TAIL ago). A match that has a date
+    but no start time yet counts for that whole day. Outside these windows nothing
+    on the page can change, so there is nothing to ask Liquipedia."""
+    today = now.date().isoformat()
+    for m in ev.get("matches", []):
+        if m.get("finished"):
+            continue
+        when = m.get("when")
+        if when:
+            try:
+                start = datetime.fromisoformat(when)
+            except ValueError:
+                continue
+            if start.tzinfo is None:
+                start = start.replace(tzinfo=timezone.utc)
+            if start - MATCH_LEAD <= now <= start + MATCH_TAIL:
+                return True
+        elif m.get("day") == today:
+            return True
+    return False
+
+
+def live_titles(today, now=None, force=False):
+    """Pages of tracked tournaments with a match due, under way or overdue right now
+    (see match_window_active), with their stage pages. `force` skips the match-time
+    test and takes every tournament within LIVE_WINDOW_DAYS of today."""
+    now = now or _now()
     lo = (today - timedelta(days=LIVE_WINDOW_DAYS)).isoformat()
     hi = (today + timedelta(days=LIVE_WINDOW_DAYS)).isoformat()
-    titles = {e["title"] for e in E.discover() if e["start"] <= hi and e["end"] >= lo}
+    titles = {e["title"] for e in E.discover()
+              if e["start"] <= hi and e["end"] >= lo and (force or match_window_active(e, now))}
     selected = [l.strip() for l in open(TITLES_FILE, encoding="utf-8") if l.strip()]
     return titles | {s for s in selected for t in list(titles) if s.startswith(t + "/")}
 
@@ -309,16 +346,16 @@ def stale_live(live):
     return sorted(t for t in live if t in served)
 
 
-def refresh_live(live, collect):
+def refresh_live(live, collect, pauses=RETRY_PAUSES):
     """Refresh the live pages, rebuild matches.json, and retry pages Liquipedia
-    refused; returns the live pages still stale afterwards."""
+    refused after each pause in `pauses`; returns the live pages still stale."""
     import time
     import collect_liquipedia
     lpfetch.FRESH_TITLES |= live
     lpfetch.STALE_SERVED.clear()
     collect()
     stale = stale_live(live)
-    for pause in RETRY_PAUSES:
+    for pause in pauses:
         if not stale:
             break
         print(f"live pages still stale after the refresh: {stale}; trying again in {pause}s")
@@ -331,15 +368,32 @@ def refresh_live(live, collect):
     return stale
 
 
-def write_status(stale, live):
-    """data/refresh_status.json: written only when it changes, so quiet runs
-    commit nothing. The workflow fails the run when `stale_pages` is not empty."""
+def _now():
+    return datetime.now(timezone.utc)
+
+
+def _load_status():
     import json
-    new = {"ok": not stale, "stale_pages": stale}
     try:
-        old = json.load(open(STATUS_FILE, encoding="utf-8"))
+        with open(STATUS_FILE, encoding="utf-8") as f:
+            return json.load(f)
     except (OSError, ValueError):
-        old = None
+        return None
+
+
+def write_status(stale, live):
+    """data/refresh_status.json: {ok, stale_pages, stale_since}. `stale_since` is
+    when the pages FIRST went stale and stays put while they are stale, so the
+    file changes (and commits) only when an outage starts or ends, never on every
+    run. `--check-status` turns a long outage into a red run."""
+    import json
+    old = _load_status() or {}
+    if stale:
+        since = old.get("stale_since") if old.get("stale_pages") else None
+        new = {"ok": False, "stale_pages": stale,
+               "stale_since": since or _now().strftime("%Y-%m-%dT%H:%M:%SZ")}
+    else:
+        new = {"ok": True, "stale_pages": [], "stale_since": None}
     if old != new:
         with open(STATUS_FILE, "w", encoding="utf-8") as f:
             json.dump(new, f, indent=1)
@@ -348,20 +402,48 @@ def write_status(stale, live):
         print(f"STALE: could not refresh {len(stale)} live tournament page(s): {stale}", file=sys.stderr)
 
 
+def check_status(max_stale_minutes, now=None):
+    """Exit code for the workflows' last step: 0 when current, or stale for less
+    than `max_stale_minutes` (a warning only: the next run retries); 1 once the
+    pages have been stale that long. 0 minutes = fail on any staleness."""
+    st = _load_status() or {}
+    if not st.get("stale_pages"):
+        print("live pages are current")
+        return 0
+    since = st.get("stale_since")
+    try:
+        age = ((now or _now()) - datetime.strptime(str(since), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)).total_seconds() / 60
+    except (TypeError, ValueError):
+        age = float("inf")     # no usable timestamp: treat as long stale
+    msg = f"Liquipedia refused these live pages {age:.0f} min ago or more: {st['stale_pages']}; the site shows older results"
+    if age >= max_stale_minutes:
+        print(msg, file=sys.stderr)
+        return 1
+    print(f"::warning::{msg} (will fail after {max_stale_minutes} min; the next run retries)")
+    return 0
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     dry = "--dry-run" in argv
     today = date.today()
 
+    if "--check-status" in argv:
+        mins = float(argv[argv.index("--max-stale-minutes") + 1]) if "--max-stale-minutes" in argv else 0.0
+        sys.exit(check_status(mins))
+
     if "--live" in argv:
-        live = live_titles(today)
+        live = live_titles(today, force="--force" in argv)
         if not live:
-            print("no tracked tournament is live: nothing to do")
+            print("no match is due, under way or overdue: nothing to ask Liquipedia (--force overrides)")
             return
         print(f"live tournament pages: {sorted(live)}")
         import collect_liquipedia
         collect_liquipedia.OFFLINE = False
-        stale = refresh_live(live, collect_liquipedia.main)
+        # one short retry, no waiting loop: the next scheduled run is the retry
+        lpfetch.RETRY_BACKOFF[:] = LIVE_RETRY_BACKOFF
+        lpfetch.MAX_RETRY_AFTER = LIVE_MAX_RETRY_AFTER
+        stale = refresh_live(live, collect_liquipedia.main, pauses=())
         write_status(stale, live)
         print(f"live refresh done; Liquipedia API requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
         return

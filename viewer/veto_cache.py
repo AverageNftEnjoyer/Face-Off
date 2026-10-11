@@ -172,8 +172,15 @@ class VetoCache:
         lines += [dump(k) + ":" + dump(self.entries[k]) + ("," if i < len(keep) - 1 else "")
                   for i, k in enumerate(keep)]
         lines.append("}}")
+        text = chr(10).join(lines) + chr(10)
         tmp = self.path + ".tmp"
         try:
+            try:
+                with open(self.path, "rb") as f:
+                    if f.read() == text.encode("utf-8"):
+                        return len(keep)        # unchanged: leave the file (and its mtime) alone
+            except OSError:
+                pass
             os.makedirs(os.path.dirname(self.path), exist_ok=True)
             with open(tmp, "w", encoding="utf-8", newline="\n") as f:
                 f.write("\n".join(lines) + "\n")

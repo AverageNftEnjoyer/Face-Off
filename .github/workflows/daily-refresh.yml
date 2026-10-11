@@ -23,7 +23,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
 
@@ -122,11 +122,4 @@ jobs:
       # refresh already waited out Liquipedia's rate limit, so this only fires
       # when it kept refusing (the data is still committed above)
       - name: Fail loudly if a live page could not be refreshed
-        run: |
-          python - <<'PY'
-          import json, sys
-          s = json.load(open("data/refresh_status.json", encoding="utf-8"))
-          if s.get("stale_pages"):
-              print("Liquipedia refused these live pages, the site still shows older results:", s["stale_pages"])
-              sys.exit(1)
-          PY
+        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 0

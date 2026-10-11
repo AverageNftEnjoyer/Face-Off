@@ -39,6 +39,7 @@ for sub in ("", "data", "scripts", "viewer"):
     sys.path.insert(0, os.path.join(ROOT, sub))
 
 SITE = "https://cs2faceoffanalytics.vercel.app/"
+RECENT_REFRESH_MIN = 25      # a data commit younger than this means the refresh is working; skip the Liquipedia request
 DEPLOY_GRACE_MIN = 20      # a data commit younger than this may still be building on the host
 
 
@@ -56,9 +57,9 @@ def site_hash(url):
     return m.group(1) if m else ""
 
 
-def minutes_since_data_commit():
+def minutes_since_data_commit(path="data/matches.json"):
     try:
-        out = subprocess.run(["git", "log", "-1", "--format=%ct", "--", "data/matches.json"],
+        out = subprocess.run(["git", "log", "-1", "--format=%ct", "--", path],
                              cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
         return (time.time() - int(out)) / 60.0
     except (OSError, ValueError, subprocess.CalledProcessError):
@@ -99,14 +100,18 @@ def main(argv=None):
     if "--no-liquipedia" not in argv:
         import daily_refresh as dr
         live = dr.live_titles(date.today())
-        if live:
+        recent = minutes_since_data_commit("data")
+        if live and recent < RECENT_REFRESH_MIN:
+            # the live refresh just ran and committed: asking Liquipedia again adds a request and tells us nothing
+            print(f"data was refreshed {recent:.0f} min ago: not asking Liquipedia again")
+        elif live:
             behind = live_pages_behind(live)
             if behind:
                 problems.append(f"Liquipedia has newer content than the repo for: {behind}")
             else:
                 print(f"live pages current with Liquipedia: {sorted(live)}")
         else:
-            print("no tracked tournament is live")
+            print("no match is due, under way or overdue: nothing to ask Liquipedia")
 
     # B. what the last refresh reported
     try:
