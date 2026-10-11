@@ -1,6 +1,5 @@
 {
- "ok": false,
- "stale_pages": [
-  "ESL/Pro League/Season 24"
- ]
+ "ok": true,
+ "stale_pages": [],
+ "stale_since": null
 }
