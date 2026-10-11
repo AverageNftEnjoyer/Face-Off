@@ -52677,5 +52677,30 @@
   ],
   "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398756)",
   "tier": "S"
+ },
+ {
+  "match_id": "e630e806b242",
+  "date": "2026-10-11",
+  "event": "ESL Pro League Season 24",
+  "team_a": "Team Vitality",
+  "team_b": "MOUZ",
+  "winner": "Team Vitality",
+  "best_of": 5,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Team Vitality"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Team Vitality"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Team Vitality"
+   }
+  ],
+  "source": "liquipedia:ESL/Pro League/Season 24 (hltv match 2398757)",
+  "tier": "S"
  }
 ]
