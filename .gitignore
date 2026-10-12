@@ -52,3 +52,4 @@ viewer/data-bundle.json
 # (scripts/promote_rosters.py rebuilds the candidate from the committed cache)
 data/roster_events.candidate.json
 data/roster_diff.md
+.claude/worktrees/
