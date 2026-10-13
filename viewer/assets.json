@@ -2088,14 +2088,6 @@
    "region": "Europe",
    "roster": [
     {
-     "id": "kreaz",
-     "name": "Rasmus Johansson",
-     "flag": "se",
-     "igl": true,
-     "role": "",
-     "joined": "2026-03-18"
-    },
-    {
      "id": "sl3nd",
      "name": "Henrich Hevesi",
      "flag": "hu",
@@ -3723,8 +3715,8 @@
   },
   "THUNDERdOWNUNDER": {
    "page": "THUNDERdOWNUNDER",
-   "logo": "THUNDERdOWNUNDER 2026 allmode.png",
-   "logo_dark": "THUNDERdOWNUNDER 2026 allmode.png",
+   "logo": "",
+   "logo_dark": "",
    "location": "Australia",
    "region": "Oceania",
    "roster": [
@@ -3745,18 +3737,26 @@
      "joined": "2025-10-14"
     },
     {
+     "id": "Gratisfaction",
+     "name": "Sean Kaiwai",
+     "flag": "nz",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-11"
+    },
+    {
      "id": "viridian",
      "name": "Eddie Azzi",
      "flag": "au",
      "igl": false,
-     "role": "Coach",
-     "joined": "2026-02-??"
+     "role": "",
+     "joined": "2026-10-11"
     }
    ],
-   "icon": "THUNDERdOWNUNDER 2026 allmode.png",
-   "icon_dark": "THUNDERdOWNUNDER 2026 allmode.png",
-   "logo_path": "data/raw/media/147f459d56baf6a6.png",
-   "logo_dark_path": "data/raw/media/147f459d56baf6a6.png"
+   "icon": "",
+   "icon_dark": "",
+   "logo_path": null,
+   "logo_dark_path": null
   },
   "TYLOO": {
    "page": "TYLOO",
