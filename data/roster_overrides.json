@@ -1,1 +1,15 @@
-[]
+[
+ {
+  "team": "Astralis",
+  "from": "2026-10-13",
+  "players": [
+   "phzy",
+   "staehr",
+   "ryu",
+   "cmtry",
+   "siuhy"
+  ],
+  "kind": "roster_change",
+  "note": "siuhy and cmtry signed; HooXi and jabbi benched; coach NEO"
+ }
+]

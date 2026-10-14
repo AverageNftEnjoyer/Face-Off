@@ -21,6 +21,8 @@ import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
 
 MAX_DAYS = 45          # longer "events" are season circuits, not tournaments
+ID_PREFIX_LEN = 24     # event-slug characters at the front of a match id (short page links);
+                       # dedupe_match_ids lengthens it only for events that would clash
 AHEAD_DAYS = 120       # show next year's tournaments once they are this close
 
 
@@ -331,6 +333,38 @@ def parse_participants(txt, alias):
 
 
 # ------------------------------------------------------------------ events
+def dedupe_match_ids(events):
+    """Make match ids unique across events, in place.
+
+    A match id is "<first ID_PREFIX_LEN characters of the event slug>-<n>".
+    Two events whose slugs share those characters (a long series name whose
+    editions differ only after them, such as the year) would hand out
+    the same ids, and the page keys every match (its call, its match page) by
+    id, so one event's matches silently replaced the other's. Only the events
+    in such a clash take a longer prefix: the full slug, then the slug plus the
+    start date if even the full slugs clash. Every other id stays as it was,
+    so existing links keep working."""
+    def prefix(e):
+        return e["slug"][:ID_PREFIX_LEN]
+
+    clash = {}
+    for e in events:
+        clash.setdefault(prefix(e), []).append(e)
+    for group in clash.values():
+        if len(group) < 2:
+            continue
+        full = {}
+        for e in group:
+            full.setdefault(e["slug"], []).append(e)
+        for e in group:
+            new = e["slug"] if len(full[e["slug"]]) == 1 else f"{e['slug']}-{e['start']}"
+            old = prefix(e)
+            for m in e["matches"]:
+                if m.get("id", "").startswith(old + "-"):
+                    m["id"] = new + m["id"][len(old):]
+    return events
+
+
 def discover(alias=None):
     if alias is None:
         alias = C.cached_aliases()
@@ -404,7 +438,7 @@ def discover(alias=None):
             if mp:
                 pool.append(C.MAP_NORMALIZE.get(mp.lower(), mp))
         for i, m in enumerate(sorted(matches, key=lambda m: (m["day"] or "9999", m["when"] or ""))):
-            m["id"] = f"{slug(name)[:24]}-{i + 1}"
+            m["id"] = f"{slug(name)[:ID_PREFIX_LEN]}-{i + 1}"
         events.append({
             "title": t, "name": name, "slug": slug(name), "start": sd, "end": ed,
             "tier": ib.get("liquipediatier", "").strip(), "tl": tier_letter(ib.get("liquipediatier", "")),
@@ -417,6 +451,7 @@ def discover(alias=None):
             "format": fmt_lines, "prizes": prizes, "pool": pool,
             "participants": parts, "matches": sorted(matches, key=lambda m: m["id"]),
         })
+    dedupe_match_ids(events)
     # one spelling per team across events: participant lists written in other
     # letter case ("desi boyz", "Desi Boyz") take the match-data spelling, else
     # the first spelling in sorted order

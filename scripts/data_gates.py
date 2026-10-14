@@ -22,6 +22,13 @@ Gates:
                  most max(--elo-bound, 40 x its new or changed series). In an
                  append-only update (every new series is dated on or after the
                  newest old one) a team with no new series must not move at all.
+  cross_source   agreement with a second, independent results source
+                 (data/valve_results.json, Valve's regional-standings match rows;
+                 winner only). Fails when the update ADDS a winner disagreement or
+                 an identity mismatch (same day, team and result, different
+                 opponent) beyond valve_results.GATE_NEW_DISAGREE_MAX. Skipped
+                 with a note when the second source is absent (never blocks on
+                 the second source being down). Report: scripts/cross_source_check.py
 
 USAGE:
   python scripts/data_gates.py [--new data/matches.json] [--old PATH | --old-git]
@@ -240,6 +247,56 @@ def gate_elo_bounds(old, new, bound: float = ELO_BOUND, allow_backfill=False):
     return {"append_only": append_only, "violations": sorted(viol, key=lambda x: -abs(x["delta"]))}
 
 
+def gate_cross_source(old, new, second=None):
+    """Agreement with the second source (data/valve_results.json, Valve's
+    regional-standings match rows). Fails only on what THIS update introduced:
+    winner disagreements or identity mismatches (same day, same team and
+    result, different opponent) present on the new data but not on the
+    published data, both compared with the same second-source file. Older,
+    already-published discrepancies are reported, never re-failed. A missing
+    or unreadable second source passes with a note: it is a cross-check, and
+    its outage must never block a refresh."""
+    sys.path.insert(0, os.path.join(ROOT, "data"))
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
+    try:
+        import valve_results as vr
+        import cross_source_check as xs
+        if second is None:
+            second = vr.load()
+    except Exception as e:  # noqa: BLE001 - the cross-check is optional input
+        return {"note": f"second source unreadable ({type(e).__name__}: {e}); cross-check skipped"}
+    if not second or not second.get("series"):
+        return {"note": "no second source (data/valve_results.json); cross-check skipped"}
+
+    def issues(matches):
+        rep = xs.compare(matches, second)
+        return ({d["match_id"]: d for d in rep.get("disagreements", [])},
+                {d["match_id"]: d for d in rep.get("identity_mismatches", [])}, rep)
+    dn, inew, rep = issues(new)
+    out = {"matched": rep.get("matched"), "agreement_rate": rep.get("agreement_rate"),
+           "disagree": len(dn), "identity_mismatch": len(inew),
+           "second_source_snapshots": [min(second.get("snapshots") or [""]),
+                                       max(second.get("snapshots") or [""])]}
+    if old is None:
+        out["note"] = "no baseline: discrepancies reported, not gated"
+        return out
+    do, iold, _ = issues(old)
+    added_d = [dn[k] for k in sorted(dn) if k not in do]
+    added_i = [inew[k] for k in sorted(inew) if k not in iold]
+    out["new_disagreements"] = added_d[:20]
+    out["new_identity_mismatches"] = added_i[:20]
+    allow = vr.GATE_NEW_DISAGREE_MAX
+    problems = []
+    if len(added_d) > allow:
+        problems.append(f"{len(added_d)} series now disagree with the second source on the winner "
+                        f"(allow {allow})")
+    if len(added_i) > allow:
+        problems.append(f"{len(added_i)} series now name a different opponent than the second source "
+                        f"(allow {allow})")
+    out["problems"] = problems
+    return out
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     new_path = argv[argv.index("--new") + 1] if "--new" in argv else os.path.join(ROOT, "data", "matches.json")
@@ -285,6 +342,8 @@ def main(argv=None):
     gates["team_names"] = {"passed": True, **names}  # informational by design
     elo = gate_elo_bounds(old, new, bound, allow_backfill)
     gates["elo_bounds"] = {"passed": not elo.get("violations") and not elo.get("error"), **elo}
+    xs = gate_cross_source(old, new)
+    gates["cross_source"] = {"passed": not xs.get("problems"), **xs}
 
     passed = all(g["passed"] for g in gates.values())
     report = {"passed": passed, "new_series": len(new),

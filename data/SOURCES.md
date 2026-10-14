@@ -149,23 +149,74 @@ duplicates).
   they are de-duplicated on (date, team pair, HLTV id).
 - Not available from this source: map veto (bans/picks) and stand-in or roster information.
 
-## 2. Valve `counter-strike_regional_standings`: INVESTIGATED, NOT USED for matches
-- https://github.com/ValveSoftware/counter-strike_regional_standings (public repo).
-  The repo tree is saved in `raw/valve/valve_tree.json`, along with `raw/valve/readme.md`
-  and one example team detail file, `raw/valve/sample_detail.md`.
-- What it contains: VRS standings snapshots (live/ and invitation/, 2024-2026), the
-  model code, and per-team detail pages listing the series results that fed each
-  snapshot. Each row has date, opponent, W/L, a snapshot-local match id and the
-  5-man roster. `data/matchdata_sample_20230829.json` is a single CS:GO-era
-  sample.
-- Why it was not used: the detail pages have no map-level results and no best-of.
-  They are per-team rolling 6-month windows, so a match list would have to be
-  rebuilt by joining thousands of markdown files. Liquipedia already gave the
-  same series with maps.
-- Possible future use: its per-match roster column could supply stand-in detection
-  (the `roster` feature), and point-in-time VRS points could replace the Elo proxy.
+## 2. Valve `counter-strike_regional_standings`: USED as the SECOND results source (cross-check only)
+- https://github.com/ValveSoftware/counter-strike_regional_standings (public repo,
+  published by Valve). Also read by `vrs.py` (standings) and `lineups.py`
+  (per-series five-man lineups). Raw files are cached in `raw/valve/` (gitignored).
+- Access and terms relied on: the repository is public and Valve's readme invites
+  the community to use its code and data ("feel free to tinker and make something
+  new"). It is read through GitHub's REST API (one `git/trees` call per run,
+  authenticated with the workflow's `GITHUB_TOKEN` in Actions, inside GitHub's API
+  rate limits) and `raw.githubusercontent.com` downloads spaced 0.25 s, with a
+  descriptive User-Agent, every file cached and never re-downloaded. That is
+  ordinary use under the GitHub Terms of Service. The repository has no LICENSE
+  file, so its files are NOT republished: the committed `valve_results.json`
+  holds only derived facts (date, the two teams, the winner, which snapshot listed
+  it). Each detail page notes that Valve's event data is "provided by HLTV.org":
+  the second source is independent of Liquipedia, but its upstream is HLTV's
+  event data as published by Valve. HLTV itself is never contacted.
+- What it contains: VRS standings snapshots (`live/<year>/`, monthly since
+  2025-03, more often before; 47 detail snapshots in the tree on 2026-10-12) and,
+  per snapshot, one detail page per ranked roster listing the series that fed it
+  over the previous six months: a snapshot-local match id (the same id on both
+  rosters' pages), date (day precision), opponent display name, W/L and the five
+  players. No maps, no best-of, no score, no event name.
+- Second results source (added 2026-10-12): `valve_results.py` joins the rows into
+  one record per series (both pages must agree on the winner, else the series is
+  dropped and counted) in the `matches.json` record shape with every field the
+  source lacks set to null, and writes `valve_results.json` (6,826 series between
+  tracked teams, 2024-02-08 .. 2026-10-04, from the 14 cached snapshots).
+  Team names are derived, never listed by hand: our names from `matches.json` /
+  `matches_lower.json` plus every code in `team_aliases.json`, compared after
+  `lineups.norm`; a normalised key claimed by two teams is dropped as ambiguous.
+  Names that still do not resolve are inferred from dates only (never from who
+  won), with the thresholds in the tolerance block of `valve_results.py`; this
+  found two: `Betclic -> Betclic Apogee Esports`, `Imperial Valkyries -> Imperial
+  Female`. The refresh updates it incrementally (only a newer snapshot is read; a
+  failure only warns). This work made no new requests: everything was built from
+  the cache `lineups.py` had already downloaded.
+- Measured against `matches.json` (`scripts/cross_source_check.py`,
+  `cross_source_report.json`, overlap 2024-02-08 .. 2026-10-04):
+  2,227 primary series in the overlap; 2,191 matched (98.4%) and **all 2,191
+  agree on the winner (0 disagreements)**; 16 pending (ESL Pro League Season 24
+  was still running when the newest snapshot was cut); 17 identity mismatches (same day, same team, same
+  result, different opponent): 9 series that `matches.json` gives to "Monte" at
+  IEM Cologne Major 2026 are "Luminosity" in Valve's data, and 8 that it gives to
+  "ECSTATIC" at PGL Major Copenhagen 2024 are "Gaimin Gladiators". These need a
+  human check against the event pages; nothing was changed automatically.
+  3 primary series are missing from the second source (HEROIC-NiP at BLAST
+  Spring Showdown 2024-03-06, and two Asian Champions League 2026 series of
+  "Last Bullet", whose Valve name could not be placed). The second source also
+  has 4,635 series between tracked teams that `matches.json` lacks: 1,607 are in
+  `matches_lower.json` (B-tier, deliberately untracked), 3,028 are other
+  untracked events.
+- Freshness: it cannot keep results current. Valve publishes a snapshot about
+  once a month (first Monday; median gap 12 days over the whole tree, 28-35 days
+  since March 2025) and apparently lists a series only once its event has
+  finished (ESL Pro League Season 24, running on 2026-10-05, is absent from that
+  snapshot while finished events up to 2026-10-04 are in it). Measured
+  from the cached snapshots, a series first appeared a median 36 days (p90 69)
+  after it was played (an upper bound: the initial cache holds every other
+  snapshot; incremental runs read every new one). With the newest snapshot
+  dated 2026-10-05, the latest series it has is 2026-10-04, a week behind
+  `matches.json` (2026-10-11). It is a cross-check, not a backup feed.
 
 ## 3. Not used
-- HLTV: not scraped (bot protection; disallowed by task rules).
+- HLTV: not scraped (no official API; bot protection; the project does not scrape
+  it). Its data reaches us only as Valve republishes it in section 2.
+- Commercial esports data APIs (PandaScore, GRID, Abios): they need an account /
+  API key and contract terms the project does not have; not evaluated further.
+- Steam Web API: no professional match results. FACEIT Data API: only
+  FACEIT-hosted matches, not the tracked S/A-tier events.
 - Kaggle / Hugging Face CS2 datasets: not needed once Liquipedia worked. None was
   downloaded, so no third-party license applies.

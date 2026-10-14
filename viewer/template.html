@@ -340,6 +340,21 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 .chip.hit { color: var(--win); }
 .chip.miss { color: var(--loss); }
 .chip.plain { color: var(--dim); }
+/* roster caution flag (roster_flags.py; display only, never in the numbers) */
+.rflag { display: inline-flex; align-items: center; gap: .25rem; border-radius: 999px; padding: .05rem .45rem; font-size: .68rem; font-weight: 700;
+  line-height: 1.3; white-space: nowrap; border: 1px solid currentColor; color: var(--amber); cursor: help; vertical-align: middle; }
+.rflag.change { color: var(--dim); }
+.rflag .ico { width: .9em; height: .9em; }
+.small > .rflag, .cu-when > .rflag, .ph > .rflag { margin-left: .4rem; }
+.ph > .rflag { grid-column: 2; justify-self: start; margin-left: 0; }
+.bm .when .rflag { padding: 0 .3rem; margin-left: auto; }
+.cid > .rflag { font-size: .72rem; background: rgba(4, 10, 12, .6); }
+.cid > .rflag.change { color: var(--text); }
+.rfpanel ul { list-style: none; margin: 0 0 .5rem; padding: 0; display: grid; gap: .6rem; }
+.rfpanel li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .6rem; align-items: start; font-size: var(--s-1); }
+.rfpanel li > span:last-child { display: grid; gap: .15rem; min-width: 0; overflow-wrap: anywhere; }
+.rfpanel li > .rflag { border: 0; padding: .1rem 0 0; font-size: 1rem; }
+.rfpanel.standin { border-left: 3px solid var(--amber); }
 /* staleness badge: one shared component, bundle-owned values, always visible */
 .stale { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .1rem .6rem; font-size: .72rem; color: var(--dim); border: 1px dashed var(--line); white-space: nowrap; }
 .stale b { color: var(--text); font-weight: 700; }
@@ -824,6 +839,61 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .stand .tms .tlink { font-weight: 600; }
 .stand .tms .open { color: var(--dim); }
 
+/* following a tournament: the hub above the schedule */
+.hub { margin-bottom: 1rem; box-shadow: inset 0 3px 0 var(--loss); }
+.hub.done { box-shadow: none; }
+.hubgrid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1rem 1.5rem; align-items: start; }
+/* finished rows carry a score, not a pick: a narrow middle column keeps the team names readable */
+@media (min-width: 641px) { .hubres .mrow { grid-template-columns: 4.2rem minmax(0, 1fr) 3.6rem minmax(0, 1fr) auto; } }
+.hubh { display: flex; align-items: center; gap: .5rem; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin: .4rem 0 .35rem; }
+.hubday { font-size: var(--s-1); font-weight: 700; margin: .55rem 0 .2rem; }
+.hubrec { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: var(--s-1); color: var(--dim); margin: 0 0 .5rem; }
+.hubrec b { color: var(--text); }
+.hubrec a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.hubpath { display: grid; margin-top: .5rem; }
+.hubpath > a { display: grid; gap: .1rem; padding: .4rem .25rem; border-bottom: 1px solid var(--line); font-size: var(--s-1); }
+.hubpath > a:last-child { border-bottom: 0; }
+.hubpath > a:hover { background: var(--raise); }
+.hubpath .logo.xs { vertical-align: -.15rem; margin-right: .2rem; }
+.mrow .tm .src, .bm .bt .nm small, .mrow .tm .src small { font-weight: 400; color: var(--dim); }
+.mrow .tm .src { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-style: italic; }
+.mrow .tm .src i, .bm .bt .nm i { font-style: normal; color: var(--dim); }
+.gnx { white-space: nowrap; }
+.gnx a { display: inline-flex; align-items: center; gap: .3rem; font-size: var(--s-1); font-variant-numeric: tabular-nums; }
+.gnx a b { font-weight: 700; color: var(--dim); }
+.gnx a b.fav { color: var(--acc); }
+.mpath { margin: .5rem 0 0; }
+.mpath a { text-decoration: underline; text-underline-offset: 2px; }
+.mpath .logo.xs { vertical-align: -.15rem; margin-right: .15rem; }
+@media (max-width: 960px) { .hubgrid { grid-template-columns: minmax(0, 1fr); } }
+/* phone: a group table with the Next column drops its VRS column (shown on every team page) to fit */
+@media (max-width: 640px) { table.hasnx tr > :last-child { display: none; } }
+
+/* home page: tournaments running now and starting soon */
+.hband { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.25rem; }
+.hbcard { display: grid; gap: .55rem; align-content: start; padding: .8rem 1rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); box-shadow: inset 0 3px 0 var(--ct); min-width: 0; flex: 1 1 16rem; }
+.hbcard.live { box-shadow: inset 0 3px 0 var(--loss); }
+.hbcard:hover { border-color: var(--dim); }
+.hbh { display: flex; align-items: center; gap: .65rem; min-width: 0; }
+.hbh .hbl { width: 2.5rem; height: 2.5rem; object-fit: contain; flex: none; }
+.hbh .evl-ph.hbl { display: grid; place-items: center; font-size: .75rem; font-weight: 800; }
+.hbt { display: grid; gap: .15rem; min-width: 0; }
+.hbt b { font-stretch: 62.5%; font-weight: 800; font-size: 1.15rem; text-transform: uppercase; line-height: 1.05; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbt > span { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .4rem; font-size: .72rem; color: var(--dim); }
+.hbnext { display: grid; gap: .2rem; font-size: var(--s-1); min-width: 0; }
+.hbnext small { font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+.hbm { display: flex; align-items: center; gap: .35rem; min-width: 0; font-weight: 600; }
+.hbm em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.hbm i { font-style: normal; color: var(--dim); font-weight: 400; }
+.hbp { color: var(--dim); }
+.hbp b { color: var(--acc); font-weight: 800; }
+.hbmore { align-self: center; font-size: var(--s-1); font-weight: 600; color: var(--dim); padding: .5rem; white-space: nowrap; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 640px) {
+  /* phone: the cards scroll sideways in one row instead of stacking above the desk */
+  .hband { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .2rem; }
+  .hbcard { flex: 0 0 82%; scroll-snap-align: start; }
+}
+
 /* team profile: the team's own finish at each event */
 .tfin { display: grid; }
 .tfin > a { display: grid; grid-template-columns: 6.5rem 2.75rem minmax(0, 1fr) minmax(6.5rem, auto) 6.5rem; gap: .25rem 1rem; align-items: center; padding: .55rem .25rem; border-bottom: 1px solid var(--line); }
@@ -1292,6 +1362,27 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .splitfig div { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: .75rem .85rem; display: grid; gap: .15rem; }
 .splitfig b { font-size: var(--s3); }
 .chart-head { display: flex; justify-content: flex-end; }
+/* track record: how-to note, baseline scores, filtered summary, team table */
+.rec-pair { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.how p { font-size: var(--s-1); color: var(--dim); }
+.how p b { color: var(--text); }
+.how details > p, .how details > .tablewrap { margin-top: .5rem; }
+.scores td .dim { display: block; font-size: .72rem; }
+.scores td.n, .tteam td.n { font-variant-numeric: tabular-nums; }
+.tteam td.n, .ctab td.n, .ctab td:first-child { white-space: nowrap; }
+.filters input { background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: var(--r); padding: .35rem .5rem; font: inherit; font-size: var(--s-1); color-scheme: dark; }
+.fsum { display: flex; flex-wrap: wrap; gap: .35rem 1rem; align-items: center; padding: .6rem .75rem; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--dim); }
+.fsum b { color: var(--text); }
+.fsum .fbtns { display: flex; flex-wrap: wrap; gap: .5rem; margin-left: auto; }
+.tteam .tl { display: flex; align-items: center; gap: .4rem; white-space: nowrap; }
+.tteam td:first-child { position: sticky; left: 0; background: var(--panel); }
+.lnk { background: none; border: 0; padding: 0; font: inherit; color: var(--acc); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+@media (min-width: 761px) { .rec-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) {
+  .filters label { flex: 1 1 calc(50% - .75rem); min-width: 0; }
+  .filters select, .filters input { min-width: 0; width: 100%; }
+  .fsum .fbtns { margin-left: 0; }
+}
 svg.rchart { cursor: crosshair; touch-action: pan-y; }
 /* track record: wide-screen layout */
 .rec-row3, .rec-quad { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
@@ -1461,7 +1552,8 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   .mrow .mid.mpick { width: 6.6rem; padding: .4rem .5rem; }
   .mrow .mid.mpick .pk b { display: none; }
   .mrow .mid.mpick .pk { justify-content: space-between; }
-  .mrow .tag { grid-area: tag; }
+  /* the tag line (result chip, roster badge, stage) wraps instead of pushing the page sideways */
+  .mrow .tag { grid-area: tag; display: flex; flex-wrap: wrap; align-items: center; gap: .15rem .5rem; }
   .evhero { grid-template-columns: minmax(0, 1fr); }
   .evhero > .evlogo { width: 4rem; }
   .strip-wrap { -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); }
@@ -1757,12 +1849,15 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 <script>
 const DATA = /*__DATA__*/null;
 const IMG = /*__IMAGES__*/null;
-const FIXTURES = /*__FIXTURES__*/null;   // upcoming matches, expanded prediction form (bundle schema v1)
-const RESULTS = /*__RESULTS__*/null;     // recent results with model verdicts (bundle schema v1)
+const FIXTURES = /*__FIXTURES__*/null;   // upcoming matches, expanded prediction form (docs/bundle-schema.md)
+const RESULTS = /*__RESULTS__*/null;     // recent results with model verdicts (docs/bundle-schema.md)
 const META = /*__META__*/null;           // {bundle_version, generated_at, data_through, data_hash, vrs_date}
+// the bundle schema this page reads; build_viewer.py's drift check fails the build when it is not
+// the version the build writes (SUPPORTED_BUNDLE_VERSION)
+const PAGE_BUNDLE_VERSION = 2;
 
 /* Bundle contract: refuse to render a bundle whose schema version we don't understand. */
-if (!META || META.bundle_version !== 1 || !DATA || !FIXTURES || !RESULTS) {
+if (!META || META.bundle_version !== PAGE_BUNDLE_VERSION || !DATA || !FIXTURES || !RESULTS) {
   document.getElementById("view").innerHTML = `<section class="panel"><h2>Data unavailable</h2>
     <p class="dim">This page build's data bundle (v${META && META.bundle_version}) isn't supported by this page version. The site needs a fresh build from a compatible bundle.</p></section>`;
   throw new Error("unsupported bundle: refusing to render");
@@ -1792,6 +1887,7 @@ const ICON = {
   head_to_head: svgI(`<path d="M2.5 12h7.5M6.5 8l4 4-4 4M21.5 12H14M17.5 8l-4 4 4 4"/>`),
   map_veto: svgI(`<path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5l-5.5 2.5-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20"/>`),
   roster: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
+  caution: svgI(`<path d="M12 3.8l9 15.7H3z"/><path d="M12 10v4.3M12 16.9v.2"/>`),
   stakes: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
   map_depth: svgI(`<path d="M12 3.5l8.5 4.5-8.5 4.5-8.5-4.5zM3.5 12l8.5 4.5 8.5-4.5M3.5 16l8.5 4.5 8.5-4.5"/>`),
 };
@@ -2030,6 +2126,49 @@ function lineupOf(team, e) {
   }
   const r = T[team]?.roster || [];
   return { source: "current", players: r.filter(p => !p.coach).map(p => person(p.id, {})), coach: r.filter(p => p.coach).map(p => person(p.id, {})), subs: [] };
+}
+
+/* ---------------- roster caution flags (roster_flags.py) ----------------
+   A team fielding a stand-in or a recently changed lineup. DISPLAY ONLY: a flag
+   never changes a number on the page. Each flag is {k, src, r, since?, thru?}:
+   k "standin" | "change", r the reason line. Point-in-time: a match's flags
+   (m.rf) use only what was known before its day; DATA.rflags holds the flags
+   for the matchup tools (now = today; ev = per tournament). One component:
+   rfBadge for cards and the court, rfPanel for the full reasons. */
+const RF_SRC = {
+  event: () => "Listed as a stand-in for this tournament. Those lists carry no dates, so the player may have played only some of its matches.",
+  lineups: f => `From published five-man lineups${f.thru ? `, known through ${fmtDate(f.thru)}` : ""}; they lag results by up to a month, so a newer change may be missing.`,
+  override: () => "From a roster move entered by hand.",
+};
+const RF_WHY = {
+  standin: "Stand-ins are where the model misses most.",
+  change: "A new lineup alone has not made past calls less accurate; shown for context.",
+};
+const RF_FOOT = "A caution only: not counted in the win chances.";
+// [[team, flags], ...] for a match's two sides; empty when no side is flagged
+const rfSides = (rf, a, b) => rf ? [[a, rf.a || []], [b, rf.b || []]].filter(([, l]) => l.length) : [];
+// flags for a matchup tool: a tournament's own list (its stand-ins apply) or today's
+function rfTool(e, a, b) {
+  const src = (e ? (DATA.rflags.ev || {})[e.slug] : DATA.rflags.now) || {};
+  return src[a] || src[b] ? { a: src[a] || [], b: src[b] || [] } : null;
+}
+const rfSev = sides => sides.some(([, l]) => l.some(f => f.k === "standin")) ? "standin" : "change";
+const rfText = sides => sides.map(([t, l]) => l.map(f => `${t}: ${f.r}`).join("; ")).join("; ");
+// the badge: one per card (both teams) or per team; the reasons ride in the tooltip
+function rfBadge(sides, short = false) {
+  if (!sides.length) return "";
+  const sev = rfSev(sides), label = sev === "standin" ? "Stand-in" : "New lineup";
+  const tip = `Treat with caution. ${rfText(sides)}. ${RF_WHY[sev]} ${RF_FOOT}`;
+  return `<span class="rflag ${sev}" title="${esc(tip)}" aria-label="${esc(tip)}">${ICON.caution}${short ? "" : `<span>${label}</span>`}</span>`;
+}
+// the full reasons, with where each comes from and how far it can be trusted
+function rfPanel(sides, cls = {}) {
+  if (!sides.length) return "";
+  const sev = rfSev(sides);
+  const rows = sides.flatMap(([t, l]) => l.map(f => `<li class="${f.k}"><span class="rflag ${f.k}" aria-hidden="true">${ICON.caution}</span><span><b class="${cls[t] || ""}">${esc(t)}</b> ${esc(f.r)}${f.igl ? " (the in-game leader)" : ""}
+    <span class="small dim">${esc((RF_SRC[f.src] || (() => ""))(f))}</span></span></li>`)).join("");
+  return `<section class="panel rfpanel ${sev}"><h2>Treat with caution <span class="dim">roster</span></h2><ul>${rows}</ul>
+    <p class="small dim">${RF_WHY[sev]} ${RF_FOOT}</p></section>`;
 }
 
 /* ---------------- shared match widgets ---------------- */
@@ -2302,6 +2441,7 @@ function court(pred, a, b, o, bo) {
         <div class="cid">
           ${T[t] ? `<a class="cname cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cname cond">${esc(t)}</span>`}
           <span class="crank" title="${esc(vrsLine(t))}">${rankLine(t)}</span>
+          ${rfBadge(rfSides(o.rf, a, b).filter(([x]) => x === t))}
           ${o.change ? `<button type="button" class="btn cchg" data-chg="${cls}" aria-haspopup="dialog" aria-label="${esc(`Change Team ${i + 1}, now ${t}`)}">Change Team ${i + 1}${ICON.swap}</button>` : ""}
         </div>
       </div>
@@ -2438,10 +2578,11 @@ function matchDesk(pred, a, b, o = {}) {
   const bo = o.fixedBo && [1, 3, 5].includes(o.fixedBo) ? o.fixedBo : desk.bo;
   const pool = (o.ev && o.ev.pool.length ? o.ev.pool : null) || DATA.pool;
   let body;
-  if (desk.tab === "lineups") body = `<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
+  const caution = rfPanel(rfSides(o.rf, a, b), { [a]: "ct", [b]: "t" });
+  if (desk.tab === "lineups") body = `${caution}<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
   else if (desk.tab === "h2h") body = `${h2hList(a, b)}<div class="grid2">${formList(a)}${formList(b)}</div>`;
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
-  else body = `
+  else body = `${caution}
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
     ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
@@ -2535,7 +2676,7 @@ function rail() {
   const doneRow = m => {
     const w = winnerOf(m), p = m.pred ? decode(m.pred).p : null, fav = p == null ? null : p >= .5 ? m.t1 : m.t2;
     return `<a class="nextm" href="#m-${m.id}">
-      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${fmtDay(m.day)}</span>
+      <span class="small dim">${esc(EV_BY[m.ev].name)}, ${fmtDay(m.day)}${rfBadge(rfSides(m.rf, m.t1, m.t2))}</span>
       <span class="tt"><span${w === m.t1 ? "" : ' class="lost"'}>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><b class="rsc cond">${m.w1}<i class="dim">:</i>${m.w2}</b><span${w === m.t2 ? "" : ' class="lost"'}><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${fav ? `<span class="rtag ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(p, 1 - p))}</span>` : ""}</a>`;
   };
@@ -2565,7 +2706,7 @@ function rail() {
     }
     const day = localDay(m.when) || m.day;
     return `<a class="nextm cu" href="#m-${m.id}">
-      <span class="small dim cu-when">${esc(EV_BY[m.ev].name)}, ${day ? fmtDay(day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span>
+      <span class="small dim cu-when">${esc(EV_BY[m.ev].name)}, ${day ? fmtDay(day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}${rfBadge(rfSides(m.rf, m.t1, m.t2))}</span>
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${pickBox}${split(m)}</a>`;
   };
@@ -2616,13 +2757,13 @@ function viewHome() {
     pred = decode(m.pred);
     const e = EV_BY[m.ev];
     // no fixedBo on the home page: Bo1 / Bo3 / Bo5 are always offered (match pages keep the real format)
-    o = { ev: e, centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back, next: f, live: recentLive(m) };
+    o = { ev: e, centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), change: true, back, next: f, live: recentLive(m), rf: m.rf };
   } else {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
-    o = { change: true, back, next: f };
+    o = { change: true, back, next: f, rf: rfTool(null, desk.a, desk.b) };
   }
   PAIR = [desk.a, desk.b];
-  return `<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
+  return `${homeBand()}<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
 }
 
 /* ---------------- tournaments index ---------------- */
@@ -2893,12 +3034,15 @@ function matchRow(m) {
     const favPct = pred.p >= .5 ? pair[0] : pair[1];
     tag = `<span class="chip ${fav === w ? "hit" : "miss"}" title="Model favored ${esc(fav)} at ${favPct}%">${missLabel(fav === w, Math.max(pred.p, 1 - pred.p))}</span>`;
   }
-  const team = (t, side) => `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}<span>${esc(t || "To be decided")}</span></div>`;
+  const team = (t, side) => {
+    const src = !t ? slotSource(m, side ? 1 : 0) : null;   // an open slot names the match that fills it
+    return `<div class="tm ${side}${w && t !== w ? " lost" : ""}">${logo(t)}${src ? `<span class="src" title="${esc(src.title)}">${src.html}</span>` : `<span>${esc(t || "To be decided")}</span>`}</div>`;
+  };
   // the visitor's own clock; if that falls on another calendar day than the event's, say which
   const ld = localDay(m.when), otherDay = ld && m.day && ld !== m.day;
   const inner = `<div class="time"><b>${clock(m.when) || (m.day ? fmtDay(m.day) : "TBA")}</b><span>${m.when ? tz(m.when) : ""}${otherDay ? ` ${esc(wday(ld))}` : ""}</span></div>
     ${team(a, "")}${mid}${team(b, "r")}
-    <div class="tag">${tag}<span>${esc(m.stage)}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span></div>`;
+    <div class="tag">${tag}${rfBadge(rfSides(m.rf, a, b))}<span>${esc(m.stage)}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span></div>`;
   return a && b ? `<a class="mrow" href="#m-${m.id}">${inner}</a>` : `<div class="mrow">${inner}</div>`;
 }
 
@@ -2964,13 +3108,7 @@ function evMatches(e) {
   dayPick[e.slug] = d;
   const list = e.matches.filter(m => m.day === d).sort((x, y) => (x.when || "").localeCompare(y.when || ""));
   const groups = groupTables(e);
-  const po = e.matches.filter(m => m.kind === "playoffs");
-  const cols = [];
-  for (const m of [...po].sort((x, y) => (x.day || "").localeCompare(y.day || ""))) {
-    let c = cols.find(c => c.name === m.stage);
-    if (!c) cols.push(c = { name: m.stage, list: [] });
-    c.list.push(m);
-  }
+  const cols = playoffCols(e);
   const bm = m => {
     const w = winnerOf(m), live = isLive(m), played = m.finished || live;
     const pred = !played && m.t1 && m.t2 ? decode(m.pred) : null;
@@ -2980,15 +3118,21 @@ function evMatches(e) {
       const cls = !t ? "tbd" : w ? (t === w ? "won" : "lost") : "";
       const right = played ? `<b class="sc">${s}</b>`
         : pp ? `<span class="bp${(pp.p >= .5) === (i === 0) ? " pk" : ""}">${pp.s[i]}%</span>` : "";
-      return `<div class="bt ${cls}">${logo(t, "sm")}<span class="nm">${esc(t || "To be decided")}</span>${right}</div>`;
+      // an open slot names the match that fills it (its favourite first), never a new number
+      const src = !t ? slotSource(m, i) : null;
+      const nm = src ? `<span class="nm" title="${esc(src.title)}">${src.html}</span>` : `<span class="nm">${esc(t || "To be decided")}</span>`;
+      return `<div class="bt ${cls}">${logo(t, "sm")}${nm}${right}</div>`;
     };
     const day = localDay(m.when) || m.day;
     const when = `${day ? `${wday(day)} ${fmtDay(day)}` : "TBA"}${m.when ? `, ${clock(m.when)}` : ""}`;
-    const inner = `${row(m.t1, m.w1, 0)}${row(m.t2, m.w2, 1)}<div class="when"><span>${when}</span>${live ? `<span class="chip live">Live</span>` : ""}</div>`;
-    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" title="${pp ? esc(`Model's pre-match chances: ${m.t1} ${pp.s[0]}%, ${m.t2} ${pp.s[1]}%`) : ""}">${inner}</a>` : `<div class="bm">${inner}</div>`;
+    const inner = `${row(m.t1, m.w1, 0)}${row(m.t2, m.w2, 1)}<div class="when"><span>${when}</span>${rfBadge(rfSides(m.rf, m.t1, m.t2), true)}${live ? `<span class="chip live">Live</span>` : ""}</div>`;
+    const call = m.finished ? callOf(m) : null;
+    const tip = pp ? `Model's pre-match chances: ${m.t1} ${pp.s[0]}%, ${m.t2} ${pp.s[1]}%`
+      : call ? `Model's pre-match pick: ${call.fav} at ${call.favPct}% (${call.label.toLowerCase()})` : "";
+    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" title="${esc(tip)}">${inner}</a>` : `<div class="bm">${inner}</div>`;
   };
   const firstTz = e.matches.find(m => m.when);
-  return `
+  return `${evHub(e)}
   ${e.pool.length ? `<section class="pool" aria-label="Map pool: choose a map to see every team's record on it at this tournament">${e.pool.map(mp => {
     const n = mapPlays(e, mp);
     return `<button type="button" class="maptile" data-evmap="${esc(mp)}" data-ev="${e.slug}" aria-pressed="${evMap[e.slug] === mp}" style="${mapBg(mp)}" title="${esc(`${mp}: every team's record on it at this tournament`)}">
@@ -3003,10 +3147,15 @@ function evMatches(e) {
     </section>
     <div class="evside">
       ${groups.length ? `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
-        ${groups.map(([name, rows]) => `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table>
-          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th><th class="n">VRS</th></tr></thead>
-          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td><td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
-        </table></div></div>`).join("")}</section>` : ""}
+        ${groups.map(([name, rows]) => {
+          // each team's next scheduled series in this group, with the model's pre-match chance for that team
+          const nx = Object.fromEntries(rows.map(r => [r.team, nextInGroup(e, name, r.team)]));
+          const showNx = rows.some(r => nx[r.team]);
+          return `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table${showNx ? ` class="hasnx"` : ""}>
+          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th>${showNx ? `<th class="gnx" title="Next series and the model's pre-match chance for this team">Next</th>` : ""}<th class="n">VRS</th></tr></thead>
+          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td>${showNx ? `<td class="gnx">${nx[r.team] || ""}</td>` : ""}<td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
+        </table></div></div>`;
+        }).join("")}</section>` : ""}
     </div>
     <div class="evside">
       ${standings(e)}
@@ -3038,12 +3187,17 @@ function bracketBlocks(cols) {
 // One bracket block. When every round has half the matches of the one before (a single-
 // elimination tree) the matches go in bracket-slot order, so matches 2k-1 and 2k sit beside
 // the match k they feed, and CSS draws the joining lines. The third-place match sits under the final.
-function bracketHtml(cs, bm) {
-  const bySlot = l => [...l].sort((x, y) => (x.slot ?? 1e3) - (y.slot ?? 1e3));
+const bySlot = l => [...l].sort((x, y) => (x.slot ?? 1e3) - (y.slot ?? 1e3));
+// A block's rounds in slot order, its third-place match, and whether it is a single-elimination tree
+function bracketShape(cs) {
   const rounds = cs.filter(c => c.name !== "Third-place match").map(c => ({ ...c, list: bySlot(c.list) }));
   const third = cs.filter(c => c.name === "Third-place match");
-  const n = Math.max(1, rounds.length);
   const tree = rounds.length > 1 && rounds.every((c, i) => !i || c.list.length * 2 === rounds[i - 1].list.length);
+  return { rounds, third, tree };
+}
+function bracketHtml(cs, bm) {
+  const { rounds, third, tree } = bracketShape(cs);
+  const n = Math.max(1, rounds.length);
   const head = c => {
     const bos = [...new Set(c.list.map(m => m.bo))];
     return `<h3>${esc(c.label)}${bos.length === 1 ? `<small>Bo${bos[0]}</small>` : ""}</h3>`;
@@ -3080,6 +3234,203 @@ function standings(e) {
   </div></section>`;
 }
 
+/* ---------------- following a tournament: hub, open slots, next opponents ----------------
+   Everything here re-reads the schedule, the results and each match's own pre-match call
+   (m.pred). No number is made up: a percentage shown is always one match's own model chance,
+   and it says which match. Event state comes from the build (e.status, from the event dates
+   and the data's as-of day); match order comes from the schedule's own times. */
+const FOLLOW = {
+  hubNext: 6,        // "Next up" rows in the hub: about one match day of a big event, without burying the tables
+  hubRecent: 4,      // "Latest results" rows in the hub: the last few series; the day list below has the rest
+  homeSoonDays: 14,  // home page: an upcoming event that starts within two weeks gets a card
+  homeCards: 3,      // home page: at most this many tournament cards, so the matchup desk stays near the top
+};
+const byTime = (a, b) => (a.day || "9999").localeCompare(b.day || "9999") || (a.when || "").localeCompare(b.when || "");
+const boOf = m => [1, 3, 5].includes(m.bo) ? m.bo : 3;
+// a match not played yet that is still current: dated no earlier than the day before the data's as-of day
+// (the same rule as the home page's "Coming up"; older unfinished records are page rot, not fixtures)
+const pendingNow = m => !m.finished && !isLive(m) && m.day && m.day >= daysBefore(DATA.as_of, 1);
+
+// Playoff matches as bracket columns, one per stage name, in date order
+function playoffCols(e) {
+  const cols = [];
+  for (const m of e.matches.filter(m => m.kind === "playoffs").sort((x, y) => (x.day || "").localeCompare(y.day || ""))) {
+    let c = cols.find(c => c.name === m.stage);
+    if (!c) cols.push(c = { name: m.stage, list: [] });
+    c.list.push(m);
+  }
+  return cols;
+}
+
+// Where each playoff match's teams come from and where its winner goes, for single-elimination
+// trees only (bracketShape: every round half the one before, slots 2k-1 and 2k feed slot k).
+// {id: {from: [id, id], loser: bool, next: id}}; built once, on first use.
+let FEED = null;
+function feeds() {
+  if (FEED) return FEED;
+  FEED = {};
+  const at = id => FEED[id] = FEED[id] || {};
+  for (const e of EV) for (const [, cs] of bracketBlocks(playoffCols(e))) {
+    const { rounds, third, tree } = bracketShape(cs);
+    if (!tree) continue;
+    rounds.forEach((c, i) => c.list.forEach((m, j) => {
+      const nx = rounds[i + 1] && rounds[i + 1].list[j >> 1];
+      if (nx) at(m.id).next = nx.id;
+      if (i) at(m.id).from = [rounds[i - 1].list[2 * j], rounds[i - 1].list[2 * j + 1]].map(x => x && x.id);
+    }));
+    // the third-place match is played by the two losers of the round before the final
+    const semis = rounds[rounds.length - 2];
+    if (semis && semis.list.length === 2) for (const c of third) for (const m of c.list) Object.assign(at(m.id), { from: semis.list.map(x => x.id), loser: true });
+  }
+  return FEED;
+}
+const loserOf = m => m.finished ? (winnerOf(m) === m.t1 ? m.t2 : m.t1) : null;
+// a short name for a match: its two teams, else its round and bracket slot ("Semifinal 1")
+const matchName = m => m.t1 && m.t2 ? `${m.t1} vs ${m.t2}` : `${m.stage}${m.slot ? " " + m.slot : ""}`;
+// The match that fills an open slot of match m (side 0 = Team 1, 1 = Team 2), as
+// {html, title}; null when the bracket shape gives no source. The two candidates are
+// listed favourite first by that match's own pre-match call; no new number is shown.
+function slotSource(m, side) {
+  const f = feeds()[m.id];
+  if (!f || !f.from) return null;
+  const src = f.from.map(id => MATCH[id]);
+  const sent = x => x && x.finished && [m.t1, m.t2].includes(f.loser ? loserOf(x) : winnerOf(x));
+  // one side already filled: the open side comes from the feeder that has not sent its team yet
+  const open = src.filter(x => x && !sent(x));
+  const x = (m.t1 || m.t2) && open.length === 1 ? open[0] : src[side];
+  if (!x) return null;
+  const role = f.loser ? "Loser" : "Winner";
+  if (x.finished) {
+    const t = f.loser ? loserOf(x) : winnerOf(x);
+    return { html: esc(t), title: `${t}: ${role.toLowerCase()} of ${matchName(x)} (${x.w1}-${x.w2}); the schedule has not filled this slot yet` };
+  }
+  if (x.t1 && x.t2 && x.pred) {
+    const p = pFor(decode(x.pred), boOf(x)).p, pair = displayPercent([p, 1 - p]);
+    // for "Loser of", the underdog is the likelier one to arrive, so it is listed first
+    const aFirst = (p >= .5) !== !!f.loser;
+    const [u, v] = aFirst ? [x.t1, x.t2] : [x.t2, x.t1];
+    return { html: `<small>${role}:</small> ${esc(u)} <i>or</i> ${esc(v)}`,
+      title: `${role} of ${x.stage}: ${x.t1} vs ${x.t2}. Model's pre-match chances for that match: ${x.t1} ${pair[0]}%, ${x.t2} ${pair[1]}%` };
+  }
+  return { html: `<small>${role} of</small> ${esc(matchName(x))}`, title: `${role} of ${matchName(x)}` };
+}
+// Where the winner of match m goes next: {m: next match, opp: html for the other slot}, or null
+function nextStep(m) {
+  const f = feeds()[m.id];
+  const nx = f && f.next && MATCH[f.next];
+  if (!nx) return null;
+  const nf = feeds()[nx.id] || {};
+  const side = nf.from ? nf.from.indexOf(m.id) : -1;
+  if (side < 0) return null;
+  const oppT = side === 0 ? nx.t2 : nx.t1;
+  const os = oppT ? null : slotSource(nx, 1 - side);
+  return { m: nx, opp: oppT ? `${logo(oppT, "xs")}<b>${esc(oppT)}</b>` : os ? `<span title="${esc(os.title)}">${os.html}</span>` : "To be decided" };
+}
+// The model's pre-match call on a finished match, for the format played
+function callOf(m) {
+  if (!m.finished || !m.pred || !m.t1 || !m.t2) return null;
+  const p = pFor(decode(m.pred), boOf(m)).p, pair = displayPercent([p, 1 - p]);
+  const fav = p >= .5 ? m.t1 : m.t2, w = winnerOf(m), fp = Math.max(p, 1 - p);
+  return { fav, w, hit: fav === w, fp, favPct: p >= .5 ? pair[0] : pair[1], label: missLabel(fav === w, fp) };
+}
+// A team's next scheduled series in one group / Swiss stage, as a small cell: opponent and the
+// model's pre-match chance for this team in that series
+function nextInGroup(e, name, team) {
+  const m = e.matches.filter(m => m.kind === "groups" && m.t1 && m.t2 && (m.t1 === team || m.t2 === team) && groupKey(m.stage) === name && !m.finished)
+    .sort(byTime)[0];
+  if (!m) return "";
+  const opp = m.t1 === team ? m.t2 : m.t1;
+  const p = m.pred ? pFor(decode(m.pred), boOf(m)).p : null;
+  const mine = p == null ? null : displayPercent([p, 1 - p])[m.t1 === team ? 0 : 1];
+  return `<a href="#m-${m.id}" title="${esc(`${isLive(m) ? "Playing now" : "Next"}: vs ${opp}${mine != null ? `; model's pre-match chance for ${team}: ${mine}%` : ""}`)}">${logo(opp, "xs")}${mine != null ? `<b class="${+mine >= 50 ? "fav" : ""}">${mine}%</b>` : `<span class="dim">vs</span>`}</a>`;
+}
+// The visitor's own day label for a match day: Today / Tomorrow / "Wed 14 Oct"
+function dayWord(d) {
+  const now = new Date(), iso = x => `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+  const tom = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  return d === iso(now) ? "Today" : d === iso(tom) ? "Tomorrow" : `${wday(d)} ${fmtDay(d)}`;
+}
+// The model's record on the finished series of one event, plus its biggest miss
+function evRecord(e) {
+  const calls = e.matches.map(m => ({ m, c: callOf(m) })).filter(x => x.c);
+  if (!calls.length) return null;
+  const hits = calls.filter(x => x.c.hit).length;
+  const upset = calls.filter(x => !x.c.hit).sort((a, b) => b.c.fp - a.c.fp)[0] || null;
+  return { n: calls.length, hits, upset };
+}
+function recordLine(e, r) {
+  if (!r) return "";
+  const u = r.upset;
+  return `<p class="hubrec"><span><b>${r.hits} of ${r.n}</b> series called right at this event (${(r.hits / r.n * 100).toFixed(2)}%)</span>${u ? `<span>Biggest miss: <a href="#m-${u.m.id}">${esc(u.c.w)} beat ${esc(u.c.fav)}</a>, who the model had at ${u.c.favPct}%</span>` : ""}</p>`;
+}
+
+// The hub at the top of a tournament page: what is on now, what is next (with the model's pick
+// for each), the latest results, and how the model is doing at this event. A finished event
+// keeps only the record line.
+function evHub(e) {
+  const rec = evRecord(e);
+  if (e.status === "finished") return rec ? `<section class="panel hub done"><h2>How the model called it <span class="dim">pre-match picks against the results</span></h2>${recordLine(e, rec)}</section>` : "";
+  // before the start the day list below already opens on the first match day with every pick
+  if (e.status !== "live") return "";
+  const live = e.matches.filter(isLive).sort(byTime);
+  // series with both teams set (each has a pick); open bracket slots are named in the bracket below
+  const next = e.matches.filter(m => pendingNow(m) && m.t1 && m.t2).sort(byTime).slice(0, FOLLOW.hubNext);
+  const recent = e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).reverse().slice(0, FOLLOW.hubRecent);
+  if (!live.length && !next.length && !recent.length) return "";
+  // the next-up list split by the visitor's own calendar day
+  let lastDay = null;
+  const nextRows = next.map(m => {
+    const d = localDay(m.when) || m.day, head = d !== lastDay ? `<h3 class="hubday">${esc(dayWord(d))}</h3>` : "";
+    lastDay = d;
+    return head + matchRow(m);
+  }).join("");
+  const steps = [...live, ...next].map(m => ({ m, s: m.t1 && m.t2 ? nextStep(m) : null })).filter(x => x.s);
+  const title = "Follow the event";
+  return `<section class="panel hub">
+    <h2>${title} <span class="dim">the model's pre-match pick on every series; times in your time zone</span></h2>
+    ${recordLine(e, rec)}
+    <div class="hubgrid">
+      <div>
+        ${live.length ? `<h3 class="hubh"><span class="chip live">Live</span> Playing now</h3><div class="mlist">${live.map(matchRow).join("")}</div>` : ""}
+        ${next.length ? `<h3 class="hubh">Next up</h3><div class="mlist">${nextRows}</div>` : ""}
+        ${steps.length ? `<div class="hubpath"><h3 class="hubh">What the winners play next</h3>${steps.map(({ m, s }) => `<a href="#m-${s.m.id}"><span class="dim">${esc(matchName(m))}</span><span>→ ${esc(s.m.stage)}${s.m.day ? `, ${esc(wday(localDay(s.m.when) || s.m.day))} ${esc(fmtDay(localDay(s.m.when) || s.m.day))}` : ""} vs ${s.opp}</span></a>`).join("")}</div>` : ""}
+      </div>
+      ${recent.length ? `<div class="hubres"><h3 class="hubh">Latest results</h3><div class="mlist">${recent.map(matchRow).join("")}</div></div>` : ""}
+    </div>
+  </section>`;
+}
+
+// Home page: the tournaments running now and the ones about to start, each with its next series.
+// Respects the tier filter chosen on the Tournaments page.
+function homeBand() {
+  const evs = EV.filter(tierShown);
+  const byStart = (a, b) => a.start.localeCompare(b.start);
+  const live = evs.filter(e => e.status === "live").sort(byStart);
+  const up = evs.filter(e => e.status === "upcoming").sort(byStart);
+  let list = [...live, ...up.filter(e => dayDiff(DATA.as_of, e.start) <= FOLLOW.homeSoonDays)].slice(0, FOLLOW.homeCards);
+  if (!list.length && up.length) list = [up[0]];
+  if (!list.length) return "";
+  const card = e => {
+    const nx = e.matches.filter(m => (pendingNow(m) || isLive(m)) && m.t1 && m.t2).sort(byTime)[0];
+    let pick = "";
+    if (nx) {
+      const pred = decode(nx.pred);
+      const p = pred ? pFor(pred, boOf(nx)).p : null;
+      const pk = p == null ? null : p >= .5 ? nx.t1 : nx.t2, pp = p == null ? null : displayPercent([p, 1 - p])[p >= .5 ? 0 : 1];
+      const d = localDay(nx.when) || nx.day;
+      pick = `<span class="hbnext"><small>${isLive(nx) ? "Live now" : `Next: ${esc(dayWord(d))}${nx.when ? ` ${esc(clock(nx.when))}` : ""}`}</small>
+        <span class="hbm">${logo(nx.t1, "xs")}<em>${esc(nx.t1)}</em><i>vs</i><em>${esc(nx.t2)}</em>${logo(nx.t2, "xs")}</span>${rfBadge(rfSides(nx.rf, nx.t1, nx.t2), true)}
+        ${pk ? `<span class="hbp">Model pick <b>${esc(pk)}</b> ${pp}%</span>` : ""}</span>`;
+    }
+    const total = dayDiff(e.start, e.end) + 1, today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 1), total);
+    const when = e.status === "live" ? `Day ${today} of ${total}` : startsIn(e).replace(/^./, c => c.toUpperCase());
+    return `<a class="hbcard ${e.status}" href="#e-${e.slug}">
+      <span class="hbh">${evImg(e, "hbl")}<span class="hbt"><b>${tierTag(e)}${esc(shortEv(e.name))}</b><span>${statusChip(e)} ${esc(when)}, ${esc(dayRange(e))}</span></span></span>
+      ${pick || `<span class="hbnext"><small>${e.matches.some(m => m.t1 && m.t2) ? "Schedule to come" : "Teams and schedule to come"}</small></span>`}</a>`;
+  };
+  return `<section class="hband" aria-label="Tournaments now and next">${list.map(card).join("")}<a class="hbmore" href="#events">All tournaments</a></section>`;
+}
+
 function evTeamsList(e) {
   const fromParts = e.participants.map(p => p.team);
   const fromMatches = e.matches.flatMap(m => [m.t1, m.t2]).filter(Boolean);
@@ -3094,7 +3445,7 @@ function evTeams(e) {
     const L = lineupOf(t, e);
     const sel = t === s.a ? "sel-a" : t === s.b ? "sel-b" : "";
     return `<div class="pcard ${sel}">
-      <div class="ph">${logo(t, "lg")}${T[t] ? `<a class="cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cond">${esc(t)}</span>`}<span class="small dim">${esc(vrsLine(t))}</span></div>
+      <div class="ph">${logo(t, "lg")}${T[t] ? `<a class="cond" href="#t-${T[t].slug}">${esc(t)}</a>` : `<span class="cond">${esc(t)}</span>`}<span class="small dim">${esc(vrsLine(t))}</span>${rfBadge(rfSides(rfTool(e, t, null), t, null))}</div>
       ${L.players.length ? `<ul>${L.players.map(p => `<li>${flag(p.flag)}<b>${esc(p.id)}</b><span class="rn">${esc(p.name)}</span>${p.igl ? `<span class="chip plain">IGL</span>` : ""}${p.standin ? `<span class="chip miss">Stand-in</span>` : ""}</li>`).join("")}${L.coach.map(c => `<li class="dim">${flag(c.flag)}Coach ${esc(c.id)}</li>`).join("")}</ul>` : `<p class="empty">Lineup not announced yet.</p>`}
       ${T[t] ? `<button type="button" class="btn" data-addpick="${esc(t)}" data-ev="${e.slug}" aria-pressed="${!!sel}">${sel ? "In matchup" : "Add to matchup"}</button>` : ""}
     </div>`;
@@ -3123,7 +3474,7 @@ function evMatchup(e) {
     <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
     <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap teams</button></div>
   </section>
-  ${matchDesk(pred, s.a, s.b, { ev: e, label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
+  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
     ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Hypothetical series</b><span>${asof}</span></span></span></div>` })}`;
 }
 
@@ -3134,10 +3485,13 @@ function viewMatch(id) {
   const e = EV_BY[m.ev];
   const a = m.t1, b = m.t2, pred = decode(m.pred);
   PAIR = [a, b];
+  // in a bracket: where the winner goes next and who (or which match) waits there
+  const st = m.finished ? null : nextStep(m);
+  const path = st ? `<p class="mpath small"><span class="dim">Winner plays next:</span> <a href="#m-${st.m.id}">${esc(st.m.stage)}${st.m.day ? `, ${esc(wday(localDay(st.m.when) || st.m.day))} ${esc(fmtDay(localDay(st.m.when) || st.m.day))}` : ""}</a> vs ${st.opp}</p>` : "";
   return `
   <nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
-  ${matchDesk(pred, a, b, { ev: e, fixedBo: m.bo, played: m.maps.length ? playedMaps(m) : "", ctx: ctxFor(m, e),
-    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), live: isLive(m), label: "Model's pre-match call" })}`;
+  ${matchDesk(pred, a, b, { ev: e, fixedBo: m.bo, played: m.maps.length ? playedMaps(m) : "", ctx: ctxFor(m, e) + path,
+    centre: centreFor(m), status: statusFor(m), verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, label: "Model's pre-match call" })}`;
 }
 function countdown(when) {
   if (!when) return "";
@@ -3194,6 +3548,7 @@ function viewTeam(slugv) {
         : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}
       <span class="small dim" style="margin-top:.4rem">${t.series ? `Elo ${t.elo}${t.rank ? `, ${ordinal(t.rank)} of active teams` : `, ${t.series} series in the data`}` : "No series in the data yet"}</span></div>
   </section>
+  ${rfPanel(rfSides(rfTool(null, n, null), n, null))}
   <div class="tlay">
     ${lineup(n, "a", null)}
     <section class="panel tl-elo"><h2>Elo over the last ${t.trace.length} series <span class="dim">hover to read</span></h2>${spark(t.trace)}
@@ -3209,21 +3564,46 @@ function viewTeam(slugv) {
 }
 
 /* ---------------- track record ----------------
-   Built only from finished 2026 matches on this site that carry the model's
-   pre-match call (each call uses results dated before the match day). */
-let CALLS = null;
+   Built only from finished matches on this site that carry the model's
+   pre-match call (each call uses results dated before the match day).
+   Calls dated on or before the day the model's weights were last fitted
+   (DATA.track.fit_end) are in-sample and are left out.
+
+   The page's own track-record settings, in one place. Each is a display
+   choice; the calibration buckets and their pass rule come from the
+   evaluation code (DATA.track, from walkforward.py), not from here. */
+const TRACK = {
+  minTeamCalls: 8,   // best / worst lists skip teams with fewer calls: a share from a handful is noise
+  page: 40,          // rows added to the call log (and team table) per "Show more"
+  streak: 20,        // calls in the "current run" strip
+  cards: 5,          // best calls / worst misses listed
+  roll: [10, 40, 5], // season trend: share right over the previous w calls, w = n / 5 kept within 10..40
+  z: 1.959964,       // 95% Wilson interval, the same z as backtest.wilson
+  eps: 1e-15,        // log-loss probability clip, the same as backtest.log_loss
+};
+const TR = DATA.track;
+const BUCKETS = TR.buckets.map(([lo, hi], i, all) => [lo, hi, i === all.length - 1 && hi >= 1 ? `${Math.round(lo * 100)}% and up` : `${Math.round(lo * 100)}-${Math.round(hi * 100)}%`]);
+// a pick chance in bucket i (the top bucket includes its upper edge, so a 100% call still counts)
+const inBucket = (p, i) => p >= BUCKETS[i][0] && (p < BUCKETS[i][1] || (i === BUCKETS.length - 1 && p <= BUCKETS[i][1]));
+let CALLS = null, CALLS_INSAMPLE = 0;
 function callLog() {
   if (CALLS) return CALLS;
   const out = [];
+  CALLS_INSAMPLE = 0;
   for (const m of Object.values(MATCH)) {
     if (!m.finished || !m.pred || !m.t1 || !m.t2 || m.w1 === m.w2) continue;
-    const pr = decode(m.pred), w = winnerOf(m), pf = pFor(pr, [1, 3, 5].includes(m.bo) ? m.bo : 3).p;
+    if (TR.fit_end && (m.day || "") <= TR.fit_end) { CALLS_INSAMPLE++; continue; }
+    const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
+    const pr = decode(m.pred), w = winnerOf(m), pf = pFor(pr, bo).p;
     const pickA = pr.p >= .5, pick = pickA ? m.t1 : m.t2, opp = pickA ? m.t2 : m.t1;
-    const set = scoreSet(pr, [1, 3, 5].includes(m.bo) ? m.bo : 3);
+    const set = scoreSet(pr, bo);
     const top = set[predictedIdx(set, pr.p)];
-    const elo = m.pred.e || null;
+    const elo = m.pred.e || null, q = typeof m.pred.q === "number" ? m.pred.q : null;
     out.push({
-      id: m.id, day: m.day || "", when: m.when || "", e: EV_BY[m.ev], stage: m.stage, a: m.t1, b: m.t2, w,
+      id: m.id, day: m.day || "", when: m.when || "", e: EV_BY[m.ev], stage: m.stage, a: m.t1, b: m.t2, w, bo,
+      // for scoring: the stated chance for team a (format played), the Elo-only chance for team a, the outcome
+      pA: pf, qA: q, y: w === m.t1 ? 1 : 0,
+      qPick: q == null ? null : pickA ? q : 1 - q,
       // the stated chance is for the format actually played (BO1 calls are less sure, BO5 more)
       pick, opp, pickP: pickA ? pf : 1 - pf, pickShown: displayPercent([pf, 1 - pf])[pickA ? 0 : 1],
       predTeam: winOf(top) ? m.t1 : m.t2, predScore: scoreFrom(top, winOf(top)),
@@ -3236,7 +3616,7 @@ function callLog() {
   out.sort((x, y) => (x.day + x.when).localeCompare(y.day + y.when) || String(x.id).localeCompare(String(y.id)));
   return CALLS = out;
 }
-function wilsonJS(k, n, z = 1.959964) {
+function wilsonJS(k, n, z = TRACK.z) {
   if (!n) return [0, 1];
   const ph = k / n, den = 1 + z * z / n, c = (ph + z * z / (2 * n)) / den;
   const h = z * Math.sqrt(ph * (1 - ph) / n + z * z / (4 * n * n)) / den;
@@ -3247,46 +3627,86 @@ const acc2 = (h, n) => n ? (h / n * 100).toFixed(2) : "-";
 const pcc = s => { const v = parseFloat(s); return isNaN(v) ? "" : v > 60 ? "pc-hi" : v > 50 ? "pc-mid" : "pc-lo"; };
 /* numeric ISO dates on this page: days are already "YYYY-MM-DD"; trim any time part */
 const isoDate = s => String(s || "").slice(0, 10) || "-";
-const rec ={ ev: "", team: "", res: "", limit: 40 };
-const MIN_N = 8;
-const BUCKETS = [[.5, .6, "50-60%"], [.6, .7, "60-70%"], [.7, .8, "70-80%"], [.8, .9, "80-90%"], [.9, 1.01, "90% and up"]];
+const rec = { ev: "", team: "", res: "", exact: "", bo: "", band: "", from: "", to: "", limit: TRACK.page, tsort: "n", tlimit: TRACK.page };
 
-function calibChart(calls) {
-  const rows = BUCKETS.map(([lo, hi, lab]) => {
-    const b = calls.filter(c => c.pickP >= lo && c.pickP < hi), n = b.length, h = b.filter(c => c.hit).length;
+/* Proper scores of a set of calls, on team a's stated chance for the format
+   played (the same Brier and log loss as backtest.py), next to the Elo-only
+   baseline on the same calls. Lower is better for both. */
+const brierOf = (ps, ys) => ps.reduce((s, p, i) => s + (p - ys[i]) ** 2, 0) / ps.length;
+const llOf = (ps, ys) => ps.reduce((s, p, i) => { const q = Math.min(1 - TRACK.eps, Math.max(TRACK.eps, p)); return s - (ys[i] ? Math.log(q) : Math.log(1 - q)); }, 0) / ps.length;
+function scoreCalls(calls) {
+  const n = calls.length, h = calls.filter(c => c.hit).length;
+  const out = { n, h, ci: wilsonJS(h, n), said: n ? calls.reduce((s, c) => s + c.pickP, 0) / n : null };
+  if (!n) return out;
+  const ys = calls.map(c => c.y);
+  out.brier = brierOf(calls.map(c => c.pA), ys);
+  out.ll = llOf(calls.map(c => c.pA), ys);
+  // the baseline is scored only when every call carries it, so both numbers cover the same calls
+  if (calls.every(c => c.qA != null)) {
+    const qs = calls.map(c => c.qA);
+    out.brierE = brierOf(qs, ys); out.llE = llOf(qs, ys);
+    out.hE = calls.filter(c => (c.qA >= .5) === (c.y === 1)).length;
+  }
+  return out;
+}
+// a coin flip's scores, for scale: every chance 50%
+const COIN = { brier: brierOf([.5], [1]), ll: llOf([.5], [1]) };
+const f3 = v => v == null ? "-" : v.toFixed(3);
+// model minus baseline, signed, coloured: negative (lower) is better for the model
+const edge = (m, e) => m == null || e == null ? "" : `<span class="${m < e ? "win" : m > e ? "loss" : "dim"}">${m - e > 0 ? "+" : ""}${(m - e).toFixed(3)}</span>`;
+const pctRange = ci => `${(ci[0] * 100).toFixed(1)}-${(ci[1] * 100).toFixed(1)}%`;
+
+function calibRows(calls) {
+  return BUCKETS.map(([, , lab], i) => {
+    const b = calls.filter(c => inBucket(c.pickP, i)), n = b.length, h = b.filter(c => c.hit).length;
     return { lab, n, h, said: n ? b.reduce((s, c) => s + c.pickP, 0) / n : null, got: n ? h / n : null, ci: wilsonJS(h, n) };
   });
+}
+// walkforward.py's acceptance rule for a bucket: close enough, and the Wilson range holds the stated chance
+const bucketVerdict = r => !r.n ? "-" : r.n < TR.min_n ? `<span class="dim">too few to judge</span>`
+  : Math.abs(r.got - r.said) <= TR.gap && r.ci[0] <= r.said && r.said <= r.ci[1] ? `<span class="win">in line</span>` : `<span class="loss">off</span>`;
+function calibTable(rows) {
+  return `<div class="tablewrap"><table class="ctab"><thead><tr><th>Model said</th><th class="n">Calls</th><th class="n">Said, on average</th><th class="n">Pick won</th><th class="n">95% range</th><th>Verdict</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n">${r.n ? (r.said * 100).toFixed(2) + "%" : "-"}</td><td class="n ${r.n ? pcc((r.got * 100).toFixed(2)) : ""}">${r.n ? `${(r.got * 100).toFixed(2)}%` : "-"}</td><td class="n">${r.n ? pctRange(r.ci) : "-"}</td><td>${bucketVerdict(r)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function calibChart(calls) {
+  const rows = calibRows(calls);
   const live = rows.filter(r => r.n);
+  if (!live.length) return `<p class="empty">No calls to grade.</p>` + calibTable(rows);
   const W = 520, H = 330, L = 50, R = 18, Tp = 14, B = 48;
-  const ylo = Math.min(.5, Math.floor(Math.min(...live.map(r => r.ci[0])) * 10) / 10);
-  const x = v => L + (v - .5) / .5 * (W - L - R), y = v => Tp + (1 - v) / (1 - ylo) * (H - Tp - B);
+  // axes follow the buckets: x from the lowest bucket edge to 100%, gridlines one bucket width apart
+  const x0 = BUCKETS[0][0], step = BUCKETS[0][1] - BUCKETS[0][0], gap = TR.gap;
+  const edges = [...new Set([...BUCKETS.map(b => b[0]), 1])];
+  const ylo = Math.max(0, Math.min(x0, Math.floor(Math.min(...live.map(r => r.ci[0])) / step) * step));
+  const x = v => L + (v - x0) / (1 - x0) * (W - L - R), y = v => Tp + (1 - v) / (1 - ylo) * (H - Tp - B);
   let g = "";
-  for (let v = ylo; v <= 1.0001; v += .1) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
-  for (const v of [.5, .6, .7, .8, .9, 1]) g += `<text x="${x(v)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
-  const band = [[.5, .6], [.9, 1], [1, 1], [1, .9], [.5, .4]].map(([a, b]) => `${x(a)},${y(Math.max(ylo, b))}`).join(" ");
+  for (let v = ylo; v <= 1 + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
+  for (const v of edges) g += `<text x="${x(v)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
+  // the pale band: within TR.gap of perfect (walkforward.py's bucket rule)
+  const band = [[x0, x0 + gap], [1 - gap, 1], [1, 1], [1, 1 - gap], [x0, x0 - gap]].map(([a, b]) => `${x(a)},${y(Math.max(ylo, b))}`).join(" ");
   g += `<polygon points="${band}" fill="var(--text)" fill-opacity=".06"/>`;
-  g += `<line x1="${x(.5)}" y1="${y(.5)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--dim)" stroke-dasharray="5 5"/>`;
-  g += `<text x="${x(.93)}" y="${y(.93) + 18}" font-size="11" fill="var(--dim)" text-anchor="middle">perfect</text>`;
+  g += `<line x1="${x(x0)}" y1="${y(x0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--dim)" stroke-dasharray="5 5"/>`;
+  const lx = 1 - (1 - x0) * .14;   // the "perfect" label sits near the top end of the diagonal
+  g += `<text x="${x(lx)}" y="${y(lx) + 18}" font-size="11" fill="var(--dim)" text-anchor="middle">perfect</text>`;
   g += `<text x="${(L + W - R) / 2}" y="${H - 8}" text-anchor="middle" font-size="12" fill="var(--dim)">What the model said for its pick</text>`;
   g += `<text transform="translate(14 ${(Tp + H - B) / 2}) rotate(-90)" text-anchor="middle" font-size="12" fill="var(--dim)">How often the pick won</text>`;
   const mx = Math.max(...live.map(r => r.n));
   for (const r of live) {
-    const ok = Math.abs(r.got - r.said) <= .1, col = ok ? "var(--win)" : "var(--loss)";
+    const ok = Math.abs(r.got - r.said) <= gap, col = ok ? "var(--win)" : "var(--loss)";
     const cx = x(r.said), cy = y(Math.max(ylo, r.got));
     g += `<line x1="${cx}" x2="${cx}" y1="${y(Math.max(ylo, r.ci[0]))}" y2="${y(r.ci[1])}" stroke="${col}" stroke-width="2" stroke-opacity=".55"/>`;
     g += `<circle cx="${cx}" cy="${cy}" r="${(5 + 7 * Math.sqrt(r.n / mx)).toFixed(1)}" fill="${col}" stroke="var(--panel)" stroke-width="2"><title>${r.lab}: said ${(r.said * 100).toFixed(2)}% on average, won ${(r.got * 100).toFixed(2)}% (${r.h} of ${r.n})</title></circle>`;
     g += `<text x="${cx}" y="${y(r.ci[1]) - 7}" text-anchor="middle" font-size="11" fill="var(--text)">${r.n}</text>`;
   }
   const svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Calibration: stated chance of the pick against how often it won, by bucket">${g}</svg>`;
-  const table = `<div class="tablewrap"><table><thead><tr><th>Model said</th><th class="n">Calls</th><th class="n">Said, on average</th><th class="n">Pick won</th></tr></thead><tbody>
-    ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n">${r.n ? (r.said * 100).toFixed(2) + "%" : "-"}</td><td class="n ${r.n ? pcc((r.got * 100).toFixed(2)) : ""}">${r.n ? `${(r.got * 100).toFixed(2)}%` : "-"}</td></tr>`).join("")}</tbody></table></div>`;
-  return svg + table;
+  return svg + calibTable(rows) + `<p class="small dim">A bucket is <b>in line</b> when its picks won within ${Math.round(gap * 100)} points of what the model said and the 95% range (Wilson interval) holds the stated chance. Buckets with fewer than ${TR.min_n} calls are not judged. The backtest uses the same rule.</p>`;
 }
 
 const RANGES = [["7", "7D"], ["30", "30D"], ["90", "90D"], ["all", "Season"]];
 const daysBefore = (day, n) => new Date(Date.parse(day + "T00:00:00Z") - n * 864e5).toISOString().slice(0, 10);
 function timeChart(calls) {
-  const n = calls.length, w = Math.max(10, Math.min(40, Math.floor(n / 5)));
+  const n = calls.length, w = Math.max(TRACK.roll[0], Math.min(TRACK.roll[1], Math.floor(n / TRACK.roll[2])));
   if (n < w + 2) return `<p class="empty">Not enough finished calls to draw a trend yet.</p>`;
   const roll = [];
   let h = 0;
@@ -3337,22 +3757,104 @@ function monthTable(calls) {
 function leaderboard(calls) {
   const by = {};
   for (const c of calls) for (const t of [c.a, c.b]) { const r = by[t] = by[t] || { t, n: 0, h: 0 }; r.n++; r.h += c.hit; }
-  const rows = Object.values(by).filter(r => r.n >= MIN_N);
+  const rows = Object.values(by).filter(r => r.n >= TRACK.minTeamCalls);
   const best = [...rows].sort((p, q) => q.h / q.n - p.h / p.n || q.n - p.n).slice(0, 8);
   const worst = [...rows].sort((p, q) => p.h / p.n - q.h / q.n || q.n - p.n).slice(0, 8);
   const row = r => { const [lo, hi] = wilsonJS(r.h, r.n); return `<div class="row">${logo(r.t, "sm")}<a class="nm" href="${T[r.t] ? `#t-${T[r.t].slug}` : "#record"}">${esc(r.t)}</a>
     <span class="rec">${r.h} of ${r.n}</span><span class="v ${pcc(acc2(r.h, r.n))}">${acc2(r.h, r.n)}%</span>
     <span class="trk" title="Range consistent with ${r.n} calls: ${(lo * 100).toFixed(2)}% to ${(hi * 100).toFixed(2)}%"><span class="ci" style="left:${(lo * 100).toFixed(1)}%;width:${((hi - lo) * 100).toFixed(1)}%"></span><span class="pt" style="left:${(r.h / r.n * 100).toFixed(1)}%"></span></span></div>`; };
-  const note = `<p class="small dim">Teams with at least ${MIN_N} calls. The pale band is the range that record is consistent with: the fewer the calls, the wider it gets.</p>`;
+  const note = `<p class="small dim">Teams with at least ${TRACK.minTeamCalls} calls. The pale band is the range that record is consistent with: the fewer the calls, the wider it gets.</p>`;
   return rows.length ? `
     <section class="panel"><h2>Reads best <span class="dim">share of calls involving the team that were right</span></h2><div class="lb best">${best.map(row).join("")}</div>${note}</section>
     <section class="panel"><h2>Keeps it guessing <span class="dim">lowest share of right calls</span></h2><div class="lb worst">${worst.map(row).join("")}</div>${note}</section>`
-    : `<section class="panel rq-wide"><h2>Teams</h2><p class="empty">No team has ${MIN_N} calls yet.</p></section>`;
+    : `<section class="panel rq-wide"><h2>Teams</h2><p class="empty">No team has ${TRACK.minTeamCalls} calls yet.</p></section>`;
 }
 
 function callCard(c, line) {
   return `<a class="callcard" href="#m-${c.id}"><span><b>${esc(line)}</b></span><span class="big cond">${c.score}</span>
     <span class="dim">${esc(c.e.name)}, ${esc(c.stage)}, ${isoDate(c.day)}. Model: ${esc(c.pick)} ${c.pickShown}%${c.pickElo != null ? `, rated ${c.pickElo} against ${c.oppElo}` : ""}</span></a>`;
+}
+
+// the call log's filters (rec), applied to the whole record; newest first
+function filteredCalls(calls) {
+  return calls.filter(c => (!rec.ev || c.e.slug === rec.ev) && (!rec.team || c.a === rec.team || c.b === rec.team)
+    && (!rec.bo || String(c.bo) === rec.bo) && (rec.band === "" || inBucket(c.pickP, +rec.band))
+    && (!rec.from || c.day >= rec.from) && (!rec.to || c.day <= rec.to)
+    && (!rec.res || (rec.res === "hit") === c.hit) && (!rec.exact || (rec.exact === "hit") === c.exact)).reverse();
+}
+const FILTER_KEYS = ["ev", "team", "bo", "band", "from", "to", "res", "exact"];
+
+// every call in the current filter as CSV: the raw numbers anyone can re-score
+function callsCsv(list) {
+  const cell = v => { const s = v == null ? "" : String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const head = ["date", "tournament", "stage", "best_of", "team_a", "team_b", "model_p_a", "elo_only_p_a",
+    "elo_a", "elo_b", "pick", "pick_p", "winner", "series_score", "pick_right", "match_id"];
+  const rows = list.map(c => [c.day, c.e.name, c.stage, c.bo, c.a, c.b, c.pA.toFixed(6), c.qA == null ? "" : c.qA.toFixed(6),
+    c.pickElo == null ? "" : (c.pick === c.a ? c.pickElo : c.oppElo), c.pickElo == null ? "" : (c.pick === c.a ? c.oppElo : c.pickElo),
+    c.pick, c.pickP.toFixed(6), c.w, c.score, c.hit ? 1 : 0, c.id]);
+  return [head, ...rows].map(r => r.map(cell).join(",")).join("\n") + "\n";
+}
+
+// a small "model vs Elo only vs coin flip" score table
+function scoreTable(s) {
+  const pct = (h, n) => n ? `${(h / n * 100).toFixed(2)}%` : "-";
+  const hasE = s.brierE != null;
+  return `<div class="tablewrap"><table class="scores"><thead><tr><th></th><th class="n">Model</th><th class="n">Elo only</th><th class="n">Model minus Elo</th><th class="n">Coin flip</th></tr></thead><tbody>
+    <tr><td>Winners right <span class="dim">higher is better</span></td><td class="n ${pcc(acc2(s.h, s.n))}">${pct(s.h, s.n)}</td><td class="n">${hasE ? pct(s.hE, s.n) : "-"}</td><td class="n">${hasE ? `<span class="${s.h > s.hE ? "win" : s.h < s.hE ? "loss" : "dim"}">${s.h - s.hE > 0 ? "+" : ""}${s.h - s.hE} calls</span>` : ""}</td><td class="n dim">50%</td></tr>
+    <tr><td>Brier score <span class="dim">lower is better</span></td><td class="n">${f3(s.brier)}</td><td class="n">${hasE ? f3(s.brierE) : "-"}</td><td class="n">${edge(s.brier, s.brierE)}</td><td class="n dim">${f3(COIN.brier)}</td></tr>
+    <tr><td>Log loss <span class="dim">lower is better</span></td><td class="n">${f3(s.ll)}</td><td class="n">${hasE ? f3(s.llE) : "-"}</td><td class="n">${edge(s.ll, s.llE)}</td><td class="n dim">${f3(COIN.ll)}</td></tr>
+  </tbody></table></div>`;
+}
+
+const listOr = xs => xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} or ${xs[xs.length - 1]}`;
+function howPanel(calls) {
+  const n = calls.length, bt = TR.backtest;
+  const fit = TR.fit_end ? `The model's weights were last fitted on series up to <b>${isoDate(TR.fit_end)}</b>. ${CALLS_INSAMPLE
+    ? `${CALLS_INSAMPLE} call${CALLS_INSAMPLE === 1 ? "" : "s"} dated on or before that day ${CALLS_INSAMPLE === 1 ? "is" : "are"} in-sample and left out of every number here.`
+    : `Every call here is dated after that, so none of these matches were used to fit it.`}` : "";
+  return `<section class="panel how"><h2>How to read this <span class="dim">and how each call is made</span></h2>
+    <p>Each of the ${n} calls is the model's pick for a finished match on this site, worked out <b>before the match day</b>: only results dated before that day go in, never one from the same day (start times aren't known, so even an earlier match that day is left out). The chance shown is for the format played (${listOr([...new Set(calls.map(c => c.bo))].sort((p, q) => p - q).map(b => `best of ${b}`))}), since the same edge is worth more over more maps.</p>
+    <p>Calls are re-worked from the full history every time the site is built, with the current model. They are not frozen copies saved before each match, so a corrected old result can move them. ${fit} Matches with no winner on record are skipped.</p>
+    <details><summary>What the numbers mean</summary><ul>
+      <li><b>Winners right</b>: how often the side the model favoured won.</li>
+      <li><b>Brier score</b>: the average squared gap between the chance given and what happened (1 or 0). Saying 50% every time scores ${f3(COIN.brier)}.</li>
+      <li><b>Log loss</b>: like Brier, but a confident miss costs far more. Saying 50% every time scores ${f3(COIN.ll)}.</li>
+      <li><b>Elo only</b>: the chance from the two teams' Elo ratings going into the match and nothing else. The model has to beat it to earn its other factors (form, maps, head-to-head, rosters).</li>
+      <li><b>95% range</b>: the Wilson interval, the hit rates that record is consistent with. Few calls make it wide.</li>
+      <li>Stand-in flags come from each tournament's page as it reads now and apply to all of that tournament's matches.</li>
+    </ul></details>
+    ${bt ? `<details><summary>Backtest numbers (not calls on this site)</summary>
+      <p class="small dim"><span class="chip">Backtest</span> A re-run of the model over ${bt.models.shipped.n} past series dated after ${isoDate(bt.after)}${bt.to ? ` up to ${isoDate(bt.to)}` : ""}, from any tracked event, not only the ones on this site. It is a test, not a record of picks made at the time.</p>
+      ${scoreTable({ n: bt.models.shipped.n, h: Math.round(bt.models.shipped.accuracy * bt.models.shipped.n), brier: bt.models.shipped.brier, ll: bt.models.shipped.log_loss,
+        hE: Math.round(bt.models.elo_only.accuracy * bt.models.elo_only.n), brierE: bt.models.elo_only.brier, llE: bt.models.elo_only.log_loss })}</details>` : ""}
+  </section>`;
+}
+
+function teamTable(calls) {
+  const by = new Map();
+  for (const c of calls) for (const t of [c.a, c.b]) { if (!by.has(t)) by.set(t, []); by.get(t).push(c); }
+  const rows = [...by].map(([t, cs]) => ({ t, ...scoreCalls(cs) }));
+  const key = {
+    n: (p, q) => q.n - p.n,
+    share: (p, q) => q.h / q.n - p.h / p.n || q.n - p.n,
+    brier: (p, q) => p.brier - q.brier || q.n - p.n,
+    edge: (p, q) => ((p.brier - (p.brierE ?? p.brier)) - (q.brier - (q.brierE ?? q.brier))) || q.n - p.n,
+  }[rec.tsort] || ((p, q) => q.n - p.n);
+  rows.sort((p, q) => key(p, q) || p.t.localeCompare(q.t));
+  const shown = rows.slice(0, rec.tlimit);
+  const sorts = [["n", "Most calls"], ["share", "Share right"], ["brier", "Lowest Brier"], ["edge", "Most ahead of Elo"]];
+  return `<section class="panel" id="rec-teams"><h2>Every team <span class="dim">calls involving the team, scored against Elo only on the same calls</span></h2>
+    <div class="filters"><label>Sort<select data-rf="tsort">${sorts.map(([v, l]) => `<option value="${v}" ${rec.tsort === v ? "selected" : ""}>${l}</option>`).join("")}</select></label></div>
+    <div class="tablewrap"><table class="tteam"><thead><tr><th>Team</th><th class="n">Calls</th><th class="n">Right</th><th class="n">Share</th><th class="n">95% range</th><th class="n">Brier</th><th class="n">Elo only</th><th class="n">Minus Elo</th><th class="n">Log loss</th><th class="n">Elo only</th><th class="n">Minus Elo</th></tr></thead><tbody>
+      ${shown.map(r => `<tr><td><span class="tl">${logo(r.t, "sm")}${T[r.t] ? `<a href="#t-${T[r.t].slug}">${esc(r.t)}</a>` : esc(r.t)}</span></td>
+        <td class="n"><button type="button" class="lnk" data-rteam="${esc(r.t)}" title="Show these calls in the log">${r.n}</button></td><td class="n">${r.h}</td>
+        <td class="n ${pcc(acc2(r.h, r.n))}">${acc2(r.h, r.n)}%</td><td class="n dim">${pctRange(r.ci)}</td>
+        <td class="n">${f3(r.brier)}</td><td class="n dim">${f3(r.brierE)}</td><td class="n">${edge(r.brier, r.brierE)}</td>
+        <td class="n">${f3(r.ll)}</td><td class="n dim">${f3(r.llE)}</td><td class="n">${edge(r.ll, r.llE)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="small dim">Showing ${shown.length} of ${rows.length} teams. A negative "minus Elo" (green) means the model's chances were closer to what happened than Elo alone. With few calls a team's numbers move a lot: read the 95% range.</p>
+    ${rows.length > rec.tlimit ? `<button type="button" class="btn" data-tmore="1">Show ${Math.min(TRACK.page, rows.length - rec.tlimit)} more teams</button>` : ""}
+  </section>`;
 }
 
 function viewRecord() {
@@ -3364,29 +3866,37 @@ function viewRecord() {
   while (k >= 0 && calls[k].hit === lastHit) { run++; k--; }
   const evs = [...new Map(calls.map(c => [c.e.slug, c.e])).values()].sort((p, q) => q.start.localeCompare(p.start));
   const teams = [...new Set(calls.flatMap(c => [c.a, c.b]))].sort((p, q) => p.localeCompare(q));
-  const list = calls.filter(c => (!rec.ev || c.e.slug === rec.ev) && (!rec.team || c.a === rec.team || c.b === rec.team)
-    && (!rec.res || (rec.res === "hit") === c.hit) && (!rec.exact || (rec.exact === "hit") === c.exact)).reverse();
+  const fmts = [...new Set(calls.map(c => c.bo))].sort((p, q) => p - q);
+  const list = filteredCalls(calls);
   const ex = calls.filter(c => c.exact).length;
-  const lh = list.filter(c => c.hit).length;
+  const all = scoreCalls(calls), ls = scoreCalls(list);
   const fav = calls.filter(c => c.pickElo != null && c.pickElo >= c.oppElo), dog = calls.filter(c => c.pickElo != null && c.pickElo < c.oppElo);
-  const hitsDog = dog.filter(c => c.hit).sort((p, q) => (q.oppElo - q.pickElo) - (p.oppElo - p.pickElo)).slice(0, 5);
-  const misses = calls.filter(c => !c.hit).sort((p, q) => q.pickP - p.pickP).slice(0, 5);
-  const sel = (key, label, options) => `<label>${label}<select data-rf="${key}"><option value="">All</option>${options.map(([v, l]) => `<option value="${esc(v)}" ${rec[key] === v ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
+  const hitsDog = dog.filter(c => c.hit).sort((p, q) => (q.oppElo - q.pickElo) - (p.oppElo - p.pickElo)).slice(0, TRACK.cards);
+  const misses = calls.filter(c => !c.hit).sort((p, q) => q.pickP - p.pickP).slice(0, TRACK.cards);
+  const sel = (key, label, options) => `<label>${label}<select data-rf="${key}"><option value="">All</option>${options.map(([v, l]) => `<option value="${esc(v)}" ${rec[key] === String(v) ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
+  const dateIn = (key, label) => `<label>${label}<input type="date" data-rf="${key}" value="${esc(rec[key])}" min="${calls[0].day}" max="${calls[n - 1].day}"></label>`;
   const tl = (t, won) => `<span class="tl ${won ? "won" : ""}">${logo(t, "sm")}${esc(t)}</span>`;
   const fh = fav.filter(c => c.hit).length, dh = dog.filter(c => c.hit).length;
+  const anyFilter = FILTER_KEYS.some(f => rec[f]);
+  const eloPct = c => c.qPick == null ? "" : ` · Elo ${(c.qPick * 100).toFixed(1)}%`;
   return `
   <div style="display:grid;gap:.4rem">
     <p class="small dim asof-line">${staleBadge(true)}</p>
   </div>
   <section class="board" aria-label="Headline numbers">
-    <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
-    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span></div>
-    <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last 20 calls, oldest first:</span>
-      <span class="streak">${calls.slice(-20).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
+    <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls (95% range ${pctRange(all.ci)})</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
+    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span><span class="lbl">Brier ${f3(all.brier)}${all.brierE != null ? `, Elo only ${f3(all.brierE)}` : ""}</span></div>
+    <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last ${Math.min(TRACK.streak, n)} calls, oldest first:</span>
+      <span class="streak">${calls.slice(-TRACK.streak).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
   </section>
+  <div class="rec-pair">
+    ${howPanel(calls)}
+    <section class="panel"><h2>Against a simple baseline <span class="dim">the same ${n} calls, scored three ways</span></h2>${scoreTable(all)}
+      <p class="small dim">The model's stated chance for each match against the chance from Elo ratings alone, and against saying 50% every time. Scores use the chance for the format played. ${all.brierE == null ? "Some calls carry no Elo-only chance, so the baseline is not scored." : ""}</p></section>
+  </div>
   <p class="pclegend small dim">Share of calls right, coloured by how it went: <span class="pc-hi">above 60%</span> <span class="pc-mid">50 to 60%</span> <span class="pc-lo">50% or under</span>. The model's own chance for each pick stays white: that is confidence, not a record.</p>
   <div class="rec-row3">
-    <section class="panel"><h2>When it says 75%, does it win 75%? <span class="dim">dots inside the pale band are within 10 points; each bar is the range for that many calls</span></h2>${calibChart(calls)}</section>
+    <section class="panel"><h2>When it says 75%, does it win 75%? <span class="dim">dots inside the pale band are within ${Math.round(TR.gap * 100)} points; each bar is the 95% range for that many calls</span></h2>${calibChart(calls)}</section>
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
     <div class="rec-splits">
       <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
@@ -3399,20 +3909,24 @@ function viewRecord() {
       </tbody></table></div></section>
     </div>
   </div>
-  <section class="panel"><h2>Every call <span class="dim">showing ${Math.min(rec.limit, list.length)} of ${list.length}, ${lh} right</span></h2>
-    <div class="filters">${sel("ev", "Tournament", evs.map(e => [e.slug, e.name]))}${sel("team", "Team", teams.map(t => [t, t]))}${sel("res", "Winner", [["hit", "Right"], ["miss", "Wrong"]])}${sel("exact", "Exact score", [["hit", "Right"], ["miss", "Wrong"]])}</div>
+  <section class="panel" id="rec-log"><h2>Every call <span class="dim">showing ${Math.min(rec.limit, list.length)} of ${list.length}, ${ls.h} right</span></h2>
+    <div class="filters">${sel("ev", "Tournament", evs.map(e => [e.slug, e.name]))}${sel("team", "Team", teams.map(t => [t, t]))}${fmts.length > 1 ? sel("bo", "Format", fmts.map(b => [String(b), `Best of ${b}`])) : ""}${sel("band", "Model said", BUCKETS.map((b, i) => [String(i), b[2]]))}${dateIn("from", "From")}${dateIn("to", "To")}${sel("res", "Winner", [["hit", "Right"], ["miss", "Wrong"]])}${sel("exact", "Exact score", [["hit", "Right"], ["miss", "Wrong"]])}</div>
+    ${ls.n ? `<div class="fsum small"><span><b>${ls.n}</b> call${ls.n === 1 ? "" : "s"}${anyFilter ? " in this filter" : ""}: <b class="${pcc(acc2(ls.h, ls.n))}">${acc2(ls.h, ls.n)}%</b> right (95% range ${pctRange(ls.ci)}), said ${(ls.said * 100).toFixed(2)}% on average.</span>
+      <span>Brier <b>${f3(ls.brier)}</b>${ls.brierE != null ? ` (Elo only ${f3(ls.brierE)}, ${edge(ls.brier, ls.brierE)})` : ""}. Log loss <b>${f3(ls.ll)}</b>${ls.llE != null ? ` (Elo only ${f3(ls.llE)}, ${edge(ls.ll, ls.llE)})` : ""}.</span>
+      <span class="fbtns">${anyFilter ? `<button type="button" class="btn" data-rclear="1">Clear filters</button>` : ""}<button type="button" class="btn" data-csv="1">Download these ${ls.n} as CSV</button></span></div>` : ""}
     <div class="tablewrap"><table class="log"><thead><tr><th>Date</th><th class="xw">Tournament</th><th>Match</th><th>Model's pick</th><th>Predicted</th><th>Result</th><th></th></tr></thead><tbody>
       ${list.slice(0, rec.limit).map(c => `<tr>
-        <td class="dt">${isoDate(c.day)}<span class="ev evd">${esc(c.e.name)}</span></td>
+        <td class="dt">${isoDate(c.day)}<span class="ev">BO${c.bo}</span><span class="ev evd">${esc(c.e.name)}</span></td>
         <td class="xw"><a href="#e-${c.e.slug}">${esc(c.e.name)}</a><span class="ev">${esc(c.stage || "")}</span></td>
         <td><a href="#m-${c.id}" style="display:grid;gap:.15rem">${tl(c.a, c.w === c.a)}${tl(c.b, c.w === c.b)}</a></td>
-        <td><span class="tl won">${logo(c.pick, "sm")}${esc(c.pick)}</span><span class="ev">${c.pickShown}%</span></td>
+        <td><span class="tl won">${logo(c.pick, "sm")}${esc(c.pick)}</span><span class="ev">${c.pickShown}%${eloPct(c)}</span></td>
         <td>${esc(c.predTeam)} ${c.predScore}${c.exact ? ` <span class="chip hit" title="The exact score also happened">exact</span>` : ""}</td>
         <td>${esc(c.w)} ${c.score}</td>
         <td><span class="hm ${c.hit ? "h" : "m"}">${c.hit ? "Right" : "Wrong"}</span></td></tr>`).join("") || `<tr><td colspan="7" class="empty">No calls match these filters. Clear one to see more.</td></tr>`}
     </tbody></table></div>
-    ${list.length > rec.limit ? `<button type="button" class="btn" data-more="1">Show ${Math.min(40, list.length - rec.limit)} more</button>` : ""}
+    ${list.length > rec.limit ? `<button type="button" class="btn" data-more="1">Show ${Math.min(TRACK.page, list.length - rec.limit)} more</button>` : ""}
   </section>
+  ${teamTable(calls)}
   <div class="rec-quad">
     ${leaderboard(calls)}
     <section class="panel"><h2>Best calls <span class="dim">backed the lower-rated team, and it won</span></h2>
@@ -3526,7 +4040,24 @@ document.addEventListener("click", e => {
   }
   const ft = e.target.closest("[data-feat]");
   if (ft && !ft.disabled) { const f = featuredMatch(); if (f) loadMatch(f); rerender(); return; }
-  if (e.target.closest("[data-more]")) { rec.limit += 40; rerender(); return; }
+  if (e.target.closest("[data-more]")) { rec.limit += TRACK.page; rerender(); return; }
+  if (e.target.closest("[data-tmore]")) { rec.tlimit += TRACK.page; rerender(); return; }
+  if (e.target.closest("[data-rclear]")) { FILTER_KEYS.forEach(k => rec[k] = ""); rec.limit = TRACK.page; rerender(); return; }
+  const rt = e.target.closest("[data-rteam]");
+  if (rt) {
+    FILTER_KEYS.forEach(k => rec[k] = ""); rec.team = rt.dataset.rteam; rec.limit = TRACK.page; rerender();
+    const lg = document.getElementById("rec-log"); if (lg) lg.scrollIntoView({ block: "start" });
+    return;
+  }
+  if (e.target.closest("[data-csv]")) {
+    const blob = new Blob([callsCsv(filteredCalls(callLog()))], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `faceoff-calls-${META.data_through}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);   // after the browser has started the download
+    return;
+  }
   const rg = e.target.closest("[data-range]");
   if (rg) { rec.range = rg.dataset.range; rerender(); return; }
   const ep = e.target.closest(".pick[data-epick]");
@@ -3552,7 +4083,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
-  if (t.dataset && t.dataset.rf) { rec[t.dataset.rf] = t.value; rec.limit = 40; rerender(); }
+  if (t.dataset && t.dataset.rf) { rec[t.dataset.rf] = t.value; rec.limit = TRACK.page; rerender(); }
   if (t.dataset && t.dataset.tier) { tierOn[t.dataset.tier] = t.checked; saveTiers(); rerender(); const b = $(`[data-tier="${t.dataset.tier}"]`); if (b) b.focus({ preventScroll: true }); }
 });
 document.addEventListener("input", e => {
@@ -3917,7 +4448,8 @@ window.addEventListener("hashchange", () => closeSearch(true));
   const PC = x => (x * 100).toFixed(1) + "%";
   function fixtureLine(f) {
     const p = f.prediction;
-    return `${f.day || "TBA"} ${f.event}, ${f.stage}: ${f.team_a} vs ${f.team_b} (Bo${f.best_of}); ${f.team_a} win chance ${PC(p.win_prob_a)}, most likely score ${p.modal_scoreline}`;
+    const rc = rfText(rfSides(f.roster_flags, f.team_a, f.team_b));
+    return `${f.day || "TBA"} ${f.event}, ${f.stage}: ${f.team_a} vs ${f.team_b} (Bo${f.best_of}); ${f.team_a} win chance ${PC(p.win_prob_a)}, most likely score ${p.modal_scoreline}${rc ? `; roster caution (not counted in the win chance): ${rc}` : ""}`;
   }
   function teamCard(t) {
     const x = T[t];
@@ -3934,6 +4466,7 @@ window.addEventListener("hashchange", () => closeSearch(true));
       last_results: (x.results || []).slice(0, 6).map(r => `${r.date} ${r.won ? "won" : "lost"} ${r.score} vs ${r.opp} (${r.event})`),
       maps_last_90_days: maps.slice(0, 8),
       upcoming: FIXTURES.filter(f => f.team_a === t || f.team_b === t).slice(0, 3).map(fixtureLine),
+      roster_caution_not_counted_in_win_chances: (DATA.rflags.now[t] || []).map(f => f.r),
     };
   }
   function matchupCard(a, b) {

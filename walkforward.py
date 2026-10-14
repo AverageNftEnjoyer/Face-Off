@@ -84,6 +84,8 @@ MAX_ROUNDS = 10
 SHIPPED_FIT_END = "2025-10-08"   # last training date of the weights in predictor.py
 CFG_SHIPPED = copy.deepcopy(pr.CONFIG)
 FAV_BUCKETS = [(0.5, 0.6), (0.6, 0.7), (0.7, 0.8), (0.8, 0.9), (0.9, 1.0001)]
+CAL_MAX_GAP = 0.10      # A3: a bucket passes when stated and actual are this close ...
+CAL_MIN_N = 30          # ... and only buckets with at least this many series are scored
 
 
 def label(r):
@@ -191,8 +193,8 @@ def fav_buckets(ps, ys):
         gap = k / n - mp
         rows.append({"bucket": f"{lo:.0%}-{min(hi, 1):.0%}", "n": n, "stated": mp, "actual": k / n,
                      "gap_pp": 100 * gap, "wilson95": [lo95, hi95],
-                     "pass": (n < 30) or (abs(gap) <= 0.10 and lo95 <= mp <= hi95),
-                     "scored": n >= 30})
+                     "pass": (n < CAL_MIN_N) or (abs(gap) <= CAL_MAX_GAP and lo95 <= mp <= hi95),
+                     "scored": n >= CAL_MIN_N})
     return rows
 
 

@@ -1,0 +1,619 @@
+{
+ "overlap": [
+  "2024-02-08",
+  "2026-10-04"
+ ],
+ "date_window_days": 1,
+ "primary_series_in_overlap": 2227,
+ "primary_series_checkable": 2227,
+ "matched": 2191,
+ "coverage_of_checkable": 0.9838,
+ "agree": 2191,
+ "disagree": 0,
+ "agreement_rate": 1.0,
+ "disagreements": [],
+ "identity_mismatch": 17,
+ "identity_mismatch_by_name": [
+  {
+   "primary": "Monte",
+   "second": "Luminosity Gaming",
+   "series": 9
+  },
+  {
+   "primary": "ECSTATIC",
+   "second": "Gaimin Gladiators",
+   "series": 8
+  }
+ ],
+ "identity_mismatches": [
+  {
+   "match_id": "e3f821d2d217",
+   "date": "2024-03-17",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "Cloud9",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-17",
+   "winner_primary": "Cloud9"
+  },
+  {
+   "match_id": "d3ae84142e66",
+   "date": "2024-03-17",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "The MongolZ",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-17",
+   "winner_primary": "ECSTATIC"
+  },
+  {
+   "match_id": "0d54d7659857",
+   "date": "2024-03-18",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "Lynn Vision Gaming",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-18",
+   "winner_primary": "ECSTATIC"
+  },
+  {
+   "match_id": "bfa25ac655fc",
+   "date": "2024-03-19",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "Imperial Esports",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-19",
+   "winner_primary": "ECSTATIC"
+  },
+  {
+   "match_id": "6e6809d2d9f8",
+   "date": "2024-03-21",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "Cloud9",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-21",
+   "winner_primary": "Cloud9"
+  },
+  {
+   "match_id": "a2c1c8d96e4c",
+   "date": "2024-03-21",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "MOUZ",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-21",
+   "winner_primary": "MOUZ"
+  },
+  {
+   "match_id": "bd692b305f1f",
+   "date": "2024-03-22",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "FURIA",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-22",
+   "winner_primary": "ECSTATIC"
+  },
+  {
+   "match_id": "03274d3efa14",
+   "date": "2024-03-23",
+   "event": "PGL Major Copenhagen 2024",
+   "team": "G2 Esports",
+   "primary_opponent": "ECSTATIC",
+   "second_opponent": "Gaimin Gladiators",
+   "second_opponent_valve_name": "Gaimin Gladiators",
+   "second_date": "2024-03-23",
+   "winner_primary": "G2 Esports"
+  },
+  {
+   "match_id": "254f8503f99e",
+   "date": "2026-06-06",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "G2 Esports",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-06",
+   "winner_primary": "G2 Esports"
+  },
+  {
+   "match_id": "a027cfea2452",
+   "date": "2026-06-06",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "BIG",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-06",
+   "winner_primary": "Monte"
+  },
+  {
+   "match_id": "e103d3453cc0",
+   "date": "2026-06-07",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "Legacy",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-07",
+   "winner_primary": "Monte"
+  },
+  {
+   "match_id": "3b3a92711fe6",
+   "date": "2026-06-08",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "BetBoom Team",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-08",
+   "winner_primary": "BetBoom Team"
+  },
+  {
+   "match_id": "dfe624e4db04",
+   "date": "2026-06-09",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "paiN Gaming",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-09",
+   "winner_primary": "Monte"
+  },
+  {
+   "match_id": "f5a999de0cea",
+   "date": "2026-06-11",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "Aurora Gaming",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-11",
+   "winner_primary": "Aurora Gaming"
+  },
+  {
+   "match_id": "116473309ca8",
+   "date": "2026-06-12",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "PARIVISION",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-12",
+   "winner_primary": "Monte"
+  },
+  {
+   "match_id": "9e92dfca0f02",
+   "date": "2026-06-13",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "Team Falcons",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-13",
+   "winner_primary": "Team Falcons"
+  },
+  {
+   "match_id": "75d3b98fd090",
+   "date": "2026-06-14",
+   "event": "Intel Extreme Masters Cologne Major 2026",
+   "team": "The MongolZ",
+   "primary_opponent": "Monte",
+   "second_opponent": "Luminosity Gaming",
+   "second_opponent_valve_name": "Luminosity",
+   "second_date": "2026-06-14",
+   "winner_primary": "The MongolZ"
+  }
+ ],
+ "pending": 16,
+ "primary_only": 3,
+ "primary_only_sample": [
+  {
+   "match_id": "7a4f11d4b4a5",
+   "date": "2024-03-06",
+   "event": "BLAST Premier: Spring Showdown 2024",
+   "teams": [
+    "HEROIC",
+    "Ninjas in Pyjamas"
+   ],
+   "winner": "HEROIC"
+  },
+  {
+   "match_id": "c24951aece77",
+   "date": "2026-05-11",
+   "event": "Asian Champions League 2026",
+   "teams": [
+    "Kaleido Gaming",
+    "Last Bullet (Chinese team)"
+   ],
+   "winner": "Kaleido Gaming"
+  },
+  {
+   "match_id": "55df94fdd342",
+   "date": "2026-05-12",
+   "event": "Asian Champions League 2026",
+   "teams": [
+    "Last Bullet (Chinese team)",
+    "Change The Game"
+   ],
+   "winner": "Change The Game"
+  }
+ ],
+ "primary_teams_without_valve_page": [
+  "1w Team",
+  "Betclic Apogee Esports",
+  "DENDELE CS",
+  "IC Esports",
+  "Imperial Female",
+  "Last Bullet (Chinese team)",
+  "Mindfreak (Australian team)"
+ ],
+ "second_series_in_overlap": 6826,
+ "second_only": {
+  "lower_tier": 1607,
+  "untracked": 3028
+ },
+ "second_only_untracked_sample": [
+  {
+   "date": "2024-02-08",
+   "teams": [
+    "BetBoom Team",
+    "FORZE Esports"
+   ],
+   "winner": "FORZE Esports"
+  },
+  {
+   "date": "2024-02-08",
+   "teams": [
+    "Nemiga Gaming",
+    "Sashi Esport"
+   ],
+   "winner": "Nemiga Gaming"
+  },
+  {
+   "date": "2024-02-09",
+   "teams": [
+    "3DMAX",
+    "Fnatic"
+   ],
+   "winner": "3DMAX"
+  },
+  {
+   "date": "2024-02-09",
+   "teams": [
+    "AMKAL ESPORTS",
+    "Nemiga Gaming"
+   ],
+   "winner": "Nemiga Gaming"
+  },
+  {
+   "date": "2024-02-09",
+   "teams": [
+    "FORZE Esports",
+    "Sashi Esport"
+   ],
+   "winner": "Sashi Esport"
+  },
+  {
+   "date": "2024-02-10",
+   "teams": [
+    "AMKAL ESPORTS",
+    "Sashi Esport"
+   ],
+   "winner": "Sashi Esport"
+  },
+  {
+   "date": "2024-02-10",
+   "teams": [
+    "Apeks",
+    "Metizport"
+   ],
+   "winner": "Apeks"
+  },
+  {
+   "date": "2024-02-10",
+   "teams": [
+    "FURIA",
+    "Metizport"
+   ],
+   "winner": "Metizport"
+  },
+  {
+   "date": "2024-02-10",
+   "teams": [
+    "FURIA",
+    "Metizport"
+   ],
+   "winner": "Metizport"
+  },
+  {
+   "date": "2024-02-10",
+   "teams": [
+    "Nemiga Gaming",
+    "Sashi Esport"
+   ],
+   "winner": "Nemiga Gaming"
+  },
+  {
+   "date": "2024-02-11",
+   "teams": [
+    "3DMAX",
+    "Apeks"
+   ],
+   "winner": "Apeks"
+  },
+  {
+   "date": "2024-02-11",
+   "teams": [
+    "Apeks",
+    "Metizport"
+   ],
+   "winner": "Metizport"
+  },
+  {
+   "date": "2024-02-13",
+   "teams": [
+    "Imperial Esports",
+    "RED Canids"
+   ],
+   "winner": "Imperial Esports"
+  },
+  {
+   "date": "2024-02-13",
+   "teams": [
+    "Imperial Esports",
+    "RED Canids"
+   ],
+   "winner": "RED Canids"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "3DMAX",
+    "KOI"
+   ],
+   "winner": "KOI"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "3DMAX",
+    "Team Falcons"
+   ],
+   "winner": "Team Falcons"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "AMKAL ESPORTS",
+    "Ninjas in Pyjamas"
+   ],
+   "winner": "AMKAL ESPORTS"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "BetBoom Team",
+    "Fnatic"
+   ],
+   "winner": "Fnatic"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "Eternal Fire",
+    "G2 Esports"
+   ],
+   "winner": "G2 Esports"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "Eternal Fire",
+    "Ninjas in Pyjamas"
+   ],
+   "winner": "Eternal Fire"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "FaZe Clan",
+    "Team Falcons"
+   ],
+   "winner": "FaZe Clan"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "Fnatic",
+    "Virtus.pro"
+   ],
+   "winner": "Virtus.pro"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "KOI",
+    "Natus Vincere"
+   ],
+   "winner": "Natus Vincere"
+  },
+  {
+   "date": "2024-02-14",
+   "teams": [
+    "SAW",
+    "Virtus.pro"
+   ],
+   "winner": "Virtus.pro"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "9z Team",
+    "Imperial Esports"
+   ],
+   "winner": "Imperial Esports"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "AMKAL ESPORTS",
+    "Fnatic"
+   ],
+   "winner": "Fnatic"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "DENDELE CS",
+    "Fluxo"
+   ],
+   "winner": "Fluxo"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "DENDELE CS",
+    "Fluxo"
+   ],
+   "winner": "Fluxo"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "Eternal Fire",
+    "Team Falcons"
+   ],
+   "winner": "Eternal Fire"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "FaZe Clan",
+    "G2 Esports"
+   ],
+   "winner": "G2 Esports"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "Fluxo",
+    "Imperial Esports"
+   ],
+   "winner": "Imperial Esports"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "Natus Vincere",
+    "Virtus.pro"
+   ],
+   "winner": "Virtus.pro"
+  },
+  {
+   "date": "2024-02-15",
+   "teams": [
+    "Ninjas in Pyjamas",
+    "SAW"
+   ],
+   "winner": "SAW"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "9z Team",
+    "Fluxo"
+   ],
+   "winner": "Fluxo"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "AMKAL ESPORTS",
+    "Team Falcons"
+   ],
+   "winner": "AMKAL ESPORTS"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "B8",
+    "Pera Esports"
+   ],
+   "winner": "B8"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "BetBoom Team",
+    "Natus Vincere"
+   ],
+   "winner": "Natus Vincere"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "Eternal Fire",
+    "FaZe Clan"
+   ],
+   "winner": "FaZe Clan"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "Fnatic",
+    "KOI"
+   ],
+   "winner": "KOI"
+  },
+  {
+   "date": "2024-02-16",
+   "teams": [
+    "Pera Esports",
+    "SINNERS Esports"
+   ],
+   "winner": "SINNERS Esports"
+  }
+ ],
+ "second_source_snapshots": [
+  "2024_08_06",
+  "2024_10_02",
+  "2024_12_02",
+  "2025_02_03",
+  "2025_04_07",
+  "2025_06_02",
+  "2025_08_04",
+  "2025_10_06",
+  "2025_12_01",
+  "2026_02_02",
+  "2026_04_06",
+  "2026_06_01",
+  "2026_08_03",
+  "2026_10_05"
+ ],
+ "freshness": {
+  "snapshots_in_tree": 47,
+  "newest_snapshot": "2026-10-05",
+  "days_since_newest_snapshot": 7,
+  "snapshot_gap_days": {
+   "median": 12,
+   "max": 35
+  },
+  "lag_days_to_first_listing": {
+   "n": 2191,
+   "median": 36,
+   "p90": 69,
+   "min": 0,
+   "max": 180
+  }
+ }
+}

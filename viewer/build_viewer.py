@@ -43,8 +43,10 @@ sys.path.insert(0, HERE)
 import backtest as bt  # noqa: E402
 import events as E  # noqa: E402
 import predictor as pr  # noqa: E402
+import roster_flags as RF  # noqa: E402
 import team_colors as TC  # noqa: E402
 import veto_cache as vc  # noqa: E402
+import walkforward as wf  # noqa: E402  (fit date + calibration buckets for the track record)
 
 N_RECENT_CALLS = 20
 N_TEAM_RESULTS = 10
@@ -400,7 +402,7 @@ def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
     event's own map pool: the veto must be played on the maps the event uses,
     not on the pool inferred from recent plays. `recs` attaches each team's
     90-day map record as of `day` (the page shows it beside the veto)."""
-    inp, _ = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
+    inp, meta = h.features({"team_a": a, "team_b": b, "date": day.isoformat(), "event_title": title})
     pool = valid_pool(pool)
     if pool and pool != inp["map_pool"]:
         inp["map_pool"] = pool
@@ -413,7 +415,67 @@ def predict(h, a, b, day, title=None, bo=3, elo=False, pool=None, recs=False):
     VD_JOBS.append((out, inp))
     if elo:   # pre-match Elo of both teams, so the track record can tell favourite from underdog
         out["e"] = [round(bt.ELO_INIT + (inp[k] - 1.0) * bt.ELO_PER_RATING) for k in ("rating_a", "rating_b")]
+        # the Elo-only baseline the track record scores the model against: the
+        # same point-in-time Elo expectation backtest.py / walkforward.py call
+        # "elo_only" (meta["p_elo"], from the same pre-match state as the call)
+        out["q"] = meta["p_elo"]
     return out
+
+
+def track_payload(fit_end, buckets, max_gap, min_n, wf_report):
+    """What the Stats page needs to label and grade its call history, all taken
+    from the evaluation code (walkforward.py), nothing typed in here:
+
+      fit_end   last series date the shipped weights were fitted on; a call dated
+                on or before it is in-sample and is left out of the record
+      buckets   favourite-view calibration buckets [[lo, hi], ...], and
+      gap/min_n the bucket pass rule (walkforward.py acceptance A3)
+      backtest  the walk-forward report's scores on its clean window (series
+                after fit_end) for the shipped engine and the Elo-only
+                baseline, or None when the report is missing or was written
+                for another fit date (a stale report is never shown)."""
+    bt_block = None
+    if wf_report and wf_report.get("clean_window_start_after") == fit_end:
+        c = wf_report.get("clean") or {}
+        models = {k: {f: c[k][f] for f in ("n", "accuracy", "brier", "log_loss")}
+                  for k in ("shipped", "elo_only") if k in c}
+        if len(models) == 2:
+            bt_block = {"after": fit_end, "to": (wf_report.get("oof_range") or [None, None])[1],
+                        "models": models}
+    return {"fit_end": fit_end, "buckets": [[lo, min(hi, 1.0)] for lo, hi in buckets],
+            "gap": max_gap, "min_n": min_n, "backtest": bt_block}
+
+
+def roster_flag_data(all_matches, events, teams, players, as_of):
+    """Display-only roster caution flags (roster_flags.py). They are attached
+    after every prediction is made and are never read by the engine.
+
+    Sets m["rf"] = {"a": [flag], "b": [flag]} on each event match with two
+    known teams and a day, when either side has a flag (flags as of that
+    match's own day; see roster_flags' point-in-time rule). Returns the
+    matchup-tool flags {"now": {team: [flag]}, "ev": {slug: {team: [flag]}}}:
+    "now" as of as_of with no event (the global matchup), "ev" per tournament
+    for its participants (finished: as of its first day; else as of as_of)."""
+    display = {k: v["id"] for k, v in players.items() if v.get("id")}
+    fl = RF.load_flagger(all_matches, display=display)
+    for e in events:
+        for m in e["matches"]:
+            if not (m.get("t1") and m.get("t2") and m.get("day")):
+                continue
+            fa = fl.flags(m["t1"], m["day"], e["title"], finished=bool(m.get("finished")), event_start=e["start"])
+            fb = fl.flags(m["t2"], m["day"], e["title"], finished=bool(m.get("finished")), event_start=e["start"])
+            if fa or fb:
+                m["rf"] = {"a": fa, "b": fb}
+    now = {t: f for t in sorted(teams) if (f := fl.flags(t, as_of.isoformat()))}
+    ev = {}
+    for e in events:
+        fin = e["status"] == "finished"
+        d = e["start"] if fin else as_of.isoformat()
+        got = {t: f for t in sorted(e["participants"]) if t in teams
+               and (f := fl.flags(t, d, e["title"], finished=fin, event_start=e["start"]))}
+        if got:
+            ev[e["slug"]] = got
+    return {"now": now, "ev": ev}
 
 
 def build_data():
@@ -429,6 +491,15 @@ def build_data():
     assets = json.load(open(os.path.join(HERE, "assets.json"), encoding="utf-8"))
     all_matches = sorted(bt.load_matches(), key=lambda m: m["date"])
     events = sorted(E.discover(), key=lambda e: e["start"])
+    # the page keys every match (its call on Stats, its match page) by id: a
+    # shared id would silently drop one event's matches, so it fails the build
+    seen_ids = defaultdict(list)
+    for e in events:
+        for m in e["matches"]:
+            seen_ids[m["id"]].append(e["slug"])
+    shared = {k: v for k, v in seen_ids.items() if len(v) > 1}
+    if shared:
+        raise SystemExit(f"match ids shared across events: {sorted(shared.items())[:5]}")
     last_day = max(bt._d(m["date"]) for m in all_matches)
     as_of = last_day + timedelta(days=1)
 
@@ -592,6 +663,8 @@ def build_data():
 
     run_vdist()
 
+    rflags = roster_flag_data(all_matches, events, teams, players, as_of)
+
     h2h = defaultdict(list)
     for m in reversed(all_matches):
         a, b = m["team_a"], m["team_b"]
@@ -610,6 +683,12 @@ def build_data():
         m = r["match"]
         recent.append({"date": m["date"], "event": m["event"], "a": m["team_a"], "b": m["team_b"],
                        "winner": m["winner"], "p": round(res["p_a_exact"], 3)})
+    wf_path = os.path.join(ROOT, "data", "walkforward_report.json")
+    wf_rep = json.load(open(wf_path, encoding="utf-8")) if os.path.exists(wf_path) else None
+    if wf_rep and wf_rep.get("clean_window_start_after") != wf.SHIPPED_FIT_END:
+        print(f"walkforward report is for fit date {wf_rep.get('clean_window_start_after')}, "
+              f"weights are fitted to {wf.SHIPPED_FIT_END}: its backtest scores are left off the Stats page")
+    track = track_payload(wf.SHIPPED_FIT_END, wf.FAV_BUCKETS, wf.CAL_MAX_GAP, wf.CAL_MIN_N, wf_rep)
     full = json.load(open(os.path.join(ROOT, "data", "backtest_report.json"), encoding="utf-8"))
     tm = full["test_metrics"]
     report = {
@@ -637,12 +716,15 @@ def build_data():
     data = {
         "as_of": as_of.isoformat(), "events": ev_out, "teams": teams, "players": players,
         "pairs": pairs, "epairs": epairs, "emr": emr, "h2h": h2h, "recent": recent, "report": report,
+        "track": round_floats(track, 6),
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
         # veto comfort, so the page can finish a half-chosen veto the way the engine does
         "vcfg": [pr.CONFIG["veto_comfort"], pr.CONFIG["veto_comfort_k"]],
         # the live map pool (maps with recent plays), the fallback when a tournament lists none
         "pool": h_today.map_pool(as_of),
+        # display-only roster caution flags for the matchup tools (roster_flags.py)
+        "rflags": rflags,
     }
     info = {
         "assets": assets, "names": names, "events": events, "teams": teams,
@@ -652,7 +734,7 @@ def build_data():
     return data, info
 
 
-SUPPORTED_BUNDLE_VERSION = 1
+SUPPORTED_BUNDLE_VERSION = 2
 BUNDLE_NAME = "data-bundle.json"
 
 
@@ -698,6 +780,10 @@ def drift_check(tpl, bundle):
     for key in sorted(set(re.findall(r"\bMETA\.([A-Za-z_][A-Za-z0-9_]*)", tpl))):
         if key not in ("bundle_version", "generated_at", "data_through", "data_hash", "vrs_date"):
             problems.append(f"META.{key}")
+    pv = re.search(r"const PAGE_BUNDLE_VERSION = (\d+);", tpl)
+    if not pv or int(pv.group(1)) != SUPPORTED_BUNDLE_VERSION:
+        problems.append(f"template PAGE_BUNDLE_VERSION {pv.group(1) if pv else 'missing'} "
+                        f"!= SUPPORTED_BUNDLE_VERSION {SUPPORTED_BUNDLE_VERSION}")
     for const in ("FIXTURES", "RESULTS"):
         if f"/*__{const}__*/" not in tpl:
             problems.append(f"missing placeholder /*__{const}__*/")

@@ -31,12 +31,16 @@ hltv id), finished series only                   idempotent) + data/team_aliases
         |                       `python scripts/promote_rosters.py --yes`)
         +── viewer/fetch_assets.py ──► viewer/assets.json (logos, map art)
         +── data/lineups.py ──► data/lineups.json (incremental; failure-tolerant,
-                                never breaks the refresh)
+        |                       never breaks the refresh)
+        +── data/valve_results.py ──► data/valve_results.json (second results
+                                source, Valve's standings match rows; incremental;
+                                a failure only warns; read-only cross-check)
         |
         v
 scripts/data_gates.py ── quality gates on the rebuilt data ──► BLOCKS the publish
 (schema, duplicate IDs, sane counts,                     on failure and opens a
- team-name resolution, Elo-delta bounds)                 GitHub issue with the report
+ team-name resolution, Elo-delta bounds,                 GitHub issue with the report
+ cross-source agreement)
         |
         v (gates pass)
 viewer/build_bundle.py ──► viewer/data-bundle.json   (versioned; see
@@ -52,6 +56,36 @@ viewer/build_viewer.py ──► static HTML (bundle inlined: DATA + FIXTURES +
  on missing/corrupt/
  foreign-version bundle)
 ```
+
+## Second results source (cross-check, not a backup feed)
+
+`data/valve_results.py` turns the per-roster match rows of Valve's public
+regional-standings repository (the same repository `vrs.py` and `lineups.py`
+read) into one record per series, in the `matches.json` shape with every field
+Valve does not publish (event, maps, best-of, tier) set to null. It only knows
+date, the two teams and the winner. Team names are derived (our names and
+`team_aliases.json` codes after `lineups.norm`, plus date-only inference for the
+few that do not normalise); tolerances live in one block at the top of the file.
+
+- **Gate** (`cross_source` in `scripts/data_gates.py`): the new data and the
+  published data are both compared with the same `valve_results.json`; the gate
+  fails when the update ADDS a winner disagreement or an identity mismatch (same
+  day, same team and result, different opponent). Discrepancies already
+  published are reported, not re-failed. No second-source file: skipped with a
+  note, never a failure.
+- **Report**: `python scripts/cross_source_check.py --write` writes
+  `data/cross_source_report.json` (agreement, coverage, pending, identity
+  mismatches, freshness). Measured 2026-10-12: 2,191 of 2,227 overlapping series
+  matched, 0 winner disagreements, 17 identity mismatches to review.
+- **Freshness**: Valve publishes about monthly and lists an event once it is over,
+  so a series reaches this source weeks after it is played. It cannot stand in
+  for the primary source when the primary refuses the runner; that problem still
+  has only the backstop described below.
+- **Fill-in** (off by default, review only): `--fill-candidates` writes
+  `data/valve_fill.candidate.json` (gitignored), the second-source series newer
+  than the newest primary series. Nothing reads or merges it: a record with no
+  maps, best-of or event would fail the schema gate and starve the map model, so
+  merging is not offered.
 
 ## SQLite copy for querying (`data/faceoff.db`)
 

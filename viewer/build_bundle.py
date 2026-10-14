@@ -36,7 +36,7 @@ sys.path.insert(0, HERE)
 
 import build_viewer as bv  # noqa: E402
 
-BUNDLE_VERSION = 1
+BUNDLE_VERSION = 2
 RESULT_DAYS = 30       # results window: finished matches this recent
 RESULT_CAP = 150
 
@@ -88,6 +88,13 @@ def decode_veto(steps):
     return out
 
 
+def roster_flags(m):
+    """Optional display-only roster caution flags (roster_flags.py), present
+    only when a side has one: {"roster_flags": {"a": [...], "b": [...]}}."""
+    rf = m.get("rf")
+    return {"roster_flags": {"a": list(rf.get("a") or []), "b": list(rf.get("b") or [])}} if rf else {}
+
+
 def build_fixtures(events, data_through):
     # Fixtures dated long before the data is through are page rot, not upcoming
     # matches (e.g. PGL Bucharest 2026 still lists "upcoming" April matches that
@@ -107,6 +114,7 @@ def build_fixtures(events, data_through):
                 "stage": m.get("stage"), "day": m.get("day"), "when": m.get("when"),
                 "best_of": m.get("bo"), "team_a": t1, "team_b": t2,
                 "prediction": expand_pred(m["pred"]),
+                **roster_flags(m),
             })
     out.sort(key=lambda f: (f["day"] or "9999", f["when"] or "", f["event_slug"]))
     return out
@@ -140,6 +148,7 @@ def build_results(events, data_through):
                 "team_a": t1, "team_b": t2,
                 "series_score": f"{w1}-{w2}", "winner": winner, "maps": maps,
                 "verdict": verdict,
+                **roster_flags(m),
             })
     out.sort(key=lambda r: (r["day"] or "", r["event_slug"], r["stage"] or ""),
                reverse=True)

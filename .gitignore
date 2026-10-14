@@ -53,3 +53,7 @@ viewer/data-bundle.json
 data/roster_events.candidate.json
 data/roster_diff.md
 .claude/worktrees/
+
+# --- second results source: fill-in review list (scripts/cross_source_check.py
+# --fill-candidates); never merged, never committed ---
+data/valve_fill.candidate.json

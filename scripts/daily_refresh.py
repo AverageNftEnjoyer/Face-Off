@@ -28,7 +28,9 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    data/lineups.json (per-series five-man lineups from Valve's standings
    detail pages, incremental: only snapshots newer than the file's newest
    one are read, so most runs download nothing; a failure here is reported
-   and never stops the refresh).
+   and never stops the refresh), data/valve_results.json (the second
+   results source for the cross_source gate: Valve's standings match rows,
+   incremental the same way, a failure only warns).
 
 The site itself is built from these files on each deploy
 (python viewer/build_viewer.py public/index.html, see vercel.json).
@@ -507,6 +509,16 @@ def main(argv=None):
     except (Exception, SystemExit) as e:   # noqa: BLE001
         print(f"lineups: refresh skipped ({type(e).__name__}: {e}); data/lineups.json unchanged",
               file=sys.stderr)
+
+    # second results source (Valve's standings match rows) for the cross_source
+    # gate: read-only cross-check, so an outage only warns; the committed file
+    # stays and the gate keeps comparing against it
+    try:
+        import valve_results
+        valve_results.main(offline=False, incremental=True)
+    except (Exception, SystemExit) as e:   # noqa: BLE001
+        print(f"WARNING valve_results: refresh skipped ({type(e).__name__}: {e}); "
+              "data/valve_results.json unchanged", file=sys.stderr)
     print(f"refresh done; Liquipedia API requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
 
 

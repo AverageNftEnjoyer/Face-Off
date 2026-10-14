@@ -48,6 +48,9 @@ NOT COVERED, AND WHY IT CANNOT BE:
   stand-in who joined mid-event is flagged for the whole event, including
   matches played before he joined. Treat it as unverified. data/lineups.json
   (dated per match, test 4) is its replacement for any feature that ships.
+  The display-only roster caution flags (roster_flags.py) use the stand-in
+  list for a finished series only once a lineup dated before its day shows
+  the stand-in (tests/test_roster_flags.py).
 
 USAGE (from D:/Face-Off):  python leakage_check.py [--days 40] [--all]
 Stdlib only, deterministic.
