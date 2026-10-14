@@ -55130,6 +55130,28 @@
   "tier": "S"
  },
  {
+  "match_id": "f51bd0920415",
+  "date": "2026-10-14",
+  "event": "Thunderpick World Championship 2026",
+  "team_a": "Legacy",
+  "team_b": "PARIVISION",
+  "winner": "Legacy",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Legacy"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Legacy"
+   }
+  ],
+  "event_page": "Thunderpick/World Championship/2026",
+  "ext_match_id": "2399386",
+  "tier": "S"
+ },
+ {
   "match_id": "4a720a4d6381",
   "date": "2026-10-14",
   "event": "Thunderpick World Championship 2026",
