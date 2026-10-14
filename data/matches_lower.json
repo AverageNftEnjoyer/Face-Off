@@ -217213,5 +217213,182 @@
   "ext_match_id": "2399255",
   "tier": "B",
   "kind": "main"
+ },
+ {
+  "match_id": "c68f313b3234",
+  "date": "2026-10-14",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "ex-RUSTEC",
+  "team_b": "mellren",
+  "winner": "ex-RUSTEC",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "mellren"
+   },
+   {
+    "map": "Cache",
+    "winner": "ex-RUSTEC"
+   },
+   {
+    "map": "Anubis",
+    "winner": "ex-RUSTEC"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399299",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "4e5a00c7ea5f",
+  "date": "2026-10-14",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "Bushido Wildcats",
+  "team_b": "BAKS Esports",
+  "winner": "BAKS Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "BAKS Esports"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Bushido Wildcats"
+   },
+   {
+    "map": "Mirage",
+    "winner": "BAKS Esports"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399076",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "f89abf6957cc",
+  "date": "2026-10-14",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "GenOne",
+  "team_b": "6666 Esports",
+  "winner": "6666 Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "GenOne"
+   },
+   {
+    "map": "Inferno",
+    "winner": "6666 Esports"
+   },
+   {
+    "map": "Anubis",
+    "winner": "6666 Esports"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399075",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "11aef003aa21",
+  "date": "2026-10-14",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Astralis",
+  "team_b": "Sashi Esport",
+  "winner": "Astralis",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Astralis"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Astralis"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399134",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "1db48ec8516e",
+  "date": "2026-10-14",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Fnatic",
+  "team_b": "Sashi Esport",
+  "winner": "Fnatic",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Fnatic"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Fnatic"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399257",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "7c47735d49ec",
+  "date": "2026-10-14",
+  "event": "Stake Pulse Beat III",
+  "team_a": "HOTU",
+  "team_b": "Fnatic",
+  "winner": "HOTU",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "HOTU"
+   },
+   {
+    "map": "Dust2",
+    "winner": "HOTU"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399135",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "25f5e8c7a5eb",
+  "date": "2026-10-14",
+  "event": "Stake Pulse Beat III",
+  "team_a": "HOTU",
+  "team_b": "Astralis",
+  "winner": "Astralis",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "HOTU"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Astralis"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Astralis"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399256",
+  "tier": "B",
+  "kind": "main"
  }
 ]

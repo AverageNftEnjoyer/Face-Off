@@ -1,5 +1,5 @@
 {
- "fetched_for": "2026-10-12",
+ "fetched_for": "2026-10-15",
  "event": "ESL/Pro League/Season 24",
  "event_logos": {
   "intel-extreme-masters-atlanta-2026": "data/raw/media/af9b934d835666bb.png",
@@ -2804,20 +2804,52 @@
    "region": "Europe",
    "roster": [
     {
-     "id": "",
-     "name": "Dmytro Vovk",
+     "id": "sdy",
+     "name": "Viktor Orudzhev",
      "flag": "ua",
-     "igl": false,
-     "role": "Founder, CEO",
-     "joined": "2022-10-??"
+     "igl": true,
+     "role": "",
+     "joined": "2026-10-14"
     },
     {
-     "id": "",
-     "name": "Denys Yashniev",
+     "id": "CYPHER",
+     "name": "Cai Watson",
+     "flag": "gb",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-14"
+    },
+    {
+     "id": "mantuu",
+     "name": "Mateusz Wilczewski",
+     "flag": "pl",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-14"
+    },
+    {
+     "id": "br0",
+     "name": "Alexander Bro",
+     "flag": "dk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-14"
+    },
+    {
+     "id": "St0m4k",
+     "name": "Vladyslav Lykhoshva",
      "flag": "ua",
      "igl": false,
-     "role": "Head of Esports",
-     "joined": "2024-03-07"
+     "role": "",
+     "joined": "2026-10-14"
+    },
+    {
+     "id": "T.c",
+     "name": "Tiaan Coertzen",
+     "flag": "za",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-10-14"
     }
    ],
    "icon": "Monte 2022 allmode.png",
@@ -3723,8 +3755,8 @@
   },
   "THUNDERdOWNUNDER": {
    "page": "THUNDERdOWNUNDER",
-   "logo": "",
-   "logo_dark": "",
+   "logo": "Off Chops lightmode.png",
+   "logo_dark": "Off Chops darkmode.png",
    "location": "Australia",
    "region": "Oceania",
    "roster": [
@@ -3761,10 +3793,10 @@
      "joined": "2026-10-11"
     }
    ],
-   "icon": "",
-   "icon_dark": "",
-   "logo_path": null,
-   "logo_dark_path": null
+   "icon": "Off Chops lightmode.png",
+   "icon_dark": "Off Chops darkmode.png",
+   "logo_path": "data/raw/media/4743e6f9f4466e37.png",
+   "logo_dark_path": "data/raw/media/c85f0975eeaaf78f.png"
   },
   "TYLOO": {
    "page": "TYLOO",
