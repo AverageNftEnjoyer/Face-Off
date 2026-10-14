@@ -22,7 +22,7 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    served from the cache.
 3. Rebuild, in order: data/matches.json (collect_liquipedia), data/
    roster_events.candidate.json (rosters --candidate: SUPERVISED, a human
-   promotes it to roster_events.json after reviewing scripts/roster_watch.py's
+   promotes it to roster_events.json after reviewing pipeline/roster_watch.py's
    diff), viewer/assets.json + new images
    (fetch_assets), data/vrs.json (Valve Regional Standings, from GitHub),
    data/lineups.json (per-series five-man lineups from Valve's standings
@@ -31,17 +31,17 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    and never stops the refresh), data/valve_results.json (the second
    results source for the cross_source gate: Valve's standings match rows,
    incremental the same way, a failure only warns), and last
-   data/matches_lower.json (scripts/lower_refresh.py: B-tier results for team
+   data/matches_lower.json (pipeline/lower_refresh.py: B-tier results for team
    pages and rating data, never events; own request budget; a failure only
    warns and never blocks the S/A data).
 
 The site itself is built from these files on each deploy
 (python viewer/build_viewer.py public/index.html, see vercel.json).
 
-All requests go through data/lpfetch.py: descriptive User-Agent, gzip, at most
+All requests go through collectors/lpfetch.py: descriptive User-Agent, gzip, at most
 one request every 2.5 s, no action=parse. A typical run is 15-50 requests.
 
-LIVE MODE (python scripts/daily_refresh.py --live, run every 10 minutes by
+LIVE MODE (python pipeline/daily_refresh.py --live, run every 10 minutes by
 .github/workflows/live-refresh.yml): only while a tracked tournament is on (its
 dates, one day either side) the event's pages are read again and matches.json is
 rebuilt, 1-3 requests and no assets. Outside a tournament it exits at once.
@@ -51,7 +51,7 @@ A page that was meant to be refreshed but could only be served from the cache
 in data/refresh_status.json so the workflow fails loudly instead of reporting a
 green run with old results.
 
-USAGE (from the repo root):  python scripts/daily_refresh.py [--dry-run] [--live]
+USAGE (from the repo root):  python pipeline/daily_refresh.py [--dry-run] [--live]
 """
 
 import os
@@ -60,15 +60,13 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "data"))
-sys.path.insert(0, os.path.join(ROOT, "viewer"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import lpfetch  # noqa: E402
 import events as E  # noqa: E402
 
 event_info, is_stage, SKIP_TIERTYPES = E.event_info, E.is_stage, E.SKIP_TIERTYPES
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
 REFRESH_DAYS = 3
 AHEAD_DAYS = 14        # upcoming events are re-read once they are this close
@@ -544,7 +542,7 @@ def refresh_lower(run=None):
     """Lower-tier results (data/matches_lower.json: Elo data and team-page
     results, never events). Runs LAST in the daily run (never in --live), so it
     can neither delay nor block the S/A data, with its own request budget
-    (scripts/lower_refresh.py). Any failure is a WARNING: the committed file
+    (pipeline/lower_refresh.py). Any failure is a WARNING: the committed file
     stays and the run goes on. Returns the step's report, or None on failure."""
     s0 = lpfetch.NETWORK_REQUESTS[0]
     try:

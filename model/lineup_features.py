@@ -29,16 +29,19 @@ No team or player names live in this code; everything is in the file.
 """
 import json
 import os
+import sys
 from collections import defaultdict
 from datetime import date, timedelta
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+
 CORE_N = 8
 CONT_DAYS = 90
 
 
 def load(path=None):
-    path = path or os.path.join(HERE, "data", "lineups.json")
+    path = path or os.path.join(paths.DATA, "lineups.json")
     if not os.path.exists(path):
         return {}
     with open(path, encoding="utf-8") as f:
@@ -46,7 +49,7 @@ def load(path=None):
 
 
 KINDS = ("roster_change", "stand_in")
-OVERRIDES_PATH = os.path.join(HERE, "data", "roster_overrides.json")
+OVERRIDES_PATH = os.path.join(paths.DATA, "roster_overrides.json")
 
 
 class Five(tuple):
@@ -60,7 +63,7 @@ def _norm(name):
 
 def parse_override(e):
     """One raw entry -> normalised dict, or None when it is malformed
-    (scripts/roster_overrides_check.py reports why)."""
+    (checks/roster_overrides_check.py reports why)."""
     try:
         if e["kind"] not in KINDS or not str(e["team"]).strip():
             return None

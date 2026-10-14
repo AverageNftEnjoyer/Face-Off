@@ -32,9 +32,9 @@ jobs:
           python-version: "3.12"
 
       - name: Refresh Liquipedia data and Valve standings (rate-limited, cached)
-        run: python scripts/daily_refresh.py
+        run: python pipeline/daily_refresh.py
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # the one GitHub API call in data/vrs.py (shared with data/lineups.py)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # the one GitHub API call in collectors/vrs.py (shared with collectors/lineups.py)
 
       # Quality gates run BEFORE anything is published: a red gate blocks the
       # commit below and opens an issue with the report. Never ship bad data.
@@ -43,7 +43,7 @@ jobs:
         id: gates
         run: |
           set -o pipefail
-          python scripts/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
+          python checks/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
 
       # The viewer renders exclusively from the bundle (gitignored; Vercel
       # rebuilds it via buildCommand). Building it here validates the bundle
@@ -58,7 +58,7 @@ jobs:
         run: python viewer/build_viewer.py public/index.html
 
       - name: Build the SQLite copy (data/faceoff.db)
-        run: python scripts/build_db.py
+        run: python pipeline/build_db.py
 
       - name: Commit and push changed data
         run: |
@@ -104,7 +104,7 @@ jobs:
           fi
 
       # The roster candidate and its diff are NOT committed (.gitignore): the
-      # issue is the review request, and scripts/promote_rosters.py rebuilds the
+      # issue is the review request, and pipeline/promote_rosters.py rebuilds the
       # candidate from the committed cache when someone approves it.
       - name: Open an issue when roster changes need review
         if: ${{ !cancelled() && steps.gates.outcome == 'success' && hashFiles('data/roster_diff.md') != '' }}
@@ -125,7 +125,7 @@ jobs:
       # healed by the 15-minute live refresh (validate.yml also starts it at once),
       # so a red run means Liquipedia kept refusing (the data is still committed above)
       - name: Fail loudly if a live page could not be refreshed
-        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 30
+        run: python pipeline/daily_refresh.py --check-status --max-stale-minutes 30
 
       # Valve standings must be as new as Valve published them. vrs.py never
       # fails the refresh itself (S/A data must still publish); it records a
@@ -137,7 +137,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           set -o pipefail
-          python data/vrs.py --check 2>&1 | tee /tmp/vrs.txt
+          python collectors/vrs.py --check 2>&1 | tee /tmp/vrs.txt
 
       - name: Open an issue when the Valve standings are stale
         if: ${{ !cancelled() && steps.vrs.outcome == 'failure' }}

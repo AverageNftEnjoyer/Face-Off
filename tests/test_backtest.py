@@ -10,7 +10,8 @@ import sys
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 import backtest as bt  # noqa: E402
 
 
@@ -169,7 +170,6 @@ class TestCollectorFinishedTypos(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        sys.path.insert(0, os.path.join(ROOT, "data"))
         import collect_liquipedia
         cls.c = collect_liquipedia
 

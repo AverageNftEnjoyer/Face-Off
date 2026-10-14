@@ -9,9 +9,9 @@ it from the committed Liquipedia cache, shows the diff, and promotes it on
 request.
 
 USAGE (repo root):
-  python scripts/promote_rosters.py            show the diff only (changes nothing)
-  python scripts/promote_rosters.py --yes      promote: candidate -> data/roster_events.json
-  python scripts/promote_rosters.py --keep-candidate   leave the candidate file in data/
+  python pipeline/promote_rosters.py            show the diff only (changes nothing)
+  python pipeline/promote_rosters.py --yes      promote: candidate -> data/roster_events.json
+  python pipeline/promote_rosters.py --keep-candidate   leave the candidate file in data/
 
 Run it after `git pull`, review the diff, then commit data/roster_events.json.
 Offline: it reads only the cache already in the repo. Stdlib only.
@@ -23,8 +23,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-sys.path.insert(0, DATA)
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 LIVE = os.path.join(DATA, "roster_events.json")
 CAND = os.path.join(DATA, "roster_events.candidate.json")

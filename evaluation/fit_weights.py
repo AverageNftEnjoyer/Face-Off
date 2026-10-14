@@ -36,8 +36,8 @@ Splits (chronological, by match day, same as backtest.py):
     from LAMBDAS by validation log loss; then refit on all of train.
 
 USAGE (from D:/Face-Off):
-    python fit_weights.py              # fit, print proposed CONFIG, write data/fit_report.json
-    python fit_weights.py --evaluate   # also score current vs fitted on the TEST split
+    python evaluation/fit_weights.py              # fit, print proposed CONFIG, write data/fit_report.json
+    python evaluation/fit_weights.py --evaluate   # also score current vs fitted on the TEST split
 """
 
 import argparse
@@ -48,8 +48,8 @@ import os
 import random
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 import predictor as pr  # noqa: E402
@@ -329,7 +329,7 @@ def main(argv=None):
             fmt = lambda r: f"{r['mean_pred']:.3f}->{r['actual']:.3f} ({r['n']})" if r["n"] else "-"
             print(f"  {a['bin']:8s} current {fmt(a):24s} fitted {fmt(b)}")
 
-    with open(os.path.join(HERE, "data", "fit_report.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(paths.DATA, "fit_report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, indent=1)
     print("wrote data/fit_report.json")
 

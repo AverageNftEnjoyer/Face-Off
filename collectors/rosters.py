@@ -21,7 +21,7 @@ Limits (also in data/SOURCES.md):
   * the IGL check uses squad-history igl flags, which mark the player's role
     on that team, not necessarily on the exact date.
 
-USAGE (from D:/Face-Off):  python data/rosters.py [--offline]
+USAGE (from D:/Face-Off):  python collectors/rosters.py [--offline]
 """
 
 import json
@@ -29,8 +29,9 @@ import os
 import re
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 
 import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
@@ -38,7 +39,7 @@ import lpfetch  # noqa: E402
 OFFLINE = "--offline" in sys.argv
 # --candidate: write data/roster_events.candidate.json instead of the live file.
 # Roster changes are SUPERVISED: the candidate is diffed against the live file
-# by scripts/roster_watch.py, and a human promotes it only after review.
+# by pipeline/roster_watch.py, and a human promotes it only after review.
 # Auto-applying roster changes corrupts everything downstream, so the daily
 # refresh never writes the live file directly.
 CANDIDATE = "--candidate" in sys.argv
@@ -99,10 +100,10 @@ def build(teams):
 
 
 def main():
-    ms = json.load(open(os.path.join(HERE, "matches.json"), encoding="utf-8"))
+    ms = json.load(open(os.path.join(DATA, "matches.json"), encoding="utf-8"))
     teams = sorted({m["team_a"] for m in ms} | {m["team_b"] for m in ms})
     out, texts = build(teams)
-    with open(os.path.join(HERE, out_name()), "w", encoding="utf-8") as f:
+    with open(os.path.join(DATA, out_name()), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False, sort_keys=True)
     n_rows = sum(len(v) for v in out.values())
     n_igl = sum(1 for v in out.values() for e in v.values() if e["missing_igl"])

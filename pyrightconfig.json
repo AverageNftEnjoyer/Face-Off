@@ -1,3 +1,11 @@
 {
-  "extraPaths": ["data", "viewer", "scripts", "."]
+  "extraPaths": [
+    ".",
+    "model",
+    "evaluation",
+    "collectors",
+    "pipeline",
+    "checks",
+    "viewer"
+  ]
 }

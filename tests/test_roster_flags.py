@@ -8,8 +8,8 @@ import unittest
 from datetime import date, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "viewer"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 import lineup_features as LF  # noqa: E402
 import roster_flags as RF  # noqa: E402
 
@@ -169,7 +169,7 @@ class DisplayOnly(unittest.TestCase):
     def test_engine_never_reads_flags(self):
         """The flags are attached after the predictions; no model module imports them."""
         for name in ("predictor.py", "backtest.py", "veto.py", "lineup_features.py"):
-            with open(os.path.join(ROOT, name), encoding="utf-8") as fh:
+            with open(os.path.join(ROOT, "model", name), encoding="utf-8") as fh:
                 src = fh.read()
                 self.assertNotIn("import roster_flags", src, name)
                 self.assertNotIn("from roster_flags", src, name)

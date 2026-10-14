@@ -2,7 +2,7 @@
 """
 Second, independent source of series RESULTS: Valve's public repository
 github.com/ValveSoftware/counter-strike_regional_standings (the same repository
-data/vrs.py and data/lineups.py read).
+collectors/vrs.py and collectors/lineups.py read).
 
 Every live/<year>/details/<snapshot>/<n>--<team>--<players>.md page lists the
 series that fed one roster's standing over the six months before <snapshot>:
@@ -22,8 +22,8 @@ field the source does not carry set to null (never guessed):
                  further meeting of the same pair on the same day
 
 What it is for: a read-only cross-check of data/matches.json
-(scripts/cross_source_check.py and the cross_source gate in
-scripts/data_gates.py). It never writes matches.json.
+(checks/cross_source_check.py and the cross_source gate in
+checks/data_gates.py). It never writes matches.json.
 
 What it is NOT: a fresh source. Valve publishes a snapshot about once a month
 (the first Monday) and lists an event once it has finished, so a series
@@ -39,15 +39,15 @@ different teams is dropped as ambiguous, so it can never map wrongly. A Valve
 name that still matches nothing is inferred from dates alone (infer_aliases,
 thresholds in the tolerance block) and recorded in the file's inferred_names.
 
-Raw pages are shared with data/lineups.py (data/raw/valve/details/,
+Raw pages are shared with collectors/lineups.py (data/raw/valve/details/,
 gitignored) and fetched through lineups.fetch (cached, spaced, User-Agent).
 
 USAGE (repo root):
-  python data/valve_results.py [--offline] [--incremental]
+  python collectors/valve_results.py [--offline] [--incremental]
     --offline      read only cached pages (a page that is not cached is
                    skipped and counted, not fetched)
     --incremental  keep data/valve_results.json and add only snapshots newer
-                   than the newest it records (what scripts/daily_refresh.py
+                   than the newest it records (what pipeline/daily_refresh.py
                    runs; nothing is rewritten when Valve published nothing new)
 Output: data/valve_results.json
 """
@@ -57,13 +57,14 @@ import re
 import sys
 from datetime import date, timedelta
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 
 import lineups  # noqa: E402  (norm, fetch, tree_paths: one fetcher, one cache)
 from collect_liquipedia import stable_match_id  # noqa: E402
 
-OUT = os.path.join(HERE, "valve_results.json")
+OUT = os.path.join(DATA, "valve_results.json")
 SOURCE_TAG = "valve-vrs"
 
 # ---------------------------------------------------------------- tolerances
@@ -81,7 +82,7 @@ ALIAS_MIN_VOTES = 3
 # ...and at least this share of that name's usable rows must agree (a rename
 # mid-window, a stand-in team or a typo leave a few strays, not a split).
 ALIAS_MIN_SHARE = 0.8
-# The cross_source gate (scripts/data_gates.py) fails when an update ADDS more
+# The cross_source gate (checks/data_gates.py) fails when an update ADDS more
 # than this many winner disagreements or identity mismatches with the second
 # source (relative to the published data, against the same second-source file).
 # Measured on 2,191 matched series (2024-02 .. 2026-10): 0 winner
@@ -137,7 +138,7 @@ def load_names():
     never be mistaken for a tracked team (it claims its own key)."""
     primary, names = set(), set()
     for fn in ("matches.json", "matches_lower.json"):
-        p = os.path.join(HERE, fn)
+        p = os.path.join(DATA, fn)
         if os.path.exists(p):
             with open(p, encoding="utf-8") as f:
                 for m in json.load(f):
@@ -145,7 +146,7 @@ def load_names():
                     if fn == "matches.json":
                         primary.update((m["team_a"], m["team_b"]))
     aliases = {}
-    p = os.path.join(HERE, "team_aliases.json")
+    p = os.path.join(DATA, "team_aliases.json")
     if os.path.exists(p):
         with open(p, encoding="utf-8") as f:
             aliases = json.load(f).get("aliases", {})
@@ -420,7 +421,7 @@ def main(offline=None, incremental=None):
         snaps = lineups.pick_snapshots(paths)
     wanted = [p for p in detail_paths(paths, set(snaps)) if index.get(lineups.norm(slug_name(p))) in primary]
     pages, missing = read_pages(wanted, offline)
-    with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
+    with open(os.path.join(DATA, "matches.json"), encoding="utf-8") as f:
         inferred = {**((old or {}).get("inferred_names") or {}), **infer_aliases(pages, index, json.load(f))}
     recs, spans, stats = build_series(pages, index, keep=primary, inferred=inferred)
 

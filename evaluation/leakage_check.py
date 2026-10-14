@@ -60,7 +60,7 @@ NOT COVERED, AND WHY IT CANNOT BE:
   list for a finished series only once a lineup dated before its day shows
   the stand-in (tests/test_roster_flags.py).
 
-USAGE (from D:/Face-Off):  python leakage_check.py [--days 40] [--all]
+USAGE (from D:/Face-Off):  python evaluation/leakage_check.py [--days 40] [--all]
 Stdlib only, deterministic.
 """
 import argparse
@@ -69,8 +69,8 @@ import copy
 import os
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 

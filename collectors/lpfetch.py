@@ -21,10 +21,12 @@ import urllib.request
 API = "https://liquipedia.net/counterstrike/api.php"
 UA = ("FaceOff-CS2-insights/0.2 (non-commercial fan analytics; "
       "https://github.com/AverageNftEnjoyer/Face-Off; python-urllib; low volume, cached)")
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "raw", "pages")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+CACHE = os.path.join(paths.RAW, "pages")
 MIN_GAP = 2.5
 _last = [0.0]
-# Daily refresh (scripts/daily_refresh.py): pages named here are re-fetched
+# Daily refresh (pipeline/daily_refresh.py): pages named here are re-fetched
 # ONCE per run even if cached; everything else is still served from the cache.
 # A cached response fetched before RUN_STARTED counts as stale for them.
 FRESH_TITLES = set()
@@ -42,7 +44,7 @@ _THROTTLED = [False]
 # Requests where a refresh was wanted but the cached copy was served instead
 # (throttled, or Liquipedia unreachable). The caller decides what that means: a
 # live tournament page in this list is stale and must be retried or reported,
-# never passed off as fresh (scripts/daily_refresh.py).
+# never passed off as fresh (pipeline/daily_refresh.py).
 STALE_SERVED = []
 
 

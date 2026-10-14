@@ -28,7 +28,7 @@ Output: data/event_lineups.json
   {"pages": {page: {team: [ids]}},          # participant sections
    "squads": {team: [[id, joindate, enddate or ""]]}}
 
-USAGE (from D:/Face-Off):  python data/event_lineups.py
+USAGE (from D:/Face-Off):  python collectors/event_lineups.py
 Library: load(); lineup(store, team, page, day) -> sorted ids or None.
 """
 import json
@@ -36,11 +36,11 @@ import os
 import re
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 
-OUT = os.path.join(HERE, "event_lineups.json")
+OUT = os.path.join(DATA, "event_lineups.json")
 DATE = re.compile(r"(\d{4})-(\d{2}|\?\?)-(\d{2}|\?\?)")
 
 
@@ -87,13 +87,12 @@ def squad_rows(txt):
 
 def build():
     import lpfetch
-    sys.path.insert(0, os.path.join(ROOT, "viewer"))
     import events as E
     idx = lpfetch.cached_pages()
     alias = _alias()
     titles = []
     for fn in ("lp_titles_selected.txt", "lp_titles_lower.txt"):
-        p = os.path.join(HERE, "raw", fn)
+        p = os.path.join(DATA, "raw", fn)
         if os.path.exists(p):
             titles += [l.strip() for l in open(p, encoding="utf-8") if l.strip()]
     pages = {}
@@ -114,7 +113,7 @@ def build():
             pages[t] = got
     teams = set()
     for fn in ("matches.json", "matches_lower.json"):
-        p = os.path.join(HERE, fn)
+        p = os.path.join(DATA, fn)
         if os.path.exists(p):
             for m in json.load(open(p, encoding="utf-8")):
                 teams |= {m["team_a"], m["team_b"]}
@@ -164,7 +163,7 @@ def main():
     # coverage report on the series data
     store = out
     for fn in ("matches.json", "matches_lower.json"):
-        ms = json.load(open(os.path.join(HERE, fn), encoding="utf-8"))
+        ms = json.load(open(os.path.join(DATA, fn), encoding="utf-8"))
         n = known = from_page = 0
         for m in ms:
             for team in (m["team_a"], m["team_b"]):

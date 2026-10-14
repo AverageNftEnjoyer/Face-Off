@@ -35,8 +35,8 @@ team's own average across the pool (a team that is uniformly better on every
 map gets ~0 veto signal, because that edge is already in the rating).
 
 USAGE:
-    python predictor.py match.json
-    python predictor.py --test      # runs the built-in EPL S24 Day 4 backtest
+    python model/predictor.py match.json
+    python model/predictor.py --test      # runs the built-in EPL S24 Day 4 backtest
 
 INPUT JSON SCHEMA (every key optional; defaults in brackets):
     team_a, team_b            names                               ["A", "B"]
@@ -62,7 +62,8 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 import veto as _veto  # noqa: E402
 
 # ============================================================================
@@ -1367,7 +1368,7 @@ def main():
         print(format_result(r))
         return
     print(__doc__)
-    print("usage: python predictor.py match.json | python predictor.py --test")
+    print("usage: python model/predictor.py match.json | python model/predictor.py --test")
 
 
 if __name__ == "__main__":

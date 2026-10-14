@@ -1,6 +1,6 @@
 """
 Tournament discovery and parsing for the Faceoff hub, from the Liquipedia
-pages already cached by data/collect_liquipedia.py (no network).
+pages already cached by collectors/collect_liquipedia.py (no network).
 
 An event is a top-level tournament page (plus its stage subpages, e.g.
 ".../Cologne/Stage 1"). For each one we read the infobox, format, prize pool,
@@ -15,7 +15,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-sys.path.insert(0, os.path.join(ROOT, "data"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402

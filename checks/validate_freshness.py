@@ -25,7 +25,7 @@ refresh reported stale pages (the workflow then starts the live refresh and
 fails the run). 2 = only the deployed site is behind the repo. When running in
 GitHub Actions the verdict is also written to $GITHUB_OUTPUT.
 
-USAGE (repo root):  python scripts/validate_freshness.py [--site URL] [--no-liquipedia]
+USAGE (repo root):  python checks/validate_freshness.py [--site URL] [--no-liquipedia]
 """
 import hashlib
 import json
@@ -39,8 +39,8 @@ import urllib.request
 from datetime import date, datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts", "viewer"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 SITE = "https://cs2faceoffanalytics.vercel.app/"
 RECENT_REFRESH_MIN = 25      # a data commit younger than this means the refresh is working; skip the Liquipedia request

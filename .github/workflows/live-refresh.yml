@@ -41,7 +41,7 @@ jobs:
           python-version: "3.12"
 
       - name: Refresh the live tournament pages (1 to 3 requests; exits at once when nothing is live)
-        run: python scripts/daily_refresh.py --live
+        run: python pipeline/daily_refresh.py --live
 
       - name: Data quality gates
         id: gates
@@ -52,10 +52,10 @@ jobs:
             exit 0
           fi
           set -o pipefail
-          python scripts/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
+          python checks/data_gates.py --old-git 2>&1 | tee /tmp/gates.json
 
       - name: Build the SQLite copy (data/faceoff.db)
-        run: python scripts/build_db.py
+        run: python pipeline/build_db.py
 
       - name: Commit and push changed data
         run: |
@@ -97,4 +97,4 @@ jobs:
       # a refused page is retried by the next scheduled run (15 min); the run only turns red once
       # pages have been stale for 30 minutes, so one refusal does not email you every 15 minutes
       - name: Fail loudly if a live page could not be refreshed
-        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 30
+        run: python pipeline/daily_refresh.py --check-status --max-stale-minutes 30

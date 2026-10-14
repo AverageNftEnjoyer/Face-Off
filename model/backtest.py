@@ -5,7 +5,7 @@ backtest.py -- point-in-time backtest of the CS2 match-insights engine.
 Fan analytics only: win probabilities and calibration. No betting logic.
 
 DATA: data/matches.json (real results scraped politely from Liquipedia's
-MediaWiki API; see data/SOURCES.md and data/collect_liquipedia.py).
+MediaWiki API; see data/SOURCES.md and collectors/collect_liquipedia.py).
 
 PIPELINE
   1. Load all finished series (BO1/BO3/BO5) sorted by date.
@@ -39,7 +39,7 @@ FEATURES (all point-in-time, see FEATURE DOC in data/backtest_report.md)
   volatility    |actual wins - Elo-expected wins| / n over the last 10 series
                 (any date < D), x2.5, clamped to [0, 1]; 0.3 if < 3 series
 
-Usage:  python backtest.py [--matches data/matches.json] [--min-history 5]
+Usage:  python model/backtest.py [--matches data/matches.json] [--min-history 5]
                            [--train-frac 0.6] [--seed 12345] [--quiet]
 Stdlib only; all randomness seeded.
 """
@@ -54,8 +54,11 @@ import sys
 from collections import defaultdict
 from datetime import date, timedelta
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "data")
+DATA = paths.DATA
 
 ELO_INIT = 1500.0
 ELO_K = 32.0
@@ -350,7 +353,7 @@ _ROSTER = None
 
 
 def roster_events():
-    """data/roster_events.json (python data/rosters.py): team -> tournament page
+    """data/roster_events.json (python collectors/rosters.py): team -> tournament page
     -> {"standin", "missing_igl"}. Empty if the file is absent."""
     global _ROSTER
     if _ROSTER is None:
@@ -994,7 +997,7 @@ def render_md(rep):
           "- maps_a/b: per-map [win rate, maps played] over the prior 90 days.",
           f"- map_pool: maps with >= {POOL_MIN_PLAYS} plays (all teams) in the prior {POOL_WINDOW_DAYS} days, the {POOL_SIZE} most recently played.",
           f"- volatility: |wins - Elo-expected wins| / n over last {VOL_WINDOW} series x {VOL_SCALE}, clamped [0,1]; {VOL_DEFAULT} if < 3 series.",
-          "- permaban: None (no veto data); roster: stand-in and missing-IGL flags from Liquipedia team-page stand-in tables (data/rosters.py); stakes: none.", ""]
+          "- permaban: None (no veto data); roster: stand-in and missing-IGL flags from Liquipedia team-page stand-in tables (collectors/rosters.py); stakes: none.", ""]
     return "\n".join(L)
 
 

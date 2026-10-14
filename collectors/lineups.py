@@ -26,10 +26,10 @@ Player ids are lower-cased.
 
 Raw files are cached in data/raw/valve/details/ (gitignored); --offline uses
 only the cache (and the cached tree). Online, the repository tree is read
-fresh (one GitHub API call, shared with data/vrs.py in the same process),
+fresh (one GitHub API call, shared with collectors/vrs.py in the same process),
 then raw.githubusercontent.com files are fetched, spaced REQUEST_GAP seconds.
 
---incremental (used by scripts/daily_refresh.py): keep data/lineups.json and
+--incremental (used by pipeline/daily_refresh.py): keep data/lineups.json and
 read only the Valve snapshots published after the newest one it records.
 Series with both sides already known are left alone; new series, and sides
 still missing, are filled from the new snapshots' rows. With no new snapshot
@@ -37,7 +37,7 @@ nothing is downloaded and the file is not rewritten. Valve publishes about
 once a month, so series played after the newest snapshot get their lineups
 when the next one appears.
 
-USAGE (from the repo root):  python data/lineups.py [--offline] [--incremental]
+USAGE (from the repo root):  python collectors/lineups.py [--offline] [--incremental]
 """
 import json
 import os
@@ -46,18 +46,17 @@ import sys
 import time
 from datetime import date
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(ROOT, "viewer"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 
 import vrs  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
 INCREMENTAL = "--incremental" in sys.argv
-TREE = os.path.join(HERE, "raw", "valve", "valve_tree.json")
-CACHE = os.path.join(HERE, "raw", "valve", "details")
-OUT = os.path.join(HERE, "lineups.json")
+TREE = os.path.join(DATA, "raw", "valve", "valve_tree.json")
+CACHE = os.path.join(DATA, "raw", "valve", "details")
+OUT = os.path.join(DATA, "lineups.json")
 SNAPSHOT_STEP = 2          # every 2nd monthly snapshot; pages look back 6 months
 REQUEST_GAP = 0.25
 # Valve slug (normalised) -> Liquipedia team name, where the names differ
@@ -142,7 +141,7 @@ def parse_detail(txt):
 
 def main(incremental=None):
     incremental = INCREMENTAL if incremental is None else incremental
-    with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
+    with open(os.path.join(DATA, "matches.json"), encoding="utf-8") as f:
         matches = json.load(f)
     ours = {}
     for m in matches:

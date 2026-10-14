@@ -1,6 +1,6 @@
 """Lower-tier results (data/matches_lower.json): history order and weight
 (backtest.py), team-page labelling (viewer/build_viewer.py), the daily refresh
-step (scripts/lower_refresh.py) and its failure handling. Everything is
+step (pipeline/lower_refresh.py) and its failure handling. Everything is
 SYNTHETIC: made-up teams, temporary files, no network."""
 import contextlib
 import io
@@ -13,8 +13,8 @@ from datetime import date
 from unittest import mock
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts", "viewer"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 import build_viewer as bv  # noqa: E402

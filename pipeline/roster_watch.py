@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Supervised roster diff: compare the candidate roster events
-(data/roster_events.candidate.json, built by `python data/rosters.py --candidate`)
+(data/roster_events.candidate.json, built by `python collectors/rosters.py --candidate`)
 against the live, human-confirmed data/roster_events.json.
 
 Roster changes are never auto-applied: a stand-in the scraper misreads would
 corrupt every downstream prediction. This script reports the diff; the workflow
 opens a GitHub issue with the report, and a human promotes the candidate only
-after review (python scripts/promote_rosters.py --yes).
+after review (python pipeline/promote_rosters.py --yes).
 
-USAGE (repo root):  python scripts/roster_watch.py [--report PATH]
+USAGE (repo root):  python pipeline/roster_watch.py [--report PATH]
 Exit 0 = candidate matches live (or no live file yet and none needed).
 Exit 1 = differences found; report written to --report (default
          data/roster_diff.md).
@@ -61,7 +61,7 @@ def report_md(diffs):
     lines = ["# Roster watch: candidate differs from live",
              "",
              "The roster scraper found changes. **Do not auto-apply.** Review each",
-             "entry, then promote with: `python scripts/promote_rosters.py --yes`",
+             "entry, then promote with: `python pipeline/promote_rosters.py --yes`",
              "(it rebuilds the candidate from the committed cache), and commit",
              "data/roster_events.json.",
              "",
@@ -80,7 +80,7 @@ def main(argv=None):
         os.path.join(DATA, "roster_diff.md")
     live, cand = load(LIVE), load(CAND)
     if cand is None:
-        print("no candidate file; run `python data/rosters.py --candidate` first",
+        print("no candidate file; run `python collectors/rosters.py --candidate` first",
               file=sys.stderr)
         return 2
     if live is None:

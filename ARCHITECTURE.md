@@ -1,0 +1,249 @@
+# Architecture
+
+Face-Off is a fan-analytics site for CS2: win probabilities, map veto
+simulation and calibrated confidence for every tracked S/A-tier series. It is
+stdlib-only Python plus one static HTML page, rebuilt by GitHub Actions and
+served by Vercel.
+
+One rule governs the design: **`data/matches.json` is the only thing ingested
+as results; every number on the site is a pure function of the committed data,
+recomputed at build time.**
+
+> **Keep this file current.** Any change that adds, moves, renames or removes a
+> module, a data file, a workflow step or a folder updates the matching section
+> here **and** adds a line to the [change log](#change-log) in the same commit.
+> `tests/test_architecture.py` fails when a code file is missing from the
+> module map, when the map names a file that does not exist, or when code
+> appears outside the code folders.
+
+---
+
+## Repository layout
+
+```
+Face-Off/
+├── paths.py            the folder layout in code; every entry point imports it first
+├── model/              the prediction engine and the rating / feature history it reads
+├── evaluation/         walk-forward evaluation, weight fitting, leakage proofs
+├── collectors/         Liquipedia and Valve fetchers + parsers  ->  data/*.json
+├── pipeline/           scheduled refresh jobs and data maintenance
+├── checks/             data-quality gates and freshness / consistency checks
+├── viewer/             bundle + static page builder, page template, site media
+├── tests/              unittest suite (python -m unittest discover -s tests)
+├── data/               inputs, caches and committed outputs: data only, no code
+├── assets/             source art (full-size originals; the site uses viewer/media/)
+├── .github/workflows/  daily refresh, live refresh, freshness validation
+└── vercel.json         site build: bundle -> page -> status feed, served from public/
+```
+
+Folders hold code by **role**, not by layer of an import graph: `model/` may be
+imported by everything, `pipeline/` and `checks/` are the scripts the workflows
+run, and `viewer/` turns the data into the site.
+
+### Imports: flat module names via `paths.py`
+
+The folders are not Python packages. Each script and test starts with:
+
+```python
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+```
+
+`paths.py` puts every folder in `paths.CODE_DIRS` on `sys.path`, so modules
+import each other by flat name (`import backtest`, `import lpfetch`,
+`import events`) wherever they live, and any script runs directly as
+`python <folder>/<script>.py` from the repo root. It also exports `ROOT`,
+`DATA` (`data/`), `RAW` (`data/raw/`) and `VIEWER`; code that reads or writes
+data uses `paths.DATA` rather than a path relative to its own file.
+
+Module names must stay unique across all code folders (they share one
+namespace). A new code folder goes in `paths.CODE_DIRS`, `pyrightconfig.json`
+and the layout above.
+
+---
+
+## Data flow
+
+```
+ Liquipedia (MediaWiki API)                 Valve regional_standings (GitHub)
+          │                                              │
+          ▼                                              ▼
+ collectors/lpfetch.py  polite cached fetch     collectors/vrs.py ─────────► data/vrs.json
+ (2.5 s gap, retries, stale ledger)             collectors/lineups.py ─────► data/lineups.json
+          │                                     collectors/valve_results.py► data/valve_results.json
+          ▼                                              (second source, cross-check only)
+ pipeline/daily_refresh.py   discovery ─► data/raw/lp_titles_selected.txt
+ (--live: only running events)
+          │
+          ▼
+ collectors/collect_liquipedia.py ─► data/matches.json   (full rebuild every run)
+                                     data/team_aliases.json
+          ├─ collectors/rosters.py ─► roster candidate ─► roster-review issue
+          │                           └─ pipeline/promote_rosters.py --yes ─► data/roster_events.json
+          ├─ collectors/event_lineups.py ─► data/event_lineups.json
+          ├─ viewer/fetch_assets.py ─► viewer/assets.json, data/raw/media/
+          └─ pipeline/lower_refresh.py ─► data/matches_lower.json   (last step, daily only)
+          │
+          ▼
+ checks/data_gates.py   schema, duplicates, counts, names, Elo bounds, cross-source
+          │             FAIL ─► publish blocked + GitHub issue with the report
+          ▼ pass
+ pipeline/build_db.py ─► data/faceoff.db   (read-only SQLite copy, committed)
+          │
+          ▼  commit data/ + push  ─►  Vercel build (vercel.json)
+ viewer/build_bundle.py ─► viewer/data-bundle.json  (Elo, form, pools, H2H,
+          │                                          predictions, veto, track record)
+          ▼
+ viewer/build_viewer.py ─► public/index.html + public/img/   (renders only from the bundle)
+ viewer/write_status.py ─► public/status.json                (result alerts feed)
+```
+
+---
+
+## Module map
+
+Every code file, by folder. (Checked by `tests/test_architecture.py`.)
+
+### Root
+
+| File | Role |
+|---|---|
+| `paths.py` | Folder layout constants (`ROOT`, `DATA`, `RAW`, `VIEWER`, `CODE_DIRS`); puts the code folders on `sys.path`. |
+
+### `model/`: prediction engine
+
+| File | Role |
+|---|---|
+| `model/predictor.py` | The engine: a log-odds blend of factors (skill, form, H2H, maps/veto, roster, stakes) with `CONFIG` holding every tunable weight. `predict_match(input)` is the entry point. |
+| `model/veto.py` | Veto subsystem: an exact probability distribution over legal map vetoes (`CONFIG["veto_mode"]`). |
+| `model/backtest.py` | Point-in-time history: loads `matches.json` / `matches_lower.json` / roster events, folds series Elo day by day (`Timeline`, `build_dataset`), and runs the train/test backtest. Shared by the viewer, gates and evaluation. |
+| `model/lineup_features.py` | Point-in-time lineup features from `data/lineups.json` + manual `data/roster_overrides.json`. |
+| `model/roster_flags.py` | Display-only "treat with caution" roster flags shown beside predictions (not a model input). |
+
+### `evaluation/`: is the model honest?
+
+| File | Role |
+|---|---|
+| `evaluation/walkforward.py` | Walk-forward fit and evaluation of factor weights; writes `data/walkforward_report.json` (the site's track record). |
+| `evaluation/fit_weights.py` | Fits factor multipliers on the train split. |
+| `evaluation/leakage_check.py` | Proves every feature is strictly pre-match (scramble / truncate tests with canaries). |
+
+### `collectors/`: sources to `data/`
+
+| File | Role |
+|---|---|
+| `collectors/lpfetch.py` | Polite, cached Liquipedia API fetcher (`data/raw/pages/`), throttling and stale-page ledger. |
+| `collectors/collect_liquipedia.py` | Parses cached tournament wikitext into `data/matches.json`, `team_aliases.json`, `matches_lower.json`. |
+| `collectors/rosters.py` | Stand-in / missing-IGL roster events from team pages (supervised: builds a candidate). |
+| `collectors/event_lineups.py` | Per-team, per-event lineups from cached tournament pages (no network). |
+| `collectors/lineups.py` | Per-match five-man lineups from Valve's regional-standings repository. |
+| `collectors/valve_results.py` | Second, independent results source (Valve rows) used only as a cross-check. |
+| `collectors/vrs.py` | Valve Regional Standings: `data/vrs.json`, `data/vrs_status.json`; `--check` fails when stale. |
+
+### `pipeline/`: scheduled jobs
+
+| File | Role |
+|---|---|
+| `pipeline/daily_refresh.py` | The refresh the workflows run: discovery, page refresh (`--live` for running events), rebuild, rosters, assets, VRS, lineups, second source, lower tier; `--check-status` turns long outages red. |
+| `pipeline/lower_refresh.py` | Daily refresh of lower-tier results (rating data only; failure only warns). |
+| `pipeline/backfill_lower.py` | Slow, resumable one-off backfill of 2025 lower-tier results. |
+| `pipeline/roster_watch.py` | Diffs the roster candidate against the live roster file for the review issue. |
+| `pipeline/promote_rosters.py` | Rebuilds and promotes the reviewed roster candidate (`--yes`). |
+| `pipeline/build_db.py` | Rebuilds `data/faceoff.db` (read-only SQLite copy with a `schema_doc` table). |
+
+### `checks/`: quality and freshness
+
+| File | Role |
+|---|---|
+| `checks/data_gates.py` | Gates a rebuilt `matches.json` against the published one; blocks the publish on failure. |
+| `checks/cross_source_check.py` | Agreement report between `matches.json` and `valve_results.json`. |
+| `checks/validate_freshness.py` | Independent schedule: Liquipedia vs repo vs deployed site; restarts the live refresh when behind. |
+| `checks/roster_overrides_check.py` | Validates `data/roster_overrides.json` names against known players and teams. |
+
+### `viewer/`: the site
+
+| File | Role |
+|---|---|
+| `viewer/build_bundle.py` | Emits `viewer/data-bundle.json`, the single versioned derived-data bundle. |
+| `viewer/build_viewer.py` | Computes everything from the data (`build_data`) and renders the static page from `template.html` + the bundle. |
+| `viewer/events.py` | Tournament discovery and parsing from cached pages (infobox, format, brackets, schedule). |
+| `viewer/fetch_assets.py` | Logos, map art, flags and team-page roster data from Liquipedia into `viewer/assets.json`. |
+| `viewer/team_colors.py` | Team colours from logo pixels (stdlib PNG decoder). |
+| `viewer/veto_cache.py` | Content-addressed cache of veto distributions (`data/veto_dist_cache.json`), fingerprinted on model code. |
+| `viewer/write_status.py` | Writes `public/status.json`, the small feed the page polls for new results. |
+
+Non-code viewer files: `viewer/template.html` (the whole front end: HTML, CSS,
+JS), `viewer/assets.json` (asset index, committed), `viewer/media/site_bg.jpg`
+(site background).
+
+### `tests/`
+
+One `test_<area>.py` per area, `unittest` only. `test_architecture.py` keeps
+this document and the layout in step.
+
+---
+
+## Data files (`data/`)
+
+| File | Written by | Notes |
+|---|---|---|
+| `matches.json` | `collect_liquipedia` | Source of truth for S/A results. |
+| `matches_lower.json` | `collect_liquipedia` via `lower_refresh` | Lower-tier rating data, never shown as events. |
+| `team_aliases.json` | `collect_liquipedia` | Output only. |
+| `roster_events.json` | `promote_rosters` | Human-confirmed; never auto-applied. |
+| `roster_overrides.json` | by hand | Dated manual lineup moves (`checks/roster_overrides_check.py`). |
+| `inactive_teams.json` | by hand | Teams hidden as inactive on the site. |
+| `lineups.json` | `collectors/lineups.py` | Incremental; failure-tolerant. |
+| `event_lineups.json` | `collectors/event_lineups.py` | |
+| `valve_results.json` | `collectors/valve_results.py` | Cross-check only. |
+| `vrs.json`, `vrs_status.json` | `collectors/vrs.py` | |
+| `refresh_status.json` | `daily_refresh` | Pages Liquipedia refused, with `stale_since`. |
+| `veto_dist_cache.json` | `viewer/build_viewer.py` | Build cache, committed so Vercel builds stay warm. |
+| `backtest_report.json`, `walkforward_report.json` | `backtest`, `walkforward` | Read by the viewer's track record. |
+| `veto_fixtures.json` | by hand | Test fixtures for the veto engine. |
+| `faceoff.db` | `build_db` | Read-only SQLite copy. |
+| `SOURCES.md` | by hand | Where every record comes from, and the terms followed. |
+| `raw/pages/`, `raw/media/`, `raw/*.txt` | `lpfetch`, `fetch_assets`, `daily_refresh` | Fetch cache, images, tracked page titles. |
+
+Generated and gitignored: `viewer/data-bundle.json`, `public/`, roster and
+fill-in candidates, research reports.
+
+---
+
+## Automation
+
+| Workflow | Cadence | Does |
+|---|---|---|
+| `daily-refresh.yml` | every 6 h + nightly | `pipeline/daily_refresh.py` → `checks/data_gates.py` → bundle → tests → page build check → `pipeline/build_db.py` → commit + push → roster-review issue → `--check-status` → `collectors/vrs.py --check` |
+| `live-refresh.yml` | every 10 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
+| `validate.yml` | every 30 min | `checks/validate_freshness.py`; restarts the live refresh when behind |
+
+Both refresh workflows share one concurrency group, so two runs never write
+the cache together. Vercel rebuilds on every push using `vercel.json`'s
+`buildCommand`; nothing needs installing (stdlib only).
+
+## Running locally
+
+```sh
+python -m unittest discover -s tests            # full suite
+python viewer/build_bundle.py viewer/data-bundle.json
+python viewer/build_viewer.py out/index.html     # open out/index.html
+python pipeline/daily_refresh.py --live          # backstop refresh from a home connection
+```
+
+---
+
+## Change log
+
+Newest first. One line per change that touches structure, data flow, a data
+file, a workflow or a public behaviour of the site.
+
+- **2026-10-14**: Repository reorganised into role folders: root-level model
+  code → `model/` and `evaluation/`; code that lived in `data/` → `collectors/`;
+  `scripts/` split into `pipeline/` and `checks/`; background originals →
+  `assets/backgrounds/`. One `paths.py` replaces the per-file `sys.path` edits.
+  Added this document and `tests/test_architecture.py`. Site output unchanged.
+- **2026-10-14**: Refresh fetches live pages first; a single Liquipedia refusal
+  heals on the next run instead of failing (`--max-stale-minutes 30` on live).
+- **2026-10-14**: UX overhaul: dashboard home, match pages, Stats page,
+  site background, inactive teams (`data/inactive_teams.json`).

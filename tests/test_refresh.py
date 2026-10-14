@@ -1,5 +1,5 @@
-"""Tests for the refresh pipeline's stale-page handling (data/lpfetch.py,
-scripts/daily_refresh.py). Everything is SYNTHETIC: a temporary cache and a
+"""Tests for the refresh pipeline's stale-page handling (collectors/lpfetch.py,
+pipeline/daily_refresh.py). Everything is SYNTHETIC: a temporary cache and a
 fake network; nothing touches Liquipedia or data/."""
 import email.message
 import io
@@ -13,8 +13,8 @@ import urllib.request
 from unittest import mock
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts", "viewer"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import lpfetch  # noqa: E402
 import daily_refresh as dr  # noqa: E402

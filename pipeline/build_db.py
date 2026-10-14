@@ -16,7 +16,7 @@ The file is built in a temp file and replaces data/faceoff.db only when its
 bytes differ, so an unchanged input never produces a commit. Builds are
 byte-identical for identical input with the same SQLite library version.
 
-USAGE (repo root):  python scripts/build_db.py [--out data/faceoff.db]
+USAGE (repo root):  python pipeline/build_db.py [--out data/faceoff.db]
 Stdlib only.
 """
 import argparse
@@ -29,7 +29,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 

@@ -9,7 +9,7 @@ data/event_lineups.json (squads and pages) and data/roster_events.json (lower-
 cased, as lineups store them); known teams from data/matches.json, lineups keys
 and data/team_aliases.json.
 
-Usage:  python scripts/roster_overrides_check.py [--file PATH]
+Usage:  python checks/roster_overrides_check.py [--file PATH]
 Exit 0 clean, 1 structural errors, 2 only unknown names (confirm the spelling,
 or that the player is genuinely new, then re-run).
 """
@@ -20,7 +20,8 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 import lineup_features as LF  # noqa: E402
 
 DATA = os.path.join(ROOT, "data")

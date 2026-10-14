@@ -1,6 +1,6 @@
 """Build data/matches.json from cached Liquipedia wikitext (real results only).
 
-Usage (from D:/Face-Off):  python data/collect_liquipedia.py [--offline]
+Usage (from D:/Face-Off):  python collectors/collect_liquipedia.py [--offline]
 
 Pipeline
   1. read page titles from data/raw/lp_titles_selected.txt
@@ -22,16 +22,17 @@ import re
 import sys
 from datetime import datetime, timezone
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 import lpfetch  # noqa: E402
 
 OFFLINE = "--offline" in sys.argv
 # --lower: build data/matches_lower.json (B-tier and below, rating data only)
 # from data/raw/lp_titles_lower.txt instead of data/matches.json
 LOWER = "--lower" in sys.argv
-LOWER_TITLES = os.path.join(HERE, "raw", "lp_titles_lower.txt")
-LOWER_OUT = os.path.join(HERE, "matches_lower.json")
+LOWER_TITLES = os.path.join(DATA, "raw", "lp_titles_lower.txt")
+LOWER_OUT = os.path.join(DATA, "matches_lower.json")
 TOP_TIERS = ("S", "A")
 # Series dated after today are excluded; only decided series are parsed, so
 # today's finished matches count. Override
@@ -420,13 +421,13 @@ def build(titles):
 def main():
     if LOWER:
         return main_lower()
-    matches, codes, disp = build(read_titles(os.path.join(HERE, "raw", "lp_titles_selected.txt")))
-    with open(os.path.join(HERE, "matches.json"), "w", encoding="utf-8") as f:
+    matches, codes, disp = build(read_titles(os.path.join(DATA, "raw", "lp_titles_selected.txt")))
+    with open(os.path.join(DATA, "matches.json"), "w", encoding="utf-8") as f:
         json.dump(matches, f, indent=1, ensure_ascii=False)
     used = {}
     for c in codes:
         used.setdefault(disp(c), set()).add(c)
-    with open(os.path.join(HERE, "team_aliases.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(DATA, "team_aliases.json"), "w", encoding="utf-8") as f:
         json.dump({"_note": "canonical name -> Liquipedia team-template codes seen; "
                             "resolved via Template:TeamShort/<code> redirects",
                    "aliases": {k: sorted(v) for k, v in sorted(used.items())}},
@@ -481,7 +482,7 @@ def build_lower():
     no lower-tier title list. Nothing is written."""
     if not os.path.exists(LOWER_TITLES):
         return None
-    kinds_path = os.path.join(HERE, "raw", "lp_titles_lower_kinds.json")
+    kinds_path = os.path.join(DATA, "raw", "lp_titles_lower_kinds.json")
     kinds = json.load(open(kinds_path, encoding="utf-8")) if os.path.exists(kinds_path) else {}
     listed = {t: k for k in ("qualifier", "sa_gap") for t in kinds.get(k, [])}
     idx = lpfetch.cached_pages()
@@ -499,7 +500,7 @@ def build_lower():
             t = t.rsplit("/", 1)[0]
 
     matches, _, _ = build(read_titles(LOWER_TITLES))
-    with open(os.path.join(HERE, "matches.json"), encoding="utf-8") as f:
+    with open(os.path.join(DATA, "matches.json"), encoding="utf-8") as f:
         top = {(m["date"], tuple(sorted((m["team_a"], m["team_b"])))) for m in json.load(f)}
     out = []
     for m in matches:

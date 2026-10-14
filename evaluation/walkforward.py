@@ -54,8 +54,8 @@ ACCEPTANCE TEST (fixed before running; all must hold to replace CONFIG):
   loss difference excludes 0; otherwise the report says "not significant".
 
 USAGE (from D:/Face-Off):
-    python walkforward.py                 # writes data/walkforward_report.json
-    python walkforward.py --block-days 91 --min-train 400
+    python evaluation/walkforward.py                 # writes data/walkforward_report.json
+    python evaluation/walkforward.py --block-days 91 --min-train 400
 Stdlib only, deterministic (bootstrap seeded).
 """
 import argparse
@@ -66,8 +66,8 @@ import os
 import sys
 from datetime import date, timedelta
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 import fit_weights as fw  # noqa: E402
@@ -337,7 +337,7 @@ def main(argv=None):
     rep = run(a.min_train, a.block_days)
     print()
     print(render(rep))
-    with open(os.path.join(HERE, "data", "walkforward_report.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(paths.DATA, "walkforward_report.json"), "w", encoding="utf-8") as f:
         json.dump(rep, f, indent=1)
     print("wrote data/walkforward_report.json")
 

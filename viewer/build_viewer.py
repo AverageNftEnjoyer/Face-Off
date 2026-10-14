@@ -36,9 +36,8 @@ from typing import Any
 
 HERE =os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "data"))
-sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 import events as E  # noqa: E402
@@ -144,7 +143,7 @@ def vrs_latest(path):
 
 
 def vrs_lookup(path):
-    """(date, assign, info) from data/vrs.py output.
+    """(date, assign, info) from collectors/vrs.py output.
 
     assign({team: roster}) -> {team: entry} matches every hub team to a global
     VRS entry in one pass, so no entry is given to two teams: first the same

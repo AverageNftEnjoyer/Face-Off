@@ -19,7 +19,7 @@ Requests: one GitHub API call (repository tree) and up to four raw-file
 downloads. In GitHub Actions the workflow's GITHUB_TOKEN is sent to the API
 to avoid the shared unauthenticated rate limit.
 
-USAGE (from the repo root):  python data/vrs.py [--offline | --check]
+USAGE (from the repo root):  python collectors/vrs.py [--offline | --check]
 """
 
 import json
@@ -29,11 +29,13 @@ import sys
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
+DATA = paths.DATA
 REPO = "ValveSoftware/counter-strike_regional_standings"
 TREE_URL = f"https://api.github.com/repos/{REPO}/git/trees/main?recursive=1"
 RAW_URL = f"https://raw.githubusercontent.com/{REPO}/main/"
-CACHE = os.path.join(HERE, "raw", "valve", "standings")
+CACHE = os.path.join(DATA, "raw", "valve", "standings")
 UA = "FaceOff-CS2-insights/0.2 (non-commercial fan analytics; https://github.com/AverageNftEnjoyer/Face-Off)"
 REGIONS = ("global", "europe", "americas", "asia")
 OFFLINE = "--offline" in sys.argv
@@ -58,7 +60,7 @@ _TREE = []
 
 
 def tree():
-    """The repository tree (one GitHub API call per process; data/lineups.py
+    """The repository tree (one GitHub API call per process; collectors/lineups.py
     reuses it when both run in the same daily refresh)."""
     if not _TREE:
         t = json.loads(_get(TREE_URL, api=True))
@@ -211,7 +213,7 @@ def refresh(get=None, paths=None, now=None):
     the status dict. vrs.json is rewritten only when the standings changed and
     the status file only when its content changed (no per-run timestamp)."""
     now = now or datetime.now(timezone.utc)
-    vpath, spath = os.path.join(HERE, "vrs.json"), os.path.join(HERE, "vrs_status.json")
+    vpath, spath = os.path.join(DATA, "vrs.json"), os.path.join(DATA, "vrs_status.json")
     prev = _read_json(vpath) or {}
     old_status = _read_json(spath) or {}
     try:
@@ -243,8 +245,8 @@ def refresh(get=None, paths=None, now=None):
 def main():
     os.makedirs(CACHE, exist_ok=True)
     if "--check" in sys.argv:
-        stored = (_read_json(os.path.join(HERE, "vrs.json")) or {}).get("date")
-        problems = assess(stored, _read_json(os.path.join(HERE, "vrs_status.json")),
+        stored = (_read_json(os.path.join(DATA, "vrs.json")) or {}).get("date")
+        problems = assess(stored, _read_json(os.path.join(DATA, "vrs_status.json")),
                           datetime.now(timezone.utc).date())
         for p in problems:
             print("VRS FRESHNESS:", p, file=sys.stderr)
@@ -257,13 +259,13 @@ def main():
         d = cached[-1][len("standings_global_"):-3]
         paths = {r: f"standings_{r}_{d}.md" for r in REGIONS
                  if os.path.exists(os.path.join(CACHE, f"standings_{r}_{d}.md"))}
-        prev = _read_json(os.path.join(HERE, "vrs.json")) or {}
+        prev = _read_json(os.path.join(DATA, "vrs.json")) or {}
         out = {"date": d.replace("_", "-"), "source": f"https://github.com/{REPO}",
                "tree_sha": prev.get("tree_sha"), "standings": {}}
         for region, path in paths.items():
             with open(os.path.join(CACHE, path), encoding="utf-8") as f:
                 out["standings"][region] = parse_table(f.read())
-        _write_if_changed(os.path.join(HERE, "vrs.json"), _dump(out))
+        _write_if_changed(os.path.join(DATA, "vrs.json"), _dump(out))
         print(f"VRS {out['date']}: " + ", ".join(f"{r} {len(v)} teams" for r, v in out["standings"].items()))
         return
     status = refresh()

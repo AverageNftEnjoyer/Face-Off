@@ -16,7 +16,7 @@ Gates:
                  corrections); a flood means the parser or the page broke.
   team_names     team names are non-empty display names; brand-new teams are
                  REPORTED (info), not failed. The phantom-team protection lives in
-                 data/collect_liquipedia.py, which refuses to resolve unknown
+                 collectors/collect_liquipedia.py, which refuses to resolve unknown
                  codes offline
   elo_bounds     per-team Elo, recomputed on old and new data. A team may move at
                  most max(--elo-bound, 40 x its new or changed series). In an
@@ -28,7 +28,7 @@ Gates:
                  an identity mismatch (same day, team and result, different
                  opponent) beyond valve_results.GATE_NEW_DISAGREE_MAX. Skipped
                  with a note when the second source is absent (never blocks on
-                 the second source being down). Report: scripts/cross_source_check.py
+                 the second source being down). Report: checks/cross_source_check.py
   vrs_freshness  the stored Valve Regional Standings (data/vrs.json) must not be
                  older than the newest Valve published at the last refresh
                  (data/vrs_status.json) nor older than Valve's measured cadence
@@ -39,7 +39,7 @@ Gates:
                  publish. The Elo bounds above stay S/A-only for the same reason.
 
 USAGE:
-  python scripts/data_gates.py [--new data/matches.json] [--old PATH | --old-git]
+  python checks/data_gates.py [--new data/matches.json] [--old PATH | --old-git]
          [--elo-bound N] [--allow-backfill] [--allow-no-baseline]
   --old-git compares against git HEAD (what the workflows use). Without --old or
   --old-git there is no baseline and the count / change / Elo gates are skipped
@@ -60,7 +60,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 REQUIRED = {
     "match_id": str, "date": str, "event": str, "team_a": str, "team_b": str,
@@ -111,7 +112,6 @@ def ensure_ids(matches):
     """Baselines written before stable_match_id existed get the same
     deterministic IDs derived from their fields, so old-vs-new comparison
     still works."""
-    sys.path.insert(0, os.path.join(ROOT, "data"))
     from collect_liquipedia import stable_match_id  # noqa: E402
     for m in matches:
         if "match_id" not in m:
@@ -161,7 +161,7 @@ def gate_lower(path=None):
     lower-tier data. The same schema rules as matches.json plus a known
     `kind`; malformed records are reported here and skipped by
     backtest.read_lower, and the refresh never writes a file that fails them
-    (scripts/lower_refresh.py)."""
+    (pipeline/lower_refresh.py)."""
     path = path or os.path.join(ROOT, "data", "matches_lower.json")
     if not os.path.exists(path):
         return {"note": "no data/matches_lower.json; ratings use S/A series only", "warnings": []}
@@ -294,8 +294,6 @@ def gate_cross_source(old, new, second=None):
     already-published discrepancies are reported, never re-failed. A missing
     or unreadable second source passes with a note: it is a cross-check, and
     its outage must never block a refresh."""
-    sys.path.insert(0, os.path.join(ROOT, "data"))
-    sys.path.insert(0, os.path.join(ROOT, "scripts"))
     try:
         import valve_results as vr
         import cross_source_check as xs
@@ -342,7 +340,6 @@ def gate_vrs_freshness(today=None, vrs_path=None, status_path=None):
     measured cadence allows (vrs.assess), or the last fetch failed while the
     stored copy is already past that limit."""
     from datetime import date as _date
-    sys.path.insert(0, os.path.join(ROOT, "data"))
     import vrs
     def rd(p):
         try:

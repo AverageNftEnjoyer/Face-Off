@@ -8,9 +8,9 @@ become tournaments, fixtures or predictions on the site (viewer/events.py
 reads lp_titles_selected.txt, never the lower-tier list). This keeps the file
 current; backtest.LOWER_TIER_ELO_WEIGHT decides whether it moves Elo.
 
-Run by scripts/daily_refresh.py at the END of the daily run (never in --live),
+Run by pipeline/daily_refresh.py at the END of the daily run (never in --live),
 after every S/A step, inside a try/except: any failure here is a WARNING and the
-committed file stays as it was. All requests go through data/lpfetch.py (cache,
+committed file stays as it was. All requests go through collectors/lpfetch.py (cache,
 2.5 s spacing, backoff); this step stops asking once REQUEST_BUDGET requests were
 sent (what it did not get to is picked up by the next run: everything fetched is
 cached).
@@ -38,7 +38,7 @@ Steps
      keeps at least MIN_KEEP_FRAC of the old series; otherwise the old file
      stays and a warning is printed.
 
-USAGE (repo root):  python scripts/lower_refresh.py [--dry-run]
+USAGE (repo root):  python pipeline/lower_refresh.py [--dry-run]
 Stdlib only.
 """
 import json
@@ -48,10 +48,8 @@ import time
 from datetime import date, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "viewer", "scripts"):
-    p = os.path.join(ROOT, sub)
-    if p not in sys.path:
-        sys.path.insert(0, p)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import lpfetch  # noqa: E402
 import events as E  # noqa: E402

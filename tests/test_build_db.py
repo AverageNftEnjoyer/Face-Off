@@ -1,4 +1,4 @@
-"""Tests for scripts/build_db.py (data/faceoff.db), on the real data files."""
+"""Tests for pipeline/build_db.py (data/faceoff.db), on the real data files."""
 import json
 import os
 import sqlite3
@@ -7,8 +7,8 @@ import tempfile
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 import build_db  # noqa: E402
 
 

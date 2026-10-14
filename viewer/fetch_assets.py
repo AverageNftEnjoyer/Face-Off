@@ -9,7 +9,7 @@ Fetch the viewer's visual assets and roster data from Liquipedia, politely.
   * imageinfo with iiurlwidth: Liquipedia serves a server-side thumbnail URL,
     so we download small images (logos ~160px, maps ~640px, flags ~36px)
 
-All API calls go through data/lpfetch.py (descriptive UA, >= 2.5 s apart,
+All API calls go through collectors/lpfetch.py (descriptive UA, >= 2.5 s apart,
 cached under data/raw/pages/). Image downloads are cached under
 data/raw/media/ and spaced >= 1.5 s apart. Writes
 viewer/assets.json (no image bytes; the build step embeds them).
@@ -31,8 +31,8 @@ import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-sys.path.insert(0, os.path.join(ROOT, "data"))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import collect_liquipedia as C  # noqa: E402
 import lpfetch  # noqa: E402
@@ -118,7 +118,7 @@ def team_record(title, txt):
 
 
 def cached_event_text(title=EVENT):
-    """Tournament pages were cached by data/collect_liquipedia.py in batches of 8
+    """Tournament pages were cached by collectors/collect_liquipedia.py in batches of 8
     from lp_titles_selected.txt; read them back the same way (no network)."""
     titles = [l.strip() for l in open(os.path.join(ROOT, "data", "raw", "lp_titles_selected.txt"),
                                       encoding="utf-8") if l.strip()]

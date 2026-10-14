@@ -49,12 +49,12 @@ public/
 viewer/data-bundle.json
 
 # --- supervised roster flow: built each refresh, reviewed via an issue, never committed ---
-# (scripts/promote_rosters.py rebuilds the candidate from the committed cache)
+# (pipeline/promote_rosters.py rebuilds the candidate from the committed cache)
 data/roster_events.candidate.json
 data/roster_diff.md
 .claude/worktrees/
 
-# --- second results source: fill-in review list (scripts/cross_source_check.py
+# --- second results source: fill-in review list (checks/cross_source_check.py
 # --fill-candidates); never merged, never committed ---
 data/valve_fill.candidate.json
 

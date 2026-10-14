@@ -17,8 +17,8 @@ from contextlib import redirect_stdout
 from unittest import mock
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts", "viewer"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import data_gates as gates  # noqa: E402
 import roster_watch as rw  # noqa: E402
@@ -278,7 +278,7 @@ class TestRosterWatch(unittest.TestCase):
                 body = _read(rp)
                 self.assertIn("Team A", body)
                 self.assertIn("donk", body)
-                self.assertIn("scripts/promote_rosters.py --yes", body)
+                self.assertIn("pipeline/promote_rosters.py --yes", body)
 
     def test_no_candidate_is_an_error(self):
         with tempfile.TemporaryDirectory() as d:

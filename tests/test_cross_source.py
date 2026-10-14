@@ -1,5 +1,5 @@
-"""Second results source (data/valve_results.py), the cross-source report
-(scripts/cross_source_check.py) and the cross_source gate. Every fixture is
+"""Second results source (collectors/valve_results.py), the cross-source report
+(checks/cross_source_check.py) and the cross_source gate. Every fixture is
 SYNTHETIC (made-up teams, dates and pages); nothing touches the network or the
 real cache."""
 import json
@@ -9,8 +9,8 @@ import tempfile
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402  (puts every code folder on sys.path)
 
 import cross_source_check as xs  # noqa: E402
 import data_gates as gates  # noqa: E402
@@ -282,7 +282,7 @@ class TestFillCandidatesNeverMerged(unittest.TestCase):
     def test_nothing_reads_the_candidate_file(self):
         """The fill-in list is a review list: no pipeline module may read it."""
         hits = []
-        for sub in ("", "data", "scripts", "viewer"):
+        for sub in ("",) + paths.CODE_DIRS:
             d = os.path.join(ROOT, sub)
             for fn in os.listdir(d):
                 if fn.endswith(".py") and fn != "cross_source_check.py":

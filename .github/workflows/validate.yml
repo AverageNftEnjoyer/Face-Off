@@ -34,7 +34,7 @@ jobs:
       - name: Compare Liquipedia, the repo and the deployed site
         id: check
         continue-on-error: true
-        run: python scripts/validate_freshness.py
+        run: python checks/validate_freshness.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # the one GitHub API call that reads Valve's tree
 

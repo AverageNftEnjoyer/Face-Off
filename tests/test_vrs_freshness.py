@@ -9,8 +9,8 @@ import unittest
 from datetime import date, datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for sub in ("", "data", "scripts", "viewer"):
-    sys.path.insert(0, os.path.join(ROOT, sub))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import vrs  # noqa: E402
 import data_gates as dg  # noqa: E402
@@ -28,13 +28,13 @@ def paths_with(*extra):
 class Base(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = (vrs.HERE, vrs.CACHE)
-        vrs.HERE = self.tmp.name
+        self.saved = (vrs.DATA, vrs.CACHE)
+        vrs.DATA = self.tmp.name
         vrs.CACHE = os.path.join(self.tmp.name, "cache")
         self.calls = []
 
     def tearDown(self):
-        vrs.HERE, vrs.CACHE = self.saved
+        vrs.DATA, vrs.CACHE = self.saved
         self.tmp.cleanup()
 
     def get(self, url):

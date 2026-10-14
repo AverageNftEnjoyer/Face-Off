@@ -2,7 +2,7 @@
 """
 Cross-source agreement: data/matches.json (primary) against the second source
 data/valve_results.json (Valve regional-standings match rows, built by
-data/valve_results.py). Read-only: it never writes matches.json.
+collectors/valve_results.py). Read-only: it never writes matches.json.
 
 Matching: same team pair, dates at most valve_results.DATE_WINDOW_DAYS apart,
 one-to-one (closest dates first). The second source only knows the series
@@ -24,7 +24,7 @@ Freshness (measured from the Valve repository tree): when a series played on
 day D can first be seen in the second source = the first snapshot after D.
 
 USAGE (repo root):
-  python scripts/cross_source_check.py [--write] [--fill-candidates]
+  python checks/cross_source_check.py [--write] [--fill-candidates]
     --write            write data/cross_source_report.json
     --fill-candidates  ALSO write data/valve_fill.candidate.json (gitignored):
                        untracked second-source series dated after the newest
@@ -32,7 +32,7 @@ USAGE (repo root):
                        every unknown field null. A review list only: nothing
                        reads it and nothing merges it (see docs/pipeline.md).
 Exit 0 always unless the inputs cannot be read (exit 2); the blocking check
-is the cross_source gate in scripts/data_gates.py.
+is the cross_source gate in checks/data_gates.py.
 Stdlib only, no network.
 """
 import json
@@ -41,7 +41,8 @@ import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(ROOT, "data"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import valve_results as vr  # noqa: E402
 
@@ -252,7 +253,7 @@ def main(argv=None):
     second = vr.load()
     if primary is None or second is None:
         print("cross_source_check: data/matches.json or data/valve_results.json missing "
-              "(run python data/valve_results.py)", file=sys.stderr)
+              "(run python collectors/valve_results.py)", file=sys.stderr)
         return 2
     rep = compare(primary, second, _load("matches_lower.json"))
     untracked = rep.pop("_untracked", [])

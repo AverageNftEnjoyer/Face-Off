@@ -32,7 +32,7 @@ WHAT IS FETCHED
     output and data/SOURCES.md).
 
 POLITENESS
-  All requests go through data/lpfetch.py (cached, never re-fetched;
+  All requests go through collectors/lpfetch.py (cached, never re-fetched;
   action=parse never used). This job sets lpfetch.MIN_GAP = 5.0 s (twice the
   daily refresh's gap), reads pages 20 per request, and stops when
   Liquipedia still answers 429 after lpfetch's backoff (30/90/180 s, or the
@@ -40,10 +40,10 @@ POLITENESS
   where the last one stopped. Progress: data/raw/backfill_2025.json.
 
 USAGE (from D:/Face-Off)
-  python scripts/backfill_lower.py plan      # discovery + per-month table
-  python scripts/backfill_lower.py fetch     # Dec 2025 -> Jan 2025, newest first
-  python scripts/backfill_lower.py titles    # (re)write data/raw/lp_titles_lower.txt
-Then: python data/collect_liquipedia.py --lower   (or --offline --lower)
+  python pipeline/backfill_lower.py plan      # discovery + per-month table
+  python pipeline/backfill_lower.py fetch     # Dec 2025 -> Jan 2025, newest first
+  python pipeline/backfill_lower.py titles    # (re)write data/raw/lp_titles_lower.txt
+Then: python collectors/collect_liquipedia.py --lower   (or --offline --lower)
 Stdlib only.
 """
 import json
@@ -55,9 +55,8 @@ import urllib.error
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(ROOT, "data"))
-sys.path.insert(0, os.path.join(ROOT, "viewer"))
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import lpfetch  # noqa: E402
 import events as E  # noqa: E402
@@ -73,7 +72,7 @@ BATCH = 20
 # B-tier league seasons (ESL Challenger League regions run ~110 days) are real
 # results; for rating data they are kept up to this length (the site's 45-day
 # rule is about what counts as one tournament on a page, not about the data).
-# One value for the backfill and the daily refresh (scripts/lower_refresh.py).
+# One value for the backfill and the daily refresh (pipeline/lower_refresh.py).
 from lower_refresh import LOWER_MAX_DAYS as LEAGUE_MAX_DAYS  # noqa: E402
 REGION = DR.SKIP_SEGMENTS - {"Open"} | {
     "Closed Qualifier", "China", "MENA", "Rest of Asia", "Asia-Pacific", "Oceania and Southeast Asia",

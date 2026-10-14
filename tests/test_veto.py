@@ -18,7 +18,8 @@ import tokenize
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import predictor  # noqa: E402
 import veto  # noqa: E402
@@ -114,7 +115,7 @@ class TestI0NoEntityLiterals(unittest.TestCase):
         return bad
 
     def test_veto_module(self):
-        src = open(os.path.join(ROOT, "veto.py"), encoding="utf-8").read()
+        src = open(os.path.join(ROOT, "model", "veto.py"), encoding="utf-8").read()
         self.assertEqual(self.hits(src, self.names()), [])
 
     def test_predictor_veto_paths(self):
@@ -123,7 +124,7 @@ class TestI0NoEntityLiterals(unittest.TestCase):
         bad = []
         for fn in self.VETO_FUNCS:
             bad += self.hits(inspect.getsource(getattr(predictor, fn)), names)
-        src = open(os.path.join(ROOT, "predictor.py"), encoding="utf-8").read()
+        src = open(os.path.join(ROOT, "model", "predictor.py"), encoding="utf-8").read()
         cfg = src[src.index("CONFIG = {"):src.index("MAPS = CONFIG")]
         bad += self.hits(cfg, names, allow_legacy=True)
         self.assertEqual(bad, [])
