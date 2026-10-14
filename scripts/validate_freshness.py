@@ -12,6 +12,10 @@ old data. This script looks from the outside and answers three questions.
                  tournament is on; none otherwise)
   B. REFRESH     Did the last refresh say it could not update a live page?
                  (data/refresh_status.json)
+  D. VALVE       Are the stored Valve Regional Standings (data/vrs.json) older
+                 than the newest file in Valve's repository, or older than
+                 Valve's measured cadence allows? (one GitHub API call; the
+                 verdict starts the DAILY refresh, which fetches standings)
   C. SITE        Is the deployed site built from the repo's current
                  data/matches.json? (its page carries a data_hash; a mismatch
                  right after a push is a deploy in progress, not a failure)
@@ -91,6 +95,33 @@ def live_pages_behind(live):
     return sorted(behind)
 
 
+def vrs_problems(tree_obj=None, today=None):
+    """Stored standings vs the newest Valve published (live tree read) and vs
+    Valve's cadence. A tree that cannot be read falls back to the status the
+    last refresh recorded (a warning is printed)."""
+    import vrs
+    stored = None
+    try:
+        with open(os.path.join(ROOT, "data", "vrs.json"), encoding="utf-8") as f:
+            stored = json.load(f).get("date")
+    except (OSError, ValueError):
+        pass
+    try:
+        paths = [t["path"] for t in (tree_obj or vrs.tree()).get("tree", [])]
+        pub = vrs.published(paths)
+        status = {"published": max(pub), "stale_after_days": vrs.cadence(pub)["stale_after"]}
+    except Exception as e:   # noqa: BLE001
+        print(f"could not read Valve's repository tree ({type(e).__name__}: {e}); "
+              "checking against the status the last refresh recorded", file=sys.stderr)
+        try:
+            with open(os.path.join(ROOT, "data", "vrs_status.json"), encoding="utf-8") as f:
+                status = json.load(f)
+        except (OSError, ValueError):
+            status = {}
+        status = {k: status.get(k) for k in ("published", "stale_after_days")}
+    return vrs.assess(stored, status, today or date.today())
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     url = argv[argv.index("--site") + 1] if "--site" in argv else SITE
@@ -122,6 +153,12 @@ def main(argv=None):
     except (OSError, ValueError):
         pass
 
+    # D. Valve standings against Valve's repository
+    vrs_bad = []
+    if "--no-valve" not in argv:
+        vrs_bad = vrs_problems()
+        problems.extend(vrs_bad)
+
     # C. the deployed site against the repo
     try:
         theirs, mine = site_hash(url), local_hash()
@@ -142,7 +179,8 @@ def main(argv=None):
     out = os.environ.get("GITHUB_OUTPUT")
     if out:
         with open(out, "a", encoding="utf-8") as f:
-            f.write(f"code={code}\nneeds_refresh={'true' if problems else 'false'}\n")
+            f.write(f"code={code}\nneeds_refresh={'true' if len(problems) > len(vrs_bad) else 'false'}\n")
+            f.write(f"needs_vrs_refresh={'true' if vrs_bad else 'false'}\n")
     return code
 
 

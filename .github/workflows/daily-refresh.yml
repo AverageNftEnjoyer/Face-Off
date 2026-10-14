@@ -34,7 +34,7 @@ jobs:
       - name: Refresh Liquipedia data and Valve standings (rate-limited, cached)
         run: python scripts/daily_refresh.py
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # for the one GitHub API call in data/vrs.py
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # the one GitHub API call in data/vrs.py (shared with data/lineups.py)
 
       # Quality gates run BEFORE anything is published: a red gate blocks the
       # commit below and opens an issue with the report. Never ship bad data.
@@ -126,3 +126,39 @@ jobs:
       # when it kept refusing (the data is still committed above)
       - name: Fail loudly if a live page could not be refreshed
         run: python scripts/daily_refresh.py --check-status --max-stale-minutes 0
+
+      # Valve standings must be as new as Valve published them. vrs.py never
+      # fails the refresh itself (S/A data must still publish); it records a
+      # failure in data/vrs_status.json, and this step turns a failed fetch or a
+      # stale snapshot into a red run plus an issue. Offline: reads the files
+      # the refresh just wrote. Runs even when an earlier step failed.
+      - name: Check the Valve standings are current
+        id: vrs
+        if: ${{ !cancelled() }}
+        run: |
+          set -o pipefail
+          python data/vrs.py --check 2>&1 | tee /tmp/vrs.txt
+
+      - name: Open an issue when the Valve standings are stale
+        if: ${{ !cancelled() && steps.vrs.outcome == 'failure' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create data-pipeline --color B60205 --description "Automated data pipeline alerts" 2>/dev/null || true
+          {
+            echo "The Valve Regional Standings are stale or could not be refreshed. Run: $RUN_URL"
+            echo
+            echo '```'
+            cat /tmp/vrs.txt
+            cat data/vrs_status.json
+            echo '```'
+          } > /tmp/issue.md
+          existing=$(gh issue list --label data-pipeline --state open --search "Valve standings stale in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue.md
+          else
+            gh issue create --title "Valve standings stale ($(date -u +%Y-%m-%d))" \
+              --body-file /tmp/issue.md --label data-pipeline
+          fi

@@ -29,6 +29,11 @@ Gates:
                  opponent) beyond valve_results.GATE_NEW_DISAGREE_MAX. Skipped
                  with a note when the second source is absent (never blocks on
                  the second source being down). Report: scripts/cross_source_check.py
+  vrs_freshness  the stored Valve Regional Standings (data/vrs.json) must not be
+                 older than the newest Valve published at the last refresh
+                 (data/vrs_status.json) nor older than Valve's measured cadence
+                 allows (max recent gap + 7 days). Offline; a fetch failure
+                 alone warns here and is raised by `vrs.py --check` in the workflow.
   lower_tier     data/matches_lower.json schema (same rules + a known `kind`).
                  REPORT ONLY, never blocks: lower-tier data must not stop an S/A
                  publish. The Elo bounds above stay S/A-only for the same reason.
@@ -330,6 +335,32 @@ def gate_cross_source(old, new, second=None):
     return out
 
 
+def gate_vrs_freshness(today=None, vrs_path=None, status_path=None):
+    """Valve standings freshness (offline: reads data/vrs.json and the
+    data/vrs_status.json the refresh wrote). Fails when the stored standings are
+    older than the newest Valve published at the last check, older than Valve's
+    measured cadence allows (vrs.assess), or the last fetch failed while the
+    stored copy is already past that limit."""
+    from datetime import date as _date
+    sys.path.insert(0, os.path.join(ROOT, "data"))
+    import vrs
+    def rd(p):
+        try:
+            with open(p, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            return None
+    stored = (rd(vrs_path or os.path.join(ROOT, "data", "vrs.json")) or {}).get("date")
+    status = rd(status_path or os.path.join(ROOT, "data", "vrs_status.json"))
+    problems = vrs.assess(stored, status, today or _date.today())
+    # a fetch failure alone is reported loudly by the workflow's `vrs.py --check`
+    # step and issue; it blocks the publish only when the stored copy is stale
+    blocking = [p for p in problems if not p.startswith("the last Valve standings refresh failed")]
+    return {"stored": stored, "published": (status or {}).get("published"),
+            "expected_next": (status or {}).get("expected_next"),
+            "problems": blocking, "warnings": [p for p in problems if p not in blocking]}
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     new_path = argv[argv.index("--new") + 1] if "--new" in argv else os.path.join(ROOT, "data", "matches.json")
@@ -377,6 +408,11 @@ def main(argv=None):
     gates["elo_bounds"] = {"passed": not elo.get("violations") and not elo.get("error"), **elo}
     xs = gate_cross_source(old, new)
     gates["cross_source"] = {"passed": not xs.get("problems"), **xs}
+
+    vf = gate_vrs_freshness()
+    gates["vrs_freshness"] = {"passed": not vf["problems"], **vf}
+    for w in vf["warnings"]:
+        print(f"WARNING vrs_freshness: {w}", file=sys.stderr)
 
     passed = all(g["passed"] for g in gates.values())
     # lower-tier data: reported, never blocking (added after `passed` on purpose)

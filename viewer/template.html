@@ -1521,6 +1521,9 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
 .pc-lo { color: var(--loss); }
 td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .board .num.pc-hi, .board .num.pc-mid, .board .num.pc-lo { text-shadow: 0 0 28px color-mix(in srgb, currentColor 25%, transparent); }
+/* home: coming up across the top */
+.cugrid { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+.cugrid > .nextm { height: 100%; }
 /* call history */
 .hlist { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
 .hlist li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .6rem; align-items: center; padding: .4rem 0; border-top: 1px solid var(--line); }
@@ -2661,7 +2664,7 @@ function closeChooser() {
   if (d && d.open) { if (d.close) d.close(); else d.removeAttribute("open"); }
 }
 
-function rail() {
+function homeLists() {
   const top = NAMES.filter(n => T[n].vrs).slice(0, 10);
   const keyOf = m => (m.day || "") + (m.when || "");
   const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1))
@@ -2706,15 +2709,23 @@ function rail() {
       <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${pickBox}${split(m)}</a>`;
   };
+  return { top, next, done, doneRow, upcoming };
+}
+// Coming up: the next scheduled matches with the model's pick, across the top of the home page
+function comingUp() {
+  const { next, upcoming } = homeLists();
+  return `<section class="panel comingup"><h2>Coming up <span class="dim">the model's pick for each</span></h2>
+    ${next.length ? `<div class="cugrid">${next.map(upcoming).join("")}</div>`
+      : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
+  </section>`;
+}
+function rail() {
+  const { top, done, doneRow } = homeLists();
   const shownTeams = PAIR || [];
   return `
   <section class="panel"><h2>Top of the standings <span class="dim">VRS, last 5</span></h2>
     <div class="rlist">${top.map(n => `<a href="#t-${T[n].slug}"${shownTeams.includes(n) ? ` class="on ${n === shownTeams[0] ? "oa" : "ob"}" title="${esc(n)} is in the matchup above"` : ""}><span class="rk">#${T[n].vrs.rank}</span>${logo(n, "sm")}<span class="nm">${esc(n)}</span>
       <span class="form5" aria-label="last five: ${T[n].results.slice(0, 5).map(r => r.won ? "won" : "lost").join(", ") || "no results"}">${T[n].results.slice(0, 5).reverse().map(r => `<i class="${r.won ? "W" : "L"}"></i>`).join("")}</span></a>`).join("")}</div>
-  </section>
-  <section class="panel"><h2>Coming up</h2>
-    ${next.length ? next.map(upcoming).join("")
-      : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
   </section>
   ${done.length ? `<section class="panel"><h2>Latest results</h2>${done.map(doneRow).join("")}</section>` : ""}`;
 }
@@ -2759,7 +2770,7 @@ function viewHome() {
     o = { change: true, back, next: f, rf: rfTool(null, desk.a, desk.b) };
   }
   PAIR = [desk.a, desk.b];
-  return `${homeBand()}<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
+  return `${comingUp()}<div class="desk"><div class="desk-main">${matchDesk(pred, desk.a, desk.b, o)}</div><aside class="rail" aria-label="Explore">${rail()}</aside></div>${builder()}`;
 }
 
 /* ---------------- tournaments index ---------------- */
@@ -3398,34 +3409,6 @@ function evHub(e) {
 
 // Home page: the tournaments running now and the ones about to start, each with its next series.
 // Respects the tier filter chosen on the Tournaments page.
-function homeBand() {
-  const evs = EV.filter(tierShown);
-  const byStart = (a, b) => a.start.localeCompare(b.start);
-  const live = evs.filter(e => e.status === "live").sort(byStart);
-  const up = evs.filter(e => e.status === "upcoming").sort(byStart);
-  let list = [...live, ...up.filter(e => dayDiff(DATA.as_of, e.start) <= FOLLOW.homeSoonDays)].slice(0, FOLLOW.homeCards);
-  if (!list.length && up.length) list = [up[0]];
-  if (!list.length) return "";
-  const card = e => {
-    const nx = e.matches.filter(m => (pendingNow(m) || isLive(m)) && m.t1 && m.t2).sort(byTime)[0];
-    let pick = "";
-    if (nx) {
-      const pred = decode(nx.pred);
-      const p = pred ? pFor(pred, boOf(nx)).p : null;
-      const pk = p == null ? null : p >= .5 ? nx.t1 : nx.t2, pp = p == null ? null : displayPercent([p, 1 - p])[p >= .5 ? 0 : 1];
-      const d = localDay(nx.when) || nx.day;
-      pick = `<span class="hbnext"><small>${isLive(nx) ? "Live now" : `Next: ${esc(dayWord(d))}${nx.when ? ` ${esc(clock(nx.when))}` : ""}`}</small>
-        <span class="hbm">${logo(nx.t1, "xs")}<em>${esc(nx.t1)}</em><i>vs</i><em>${esc(nx.t2)}</em>${logo(nx.t2, "xs")}</span>${rfBadge(rfSides(nx.rf, nx.t1, nx.t2), true)}
-        ${pk ? `<span class="hbp">Model pick <b>${esc(pk)}</b> ${pp}%</span>` : ""}</span>`;
-    }
-    const total = dayDiff(e.start, e.end) + 1, today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 1), total);
-    const when = e.status === "live" ? `Day ${today} of ${total}` : startsIn(e).replace(/^./, c => c.toUpperCase());
-    return `<a class="hbcard ${e.status}" href="#e-${e.slug}">
-      <span class="hbh">${evImg(e, "hbl")}<span class="hbt"><b>${tierTag(e)}${esc(shortEv(e.name))}</b><span>${statusChip(e)} ${esc(when)}, ${esc(dayRange(e))}</span></span></span>
-      ${pick || `<span class="hbnext"><small>${e.matches.some(m => m.t1 && m.t2) ? "Schedule to come" : "Teams and schedule to come"}</small></span>`}</a>`;
-  };
-  return `<section class="hband" aria-label="Tournaments now and next">${list.map(card).join("")}</section>`;
-}
 
 function evTeamsList(e) {
   const fromParts = e.participants.map(p => p.team);
@@ -3499,7 +3482,7 @@ function countdown(when) {
 
 /* ---------------- teams ---------------- */
 function viewTeams() {
-  return `<section class="panel"><h2>Teams <span class="dim">ordered by Valve Regional Standings${DATA.vrs_date ? ` (${fmtDate(DATA.vrs_date)})` : ""}; teams outside the standings follow by Elo</span></h2>
+  return `<section class="panel"><h2>Teams <span class="dim">ordered by Valve Regional Standings${DATA.vrs_date ? ` (${fmtDate(DATA.vrs_date)}${!DATA.vrs_latest ? "" : DATA.vrs_latest > DATA.vrs_date ? `; Valve published ${fmtDate(DATA.vrs_latest)}, loading` : ", latest published by Valve"})` : ""}; teams outside the standings follow by Elo</span></h2>
     <div class="tgrid">${NAMES.map(n => `<a class="tcard" href="#t-${T[n].slug}">${logo(n, "lg")}<span class="cond">${esc(n)}</span><span class="small dim">${esc(vrsLine(n))}</span></a>`).join("")}</div></section>`;
 }
 

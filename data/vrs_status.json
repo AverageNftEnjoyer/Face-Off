@@ -1,0 +1,10 @@
+{
+ "ok": true,
+ "stored": "2026-10-05",
+ "published": "2026-10-05",
+ "typical_gap_days": 28,
+ "stale_after_days": 42,
+ "expected_next": "2026-11-02",
+ "error": null,
+ "failing_since": null
+}

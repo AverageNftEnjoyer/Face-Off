@@ -502,7 +502,13 @@ def main(argv=None):
 
     import vrs          # Valve Regional Standings (GitHub; new file roughly monthly)
     vrs.OFFLINE = False
-    vrs.main()
+    # refresh() never raises: on a failure the last good vrs.json stays and
+    # data/vrs_status.json says so (ok=false). The run goes on so S/A data still
+    # publishes, and the workflow's `vrs.py --check` step plus the data gate
+    # turn it into a red run and an issue: never silent.
+    vstat = vrs.refresh()
+    print(f"VRS stored {vstat.get('stored')}, newest published by Valve {vstat.get('published')}"
+          + ("" if vstat["ok"] else f" (REFRESH FAILED: {vstat['error']})"))
 
     # lineups are optional input (roster-core features): a failure here must
     # never break the data refresh, so it is reported and the old file is kept

@@ -133,6 +133,16 @@ def _norm(name):
     return "".join(w for w in words if w not in _DROP) or "".join(words)
 
 
+def vrs_latest(path):
+    """Newest standings date Valve had published at the last refresh
+    (data/vrs_status.json), or None when unknown."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f).get("published") or None
+    except (OSError, ValueError):
+        return None
+
+
 def vrs_lookup(path):
     """(date, assign, info) from data/vrs.py output.
 
@@ -747,6 +757,8 @@ def build_data():
         "track": round_floats(track, 6),
         "map_info": {mp: {"location": v.get("location", "")} for mp, v in assets["maps"].items()},
         "factors": FACTORS, "vrs_date": vrs_date, "vmaps": VMAPS,
+        # newest Valve standings date seen at the last refresh (may equal vrs_date)
+        "vrs_latest": vrs_latest(os.path.join(ROOT, "data", "vrs_status.json")),
         # veto comfort, so the page can finish a half-chosen veto the way the engine does
         "vcfg": [pr.CONFIG["veto_comfort"], pr.CONFIG["veto_comfort_k"]],
         # the live map pool (maps with recent plays), the fallback when a tournament lists none

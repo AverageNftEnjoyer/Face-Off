@@ -31,14 +31,16 @@ class _Resp:
 class UnchangedPageTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
-        self.saved = (lpfetch.CACHE, lpfetch.RUN_STARTED, lpfetch.MIN_GAP)
-        lpfetch.CACHE, lpfetch.MIN_GAP = self.tmp, 0
+        self.saved = (lpfetch.CACHE, lpfetch.RUN_STARTED, lpfetch.MIN_GAP, lpfetch._PAGE_INDEX)
+        # the page index is module state other tests build; this test's temp
+        # records must not be added to it
+        lpfetch.CACHE, lpfetch.MIN_GAP, lpfetch._PAGE_INDEX = self.tmp, 0, None
         lpfetch.RUN_STARTED = "2999-01-01T00:00:00Z"      # every cached copy is stale this run
         lpfetch._CONFIRMED.clear()
         lpfetch.NETWORK_REQUESTS[0] = 0
 
     def tearDown(self):
-        lpfetch.CACHE, lpfetch.RUN_STARTED, lpfetch.MIN_GAP = self.saved
+        lpfetch.CACHE, lpfetch.RUN_STARTED, lpfetch.MIN_GAP, lpfetch._PAGE_INDEX = self.saved
         lpfetch._CONFIRMED.clear()
 
     def _query(self, body):

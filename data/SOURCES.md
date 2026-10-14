@@ -235,3 +235,5 @@ duplicates).
   FACEIT-hosted matches, not the tracked S/A-tier events.
 - Kaggle / Hugging Face CS2 datasets: not needed once Liquipedia worked. None was
   downloaded, so no third-party license applies.
+
+- Standings freshness (added 2026-10-14): Valve publishes standings on the first Monday of each month (28-35 day gaps since 2025-03; weekly before). `vrs.py` picks the newest by date on every daily run, keeps the last good `vrs.json` on any failure and records it in `vrs_status.json` (published, expected_next, stale_after_days, error). The `vrs_freshness` data gate, `vrs.py --check` (workflow step + issue) and `validate_freshness.py` fail when the stored standings are older than Valve published or than max recent gap + 7 days.
