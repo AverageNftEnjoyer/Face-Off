@@ -844,6 +844,15 @@ def main(out_path):
     # The previously deployed page (built from the last good bundle) keeps serving.
     bundle = load_bundle(os.path.join(HERE, BUNDLE_NAME))
     data = bundle["data"]
+    # teams that no longer compete (data/inactive_teams.json): hidden from team lists,
+    # pickers, search and standings; their past matches stay in the record
+    inactive_path = os.path.join(ROOT, "data", "inactive_teams.json")
+    if os.path.exists(inactive_path):
+        with open(inactive_path, encoding="utf-8") as f:
+            for row in json.load(f):
+                t = row.get("team") if isinstance(row, dict) else None
+                if t in data["teams"]:
+                    data["teams"][t]["inactive"] = True
     meta = {k: bundle[k] for k in ("bundle_version", "generated_at",
                                    "data_through", "data_hash", "vrs_date")}
     assets = json.load(open(os.path.join(HERE, "assets.json"), encoding="utf-8"))
@@ -858,6 +867,8 @@ def main(out_path):
         "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
         "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
         "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
+        # the site background (a darkened, desaturated Mirage still; viewer/media/site_bg.jpg)
+        "site": {"bg": imw.url("viewer/media/site_bg.jpg")} if os.path.exists(os.path.join(ROOT, "viewer", "media", "site_bg.jpg")) else {},
     }
     pruned = imw.prune()
     tpl = open(os.path.join(HERE, "template.html"), encoding="utf-8").read()
