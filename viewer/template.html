@@ -1522,26 +1522,18 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
 .pc-lo { color: var(--loss); }
 td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .board .num.pc-hi, .board .num.pc-mid, .board .num.pc-lo { text-shadow: 0 0 28px color-mix(in srgb, currentColor 25%, transparent); }
-.rec-row3 { --rh: clamp(36rem, 70vh, 52rem); }
+/* call history */
+.hlist { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.hlist li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .6rem; align-items: center; padding: .4rem 0; border-top: 1px solid var(--line); }
+.hlist li:first-child { border-top: 0; }
+.hmatch { display: grid; gap: .15rem; min-width: 0; }
+.hpick { display: grid; justify-items: end; gap: .05rem; }
+.chist .fbtns { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+/* record page: panels size to their content (no scroll boxes inside the page); columns share a row height */
 @media (min-width: 761px) {
   .rec-row3, .rec-quad { align-items: stretch; }
-  /* block (not grid) inside: a grid row would squeeze the charts once the panel's height is fixed */
-  .rec-row3 > .panel, .rec-splits > .panel, .rec-quad > .panel { display: block; }
-  .rec-row3 > .panel > * + *, .rec-splits > .panel > * + *, .rec-quad > .panel > * + * { margin-top: .85rem; }
-  .rec-row3 > .panel { height: var(--rh); overflow-y: auto; overscroll-behavior: contain; }
-  .rec-splits { height: 24rem; }
-  .rec-splits > .panel { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-  .rec-quad > .panel { max-height: 34rem; overflow-y: auto; overscroll-behavior: contain; }
-  /* the heading stays in view while a module scrolls */
-  .rec-row3 > .panel > h2, .rec-splits > .panel > h2, .rec-quad > .panel > h2 {
-    position: sticky; top: -1rem; z-index: 2; margin: -1rem -1rem 0; padding: 1rem 1rem .6rem;
-    background: var(--panel); box-shadow: 0 1px 0 var(--line);
-  }
-}
-@media (min-width: 1400px) {
-  .rec-splits { height: var(--rh); display: flex; flex-direction: column; align-items: stretch; gap: 1rem; }
-  .rec-splits > .panel { height: auto; flex: none; }
-  .rec-splits > .panel:last-child { flex: 1 1 0; }
+  .rec-splits { display: flex; flex-direction: column; gap: 1rem; }
+  .rec-splits > .panel { flex: 1 1 auto; }
 }
 
 /* phones */
@@ -1872,7 +1864,7 @@ if (!META || META.bundle_version !== PAGE_BUNDLE_VERSION || !DATA || !FIXTURES |
 
 /* Shared staleness badge: one component, bundle-owned values, rendered verbatim.
    data_through is the last match date ingested; generated_at is the bundle build time. */
-const staleBadge = (long) => `<span class="stale" title="Bundle v${META.bundle_version} · built ${esc(META.generated_at)} · data hash ${esc(META.data_hash)}">data through <b>${esc(fmtDate(META.data_through))}</b>${long ? ` · built ${esc(META.generated_at)}` : ""}</span>`;
+const staleBadge = (long) => `<span class="stale" title="Bundle v${META.bundle_version} · built ${esc(META.generated_at)} · data hash ${esc(META.data_hash)}">latest result <b>${esc(fmtDate(META.data_through))}</b>${long ? ` · updated ${esc(String(META.generated_at).replace("T", " ").slice(0, 16))} UTC` : ""}</span>`;
 
 /* ---------------- basics ---------------- */
 const $ = s => document.querySelector(s);
@@ -3667,22 +3659,11 @@ function scoreCalls(calls) {
   }
   return out;
 }
-// a coin flip's scores, for scale: every chance 50%
-const COIN = { brier: brierOf([.5], [1]), ll: llOf([.5], [1]) };
 const f3 = v => v == null ? "-" : v.toFixed(3);
 // model minus baseline, signed, coloured: negative (lower) is better for the model
 const edge = (m, e) => m == null || e == null ? "" : `<span class="${m < e ? "win" : m > e ? "loss" : "dim"}">${m - e > 0 ? "+" : ""}${(m - e).toFixed(3)}</span>`;
 const pctRange = ci => `${(ci[0] * 100).toFixed(1)}-${(ci[1] * 100).toFixed(1)}%`;
 
-function calibRows(calls) {
-  return BUCKETS.map(([, , lab], i) => {
-    const b = calls.filter(c => inBucket(c.pickP, i)), n = b.length, h = b.filter(c => c.hit).length;
-    return { lab, n, h, said: n ? b.reduce((s, c) => s + c.pickP, 0) / n : null, got: n ? h / n : null, ci: wilsonJS(h, n) };
-  });
-}
-// walkforward.py's acceptance rule for a bucket: close enough, and the Wilson range holds the stated chance
-const bucketVerdict = r => !r.n ? "-" : r.n < TR.min_n ? `<span class="dim">too few to judge</span>`
-  : Math.abs(r.got - r.said) <= TR.gap && r.ci[0] <= r.said && r.said <= r.ci[1] ? `<span class="win">in line</span>` : `<span class="loss">off</span>`;
 
 
 const RANGES = [["7", "7D"], ["30", "30D"], ["90", "90D"], ["all", "Season"]];
@@ -3778,27 +3759,14 @@ function callsCsv(list) {
 }
 
 
-const listOr = xs => xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} or ${xs[xs.length - 1]}`;
-function howPanel(calls) {
-  const n = calls.length, rows = calibRows(calls).filter(r => r.n);
-  const formats = listOr([...new Set(calls.map(c => c.bo))].sort((p, q) => p - q).map(b => `best of ${b}`));
-  return `<section class="panel how"><h2>How to read this</h2>
-    <ul class="howlist">
-      <li><b>A call</b> is the model's pick for a finished match, made using only results from before that match day. The chance shown is for the format played (${formats}).</li>
-      <li><b>Winners right</b> is how often the side the model favoured won.</li>
-      <li><b>Does 70% mean 70%?</b> Of the picks where the model said about 70%, about 70 in every 100 should win. The table below checks exactly that.</li>
-    </ul>
-    <div class="tablewrap"><table class="ctab"><thead><tr><th>When the model said</th><th class="n">Calls</th><th class="n">Pick won</th><th>Verdict</th></tr></thead><tbody>
-      ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n ${pcc((r.got * 100).toFixed(2))}">${(r.got * 100).toFixed(0)}%</td><td>${bucketVerdict(r)}</td></tr>`).join("") || `<tr><td colspan="4" class="dim">No calls to grade yet.</td></tr>`}
-    </tbody></table></div>
-    <p class="small dim"><b>In line</b>: the picks won within ${Math.round(TR.gap * 100)} points of what the model said. <b>Off</b>: they did not. <b>Too few</b>: under ${TR.min_n} calls, so the result could be luck.${CALLS_INSAMPLE ? ` ${CALLS_INSAMPLE} call${CALLS_INSAMPLE === 1 ? "" : "s"} used to train the model ${CALLS_INSAMPLE === 1 ? "is" : "are"} left out.` : ""}</p>
-    <details><summary>The scores, in plain words</summary><ul>
-      <li><b>Brier score</b>: the average squared gap between the chance given and what happened (1 or 0). Lower is better; saying 50% every time scores ${f3(COIN.brier)}.</li>
-      <li><b>Log loss</b>: like Brier, but a confident miss costs far more. Lower is better; saying 50% every time scores ${f3(COIN.ll)}.</li>
-      <li><b>Elo only</b>: the chance from the two teams' Elo ratings and nothing else, the bar the model's other factors have to beat.</li>
-      <li><b>95% range</b>: the hit rates the record is consistent with. Few calls make it wide.</li>
-      <li>Calls are re-worked from the full history each build with the current model, so they are not frozen copies saved before each match. Matches with no winner on record are skipped.</li>
-    </ul></details>
+// Call history: the latest calls at a glance; "Show more" grows it in place, "See every call" jumps to the filterable log
+function callHistory(calls) {
+  const shown = Math.min(rec.hist || 8, calls.length), newest = calls.slice(-shown).reverse();
+  return `<section class="panel chist"><h2>Call history <span class="dim">latest first, ${shown} of ${calls.length}</span></h2>
+    <ul class="hlist">${newest.map(c => `<li><a href="#m-${c.id}" class="hmatch">${tl(c.a, c.w === c.a)}${tl(c.b, c.w === c.b)}</a>
+      <span class="hpick"><span class="small dim">${isoDate(c.day)}</span><b>${esc(c.pick)}</b><span class="small dim">${c.pickShown}%</span></span>
+      <span class="hm ${c.hit ? "h" : "m"}">${c.hit ? "Right" : "Wrong"}</span></li>`).join("")}</ul>
+    <div class="fbtns">${shown < calls.length ? `<button type="button" class="btn" data-hmore="1">Show 8 more</button>` : ""}<button type="button" class="btn" data-golog="1">See every call</button></div>
   </section>`;
 }
 
@@ -3863,7 +3831,7 @@ function viewRecord() {
   </section>
   <p class="pclegend small dim">Share of calls right, coloured by how it went: <span class="pc-hi">above 60%</span> <span class="pc-mid">50 to 60%</span> <span class="pc-lo">50% or under</span>. The model's own chance for each pick stays white: that is confidence, not a record.</p>
   <div class="rec-row3">
-    ${howPanel(calls)}
+    ${callHistory(calls)}
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
     <div class="rec-splits">
       <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
@@ -4008,6 +3976,8 @@ document.addEventListener("click", e => {
   const ft = e.target.closest("[data-feat]");
   if (ft && !ft.disabled) { const f = featuredMatch(); if (f) loadMatch(f); rerender(); return; }
   if (e.target.closest("[data-more]")) { rec.limit += TRACK.page; rerender(); return; }
+  if (e.target.closest("[data-hmore]")) { rec.hist = (rec.hist || 8) + 8; rerender(); return; }
+  if (e.target.closest("[data-golog]")) { const lg = document.getElementById("rec-log"); if (lg) lg.scrollIntoView({ block: "start" }); return; }
   if (e.target.closest("[data-tmore]")) { rec.tlimit += TRACK.page; rerender(); return; }
   if (e.target.closest("[data-rclear]")) { FILTER_KEYS.forEach(k => rec[k] = ""); rec.limit = TRACK.page; rerender(); return; }
   const rt = e.target.closest("[data-rteam]");
