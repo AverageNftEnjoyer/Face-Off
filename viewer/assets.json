@@ -26,6 +26,7 @@
   "intel-extreme-masters-krak-w-2027": "data/raw/media/af9b934d835666bb.png",
   "blast-bounty-winter-2027": "data/raw/media/659fed02909a9624.png",
   "pgl-bucharest-2027": "data/raw/media/6826a73c0bf39458.png",
+  "pgl-cluj-napoca-2027": "data/raw/media/6826a73c0bf39458.png",
   "stake-ranked-episode-1": "data/raw/media/a5ff6c95529a0315.png",
   "asian-champions-league-2026": "data/raw/media/6f3b0f0963230f17.png",
   "cs-asia-championships-2026": "data/raw/media/4044dde16bda7da9.png",
@@ -36,7 +37,6 @@
   "logitech-g-play-connect-2026": "data/raw/media/d4310c4b360d176b.png",
   "1win-private-club-1": "data/raw/media/75ae0988e56cea91.png",
   "stake-ranked-episode-4": "data/raw/media/a5ff6c95529a0315.png",
-  "forge-of-legends-2026": null,
   "1win-private-club-2": "data/raw/media/75ae0988e56cea91.png",
   "stake-ranked-episode-5": "data/raw/media/a5ff6c95529a0315.png",
   "esports-nations-cup-2026": "data/raw/media/83733d9f840ab32f.png",
@@ -210,14 +210,6 @@
      "id": "Raijin",
      "name": "Konstantin Trubarov",
      "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2026-08-18"
-    },
-    {
-     "id": "synyx",
-     "name": "Danyyl Mazur",
-     "flag": "ua",
      "igl": false,
      "role": "",
      "joined": "2026-08-18"
@@ -592,6 +584,22 @@
      "igl": false,
      "role": "",
      "joined": "2026-01-08"
+    },
+    {
+     "id": "siuhy",
+     "name": "Kamil Szkaradek",
+     "flag": "pl",
+     "igl": true,
+     "role": "",
+     "joined": "2026-10-13"
+    },
+    {
+     "id": "cmtry",
+     "name": "Mykyta Samolotov",
+     "flag": "ua",
+     "igl": false,
+     "role": "",
+     "joined": "2026-10-13"
     },
     {
      "id": "NEO",
