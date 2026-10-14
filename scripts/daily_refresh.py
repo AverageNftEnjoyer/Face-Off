@@ -470,14 +470,21 @@ def main(argv=None):
             print("  ~", t)
         print(f"Liquipedia requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
         return
-    lpfetch.FRESH_TITLES |= titles | teams
-
     import collect_liquipedia
     collect_liquipedia.OFFLINE = False
     live = live_titles(today)
-    stale = refresh_live(live, collect_liquipedia.main) if live else []
-    if not live:
-        collect_liquipedia.main()
+    # 1) the live tournament pages alone, first, while Liquipedia's rate budget is
+    #    untouched: on 2026-10-14 the bulk refresh got rate-limited and the live page,
+    #    fetched in the same batch, was refused with it
+    stale = refresh_live(live, collect_liquipedia.main, pauses=()) if live else []
+    # 2) then every other tracked tournament and team page
+    lpfetch.FRESH_TITLES |= titles | teams
+    lpfetch._THROTTLED[0] = False
+    collect_liquipedia.main()
+    # 3) a live page refused in step 1 gets the full retry (pause, ask again) at the end
+    if stale:
+        lpfetch._THROTTLED[0] = False
+        stale = refresh_live(set(stale), collect_liquipedia.main)
     write_status(stale, live)
 
     import rosters

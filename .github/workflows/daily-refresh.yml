@@ -121,11 +121,11 @@ jobs:
               --body-file data/roster_diff.md --label roster-review
           fi
 
-      # a green run must mean the live pages are current: the retries inside the
-      # refresh already waited out Liquipedia's rate limit, so this only fires
-      # when it kept refusing (the data is still committed above)
+      # fails only when a live page has stayed stale for 30 minutes: one refusal is
+      # healed by the 15-minute live refresh (validate.yml also starts it at once),
+      # so a red run means Liquipedia kept refusing (the data is still committed above)
       - name: Fail loudly if a live page could not be refreshed
-        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 0
+        run: python scripts/daily_refresh.py --check-status --max-stale-minutes 30
 
       # Valve standings must be as new as Valve published them. vrs.py never
       # fails the refresh itself (S/A data must still publish); it records a

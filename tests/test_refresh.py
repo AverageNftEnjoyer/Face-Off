@@ -230,5 +230,53 @@ class TestValidate(unittest.TestCase):
             self.assertEqual(vf.site_hash("http://x/"), "")
 
 
+class TestRefreshReliability(unittest.TestCase):
+    """2026-10-14: the daily run's bulk refresh got rate-limited and the live page,
+    fetched in the same batch, was refused; the watchdog then failed on a page the
+    next live refresh fixed. The live pages now go first, alone, and one refusal
+    heals instead of failing."""
+
+    def test_daily_refresh_fetches_live_pages_first_and_alone(self):
+        import collect_liquipedia
+        seen = []
+
+        class Stop(Exception):
+            pass
+
+        saved = set(lpfetch.FRESH_TITLES)
+        lpfetch.FRESH_TITLES.clear()
+        try:
+            with mock.patch.object(dr, "stale_titles", return_value=({"Bulk Cup", "Old Cup"}, {"Some Team"}, ())),                     mock.patch.object(dr, "discover", return_value=([], [])),                     mock.patch.object(dr, "live_titles", return_value={"Live Cup"}),                     mock.patch.object(collect_liquipedia, "main", side_effect=lambda: seen.append(set(lpfetch.FRESH_TITLES))),                     mock.patch.object(dr, "write_status", side_effect=Stop):
+                with self.assertRaises(Stop):
+                    dr.main([])
+        finally:
+            lpfetch.FRESH_TITLES.clear()
+            lpfetch.FRESH_TITLES |= saved
+        self.assertEqual(seen[0], {"Live Cup"})                       # live page alone, first
+        self.assertTrue({"Bulk Cup", "Old Cup", "Some Team"} <= seen[1])   # then the bulk pass
+
+    def _validate(self, minutes_ago):
+        from datetime import datetime, timedelta, timezone
+        tmp = tempfile.mkdtemp()
+        os.makedirs(os.path.join(tmp, "data"))
+        since = (datetime.now(timezone.utc) - timedelta(minutes=minutes_ago)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        with open(os.path.join(tmp, "data", "refresh_status.json"), "w", encoding="utf-8") as f:
+            json.dump({"ok": False, "stale_pages": ["Live Cup"], "stale_since": since}, f)
+        out = os.path.join(tmp, "gh_out")
+        with mock.patch.object(vf, "ROOT", tmp), mock.patch.object(vf, "site_hash", return_value="h"),                 mock.patch.object(vf, "local_hash", return_value="h"),                 mock.patch.dict(os.environ, {"GITHUB_OUTPUT": out}):
+            code = vf.main(["--no-liquipedia", "--no-valve", "--site", "http://x/"])
+        return code, open(out, encoding="utf-8").read()
+
+    def test_a_fresh_refusal_heals_without_failing(self):
+        code, out = self._validate(5)
+        self.assertEqual(code, 0)
+        self.assertIn("needs_refresh=true", out)
+
+    def test_a_refusal_that_lasts_fails(self):
+        code, out = self._validate(45)
+        self.assertEqual(code, 1)
+        self.assertIn("needs_refresh=true", out)
+
+
 if __name__ == "__main__":
     unittest.main()

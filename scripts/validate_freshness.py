@@ -36,7 +36,7 @@ import sys
 import tempfile
 import time
 import urllib.request
-from datetime import date
+from datetime import date, datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 for sub in ("", "data", "scripts", "viewer"):
@@ -45,6 +45,7 @@ for sub in ("", "data", "scripts", "viewer"):
 SITE = "https://cs2faceoffanalytics.vercel.app/"
 RECENT_REFRESH_MIN = 25      # a data commit younger than this means the refresh is working; skip the Liquipedia request
 DEPLOY_GRACE_MIN = 20      # a data commit younger than this may still be building on the host
+STALE_FAIL_MIN = 30        # a live page refused this long fails the run; before that the live refresh is started (heal)
 
 
 def local_hash():
@@ -126,6 +127,7 @@ def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     url = argv[argv.index("--site") + 1] if "--site" in argv else SITE
     problems, site_only = [], []
+    heal = False      # B: a fresh refusal -> start the live refresh without failing the run
 
     # A. live pages against Liquipedia
     if "--no-liquipedia" not in argv:
@@ -149,7 +151,19 @@ def main(argv=None):
         with open(os.path.join(ROOT, "data", "refresh_status.json"), encoding="utf-8") as f:
             st = json.load(f)
         if st.get("stale_pages"):
-            problems.append(f"the last refresh could not update: {st['stale_pages']}")
+            # one refusal is healed by starting the live refresh at once; only a page that
+            # has stayed stale for STALE_FAIL_MIN (retries keep failing) fails the run
+            try:
+                since = datetime.strptime(str(st.get("stale_since")), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+                age = (datetime.now(timezone.utc) - since).total_seconds() / 60
+            except (TypeError, ValueError):
+                age = float("inf")
+            if age >= STALE_FAIL_MIN:
+                problems.append(f"the last refresh could not update {st['stale_pages']} for {age:.0f} min")
+            else:
+                heal = True
+                print(f"::warning::Liquipedia refused {st['stale_pages']} {age:.0f} min ago; starting the live "
+                      f"refresh now (fails only after {STALE_FAIL_MIN} min)")
     except (OSError, ValueError):
         pass
 
@@ -179,7 +193,7 @@ def main(argv=None):
     out = os.environ.get("GITHUB_OUTPUT")
     if out:
         with open(out, "a", encoding="utf-8") as f:
-            f.write(f"code={code}\nneeds_refresh={'true' if len(problems) > len(vrs_bad) else 'false'}\n")
+            f.write(f"code={code}\nneeds_refresh={'true' if heal or len(problems) > len(vrs_bad) else 'false'}\n")
             f.write(f"needs_vrs_refresh={'true' if vrs_bad else 'false'}\n")
     return code
 
