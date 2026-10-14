@@ -728,7 +728,6 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .pin.upcoming { background: var(--bg); border-style: dashed; }
 .pin.upcoming .pt b { color: var(--dim); }
 .strip .now { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--loss); z-index: 2; pointer-events: none; }
-.strip .now span { position: absolute; bottom: .2rem; left: .45rem; font-size: .72rem; font-weight: 700; color: var(--loss); white-space: nowrap; }
 
 .marquee { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(20rem, 1fr); gap: 1.5rem 2.5rem; align-items: start; }
 .onair { display: grid; gap: 1.1rem; padding: 1.25rem 1.4rem 1.4rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); box-shadow: inset 0 3px 0 var(--loss); }
@@ -2875,7 +2874,7 @@ function seasonStrip(EV) {
   }
   const rows = lanes.map((_, i) => `<div class="lane">${pins.filter(p => p[0] === i).map(p => p[1]).join("")}</div>`).join("");
   return `<div class="strip-wrap"><div class="strip" role="group" aria-label="Tournament calendar">${mo}<div class="lanes">${rows}</div>
-    <div class="now" style="left:${x(DATA.as_of)}%"><span>Today, ${fmtDay(DATA.as_of)}</span></div></div></div>
+    <div class="now" style="left:${x(DATA.as_of)}%" title="Today"></div></div></div>
     <p class="strip-hint">Swipe the calendar sideways for the other months.</p>`;
 }
 
@@ -3760,6 +3759,8 @@ function callsCsv(list) {
 
 
 // Call history: the latest calls at a glance; "Show more" grows it in place, "See every call" jumps to the filterable log
+/* one team in a call row: logo + name, bold when it won (call history and the call log) */
+const tl = (t, won) => `<span class="tl ${won ? "won" : ""}">${logo(t, "sm")}${esc(t)}</span>`;
 function callHistory(calls) {
   const shown = Math.min(rec.hist || 8, calls.length), newest = calls.slice(-shown).reverse();
   return `<section class="panel chist"><h2>Call history <span class="dim">latest first, ${shown} of ${calls.length}</span></h2>
@@ -3815,7 +3816,6 @@ function viewRecord() {
   const misses = calls.filter(c => !c.hit).sort((p, q) => q.pickP - p.pickP).slice(0, TRACK.cards);
   const sel = (key, label, options) => `<label>${label}<select data-rf="${key}"><option value="">All</option>${options.map(([v, l]) => `<option value="${esc(v)}" ${rec[key] === String(v) ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
   const dateIn = (key, label) => `<label>${label}<input type="date" data-rf="${key}" value="${esc(rec[key])}" min="${calls[0].day}" max="${calls[n - 1].day}"></label>`;
-  const tl = (t, won) => `<span class="tl ${won ? "won" : ""}">${logo(t, "sm")}${esc(t)}</span>`;
   const fh = fav.filter(c => c.hit).length, dh = dog.filter(c => c.hit).length;
   const anyFilter = FILTER_KEYS.some(f => rec[f]);
   const eloPct = c => c.qPick == null ? "" : ` · Elo ${(c.qPick * 100).toFixed(1)}%`;
