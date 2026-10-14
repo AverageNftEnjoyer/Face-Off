@@ -352,7 +352,7 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
   line-height: 1.3; white-space: nowrap; border: 1px solid currentColor; color: var(--amber); cursor: help; vertical-align: middle; }
 .rflag.change { color: var(--dim); }
 .rflag .ico { width: .9em; height: .9em; }
-.small > .rflag, .cu-when > .rflag, .ph > .rflag { margin-left: .4rem; }
+.small > .rflag, .ph > .rflag { margin-left: .4rem; }
 .ph > .rflag { grid-column: 2; justify-self: start; margin-left: 0; }
 .bm .when .rflag { padding: 0 .3rem; margin-left: auto; }
 .cid > .rflag { font-size: .72rem; background: rgba(4, 10, 12, .6); }
@@ -1306,18 +1306,7 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .nextm .tt em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nextm .mini { height: .22rem; border-radius: 999px; background: var(--c2, var(--t)); overflow: hidden; display: flex; }
 .nextm .mini b { display: block; height: 100%; background: var(--c1, var(--ct)); border-right: 2px solid var(--panel); }
-.cu { gap: .5rem; padding: .8rem 0; }
-.cu .cu-pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem .6rem; align-items: center; background: var(--bg);
   border: 1px solid var(--line); border-radius: 10px; padding: .55rem .7rem; }
-.cu .cu-pick small { display: block; font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: .15rem; }
-.cu .cu-who > span { display: flex; align-items: center; gap: .4rem; min-width: 0; }
-.cu .cu-who b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--s0); }
-.cu .cu-pct { font-size: 1.9rem; font-weight: 900; line-height: 1; color: var(--acc); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.cu .cu-pct small { display: inline; font-size: .5em; margin: 0; letter-spacing: 0; text-transform: none; color: inherit; }
-.cu .cu-score { grid-column: 1 / -1; display: flex; align-items: baseline; gap: .5rem; border-top: 1px solid var(--line); padding-top: .4rem; margin-top: .15rem; }
-.cu .cu-score small { margin: 0; }
-.cu .cu-score b { font-size: 1.25rem; font-weight: 900; color: var(--text); line-height: 1; }
-.cu .cu-score i { font-style: normal; font-size: .74rem; color: var(--dim); margin-left: auto; }
 .rtag { justify-self: start; font-size: .75rem; font-weight: 700; padding-left: .45rem; border-left: 2px solid currentColor; line-height: 1.2; }
 .rtag.hit { color: var(--win); }
 .rtag.miss { color: var(--loss); }
@@ -1521,9 +1510,40 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
 .pc-lo { color: var(--loss); }
 td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .board .num.pc-hi, .board .num.pc-mid, .board .num.pc-lo { text-shadow: 0 0 28px color-mix(in srgb, currentColor 25%, transparent); }
-/* home: coming up across the top */
-.cugrid { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
-.cugrid > .nextm { height: 100%; }
+/* home: coming up, as a list of fixtures. One hairline between rows, no boxes. */
+.fxlist { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 31rem), 1fr)); column-gap: 3rem; }
+.fx { display: grid; grid-template-columns: 11.5rem minmax(0, 1fr) 2rem; gap: 0 1rem; align-items: start; padding: .8rem 0; border-top: 1px solid var(--line); }
+.fxlist > .fx:first-child { border-top-color: transparent; }
+@media (min-width: 761px) { .fxlist > .fx:nth-child(2) { border-top-color: transparent; } }
+@media (max-width: 760px) { .fx { grid-template-columns: minmax(0, 1fr) 2rem; } .fx-main { grid-column: 1 / -1; grid-row: 2; } }
+.fx-meta { display: grid; gap: .15rem; min-width: 0; font-size: var(--s-1); line-height: 1.3; }
+.fx-when { color: var(--text); white-space: nowrap; }
+.fx-when b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.fx-ev { display: flex; align-items: center; gap: .4rem; min-width: 0; color: var(--dim); }
+.fx-ev > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fx-main { display: grid; gap: 0; min-width: 0; color: inherit; text-decoration: none; }
+.fx-names { display: flex; justify-content: space-between; gap: 1rem; min-width: 0; }
+.fx-t { display: flex; align-items: center; gap: .45rem; min-width: 0; }
+.fx-t em { font-style: normal; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fx-main:hover .fx-t em { text-decoration: underline; text-underline-offset: 3px; }
+.fx-line { display: flex; gap: 3px; height: 3px; margin: .5rem 0 .3rem; }
+.fx-line i { display: block; border-radius: 2px; opacity: .35; }
+.fx-line i:first-child { flex: 0 0 calc(var(--p) - 1.5px); background: var(--c1, var(--ct)); }
+.fx-line i:last-child { flex: 1 1 0; background: var(--c2, var(--t)); }
+.fx-line i.lead { opacity: 1; }
+.fx-line.none { background: var(--line); opacity: .6; }
+.fx-nums { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; font-size: var(--s-1); font-variant-numeric: tabular-nums; color: var(--dim); }
+.fx-nums > :last-child { text-align: right; }
+.fx-nums .lead { color: var(--text); font-weight: 700; }
+.fx-sc { font-size: .78rem; }
+.fav { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: var(--r); background: transparent; color: var(--dim); cursor: pointer; font: inherit; font-size: var(--s-1); }
+.fav:hover { color: var(--text); background: var(--raise); }
+.fav:focus-visible { outline: 2px solid var(--acc); outline-offset: 1px; }
+.fav .ico { width: 1.05rem; height: 1.05rem; }
+.fav.on { color: var(--amber); }
+.fav.on .ico path { fill: currentColor; }
+.fav.lab { padding: 0 .65rem; border: 1px solid var(--line2); }
+.evtop { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
 /* call history */
 .hlist { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
 .hlist li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .6rem; align-items: center; padding: .4rem 0; border-top: 1px solid var(--line); }
@@ -2664,11 +2684,36 @@ function closeChooser() {
   if (d && d.open) { if (d.close) d.close(); else d.removeAttribute("open"); }
 }
 
+/* ---------------- followed tournaments ----------------
+   A star on a tournament keeps its next matches in "Coming up" even when
+   others are sooner. Kept in this browser only (localStorage when allowed). */
+const FAVS = (() => {
+  try {
+    const v = JSON.parse(localStorage.getItem("faceoff.favs") || "[]");
+    return new Set(Array.isArray(v) ? v.filter(x => typeof x === "string") : []);
+  } catch (_) { return new Set(); }
+})();
+function saveFavs() { try { localStorage.setItem("faceoff.favs", JSON.stringify([...FAVS])); } catch (_) { /* not kept */ } }
+const STAR = svgI(`<path d="M12 3.6l2.6 5.4 5.9.8-4.3 4.1 1.1 5.9L12 17l-5.3 2.8 1.1-5.9L3.5 9.8l5.9-.8z"/>`);
+function favBtn(e, withLabel = false) {
+  const on = FAVS.has(e.slug), tip = on ? `Stop following ${e.name}` : `Follow ${e.name}: its matches stay in Coming up`;
+  return `<button type="button" class="fav${on ? " on" : ""}${withLabel ? " lab" : ""}" data-fav="${esc(e.slug)}" aria-pressed="${on}" title="${esc(tip)}" aria-label="${esc(tip)}">${STAR}${withLabel ? `<span>${on ? "Following" : "Follow"}</span>` : ""}</button>`;
+}
+// a team slot that is not a real team yet ("TBD", a private-club placeholder)
+const isTeamSlot = n => !!n && !/^(tbd|tba|private|to be determined|bye)$/i.test(String(n).trim());
+
 function homeLists() {
   const top = NAMES.filter(n => T[n].vrs).slice(0, 10);
   const keyOf = m => (m.day || "") + (m.when || "");
-  const next = Object.values(MATCH).filter(m => m.t1 && m.t2 && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1))
-    .sort((x, y) => keyOf(x).localeCompare(keyOf(y))).slice(0, 5);
+  const soon = Object.values(MATCH).filter(m => isTeamSlot(m.t1) && isTeamSlot(m.t2) && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1))
+    .sort((x, y) => keyOf(x).localeCompare(keyOf(y)));
+  // by default: what is on in the next two days (the three soonest when it is quiet);
+  // a followed tournament adds its next two matches however far off they are
+  const nowIso = new Date().toLocaleDateString("en-CA"), ref = nowIso > DATA.as_of ? nowIso : DATA.as_of;
+  const inWindow = soon.filter(m => dayDiff(ref, localDay(m.when) || m.day) <= 2);
+  const picked = new Set(inWindow.length ? inWindow.slice(0, 8) : soon.slice(0, 3));
+  for (const slug of FAVS) soon.filter(m => m.ev === slug).slice(0, 2).forEach(m => picked.add(m));
+  const next = soon.filter(m => picked.has(m)).slice(0, 10);
   // latest finished series, each with whether the model's pre-match pick won
   const done = Object.values(MATCH).filter(m => m.t1 && m.t2 && m.finished && m.day && m.w1 !== m.w2)
     .sort((x, y) => keyOf(y).localeCompare(keyOf(x))).slice(0, 5);
@@ -2679,43 +2724,35 @@ function homeLists() {
       <span class="tt"><span${w === m.t1 ? "" : ' class="lost"'}>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><b class="rsc cond">${m.w1}<i class="dim">:</i>${m.w2}</b><span${w === m.t2 ? "" : ' class="lost"'}><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
       ${fav ? `<span class="rtag ${fav === w ? "hit" : "miss"}">${missLabel(fav === w, Math.max(p, 1 - p))}</span>` : ""}</a>`;
   };
-  // each coming match's bar uses that match's own two team colours
-  const split = m => {
-    const p = m.pred ? decode(m.pred).p : null;
-    if (p == null) return "";
-    const [c1, c2] = pairColors(m.t1, m.t2), sh = displayPercent([p, 1 - p]);
-    return `<span class="mini" style="--c1:${c1};--c2:${c2}" title="${esc(`Model: ${m.t1} ${sh[0]}%, ${m.t2} ${sh[1]}%`)}"><b style="width:${(p * 100).toFixed(1)}%"></b></span>`;
-  };
-  // a coming match: when, the two teams, the model's pick with its win chance and projected score, then the split bar
+  // a coming match as one fixture: when and where on the left, the two teams on a split
+  // line (each half in its team's colour, the favoured half drawn full strength)
   const upcoming = m => {
+    const e = EV_BY[m.ev], d = localDay(m.when) || m.day, bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
     const pred = m.pred ? decode(m.pred) : null;
-    let pickBox = "";
+    let line = `<span class="fx-line none"></span>`, nums = "";
     if (pred) {
-      const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
-      const p = pFor(pred, bo).p, pickA = p >= .5, pick = pickA ? m.t1 : m.t2;
-      const pp = displayPercent([p, 1 - p])[pickA ? 0 : 1];
+      const p = pFor(pred, bo).p, [sa, sb] = displayPercent([p, 1 - p], 0), [c1, c2] = pairColors(m.t1, m.t2);
       const set = scoreSet(pred, bo), top = set[predictedIdx(set, p)];
-      const sc = bo === 1 ? "" : scoreFrom(top, pickA).replace("-", "\u2013");
-      const scp = displayPercent(set.map(x => x.p))[set.indexOf(top)];
-      pickBox = `<span class="cu-pick" title="${esc(`Model pick: ${pick} at ${pp}% to win the series${sc ? ", most likely score " + sc + " (" + scp + "%)" : ""}`)}">
-        <span class="cu-who"><small>Model pick</small><span>${logo(pick, "sm")}<b>${esc(pick)}</b></span></span>
-        <span class="cu-pct cond">${bigPct(pp)}</span>
-        ${sc ? `<span class="cu-score"><small>Projected score</small><b class="cond">${sc}</b><i>${scp}% likely</i></span>` : ""}
-      </span>`;
+      const sc = bo === 1 ? "" : scoreFrom(top, p >= .5).replace("-", "\u2013");
+      line = `<span class="fx-line" style="--c1:${c1};--c2:${c2};--p:${(p * 100).toFixed(1)}%"><i${p >= .5 ? ' class="lead"' : ""}></i><i${p < .5 ? ' class="lead"' : ""}></i></span>`;
+      nums = `<span class="fx-nums"><span${p >= .5 ? ' class="lead"' : ""}>${sa}%</span><span class="fx-sc">${sc ? `Projected ${sc}` : ""}</span><span${p < .5 ? ' class="lead"' : ""}>${sb}%</span></span>`;
     }
-    const day = localDay(m.when) || m.day;
-    return `<a class="nextm cu" href="#m-${m.id}">
-      <span class="small dim cu-when">${esc(EV_BY[m.ev].name)}, ${day ? fmtDay(day) : ""}${m.when ? ` ${clock(m.when)} ${tz(m.when)}` : ""}${m.bo !== 3 ? `, Bo${m.bo}` : ""}${rfBadge(rfSides(m.rf, m.t1, m.t2))}</span>
-      <span class="tt"><span>${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="dim">vs</span><span><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
-      ${pickBox}${split(m)}</a>`;
+    return `<div class="fx">
+      <div class="fx-meta"><span class="fx-when">${esc(dayWord(d))}${m.when ? ` <b>${esc(clock(m.when))}</b> <span class="dim">${esc(tz(m.when))}</span>` : ""}</span>
+        <span class="fx-ev"><span>${esc(shortEv(e.name))}${m.bo !== 3 ? `, Bo${m.bo}` : ""}</span>${rfBadge(rfSides(m.rf, m.t1, m.t2), true)}</span></div>
+      <a class="fx-main" href="#m-${m.id}">
+        <span class="fx-names"><span class="fx-t">${logo(m.t1, "sm")}<em>${esc(m.t1)}</em></span><span class="fx-t r"><em>${esc(m.t2)}</em>${logo(m.t2, "sm")}</span></span>
+        ${line}${nums}</a>
+      ${favBtn(e)}
+    </div>`;
   };
   return { top, next, done, doneRow, upcoming };
 }
 // Coming up: the next scheduled matches with the model's pick, across the top of the home page
 function comingUp() {
   const { next, upcoming } = homeLists();
-  return `<section class="panel comingup"><h2>Coming up <span class="dim">the model's pick for each</span></h2>
-    ${next.length ? `<div class="cugrid">${next.map(upcoming).join("")}</div>`
+  return `<section class="panel comingup"><h2>Coming up</h2>
+    ${next.length ? `<div class="fxlist">${next.map(upcoming).join("")}</div>`
       : `<p class="empty">No matches scheduled in this snapshot. <a class="btn" href="#events">See tournaments</a></p>`}
   </section>`;
 }
@@ -3084,7 +3121,7 @@ function evHero(e) {
   return `<section class="evhero">
     ${evImg(e, "evlogo")}
     <div>
-      ${statusChip(e)}
+      <div class="evtop">${statusChip(e)}${favBtn(e, true)}</div>
       <h1 class="cond" style="margin-top:.5rem">${esc(e.name)}</h1>
       <dl class="facts">${facts.map(([k, v]) => `<div class="${k === "Prize pool" || k === "Dates" ? "big" : ""}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
     </div>
@@ -3910,6 +3947,12 @@ function rerender() {
   window.scrollTo(0, y);
 }
 document.addEventListener("click", e => {
+  const fav = e.target.closest("[data-fav]");
+  if (fav) {
+    const slug = fav.dataset.fav;
+    if (FAVS.has(slug)) FAVS.delete(slug); else FAVS.add(slug);
+    saveFavs(); rerender(); return;
+  }
   const day = e.target.closest("[data-day]");
   if (day) { dayPick[day.dataset.ev] = day.dataset.day; rerender(); return; }
   const em = e.target.closest("[data-evmap]");
