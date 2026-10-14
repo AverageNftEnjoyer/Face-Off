@@ -78,16 +78,12 @@ class TestNoLeakage(unittest.TestCase):
         ms = [synth("2025-01-01", "Alpha", "Bravo", "Alpha"),
               synth("2025-03-01", "Alpha", "Bravo", "Bravo", i=1),
               synth("2025-03-15", "Alpha", "Bravo", "Alpha", i=2)]
-        saved, bt.MAP_RATES = bt.MAP_RATES, "raw"     # window check on plain win rates
-        try:
-            r = bt.build_dataset(ms)[2]["input"]
-        finally:
-            bt.MAP_RATES = saved
+        r = bt.build_dataset(ms)[2]["input"]
         # 30-day window only sees the 2025-03-01 series
         self.assertEqual(r["n30_a"], 1)
         self.assertEqual(r["form30_a"], 0.0)
         # 90-day map window sees both earlier series (73 and 14 days back)
-        self.assertEqual(r["maps_a"]["Mirage"], [0.5, 2])
+        self.assertEqual(r["maps_raw_a"]["Mirage"], [0.5, 2])     # plain win rates
         self.assertEqual(r["form5_a"], 0.5)
 
 
@@ -237,23 +233,20 @@ class TestRealDataSmoke(unittest.TestCase):
         self.assertGreater(len(ev), 300)
         tr, te = bt.chrono_split(ev)
         self.assertLess(tr[-1]["match"]["date"], te[0]["match"]["date"])
-        new, old, errs = bt.load_engines()
-        if old is not None:
-            r = old.predict_match(dict(te[0]["input"]))
-            self.assertTrue(0 <= r["p_a"] <= 1)
-        if new is not None:
-            r = new.predict_match(dict(te[0]["input"]))
-            self.assertTrue(0 <= r["p_a"] <= 1)
+        new, errs = bt.load_engine()
+        self.assertIsNotNone(new, errs)
+        r = new.predict_match(dict(te[0]["input"]))
+        self.assertTrue(0 <= r["p_a"] <= 1)
 
 
 class TestNewcomerElo(unittest.TestCase):
     """SYNTHETIC fixtures only."""
 
     def setUp(self):
-        self.saved = (bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET)
+        self.saved = bt.NEWCOMER_OFFSET
 
     def tearDown(self):
-        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = self.saved
+        bt.NEWCOMER_OFFSET = self.saved
 
     def season(self):
         ms = [synth("2025-01-01", "Alpha", "Bravo", "Alpha", i=0),
@@ -261,7 +254,7 @@ class TestNewcomerElo(unittest.TestCase):
         return ms
 
     def test_early_teams_start_at_init_late_teams_below(self):
-        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE = 150.0, "start"
+        bt.NEWCOMER_OFFSET = 150.0
         rows = {r["match"]["id"]: r for r in bt.build_dataset(self.season())}
         self.assertEqual(rows[0]["meta"]["elo_a"], bt.ELO_INIT)
         self.assertEqual(rows[0]["meta"]["elo_b"], bt.ELO_INIT)
@@ -271,16 +264,6 @@ class TestNewcomerElo(unittest.TestCase):
         bt.NEWCOMER_OFFSET = 0.0
         rows = {r["match"]["id"]: r for r in bt.build_dataset(self.season())}
         self.assertEqual(rows[1]["meta"]["elo_b"], bt.ELO_INIT)
-
-    def test_feature_mode_leaves_elo_table_alone(self):
-        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = 0.0, "feature", 100.0
-        h = bt.History()
-        for m in self.season():
-            h.add(m)
-        self.assertEqual(h.n_prior("Late"), 1)
-        # table value is plain Elo; the feature is lowered by 100 x (5 - 1) / 5
-        self.assertAlmostEqual(h.feature_elo("Late"), h.elo["Late"] - 80.0)
-        self.assertEqual(h.feature_elo("Bravo"), h.elo["Bravo"])   # early team: no offset
 
     def test_raw_map_rates_in_input(self):
         rows = bt.build_dataset(synthetic_season())

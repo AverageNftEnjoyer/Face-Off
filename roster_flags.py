@@ -37,12 +37,11 @@ from datetime import date, timedelta
 
 import backtest as bt
 import lineup_features as LF
-import predictor as pr
 
 # ---- thresholds (the one place they live) --------------------------------
-# A lineup counts as "settled" after this many series with it: the same
-# horizon the veto evidence roster discount uses (CONFIG veto_roster_recover).
-RECENT_SERIES = int(pr.CONFIG.get("veto_roster_recover", 8))
+# A lineup counts as "settled" after this many series with it: by then it
+# fills the whole core window, so the core five is the new lineup itself.
+RECENT_SERIES = LF.CORE_N
 # The reference lineup is the core five over the team's CORE_N lineups before
 # the latest RECENT_SERIES (lineup_features.CORE_N, the stand-in feature's rule).
 CORE_N = LF.CORE_N

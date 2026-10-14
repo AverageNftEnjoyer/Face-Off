@@ -545,6 +545,7 @@ details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: var(--s-1); col
 .wl.L { background: var(--loss); }
 .res .ev { color: var(--dim); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .res .opp { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.res .ev .chip.lt { font-size: .62rem; padding: 0 .4rem; margin-right: .35rem; vertical-align: 1px; }
 
 .warn { border-left: 3px solid var(--loss); padding: .15rem 0 .15rem .7rem; font-size: var(--s-1); color: var(--dim); }
 .links { display: flex; flex-wrap: wrap; gap: .5rem; }
@@ -2221,7 +2222,6 @@ function vetoWarnText(code, a, b) {
   if (code === "cold_start_both") return "Neither team has recent map history, so the chances are close to even across the pool.";
   if (base === "cold_start" && t) return `${t} has no recent map history; its picks and bans follow what teams usually do.`;
   if (base === "mask_exhausted" && t) return `${t} has not played any of the maps left at a pick step; the "not played lately" filter was lifted there.`;
-  if (base === "lineup_stale" && t) return `${t}'s lineup data is older than its last series, so lineup history was not used.`;
   if (code === "pool_default") return "No map pool was given for this series; the usual pool is used.";
   if (code === "pool_size_n") return "The map pool is not seven maps; the veto steps follow the standard rules for this pool size.";
   if (code === "pool_too_large") return "The map pool is too large for exact chances; one simulated veto is shown.";
@@ -3507,6 +3507,19 @@ function viewTeams() {
     <div class="tgrid">${NAMES.map(n => `<a class="tcard" href="#t-${T[n].slug}">${logo(n, "lg")}<span class="cond">${esc(n)}</span><span class="small dim">${esc(vrsLine(n))}</span></a>`).join("")}</div></section>`;
 }
 
+// A team's recent results: its S/A results as before, plus its lower-tier
+// series (t.lower, labelled by tier) dated inside the same span. Lower-tier
+// events are never tournaments on this site; their results are shown here only.
+function teamResults(t) {
+  const sa = t.results || [], lo = t.lower || [];
+  const from = sa.length >= 10 ? sa[sa.length - 1].date : "";
+  return [...sa, ...lo.filter(r => r.date >= from)].sort((a, b) => b.date.localeCompare(a.date));
+}
+function lowerNote() {
+  return DATA.lower_w ? `Lower-tier event, not tracked as a tournament here; counts in Elo at ${DATA.lower_w}x weight`
+    : "Lower-tier event, not tracked as a tournament here; shown for reference, not counted in the ratings";
+}
+
 function spark(trace) {
   if (trace.length < 2) return `<p class="empty">Not enough series to chart.</p>`;
   const W = 560, H = 150, L = 36, R = 10, Tp = 12, B = 22;
@@ -3556,9 +3569,9 @@ function viewTeam(slugv) {
   ${evs.length ? teamFinishes(n, evs) : ""}
     <section class="panel tl-pool"><h2>Map pool <span class="dim">last 90 days, line marks 50%</span></h2>
       <div class="poolbars">${[...maps, ...activePool().filter(m => !maps.some(([x]) => x === m)).map(m => [m, null])].map(([m, v]) => `<div class="pb"><span class="thumb" style="${mapBg(m)}"><span class="cond">${esc(m)}</span></span><span class="trk">${v ? `<b style="width:${(v[0] * 100).toFixed(1)}%"></b>` : ""}<i></i></span><span${v ? "" : ` class="dim" title="Not played in the last 90 days"`}>${v ? `${pct(v[0])} of ${v[1]}` : "N/A"}</span></div>`).join("")}</div></section>
-    <section class="panel tl-res"><h2>Recent results</h2><div class="res">${t.results.map(r => `<div class="r">
+    <section class="panel tl-res"><h2>Recent results${(t.lower || []).length ? ` <span class="dim">events not tracked here are labelled by tier</span>` : ""}</h2><div class="res">${teamResults(t).map(r => `<div class="r">
       <span class="wl ${r.won ? "W" : "L"}">${r.won ? "W" : "L"}</span>
-      <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${esc(r.event)}, ${fmtDate(r.date)}</span></span>
+      <span style="min-width:0"><span class="opp">${logo(r.opp, "sm")}<span>${esc(r.opp)}</span></span><span class="ev">${r.tier ? `<span class="chip plain lt" title="${esc(lowerNote())}">${esc(r.tier)}</span>` : ""}${esc(r.event)}, ${fmtDate(r.date)}</span></span>
       <span>${esc(r.score)}</span></div>`).join("") || `<p class="empty">No results in the data.</p>`}</div></section>
   </div>`;
 }
@@ -4114,7 +4127,7 @@ document.addEventListener("pointermove", e => {
   const ln = g.querySelector("line"); ln.setAttribute("x1", x); ln.setAttribute("x2", x);
   const c = g.querySelector("circle"); c.setAttribute("cx", x); c.setAttribute("cy", y);
   const tx = g.querySelector("text");
-  tx.textContent = `${tr[i][1]} on ${fmtDate(tr[i][0])}`;
+  tx.textContent = `${tr[i][1]} on ${fmtDate(tr[i][0])}${tr[i][2] ? ` (${tr[i][2]})` : ""}`;
   tx.setAttribute("x", x > W / 2 ? x - 8 : x + 8); tx.setAttribute("y", Math.max(Tp + 10, y - 8));
   tx.setAttribute("text-anchor", x > W / 2 ? "end" : "start");
 });

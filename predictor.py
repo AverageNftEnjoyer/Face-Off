@@ -119,7 +119,7 @@ CONFIG = {
     "w_depth": 0.0,
     # Map-pool depth (number of active-pool maps played >= 3 times in 90 days
     # and won >= 50%), difference A - B: SHOWN, NOT COUNTED. Pre-registered
-    # walk-forward test (scripts/map_depth_check.py, 1,260 held-out BO3s,
+    # walk-forward test (map_depth_check, removed 2026-10-13, in git history, 1,260 held-out BO3s,
     # logistic on the engine's log-odds + depth gap): log loss +0.0004, 95% CI
     # [-0.0018, +0.0025]; the Elo-residual, breadth, veto-map and existing
     # map_veto versions were also within noise. Fitted coefficient ~0.04
@@ -136,7 +136,7 @@ CONFIG = {
     # Cap on the base-strength signal alone (rating gap / rating_scale), in
     # the same units as signal_cap: 2.0 = a 200-Elo gap, beyond which every
     # gap gets the same ~1.59 log-odds. Kept at 2.0. Pre-registered test
-    # (scripts/mismatch_check.py, walk-forward, 1,260 held-out BO3s): caps
+    # (mismatch_check, removed 2026-10-13, in git history, walk-forward, 1,260 held-out BO3s): caps
     # {2,3,4,8} x shrink variants x newcomer Elo, with a temperature, picked
     # per fold on training log loss -> OOF log loss 0.6174 vs 0.6173 shipped
     # (CI [-0.005, +0.005]); it failed the "lower log loss" criterion, so
@@ -189,7 +189,7 @@ CONFIG = {
     "veto_comfort": 0.8,
     # Weight of map comfort in the simulated veto's picks and bans (see
     # simulate_veto); comfort = maps_played / (maps_played + veto_comfort_k).
-    # Tuned on real vetoes (scripts/veto_check.py, 1,953 BO3s; chosen on the
+    # Tuned on real vetoes (veto_check, removed 2026-10-13, in git history, 1,953 BO3s; chosen on the
     # first 60%, scored on the last 40%): without it the veto was no better
     # than chance (27.2% of picked maps right vs 28.6% random) and had a team
     # pick a map it hadn't played in 90 days 20.1% of the time; at 0.8: 47.6%
@@ -202,14 +202,16 @@ CONFIG = {
     # "point": the single simulated veto above (simulate_veto), every output
     # exactly as before. "dist": BO3 scorelines are a mixture over the full
     # veto distribution (veto.py), and the output gains veto_dist. Stays
-    # "point": no phase passed its gate (scripts/veto_harness.py, test window
+    # "point": no phase passed its gate (veto_harness, removed 2026-10-13, in git history, test window
     # 746 held-out BO3s vs the comfort sim; data/veto_phase*_report.json):
     # P1 myopic failed (pick-set hit +0.003, CI [-0.017, +0.023]; one series
     # had probability 0 under the alpha-0.05 mask; scoreline CI upper +0.0020),
     # P2 lookahead failed only the pick-set hit (+0.011, CI [-0.012, +0.035];
     # veto log-likelihood +0.663 [+0.586, +0.737], scoreline -0.0021 [-0.0061,
     # +0.0019], coverage 0.845, ECE 0.010), P3 habits failed only the scoreline
-    # non-regression (-0.0016, CI upper +0.0025 > +0.002).
+    # non-regression (-0.0016, CI upper +0.0025 > +0.002). The habit, roster-core
+    # and phase-7 evidence options (decay, soft avoid, roster discount) never
+    # passed their gates and were removed on 2026-10-13 (see git history).
     "veto_mode_bo1": "point",
     # BO1 (phase 6): "dist" adds veto_dist_bo1 (which map gets played). The
     # BO1 win chance never depends on it. Stays "point": on 174 held-out BO1s
@@ -228,7 +230,7 @@ CONFIG = {
         "alpha_ban2": -0.32497224410789893, "gamma_ban2": 1.5532098742820395,
         "alpha_pick": 4.545925649320859, "gamma_pick": 2.627795382754427,
     },
-    # Phase-2 fit (scripts/veto_fit.py, maximum likelihood of the played map
+    # Phase-2 fit (veto_fit, removed 2026-10-13, in git history, maximum likelihood of the played map
     # order on 1,207 training BO3s <= 2025-11-05, starter and bans hidden):
     # train mean log-likelihood -3.734 vs -4.310 for the smoothed comfort sim
     # and -4.396 for a uniform legal veto. pi = P(team_a started) = 0.29.
@@ -241,42 +243,6 @@ CONFIG = {
     },
     # Phase-6 fit on 186 training BO1s (train log-likelihood -1.708 vs -1.946
     # uniform); temperature 0.687 fitted on the inner fold (its ECE was 0.038).
-    "veto_use_habits": False,
-    "veto_habit_k": 4.0,
-    # Phase 3 habits: team choice shares shrunk to the field with k_h
-    # pseudo-counts (posterior soft counts, 90 days, series < D).
-    "veto_use_roster": False,
-    "veto_roster_k": 4.0,
-    # Phase 4: roster-core level between team and field (lineups < D).
-    # Phase 7 (scripts/veto_phase7.py, data/veto_phase7_report.json): three
-    # evidence options, each OFF until it passes its gates. They change the
-    # evidence History builds (backtest.History reads these keys) and the
-    # exclusion / habit terms of the veto distribution only; the point veto,
-    # p_a and the frozen fields never see them. Stay OFF: every candidate
-    # (each change alone and combined) passed all gates except the scoreline
-    # non-regression (CI upper +0.0022..+0.0025 > +0.002, as phase 3); see
-    # data/veto_phase7_report.json.
-    "veto_decay_halflife": None,
-    # Days. Replaces the equal-weight 90-day window of the exclusion test and
-    # the habit counts by weights 0.5 ** (age / halflife) over
-    # veto_decay_horizon days. None = the flat 90-day window.
-    "veto_decay_horizon": 180,
-    "veto_soft_avoid": False,
-    # True: the binary zero-plays exclusion is replaced by a soft avoid score
-    # (veto.avoid_scores) weighted by the fitted zeta_* policy weights.
-    "veto_habit_k_ban": None,
-    # Habit / avoid shrinkage for ban kinds; None = veto_habit_k for every
-    # kind. The pick kind uses veto_pick_shrink_mult times this.
-    "veto_pick_shrink_mult": 4.0,
-    "veto_roster_discount": False,
-    # True: habit and exclusion evidence dated before a lineup change is
-    # multiplied by a factor that is veto_roster_floor right after a change of
-    # 2+ players (halfway for 1) and returns to 1 over veto_roster_recover
-    # series. Lineups dated < D only (data/lineups.json); a team whose lineup
-    # data is older than its last series gets no discount and a
-    # lineup_stale_X warning. Independent of veto_use_roster (stays False).
-    "veto_roster_floor": 0.4,
-    "veto_roster_recover": 8,
     "map_shrink_k": 10.0,
     # Per-team map-rate shrinkage toward the team's own pool average:
     # n/(n+10). A missing map is n=0 (no data), never a fabricated sample.
@@ -744,12 +710,10 @@ VETO_WARN_TEXT = {
     "cold_start_both": "no map history for either team; the veto distribution is close to uniform",
     "pool_too_large": "the pool is too large for the exact veto distribution; the single simulated veto is used",
     "pool_size_n": "the pool is not 7 maps; the veto steps follow the standard rules for this size",
-    "lineup_stale_a": "team A's lineup data is older than its last series; the roster-core level is skipped",
-    "lineup_stale_b": "team B's lineup data is older than its last series; the roster-core level is skipped",
 }
 
 
-def veto_context(m, best_of=3, legacy=False):
+def veto_context(m, best_of=3):
     """veto.Context for one input (PoolResolver + MapModel + the
     PreferenceEstimator of each team). Uses only the veto inputs: map
     records, the pool, veto evidence and permabans -- never ratings, h2h or
@@ -766,41 +730,14 @@ def veto_context(m, best_of=3, legacy=False):
     rel_a, _, _ = _team_maps(m.get("maps_a"), pool)
     rel_b, _, _ = _team_maps(m.get("maps_b"), pool)
     ell = {mp: CONFIG["map_scale"] * (rel_a[mp] - rel_b[mp]) for mp in pool}
-    use_h = bool(CONFIG.get("veto_use_habits"))
-    if use_h:
-        for t in "ab":
-            ev = m.get(f"veto_ev_{t}")
-            if not (isinstance(ev, dict) and "habit" in ev and "field" in ev):
-                # never run a different model silently: habit weights need
-                # habit evidence (backtest.History with a HabitAccumulator)
-                raise ValueError(f"veto_use_habits is on but veto_ev_{t} has no habit evidence; "
-                                 "build inputs with a History that has a HabitAccumulator")
-    if not legacy and (CONFIG.get("veto_decay_halflife") or CONFIG.get("veto_roster_discount")
-                       or CONFIG.get("veto_soft_avoid")):
-        for t in "ab":
-            ev = m.get(f"veto_ev_{t}")
-            if not (isinstance(ev, dict) and ev.get("wmaps") is not None):
-                # same rule as the habits: never run a different model silently
-                raise ValueError(f"a phase-7 veto option is on but veto_ev_{t} has no weighted evidence; "
-                                 "build inputs with backtest.History under the same CONFIG")
     prefs = {
-        "a": _veto.team_prefs(_comfort(m.get("maps_a"), pool), m.get("veto_ev_a"), pool, CONFIG, use_h, legacy),
-        "b": _veto.team_prefs(_comfort(m.get("maps_b"), pool), m.get("veto_ev_b"), pool, CONFIG, use_h, legacy),
+        "a": _veto.team_prefs(_comfort(m.get("maps_a"), pool), m.get("veto_ev_a"), pool, CONFIG),
+        "b": _veto.team_prefs(_comfort(m.get("maps_b"), pool), m.get("veto_ev_b"), pool, CONFIG),
     }
-    if not legacy and CONFIG.get("veto_roster_discount"):
-        for t in "ab":
-            ev = m.get(f"veto_ev_{t}")
-            if isinstance(ev, dict) and ev.get("roster_stale"):
-                warns.append(f"lineup_stale_{t}")
     if prefs["a"]["cold"] and prefs["b"]["cold"]:
         warns.append("cold_start_both")
     else:
         warns += [f"cold_start_{t}" for t in "ab" if prefs[t]["cold"]]
-    if use_h and CONFIG.get("veto_use_roster"):
-        for t in "ab":
-            ev = m.get(f"veto_ev_{t}")
-            if isinstance(ev, dict) and ev.get("core_stale"):
-                warns.append(f"lineup_stale_{t}")
     steps = _veto.format_steps(best_of, len(pool), VETO_ORDER, m.get("veto_format"))
     pb = {"a": m.get("permaban_a"), "b": m.get("permaban_b")}
     return _veto.Context(pool, best_of, steps, ell, prefs, pb, warns)
@@ -816,17 +753,6 @@ def veto_distribution(m, best_of=3):
     prefix = m.get("veto_prefix") if isinstance(m.get("veto_prefix"), list) else None
     dist, internals = _veto.distribution(ctx, veto_params(best_of), prefix)
     return dist, internals, ctx
-
-
-def veto_posterior(inp, played, w=None):
-    """Phase 3 HabitAccumulator hook: expected (choice, opportunity) counts per
-    team, kind and map under the posterior over vetoes consistent with the
-    played order. `w`: the policy weights the posterior uses (habit terms off)."""
-    w = dict(w or veto_params(3))
-    for k in ("eta_ban1", "eta_ban2", "eta_pick", "zeta_ban1", "zeta_ban2", "zeta_pick"):
-        w[k] = 0.0
-    ctx = veto_context(inp, 3, legacy=True)
-    return _veto.posterior_counts(ctx, w, played)
 
 
 def _modal_veto(ctx, internals):
@@ -999,7 +925,7 @@ def _compute(m):
                     1.0 if rnotes else 0.0, note])
 
     # 8. map-pool depth -- shown as evidence, weight 0 (no held-out signal
-    #    beyond strength, scripts/map_depth_check.py). Zero delta and zero
+    #    beyond strength, map_depth_check, removed 2026-10-13, in git history). Zero delta and zero
     #    variance, so it never moves p_a, the band or the shrink.
     pool = _pool(m)
     da = map_depth(m.get("maps_raw_a", m.get("maps_a")), pool)
@@ -1184,7 +1110,7 @@ def predict_match(m):
     # weights are fitted on BO3 results). The same per-map edge q is worth less
     # over one map and more over five: q = the flat per-map chance that gives
     # p_a over a BO3, then BO1 P(A) = q and BO5 P(A) = P(win 3 of 5 at q).
-    # Checked on real series (scripts/series_length_check.py): on 226 BO1s the
+    # Checked on real series (series_length_check, removed 2026-10-13, in git history): on 226 BO1s the
     # favourite won 60.2%; the BO3 number said 66.0%, this says 61.1%, and a
     # logit scale fitted freely on half the BO1s (0.64) matches the one this
     # implies (0.66). On 44 BO5s it says 73.2% against 72.7% actual (too few to

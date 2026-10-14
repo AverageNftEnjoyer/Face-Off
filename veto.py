@@ -8,7 +8,7 @@ exact probability distribution over every legal veto.
 
 Components (design: veto_architecture v2, section A):
   FormatSpec            format_steps(): the explicit step list (role, kind)
-  PreferenceEstimator   team_prefs(): comfort, exclusion set, habits -- a
+  PreferenceEstimator   team_prefs(): comfort and exclusion set -- a
                         function of (team, D) only, never of the opponent (I8)
   Policy                quantal response (softmax over a linear utility) at
                         one state; myopic (phase 1) or with lookahead values V
@@ -20,9 +20,16 @@ Components (design: veto_architecture v2, section A):
   ScorelineAdapter      mixture_scoreline(): the BO3 scoreline as a mixture
                         over outcomes with one shared logit shift; the ONLY
                         place that sees p_a, read-only (I6)
-  Likelihood            loglik(): P(observed map order), summing over every
-                        consistent veto and both starters (used by the fit
-                        and the harness)
+
+KNOWN LIMITATION (invariant I14 does not hold in general): with less map
+history for one team the distribution is NOT guaranteed to be flatter. Team
+A's map records feed both its comfort / exclusion set and the shared map
+logit ell = map_scale * (rel_a - rel_b), and the lookahead reads ell, so
+removing A's evidence can sharpen A's own choices or the opponent's (on 600
+random synthetic matches: total entropy fell by > 0.05 bits in 45, A's pick
+entropy in 73). Only the weak form holds and is tested: two teams with no
+history give the flattest distribution. A per-team map model would be needed
+for the strong form (it would change the published pick / ban chances).
 
 No team name and no map name appears as a literal in this file (I0). Every
 number that is a modelling choice is passed in from predictor.CONFIG.
@@ -150,32 +157,13 @@ def format_steps(best_of, n_pool, veto_order, veto_format=None):
 # ============================================================================
 # PreferenceEstimator -- (team, D) only
 # ============================================================================
-EXCL_PLAY_EPS = 0.25   # weighted plays below this count as "no plays" (phase 7); one equal-weight play is 1.0
-
-
-def exclusion_set(evidence, pool, alpha_excl, weighted=False):
+def exclusion_set(evidence, pool, alpha_excl):
     """E_X: maps with zero plays in the window whose zero count would be
     unlikely (prob <= alpha_excl) if the team played them at the field's
     point-in-time rate. evidence = {"maps": {map: [plays, n_pool_series,
-    log_p0]}} from backtest.History (series dated < D only).
-
-    weighted=True (phase 7) reads evidence["wmaps"] instead: every series is
-    weighted by recency decay and the roster-change discount, "zero plays" is
-    weighted plays < EXCL_PLAY_EPS (so an old or discounted play no longer
-    protects a map) and the zero-count probability is exp(weighted sum of
-    log(1 - rate)). With all weights 1 this is the baseline rule."""
+    log_p0]}} from backtest.History (series dated < D only)."""
     if not isinstance(evidence, dict) or not alpha_excl or alpha_excl <= 0:
         return set()
-    if weighted and evidence.get("wmaps") is not None:
-        out = set()
-        la = math.log(alpha_excl)
-        for mp in pool:
-            e = evidence["wmaps"].get(mp)
-            if not isinstance(e, (list, tuple)) or len(e) < 5:
-                continue
-            if e[0] < EXCL_PLAY_EPS and e[1] > 0 and e[2] <= la:
-                out.add(mp)
-        return out
     ev = evidence.get("maps") or {}
     out = set()
     la = math.log(alpha_excl)
@@ -189,88 +177,13 @@ def exclusion_set(evidence, pool, alpha_excl, weighted=False):
     return out
 
 
-def shrink_k(cfg):
-    """{kind: pseudo-count} for habit shares and avoid scores. Default: the
-    phase-3 veto_habit_k for every kind. With veto_habit_k_ban set (phase 7),
-    ban kinds use it and the pick kind uses veto_pick_shrink_mult times as
-    much (pick habits carry about a quarter of the held-out information)."""
-    kh = float(cfg.get("veto_habit_k", 4.0))
-    kb = cfg.get("veto_habit_k_ban")
-    if kb is None:
-        return {k: kh for k in KINDS}
-    kb = float(kb)
-    return {"ban1": kb, "ban2": kb, "pick": kb * float(cfg.get("veto_pick_shrink_mult", 4.0))}
-
-
-def avoid_scores(evidence, pool, cfg):
-    """Phase 7 soft avoid score: per kind and map, log((E + k) / (P + k)) with
-    P the (decayed, roster-discounted) plays of the team and E the plays the
-    field's play rate would have given it over the same series; k as in
-    shrink_k. Positive = played less than the field (avoided), negative =
-    played more; 0 with no evidence. Reads evidence["wmaps"]."""
-    out = {k: {mp: 0.0 for mp in pool} for k in KINDS}
-    wm = evidence.get("wmaps") if isinstance(evidence, dict) else None
-    if not wm:
-        return out
-    ks = shrink_k(cfg)
-    for k in KINDS:
-        for mp in pool:
-            e = wm.get(mp)
-            if isinstance(e, (list, tuple)) and len(e) >= 5:
-                out[k][mp] = math.log((e[3] + ks[k]) / (e[0] + ks[k]))
-    return out
-
-
-def habit_scores(evidence, pool, cfg):
-    """Phase 3: h_k,X(m) = log p_k,X(m) - log g_k(m), the team's shrunk choice
-    share at kind k over the field's. evidence["habit"] = {kind: {map: [c, o]}}
-    soft counts (posterior expectation over hidden vetoes, series < D) and
-    evidence["field"] = {kind: {map: [c, o]}} for the field prior g. Roster
-    core (phase 4): evidence["core"] = {kind: {map: [c, o]}} is the middle
-    level, skipped when evidence["core_stale"] is true. Zero evidence -> 0."""
-    out = {k: {mp: 0.0 for mp in pool} for k in KINDS}
-    if not isinstance(evidence, dict):
-        return out
-    hab = evidence.get("habit") or {}
-    field = evidence.get("field") or {}
-    core = evidence.get("core") if not evidence.get("core_stale") else None
-    khs = shrink_k(cfg)
-    kr = float(cfg.get("veto_roster_k", 4.0))
-    use_core = bool(cfg.get("veto_use_roster", False)) and isinstance(core, dict)
-    for k in KINDS:
-        kh = khs[k]
-        fk = field.get(k) or {}
-        hk = hab.get(k) or {}
-        ck = (core or {}).get(k) or {} if use_core else {}
-        legal = len(pool)
-        for mp in pool:
-            fc, fo = (fk.get(mp) or [0.0, 0.0])[:2]
-            g = (fc + 1.0) / (fo + legal) if fo > 0 else 1.0 / legal
-            prior = g
-            if use_core:
-                cc, co = (ck.get(mp) or [0.0, 0.0])[:2]
-                prior = (cc + kr * g) / (co + kr)
-            c, o = (hk.get(mp) or [0.0, 0.0])[:2]
-            p = (c + kh * prior) / (o + kh)
-            out[k][mp] = math.log(max(p, 1e-12)) - math.log(g)
-    return out
-
-
-def team_prefs(comfort, evidence, pool, cfg, use_habits=False, plain=False):
-    """PreferenceEstimator for one team: {"kappa", "excl", "habit", "avoid",
-    "cold"}. Depends only on the team's own inputs (I8). Phase 7: with
-    evidence["wmaps"] present the exclusion test uses the weighted counts; with
-    cfg veto_soft_avoid the binary exclusion is replaced by the soft avoid
-    scores ("avoid", None otherwise). plain=True ignores all of it (the
-    posterior that labels past vetoes for the habit counts is always plain)."""
-    has_w = (not plain) and isinstance(evidence, dict) and evidence.get("wmaps") is not None
-    soft = has_w and bool(cfg.get("veto_soft_avoid"))
-    excl = set() if soft else exclusion_set(evidence, pool, cfg.get("veto_excl_alpha", 0.0), weighted=has_w)
-    avoid = avoid_scores(evidence, pool, cfg) if soft else None
-    hab = habit_scores(evidence, pool, cfg) if use_habits else {k: {mp: 0.0 for mp in pool} for k in KINDS}
+def team_prefs(comfort, evidence, pool, cfg):
+    """PreferenceEstimator for one team: {"kappa", "excl", "cold"}. Depends
+    only on the team's own inputs (I8)."""
+    excl = exclusion_set(evidence, pool, cfg.get("veto_excl_alpha", 0.0))
     n_series = evidence.get("n", 0) if isinstance(evidence, dict) else 0
     cold = (not any(v > 0 for v in comfort.values())) and not n_series
-    return {"kappa": dict(comfort), "excl": excl, "habit": hab, "avoid": avoid, "cold": cold}
+    return {"kappa": dict(comfort), "excl": excl, "cold": cold}
 
 
 # ============================================================================
@@ -291,11 +204,6 @@ class Context:
         self.ell["b"] = [-x for x in self.ell["a"]]
         self.kap = {t: [prefs[t]["kappa"].get(mp, 0.0) for mp in self.pool] for t in "ab"}
         self.excl = {t: [mp in prefs[t]["excl"] for mp in self.pool] for t in "ab"}
-        self.hab = {t: {k: [prefs[t]["habit"][k].get(mp, 0.0) for mp in self.pool] for k in KINDS}
-                    for t in "ab"}
-        self.has_avoid = any(prefs[t].get("avoid") for t in "ab")
-        self.avoid = {t: {k: [(prefs[t].get("avoid") or {}).get(k, {}).get(mp, 0.0) for mp in self.pool]
-                          for k in KINDS} for t in "ab"} if self.has_avoid else None
         self.cold = {t: bool(prefs[t]["cold"]) for t in "ab"}
         self.masked = {t: sorted(prefs[t]["excl"]) for t in "ab"}
         pb = permaban or {}
@@ -344,22 +252,17 @@ class Tree:
                 a = float(w.get(f"alpha_{k}", 0.0))
                 g = float(w.get(f"gamma_{k}", 0.0))
                 r = float(w.get(f"rho_{k}", 0.0))
-                e = float(w.get(f"eta_{k}", 0.0))
-                ell, kap, kapo, hab = ctx.ell[t], ctx.kap[t], ctx.kap[o], ctx.hab[t][k]
+                ell, kap, kapo = ctx.ell[t], ctx.kap[t], ctx.kap[o]
                 if k == "pick":
                     if self.look:
-                        c = [g * kap[i] + e * hab[i] for i in range(n)]
+                        c = [g * kap[i] for i in range(n)]
                     else:
-                        c = [a * ell[i] + g * kap[i] + e * hab[i] for i in range(n)]
+                        c = [a * ell[i] + g * kap[i] for i in range(n)]
                 else:
                     if self.look:
-                        c = [-g * kap[i] + e * hab[i] for i in range(n)]
+                        c = [-g * kap[i] for i in range(n)]
                     else:
-                        c = [-a * ell[i] - g * kap[i] + r * kapo[i] + e * hab[i] for i in range(n)]
-                z = float(w.get(f"zeta_{k}", 0.0))
-                if z and ctx.has_avoid:      # phase 7: soft avoid (bans want it, picks shun it)
-                    av = ctx.avoid[t][k]
-                    c = [c[i] + (-z if k == "pick" else z) * av[i] for i in range(n)]
+                        c = [-a * ell[i] - g * kap[i] + r * kapo[i] for i in range(n)]
                 self.const[(t, k)] = c
         # leaf value: P(S wins | q = sigmoid(ell_S)) on the played maps
         q = [_sigmoid(x) for x in ctx.ell[sigma]]
@@ -431,145 +334,6 @@ class Tree:
 
     def root(self):
         return (0, self.ctx.full, ())
-
-
-# ============================================================================
-# Likelihood of an observed map order
-# ============================================================================
-def _obs_prob(tree, obs):
-    """P(observed played maps | sigma) summed over every consistent veto.
-    obs = map indices in played order (picks in pick order, then the decider
-    if it was played)."""
-    ctx = tree.ctx
-    npk = ctx.n_picks
-    obs = tuple(obs)
-    dec = obs[npk] if len(obs) > npk else None
-    obs_set = 0
-    for i in obs:
-        obs_set |= 1 << i
-    memo = {}
-
-    def rec(t, R, picks):
-        key = (t, R, picks)
-        if key in memo:
-            return memo[key]
-        if t == len(ctx.steps):
-            d = R.bit_length() - 1
-            r = 1.0 if (dec is None or d == dec) else 0.0
-            memo[key] = r
-            return r
-        kind = ctx.steps[t][1]
-        _, choices, _ = tree.node(t, R, picks)
-        tot = 0.0
-        if kind == "pick":
-            j = len(picks)
-            want = obs[j] if j < len(obs) else None
-            for i, p, ch in choices:
-                if want is None:
-                    if obs_set >> i & 1:
-                        continue
-                elif i != want:
-                    continue
-                if p > 0.0:
-                    tot += p * rec(*ch)
-        else:
-            for i, p, ch in choices:
-                if obs_set >> i & 1:
-                    continue
-                if p > 0.0:
-                    tot += p * rec(*ch)
-        memo[key] = tot
-        return tot
-
-    return rec(*tree.root())
-
-
-def loglik(ctx, w, obs_maps):
-    """log P(observed map order) mixing both starters with prior pi =
-    P(team_a started). obs_maps: map names in played order."""
-    pi = float(w.get("pi", 0.5))
-    obs = [ctx.idx[mp] for mp in obs_maps]
-    pa = _obs_prob(Tree(ctx, w, "a"), obs)
-    pb = _obs_prob(Tree(ctx, w, "b"), obs)
-    p = pi * pa + (1.0 - pi) * pb
-    return math.log(p) if p > 0 else float("-inf"), pa, pb
-
-
-def posterior_counts(ctx, w, obs_maps):
-    """Phase 3 (HabitAccumulator): expected choice counts c and opportunity
-    counts o per (team, kind, map) under the posterior over vetoes consistent
-    with the observed map order (both starters, prior pi). Returns
-    {team: {kind: {map: [c, o]}}} or None if the order has probability 0."""
-    pi = float(w.get("pi", 0.5))
-    obs = tuple(ctx.idx[mp] for mp in obs_maps)
-    npk = ctx.n_picks
-    dec = obs[npk] if len(obs) > npk else None
-    obs_set = 0
-    for i in obs:
-        obs_set |= 1 << i
-    trees = {s: Tree(ctx, w, s) for s in "ab"}
-    betas = {}
-    for s, tree in trees.items():
-        memo = {}
-
-        def rec(t, R, picks, tree=tree, memo=memo):
-            key = (t, R, picks)
-            if key in memo:
-                return memo[key]
-            if t == len(ctx.steps):
-                d = R.bit_length() - 1
-                r = 1.0 if (dec is None or d == dec) else 0.0
-                memo[key] = r
-                return r
-            kind = ctx.steps[t][1]
-            _, choices, _ = tree.node(t, R, picks)
-            tot = 0.0
-            for i, p, ch in choices:
-                if kind == "pick":
-                    j = len(picks)
-                    want = obs[j] if j < len(obs) else None
-                    if (want is None and obs_set >> i & 1) or (want is not None and i != want):
-                        continue
-                elif obs_set >> i & 1:
-                    continue
-                if p > 0.0:
-                    tot += p * rec(*ch)
-            memo[key] = tot
-            return tot
-
-        rec(*tree.root())
-        betas[s] = memo
-    z = {s: betas[s].get(trees[s].root(), 0.0) for s in "ab"}
-    total = pi * z["a"] + (1.0 - pi) * z["b"]
-    if total <= 0:
-        return None
-    out = {t: {k: {mp: [0.0, 0.0] for mp in ctx.pool} for k in KINDS} for t in "ab"}
-    for s, tree in trees.items():
-        prior = pi if s == "a" else 1.0 - pi
-        if z[s] <= 0:
-            continue
-        beta = betas[s]
-        layer = {tree.root(): prior / total}
-        for t in range(len(ctx.steps)):
-            role, kind = ctx.steps[t]
-            team = tree.team[role]
-            nxt = {}
-            for st in sorted(layer):
-                a = layer[st]
-                _, choices, _ = tree.node(*st)
-                reach = a * beta.get(st, 0.0)       # posterior P(reach st)
-                if reach <= 0:
-                    continue
-                cell = out[team][kind]
-                for i, p, ch in choices:
-                    cell[ctx.pool[i]][1] += reach     # m was available at this choice
-                    b = beta.get(ch, 0.0)
-                    if p <= 0 or b <= 0:
-                        continue
-                    cell[ctx.pool[i]][0] += a * p * b
-                    nxt[ch] = nxt.get(ch, 0.0) + a * p
-            layer = nxt
-    return out
 
 
 # ============================================================================

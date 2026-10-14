@@ -57,3 +57,23 @@ data/roster_diff.md
 # --- second results source: fill-in review list (scripts/cross_source_check.py
 # --fill-candidates); never merged, never committed ---
 data/valve_fill.candidate.json
+
+# --- not public: internal docs, research reports, local tooling ---
+# (kept on disk, never pushed; the site build, CI and tests do not read them)
+docs/
+.claude/
+data/backtest_report.md
+data/ban_patterns_report.json
+data/cross_source_report.json
+data/fit_report.json
+data/lineup_eval_report.json
+data/lower_tier_report.json
+data/map_depth_report.json
+data/mismatch_report.json
+data/newcomer_report*.json
+data/roster_rating_report.json
+data/veto_fit_report.json
+data/veto_phase[1-7]*_report.json
+data/form_*_report.json
+data/form_diagnosis_report.json
+data/veto_phase0_report.json

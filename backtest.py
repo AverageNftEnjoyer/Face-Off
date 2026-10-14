@@ -17,14 +17,14 @@ PIPELINE
      never cuts through a calendar day).
   4. Fit CONFIG["temperature"] of the current engine on TRAIN only
      (golden-section search on mean log-loss of sigmoid(T * total_logodds)).
-  5. Score on TEST: current engine (fitted T), old engine (legacy/predictor_v1,
-     untouched), and baselines (coin flip, Elo-only probability, higher-Elo pick).
+  5. Score on TEST: current engine (fitted T) and baselines (coin flip,
+     Elo-only probability, higher-Elo pick).
 
 FEATURES (all point-in-time, see FEATURE DOC in data/backtest_report.md)
   rating        proxy: series-level Elo (init 1500, K=32, BO-weighted K) mapped
                 linearly: rating = 1.0 + (elo - 1500) / ELO_PER_RATING (2000).
                 ~150 Elo between a top-5 and a mid team => ~0.075 rating gap.
-                NOT a real HLTV rating. Teams entering the data more than 90
+                Not a published team rating. Teams entering the data more than 90
                 days after its start begin at 1500 - NEWCOMER_OFFSET (150).
   form30/n30    series win rate / count in the 30 days before D (absent -> key omitted)
   opp_rating30  mean proxy rating of opponents faced in those 30 days
@@ -68,9 +68,8 @@ ELO_PER_RATING = 2000.0                     # rating = 1 + (elo-1500)/2000
 # after the first series in the data starts at ELO_INIT - NEWCOMER_OFFSET
 # (S/A newcomers mostly arrive from lower tiers; every team present at the
 # start of the data still starts at ELO_INIT, so the offset is relative to the
-# established field). Its first PROVISIONAL_N series move its Elo with
-# K x PROVISIONAL_K_MULT (its opponent moves by the normal step).
-# Evidence (scripts/newcomer_check.py, pre-registered, walk-forward over
+# established field).
+# Evidence (pre-registered newcomer check, walk-forward over
 # 91-day blocks, offset picked per fold on earlier newcomer rows): on 158
 # held-out BO3 series where a team had < 5 prior S/A series, log loss 0.6837
 # -> 0.6400 (paired 95% CI of the difference [-0.074, -0.016]), Brier 0.2451
@@ -79,19 +78,9 @@ ELO_PER_RATING = 2000.0                     # rating = 1 + (elo-1500)/2000
 # established teams beat newcomers far more often than Elo said (65% when
 # the established side was rated below 1500; Elo said 44%). 150 is the value
 # the walk-forward picked in 7 of 8 folds (the all-rows best, 200, costs the
-# graded rows more in-sample: 0.6305 vs 0.6279). The provisional-K variant
-# (x2 for the first 10 series) hurt graded rows and is off.
+# graded rows more in-sample: 0.6305 vs 0.6279).
 NEWCOMER_OFFSET = 150.0
 NEWCOMER_AFTER_DAYS = 90
-# "start": the offset is the team's starting Elo (it then feeds every Elo
-# update). "feature": the Elo table is untouched; only the rating fed to the
-# engine for a late-entering team is lowered, by the offset x (MIN_HISTORY -
-# prior series) / MIN_HISTORY, fading to 0 at MIN_HISTORY series. Series
-# where both teams have >= MIN_HISTORY prior series are then unchanged.
-NEWCOMER_MODE = "start"
-NEWCOMER_FEATURE_OFFSET = 0.0
-PROVISIONAL_N = 0
-PROVISIONAL_K_MULT = 1.0
 MIN_HISTORY = 5
 VOL_WINDOW = 10
 VOL_SCALE = 2.5
@@ -99,13 +88,35 @@ VOL_DEFAULT = 0.3
 POOL_WINDOW_DAYS = 60
 POOL_MIN_PLAYS = 3
 POOL_SIZE = 7
-# Map inputs to the engine. "residual": per-map results relative to what Elo
+# Map inputs to the engine ("maps"): per-map results relative to what Elo
 # expected in those maps (0.5 + mean(won - expected)), so a team's strength is
-# not counted again through its map rates and one strong map does not make
-# every other map look weak after the engine's pool-relative step. "raw":
-# plain 90-day win rates (the original behaviour; the veto factor was
-# anti-predictive with these, see fit_weights.py).
-MAP_RATES = "residual"
+# not counted again through its map rates. "maps_raw" (plain 90-day win rates)
+# feeds only the shown-not-counted map-depth row.
+# Lower-tier results (data/matches_lower.json: B-tier main events, closed
+# qualifiers, untracked S/A events) as rating DATA. They never become events,
+# fixtures or predictions; they only move series Elo, by K x best-of weight x
+# LOWER_TIER_ELO_WEIGHT. 30-day form, last-5, maps, h2h, volatility, veto
+# evidence and the prior-series counts that gate eval rows (and the newcomer
+# offset) stay S/A-only. Day order: features for day D see only series (S/A
+# and lower) dated < D; day D is folded in S/A first, then lower.
+# Evidence: lower_tier_check, removed 2026-10-13, in git history (pre-registered 2026-10-08;
+# data/lower_tier_report.json). Ship rule set with the owner: ON only if, on
+# the primary rows, the chosen variant's log loss <= base (point estimate),
+# its calibration passes L3 and it is not worse than base on either half of
+# the window (L2). Re-run 2026-10-13 (2,404 S/A + 8,961 lower series, 581
+# primary rows): elo_0.25 log loss 0.6140 vs base 0.6160 (-0.0020, CI
+# [-0.0092, +0.0054]), L3 pass, but the second half is worse (0.6255 vs
+# 0.6247), so L2 fails and the setting is OFF. Candidate when re-tested:
+# 0.25 (best Elo-only variant in both runs; full weight was worse in both).
+# 0 = off: lower-tier series are still shown on team pages, never rated.
+LOWER_TIER_ELO_WEIGHT = 0.0
+LOWER_TIER_CANDIDATE_WEIGHT = 0.25   # the value a re-test would switch on; leakage_check tests it
+# "elo": every lower-tier series moves Elo; "linked": only series where at
+# least one team already has an S/A series (lower_tier_check option b).
+# "elo" had the better primary log loss in both runs (2026-10-13: -0.0020
+# vs -0.0017) and the same L2 / L3 outcome.
+LOWER_TIER_MODE = "elo"
+LOWER_PATH = os.path.join(DATA, "matches_lower.json")
 # Window of the veto evidence (exclusion test in veto.py): the same 90 days as
 # the per-map records the veto already uses.
 VETO_EV_DAYS = 90
@@ -241,6 +252,99 @@ def load_matches(path=None):
     return sorted(ms, key=lambda m: (m["date"], m["id"]))
 
 
+def valid_lower(m):
+    """A lower-tier record the history can fold in: ISO date, two different
+    teams, the winner one of them."""
+    try:
+        return (isinstance(m.get("date"), str) and len(m["date"]) == 10 and _d(m["date"]) is not None
+                and isinstance(m.get("team_a"), str) and isinstance(m.get("team_b"), str)
+                and m["team_a"] and m["team_b"] and m["team_a"] != m["team_b"]
+                and m.get("winner") in (m["team_a"], m["team_b"]))
+    except (TypeError, ValueError):
+        return False
+
+
+def load_lower(path=None, weight=None):
+    """Lower-tier series for the HISTORY: read_lower(), or [] when
+    LOWER_TIER_ELO_WEIGHT (or `weight`) is 0 (switched off)."""
+    w = LOWER_TIER_ELO_WEIGHT if weight is None else weight
+    return read_lower(path) if w else []
+
+
+def read_lower(path=None):
+    """data/matches_lower.json sorted by (date, file order), each record with
+    id ("L", i). [] when the file is missing or unreadable (a warning:
+    lower-tier data is optional and must never break a build). Records that
+    fail valid_lower are skipped and counted in the warning."""
+    path = path or LOWER_PATH
+    try:
+        with open(path, encoding="utf-8") as f:
+            ms = json.load(f)
+        if not isinstance(ms, list):
+            raise ValueError("not a list")
+    except (OSError, ValueError) as e:
+        print(f"WARNING lower-tier data unavailable ({type(e).__name__}: {e}); ratings use S/A series only",
+              file=sys.stderr)
+        return []
+    out = []
+    for i, m in enumerate(ms):
+        if isinstance(m, dict) and valid_lower(m):
+            out.append(dict(m, id=("L", i)))
+    if len(out) < len(ms):
+        print(f"WARNING lower-tier data: {len(ms) - len(out)} malformed records skipped", file=sys.stderr)
+    return sorted(out, key=lambda m: (m["date"], m["id"][1]))
+
+
+def lower_label(m):
+    """Display label of a lower-tier series' event tier: "B-tier",
+    "A-tier qualifier", ... ("Lower tier" when the record names no tier)."""
+    t = (m.get("tier") or "").strip().upper()
+    base = f"{t}-tier" if t else "Lower tier"
+    return base + (" qualifier" if m.get("kind") == "qualifier" else "")
+
+
+def day_groups(matches, lower=()):
+    """[(day, [S/A series], [lower-tier series])] in date order: the calendar
+    every history builder walks. S/A series keep their (date, id) order."""
+    by_day = {}
+    for m in sorted(matches, key=lambda m: (m["date"], m.get("id", 0))):
+        by_day.setdefault(m["date"], ([], []))[0].append(m)
+    for m in lower or ():
+        by_day.setdefault(m["date"], ([], []))[1].append(m)
+    return [(d, by_day[d][0], by_day[d][1]) for d in sorted(by_day)]
+
+
+class Replay:
+    """Walks day_groups forward: until(day) folds every day < day into the
+    history (S/A first, then lower), so a call for `day` sees only earlier
+    days. on_step(h, m, lower) runs after each series that changed state."""
+
+    def __init__(self, matches, lower=(), history=None, on_step=None):
+        self.days = day_groups(matches, lower)
+        self.h = history if history is not None else History()
+        self.i = 0
+        self.on_step = on_step
+
+    def until(self, day):
+        while self.i < len(self.days) and _d(self.days[self.i][0]) < day:
+            _, sa, lo = self.days[self.i]
+            for m in sa:
+                self.h.add(m)
+                if self.on_step:
+                    self.on_step(self.h, m, False)
+            for m in lo:
+                if self.h.add_lower(m) and self.on_step:
+                    self.on_step(self.h, m, True)
+            self.i += 1
+        return self.h
+
+    def all(self):
+        """Fold everything in (no cutoff)."""
+        if self.days:
+            self.until(_d(self.days[-1][0]) + timedelta(days=1))
+        return self.h
+
+
 # ------------------------------------------------------------------ rosters
 _ROSTER = None
 
@@ -330,105 +434,6 @@ class _EloTable(dict):
         return self.hist.start_elo()
 
 
-class HabitAccumulator:
-    """Veto phase 3: online team ban / pick habits (design ADR-8).
-
-    When a BO3 series dated D is folded in, its posterior over the vetoes
-    consistent with the played map order is computed from veto inputs of D
-    (every one of them filters on dates < D) by `posterior_fn(inp, played)`
-    -> {"a": {kind: {map: [c, o]}}, "b": ...} (expected choice counts c and
-    opportunity counts o). Evidence for (team, D) sums records dated < D
-    only: the team's own within VETO_EV_DAYS, the field's over all series
-    < D. `leaky=True` is the leakage canary (records dated <= D count)."""
-
-    KINDS = ("ban1", "pick", "ban2")
-
-    def __init__(self, posterior_fn, leaky=False, core_fn=None):
-        self.post = posterior_fn
-        self.leaky = leaky
-        self.core_fn = core_fn           # (team, dt) -> (core five or None, stale)
-        self.recs = defaultdict(list)    # team -> [(date, counts)]
-        self.recs_all = []               # (date, five or None, counts): roster-core level (phase 4)
-        self.snap_dates = []             # field totals after all records dated <= snap_dates[i]
-        self.snaps = []
-        self.total = {k: {} for k in self.KINDS}
-
-    def on_add(self, h, m, inp):
-        if m.get("best_of") != 3 or len(m.get("maps") or []) < 2:
-            return
-        played = [x["map"] for x in m["maps"]]
-        pool = inp.get("map_pool") or []
-        if any(p not in pool for p in played) or len(set(played)) != len(played):
-            return
-        counts = self.post(inp, played)
-        if counts is None:
-            return
-        dt = _d(m["date"])
-        if self.snap_dates and dt < self.snap_dates[-1]:
-            raise ValueError("HabitAccumulator needs series folded in date order")
-        for side, team in (("a", m["team_a"]), ("b", m["team_b"])):
-            self.recs[team].append((dt, counts[side]))
-            self.recs_all.append((dt, h.lineup_of(m, side), counts[side]))
-            for k in self.KINDS:
-                tk = self.total[k]
-                for mp, (c, o) in (counts[side].get(k) or {}).items():
-                    cur = tk.setdefault(mp, [0.0, 0.0])
-                    cur[0] += c
-                    cur[1] += o
-        snap = {k: {mp: list(v) for mp, v in self.total[k].items()} for k in self.KINDS}
-        if self.snap_dates and self.snap_dates[-1] == dt:
-            self.snaps[-1] = snap
-        else:
-            self.snap_dates.append(dt)
-            self.snaps.append(snap)
-
-    def _ok(self, d, dt):
-        return d <= dt if self.leaky else d < dt
-
-    @staticmethod
-    def _sum(recs, pool, weight=None):
-        """Sum of (c, o) counts over `recs`; `weight(date)` scales each record
-        (veto phase 7: recency decay / roster discount). None = equal weights."""
-        out = {k: {mp: [0.0, 0.0] for mp in sorted(pool)} for k in HabitAccumulator.KINDS}
-        for d, c in recs:
-            w = 1.0 if weight is None else weight(d)
-            for k in HabitAccumulator.KINDS:
-                ck = c.get(k) or {}
-                for mp in out[k]:
-                    v = ck.get(mp)
-                    if v:
-                        if weight is None:
-                            out[k][mp][0] += v[0]
-                            out[k][mp][1] += v[1]
-                        else:
-                            out[k][mp][0] += w * v[0]
-                            out[k][mp][1] += w * v[1]
-        return out
-
-    def evidence(self, team, dt, pool, weight=None, horizon=None):
-        """`weight(record_date)` and `horizon` (days) are the phase-7 options:
-        both None reproduces the equal-weight VETO_EV_DAYS window exactly."""
-        lo = dt - timedelta(days=VETO_EV_DAYS if horizon is None else horizon)
-        own = [r for r in self.recs.get(team, []) if lo <= r[0] and self._ok(r[0], dt)]
-        snap = None
-        for d, sn in zip(reversed(self.snap_dates), reversed(self.snaps)):
-            if self._ok(d, dt):
-                snap = sn
-                break
-        field = {k: {mp: list((snap or {}).get(k, {}).get(mp, [0.0, 0.0])) for mp in sorted(pool)}
-                 for k in self.KINDS}
-        out = {"habit": self._sum(own, pool, weight), "field": field, "habit_n": len(own)}
-        if self.core_fn is not None:
-            core, stale = self.core_fn(team, dt)
-            if core:
-                rs = [(d, c) for d, five, c in self.recs_all
-                      if five and lo <= d and self._ok(d, dt) and len(core & five) >= 3]
-                out["core"] = self._sum(rs, pool)
-                out["core_n"] = len(rs)
-            out["core_stale"] = bool(stale) or not core
-        return out
-
-
 class History:
     """State built ONLY from series already folded in (all dated < current day)."""
 
@@ -447,44 +452,23 @@ class History:
         self.vteam = defaultdict(list)   # team -> indexes into vseries
         self._pool_cache = {}
         self._rate_cache = {}
-        self.habits = None               # optional HabitAccumulator (veto phase 3)
-        self.lineups = None              # optional {"date|a|b": {"a": five, "b": five}} (veto phase 4)
-        self.lineup_hist = defaultdict(list)
-        self.ev_cfg = None               # veto phase-7 evidence options; None = predictor.CONFIG (see _cfg)
+        self.lower_w = None              # lower-tier Elo weight; None = LOWER_TIER_ELO_WEIGHT
+        self.lower_mode = None           # None = LOWER_TIER_MODE
+        self.lower_n = defaultdict(int)  # team -> lower-tier series folded in (display only)
 
     def start_elo(self):
         """Starting Elo of a team not seen yet, at self.clock."""
-        if (NEWCOMER_OFFSET and NEWCOMER_MODE == "start" and self.first_day is not None and self.clock is not None
+        if (NEWCOMER_OFFSET and self.first_day is not None and self.clock is not None
                 and (self.clock - self.first_day).days > NEWCOMER_AFTER_DAYS):
             return ELO_INIT - NEWCOMER_OFFSET
         return ELO_INIT
 
-    def is_late_entrant(self, team):
-        """True if the team's first series (or, unseen, the current clock) is
-        more than NEWCOMER_AFTER_DAYS after the first series in the data."""
-        if self.first_day is None:
-            return False
-        g = self.games[team]
-        d = g[0]["date"] if g else self.clock
-        return d is not None and (d - self.first_day).days > NEWCOMER_AFTER_DAYS
-
     def feature_elo(self, team):
-        """Elo fed to the engine: the table value, minus the fading newcomer
-        offset in "feature" mode (see NEWCOMER_MODE)."""
-        e = self.elo[team]
-        if NEWCOMER_MODE == "feature" and NEWCOMER_FEATURE_OFFSET:
-            n = len(self.games[team])
-            if n < MIN_HISTORY and self.is_late_entrant(team):
-                e -= NEWCOMER_FEATURE_OFFSET * (MIN_HISTORY - n) / MIN_HISTORY
-        return e
+        """Elo fed to the engine (the table value)."""
+        return self.elo[team]
 
     def add(self, m):
         a, b = m["team_a"], m["team_b"]
-        if self.habits is not None:
-            # veto inputs of D filter on dates < D, so same-day series already
-            # folded in cannot reach them
-            inp, _ = self.features(m)
-            self.habits.on_add(self, m, inp)
         self.clock = _d(m["date"])
         if self.first_day is None:
             self.first_day = self.clock
@@ -500,18 +484,7 @@ class History:
                                            for x in m.get("maps", [])]})
         k = ELO_K * ELO_K_BY_TIER.get(m.get("tier"), 1.0)
         na, nb = elo_update(ea, eb, a_won, m.get("best_of", 3), k=k)
-        if PROVISIONAL_N and PROVISIONAL_K_MULT != 1.0:
-            # games[t] already holds this series, so len - 1 = series before it
-            if len(self.games[a]) - 1 < PROVISIONAL_N:
-                na = ea + (na - ea) * PROVISIONAL_K_MULT
-            if len(self.games[b]) - 1 < PROVISIONAL_N:
-                nb = eb + (nb - eb) * PROVISIONAL_K_MULT
         self.elo[a], self.elo[b] = na, nb
-        if self.lineups is not None:
-            for side, t in (("a", a), ("b", b)):
-                five = self.lineup_of(m, side)
-                if five:
-                    self.lineup_hist[t].append((dt, five))
         pool_dt = self.pool_at(dt)       # pool of this series' own date (series < dt)
         self._invalidate(dt)
         for x in m.get("maps", []):
@@ -521,31 +494,27 @@ class History:
         for t in (a, b):
             self.vteam[t].append(len(self.vseries) - 1)
 
+    def add_lower(self, m):
+        """Fold in one lower-tier series: series Elo only, step K x best-of
+        weight x LOWER_TIER_ELO_WEIGHT. games[] (form, last-5, maps, h2h,
+        volatility, prior-series counts), veto evidence and first_day are not
+        touched. Returns True when the series moved Elo."""
+        w = LOWER_TIER_ELO_WEIGHT if self.lower_w is None else self.lower_w
+        if not w:
+            return False
+        a, b = m["team_a"], m["team_b"]
+        mode = LOWER_TIER_MODE if self.lower_mode is None else self.lower_mode
+        if mode == "linked" and not (self.games.get(a) or self.games.get(b)):
+            return False
+        self.clock = _d(m["date"])
+        ea, eb = self.elo[a], self.elo[b]
+        na, nb = elo_update(ea, eb, m["winner"] == a, m.get("best_of", 3), k=ELO_K * w)
+        self.elo[a], self.elo[b] = na, nb
+        self.lower_n[a] += 1
+        self.lower_n[b] += 1
+        return True
+
     # ------------------------------------------------------------ veto evidence
-    def lineup_of(self, m, side):
-        if not self.lineups:
-            return None
-        rec = self.lineups.get(f"{m['date']}|{m['team_a']}|{m['team_b']}") or {}
-        return frozenset(rec[side]) if rec.get(side) else None
-
-    def core_five(self, team, dt, core_n=8):
-        """(core five, stale) from the team's lineups dated < dt, with the
-        lineup_features rule (most appearances in its last core_n lineups,
-        ties to the most recent). stale: its last series is newer than its
-        last lineup (failure mode lineup_stale_X)."""
-        prior = [(d, f) for d, f in self.lineup_hist.get(team, []) if d < dt]
-        if not prior:
-            return None, True
-        recent = prior[-core_n:]
-        count, seen = defaultdict(int), {}
-        for i, (_, five) in enumerate(recent):
-            for p in five:
-                count[p] += 1
-                seen[p] = i
-        core = frozenset(sorted(count, key=lambda p: (-count[p], -seen[p], p))[:5])
-        last_series = max((r["date"] for r in self.games.get(team, []) if r["date"] < dt), default=None)
-        return core, last_series is not None and last_series > prior[-1][0]
-
     def _invalidate(self, dt):
         """A series dated dt changes pools / rates only for dates > dt."""
         for c in (self._pool_cache, self._rate_cache):
@@ -580,76 +549,12 @@ class History:
             self._rate_cache[dt] = r
         return r
 
-    # ------------------------------------------------ phase 7: weighted evidence
-    def _cfg(self):
-        """Evidence options: self.ev_cfg, else the CONFIG of the imported
-        `predictor` (read at call time; absent -> every option off)."""
-        if self.ev_cfg is not None:
-            return self.ev_cfg
-        p = sys.modules.get("predictor")
-        return getattr(p, "CONFIG", {}) if p is not None else {}
-
-    def roster_events(self, team, dt, floor, recover):
-        """(events, stale) for the roster-change discount. events = [(change
-        date, factor)]: a lineup that differs from the team's previous one in
-        n players (first seen in the series dated `change date`) multiplies the
-        weight of every evidence record dated BEFORE that date by
-        1 - (1 - floor) * min(1, n / 2) * max(0, 1 - (k - 1) / recover), k = the
-        team's series played with the new lineup so far (1 right after the
-        change, full weight again from k = recover + 1). Lineups dated < dt
-        only. stale: the team's last series is newer than its last lineup (or it
-        has no lineup): no discount, same rule as core_five."""
-        hist = [(d, f) for d, f in self.lineup_hist.get(team, []) if d < dt]
-        if not hist:
-            return [], True
-        last_series = next((r["date"] for r in reversed(self.games.get(team, [])) if r["date"] < dt), None)
-        if last_series is not None and last_series > hist[-1][0]:
-            return [], True
-        n = len(hist)
-        out = []
-        for i in range(max(1, n - recover), n):
-            changed = 5 - len(hist[i - 1][1] & hist[i][1])
-            if changed <= 0:
-                continue
-            k = n - i
-            f = 1.0 - (1.0 - floor) * min(1.0, changed / 2.0) * max(0.0, 1.0 - (k - 1) / float(recover))
-            out.append((hist[i][0], f))
-        return out, False
-
-    def record_weights(self, team, dt, cfg):
-        """(weight(record_date) or None, horizon days, roster_stale). None when
-        no phase-7 option is on (legacy equal weights over VETO_EV_DAYS)."""
-        hl = cfg.get("veto_decay_halflife")
-        roster = bool(cfg.get("veto_roster_discount"))
-        if not hl and not roster:
-            return None, VETO_EV_DAYS, False
-        events, stale = ([], False)
-        if roster:
-            events, stale = self.roster_events(team, dt, float(cfg.get("veto_roster_floor", 0.4)),
-                                               int(cfg.get("veto_roster_recover", 8)))
-
-        def weight(d):
-            x = 0.5 ** ((dt - d).days / float(hl)) if hl else 1.0
-            for c, f in events:
-                if d < c:
-                    x *= f
-            return x
-        horizon = int(cfg.get("veto_decay_horizon", 180)) if hl else VETO_EV_DAYS
-        return weight, horizon, stale
-
     def veto_evidence(self, team, dt, pool):
         """Point-in-time evidence for the veto's exclusion test (veto.py):
         over the team's series in the VETO_EV_DAYS days before dt, per pool
         map: [series where it was played, series with it in their pool,
-        sum of log(1 - field play rate at that series' date)].
-
-        Phase 7 (CONFIG veto_decay_halflife / veto_roster_discount /
-        veto_soft_avoid, all off by default): adds ev["wmaps"], the same
-        counts with each series weighted by recency decay and the roster-change
-        discount, over the decay horizon: per map [weighted plays, weighted
-        series with the map in the pool, weighted sum of log(1 - rate),
-        weighted expected plays (sum of rate), raw plays]. The legacy "maps"
-        stay as they were. Series dated < dt only."""
+        sum of log(1 - field play rate at that series' date)]. Series dated
+        < dt only."""
         lo = dt - timedelta(days=VETO_EV_DAYS)
         js = [self.vseries[j] for j in self.vteam.get(team, []) if lo <= self.vseries[j][0] < dt]
         out = {}
@@ -663,33 +568,7 @@ class History:
                     rate = min(self.field_rates(d).get(mp, 0.0), 1.0 - 1e-9)
                     lp += math.log(1.0 - rate)
             out[mp] = [plays, n_pool, lp]
-        ev = {"n": len(js), "maps": out}
-        cfg = self._cfg()
-        weight, horizon, stale = self.record_weights(team, dt, cfg)
-        if weight is not None or cfg.get("veto_soft_avoid"):
-            wlo = dt - timedelta(days=horizon)
-            jw = [self.vseries[j] for j in self.vteam.get(team, []) if wlo <= self.vseries[j][0] < dt]
-            ws = [1.0 if weight is None else weight(d) for d, _, _, _ in jw]
-            wm = {}
-            for mp in sorted(pool):
-                pw = nw = lw = ew = 0.0
-                raw = 0
-                for (d, jpool, played, _), w in zip(jw, ws):
-                    if mp in played:
-                        pw += w
-                        raw += 1
-                    if mp in jpool:
-                        nw += w
-                        rate = min(self.field_rates(d).get(mp, 0.0), 1.0 - 1e-9)
-                        lw += w * math.log(1.0 - rate)
-                        ew += w * rate
-                wm[mp] = [pw, nw, lw, ew, raw]
-            ev["wmaps"] = wm
-            if cfg.get("veto_roster_discount"):
-                ev["roster_stale"] = stale
-        if self.habits is not None:
-            ev.update(self.habits.evidence(team, dt, pool, weight, horizon if weight is not None else None))
-        return ev
+        return {"n": len(js), "maps": out}
 
     def n_prior(self, team):
         return len(self.games[team])
@@ -725,7 +604,7 @@ class History:
         out["maps_raw"] = {mp: [round(w / n, 4), n] for mp, (w, n, _) in sorted(maps.items())}
         out["maps_resid"] = {mp: [round(min(1.0, max(0.0, 0.5 + e / n)), 4), n]
                              for mp, (_, n, e) in sorted(maps.items())}
-        out["maps"] = out["maps_resid"] if MAP_RATES == "residual" else out["maps_raw"]
+        out["maps"] = out["maps_resid"]
         lastv = g[-VOL_WINDOW:]
         if len(lastv) >= 3:
             dev = abs(sum(r["won"] for r in lastv) - sum(r["exp"] for r in lastv)) / len(lastv)
@@ -775,24 +654,23 @@ class History:
         return inp, meta
 
 
-def build_dataset(matches):
+def build_dataset(matches, lower=None):
     """Return a list (same order as `matches` sorted by date) of
-    {"match", "input", "meta"} with features from strictly earlier days."""
-    ms = sorted(matches, key=lambda m: (m["date"], m.get("id", 0)))
+    {"match", "input", "meta"} with features from strictly earlier days.
+    `lower`: lower-tier series (load_lower()) folded into the Elo after each
+    day's S/A series; rows are made for the S/A series only. Callers on the
+    real data pass lower=load_lower() so the backtest, walk-forward and site
+    share one history; None (synthetic data) folds in nothing."""
     h = History()
     out = []
-    i = 0
-    while i < len(ms):
-        j = i
-        while j < len(ms) and ms[j]["date"] == ms[i]["date"]:
-            j += 1
-        day = ms[i:j]
+    for _, day, lo in day_groups(matches, lower):
         for m in day:                    # 1) features from state of days < D
             inp, meta = h.features(m)
             out.append({"match": m, "input": inp, "meta": meta})
         for m in day:                    # 2) then fold day D in
             h.add(m)
-        i = j
+        for m in lo:                     # 3) then day D's lower-tier series
+            h.add_lower(m)
     return out
 
 
@@ -830,18 +708,12 @@ def load_module(name, path):
     return mod
 
 
-def load_engines():
-    new = old = None
-    errs = {}
+def load_engine():
+    """(predictor module or None, errors)."""
     try:
-        new = load_module("predictor_current", os.path.join(HERE, "predictor.py"))
+        return load_module("predictor_current", os.path.join(HERE, "predictor.py")), {}
     except Exception as e:  # engine may be mid-rewrite
-        errs["new"] = repr(e)
-    try:
-        old = load_module("predictor_v1", os.path.join(HERE, "legacy", "predictor_v1.py"))
-    except Exception as e:
-        errs["old"] = repr(e)
-    return new, old, errs
+        return None, {"new": repr(e)}
 
 
 def get_total_logodds(mod, inp):
@@ -929,10 +801,12 @@ def scoreline_acc(preds, actual):
 def run(matches_path=None, min_history=MIN_HISTORY, train_frac=0.6, seed=12345, quiet=False):
     random.seed(seed)
     matches = load_matches(matches_path)
-    rows = build_dataset(matches)
+    # the real data gets the same lower-tier history as the site; a custom file does not
+    lower = load_lower() if matches_path is None else None
+    rows = build_dataset(matches, lower)
     ev, excluded = select_eval(rows, min_history)
     train, test = chrono_split(ev, train_frac)
-    new, old, errs = load_engines()
+    new, errs = load_engine()
     rep = {"data": {
         "matches_total": len(matches),
         "date_range": [matches[0]["date"], matches[-1]["date"]] if matches else None,
@@ -943,6 +817,7 @@ def run(matches_path=None, min_history=MIN_HISTORY, train_frac=0.6, seed=12345, 
         "train_range": [train[0]["match"]["date"], train[-1]["match"]["date"]] if train else None,
         "test_range": [test[0]["match"]["date"], test[-1]["match"]["date"]] if test else None,
         "teams": len({m["team_a"] for m in matches} | {m["team_b"] for m in matches}),
+        "lower_tier": {"series": len(lower or []), "elo_weight": LOWER_TIER_ELO_WEIGHT, "mode": LOWER_TIER_MODE},
     }, "engine_errors": errs, "config": {
         "elo_init": ELO_INIT, "elo_k": ELO_K, "elo_k_by_bo": ELO_K_BY_BO,
         "elo_per_rating": ELO_PER_RATING, "vol_window": VOL_WINDOW, "vol_scale": VOL_SCALE,
@@ -960,15 +835,6 @@ def run(matches_path=None, min_history=MIN_HISTORY, train_frac=0.6, seed=12345, 
     models["elo_only"] = {"p": [r["meta"]["p_elo"] for r in test]}
     pick = [1.0 if r["meta"]["p_elo"] > 0.5 else (0.0 if r["meta"]["p_elo"] < 0.5 else 0.5) for r in test]
     models["higher_elo_pick"] = {"p": pick, "accuracy_only": True}
-    # old engine (as-is)
-    if old is not None:
-        res = [old.predict_match(dict(r["input"])) for r in test]
-        models["old_engine_v1"] = {"p": [float(x["p_a"]) for x in res], "results": res}
-        res_tr = [old.predict_match(dict(r["input"])) for r in train]
-        t_old = fit_temperature([logit(float(x["p_a"])) for x in res_tr], y_tr)
-        models["old_engine_v1_posthoc_T"] = {
-            "p": [sigmoid(t_old * logit(float(x["p_a"]))) for x in res],
-            "note": f"diagnostic only: post-hoc temperature {t_old:.3f} on logit(p_a), fitted on train"}
     # new engine
     fitted_T = None
     if new is not None:
@@ -1030,19 +896,13 @@ def run(matches_path=None, min_history=MIN_HISTORY, train_frac=0.6, seed=12345, 
     rep["test_metrics"] = out
     # paired comparisons (Brier difference, negative = first is better)
     comps = {}
-    for a, b in (("new_engine", "elo_only"), ("new_engine", "old_engine_v1"), ("old_engine_v1", "elo_only"),
-                 ("new_engine", "coin_flip")):
+    for a, b in (("new_engine", "elo_only"), ("new_engine", "coin_flip")):
         if a in models and b in models:
             comps[f"{a} - {b}"] = {
                 "brier_diff": brier(models[a]["p"], y_te) - brier(models[b]["p"], y_te),
                 "brier_diff_ci95": paired_bootstrap_diff(brier, models[a]["p"], models[b]["p"], y_te, seed=seed),
                 "log_loss_diff": log_loss(models[a]["p"], y_te) - log_loss(models[b]["p"], y_te)}
     rep["paired_comparisons"] = comps
-    # old engine overconfidence on the whole eval set (train+test), as requested
-    if old is not None:
-        allp = [float(old.predict_match(dict(r["input"]))["p_a"]) for r in ev]
-        ally = y_tr + y_te
-        rep["old_engine_overconfidence_all_eval"] = overconfidence(allp, ally)
     # scoreline base rates
     sc = [a for a in act_te if a]
     rep["test_scoreline_distribution"] = {s: sc.count(s) / len(sc) for s in ("2-0", "2-1", "1-2", "0-2")} if sc else {}
@@ -1090,15 +950,14 @@ def render_md(rep):
                  f"{b['log_loss']:.4f} [{b['log_loss_ci95_bootstrap'][0]:.4f}, {b['log_loss_ci95_bootstrap'][1]:.4f}] | "
                  f"{b['ece10']:.4f} | {_f(b.get('scoreline_modal_acc'))} |")
     L += ["", "Notes: coin flip accuracy is credited 0.5 per series by definition. "
-          "higher_elo_pick is a hard pick (accuracy only). old_engine_v1_posthoc_T is a diagnostic, "
-          "not the shipped old engine. Scoreline acc = modal BO3 scoreline from series_probs vs actual "
+          "higher_elo_pick is a hard pick (accuracy only). Scoreline acc = modal BO3 scoreline from series_probs vs actual "
           f"(test base rates: {', '.join(f'{k} {v:.2f}' for k, v in rep['test_scoreline_distribution'].items())}).", ""]
     if rep.get("paired_comparisons"):
         L += ["## Paired Brier differences (test, 95% paired bootstrap; negative = first model better)", ""]
         for k, v in rep["paired_comparisons"].items():
             L.append(f"- {k}: {v['brier_diff']:+.4f} [{v['brier_diff_ci95'][0]:+.4f}, {v['brier_diff_ci95'][1]:+.4f}]; log-loss diff {v['log_loss_diff']:+.4f}")
         L.append("")
-    for name in ("new_engine", "old_engine_v1", "elo_only"):
+    for name in ("new_engine", "elo_only"):
         b = rep["test_metrics"].get(name)
         if not b or "reliability_table" not in b:
             continue
@@ -1106,7 +965,7 @@ def render_md(rep):
         for r in b["reliability_table"]:
             L.append(f"| {r['bin']} | {r['n']} | {_f(r['mean_pred'])} | {_f(r['actual'])} |")
         L.append("")
-    for name in ("new_engine", "old_engine_v1"):
+    for name in ("new_engine",):
         b = rep["test_metrics"].get(name)
         if not b or "reliability_tiers" not in b:
             continue
@@ -1122,21 +981,18 @@ def render_md(rep):
             L.append(f"| Q{q['quartile']} | {q['n']} | {q['width_pp_range'][0]}-{q['width_pp_range'][1]} | {q['brier']:.4f} | {q['accuracy']:.3f} |")
         L.append("")
     L += ["## Overconfidence check (outputs >= 90% or <= 10%)", ""]
-    for name in ("old_engine_v1", "new_engine", "elo_only"):
+    for name in ("new_engine", "elo_only"):
         b = rep["test_metrics"].get(name)
         if b and "overconfidence_90" in b:
             o = b["overconfidence_90"]
             L.append(f"- {name} (test): {o['n_extreme']} series ({o['share']:.1%}), hit-rate {_f(o['hit_rate'])}, mean stated conf {_f(o['mean_conf'])}")
-    if rep.get("old_engine_overconfidence_all_eval"):
-        o = rep["old_engine_overconfidence_all_eval"]
-        L.append(f"- old_engine_v1 (all {rep['data']['eval_series']} eval series): {o['n_extreme']} ({o['share']:.1%}), hit-rate {_f(o['hit_rate'])}, mean stated conf {_f(o['mean_conf'])}")
     L += ["", "## Feature derivation (point-in-time, only series dated strictly before the match day)", "",
           f"- rating: series Elo (init {ELO_INIT:.0f}, K={ELO_K:.0f} x {ELO_K_BY_BO} by best-of), rating = 1 + (elo-1500)/{ELO_PER_RATING:.0f}. PROXY, not HLTV.",
           "- form30/n30/opp_rating30: series win rate, count and mean opponent proxy rating in the 30 days before; keys omitted if no series.",
           "- form5: win rate over the last <=5 series; omitted if none.",
           "- h2h: series wins vs each other in the prior 365 days.",
           "- maps_a/b: per-map [win rate, maps played] over the prior 90 days.",
-          f"- map_pool: maps with >= {POOL_MIN_PLAYS} plays (all teams) in the prior {POOL_WINDOW_DAYS} days, the {POOL_SIZE} most recently played (old engine ignores it: hardcoded pool).",
+          f"- map_pool: maps with >= {POOL_MIN_PLAYS} plays (all teams) in the prior {POOL_WINDOW_DAYS} days, the {POOL_SIZE} most recently played.",
           f"- volatility: |wins - Elo-expected wins| / n over last {VOL_WINDOW} series x {VOL_SCALE}, clamped [0,1]; {VOL_DEFAULT} if < 3 series.",
           "- permaban: None (no veto data); roster: stand-in and missing-IGL flags from Liquipedia team-page stand-in tables (data/rosters.py); stakes: none.", ""]
     return "\n".join(L)

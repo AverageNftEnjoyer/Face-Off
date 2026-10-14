@@ -29,6 +29,9 @@ Gates:
                  opponent) beyond valve_results.GATE_NEW_DISAGREE_MAX. Skipped
                  with a note when the second source is absent (never blocks on
                  the second source being down). Report: scripts/cross_source_check.py
+  lower_tier     data/matches_lower.json schema (same rules + a known `kind`).
+                 REPORT ONLY, never blocks: lower-tier data must not stop an S/A
+                 publish. The Elo bounds above stay S/A-only for the same reason.
 
 USAGE:
   python scripts/data_gates.py [--new data/matches.json] [--old PATH | --old-git]
@@ -142,6 +145,36 @@ def gate_schema(new):
                     bad.append(f"record {i}: map entry has bad winner: {mp!r}")
                     break
     return bad
+
+
+LOWER_KINDS = {"main", "qualifier", "sa_gap"}
+
+
+def gate_lower(path=None):
+    """data/matches_lower.json (lower-tier series: Elo data and team-page
+    results, never events). WARN ONLY: the S/A publish must never be blocked by
+    lower-tier data. The same schema rules as matches.json plus a known
+    `kind`; malformed records are reported here and skipped by
+    backtest.read_lower, and the refresh never writes a file that fails them
+    (scripts/lower_refresh.py)."""
+    path = path or os.path.join(ROOT, "data", "matches_lower.json")
+    if not os.path.exists(path):
+        return {"note": "no data/matches_lower.json; ratings use S/A series only", "warnings": []}
+    try:
+        lower = load(path)
+        if not isinstance(lower, list):
+            raise ValueError("not a list")
+    except (OSError, ValueError) as e:
+        return {"warnings": [f"unreadable: {e}"]}
+    warn = gate_schema(lower)
+    warn += [f"record {i}: unknown kind {m.get('kind')!r}" for i, m in enumerate(lower)
+             if isinstance(m, dict) and m.get("kind") not in LOWER_KINDS][:10]
+    dups = gate_duplicate_ids(lower)
+    if dups:
+        warn.append(f"{len(dups)} duplicate match_ids, e.g. {dups[:3]}")
+    dates = [m["date"] for m in lower if isinstance(m, dict) and isinstance(m.get("date"), str)]
+    return {"series": len(lower), "newest": max(dates) if dates else None,
+            "warning_count": len(warn), "warnings": warn[:20]}
 
 
 def gate_duplicate_ids(new):
@@ -346,6 +379,11 @@ def main(argv=None):
     gates["cross_source"] = {"passed": not xs.get("problems"), **xs}
 
     passed = all(g["passed"] for g in gates.values())
+    # lower-tier data: reported, never blocking (added after `passed` on purpose)
+    gates["lower_tier"] = {"passed": True, "blocking": False, **gate_lower()}
+    if gates["lower_tier"].get("warnings"):
+        print(f"WARNING lower_tier: {len(gates['lower_tier']['warnings'])} issue(s) in data/matches_lower.json "
+              "(not blocking)", file=sys.stderr)
     report = {"passed": passed, "new_series": len(new),
               "old_series": len(old) if old is not None else None,
               "baseline": baseline_note or "compared with the last published matches.json",

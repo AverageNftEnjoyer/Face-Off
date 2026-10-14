@@ -272,7 +272,7 @@ def main(argv=None):
     ap.add_argument("--evaluate", action="store_true", help="also score current vs fitted on the TEST split")
     args = ap.parse_args(argv)
 
-    rows = bt.build_dataset(bt.load_matches())
+    rows = bt.build_dataset(bt.load_matches(), bt.load_lower())
     ev, _ = bt.select_eval(rows, bt.MIN_HISTORY)
     train, test = bt.chrono_split(ev, 0.6)
     fit_part, val_part = bt.chrono_split(train, 0.8)

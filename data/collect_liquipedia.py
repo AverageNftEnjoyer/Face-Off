@@ -454,9 +454,33 @@ def main_lower():
                    ("sa_gap") that matches.json does not track.
     Any other page whose infobox says S or A tier is left out (it belongs in
     the main list)."""
-    if not os.path.exists(LOWER_TITLES):
+    out = build_lower()
+    if out is None:
         print("no lower-tier title list; nothing to build")
         return
+    write_lower(out)
+
+
+def write_lower(out, path=LOWER_OUT):
+    """Write the lower-tier list (temp file + replace, so a reader never sees
+    half a file) and print its counts."""
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=1, ensure_ascii=False)
+    os.replace(tmp, path)
+    tiers = {}
+    for m in out:
+        k = (m["tier"] or "?") + ":" + m["kind"]
+        tiers[k] = tiers.get(k, 0) + 1
+    print(f"lower-tier series: {len(out)} {dict(sorted(tiers.items()))}"
+          + (f" ({out[0]['date']} -> {out[-1]['date']})" if out else ""))
+
+
+def build_lower():
+    """The matches_lower.json records (see main_lower), or None when there is
+    no lower-tier title list. Nothing is written."""
+    if not os.path.exists(LOWER_TITLES):
+        return None
     kinds_path = os.path.join(HERE, "raw", "lp_titles_lower_kinds.json")
     kinds = json.load(open(kinds_path, encoding="utf-8")) if os.path.exists(kinds_path) else {}
     listed = {t: k for k in ("qualifier", "sa_gap") for t in kinds.get(k, [])}
@@ -485,14 +509,7 @@ def main_lower():
         if (m["date"], tuple(sorted((m["team_a"], m["team_b"])))) in top:
             continue
         out.append(m)
-    with open(LOWER_OUT, "w", encoding="utf-8") as f:
-        json.dump(out, f, indent=1, ensure_ascii=False)
-    tiers = {}
-    for m in out:
-        k = (m["tier"] or "?") + ":" + m["kind"]
-        tiers[k] = tiers.get(k, 0) + 1
-    print(f"lower-tier series: {len(out)} {dict(sorted(tiers.items()))}"
-          + (f" ({out[0]['date']} -> {out[-1]['date']})" if out else ""))
+    return out
 
 
 if __name__ == "__main__":

@@ -30,7 +30,10 @@ Daily data refresh for the Faceoff hub (run by .github/workflows/daily-refresh.y
    one are read, so most runs download nothing; a failure here is reported
    and never stops the refresh), data/valve_results.json (the second
    results source for the cross_source gate: Valve's standings match rows,
-   incremental the same way, a failure only warns).
+   incremental the same way, a failure only warns), and last
+   data/matches_lower.json (scripts/lower_refresh.py: B-tier results for team
+   pages and rating data, never events; own request budget; a failure only
+   warns and never blocks the S/A data).
 
 The site itself is built from these files on each deploy
 (python viewer/build_viewer.py public/index.html, see vercel.json).
@@ -519,7 +522,29 @@ def main(argv=None):
     except (Exception, SystemExit) as e:   # noqa: BLE001
         print(f"WARNING valve_results: refresh skipped ({type(e).__name__}: {e}); "
               "data/valve_results.json unchanged", file=sys.stderr)
+    refresh_lower()
     print(f"refresh done; Liquipedia API requests sent: {lpfetch.NETWORK_REQUESTS[0]}")
+
+
+def refresh_lower(run=None):
+    """Lower-tier results (data/matches_lower.json: Elo data and team-page
+    results, never events). Runs LAST in the daily run (never in --live), so it
+    can neither delay nor block the S/A data, with its own request budget
+    (scripts/lower_refresh.py). Any failure is a WARNING: the committed file
+    stays and the run goes on. Returns the step's report, or None on failure."""
+    s0 = lpfetch.NETWORK_REQUESTS[0]
+    try:
+        import lower_refresh
+        rep = (run or lower_refresh.run)()
+        print(lower_refresh.report_line(rep))
+        for w in rep.get("warnings", []):
+            print(f"WARNING lower tier: {w}", file=sys.stderr)
+        return rep
+    except (Exception, SystemExit) as e:   # noqa: BLE001
+        print(f"WARNING lower tier: refresh skipped ({type(e).__name__}: {e}); data/matches_lower.json "
+              f"unchanged; {lpfetch.NETWORK_REQUESTS[0] - s0} Liquipedia requests sent by this step",
+              file=sys.stderr)
+        return None
 
 
 if __name__ == "__main__":

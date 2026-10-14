@@ -30,16 +30,24 @@ Exit code 0 = no leakage found, 1 = leakage (offending fields are printed).
   Tests 1-2 also cover the plain 90-day map rates (input maps_raw_a/_b, used
   for the map_depth row) and the newcomer Elo offset (backtest.NEWCOMER_*),
   whose only inputs are the match date and the date of the first series in
-  the data. Test 5 (below) checks the offset with it switched on explicitly.
+  the data. Test 5 checks the offset with it switched on explicitly.
 
   6. VETO (veto.py): the whole veto_dist (outcomes, marginals, masks,
      warnings) of every BO1/BO3 series dated D, as canonical JSON with repr
      floats, must be bit-identical under SCRAMBLE and TRUNCATE (tests 1-2
-     already cover its inputs veto_ev_a/_b, and with habits on, the
-     HabitAccumulator state). CANARIES: an exclusion set computed with day
-     D's own plays must change at least one mask on at least one sampled
-     day; with CONFIG["veto_use_habits"] on, an accumulator that counts day D
-     before predicting day D must fail the scramble check.
+     already cover its inputs veto_ev_a/_b). CANARY: an exclusion set
+     computed with day D's own plays must change at least one mask on at
+     least one sampled day.
+
+  7. LOWER TIER (data/matches_lower.json, folded into series Elo at
+     backtest.LOWER_TIER_ELO_WEIGHT; when that is 0 the check switches the
+     candidate weight LOWER_TIER_CANDIDATE_WEIGHT on explicitly, like test 5):
+     SCRAMBLE inverts every lower-tier outcome dated >= D (series and map
+     winners), TRUNCATE removes every lower-tier series dated > D; every
+     feature of every S/A series dated D must be bit-identical. CANARIES:
+     the lower-tier data must change at least one feature (the check sees
+     it), and a deliberately leaky builder that folds day D's lower-tier
+     series in before day D's features must fail the scramble.
 
 NOT COVERED, AND WHY IT CANNOT BE:
   data/roster_events.json is a present-day scrape of Liquipedia stand-in
@@ -89,11 +97,11 @@ def scramble_from(matches, day):
     return out
 
 
-def leaky_build(matches, history_factory=None):
+def leaky_build(matches):
     """CANARY ONLY: folds each day into history BEFORE computing that day's
     features, i.e. the bug the check must catch."""
     ms = sorted(matches, key=lambda m: (m["date"], m.get("id", 0)))
-    h = history_factory() if history_factory else bt.History()
+    h = bt.History()
     out = []
     i = 0
     while i < len(ms):
@@ -107,6 +115,69 @@ def leaky_build(matches, history_factory=None):
             out.append({"match": m, "input": inp, "meta": meta})
         i = j
     return out
+
+
+def scramble_lower_from(lower, day):
+    """Copy of the lower-tier list with every outcome dated >= day inverted
+    (series winner and each map winner)."""
+    out = copy.deepcopy(lower)
+    for m in out:
+        if m["date"] < day:
+            continue
+        flip = {m["team_a"]: m["team_b"], m["team_b"]: m["team_a"]}
+        m["winner"] = flip.get(m["winner"], m["winner"])
+        for x in m.get("maps") or []:
+            x["winner"] = flip.get(x["winner"], x["winner"])
+    return out
+
+
+def leaky_lower_build(matches, lower):
+    """CANARY ONLY: folds day D's lower-tier series in BEFORE computing day D's
+    features (the bug test 7 must catch)."""
+    h = bt.History()
+    out = []
+    for _, day, lo in bt.day_groups(matches, lower):
+        for m in lo:
+            h.add_lower(m)
+        for m in day:
+            inp, meta = h.features(m)
+            out.append({"match": m, "input": inp, "meta": meta})
+        for m in day:
+            h.add(m)
+    return out
+
+
+def check_lower(matches, lower, test_days, weight):
+    """Test 7 at the given lower-tier weight. Returns (problems, days tested,
+    lower data changes features?, leaky-builder canary caught on n days)."""
+    saved = bt.LOWER_TIER_ELO_WEIGHT
+    keyed = lambda rows: {(r["match"]["date"], r["match"]["id"]): (r["input"], r["meta"]) for r in rows}  # noqa: E731
+    problems = []
+    try:
+        bt.LOWER_TIER_ELO_WEIGHT = weight
+        clean = keyed(bt.build_dataset(matches, lower))
+        without = keyed(bt.build_dataset(matches))
+        sees = any(clean[k] != without[k] for k in clean)
+        first = lower[0]["date"] if lower else "9999"
+        days = [d for d in test_days if d >= first]
+        for day in days:
+            problems += check_day(clean, bt.build_dataset(matches, scramble_lower_from(lower, day)), day)
+            problems += check_day(clean, bt.build_dataset([m for m in matches if m["date"] <= day],
+                                                          [m for m in lower if m["date"] <= day]), day)
+        # canary days: days where a team plays an S/A series AND a lower-tier
+        # series, so a builder that lets day D's lower-tier results in early
+        # must be caught by the scramble (picked from the data, evenly spaced)
+        sa_teams = {}
+        for m in matches:
+            sa_teams.setdefault(m["date"], set()).update((m["team_a"], m["team_b"]))
+        both = sorted({m["date"] for m in lower
+                       if {m["team_a"], m["team_b"]} & sa_teams.get(m["date"], set())})
+        leaky = keyed(leaky_lower_build(matches, lower))
+        caught = sum(1 for day in sample_days(both, 6) if both
+                     and check_day(leaky, leaky_lower_build(matches, scramble_lower_from(lower, day)), day))
+    finally:
+        bt.LOWER_TIER_ELO_WEIGHT = saved
+    return problems, len(days), sees, caught
 
 
 def diff_fields(x, y, prefix=""):
@@ -185,22 +256,15 @@ def _veto_dumps(rows, day, build=None):
     return out
 
 
-def check_veto(matches, test_days, history_factory=None, n_habit_days=4):
-    """Test 6. Returns (problems, days where the exclusion canary changed a
-    mask, habit canary status: "off" | "caught" | "BLIND")."""
+def check_veto(matches, test_days):
+    """Test 6. Returns (problems, days where the exclusion canary changed a mask)."""
     import predictor as pr
     import veto as V
     problems = []
-    if history_factory is not None:
-        sys.path.insert(0, os.path.join(HERE, "scripts"))
-        import veto_harness as H
-        build = lambda ms: H.build_dataset(ms, history_factory)   # noqa: E731
-        days = test_days[:: max(1, len(test_days) // n_habit_days)][:n_habit_days]
-    else:
-        build = bt.build_dataset
-        days = test_days
+    lower = bt.load_lower()      # the site's history (empty while the weight is 0)
+    build = lambda ms: bt.build_dataset(ms, [m for m in lower if m["date"] <= ms[-1]["date"]])  # noqa: E731
     clean_rows = build(matches)
-    for day in days:
+    for day in test_days:
         clean = _veto_dumps(clean_rows, day)
         for name, variant in (("scramble", scramble_from(matches, day)),
                               ("truncate", [m for m in matches if m["date"] <= day])):
@@ -230,18 +294,7 @@ def check_veto(matches, test_days, history_factory=None, n_habit_days=4):
                 bad = V.exclusion_set(h.veto_evidence(t, leak_dt, pool), pool, alpha)
                 hit |= ok != bad
         caught += hit
-    # habit canary (phase 3): only when habits are switched on
-    status = "off"
-    if pr.CONFIG.get("veto_use_habits") and history_factory is not None:
-        status = "BLIND"
-        for day in test_days[:: max(1, len(test_days) // n_habit_days)][:n_habit_days]:
-            # the bug the check must catch: day D counted (<= D) and folded in first
-            a = _veto_dumps(leaky_build(matches, lambda: history_factory(leaky=True)), day)
-            b = _veto_dumps(leaky_build(scramble_from(matches, day), lambda: history_factory(leaky=True)), day)
-            if a != b:
-                status = "caught"
-                break
-    return problems, caught, status
+    return problems, caught
 
 
 def sample_days(days, k):
@@ -255,13 +308,11 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="strict pre-match feature check")
     ap.add_argument("--days", type=int, default=40, help="match days to test (evenly spaced)")
     ap.add_argument("--all", action="store_true", help="test every match day (slow)")
-    ap.add_argument("--roster", action="store_true", help="with --habits: phase-4 roster-core level on too")
-    ap.add_argument("--habits", action="store_true",
-                    help="also run test 6 with the phase-3 HabitAccumulator on (slow; 4 days)")
     a = ap.parse_args(argv)
 
     matches = bt.load_matches()
-    rows = bt.build_dataset(matches)
+    lower = bt.load_lower()          # [] while bt.LOWER_TIER_ELO_WEIGHT is 0
+    rows = bt.build_dataset(matches, lower)
     clean = {(r["match"]["date"], r["match"]["id"]): (r["input"], r["meta"]) for r in rows}
     days = sorted({m["date"] for m in matches})
     # skip the first 30 days: teams have no history yet, features are trivially empty
@@ -272,8 +323,9 @@ def main(argv=None):
 
     failures = []
     for day in test_days:
-        failures += check_day(clean, bt.build_dataset(scramble_from(matches, day)), day)
-        failures += check_day(clean, bt.build_dataset([m for m in matches if m["date"] <= day]), day)
+        failures += check_day(clean, bt.build_dataset(scramble_from(matches, day), lower), day)
+        failures += check_day(clean, bt.build_dataset([m for m in matches if m["date"] <= day],
+                                                      [m for m in lower if m["date"] <= day]), day)
 
     # canary: the leaky builder must be caught on at least one of the sampled days
     caught = 0
@@ -291,58 +343,45 @@ def main(argv=None):
     print(f"lineups: {lineup_days} days with lineup data tested, {len(lineup_fail)} leaks; "
           f"lineup canary caught on {lineup_caught} days")
 
-    # 5. newcomer Elo offset, both modes switched on explicitly (scramble + truncate)
-    saved = (bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET)
-    nc_fail, nc_moved = [], True
+    # 5. newcomer Elo offset switched on explicitly (scramble + truncate)
+    saved = bt.NEWCOMER_OFFSET
+    nc_fail = []
     keyed = lambda rows: {(r["match"]["date"], r["match"]["id"]): (r["input"], r["meta"]) for r in rows}
     try:
-        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = 0.0, "start", 0.0
+        bt.NEWCOMER_OFFSET = 0.0
         off = keyed(bt.build_dataset(matches))
-        for setting in ((150.0, "start", 0.0), (0.0, "feature", 150.0)):
-            bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = setting
-            on = keyed(bt.build_dataset(matches))
-            # teeth: the setting must change at least one rating vs no offset
-            nc_moved &= any(on[k][0]["rating_a"] != off[k][0]["rating_a"] for k in on)
-            for day in test_days[::4]:
-                nc_fail += check_day(on, bt.build_dataset(scramble_from(matches, day)), day)
-                nc_fail += check_day(on, bt.build_dataset([m for m in matches if m["date"] <= day]), day)
+        bt.NEWCOMER_OFFSET = 150.0
+        on = keyed(bt.build_dataset(matches))
+        # teeth: the offset must change at least one rating vs no offset
+        nc_moved = any(on[k][0]["rating_a"] != off[k][0]["rating_a"] for k in on)
+        for day in test_days[::4]:
+            nc_fail += check_day(on, bt.build_dataset(scramble_from(matches, day)), day)
+            nc_fail += check_day(on, bt.build_dataset([m for m in matches if m["date"] <= day]), day)
     finally:
-        bt.NEWCOMER_OFFSET, bt.NEWCOMER_MODE, bt.NEWCOMER_FEATURE_OFFSET = saved
+        bt.NEWCOMER_OFFSET = saved
     failures += nc_fail
-    print(f"newcomer offset (start 150 / feature 150): {len(nc_fail)} leaks on {len(test_days[::4])} days; "
+    print(f"newcomer offset (150): {len(nc_fail)} leaks on {len(test_days[::4])} days; "
           f"offset changes features: {'yes' if nc_moved else 'NO (check is blind)'}")
     canary_ok = canary_ok and nc_moved
 
     # 6. veto distribution (veto.py): the whole veto_dist of every day-D series
     #    must be bit-identical under SCRAMBLE and TRUNCATE; canaries: an
-    #    exclusion set computed with day D's own plays must change a mask, and
-    #    (with habits on) an accumulator that folds day D in first must fail.
-    v_fail, excl_caught, habit_status = check_veto(matches, test_days)
-    if a.habits:
-        import predictor as pr
-        sys.path.insert(0, os.path.join(HERE, "scripts"))
-        import veto_fit as F
-        import veto_harness as H
-        rep = H.read_report()
-        saved = dict(pr.CONFIG)
-        try:
-            ph = "p4" if a.roster else "p3"
-            pr.CONFIG.update(veto_use_habits=True, veto_habit_k=rep["phases"]["p3"]["grid_value"],
-                             veto_params_bo3=rep["phases"][ph]["params"])
-            if a.roster:
-                pr.CONFIG.update(veto_use_roster=True, veto_roster_k=rep["phases"]["p4"]["grid_value"])
-            hv_fail, _, habit_status = check_veto(matches, test_days,
-                                                  F.history_factory(rep["phases"]["p2"]["params"],
-                                                                    roster=a.roster))
-        finally:
-            pr.CONFIG.clear()
-            pr.CONFIG.update(saved)
-        print(f"veto_dist with habits: {len(hv_fail)} differing distributions")
-        v_fail += hv_fail
+    #    exclusion set computed with day D's own plays must change a mask.
+    v_fail, excl_caught = check_veto(matches, test_days)
     failures += v_fail
-    canary_ok = canary_ok and excl_caught > 0 and habit_status in ("off", "caught")
+    canary_ok = canary_ok and excl_caught > 0
     print(f"veto_dist: {len(v_fail)} differing distributions on {len(test_days)} days; exclusion canary "
-          f"changed a mask on {excl_caught} days; habit canary: {habit_status}")
+          f"changed a mask on {excl_caught} days")
+
+    # 7. lower-tier series (Elo data): scramble / truncate them from day D on
+    w_low = bt.LOWER_TIER_ELO_WEIGHT or bt.LOWER_TIER_CANDIDATE_WEIGHT
+    low_all = bt.read_lower()
+    l_fail, l_days, l_sees, l_caught = check_lower(matches, low_all, test_days, w_low)
+    failures += l_fail
+    canary_ok = canary_ok and l_sees and l_caught > 0
+    print(f"lower tier (weight {w_low}{'' if bt.LOWER_TIER_ELO_WEIGHT else ', switched on for the check'}, "
+          f"{len(low_all)} series): {len(l_fail)} leaks on {l_days} days; lower-tier data changes features: "
+          f"{'yes' if l_sees else 'NO (check is blind)'}; leaky-builder canary caught on {l_caught} days")
 
     print(f"scramble + truncate: {len(failures)} differing fields")
     for f in failures[:30]:

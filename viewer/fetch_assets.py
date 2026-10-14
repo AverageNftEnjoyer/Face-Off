@@ -218,11 +218,11 @@ def main():
     from datetime import timedelta
 
     # teams: everyone in the event + the strongest active teams the viewer offers
-    h = bt.History()
     ms = bt.load_matches()
-    for m in sorted(ms, key=lambda m: m["date"]):
-        h.add(m)
     as_of = max(bt._d(m["date"]) for m in ms) + timedelta(days=1)
+    # the same history the site rates teams with (lower-tier series included
+    # at bt.LOWER_TIER_ELO_WEIGHT), so the same top teams get their assets
+    h = bt.Replay(ms, bt.load_lower()).until(as_of)
     active = [t for t, g in h.games.items() if g and g[-1]["date"] >= as_of - timedelta(days=45) and len(g) >= 15]
     top = sorted(active, key=lambda t: -h.elo[t])[:16]
     import events as E

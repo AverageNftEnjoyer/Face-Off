@@ -292,11 +292,6 @@ class TestPredictContract(DistMode, unittest.TestCase):
         with self.assertRaises(veto.VetoError):
             veto.distribution(predictor.veto_context(m, 3), CONFIG["veto_params_bo3"])
 
-    def test_habits_without_accumulator_raise(self):
-        CONFIG["veto_use_habits"] = True
-        with self.assertRaises(ValueError):
-            predict_match(synth(random.Random(6)))
-
     def test_veto_prefix_conditions_and_updates_starter(self):
         m = self.matches()[2]
         r = predict_match(copy.deepcopy(m))
@@ -319,7 +314,7 @@ class TestSymmetryAndPreferences(unittest.TestCase):
             o = synth(rng)
             mm = dict(m, maps_b=o["maps_b"], veto_ev_b=o["veto_ev_b"])
             ctx = predictor.veto_context(mm, 3)
-            got.append((ctx.kap["a"], ctx.excl["a"], ctx.hab["a"]))
+            got.append((ctx.kap["a"], ctx.excl["a"]))
         self.assertEqual(got[0], got[1])
         self.assertEqual(got[1], got[2])
 
@@ -342,28 +337,6 @@ class TestSymmetryAndPreferences(unittest.TestCase):
                 for mp in d1["marginals"]:
                     self.assertAlmostEqual(d1["marginals"][mp]["banned_a"], d2["marginals"][mp]["banned_b"],
                                            places=12)
-
-    @unittest.expectedFailure
-    def test_i14_less_evidence_is_never_sharper(self):
-        # DESIGN FINDING (recorded in the final report): violated in 2 of these
-        # 20 synthetic cases (up to 0.16 bits). Removing team A's map history
-        # also moves the shared map logit ell = map_scale * (rel_a - rel_b), and
-        # that can make the OPPONENT's choices sharper. Kept as an expected
-        # failure so a fix (e.g. a per-team MapModel) shows up as a success.
-        rng = random.Random(14)
-        w = CONFIG["veto_params_bo3"]
-        checked = 0
-        for _ in range(10):
-            m = synth(rng, n_lo=5, n_hi=20)
-            full = veto.distribution(predictor.veto_context(m, 3), w)[0]["entropy_bits"]
-            for k in (0.5, 0.0):        # keep half of the plays, then none
-                mm = copy.deepcopy(m)
-                mm["maps_a"] = {mp: [wr, int(n * k)] for mp, (wr, n) in m["maps_a"].items()}
-                mm["veto_ev_a"] = {"n": 0, "maps": {}} if k == 0 else mm["veto_ev_a"]
-                less = veto.distribution(predictor.veto_context(mm, 3), w)[0]["entropy_bits"]
-                self.assertGreaterEqual(less, full - 0.05)
-                checked += 1
-        self.assertEqual(checked, 20)
 
     def test_i14_weak_both_cold_is_most_diffuse(self):
         # the part of I14 that holds by construction: two teams with no
@@ -489,27 +462,7 @@ class TestOct9Fixtures(unittest.TestCase):
         legal = len(ctx.pool) - 2
         self.assertGreaterEqual(pk[f["picks"]["a"]], 1.0 / legal)
 
-    @unittest.expectedFailure
-    def test_r3_observed_order_beats_smoothed_comfort_sim(self):
-        # DESIGN FINDING: fails for every fitted phase (P1 0.0029, P2 0.0030 vs
-        # 0.0043 for the smoothed comfort sim, whose smoothing is near-uniform).
-        # The actual decider was a map MOUZ was 2-6 on in 90 days, which the
-        # data cannot explain (the design itself declines to assert it).
-        sys.path.insert(0, os.path.join(ROOT, "scripts"))
-        import veto_harness as H
-        f = self.fx["R3"]
-        rep = json.load(open(os.path.join(DATA, "veto_phase0_report.json"), encoding="utf-8"))
-        refp = rep["reference_comfort_sim"]["eps_pi_fit_on_train"]
-        row = {"input": self.inp["R3"], "played": f["played"]}
-        prep = H.ref_prepare([row])
-        ref_ll = H.ref_loglik_rows([row], prep, refp["eps"], refp["pi"])[0]
-        ctx = predictor.veto_context(self.inp["R3"], 3)
-        ll = veto.loglik(ctx, predictor.veto_params(3), f["played"])[0]
-        self.assertGreater(ll, ref_ll)
-
     def test_r3_lookahead_wasted_ban(self):
-        if not predictor.veto_params(3).get("lookahead"):
-            self.skipTest("expected failure in phase 1: myopic utilities cannot see a wasted ban")
         f = self.fx["R3"]
         d = self.dist["R3"][0]["marginals"]
         mp = f["first_bans"]["b"]

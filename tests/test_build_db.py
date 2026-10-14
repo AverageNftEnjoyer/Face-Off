@@ -33,7 +33,10 @@ class TestBuildDb(unittest.TestCase):
     def test_counts_match_json(self):
         self.assertEqual(self.q("SELECT COUNT(*) FROM matches")[0][0], len(self.matches))
         self.assertEqual(self.q("SELECT COUNT(*) FROM maps")[0][0], sum(len(m.get("maps") or []) for m in self.matches))
-        self.assertEqual(self.q("SELECT COUNT(*) FROM elo_history")[0][0], 2 * len(self.matches))
+        self.assertEqual(self.q("SELECT COUNT(*) FROM elo_history WHERE source = 'main'")[0][0], 2 * len(self.matches))
+        # every lower-tier series that moved Elo has its two elo_history rows
+        moved = self.q("SELECT COUNT(*) FROM lower_matches WHERE elo_a_before IS NOT NULL")[0][0]
+        self.assertEqual(self.q("SELECT COUNT(*) FROM elo_history WHERE source = 'lower'")[0][0], 2 * moved)
         self.assertEqual(self.q("SELECT COUNT(*) FROM team_matches")[0][0], 2 * len(self.matches))
 
     def test_every_column_documented(self):

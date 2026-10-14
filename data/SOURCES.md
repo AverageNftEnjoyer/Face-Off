@@ -91,13 +91,28 @@ nothing is invented, imputed or estimated.
   {{TeamCard}}), else the team page's squad history dates (join /
   inactive / leave). Coverage: 99.8% of team-series in `matches.json`,
   96.2% in `matches_lower.json`.
-- Evidence (`scripts/roster_rating_check.py`, pre-registered,
+- Evidence (roster_rating_check, removed 2026-10-13, in git history, pre-registered,
   `roster_rating_report.json`): on 742 held-out S/A BO3 series after
   2025-10-08, neither lower-tier results as Elo data (K x 0.25) nor a
   roster-aware Elo (regress halfway to 1500 when <= 2 of 5 players carry
   over; graded; with a K boost; combined with the lower-tier data) had a
   log-loss CI below 0, and every variant was worse on one half of the
-  window. Nothing reads these files in the engine or on the site.
+  window.
+- Daily refresh and use (2026-10-13, `scripts/lower_refresh.py`, last step
+  of the daily run; docs/pipeline.md "Lower-tier results"): new B-tier events
+  from `Category:B-Tier Tournaments` (newest 500 additions, one request),
+  closed qualifiers from the cached listings, running pages re-read; budget
+  40 requests per run, failures only warn. The first run sent 16 requests
+  (1 category listing, 2 candidate infobox batches, 1 stage listing, 2
+  qualifier page batches, 8 stage re-listings of running events, 1 page
+  refresh, 1 team-code expansion), no 429/5xx, and added 103 series
+  (2026-10-07 .. 2026-10-13; 9,064 in all). The site shows the series on team
+  pages with their tier label; they never become events or predictions. As
+  rating data they wait on `backtest.LOWER_TIER_ELO_WEIGHT`, which is 0: the
+  pre-registered test re-run on 2026-10-13 (`lower_tier_report.json`, 581
+  primary rows) gave elo_0.25 log loss 0.6140 vs 0.6160 (CI [-0.0092,
+  +0.0054]) with calibration passing, but worse than base on the second half
+  of the window (0.6255 vs 0.6247), so it stays off.
   Event, team and sponsor names are reproduced
   as Liquipedia writes them.
 - Forfeited maps (`score1=W|score2=FF` or the reverse) are now credited to the

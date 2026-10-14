@@ -345,21 +345,39 @@ def run_vdist():
 
 
 class Timeline:
-    """Fold series day by day so a prediction for day D sees only days < D."""
+    """Fold series day by day so a prediction for day D sees only days < D.
+    Lower-tier series (rating data only) are folded in after each day's S/A
+    series, exactly as backtest.build_dataset does."""
 
-    def __init__(self, matches: Any):
-        self.ms = sorted(matches, key=lambda m: m["date"])
-        self.h = bt.History()
-        self.i = 0
+    def __init__(self, matches: Any, lower: Any = ()):
+        self.replay = bt.Replay(matches, lower)
+        self.h = self.replay.h
         self.day = None
 
     def at(self, day):
         assert self.day is None or day >= self.day, "days must be requested in order"
-        while self.i < len(self.ms) and bt._d(self.ms[self.i]["date"]) < day:
-            self.h.add(self.ms[self.i])
-            self.i += 1
+        self.replay.until(day)
         self.day = day
         return self.h
+
+
+def lower_results(lower, before, n):
+    """{team: [result]} newest first, at most n per team: the lower-tier series
+    dated before `before`, labelled with their event tier (rating data, never
+    a tournament on the site)."""
+    out = defaultdict(list)
+    for m in reversed(lower):
+        if m["date"] >= before.isoformat():
+            continue
+        sc = bt.actual_scoreline(m)
+        for t, o in ((m["team_a"], m["team_b"]), (m["team_b"], m["team_a"])):
+            if len(out[t]) >= n:
+                continue
+            s = sc if t == m["team_a"] or not sc else "-".join(reversed(sc.split("-")))
+            out[t].append({"date": m["date"], "opp": o, "won": m["winner"] == t,
+                           "score": s or ("W" if m["winner"] == t else "L"),
+                           "event": m.get("event") or "", "tier": bt.lower_label(m)})
+    return out
 
 
 def evidence(h, inp, day):
@@ -519,10 +537,14 @@ def build_data():
         # each team's own finish, derived from the results and the prize slots
         e["placements"] = E.placements(e, e["status"])
 
+    # lower-tier series (data/matches_lower.json): shown on team pages with
+    # their tier, never as events; they move Elo only when
+    # bt.LOWER_TIER_ELO_WEIGHT > 0 (lower = [] otherwise)
+    lower_all = bt.read_lower()
+    lower = lower_all if bt.LOWER_TIER_ELO_WEIGHT else []
+
     # ---- teams: every participant, every team in a match, plus the top active teams
-    h_now = bt.History()
-    for m in all_matches:
-        h_now.add(m)
+    h_now = bt.Replay(all_matches, lower).until(as_of)
     active = [t for t, g in h_now.games.items() if g and g[-1]["date"] >= as_of - timedelta(days=90)]
     rank = {t: i + 1 for i, t in enumerate(sorted(active, key=lambda t: -h_now.elo[t]))}
     top = [t for t in sorted(active, key=lambda t: -h_now.elo[t]) if len(h_now.games[t]) >= 15][:16]
@@ -531,12 +553,15 @@ def build_data():
     pool = set(E.event_teams(events)) | set(top)
     names = sorted(set(E.event_teams(events)) | set(top))
 
+    # Elo after every series; a lower-tier step carries its tier label as a
+    # third element ([date, elo, "B-tier"])
     trace = defaultdict(list)
-    hh = bt.History()
-    for m in all_matches:
-        hh.add(m)
+
+    def trace_step(hh, m, is_lower):
         for t in (m["team_a"], m["team_b"]):
-            trace[t].append([m["date"], round(hh.elo[t])])
+            trace[t].append([m["date"], round(hh.elo[t])] + ([bt.lower_label(m)] if is_lower else []))
+    bt.Replay(all_matches, lower, on_step=trace_step).until(as_of)
+    lres = lower_results(lower_all, as_of, N_TEAM_RESULTS)
 
     players = {}
     for t, rec in assets["teams"].items():
@@ -622,6 +647,9 @@ def build_data():
             "events": [e["slug"] for e in events if t in e["participants"]
                        or any(t in (m["t1"], m["t2"]) for m in e["matches"])],
         }
+        if lres.get(t):
+            # lower-tier results, labelled by tier (v2 optional; display only)
+            teams[t]["lower"] = lres[t]
 
     # ---- predictions, in date order so each sees only earlier days
     jobs = defaultdict(list)            # day -> [callable(h, day)]
@@ -636,7 +664,7 @@ def build_data():
         if e["status"] == "finished":
             jobs[date.fromisoformat(e["start"])].append(("event", e))
     epairs, emr = {}, {}
-    tl = Timeline(all_matches)
+    tl = Timeline(all_matches, lower)
     for d in sorted(jobs):
         h = tl.at(d)
         for kind, obj in jobs[d]:
@@ -674,7 +702,7 @@ def build_data():
                 h2h[key].append({"date": m["date"], "event": m["event"], "a": a, "b": b,
                                  "winner": m["winner"], "score": bt.actual_scoreline(m)})
 
-    rows = bt.build_dataset(all_matches)
+    rows = bt.build_dataset(all_matches, lower)
     ev_rows, _ = bt.select_eval(rows, bt.MIN_HISTORY)
     _, test = bt.chrono_split(ev_rows, 0.6)
     recent = []
@@ -696,7 +724,7 @@ def build_data():
                                               "train_range", "test_range")},
         "models": {k: {"accuracy": tm[k]["accuracy"], "brier": tm[k]["brier"],
                        "calibration": tm[k].get("reliability_table", [])}
-                   for k in ("new_engine", "elo_only", "old_engine_v1")},
+                   for k in ("new_engine", "elo_only")},
     }
 
     ev_out = []
@@ -725,6 +753,8 @@ def build_data():
         "pool": h_today.map_pool(as_of),
         # display-only roster caution flags for the matchup tools (roster_flags.py)
         "rflags": rflags,
+        # Elo weight of lower-tier series (bt.LOWER_TIER_ELO_WEIGHT; 0 = shown, not rated)
+        "lower_w": bt.LOWER_TIER_ELO_WEIGHT,
     }
     info = {
         "assets": assets, "names": names, "events": events, "teams": teams,

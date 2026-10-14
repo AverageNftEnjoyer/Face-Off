@@ -33,7 +33,9 @@ sys.path.insert(0, ROOT)
 
 import backtest as bt  # noqa: E402
 
-SCHEMA_VERSION = 1
+# 2: elo_history.source and lower_matches.elo_* (lower-tier series move Elo
+# at backtest.LOWER_TIER_ELO_WEIGHT)
+SCHEMA_VERSION = 2
 
 # table -> [(column, SQL type, description)]; the table's own description is under column ""
 SCHEMA = {
@@ -69,14 +71,18 @@ SCHEMA = {
         ("winner", "TEXT", "Team that won the map."),
     ],
     "elo_history": [
-        ("", "", "Each team's series Elo before and after every series in `matches`, in date order."),
-        ("match_id", "TEXT", "Series (matches.match_id)."),
+        ("", "", "Each team's series Elo before and after every series that moved it, in the order the "
+                 "ratings fold them in: each day's `matches` series, then that day's `lower_matches` "
+                 "series (lower-tier series move Elo at a reduced weight, see meta.lower_tier_elo_weight)."),
+        ("match_id", "TEXT", "Series (matches.match_id, or lower_matches.match_id when source = 'lower')."),
+        ("source", "TEXT", "'main' (an S/A-tier series in `matches`) or 'lower' (a series in `lower_matches`)."),
         ("date", "TEXT", "Match day."),
         ("team", "TEXT", "Team."),
         ("opponent", "TEXT", "Opponent."),
         ("won", "INTEGER", "1 if team won the series."),
         ("expected", "REAL", "Elo expectation that team wins, from elo_before of both sides."),
-        ("elo_before", "REAL", "Elo from series dated before this day."),
+        ("elo_before", "REAL", "main: Elo from series dated before this day (what the prediction saw); "
+                               "lower: Elo just before this series was folded in (after the day's main series)."),
         ("elo_after", "REAL", "Elo after this series is folded in."),
     ],
     "teams": [
@@ -119,7 +125,8 @@ SCHEMA = {
         ("roster", "TEXT", "Players, comma-separated."),
     ],
     "lower_matches": [
-        ("", "", "Lower-tier and qualifier series (data/matches_lower.json). NOT used by the ratings."),
+        ("", "", "Lower-tier and qualifier series (data/matches_lower.json). Never shown as events or "
+                 "predicted; they move series Elo only, at meta.lower_tier_elo_weight (0 = not used)."),
         ("match_id", "TEXT", "Stable 12-hex id."),
         ("date", "TEXT", "Match day."),
         ("event", "TEXT", "Event name."),
@@ -132,6 +139,11 @@ SCHEMA = {
         ("winner", "TEXT", "Series winner."),
         ("maps_a", "INTEGER", "Maps won by team_a."),
         ("maps_b", "INTEGER", "Maps won by team_b."),
+        ("elo_a_before", "REAL", "team_a's series Elo just before this series was folded in (NULL when it "
+                                 "did not move Elo: weight 0, or skipped by the linked mode)."),
+        ("elo_b_before", "REAL", "team_b's series Elo just before this series was folded in."),
+        ("elo_a_after", "REAL", "team_a's series Elo after it."),
+        ("elo_b_after", "REAL", "team_b's series Elo after it."),
     ],
     "lower_maps": [
         ("", "", "Maps of `lower_matches`."),
@@ -198,19 +210,15 @@ def map_counts(m):
             sum(1 for x in maps if x["winner"] == m["team_b"]))
 
 
-def elo_rows(matches):
-    """(per-match pre-match Elo, elo_history rows, final History). Days are
-    folded in like backtest.build_dataset: every series of day D sees only
-    days < D."""
+def elo_rows(matches, lower=()):
+    """(per-match pre-match Elo, elo_history rows, final History, {lower id:
+    (elo_a_before, elo_b_before, elo_a_after, elo_b_after)}). Days are folded
+    in like backtest.build_dataset: every series of day D sees only days < D;
+    each day's lower-tier series follow its S/A series."""
     h = bt.History()
-    pre, hist = {}, []
-    i = 0
-    while i < len(matches):
-        j = i
-        while j < len(matches) and matches[j]["date"] == matches[i]["date"]:
-            j += 1
-        day = matches[i:j]
-        h.clock = bt._d(day[0]["date"])
+    pre, hist, low = {}, [], {}
+    for day_s, day, lo in bt.day_groups(matches, lower):
+        h.clock = bt._d(day_s)
         for m in day:
             pre[m["match_id"]] = (h.feature_elo(m["team_a"]), h.feature_elo(m["team_b"]))
         for m in day:
@@ -218,10 +226,19 @@ def elo_rows(matches):
             ea, eb = pre[m["match_id"]]
             h.add(m)
             e = bt.elo_expected(ea, eb)
-            hist.append((m["match_id"], m["date"], a, b, int(m["winner"] == a), e, ea, h.elo[a]))
-            hist.append((m["match_id"], m["date"], b, a, int(m["winner"] == b), 1 - e, eb, h.elo[b]))
-        i = j
-    return pre, hist, h
+            hist.append((m["match_id"], "main", m["date"], a, b, int(m["winner"] == a), e, ea, h.elo[a]))
+            hist.append((m["match_id"], "main", m["date"], b, a, int(m["winner"] == b), 1 - e, eb, h.elo[b]))
+        for m in lo:
+            a, b = m["team_a"], m["team_b"]
+            h.clock = bt._d(m["date"])
+            ea, eb = h.elo[a], h.elo[b]
+            if not h.add_lower(m):
+                continue
+            e = bt.elo_expected(ea, eb)
+            low[m["id"]] = (ea, eb, h.elo[a], h.elo[b])
+            hist.append((m.get("match_id"), "lower", m["date"], a, b, int(m["winner"] == a), e, ea, h.elo[a]))
+            hist.append((m.get("match_id"), "lower", m["date"], b, a, int(m["winner"] == b), 1 - e, eb, h.elo[b]))
+    return pre, hist, h, low
 
 
 def build(path):
@@ -229,7 +246,8 @@ def build(path):
     for m in matches:
         if not m.get("match_id"):
             raise SystemExit(f"series without match_id: {m['date']} {m['team_a']} vs {m['team_b']}")
-    pre, hist, h = elo_rows(matches)
+    lower = bt.read_lower()
+    pre, hist, h, low = elo_rows(matches, lower if bt.LOWER_TIER_ELO_WEIGHT else [])
     with open(os.path.join(DATA, "matches.json"), "rb") as f:
         mhash = hashlib.sha1(f.read().replace(b"\r\n", b"\n")).hexdigest()[:12]
 
@@ -247,7 +265,7 @@ def build(path):
                      m.get("ext_match_id")))
         for k, x in enumerate(m.get("maps") or [], 1):
             cur.execute("INSERT INTO maps VALUES (?,?,?,?)", (m["match_id"], k, x["map"], x["winner"]))
-    cur.executemany("INSERT INTO elo_history VALUES (?,?,?,?,?,?,?,?)", hist)
+    cur.executemany("INSERT INTO elo_history VALUES (?,?,?,?,?,?,?,?,?)", hist)
 
     # teams
     agg = {}
@@ -302,11 +320,12 @@ def build(path):
                          ", ".join(r.get("roster") or [])))
 
     # lower tier
-    for m in load("matches_lower.json", []) or []:
+    for m in lower:
         ma, mb = map_counts(m)
-        cur.execute("INSERT INTO lower_matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        el = low.get(m["id"], (None, None, None, None))
+        cur.execute("INSERT INTO lower_matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (m.get("match_id"), m["date"], m.get("event"), m.get("event_page"), m.get("tier"),
-                     m.get("kind"), m.get("best_of"), m["team_a"], m["team_b"], m["winner"], ma, mb))
+                     m.get("kind"), m.get("best_of"), m["team_a"], m["team_b"], m["winner"], ma, mb, *el))
         for k, x in enumerate(m.get("maps") or [], 1):
             cur.execute("INSERT INTO lower_maps VALUES (?,?,?,?)", (m.get("match_id"), k, x["map"], x["winner"]))
 
@@ -325,7 +344,8 @@ def build(path):
 
     meta = {"schema_version": SCHEMA_VERSION, "data_through": through, "matches_hash": mhash,
             "matches": len(matches), "lower_matches": cur.execute("SELECT COUNT(*) FROM lower_matches").fetchone()[0],
-            "elo": "series Elo, init 1500, K 32 (backtest.py)"}
+            "elo": "series Elo, init 1500, K 32 (backtest.py)",
+            "lower_tier_elo_weight": bt.LOWER_TIER_ELO_WEIGHT, "lower_tier_mode": bt.LOWER_TIER_MODE}
     cur.executemany("INSERT INTO meta VALUES (?,?)", [(k, str(v)) for k, v in meta.items()])
     con.commit()
     cur.execute("VACUUM")

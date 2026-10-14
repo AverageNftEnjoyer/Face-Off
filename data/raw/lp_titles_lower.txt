@@ -300,6 +300,10 @@ PGL/2026/Masters/Asia/West Asia
 PGL/2026/Masters/Europe
 PGL/2026/Masters/North America
 PGL/2026/Masters/South America
+PGL/2027/Bucharest/Qualifier
+PGL/2027/China/Europe
+PGL/2027/Cluj-Napoca/Qualifier
+PGL/2027/Łódź/Qualifier
 PLAYzone/Conquest of Prague/2025
 PLAYzone/Conquest of Prague/2026
 PLAYzone/MČR/2025
@@ -340,6 +344,7 @@ Svenska Cupen/2025
 Svenska Cupen/2026
 Svenska Elitserien/2026/Fall
 T-esports Championship/Season 4
+Tesla Cup/2026
 Thunderpick/World Championship/2025/Europe/1
 Thunderpick/World Championship/2025/Europe/2
 Thunderpick/World Championship/2025/North America/1

@@ -72,8 +72,9 @@ SINCE = "2024-01-01"
 BATCH = 20
 # B-tier league seasons (ESL Challenger League regions run ~110 days) are real
 # results; for rating data they are kept up to this length (the site's 45-day
-# rule is about what counts as one tournament on a page, not about the data)
-LEAGUE_MAX_DAYS = 150
+# rule is about what counts as one tournament on a page, not about the data).
+# One value for the backfill and the daily refresh (scripts/lower_refresh.py).
+from lower_refresh import LOWER_MAX_DAYS as LEAGUE_MAX_DAYS  # noqa: E402
 REGION = DR.SKIP_SEGMENTS - {"Open"} | {
     "Closed Qualifier", "China", "MENA", "Rest of Asia", "Asia-Pacific", "Oceania and Southeast Asia",
     "Mongolia and West Asia", "Middle East", "Southeast Asia", "CIS", "Eastern Europe", "Western Europe",

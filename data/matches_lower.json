@@ -214627,6 +214627,29 @@
   "kind": "main"
  },
  {
+  "match_id": "07731d6c7c07",
+  "date": "2026-10-07",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Iberian Soul",
+  "team_b": "ex-RUSTEC",
+  "winner": "Iberian Soul",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Iberian Soul"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Iberian Soul"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398402",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "5d62a000ad62",
   "date": "2026-10-07",
   "event": "CCT Europe 2026 Series #10",
@@ -214650,6 +214673,298 @@
   ],
   "event_page": "CCT/2026/Europe/Series 10",
   "ext_match_id": "2398401",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "20d823be1504",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "EMPIRE (American team)",
+  "team_b": "DETONATE",
+  "winner": "DETONATE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "DETONATE"
+   },
+   {
+    "map": "Cache",
+    "winner": "DETONATE"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399206",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "cd03c263270c",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "OverKnight",
+  "team_b": "Desi Boyz",
+  "winner": "Desi Boyz",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Desi Boyz"
+   },
+   {
+    "map": "Ancient",
+    "winner": "OverKnight"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Desi Boyz"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399212",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "0267ae385f14",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Villainous",
+  "team_b": "FarmVille",
+  "winner": "FarmVille",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "FarmVille"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Villainous"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FarmVille"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399207",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "976a8c81a017",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Wanted Goons",
+  "team_b": "Iowa Stormboar",
+  "winner": "Iowa Stormboar",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Iowa Stormboar"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Wanted Goons"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Iowa Stormboar"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399210",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "abf2bfc0f93b",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Zomblers",
+  "team_b": "Club 333",
+  "winner": "Zomblers",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Zomblers"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Zomblers"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399211",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "db3bb9a16a5f",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "ex-Reign Above",
+  "team_b": "Overtake Sector",
+  "winner": "Overtake Sector",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Overtake Sector"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Overtake Sector"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399208",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "e7c4dc0f216f",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "regain",
+  "team_b": "Day Traders",
+  "winner": "regain",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "regain"
+   },
+   {
+    "map": "Mirage",
+    "winner": "regain"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399209",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "563ee50cc6ef",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "BESTIA Academy",
+  "team_b": "Alka Esports",
+  "winner": "Alka Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Alka Esports"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Alka Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399181",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "7a2c527a351d",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Bounty Hunters Esports",
+  "team_b": "Procyon Team",
+  "winner": "Bounty Hunters Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Bounty Hunters Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Bounty Hunters Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399180",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "33ab713d55af",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Galorys",
+  "team_b": "Grêmio Esports",
+  "winner": "Grêmio Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Grêmio Esports"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Grêmio Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399176",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a539b3cde8b8",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "QUINTESSÊNCIA",
+  "team_b": "ex-Keyd Stars",
+  "winner": "ex-Keyd Stars",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "ex-Keyd Stars"
+   },
+   {
+    "map": "Ancient",
+    "winner": "ex-Keyd Stars"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399179",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "80c259ec0d5e",
+  "date": "2026-10-07",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Turma do Pagode",
+  "team_b": "BORRACHEIROS",
+  "winner": "Turma do Pagode",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "BORRACHEIROS"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Turma do Pagode"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Turma do Pagode"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399182",
   "tier": "B",
   "kind": "main"
  },
@@ -214725,5 +215040,2155 @@
   "ext_match_id": "2398980",
   "tier": "B",
   "kind": "qualifier"
+ },
+ {
+  "match_id": "1c11a41ee2b3",
+  "date": "2026-10-08",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Acend",
+  "team_b": "ex-Zero Tenacity",
+  "winner": "Acend",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "ex-Zero Tenacity"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Acend"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Acend"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398403",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "f6d438af35c5",
+  "date": "2026-10-08",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Nemiga Gaming",
+  "team_b": "lavked",
+  "winner": "Nemiga Gaming",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Nemiga Gaming"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Nemiga Gaming"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398404",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "146ff4ff2695",
+  "date": "2026-10-08",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "SINNERS Esports",
+  "team_b": "Black Phoenix",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "SINNERS Esports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398406",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d2335fce2654",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Chicken Coop Esports",
+  "team_b": "DETONATE",
+  "winner": "Chicken Coop Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Chicken Coop Esports"
+   },
+   {
+    "map": "Inferno",
+    "winner": "DETONATE"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Chicken Coop Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399213",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "f687e02f0c79",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Club 333",
+  "team_b": "OverKnight",
+  "winner": "Club 333",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Club 333"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Club 333"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399219",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "da9120dd7fd8",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Day Traders",
+  "team_b": "Wanted Goons",
+  "winner": "Wanted Goons",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Day Traders"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Wanted Goons"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Wanted Goons"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399218",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "14f094dd3009",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Villainous",
+  "team_b": "ex-Reign Above",
+  "winner": "Villainous",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "ex-Reign Above"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Villainous"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Villainous"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399217",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "9201a13557dd",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Zomblers",
+  "team_b": "Desi Boyz",
+  "winner": "Zomblers",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Zomblers"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Zomblers"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399216",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a2b2a948fd45",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "regain",
+  "team_b": "Iowa Stormboar",
+  "winner": "Iowa Stormboar",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Iowa Stormboar"
+   },
+   {
+    "map": "Ancient",
+    "winner": "regain"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Iowa Stormboar"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399215",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "e018f8996bb0",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "BORRACHEIROS",
+  "team_b": "Metanoia Wolves",
+  "winner": "BORRACHEIROS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "BORRACHEIROS"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Metanoia Wolves"
+   },
+   {
+    "map": "Dust2",
+    "winner": "BORRACHEIROS"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399191",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "e573a6c90f3b",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Bounty Hunters Esports",
+  "team_b": "Alka Esports",
+  "winner": "Bounty Hunters Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Bounty Hunters Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Bounty Hunters Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399186",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "773b9a5542f6",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Grêmio Esports",
+  "team_b": "Yawara E-Sports",
+  "winner": "Yawara E-Sports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Yawara E-Sports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Yawara E-Sports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399184",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "249753c0e137",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Isurus",
+  "team_b": "ex-Keyd Stars",
+  "winner": "ex-Keyd Stars",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "ex-Keyd Stars"
+   },
+   {
+    "map": "Ancient",
+    "winner": "ex-Keyd Stars"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399185",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "9c77e65fb3d1",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "MEIA NOITE",
+  "team_b": "QUINTESSÊNCIA",
+  "winner": "MEIA NOITE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "QUINTESSÊNCIA"
+   },
+   {
+    "map": "Ancient",
+    "winner": "MEIA NOITE"
+   },
+   {
+    "map": "Dust2",
+    "winner": "MEIA NOITE"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399189",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "b4a35dac4587",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Procyon Team",
+  "team_b": "BESTIA Academy",
+  "winner": "Procyon Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Procyon Team"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Procyon Team"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399190",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "fe1dd7ba1433",
+  "date": "2026-10-08",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Turma do Pagode",
+  "team_b": "LargadosyPelados",
+  "winner": "LargadosyPelados",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "LargadosyPelados"
+   },
+   {
+    "map": "Mirage",
+    "winner": "LargadosyPelados"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399187",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a6d510ae8b83",
+  "date": "2026-10-09",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "HOTU",
+  "team_b": "Acend",
+  "winner": "HOTU",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "HOTU"
+   },
+   {
+    "map": "Mirage",
+    "winner": "HOTU"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398983",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "2d3295f90568",
+  "date": "2026-10-09",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "K27",
+  "team_b": "Fnatic",
+  "winner": "Fnatic",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "K27"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Fnatic"
+   },
+   {
+    "map": "Cache",
+    "winner": "Fnatic"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398985",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "41ed5aa74244",
+  "date": "2026-10-09",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "PRIVATE",
+  "team_b": "Nuclear TigeRES",
+  "winner": "PRIVATE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "PRIVATE"
+   },
+   {
+    "map": "Dust2",
+    "winner": "PRIVATE"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398986",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "11a714e1e407",
+  "date": "2026-10-09",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "SINNERS Esports",
+  "team_b": "GamerLegion",
+  "winner": "GamerLegion",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "GamerLegion"
+   },
+   {
+    "map": "Ancient",
+    "winner": "GamerLegion"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398984",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "f45f4af51e21",
+  "date": "2026-10-09",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Acend",
+  "team_b": "Nexus Gaming",
+  "winner": "Nexus Gaming",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Nexus Gaming"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Nexus Gaming"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398409",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "00a352ca60ca",
+  "date": "2026-10-09",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Black Phoenix",
+  "team_b": "Leo Team",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Leo Team"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398407",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "b39c8cab5a5f",
+  "date": "2026-10-09",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Iberian Soul",
+  "team_b": "Noir Verse",
+  "winner": "Iberian Soul",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Iberian Soul"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Iberian Soul"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398410",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "84a03cee525f",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "DETONATE",
+  "team_b": "Club 333",
+  "winner": "DETONATE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "DETONATE"
+   },
+   {
+    "map": "Anubis",
+    "winner": "DETONATE"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399223",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "488ef20c550f",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Desi Boyz",
+  "team_b": "EMPIRE (American team)",
+  "winner": "EMPIRE (American team)",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "EMPIRE (American team)"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Desi Boyz"
+   },
+   {
+    "map": "Nuke",
+    "winner": "EMPIRE (American team)"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399220",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d50f9986a6c8",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "FarmVille",
+  "team_b": "Wanted Goons",
+  "winner": "Wanted Goons",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Wanted Goons"
+   },
+   {
+    "map": "Ancient",
+    "winner": "FarmVille"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Wanted Goons"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399222",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "c4d18abb31b4",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "regain",
+  "team_b": "Villainous",
+  "winner": "regain",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "regain"
+   },
+   {
+    "map": "Inferno",
+    "winner": "regain"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399221",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "77d4ea34b9de",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Alka Esports",
+  "team_b": "MEIA NOITE",
+  "winner": "MEIA NOITE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "MEIA NOITE"
+   },
+   {
+    "map": "Dust2",
+    "winner": "MEIA NOITE"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399193",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "7ace558ad143",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Grêmio Esports",
+  "team_b": "BORRACHEIROS",
+  "winner": "BORRACHEIROS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "BORRACHEIROS"
+   },
+   {
+    "map": "Mirage",
+    "winner": "BORRACHEIROS"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399195",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "927e505b96f5",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Isurus",
+  "team_b": "Procyon Team",
+  "winner": "Procyon Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Procyon Team"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Procyon Team"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399194",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "dfb3c02be8ea",
+  "date": "2026-10-09",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Turma do Pagode",
+  "team_b": "Galorys",
+  "winner": "Galorys",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Galorys"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399192",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a5a066d61166",
+  "date": "2026-10-10",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "HOTU",
+  "team_b": "Fnatic",
+  "winner": "Fnatic",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "HOTU"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Fnatic"
+   },
+   {
+    "map": "Cache",
+    "winner": "Fnatic"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398987",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "e6147ba3235f",
+  "date": "2026-10-10",
+  "event": "1win Private Club #2: Closed Qualifier",
+  "team_a": "PRIVATE",
+  "team_b": "GamerLegion",
+  "winner": "PRIVATE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "PRIVATE"
+   },
+   {
+    "map": "Cache",
+    "winner": "GamerLegion"
+   },
+   {
+    "map": "Ancient",
+    "winner": "PRIVATE"
+   }
+  ],
+  "event_page": "1win Private Club/2/Qualifier",
+  "ext_match_id": "2398988",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "63852a48ecd9",
+  "date": "2026-10-10",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Black Phoenix",
+  "team_b": "Iberian Soul",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398413",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "fadbe42ae385",
+  "date": "2026-10-10",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Iberian Soul",
+  "team_b": "Nemiga Gaming",
+  "winner": "Iberian Soul",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Iberian Soul"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Nemiga Gaming"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Iberian Soul"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398411",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d50b3db6df36",
+  "date": "2026-10-10",
+  "event": "CCT Europe 2026 Series #10",
+  "team_a": "Nexus Gaming",
+  "team_b": "Black Phoenix",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 10",
+  "ext_match_id": "2398412",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "7f407950834d",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Chicken Coop Esports",
+  "team_b": "Overtake Sector",
+  "winner": "Chicken Coop Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Chicken Coop Esports"
+   },
+   {
+    "map": "Cache",
+    "winner": "Chicken Coop Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399224",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "124563b80bba",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "EMPIRE (American team)",
+  "team_b": "regain",
+  "winner": "regain",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "regain"
+   },
+   {
+    "map": "Ancient",
+    "winner": "EMPIRE (American team)"
+   },
+   {
+    "map": "Mirage",
+    "winner": "regain"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399226",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "8b4a1f1229bd",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Iowa Stormboar",
+  "team_b": "Zomblers",
+  "winner": "Zomblers",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Zomblers"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Iowa Stormboar"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Zomblers"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399225",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d2900cd7a852",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Wanted Goons",
+  "team_b": "DETONATE",
+  "winner": "DETONATE",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "DETONATE"
+   },
+   {
+    "map": "Nuke",
+    "winner": "DETONATE"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399227",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "9777bfa4906e",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Bounty Hunters Esports",
+  "team_b": "LargadosyPelados",
+  "winner": "LargadosyPelados",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "LargadosyPelados"
+   },
+   {
+    "map": "Ancient",
+    "winner": "LargadosyPelados"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399197",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a1cb0a656420",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Galorys",
+  "team_b": "MEIA NOITE",
+  "winner": "Galorys",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "MEIA NOITE"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Galorys"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399198",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "400e67642ed7",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Procyon Team",
+  "team_b": "BORRACHEIROS",
+  "winner": "BORRACHEIROS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "BORRACHEIROS"
+   },
+   {
+    "map": "Mirage",
+    "winner": "BORRACHEIROS"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399199",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a39d690ba1bb",
+  "date": "2026-10-10",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Yawara E-Sports",
+  "team_b": "ex-Keyd Stars",
+  "winner": "ex-Keyd Stars",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Yawara E-Sports"
+   },
+   {
+    "map": "Dust2",
+    "winner": "ex-Keyd Stars"
+   },
+   {
+    "map": "Ancient",
+    "winner": "ex-Keyd Stars"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399196",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "1d609d1238d6",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "DENDELE CS",
+  "team_b": "Marsborne",
+  "winner": "DENDELE CS",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "DENDELE CS"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399390",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "bdaca11520cd",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "DENDELE CS",
+  "team_b": "Imperial Esports",
+  "winner": "DENDELE CS",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "DENDELE CS"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399398",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "2e33b88f74a7",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "DENDELE CS",
+  "team_b": "Wildcard",
+  "winner": "Wildcard",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Wildcard"
+   },
+   {
+    "map": "Cache",
+    "winner": "Wildcard"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399402",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "815372628b0d",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Elusive (American team)",
+  "team_b": "Last Dance (American team)",
+  "winner": "Last Dance (American team)",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Last Dance (American team)"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": null,
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "cef034c97519",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Imperial Esports",
+  "team_b": "SportsBetExpert",
+  "winner": "Imperial Esports",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Imperial Esports"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399391",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "3ab5df5f66b9",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Imperial Esports",
+  "team_b": "Without a Roof",
+  "winner": "Imperial Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Imperial Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Imperial Esports"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399403",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "78fafcbab069",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Last Dance (American team)",
+  "team_b": "Without a Roof",
+  "winner": "Without a Roof",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Last Dance (American team)"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Without a Roof"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Without a Roof"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399394",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "6640145ba08e",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Marsborne",
+  "team_b": "Without a Roof",
+  "winner": "Marsborne",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Marsborne"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": null,
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "2dc585276912",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Marsborne",
+  "team_b": "Elusive (American team)",
+  "winner": "Marsborne",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Marsborne"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Marsborne"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399397",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "0e96235729c2",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "NRG",
+  "team_b": "Unreal Nightmare",
+  "winner": "NRG",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "NRG"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399392",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "791e1bb043b5",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "NRG",
+  "team_b": "Wildcard",
+  "winner": "Wildcard",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Wildcard"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399399",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "ffc6cd24f44c",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "NRG",
+  "team_b": "SportsBetExpert",
+  "winner": "NRG",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "NRG"
+   },
+   {
+    "map": "Cache",
+    "winner": "SportsBetExpert"
+   },
+   {
+    "map": "Nuke",
+    "winner": "NRG"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399404",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "70e6efa0296f",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "SportsBetExpert",
+  "team_b": "Holy Cannoli",
+  "winner": "SportsBetExpert",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "SportsBetExpert"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": null,
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "ede5e2e99081",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "SportsBetExpert",
+  "team_b": "Team Fathom Gaming",
+  "winner": "SportsBetExpert",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "SportsBetExpert"
+   },
+   {
+    "map": "Mirage",
+    "winner": "SportsBetExpert"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399396",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "c7b39f43a6e4",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "SportsBetExpert",
+  "team_b": "Marsborne",
+  "winner": "SportsBetExpert",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "SportsBetExpert"
+   },
+   {
+    "map": "Nuke",
+    "winner": "SportsBetExpert"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399401",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "8bdcb5c5dac7",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Unreal Nightmare",
+  "team_b": "Team Fathom Gaming",
+  "winner": "Unreal Nightmare",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Unreal Nightmare"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": null,
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "d2ef5589dd14",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Unreal Nightmare",
+  "team_b": "Holy Cannoli",
+  "winner": "Unreal Nightmare",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Unreal Nightmare"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Unreal Nightmare"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399395",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "28d9bd86e3a7",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Wildcard",
+  "team_b": "Last Dance (American team)",
+  "winner": "Wildcard",
+  "best_of": 1,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Wildcard"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399393",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "5b0e983af614",
+  "date": "2026-10-10",
+  "event": "FRAG University 2026",
+  "team_a": "Without a Roof",
+  "team_b": "Unreal Nightmare",
+  "winner": "Without a Roof",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Without a Roof"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Without a Roof"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399400",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "a5db28137e19",
+  "date": "2026-10-11",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Iowa Stormboar",
+  "team_b": "DETONATE",
+  "winner": "Iowa Stormboar",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Iowa Stormboar"
+   },
+   {
+    "map": "Mirage",
+    "winner": "DETONATE"
+   },
+   {
+    "map": "Cache",
+    "winner": "Iowa Stormboar"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399229",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "8e61d4892dea",
+  "date": "2026-10-11",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Overtake Sector",
+  "team_b": "regain",
+  "winner": "Overtake Sector",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Overtake Sector"
+   },
+   {
+    "map": "Inferno",
+    "winner": "regain"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Overtake Sector"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399228",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "1f4f052bcf77",
+  "date": "2026-10-11",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Bounty Hunters Esports",
+  "team_b": "BORRACHEIROS",
+  "winner": "Bounty Hunters Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Bounty Hunters Esports"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Bounty Hunters Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399201",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "0a96f6b6ef60",
+  "date": "2026-10-11",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Yawara E-Sports",
+  "team_b": "Galorys",
+  "winner": "Galorys",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Galorys"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399200",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "3b57d3839820",
+  "date": "2026-10-11",
+  "event": "FRAG University 2026",
+  "team_a": "DENDELE CS",
+  "team_b": "Imperial Esports",
+  "winner": "DENDELE CS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "DENDELE CS"
+   },
+   {
+    "map": "Inferno",
+    "winner": "DENDELE CS"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399406",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "226d16c7b27f",
+  "date": "2026-10-11",
+  "event": "FRAG University 2026",
+  "team_a": "Imperial Esports",
+  "team_b": "NRG",
+  "winner": "Imperial Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "NRG"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Imperial Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Imperial Esports"
+   }
+  ],
+  "event_page": "FRAG/2026/Syracuse/2",
+  "ext_match_id": "2399405",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "38fe18ef9331",
+  "date": "2026-10-12",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Chicken Coop Esports",
+  "team_b": "Zomblers",
+  "winner": "Chicken Coop Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Chicken Coop Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Chicken Coop Esports"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399230",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a2caea2a225e",
+  "date": "2026-10-12",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Overtake Sector",
+  "team_b": "Iowa Stormboar",
+  "winner": "Overtake Sector",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Overtake Sector"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Overtake Sector"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399231",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "0cf252e1eac7",
+  "date": "2026-10-12",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "Galorys",
+  "team_b": "Bounty Hunters Esports",
+  "winner": "Galorys",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Bounty Hunters Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Galorys"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399203",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "3343e9e57482",
+  "date": "2026-10-12",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "ex-Keyd Stars",
+  "team_b": "LargadosyPelados",
+  "winner": "LargadosyPelados",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "LargadosyPelados"
+   },
+   {
+    "map": "Inferno",
+    "winner": "LargadosyPelados"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399202",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d310bac37b37",
+  "date": "2026-10-12",
+  "event": "Stake Pulse Beat III",
+  "team_a": "IC Esports",
+  "team_b": "Sangal Esports",
+  "winner": "IC Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "IC Esports"
+   },
+   {
+    "map": "Dust2",
+    "winner": "IC Esports"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399130",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "7502a92978d5",
+  "date": "2026-10-12",
+  "event": "Stake Pulse Beat III",
+  "team_a": "IC Esports",
+  "team_b": "Ninjas in Pyjamas",
+  "winner": "Ninjas in Pyjamas",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Ninjas in Pyjamas"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Ninjas in Pyjamas"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399250",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "dc46a8838ebc",
+  "date": "2026-10-12",
+  "event": "Stake Pulse Beat III",
+  "team_a": "IC Esports",
+  "team_b": "Sangal Esports",
+  "winner": "Sangal Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Sangal Esports"
+   },
+   {
+    "map": "Cache",
+    "winner": "Sangal Esports"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399252",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "73d2c08f8606",
+  "date": "2026-10-12",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Ninjas in Pyjamas",
+  "team_b": "Betclic Apogee Esports",
+  "winner": "Ninjas in Pyjamas",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Ninjas in Pyjamas"
+   },
+   {
+    "map": "Cache",
+    "winner": "Betclic Apogee Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Ninjas in Pyjamas"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399131",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "2c17643d999a",
+  "date": "2026-10-12",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Sangal Esports",
+  "team_b": "Betclic Apogee Esports",
+  "winner": "Sangal Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Sangal Esports"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Sangal Esports"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399251",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "ed6deedfc685",
+  "date": "2026-10-13",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "BAKS Esports",
+  "team_b": "Team Spirit Academy",
+  "winner": "BAKS Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "BAKS Esports"
+   },
+   {
+    "map": "Nuke",
+    "winner": "BAKS Esports"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399294",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "521941e99b64",
+  "date": "2026-10-13",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "Black Phoenix",
+  "team_b": "6666 Esports",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399297",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "0cca739271cc",
+  "date": "2026-10-13",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "Bushido Wildcats",
+  "team_b": "ILLYRIANS",
+  "winner": "ILLYRIANS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "ILLYRIANS"
+   },
+   {
+    "map": "Cache",
+    "winner": "ILLYRIANS"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399295",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "8b62bac58aa3",
+  "date": "2026-10-13",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "Grêmio Esports",
+  "team_b": "Los Niños",
+  "winner": "Los Niños",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Los Niños"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Grêmio Esports"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Los Niños"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399459",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "58aa9bf381ee",
+  "date": "2026-10-13",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "Procyon Team",
+  "team_b": "Hacha Esports",
+  "winner": "Procyon Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Procyon Team"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Procyon Team"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399458",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "abba7e73da6d",
+  "date": "2026-10-13",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "QUINTESSÊNCIA",
+  "team_b": "Martians",
+  "winner": "QUINTESSÊNCIA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "QUINTESSÊNCIA"
+   },
+   {
+    "map": "Ancient",
+    "winner": "QUINTESSÊNCIA"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399457",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "a774820071a3",
+  "date": "2026-10-13",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "ex-Keyd Stars",
+  "team_b": "Galorys",
+  "winner": "Galorys",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Galorys"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399204",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "258c5fbf0a15",
+  "date": "2026-10-13",
+  "event": "Stake Pulse Beat III",
+  "team_a": "100 Thieves",
+  "team_b": "JiJieHao",
+  "winner": "100 Thieves",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "100 Thieves"
+   },
+   {
+    "map": "Dust2",
+    "winner": "100 Thieves"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399133",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "271367c2d62f",
+  "date": "2026-10-13",
+  "event": "Stake Pulse Beat III",
+  "team_a": "BBL Esports",
+  "team_b": "JiJieHao",
+  "winner": "JiJieHao",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "BBL Esports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "JiJieHao"
+   },
+   {
+    "map": "Cache",
+    "winner": "JiJieHao"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399254",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d82a0805bbad",
+  "date": "2026-10-13",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Team Liquid",
+  "team_b": "BBL Esports",
+  "winner": "Team Liquid",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "BBL Esports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Team Liquid"
+   },
+   {
+    "map": "Cache",
+    "winner": "Team Liquid"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399132",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "5711d8a7dd40",
+  "date": "2026-10-13",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Team Liquid",
+  "team_b": "100 Thieves",
+  "winner": "100 Thieves",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "100 Thieves"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Team Liquid"
+   },
+   {
+    "map": "Mirage",
+    "winner": "100 Thieves"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399253",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "2cdf6bec5e48",
+  "date": "2026-10-13",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Team Liquid",
+  "team_b": "JiJieHao",
+  "winner": "Team Liquid",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Team Liquid"
+   },
+   {
+    "map": "Cache",
+    "winner": "Team Liquid"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399255",
+  "tier": "B",
+  "kind": "main"
  }
 ]

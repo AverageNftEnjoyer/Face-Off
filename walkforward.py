@@ -240,7 +240,7 @@ def blocks(ev, min_train, block_days):
 
 
 def run(min_train, block_days, verbose=True):
-    rows = bt.build_dataset(bt.load_matches())
+    rows = bt.build_dataset(bt.load_matches(), bt.load_lower())
     ev, _ = bt.select_eval(rows, bt.MIN_HISTORY)
     folds = blocks(ev, min_train, block_days)
     oof = {"elo_only": [], "elo_platt": [], "shipped": [], "wf_fit": []}

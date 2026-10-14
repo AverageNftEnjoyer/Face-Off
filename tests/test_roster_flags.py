@@ -11,7 +11,6 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "viewer"))
 import lineup_features as LF  # noqa: E402
-import predictor as pr  # noqa: E402
 import roster_flags as RF  # noqa: E402
 
 OLD = ["o1", "o2", "o3", "o4", "o5"]
@@ -42,7 +41,7 @@ def flagger(matches, lineups, overrides=(), events=None):
 class Thresholds(unittest.TestCase):
     def test_named_and_reused(self):
         """No magic numbers: the window and look-back reuse existing constants."""
-        self.assertEqual(RF.RECENT_SERIES, pr.CONFIG["veto_roster_recover"])
+        self.assertEqual(RF.RECENT_SERIES, LF.CORE_N)
         self.assertEqual(RF.CORE_N, LF.CORE_N)
         self.assertEqual(RF.MAX_DAYS, LF.CONT_DAYS)
         self.assertGreaterEqual(RF.MIN_NEW, 1)
