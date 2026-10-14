@@ -1402,7 +1402,7 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
   .rq-wide { grid-column: 1 / -1; }
 }
 @media (min-width: 1400px) {
-  .rec-row3 { grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); }
+  .rec-row3 { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, .9fr); }
   .rec-splits { grid-column: auto; grid-template-columns: minmax(0, 1fr); }
   .log .xw { display: table-cell; }
   .log .evd { display: none; }
@@ -3861,9 +3861,9 @@ function viewRecord() {
     <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last ${Math.min(TRACK.streak, n)} calls, oldest first:</span>
       <span class="streak">${calls.slice(-TRACK.streak).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
   </section>
-  ${howPanel(calls)}
   <p class="pclegend small dim">Share of calls right, coloured by how it went: <span class="pc-hi">above 60%</span> <span class="pc-mid">50 to 60%</span> <span class="pc-lo">50% or under</span>. The model's own chance for each pick stays white: that is confidence, not a record.</p>
   <div class="rec-row3">
+    ${howPanel(calls)}
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
     <div class="rec-splits">
       <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>
