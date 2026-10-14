@@ -368,6 +368,7 @@ def refresh_live(live, collect, pauses=RETRY_PAUSES):
         lpfetch._THROTTLED[0] = False
         lpfetch.STALE_SERVED.clear()
         lpfetch.RUN_STARTED = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())  # a copy fetched now counts as fresh
+        lpfetch._CONFIRMED.clear()
         collect()
         stale = stale_live(live)
     return stale

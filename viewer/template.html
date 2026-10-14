@@ -140,12 +140,18 @@ header.top {
 .tabs a:focus-visible { outline-offset: -4px; }
 
 /* search: a combobox; results drop down under it */
-.qwrap { position: relative; margin-left: auto; align-self: center; width: min(26rem, 30vw); }
-.qfield { position: relative; display: flex; align-items: center; }
+.qwrap { position: relative; margin-left: auto; align-self: center; width: min(26rem, 30vw); display: flex; align-items: stretch; }
+.qfield { position: relative; display: flex; align-items: center; flex: 1; min-width: 0; }
+/* settings: the right-hand segment of the search control (same height, border and fill) */
+.qset { display: grid; place-items: center; flex: none; width: 2.6rem; height: 2.5rem; padding: 0; cursor: pointer;
+  background: rgba(16, 28, 31, .9); color: var(--dim); border: 1px solid var(--line2); border-left: 0; border-radius: 0 8px 8px 0; }
+.qset:hover, .qset:focus-visible { color: var(--text); background: var(--raise); }
+.qset:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; }
+.qset .ico { width: 1.15rem; height: 1.15rem; }
 .qfield > .ico { position: absolute; left: .75rem; width: 1rem; height: 1rem; color: var(--dim); pointer-events: none; }
 #q {
   width: 100%; min-width: 0; height: 2.5rem; padding: 0 2.4rem 0 2.3rem;
-  background: rgba(16, 28, 31, .9); color: var(--text); border: 1px solid var(--line2); border-radius: 8px; font: inherit; font-size: .9rem;
+  background: rgba(16, 28, 31, .9); color: var(--text); border: 1px solid var(--line2); border-radius: 8px 0 0 8px; font: inherit; font-size: .9rem;
   -webkit-appearance: none; appearance: none;
 }
 #q::placeholder { color: var(--dim); opacity: .85; }
@@ -201,11 +207,12 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 @media (max-width: 900px) {
   .qwrap { width: auto; margin-left: auto; position: static; }
   .qfield, .qkey { display: none; }
-  #qOpen { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line2); border-radius: 8px; background: var(--panel); cursor: pointer; color: var(--text); }
+  #qOpen { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line2); border-radius: 8px 0 0 8px; background: var(--panel); cursor: pointer; color: var(--text); }
+  .qset { width: 44px; height: 44px; background: var(--panel); }
   #qOpen .ico { width: 1.15rem; height: 1.15rem; }
   header.top.qon::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(env(safe-area-inset-top, 0px) + var(--toph)); background: #0A1517; z-index: 30; border-bottom: 1px solid var(--line); }
   header.top.qon .qfield { display: flex; position: absolute; left: var(--gut); right: var(--gut); top: calc(env(safe-area-inset-top, 0px) + (var(--toph) - 2.7rem) / 2); z-index: 31; }
-  header.top.qon #q { height: 2.7rem; font-size: 1rem; padding-right: 3.2rem; }
+  header.top.qon #q { height: 2.7rem; font-size: 1rem; padding-right: 3.2rem; border-radius: 8px; }
   header.top.qon .qclose { display: grid; place-items: center; position: absolute; right: .2rem; width: 2.6rem; height: 2.6rem; border: 0; background: none; color: var(--dim); cursor: pointer; }
   header.top.qon .qclose .ico { width: 1.15rem; height: 1.15rem; }
   .qlist { position: fixed; left: var(--gut); right: var(--gut); top: calc(env(safe-area-inset-top, 0px) + var(--toph) + .35rem); max-height: calc(100dvh - var(--toph) - 2rem); }
@@ -888,7 +895,6 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .hbm i { font-style: normal; color: var(--dim); font-weight: 400; }
 .hbp { color: var(--dim); }
 .hbp b { color: var(--acc); font-weight: 800; }
-.hbmore { align-self: center; font-size: var(--s-1); font-weight: 600; color: var(--dim); padding: .5rem; white-space: nowrap; text-decoration: underline; text-underline-offset: 2px; }
 @media (max-width: 640px) {
   /* phone: the cards scroll sideways in one row instead of stacking above the desk */
   .hband { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .2rem; }
@@ -1396,7 +1402,7 @@ svg.rchart { cursor: crosshair; touch-action: pan-y; }
   .rq-wide { grid-column: 1 / -1; }
 }
 @media (min-width: 1400px) {
-  .rec-row3 { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, .9fr); }
+  .rec-row3 { grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); }
   .rec-splits { grid-column: auto; grid-template-columns: minmax(0, 1fr); }
   .log .xw { display: table-cell; }
   .log .evd { display: none; }
@@ -1614,7 +1620,7 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   box-shadow: 0 8px 28px -8px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .08) inset; }
 .chat-fab:hover { filter: brightness(1.08); }
 .chat-fab .ico { width: 1.15rem; height: 1.15rem; stroke: currentColor; }
-.chat-fab[aria-expanded="true"] { display: none; }
+.chat-fab[aria-expanded="true"], .chat-fab[hidden] { display: none; }
 .chat { position: fixed; z-index: 70; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
   width: min(27rem, calc(100vw - 32px)); height: min(40rem, 78vh); display: flex; flex-direction: column; min-height: 0;
   background: var(--panel); border: 1px solid var(--line2); border-radius: 14px; overflow: hidden;
@@ -1722,14 +1728,14 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
         <button type="button" class="qclose" id="qClose" aria-label="Close search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <div class="qlist" id="qList" role="listbox" aria-label="Search results" hidden></div>
+      <button type="button" class="qset" id="setOpen" aria-label="Settings" title="Settings" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
-    <button type="button" class="hbtn" id="setOpen" aria-label="Settings" title="Settings" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
   </div>
 </header>
 
 <main class="page" id="view" tabindex="-1"></main>
 
-<button type="button" class="chat-fab" id="chatFab" aria-label="Ask FaceOff, the assistant" aria-expanded="false" aria-controls="chat">
+<button type="button" class="chat-fab" id="chatFab" hidden aria-label="Ask FaceOff, the assistant" aria-expanded="false" aria-controls="chat">
   <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.6L3 20.5l1.5-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
   <span>Ask FaceOff</span>
 </button>
@@ -2269,10 +2275,9 @@ function chances(pred, a, b, bo) {
       ${maskNote(r) ? `<span class="vnotes small">${maskNote(r)}</span>` : ""}
     </li>`;
   }).join("");
-  const first = D.startA === null ? "" : `Which team vetoes first is not known in advance: the model gives ${esc(a)} ${vPct(D.startA)} and ${esc(b)} ${vPct(1 - D.startA)}. These chances cover both cases, while the veto above assumes ${esc(a)} bans first. `;
   return `<div class="vch"><h3>Pick and ban chances <span class="dim small">${bo === 1 ? "which map ends up played" : "how often each map is picked, left as the decider, or banned"}</span></h3>
     <ul class="vlist">${list}</ul>
-    <p class="small dim">${first}A map's played chance is its pick chance plus its decider chance. Chances come from past vetoes and each team's recent maps, not from this event's draw.</p></div>`;
+    <p class="small dim">A map's played chance is its pick chance plus its decider chance. Chances come from past vetoes and each team's recent maps, not from this event's draw.</p></div>`;
 }
 
 // One factor row's evidence from the build's fx array (see evidence() in
@@ -3428,7 +3433,7 @@ function homeBand() {
       <span class="hbh">${evImg(e, "hbl")}<span class="hbt"><b>${tierTag(e)}${esc(shortEv(e.name))}</b><span>${statusChip(e)} ${esc(when)}, ${esc(dayRange(e))}</span></span></span>
       ${pick || `<span class="hbnext"><small>${e.matches.some(m => m.t1 && m.t2) ? "Schedule to come" : "Teams and schedule to come"}</small></span>`}</a>`;
   };
-  return `<section class="hband" aria-label="Tournaments now and next">${list.map(card).join("")}<a class="hbmore" href="#events">All tournaments</a></section>`;
+  return `<section class="hband" aria-label="Tournaments now and next">${list.map(card).join("")}</section>`;
 }
 
 function evTeamsList(e) {
@@ -3678,43 +3683,7 @@ function calibRows(calls) {
 // walkforward.py's acceptance rule for a bucket: close enough, and the Wilson range holds the stated chance
 const bucketVerdict = r => !r.n ? "-" : r.n < TR.min_n ? `<span class="dim">too few to judge</span>`
   : Math.abs(r.got - r.said) <= TR.gap && r.ci[0] <= r.said && r.said <= r.ci[1] ? `<span class="win">in line</span>` : `<span class="loss">off</span>`;
-function calibTable(rows) {
-  return `<div class="tablewrap"><table class="ctab"><thead><tr><th>Model said</th><th class="n">Calls</th><th class="n">Said, on average</th><th class="n">Pick won</th><th class="n">95% range</th><th>Verdict</th></tr></thead><tbody>
-    ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n">${r.n ? (r.said * 100).toFixed(2) + "%" : "-"}</td><td class="n ${r.n ? pcc((r.got * 100).toFixed(2)) : ""}">${r.n ? `${(r.got * 100).toFixed(2)}%` : "-"}</td><td class="n">${r.n ? pctRange(r.ci) : "-"}</td><td>${bucketVerdict(r)}</td></tr>`).join("")}</tbody></table></div>`;
-}
 
-function calibChart(calls) {
-  const rows = calibRows(calls);
-  const live = rows.filter(r => r.n);
-  if (!live.length) return `<p class="empty">No calls to grade.</p>` + calibTable(rows);
-  const W = 520, H = 330, L = 50, R = 18, Tp = 14, B = 48;
-  // axes follow the buckets: x from the lowest bucket edge to 100%, gridlines one bucket width apart
-  const x0 = BUCKETS[0][0], step = BUCKETS[0][1] - BUCKETS[0][0], gap = TR.gap;
-  const edges = [...new Set([...BUCKETS.map(b => b[0]), 1])];
-  const ylo = Math.max(0, Math.min(x0, Math.floor(Math.min(...live.map(r => r.ci[0])) / step) * step));
-  const x = v => L + (v - x0) / (1 - x0) * (W - L - R), y = v => Tp + (1 - v) / (1 - ylo) * (H - Tp - B);
-  let g = "";
-  for (let v = ylo; v <= 1 + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
-  for (const v of edges) g += `<text x="${x(v)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--dim)">${Math.round(v * 100)}%</text>`;
-  // the pale band: within TR.gap of perfect (walkforward.py's bucket rule)
-  const band = [[x0, x0 + gap], [1 - gap, 1], [1, 1], [1, 1 - gap], [x0, x0 - gap]].map(([a, b]) => `${x(a)},${y(Math.max(ylo, b))}`).join(" ");
-  g += `<polygon points="${band}" fill="var(--text)" fill-opacity=".06"/>`;
-  g += `<line x1="${x(x0)}" y1="${y(x0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--dim)" stroke-dasharray="5 5"/>`;
-  const lx = 1 - (1 - x0) * .14;   // the "perfect" label sits near the top end of the diagonal
-  g += `<text x="${x(lx)}" y="${y(lx) + 18}" font-size="11" fill="var(--dim)" text-anchor="middle">perfect</text>`;
-  g += `<text x="${(L + W - R) / 2}" y="${H - 8}" text-anchor="middle" font-size="12" fill="var(--dim)">What the model said for its pick</text>`;
-  g += `<text transform="translate(14 ${(Tp + H - B) / 2}) rotate(-90)" text-anchor="middle" font-size="12" fill="var(--dim)">How often the pick won</text>`;
-  const mx = Math.max(...live.map(r => r.n));
-  for (const r of live) {
-    const ok = Math.abs(r.got - r.said) <= gap, col = ok ? "var(--win)" : "var(--loss)";
-    const cx = x(r.said), cy = y(Math.max(ylo, r.got));
-    g += `<line x1="${cx}" x2="${cx}" y1="${y(Math.max(ylo, r.ci[0]))}" y2="${y(r.ci[1])}" stroke="${col}" stroke-width="2" stroke-opacity=".55"/>`;
-    g += `<circle cx="${cx}" cy="${cy}" r="${(5 + 7 * Math.sqrt(r.n / mx)).toFixed(1)}" fill="${col}" stroke="var(--panel)" stroke-width="2"><title>${r.lab}: said ${(r.said * 100).toFixed(2)}% on average, won ${(r.got * 100).toFixed(2)}% (${r.h} of ${r.n})</title></circle>`;
-    g += `<text x="${cx}" y="${y(r.ci[1]) - 7}" text-anchor="middle" font-size="11" fill="var(--text)">${r.n}</text>`;
-  }
-  const svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Calibration: stated chance of the pick against how often it won, by bucket">${g}</svg>`;
-  return svg + calibTable(rows) + `<p class="small dim">A bucket is <b>in line</b> when its picks won within ${Math.round(gap * 100)} points of what the model said and the 95% range (Wilson interval) holds the stated chance. Buckets with fewer than ${TR.min_n} calls are not judged. The backtest uses the same rule.</p>`;
-}
 
 const RANGES = [["7", "7D"], ["30", "30D"], ["90", "90D"], ["all", "Season"]];
 const daysBefore = (day, n) => new Date(Date.parse(day + "T00:00:00Z") - n * 864e5).toISOString().slice(0, 10);
@@ -3808,38 +3777,28 @@ function callsCsv(list) {
   return [head, ...rows].map(r => r.map(cell).join(",")).join("\n") + "\n";
 }
 
-// a small "model vs Elo only vs coin flip" score table
-function scoreTable(s) {
-  const pct = (h, n) => n ? `${(h / n * 100).toFixed(2)}%` : "-";
-  const hasE = s.brierE != null;
-  return `<div class="tablewrap"><table class="scores"><thead><tr><th></th><th class="n">Model</th><th class="n">Elo only</th><th class="n">Model minus Elo</th><th class="n">Coin flip</th></tr></thead><tbody>
-    <tr><td>Winners right <span class="dim">higher is better</span></td><td class="n ${pcc(acc2(s.h, s.n))}">${pct(s.h, s.n)}</td><td class="n">${hasE ? pct(s.hE, s.n) : "-"}</td><td class="n">${hasE ? `<span class="${s.h > s.hE ? "win" : s.h < s.hE ? "loss" : "dim"}">${s.h - s.hE > 0 ? "+" : ""}${s.h - s.hE} calls</span>` : ""}</td><td class="n dim">50%</td></tr>
-    <tr><td>Brier score <span class="dim">lower is better</span></td><td class="n">${f3(s.brier)}</td><td class="n">${hasE ? f3(s.brierE) : "-"}</td><td class="n">${edge(s.brier, s.brierE)}</td><td class="n dim">${f3(COIN.brier)}</td></tr>
-    <tr><td>Log loss <span class="dim">lower is better</span></td><td class="n">${f3(s.ll)}</td><td class="n">${hasE ? f3(s.llE) : "-"}</td><td class="n">${edge(s.ll, s.llE)}</td><td class="n dim">${f3(COIN.ll)}</td></tr>
-  </tbody></table></div>`;
-}
 
 const listOr = xs => xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} or ${xs[xs.length - 1]}`;
 function howPanel(calls) {
-  const n = calls.length, bt = TR.backtest;
-  const fit = TR.fit_end ? `The model's weights were last fitted on series up to <b>${isoDate(TR.fit_end)}</b>. ${CALLS_INSAMPLE
-    ? `${CALLS_INSAMPLE} call${CALLS_INSAMPLE === 1 ? "" : "s"} dated on or before that day ${CALLS_INSAMPLE === 1 ? "is" : "are"} in-sample and left out of every number here.`
-    : `Every call here is dated after that, so none of these matches were used to fit it.`}` : "";
-  return `<section class="panel how"><h2>How to read this <span class="dim">and how each call is made</span></h2>
-    <p>Each of the ${n} calls is the model's pick for a finished match on this site, worked out <b>before the match day</b>: only results dated before that day go in, never one from the same day (start times aren't known, so even an earlier match that day is left out). The chance shown is for the format played (${listOr([...new Set(calls.map(c => c.bo))].sort((p, q) => p - q).map(b => `best of ${b}`))}), since the same edge is worth more over more maps.</p>
-    <p>Calls are re-worked from the full history every time the site is built, with the current model. They are not frozen copies saved before each match, so a corrected old result can move them. ${fit} Matches with no winner on record are skipped.</p>
-    <details><summary>What the numbers mean</summary><ul>
-      <li><b>Winners right</b>: how often the side the model favoured won.</li>
-      <li><b>Brier score</b>: the average squared gap between the chance given and what happened (1 or 0). Saying 50% every time scores ${f3(COIN.brier)}.</li>
-      <li><b>Log loss</b>: like Brier, but a confident miss costs far more. Saying 50% every time scores ${f3(COIN.ll)}.</li>
-      <li><b>Elo only</b>: the chance from the two teams' Elo ratings going into the match and nothing else. The model has to beat it to earn its other factors (form, maps, head-to-head, rosters).</li>
-      <li><b>95% range</b>: the Wilson interval, the hit rates that record is consistent with. Few calls make it wide.</li>
-      <li>Stand-in flags come from each tournament's page as it reads now and apply to all of that tournament's matches.</li>
+  const n = calls.length, rows = calibRows(calls).filter(r => r.n);
+  const formats = listOr([...new Set(calls.map(c => c.bo))].sort((p, q) => p - q).map(b => `best of ${b}`));
+  return `<section class="panel how"><h2>How to read this</h2>
+    <ul class="howlist">
+      <li><b>A call</b> is the model's pick for a finished match, made using only results from before that match day. The chance shown is for the format played (${formats}).</li>
+      <li><b>Winners right</b> is how often the side the model favoured won.</li>
+      <li><b>Does 70% mean 70%?</b> Of the picks where the model said about 70%, about 70 in every 100 should win. The table below checks exactly that.</li>
+    </ul>
+    <div class="tablewrap"><table class="ctab"><thead><tr><th>When the model said</th><th class="n">Calls</th><th class="n">Pick won</th><th>Verdict</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td>${r.lab}</td><td class="n">${r.n}</td><td class="n ${pcc((r.got * 100).toFixed(2))}">${(r.got * 100).toFixed(0)}%</td><td>${bucketVerdict(r)}</td></tr>`).join("") || `<tr><td colspan="4" class="dim">No calls to grade yet.</td></tr>`}
+    </tbody></table></div>
+    <p class="small dim"><b>In line</b>: the picks won within ${Math.round(TR.gap * 100)} points of what the model said. <b>Off</b>: they did not. <b>Too few</b>: under ${TR.min_n} calls, so the result could be luck.${CALLS_INSAMPLE ? ` ${CALLS_INSAMPLE} call${CALLS_INSAMPLE === 1 ? "" : "s"} used to train the model ${CALLS_INSAMPLE === 1 ? "is" : "are"} left out.` : ""}</p>
+    <details><summary>The scores, in plain words</summary><ul>
+      <li><b>Brier score</b>: the average squared gap between the chance given and what happened (1 or 0). Lower is better; saying 50% every time scores ${f3(COIN.brier)}.</li>
+      <li><b>Log loss</b>: like Brier, but a confident miss costs far more. Lower is better; saying 50% every time scores ${f3(COIN.ll)}.</li>
+      <li><b>Elo only</b>: the chance from the two teams' Elo ratings and nothing else, the bar the model's other factors have to beat.</li>
+      <li><b>95% range</b>: the hit rates the record is consistent with. Few calls make it wide.</li>
+      <li>Calls are re-worked from the full history each build with the current model, so they are not frozen copies saved before each match. Matches with no winner on record are skipped.</li>
     </ul></details>
-    ${bt ? `<details><summary>Backtest numbers (not calls on this site)</summary>
-      <p class="small dim"><span class="chip">Backtest</span> A re-run of the model over ${bt.models.shipped.n} past series dated after ${isoDate(bt.after)}${bt.to ? ` up to ${isoDate(bt.to)}` : ""}, from any tracked event, not only the ones on this site. It is a test, not a record of picks made at the time.</p>
-      ${scoreTable({ n: bt.models.shipped.n, h: Math.round(bt.models.shipped.accuracy * bt.models.shipped.n), brier: bt.models.shipped.brier, ll: bt.models.shipped.log_loss,
-        hE: Math.round(bt.models.elo_only.accuracy * bt.models.elo_only.n), brierE: bt.models.elo_only.brier, llE: bt.models.elo_only.log_loss })}</details>` : ""}
   </section>`;
 }
 
@@ -3898,18 +3857,13 @@ function viewRecord() {
   </div>
   <section class="board" aria-label="Headline numbers">
     <div class="first"><span class="lbl">Winners called right</span><span class="num cond ${pcc(acc2(hits, n))}">${bigPct(acc2(hits, n))}</span><span class="lbl">${hits} of ${n} calls (95% range ${pctRange(all.ci)})</span><span class="lbl">Bonus: exact score also right in ${ex} (${acc2(ex, n)}%)</span></div>
-    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">${isoDate(calls[0].day)} to ${isoDate(calls[n - 1].day)}</span><span class="lbl">Brier ${f3(all.brier)}${all.brierE != null ? `, Elo only ${f3(all.brierE)}` : ""}</span></div>
+    <div><span class="lbl">Matches tracked</span><span class="num cond">${n}</span><span class="lbl">finished matches the model called</span></div>
     <div><span class="lbl">Current run</span><span class="num cond ${lastHit ? "win" : "loss"}">${run}</span><span class="lbl">${lastHit ? "right" : "wrong"} in a row. The last ${Math.min(TRACK.streak, n)} calls, oldest first:</span>
       <span class="streak">${calls.slice(-TRACK.streak).map(c => `<i class="${c.hit ? "h" : "m"}" title="${esc(`${c.a} vs ${c.b}: ${c.hit ? "right" : "wrong"}`)}"></i>`).join("")}</span></div>
   </section>
-  <div class="rec-pair">
-    ${howPanel(calls)}
-    <section class="panel"><h2>Against a simple baseline <span class="dim">the same ${n} calls, scored three ways</span></h2>${scoreTable(all)}
-      <p class="small dim">The model's stated chance for each match against the chance from Elo ratings alone, and against saying 50% every time. Scores use the chance for the format played. ${all.brierE == null ? "Some calls carry no Elo-only chance, so the baseline is not scored." : ""}</p></section>
-  </div>
+  ${howPanel(calls)}
   <p class="pclegend small dim">Share of calls right, coloured by how it went: <span class="pc-hi">above 60%</span> <span class="pc-mid">50 to 60%</span> <span class="pc-lo">50% or under</span>. The model's own chance for each pick stays white: that is confidence, not a record.</p>
   <div class="rec-row3">
-    <section class="panel"><h2>When it says 75%, does it win 75%? <span class="dim">dots inside the pale band are within ${Math.round(TR.gap * 100)} points; each bar is the 95% range for that many calls</span></h2>${calibChart(calls)}</section>
     <section class="panel"><h2>Through the season</h2>${timeChart(calls)}</section>
     <div class="rec-splits">
       <section class="panel"><h2>Favourite or underdog <span class="dim">by the two teams' ratings going into the match</span></h2>

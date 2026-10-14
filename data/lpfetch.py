@@ -52,6 +52,9 @@ def _key(params):
     return hashlib.sha1(h.encode()).hexdigest()[:16], s
 
 
+_CONFIRMED = set()   # cache keys re-fetched this run whose content did not change
+
+
 def query(params, offline=False, refresh=False):
     params = dict(params)
     params.setdefault("format", "json")
@@ -63,7 +66,7 @@ def query(params, offline=False, refresh=False):
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             cached = json.load(f)
-        stale = (refresh or FRESH_ALL) and cached.get("fetched", "") < RUN_STARTED
+        stale = (refresh or FRESH_ALL) and cached.get("fetched", "") < RUN_STARTED and k not in _CONFIRMED
         if offline or not stale:
             return cached["response"]
     if offline:
@@ -116,6 +119,14 @@ def query(params, offline=False, refresh=False):
     _last[0] = time.time()
     assert raw is not None
     resp = json.loads(raw.decode("utf-8"))
+    NETWORK_REQUESTS[0] += 1
+    if have_cache and cached.get("response") == resp:
+        # Same content as the cached copy: leave the file alone. Rewriting it
+        # for a new "fetched" stamp made every refresh run commit ~60 files
+        # that differed by that one line. _CONFIRMED stops a second query of
+        # this key in the same run from fetching it again.
+        _CONFIRMED.add(k)
+        return resp
     rec = {"url": API + "?" + qs,
            "fetched": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
            "response": resp}
@@ -123,7 +134,6 @@ def query(params, offline=False, refresh=False):
         json.dump(rec, f, ensure_ascii=False)
     if _PAGE_INDEX is not None:
         _index_add(_PAGE_INDEX, rec)
-    NETWORK_REQUESTS[0] += 1
     return resp
 
 
