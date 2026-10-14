@@ -55130,6 +55130,28 @@
   "tier": "S"
  },
  {
+  "match_id": "3fd32bc007fc",
+  "date": "2026-10-14",
+  "event": "Thunderpick World Championship 2026",
+  "team_a": "FURIA",
+  "team_b": "BetBoom Team",
+  "winner": "FURIA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "FURIA"
+   },
+   {
+    "map": "Mirage",
+    "winner": "FURIA"
+   }
+  ],
+  "event_page": "Thunderpick/World Championship/2026",
+  "ext_match_id": "2399387",
+  "tier": "S"
+ },
+ {
   "match_id": "f51bd0920415",
   "date": "2026-10-14",
   "event": "Thunderpick World Championship 2026",
