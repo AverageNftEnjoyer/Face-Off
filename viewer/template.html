@@ -2517,16 +2517,34 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
   .nx-sk i { background: linear-gradient(90deg, var(--nx-raise) 0%, #232327 50%, var(--nx-raise) 100%) 0 0 / 200% 100%; animation: nxShim 1.4s linear infinite; }
 }
 @keyframes nxShim { from { background-position: 100% 0; } to { background-position: -100% 0; } }
-.ho.ho-m { grid-template-areas: "cu un" "court st" "nx res" "tabs res" "body res"; }
-.ho-nx { grid-area: nx; }
 .tnx { margin-top: 1rem; }
-@media (max-width: 1100px) {
-  .ho.ho-m { grid-template-areas: "cu cu" "un st" "court court" "nx nx" "tabs tabs" "body body" "res res"; }
+/* five matchup tabs: keep Format on the same row (the tab list scrolls rather than wrapping) */
+@media (min-width: 761px) {
+  .ho-tabs { flex-wrap: nowrap; }
+  .ho-tl { flex: 1 1 auto; }
+  .ho-tl button { padding: 0 1rem; }
+  .ho-tr2 { flex: none; }
 }
+.nx-sec { font: 600 .72rem/1.2 var(--nx-face); letter-spacing: .08em; text-transform: uppercase; color: var(--nx-mute); margin: .2rem 0 -.3rem; }
+.nx-sheet dl { margin: 0; display: grid; }
+.nx-r { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: .6rem; padding: .5rem 0; border-top: 1px solid var(--nx-line); }
+.nx-r:first-child { border-top: 0; }
+.nx-r dt { font-size: .74rem; color: var(--nx-mute); padding-top: .1rem; }
+.nx-r dd { margin: 0; font-size: .86rem; line-height: 1.45; color: var(--nx-text); min-width: 0; overflow-wrap: anywhere; }
+.nx-rs { font-size: .74rem; color: var(--nx-dim); font-weight: 400; }
+.nx-r dd > .nx-rs, .nx-rec > .nx-rs { display: block; margin-top: .15rem; }
+.nx .wl { display: inline-grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 4px; font: 700 .66rem/1 var(--nx-face); font-style: normal; vertical-align: .05em; }
+.nx .wl.W { background: color-mix(in srgb, var(--win) 22%, transparent); color: var(--win); }
+.nx .wl.L { background: color-mix(in srgb, var(--loss) 22%, transparent); color: var(--loss); }
+.nx-l10 { display: inline-flex; gap: .2rem; flex-wrap: wrap; margin-right: .35rem; vertical-align: middle; }
+.nx-pf { display: flex; flex-wrap: wrap; gap: .35rem .9rem; }
+.nx-pf a { color: var(--nx-text); text-decoration: underline; text-decoration-color: var(--nx-line2); text-underline-offset: 2px; }
+.nx-rec { margin: 0; font-size: .9rem; }
+.nx-mt { list-style: none; margin: .3rem 0 0; padding: 0; display: grid; }
+.nx-mt li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .5rem; align-items: center; padding: .45rem 0; border-top: 1px solid var(--nx-line); font-size: .8rem; }
+.nx-tsheet { display: grid; grid-template-columns: minmax(0, 1fr); }
+.nx-tsheet .nx-sheet { max-width: 48rem; }
 @media (max-width: 1000px) { .nx-grid.h2h { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nx-grid.h2h .nx-col.m { grid-column: 1 / -1; grid-row: 2; } }
-@media (max-width: 760px) {
-  .ho.ho-m { grid-template-areas: "cu" "un" "court" "nx" "tabs" "body" "st" "res"; }
-}
 @media (max-width: 640px) {
   .nx { padding: .85rem .8rem .9rem; border-radius: 10px; }
   .nx-grid, .nx-grid.h2h { grid-template-columns: minmax(0, 1fr); }
@@ -2725,6 +2743,7 @@ const ICON = {
   overview: svgI(`<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>`),
   lineups: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
   h2h: svgI(`<path d="M2.5 12h7.5M6.5 8l4 4-4 4M21.5 12H14M17.5 8l-4 4 4 4"/>`),
+  notes: svgI(`<path d="M6.5 3.5h8l3.5 3.5v13.5h-11.5zM14.5 3.5V7H18M9.5 11.5h5M9.5 15h5M9.5 18h3"/>`),
   pools: svgI(`<path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5l-5.5 2.5-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20"/>`),
   base_strength: svgI(`<path d="M12 3l7.5 3v5.2c0 4.4-3.1 7.9-7.5 9.8-4.4-1.9-7.5-5.4-7.5-9.8V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>`),
   form_30d: svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.5"/>`),
@@ -3268,7 +3287,7 @@ const scoreFrom = (x, forA) => forA ? `${x.a}-${x.b}` : `${x.b}-${x.a}`;
 
 /* ---------------- the matchup desk ---------------- */
 const desk = { a: null, b: null, feat: null, bo: 3, tab: "overview", spot: null, key: "", next: "a", q: "" };
-const DTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-to-head"], ["pools", "Map pools"]];
+const DTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-to-head"], ["pools", "Map pools"], ["notes", "Notes"]];
 const bigPct = v => { const [i, d] = String(v).split("."); return `${i}<small>.${d}%</small>`; };
 
 function court(pred, a, b, o, bo) {
@@ -3426,12 +3445,13 @@ function matchDesk(pred, a, b, o = {}) {
   if (desk.tab === "lineups") body = `${caution}<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
   else if (desk.tab === "h2h") body = `${h2hList(a, b)}<div class="grid2">${formList(a)}${formList(b)}</div>`;
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
-  else body = `${caution}${o.notes || ""}
+  else if (desk.tab === "notes") body = o.notes || "";
+  else body = `${caution}
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
     ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
   // the section tabs ride in the court's control row (left), next to Format / Swap (right)
-  const SHORT = { h2h: "H2H", pools: "Maps" };   // phone labels, so all four tabs fit in one row
+  const SHORT = { h2h: "H2H", pools: "Maps", notes: "Notes" };   // phone labels, so all four tabs fit in one row
   const tabs = `<div class="dtabs" role="tablist" aria-label="Matchup sections">${DTABS.map(([k, l]) => `<button type="button" role="tab" data-dtab="${k}" aria-selected="${desk.tab === k}" aria-label="${esc(l)}">${ICON[k]}<span class="tl-full">${l}</span><span class="tl-short" aria-hidden="true">${SHORT[k] || l}</span></button>`).join("")}</div>`;
   return `${o.ctx || ""}${court(pred, a, b, { ...o, tabs }, bo)}
     <div class="desk-main" role="tabpanel">${body}</div>`;
@@ -3613,7 +3633,7 @@ ICON.veto = HI.veto;
 // a shorter team name for tight spots (cards, map tiles); the full name stays in titles and links
 const shortName = t => String(t || "").replace(/^Team\s+/i, "").replace(/\s+(Esports|eSports|Gaming|Team|Club)$/i, "").trim() || String(t || "");
 const dayTime = m => { const d = localDay(m.when) || m.day; return `${d ? dayWord(d) : "Date to be announced"}${m.when ? ` • ${clock(m.when)} ${tz(m.when)}` : ""}`; };
-const HTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-to-head"], ["veto", "Veto simulation"]];
+const HTABS = [["overview", "Overview"], ["lineups", "Lineups"], ["h2h", "Head-to-head"], ["veto", "Veto simulation"], ["notes", "Notes"]];
 const homeUi = { cuScroll: 0 };
 
 // the fixtures the court's arrows step through: Coming up's list, where both teams have a call
@@ -3825,9 +3845,10 @@ function hoBody(pred, a, b, o, bo) {
   if (desk.tab === "lineups") return `${caution}<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
   if (desk.tab === "h2h") return `${h2hList(a, b)}<div class="grid2">${formList(a)}${formList(b)}</div>`;
   if (desk.tab === "pools") return poolCompare(a, b, pool);
+  if (desk.tab === "notes") return o.notes || "";
   if (desk.tab === "veto") return pred ? `<section class="panel"><h2>Simulated veto <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>` : none;
   const played = o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : "";
-  return pred ? `${caution}${o.notes || ""}${played}<div class="ho-ovw">${hoVeto(pred, a, b, bo)}<div class="ho-col">${hoFactors(pred, a, b)}${hoDist(pred, a, b, bo)}</div></div>` : none;
+  return pred ? `${caution}${played}<div class="ho-ovw">${hoVeto(pred, a, b, bo)}<div class="ho-col">${hoFactors(pred, a, b)}${hoDist(pred, a, b, bo)}</div></div>` : none;
 }
 
 function viewHome() {
@@ -4715,7 +4736,7 @@ function nxApi() {
   return o && /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//.test(o) ? o : (NOTES && NOTES.api) || "/api/notes_api";
 }
 function nxUrl(p) {
-  const q = [["v", NOTES.v], ...["team", "a", "b", "asof", "day", "event"].filter(k => p[k]).map(k => [k, p[k]])];
+  const q = [["v", NOTES.v], ...["team", "a", "b", "asof", "day", "event", "limit"].filter(k => p[k]).map(k => [k, p[k]])];
   return `${nxApi()}?${q.map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&")}`;
 }
 function nxGet(url) {
@@ -4728,7 +4749,7 @@ function nxGet(url) {
   }
   return NX_WAIT.get(url);
 }
-const nxTitle = kind => kind === "team" ? "Team context" : "Matchup context";
+const nxTitle = kind => kind === "team" ? "Team context" : "Notes";
 const nxHid = kind => kind === "team" ? "nxTT" : "nxMT";
 function nxSlotHtml(kind, url, a, b) {
   return `<div class="nx-slot" data-nx-url="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">${notesSkeleton(nxTitle(kind))}</div>`;
@@ -4770,33 +4791,66 @@ document.addEventListener("click", e => {
 });
 // the match page: a played match as of its own day, an unplayed one as of now (rest counted to its day)
 function matchNotes(m, e) {
-  return nxSlot("match", { a: m.t1, b: m.t2, asof: m.finished ? m.day : "latest", day: m.day, event: e && e.name }, m.t1, m.t2);
+  return nxSlot("match", { a: m.t1, b: m.t2, asof: m.finished ? m.day : "latest", day: m.day, event: e && e.name, limit: 24 }, m.t1, m.t2);
 }
 // any two teams: today (home), or inside an event (a finished one as of its first day)
 function pairNotes(a, b, e) {
-  if (!e) return nxSlot("match", { a, b, asof: "latest" }, a, b);
+  if (!e) return nxSlot("match", { a, b, asof: "latest", limit: 24 }, a, b);
   const fin = e.status === "finished";
-  return nxSlot("match", { a, b, asof: fin ? e.start : "latest", day: fin ? e.start : null, event: e.name }, a, b);
+  return nxSlot("match", { a, b, asof: fin ? e.start : "latest", day: fin ? e.start : null, event: e.name, limit: 24 }, a, b);
 }
 function teamNotes(name) {
   const nx = NOTES && NOTES.next && NOTES.next[name];
-  return nxSlot("team", { team: name, asof: "latest", day: nx && nx.day, event: nx && nx.event }, name);
+  return nxSlot("team", { team: name, asof: "latest", day: nx && nx.day, event: nx && nx.event, limit: 24 }, name);
+}
+const nxDays = n => n == null ? "" : n <= 0 ? "same day" : n === 1 ? "1 day" : `${n} days`;
+const nxRow = (k, v, sub = "") => `<div class="nx-r"><dt>${k}</dt><dd>${v}${sub ? `<span class="nx-rs">${sub}</span>` : ""}</dd></div>`;
+// one team's fact sheet (notes.team_sheet): always filled, rules or not
+function nxSheet(sh, cls) {
+  if (!sh) return "";
+  const L = sh.last, f = sh.form, r = sh.roster, rows = [];
+  rows.push(nxRow("Last match", L
+    ? `<span class="wl ${L.won ? "W" : "L"}">${L.won ? "W" : "L"}</span> ${esc(L.score || "")} vs ${esc(L.opp)}`
+    : "No series in the data", L ? `${esc(L.event)}${L.stage ? ` (${esc(L.stage)})` : ""} · ${esc(fmtDate(L.date))}` : ""));
+  if (L) rows.push(nxRow("Rest", nxDays(L.days), "before this match"));
+  rows.push(nxRow("Schedule", `${sh.load.d14} in 14 days`, `${sh.load.d30} in the last 30`));
+  if (f) rows.push(nxRow("Form", `${f.streak.result === "W" ? "Won" : "Lost"} ${f.streak.n} straight`,
+    `<span class="nx-l10" aria-label="Last ${f.last10.length}, newest first: ${f.w10} won, ${f.l10} lost">${[...f.last10].map(x => `<i class="wl ${x}">${x}</i>`).join("")}</span> ${f.w10}-${f.l10} in the last ${f.last10.length}`));
+  if (r && r.five) {
+    rows.push(nxRow("Five", esc(r.five.join(", ")), r.stand_ins && r.stand_ins.length ? `Stand-in in the latest lineup: ${esc(r.stand_ins.join(", "))}` : ""));
+    rows.push(nxRow("Together", r.days_together == null ? "Not resolvable from the lineups" : `${r.at_least ? "At least " : ""}${r.days_together} days`,
+      `${r.together_since ? `as this five since ${esc(fmtDate(r.together_since))}` : ""}${r.newest && r.newest.length && r.newest_since ? ` · newest: ${esc(r.newest.join(", "))} (${esc(fmtDate(r.newest_since))})` : ""}${r.lineups_thru ? ` · lineups through ${esc(fmtDate(r.lineups_thru))}` : ""}`));
+  } else if (r) rows.push(nxRow("Five", "Unknown", esc(r.why || "")));
+  rows.push(nxRow("Player form", sh.players && sh.players.length
+    ? `<span class="nx-pf">${sh.players.map(p => `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.player)} ${p.rating_last30.toFixed(2)} <span class="nx-rs">(${p.delta >= 0 ? "+" : ""}${p.delta.toFixed(2)})</span></a>`).join("")}</span>`
+    : "No HLTV form facts yet", sh.players && sh.players.length ? "rating last 30 days (vs baseline) · HLTV" : ""));
+  return `<section class="nx-col nx-sheet ${cls}" aria-label="${esc(sh.team)} facts"><h3>${esc(sh.team)}</h3><dl>${rows.join("")}</dl></section>`;
+}
+function nxH2h(h, a, b) {
+  if (!h) return "";
+  const list = h.recent.map(m => `<li><span class="wl ${m.winner === a ? "W" : "L"}">${m.winner === a ? "W" : "L"}</span><span>${[m.score, m.event + (m.stage ? ` (${m.stage})` : "")].filter(Boolean).map(esc).join(" · ")}</span><span class="nx-rs">${esc(fmtDate(m.date))}</span></li>`).join("");
+  return `<section class="nx-col m nx-h2hs" aria-label="Head-to-head"><h3>Head-to-head</h3>${h.meetings
+    ? `<p class="nx-rec"><b>${esc(a)}</b> ${h.record[a]}–${h.record[b]} <b>${esc(b)}</b><span class="nx-rs">${h.meetings} meeting${h.meetings === 1 ? "" : "s"} in the data · results from ${esc(a)}'s side</span></p><ul class="nx-mt">${list}</ul>`
+    : `<p class="nx-empty">They have not met in the data.</p>`}</section>`;
 }
 function notesPanel(ns, a, b, ctx, ans) {
-  const head = notesHead("Matchup context", "nxMT", ans);
-  if (!ns.length) return `<section class="nx" aria-labelledby="nxMT">${head}<p class="nx-none">No context available for this matchup yet — check back closer to match time.</p></section>`;
+  const head = notesHead("Notes", "nxMT", ans), sh = ans && ans.sheet;
   const team = t => ns.filter(n => n.scope !== "matchup" && n.team_scope === t);
   const h2h = ns.filter(n => n.scope === "matchup" || (n.team_scope !== a && n.team_scope !== b));
   const col = (t, cls) => { const l = team(t);
-    return `<section class="nx-col ${cls}" aria-label="${esc(`${t} context`)}"><h3>${esc(t)}</h3>${l.length ? noteList(l, ctx) : `<p class="nx-empty">No notable context for ${esc(t)}</p>`}</section>`; };
-  return `<section class="nx" aria-labelledby="nxMT">${head}
-    <div class="nx-grid${h2h.length ? " h2h" : ""}">${col(a, "a")}${h2h.length ? `<section class="nx-col m" aria-label="Head-to-head context"><h3>Head-to-head</h3>${noteList(h2h, ctx)}</section>` : ""}${col(b, "b")}</div></section>`;
+    return `<section class="nx-col ${cls}" aria-label="${esc(`${t} notes`)}"><h3>${esc(t)}</h3>${l.length ? noteList(l, ctx) : `<p class="nx-empty">Nothing unusual for ${esc(t)}</p>`}</section>`; };
+  const stand = ns.length
+    ? `<div class="nx-grid${h2h.length ? " h2h" : ""}">${col(a, "a")}${h2h.length ? `<section class="nx-col m" aria-label="Head-to-head notes"><h3>Head-to-head</h3>${noteList(h2h, ctx)}</section>` : ""}${col(b, "b")}</div>`
+    : `<p class="nx-none">Nothing unusual stands out for this matchup: no rule fired. The facts below are the full picture.</p>`;
+  const facts = sh ? `<h3 class="nx-sec">The facts</h3><div class="nx-grid h2h nx-facts">${nxSheet(sh.a, "a")}${nxH2h(sh.h2h, a, b)}${nxSheet(sh.b, "b")}</div>` : "";
+  return `<section class="nx" aria-labelledby="nxMT">${head}<h3 class="nx-sec">What stands out</h3>${stand}${facts}</section>`;
 }
 function teamPanel(ns, name, ans) {
   const nx = NOTES && NOTES.next && NOTES.next[name];
   const next = nx ? `<p class="nx-next">Rest counted to the next match: vs ${esc(nx.opp)}, ${esc(nx.event)}, ${esc(fmtDate(nx.day))}</p>` : "";
+  const sh = ans && ans.sheet ? `<div class="nx-tsheet">${nxSheet(ans.sheet, "a")}</div>` : "";
   return `<section class="nx" aria-labelledby="nxTT">${notesHead("Team context", "nxTT", ans)}
-    ${ns.length ? noteList(ns, `t${name}`, " nx-tlist") : `<p class="nx-none">No notable context for ${esc(name)} right now.</p>`}${next}</section>`;
+    ${ns.length ? noteList(ns, `t${name}`, " nx-tlist") : `<p class="nx-none">Nothing unusual for ${esc(name)} right now: no rule fired.</p>`}${sh}${next}</section>`;
 }
 // open / close one note in place (no re-render), remembered for the next render
 document.addEventListener("click", e => {
@@ -4824,7 +4878,7 @@ function viewMatch(id) {
   const up = evMs.filter(x => !x.finished && x.day >= daysBefore(DATA.as_of, 1));
   const done = evMs.filter(x => x.finished && x.w1 !== x.w2).reverse().slice(0, 6);
   const navList = evMs.filter(x => x.pred), j = navList.findIndex(x => x.id === id);
-  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf,
+  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, notes: matchNotes(m, e),
     played: m.maps.length ? playedMaps(m) : "", nav: { prev: j > 0 ? navList[j - 1] : null, next: j >= 0 ? navList[j + 1] || null : null } };
   const field = evTeamsList(e).filter(t => T[t] && T[t].vrs).sort((x, y) => T[x].vrs.rank - T[y].vrs.rank);
   return `<nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
@@ -4832,7 +4886,7 @@ function viewMatch(id) {
   <div class="ho ho-m">
     ${hoComing(up, `Coming up at ${shortEv(e.name)}`, `#e-${e.slug}`)}${hoEvCard(e, m, path)}
     ${hoCourt(pred, a, b, o, bo)}${hoStand(field.length ? field : [a, b].filter(t => T[t] && T[t].vrs))}
-    <div class="ho-nx">${matchNotes(m, e)}</div>${hoTabs(bo, true)}
+    ${hoTabs(bo, true)}
     <div class="ho-body" id="hoBody" role="tabpanel" aria-labelledby="hoTab-${desk.tab}">${hoBody(pred, a, b, o, bo)}</div>
     ${hoResults(done, "No finished series at this tournament yet.")}
   </div>`;

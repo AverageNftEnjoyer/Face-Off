@@ -264,6 +264,10 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-15**: Matchup notes move into a **Notes** tab (next to Veto simulation on
+  the home and match pages, and in the event matchup tool) and gain an always-filled
+  fact sheet (`notes.team_sheet` / `h2h_sheet`, tool 1.1.0); team pages show the
+  sheet too. The panel under the match court is gone.
 - **2026-10-15**: Notes are generated on request: new `api/` folder with the Vercel
   function `api/notes_api.py` (CDN-cached per URL, pinned to the snapshot's
   `inputs_version`); the page ships no notes and fills its panels from it;

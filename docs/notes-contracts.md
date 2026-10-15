@@ -172,7 +172,12 @@ Success:
  "counted_in_win_probability": false}
 ```
 
-`omitted` = notes that fired but fell outside the 6-note cap. `notes: []` with
+`omitted` = notes that fired but fell outside the cap (`limit`, default 6,
+1-24). Since tool 1.1.0 the output also carries `sheet`: the fact sheet
+(last match, rest, schedule load, streak and last ten, the five and its days
+together, web form facts; for a matchup also the head-to-head record and
+recent meetings), always filled whether or not a rule fired, under the same
+cutoff rules. The site's Notes tab shows the notes and the sheet. `notes: []` with
 `ok: true` means the rules ran and nothing fired, never a failure.
 
 Errors (`ok: false`, never an empty note list):

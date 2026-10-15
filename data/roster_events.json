@@ -3219,7 +3219,7 @@
    "standin": true
   },
   "PGL/2024/Copenhagen/Europe B": {
-   "missing_igl": false,
+   "missing_igl": true,
    "players": [
     [
      "Gizmy",

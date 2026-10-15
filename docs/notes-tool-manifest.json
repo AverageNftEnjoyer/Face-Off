@@ -1,6 +1,6 @@
 {
  "name": "faceoff_get_notes",
- "version": "1.0.0",
+ "version": "1.1.0",
  "note_schema": 1,
  "description": "Deterministic context notes for a CS2 matchup or a team, from the Face-Off data bundle: rest and schedule (short rest, heavy schedule, weeks without an official), roster tenure (days with the current five, new players), win/loss streaks, the last head-to-head, and, where the web fetcher has recorded them, player form (HLTV rating over the last 30 days vs the player's baseline), stand-ins and roster rumors. Call it whenever you need to explain or add colour to a matchup ('why is Aurora favored?', 'anything I should know about this series?', 'what is going on with NiP lately?'), next to the prediction tool for the numbers. Every note is computed by fixed rules from dated data, never written by a model: quote its headline or values and cite source_url when it has one. Notes are context only. They are NOT inputs to the win probability (counted_in_win_probability is always false), so never say a note moved the prediction. ok=true with an empty notes list means the rules ran and nothing notable fired; ok=false is an error to report or fix (for example retry with a name from close_matches).",
  "when_to_call": [
@@ -54,6 +54,12 @@
      "event": {
       "type": "string",
       "description": "The series' event name; a SHORT_REST is not shown when the team's last series was at the same event."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 24,
+      "description": "Most notes kept (default 6 for a matchup, 6 for a team). Use 24 to see every note that fired."
      }
     }
    },
@@ -131,6 +137,11 @@
      },
      "event": {
       "type": "string"
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 24
      }
     }
    },
@@ -339,6 +350,10 @@
     "team": {
      "type": "string",
      "description": "team_notes only: the resolved team (in place of team_a / team_b)"
+    },
+    "sheet": {
+     "type": "object",
+     "description": "The fact sheet, always filled whether or not a rule fired (since 1.1.0). Matchup: {a: TeamSheet, b: TeamSheet, h2h: {meetings, record: {team: wins}, recent: [{date, event, stage, winner, score (team_a's side), days}]}}; team_notes: a TeamSheet. TeamSheet: {team, series, last: {date, event, stage, opp, won, score, days} | null, load: {d14, d30}, form: {streak: {result, n}, last10 (newest first, W/L), w10, l10} | null, roster: {five, together_since, days_together, at_least, newest, newest_since, stand_ins, lineups_thru} | {five: null, why}, players: [web form facts]}. Same cutoff rules as the notes. Quote it for questions like 'how rested is X' or 'what is their record against Y'."
     }
    }
   },
@@ -426,7 +441,7 @@
  "versioning": "tool_version is semver: a breaking change to the output or the note schema bumps the major (and note_schema); new optional fields bump the minor. Check tool_version and note_schema before parsing.",
  "error_example": {
   "tool": "faceoff_get_notes",
-  "tool_version": "1.0.0",
+  "tool_version": "1.1.0",
   "note_schema": 1,
   "ok": false,
   "error": {
@@ -442,7 +457,7 @@
   "call": "get_notes('Aurora Gaming', 'Ninjas in Pyjamas', '2026-10-15', bundle, match_day='2026-10-15', event='Thunderpick World Championship 2026')",
   "result": {
    "tool": "faceoff_get_notes",
-   "tool_version": "1.0.0",
+   "tool_version": "1.1.0",
    "note_schema": 1,
    "ok": true,
    "team_a": "Aurora Gaming",
@@ -547,6 +562,7 @@
   "Names resolve exactly, then case-insensitively, then through the Liquipedia short-name table (e.g. nip, 9z, aurora, falcons, liquid); anything else is UNKNOWN_TEAM with close_matches (difflib). The resolved names are echoed in team_a / team_b.",
   "Text fields contain the UTF-8 '·' separator: set PYTHONIOENCODING=utf-8 on a Windows console, or serialise with ensure_ascii=True.",
   "values keys differ per rule; read them from the note itself (worked_example shows TENURE_NEW, HEAVY_SCHEDULE and HOT_PLAYER).",
-  "Narrating: say first that notes are context, not part of the win chance; present a note that cuts against the team asked about as such; label rumors as unconfirmed; mention when freshness.stale means no current web facts."
+  "Narrating: say first that notes are context, not part of the win chance; present a note that cuts against the team asked about as such; label rumors as unconfirmed; mention when freshness.stale means no current web facts.",
+  "sheet (1.1.0) carries the plain numbers (last match, rest, matches in 14/30 days, streak and last ten, the five and days together, head-to-head record and recent meetings) even when no note fired: use it to answer factual questions, and the notes for what stands out."
  ]
 }

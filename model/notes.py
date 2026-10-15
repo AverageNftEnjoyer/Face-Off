@@ -47,7 +47,7 @@ import notes_facts as NF  # noqa: E402
 import tenure as TN  # noqa: E402
 
 TOOL_NAME = "faceoff_get_notes"
-TOOL_VERSION = "1.0.0"
+TOOL_VERSION = "1.1.0"   # 1.1: `sheet` (the always-filled fact sheet) and `limit`
 NOTE_SCHEMA = 1
 INPUTS_SCHEMA = 1
 
@@ -425,6 +425,74 @@ def freshness(inp, cutoff, scope=None):
             "teams_with_no_facts": sorted(t for t in scope if t not in newest), "facts_live": live}
 
 
+# ---- the fact sheet: the numbers behind the notes, always filled ------------
+def team_sheet(inp, team, cutoff, match_day):
+    """What a reader wants on one team whether or not a rule fired: last
+    series, schedule load, streak and last ten, the five and its tenure, and
+    any web form facts. Same cutoff rules as the notes (leakage test 8)."""
+    c = NF.cutoff_of(cutoff)
+    cday = c.date()
+    rows = inp.prior(team, cday)
+    out = {"team": team, "series": len(rows), "last": None, "load": {"d14": 0, "d30": 0},
+           "form": None, "roster": None, "players": []}
+    if rows:
+        d, ev, stage, opp, won, score = rows[-1]
+        out["last"] = {"date": d.isoformat(), "event": ev, "stage": stage, "opp": opp, "won": won,
+                       "score": score, "days": (match_day - d).days}
+        out["load"] = {k: sum(1 for r in rows if (match_day - r[0]).days <= n) for k, n in (("d14", 14), ("d30", 30))}
+        n = 0
+        for r in reversed(rows):
+            if r[4] != rows[-1][4]:
+                break
+            n += 1
+        ten = rows[-10:][::-1]
+        out["form"] = {"streak": {"result": "W" if rows[-1][4] else "L", "n": n},
+                       "last10": "".join("W" if r[4] else "L" for r in ten),
+                       "w10": sum(1 for r in ten if r[4]), "l10": sum(1 for r in ten if not r[4])}
+    tn = inp.tenure_live if cday >= inp.as_of else inp.tenure_hist
+    s = tn.state(team, cday)
+    if s["five"]:
+        since, broke, at_least = five_run(tn, team, cday, set(s["five"]))
+        starts = {p: v[0] for p, v in s["starts"].items() if v[1] and v[0]}
+        newest = max(starts.values()) if starts else None
+        out["roster"] = {"five": [inp.player(p) for p in s["five"]],
+                         "together_since": since.isoformat() if since else None,
+                         "days_together": (cday - since).days if since else None, "at_least": at_least,
+                         "newest": [inp.player(p) for p, st in sorted(starts.items()) if st == newest],
+                         "newest_since": newest, "stand_ins": [inp.player(p) for p in s["stand_ins"]],
+                         "lineups_thru": s["thru"]}
+    elif s["why"]:
+        out["roster"] = {"five": None, "why": s["why"], "lineups_thru": s["thru"]}
+    for (t, player), f in sorted(NF.live_form(inp.form, c).items()):
+        if t == team:
+            out["players"].append({"player": player, "rating_last30": f["rating_last30"],
+                                   "rating_baseline": f["rating_baseline"], "baseline": f["baseline"],
+                                   "delta": round(f["rating_last30"] - f["rating_baseline"], 2),
+                                   "maps_last30": f["maps_last30"], "observed_at": f["observed_at"][:10],
+                                   "source": f["source"], "source_url": f["source_url"]})
+    return out
+
+
+def h2h_sheet(inp, a, b, cutoff_day, match_day):
+    """The pair's meetings before the cutoff, from a's side."""
+    x, y = sorted((a, b))
+    rows = [r for r in inp.h2h.get((x, y), []) if r[0] < cutoff_day]
+    flip = lambda sc: "-".join(reversed(sc.split("-"))) if sc else sc
+    recent = [{"date": d.isoformat(), "event": ev, "stage": st, "winner": w,
+               "score": sc if a == x else flip(sc), "days": (match_day - d).days}
+              for d, ev, st, w, sc in rows[::-1][:5]]
+    return {"meetings": len(rows), "record": {a: sum(1 for r in rows if r[3] == a), b: sum(1 for r in rows if r[3] == b)},
+            "recent": recent}
+
+
+def _limit(limit, default):
+    if limit is None:
+        return default
+    if not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 24:
+        raise NotesError("BAD_REQUEST", "limit must be an integer from 1 to 24.", field="limit", value=limit)
+    return limit
+
+
 # ---- the tool interface ----------------------------------------------------
 def _resolve(inp, team):
     if team in inp.team_set:
@@ -480,7 +548,7 @@ def _fail(e):
     return _envelope(False, error=e.payload())
 
 
-def _matchup(inp, team_a, team_b, asof, match_day=None, event=None):
+def _matchup(inp, team_a, team_b, asof, match_day=None, event=None, limit=None):
     a, b = _resolve(inp, team_a), _resolve(inp, team_b)
     if a == b:
         raise NotesError("SAME_TEAM", "team_a and team_b are the same team.", team=a)
@@ -492,17 +560,20 @@ def _matchup(inp, team_a, team_b, asof, match_day=None, event=None):
     cands = (_team_candidates(inp, a, cutoff, md, event) + h2h_notes(inp, a, b, cday, cday, md)
              + _team_candidates(inp, b, cutoff, md, event))
     side = {a: 0, b: 2}
-    notes, omitted = _select(cands, CONFIG["max_matchup_notes"],
+    notes, omitted = _select(cands, _limit(limit, CONFIG["max_matchup_notes"]),
                              lambda n: 1 if n["scope"] == "matchup" else side[n["team_scope"]])
+    sheet = {"a": team_sheet(inp, a, cutoff, md), "b": team_sheet(inp, b, cutoff, md),
+             "h2h": h2h_sheet(inp, a, b, cday, md)}
     return _envelope(team_a=a, team_b=b, asof_date=asof, match_day=md.isoformat(), event=event,
-                     notes=notes, omitted=omitted, freshness=freshness(inp, cutoff, [a, b]),
+                     notes=notes, omitted=omitted, sheet=sheet, freshness=freshness(inp, cutoff, [a, b]),
                      counted_in_win_probability=False)
 
 
-def get_notes(team_a, team_b, asof_date, bundle, match_day=None, event=None):
-    """Notes for one matchup (contract: docs/notes-contracts.md section 3)."""
+def get_notes(team_a, team_b, asof_date, bundle, match_day=None, event=None, limit=None):
+    """Notes for one matchup (contract: docs/notes-contracts.md section 3);
+    limit = most notes kept (default CONFIG["max_matchup_notes"], 1-24)."""
     try:
-        return _matchup(inputs_of(bundle), team_a, team_b, asof_date, match_day, event)
+        return _matchup(inputs_of(bundle), team_a, team_b, asof_date, match_day, event, limit)
     except NotesError as e:
         return _fail(e)
 
@@ -518,13 +589,13 @@ def get_notes_batch(matchups, asof_date, bundle):
     for m in matchups or []:
         try:
             results.append(_matchup(inp, m.get("team_a"), m.get("team_b"), m.get("asof_date", asof_date),
-                                    m.get("match_day"), m.get("event")))
+                                    m.get("match_day"), m.get("event"), m.get("limit")))
         except NotesError as e:
             results.append(_fail(e))
     return _envelope(results=results)
 
 
-def team_notes(team, asof_date, bundle, match_day=None, event=None):
+def team_notes(team, asof_date, bundle, match_day=None, event=None, limit=None):
     """Team-scoped notes (the team page): schedule, tenure, form, news."""
     try:
         inp = inputs_of(bundle)
@@ -534,10 +605,10 @@ def team_notes(team, asof_date, bundle, match_day=None, event=None):
         md = _day(match_day, "match_day") or cday
         cutoff = _clamp(cutoff, md)
         cday = NF.cutoff_of(cutoff).date()
-        notes, omitted = _select(_team_candidates(inp, t, cutoff, md, event), CONFIG["max_team_notes"],
-                                 lambda n: 0)
+        notes, omitted = _select(_team_candidates(inp, t, cutoff, md, event),
+                                 _limit(limit, CONFIG["max_team_notes"]), lambda n: 0)
         return _envelope(team=t, asof_date=asof_date, match_day=md.isoformat(), event=event, notes=notes,
-                         omitted=omitted, freshness=freshness(inp, cutoff, [t]),
+                         omitted=omitted, sheet=team_sheet(inp, t, cutoff, md), freshness=freshness(inp, cutoff, [t]),
                          counted_in_win_probability=False)
     except NotesError as e:
         return _fail(e)

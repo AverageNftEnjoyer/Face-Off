@@ -8,7 +8,7 @@ Contract and the decision to serve notes on request (not pre-rendered):
 docs/notes-contracts.md section 4. In short:
 
   GET /api/notes_api?v=<inputs_version>&a=<team>&b=<team>&asof=<YYYY-MM-DD|latest>
-                     [&day=<YYYY-MM-DD>][&event=<name>]
+                     [&day=<YYYY-MM-DD>][&event=<name>][&limit=1..24]
   GET /api/notes_api?v=<inputs_version>&team=<team>&asof=...[&day=...][&event=...]
 
 The body is model/notes.py's tool output (get_notes / team_notes) plus
@@ -130,15 +130,20 @@ def _answer(query):
         if asof != "latest" and not _DAY.match(asof):
             raise NT.NotesError("BAD_DATE", "asof must be YYYY-MM-DD or latest.", field="asof", value=asof)
         day, event = _param(q, "day"), _param(q, "event")
+        lim = _param(q, "limit")
+        if lim is not None:
+            if not lim.isdigit():
+                raise NT.NotesError("BAD_REQUEST", "limit must be an integer from 1 to 24.", field="limit")
+            lim = int(lim)
         if day is not None and not _DAY.match(day):
             raise NT.NotesError("BAD_DATE", "day must be YYYY-MM-DD.", field="day", value=day)
         bundle, ver = snapshot(v)
-        key = (ver, team, a, b, asof, day, event)
+        key = (ver, team, a, b, asof, day, event, lim)
         if key in _lru:
             _lru.move_to_end(key)
             return _lru[key]
-        out = (NT.team_notes(team, asof, bundle, day, event) if team
-               else NT.get_notes(a, b, asof, bundle, match_day=day, event=event))
+        out = (NT.team_notes(team, asof, bundle, day, event, lim) if team
+               else NT.get_notes(a, b, asof, bundle, match_day=day, event=event, limit=lim))
         if out["ok"]:
             out["asof_resolved"] = bundle["notes"]["live_cutoff"] if asof == "latest" else asof
             out["inputs_version"] = ver

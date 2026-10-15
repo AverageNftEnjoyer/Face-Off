@@ -344,6 +344,40 @@ class FactSchemaTest(unittest.TestCase):
         self.assertTrue(NT.team_notes("Alpha", iso(AS_OF), b)["ok"])
 
 
+class SheetTest(unittest.TestCase):
+    """The fact sheet is always filled and obeys the same cutoff."""
+
+    def test_matchup_sheet(self):
+        out = NT.get_notes("Alpha", "Charlie", iso(AS_OF), build())
+        a, h = out["sheet"]["a"], out["sheet"]["h2h"]
+        self.assertEqual(a["team"], "Alpha")
+        self.assertEqual(a["last"]["date"], iso(AS_OF - timedelta(days=5)))
+        self.assertEqual(a["last"]["days"], 5)
+        self.assertEqual(a["load"], {"d14": 9, "d30": 9})       # the Charlie series is 40 days back
+        self.assertEqual(a["form"]["streak"], {"result": "W", "n": 6})
+        self.assertEqual(a["form"]["last10"][:6], "WWWWWW")
+        self.assertEqual((h["meetings"], h["record"]), (1, {"Alpha": 0, "Charlie": 1}))
+        self.assertEqual(h["recent"][0]["score"], "1-2")
+        c = out["sheet"]["b"]["roster"]
+        self.assertEqual(c["five"], ["c1", "c2", "c3", "c4", "c5"])
+        self.assertGreaterEqual(c["days_together"], 180)
+
+    def test_sheet_without_any_note(self):
+        out = NT.team_notes("Kilo", iso(AS_OF), build())
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["sheet"]["series"], 0)
+        self.assertIsNone(out["sheet"]["last"])
+
+    def test_sheet_respects_cutoff(self):
+        early = NT.get_notes("Alpha", "Charlie", iso(AS_OF - timedelta(days=8)), build())
+        self.assertLess(early["sheet"]["a"]["last"]["date"], iso(AS_OF - timedelta(days=8)))
+
+    def test_limit(self):
+        b = build()
+        self.assertLessEqual(len(NT.get_notes("Alpha", "Charlie", iso(AS_OF), b, limit=1)["notes"]), 1)
+        self.assertEqual(NT.get_notes("Alpha", "Charlie", iso(AS_OF), b, limit=99)["error"]["code"], "BAD_REQUEST")
+
+
 class DeterminismTest(unittest.TestCase):
     def test_synthetic_twice(self):
         x = NT.dumps(NT.get_notes("Alpha", "Charlie", iso(AS_OF), build()))
