@@ -888,6 +888,15 @@ def main(out_path):
                .replace("/*__META__*/null", met)
                .replace("/*__NOTES__*/null", nts))
     os.makedirs(out_dir, exist_ok=True)
+    # a static copy of the notes snapshot, versioned by name: api/notes_api.py falls back
+    # to it when the function bundle lacks viewer/notes-inputs.json
+    if notes:
+        nd = os.path.join(out_dir, "notes")
+        os.makedirs(nd, exist_ok=True)
+        for old in os.listdir(nd):
+            if old.startswith("inputs-") and old != f"inputs-{notes['v']}.json":
+                os.remove(os.path.join(nd, old))
+        ND.write_inputs(bundle["notes"], os.path.join(nd, f"inputs-{notes['v']}.json"))
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     n_m = sum(len(e["matches"]) for e in events)

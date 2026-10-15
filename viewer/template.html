@@ -3426,7 +3426,7 @@ function matchDesk(pred, a, b, o = {}) {
   if (desk.tab === "lineups") body = `${caution}<div class="grid2">${lineup(a, "a", o.ev)}${lineup(b, "b", o.ev)}</div>`;
   else if (desk.tab === "h2h") body = `${h2hList(a, b)}<div class="grid2">${formList(a)}${formList(b)}</div>`;
   else if (desk.tab === "pools") body = poolCompare(a, b, pool);
-  else body = `${caution}
+  else body = `${caution}${o.notes || ""}
     ${o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : ""}
     ${pred ? `<div class="ovw"><section class="panel ovw-veto"><h2>${o.played ? "The model's simulated veto" : "Simulated veto"} <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>
     ${scoreTiles(pred, a, b, bo)}${factors(pred, a, b)}</div>` : ""}`;
@@ -3827,7 +3827,7 @@ function hoBody(pred, a, b, o, bo) {
   if (desk.tab === "pools") return poolCompare(a, b, pool);
   if (desk.tab === "veto") return pred ? `<section class="panel"><h2>Simulated veto <span class="dim">${vetoFor(pred, bo) ? "choose a map to see who it suits" : ""}</span></h2>${vetoBody(pred, a, b, bo)}${chances(pred, a, b, bo)}</section>` : none;
   const played = o.played ? `<section class="panel"><h2>Maps played <span class="dim">tap a map for CT and T halves</span></h2>${o.played}</section>` : "";
-  return pred ? `${caution}${played}<div class="ho-ovw">${hoVeto(pred, a, b, bo)}<div class="ho-col">${hoFactors(pred, a, b)}${hoDist(pred, a, b, bo)}</div></div>` : none;
+  return pred ? `${caution}${o.notes || ""}${played}<div class="ho-ovw">${hoVeto(pred, a, b, bo)}<div class="ho-col">${hoFactors(pred, a, b)}${hoDist(pred, a, b, bo)}</div></div>` : none;
 }
 
 function viewHome() {
@@ -3844,6 +3844,7 @@ function viewHome() {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
     o = { rf: rfTool(null, desk.a, desk.b) };
   }
+  o.notes = isFeat ? matchNotes(m, EV_BY[m.ev]) : pairNotes(desk.a, desk.b);
   const key = `${desk.a}|${desk.b}`;
   if (desk.key !== key) { desk.key = key; desk.spot = null; desk.tab = "overview"; }
   PAIR = [desk.a, desk.b];
@@ -4643,7 +4644,7 @@ function evMatchup(e) {
     <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
     <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap teams</button></div>
   </section>
-  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
+  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), notes: pairNotes(s.a, s.b, e), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
     ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Hypothetical series</b><span>${asof}</span></span></span></div>` })}`;
 }
 
@@ -4656,8 +4657,13 @@ const NX_OPEN = new Set();   // notes the visitor has opened, kept across re-ren
 const NX_SRC = { matches: "From results", lineups: "From lineups" };
 // a note's stable id (notes.py) when the bundle carries it; older bundles fall back to its text
 const nxKey = (ctx, n) => `${ctx}|${n.id || `${n.rule}|${n.team_scope}|${n.headline}`}`;
-function notesFresh() {
-  const f = NOTES && NOTES.freshness;
+// `ans` = the endpoint's answer: its freshness is computed at the asof it resolved, so a past
+// match says when its notes are from, not today's state
+function notesFresh(ans) {
+  const f = (ans && ans.freshness) || (NOTES && NOTES.freshness);
+  const at = ans && ans.asof_resolved && ans.asof_date !== "latest" ? String(ans.asof_resolved).slice(0, 10) : null;
+  if (at) return { cls: "none", text: `As known before ${fmtDate(at)}`,
+    title: "Notes for a past match use only results, lineups and facts dated before it was played", warn: "" };
   if (!f) return { cls: "none", text: "No facts in this build", title: "This page build carries no notes data", warn: "" };
   const up = f.facts_updated_at ? String(f.facts_updated_at).slice(0, 10) : null;
   const day = up || f.as_of || NOTES.as_of;
@@ -4669,8 +4675,8 @@ function notesFresh() {
     title: `Web facts last fetched ${String(f.facts_updated_at).replace("T", " ").slice(0, 16)} UTC${f.oldest_fact_age_days != null ? ` · oldest ${f.oldest_fact_age_days}d old` : ""}${miss ? ` · ${miss} team${miss === 1 ? "" : "s"} playing soon with no web facts` : ""}`,
     warn: stale ? "Some facts may be outdated" : "" };
 }
-function notesChip() {
-  const r = notesFresh();
+function notesChip(ans) {
+  const r = notesFresh(ans);
   return `<span class="nx-chip ${r.cls}" title="${esc(r.title)}"><span>${esc(r.text)}</span></span>`;
 }
 function noteItem(n, ctx) {
@@ -4693,14 +4699,91 @@ function notesSkeleton(title = "Matchup context") {
     <header class="nx-hd"><div><h2>${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.</p></div></header>
     <div class="nx-sk" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>`;
 }
-function notesHead(title, hid) {
-  const r = notesFresh();
-  return `<header class="nx-hd"><div><h2 id="${hid}">${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.${r.warn ? ` <span class="nx-warn">${esc(r.warn)}</span>` : ""}</p></div>${NOTES ? notesChip() : ""}</header>`;
+function notesHead(title, hid, ans) {
+  const r = notesFresh(ans);
+  return `<header class="nx-hd"><div><h2 id="${hid}">${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.${r.warn ? ` <span class="nx-warn">${esc(r.warn)}</span>` : ""}</p></div>${NOTES ? notesChip(ans) : ""}</header>`;
 }
-function matchNotes(id, a, b) {
-  if (typeof NOTES === "undefined") return notesSkeleton();
-  const ns = (NOTES && NOTES.matches && NOTES.matches[id]) || [];
-  const ctx = `m${id}`, head = notesHead("Matchup context", "nxMT");
+/* Notes are generated on request: a panel renders as a slot (skeleton), the observer below
+   asks api/notes_api.py once per canonical URL, and the answer is kept for this visit.
+   Contract and caching: docs/notes-contracts.md section 4. */
+const NX_DONE = new Map();     // url -> {status, body} once answered
+const NX_WAIT = new Map();     // url -> in-flight promise
+function nxApi() {
+  // ?notesapi=http://127.0.0.1:8787/api/notes_api points a local build at `python api/notes_api.py --serve`
+  let o = null;
+  try { o = new URLSearchParams(location.search).get("notesapi"); } catch (e) { o = null; }
+  return o && /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//.test(o) ? o : (NOTES && NOTES.api) || "/api/notes_api";
+}
+function nxUrl(p) {
+  const q = [["v", NOTES.v], ...["team", "a", "b", "asof", "day", "event"].filter(k => p[k]).map(k => [k, p[k]])];
+  return `${nxApi()}?${q.map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&")}`;
+}
+function nxGet(url) {
+  if (NX_DONE.has(url)) return Promise.resolve(NX_DONE.get(url));
+  if (!NX_WAIT.has(url)) {
+    NX_WAIT.set(url, fetch(url, { headers: { Accept: "application/json" } })
+      .then(async r => ({ status: r.status, body: await r.json().catch(() => null) }))
+      .catch(() => ({ status: 0, body: null }))
+      .then(r => { NX_WAIT.delete(url); if (r.status && r.status < 500 && r.body) NX_DONE.set(url, r); return r; }));
+  }
+  return NX_WAIT.get(url);
+}
+const nxTitle = kind => kind === "team" ? "Team context" : "Matchup context";
+const nxHid = kind => kind === "team" ? "nxTT" : "nxMT";
+function nxSlotHtml(kind, url, a, b) {
+  return `<div class="nx-slot" data-nx-url="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">${notesSkeleton(nxTitle(kind))}</div>`;
+}
+// one panel: kind "match" (two teams) or "team"; p = the request parameters
+function nxSlot(kind, p, a, b) {
+  if (typeof NOTES === "undefined") return notesSkeleton(nxTitle(kind));
+  if (!NOTES || !NOTES.v) return `<section class="nx" aria-labelledby="${nxHid(kind)}">${notesHead(nxTitle(kind), nxHid(kind))}<p class="nx-none">No context available in this build.</p></section>`;
+  const url = nxUrl(p), got = NX_DONE.get(url);
+  return got ? nxRender(kind, got, a, b, url) : nxSlotHtml(kind, url, a, b);
+}
+function nxRender(kind, r, a, b, url) {
+  const body = r.body, hid = nxHid(kind), head = notesHead(nxTitle(kind), hid);
+  if (!body || !r.status || r.status >= 500)
+    return `<section class="nx" aria-labelledby="${hid}">${head}<p class="nx-none">Context unavailable right now. <button type="button" class="btn" data-nx-retry="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">Retry</button></p></section>`;
+  if (!body.ok && body.error && body.error.code === "STALE_VERSION")
+    return `<section class="nx" aria-labelledby="${hid}">${head}<p class="nx-none">This page is older than the latest data. <button type="button" class="btn" data-nx-reload="1">Reload</button></p></section>`;
+  const ns = body.ok ? body.notes || [] : [];
+  return kind === "team" ? teamPanel(ns, a, body) : notesPanel(ns, a, b, `n${url}`, body);
+}
+// fill every slot the page has just rendered (any view, any tab switch)
+function nxHydrate(root = document) {
+  root.querySelectorAll(".nx-slot:not([data-nx-busy])").forEach(slot => {
+    slot.dataset.nxBusy = "1";
+    const url = slot.dataset.nxUrl;
+    nxGet(url).then(r => {
+      if (slot.isConnected) slot.outerHTML = nxRender(slot.dataset.nxKind, r, slot.dataset.a, slot.dataset.b, url);
+    });
+  });
+}
+new MutationObserver(() => nxHydrate()).observe(document.getElementById("view") || document.body, { childList: true, subtree: true });
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-nx-reload]")) { location.reload(); return; }
+  const b = e.target.closest("[data-nx-retry]");
+  if (!b) return;
+  const sec = b.closest(".nx");
+  NX_DONE.delete(b.dataset.nxRetry);
+  if (sec) sec.outerHTML = nxSlotHtml(b.dataset.nxKind, b.dataset.nxRetry, b.dataset.a, b.dataset.b);
+});
+// the match page: a played match as of its own day, an unplayed one as of now (rest counted to its day)
+function matchNotes(m, e) {
+  return nxSlot("match", { a: m.t1, b: m.t2, asof: m.finished ? m.day : "latest", day: m.day, event: e && e.name }, m.t1, m.t2);
+}
+// any two teams: today (home), or inside an event (a finished one as of its first day)
+function pairNotes(a, b, e) {
+  if (!e) return nxSlot("match", { a, b, asof: "latest" }, a, b);
+  const fin = e.status === "finished";
+  return nxSlot("match", { a, b, asof: fin ? e.start : "latest", day: fin ? e.start : null, event: e.name }, a, b);
+}
+function teamNotes(name) {
+  const nx = NOTES && NOTES.next && NOTES.next[name];
+  return nxSlot("team", { team: name, asof: "latest", day: nx && nx.day, event: nx && nx.event }, name);
+}
+function notesPanel(ns, a, b, ctx, ans) {
+  const head = notesHead("Matchup context", "nxMT", ans);
   if (!ns.length) return `<section class="nx" aria-labelledby="nxMT">${head}<p class="nx-none">No context available for this matchup yet — check back closer to match time.</p></section>`;
   const team = t => ns.filter(n => n.scope !== "matchup" && n.team_scope === t);
   const h2h = ns.filter(n => n.scope === "matchup" || (n.team_scope !== a && n.team_scope !== b));
@@ -4709,11 +4792,10 @@ function matchNotes(id, a, b) {
   return `<section class="nx" aria-labelledby="nxMT">${head}
     <div class="nx-grid${h2h.length ? " h2h" : ""}">${col(a, "a")}${h2h.length ? `<section class="nx-col m" aria-label="Head-to-head context"><h3>Head-to-head</h3>${noteList(h2h, ctx)}</section>` : ""}${col(b, "b")}</div></section>`;
 }
-function teamNotes(name) {
-  if (typeof NOTES === "undefined") return notesSkeleton("Team context");
-  const t = NOTES && NOTES.teams && NOTES.teams[name], ns = (t && t.n) || [], nx = t && t.next;
+function teamPanel(ns, name, ans) {
+  const nx = NOTES && NOTES.next && NOTES.next[name];
   const next = nx ? `<p class="nx-next">Rest counted to the next match: vs ${esc(nx.opp)}, ${esc(nx.event)}, ${esc(fmtDate(nx.day))}</p>` : "";
-  return `<section class="nx" aria-labelledby="nxTT">${notesHead("Team context", "nxTT")}
+  return `<section class="nx" aria-labelledby="nxTT">${notesHead("Team context", "nxTT", ans)}
     ${ns.length ? noteList(ns, `t${name}`, " nx-tlist") : `<p class="nx-none">No notable context for ${esc(name)} right now.</p>`}${next}</section>`;
 }
 // open / close one note in place (no re-render), remembered for the next render
@@ -4750,7 +4832,7 @@ function viewMatch(id) {
   <div class="ho ho-m">
     ${hoComing(up, `Coming up at ${shortEv(e.name)}`, `#e-${e.slug}`)}${hoEvCard(e, m, path)}
     ${hoCourt(pred, a, b, o, bo)}${hoStand(field.length ? field : [a, b].filter(t => T[t] && T[t].vrs))}
-    <div class="ho-nx">${matchNotes(id, a, b)}</div>${hoTabs(bo, true)}
+    <div class="ho-nx">${matchNotes(m, e)}</div>${hoTabs(bo, true)}
     <div class="ho-body" id="hoBody" role="tabpanel" aria-labelledby="hoTab-${desk.tab}">${hoBody(pred, a, b, o, bo)}</div>
     ${hoResults(done, "No finished series at this tournament yet.")}
   </div>`;

@@ -25,6 +25,7 @@ CODE_DIRS = (
     "pipeline",     # scheduled refresh jobs and data maintenance
     "checks",       # data gates and freshness / consistency checks
     "viewer",       # bundle + static page builder
+    "api",          # Vercel serverless functions (the on-demand notes endpoint)
 )
 
 for _d in reversed(CODE_DIRS):
