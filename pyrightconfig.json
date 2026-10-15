@@ -6,6 +6,7 @@
     "collectors",
     "pipeline",
     "checks",
-    "viewer"
+    "viewer",
+    "api"
   ]
 }

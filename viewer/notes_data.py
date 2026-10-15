@@ -13,9 +13,12 @@ Inputs (all point-in-time filtered by the engine, never here):
   overrides data/roster_overrides.json (the engine reads them only for the present)
   facts     data/notes_facts.json (collectors/notes_fetch.py), cleaned again
 
-The page reads only the pre-rendered notes; the tool (notes.get_notes) reads
-the inputs. Both go through the same engine functions.
+Nothing is pre-rendered: the page asks api/notes_api.py for the notes it
+shows, and that endpoint runs notes.get_notes on this snapshot (written to
+viewer/notes-inputs.json, versioned by inputs_version; decision record:
+docs/notes-contracts.md section 4).
 """
+import hashlib
 import json
 import os
 import re
@@ -31,10 +34,6 @@ import notes as NT  # noqa: E402
 import notes_facts as NF  # noqa: E402
 
 FACTS_PATH = os.path.join(paths.DATA, "notes_facts.json")
-PAGE_KEYS = ("id", "rule", "scope", "team_scope", "kind", "headline", "evidence", "source", "source_url",
-             "observed_at", "age_days")
-
-
 def _load(path, default):
     if not os.path.exists(path):
         return default
@@ -71,10 +70,6 @@ def live_cutoff(as_of, facts):
     if up:
         c = max(c, NF.parse_ts(up) + timedelta(seconds=1))
     return NF.fmt_ts(c)
-
-
-def page_note(n):
-    return {k: n[k] for k in PAGE_KEYS}
 
 
 def section(as_of, matches, events, data_teams, players, fixtures, lineups, squads, overrides, facts,
@@ -131,38 +126,33 @@ def build(data, fixtures, facts_path=None):
     inp = NT.inputs_of(b)
     cut = sec["live_cutoff"]
     sec["freshness"] = NT.freshness(inp, cut)
-    # team pages: as of now, rest counted to the team's next fixture within the scope window
+    # team pages count rest to the team's next fixture within next_match_days
     nxt = {}
     hi = (as_of + timedelta(days=NT.CONFIG["next_match_days"])).isoformat()
     for d, ev, a, bb in sorted(fx):
         if as_of.isoformat() <= d <= hi:
             nxt.setdefault(a, {"day": d, "event": ev, "opp": bb})
             nxt.setdefault(bb, {"day": d, "event": ev, "opp": a})
-    tn = {}
-    for t in sorted(data["teams"]):
-        n = nxt.get(t)
-        r = NT.team_notes(t, cut, b, n["day"] if n else None, n["event"] if n else None)
-        tn[t] = {"notes": r["notes"], "omitted": r["omitted"], "next": n}
-    sec["teams"] = tn
-    # every event match: a played one as of its own day, an unplayed one as of now
-    mn = {}
-    for e in data["events"]:
-        for m in e["matches"]:
-            if not (m.get("t1") and m.get("t2") and m.get("day")) or m["t1"] == m["t2"]:
-                continue
-            asof = m["day"] if m.get("finished") else cut
-            r = NT.get_notes(m["t1"], m["t2"], asof, b, match_day=m["day"], event=e["name"])
-            if r["ok"]:
-                mn[m["id"]] = {"asof": asof, "notes": r["notes"], "omitted": r["omitted"]}
-    sec["matches"] = mn
+    sec["next"] = {t: nxt[t] for t in sorted(nxt) if t in data["teams"]}
+    sec["inputs_version"] = inputs_version(sec)
     return sec
 
 
+def inputs_version(sec):
+    """sha1-12 of the snapshot's canonical JSON (its id in every notes URL)."""
+    body = {k: v for k, v in sec.items() if k != "inputs_version"}
+    raw = json.dumps(body, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12]
+
+
+def write_inputs(sec, path):
+    """The snapshot api/notes_api.py serves from (canonical JSON, one line)."""
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(sec, sort_keys=True, ensure_ascii=False, separators=(",", ":")))
+
+
 def page_payload(section):
-    """The compact copy the page inlines (NOTES): no inputs, no facts."""
-    return {
-        "as_of": section["as_of"], "freshness": section["freshness"],
-        "teams": {t: {"n": [page_note(n) for n in v["notes"]], "next": v["next"]}
-                  for t, v in section["teams"].items()},
-        "matches": {k: [page_note(n) for n in v["notes"]] for k, v in section["matches"].items()},
-    }
+    """What the page inlines (NOTES): no notes, only what it needs to ask
+    the endpoint for them (snapshot version, freshness, next fixtures)."""
+    return {"v": section["inputs_version"], "as_of": section["as_of"], "freshness": section["freshness"],
+            "next": section.get("next") or {}, "api": "/api/notes_api"}

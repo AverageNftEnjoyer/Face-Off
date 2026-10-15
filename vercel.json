@@ -7,7 +7,7 @@
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -32,6 +32,22 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/notes/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
-  ]
+  ],
+  "functions": {
+    "api/notes_api.py": {
+      "includeFiles": "viewer/notes-inputs.json",
+      "excludeFiles": "{data/**,assets/**,public/**,tests/**,docs/**,.claude/**,.github/**}",
+      "maxDuration": 10
+    }
+  }
 }

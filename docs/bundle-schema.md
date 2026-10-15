@@ -286,14 +286,18 @@ section changes no other byte of the bundle.
 | `notes.inputs.fixtures` | `[day, event, team_a, team_b]` of `fixtures[]` (freshness scope, next-match context). |
 | `notes.facts` | `data/notes_facts.json` after validation (fact schema v1; malformed facts are dropped at build). |
 | `notes.freshness` | The `notes_freshness` signal over teams with a fixture in the next 3 days, the fetcher's scope (contracts, section 2). |
-| `notes.teams` | `team → {"notes": [note], "omitted", "next": {day, event, opp} \| null}`: team-page notes as of `live_cutoff`, rest counted to the team's next fixture within 7 days. |
-| `notes.matches` | Event match id (`data.events[].matches[].id`) → `{"asof", "notes", "omitted"}`: a played match as of its own day, an unplayed one as of `live_cutoff` with rest counted to its day. |
+| `notes.next` | `team → {day, event, opp}`: the team's next fixture within `config.next_match_days` (team-page notes count rest to it). |
+| `notes.inputs_version` | sha1-12 of the section's canonical JSON: the snapshot id every notes URL carries (`?v=`). |
 
-The page inlines only a compact copy (`NOTES`, `notes_data.page_payload`):
-`as_of`, `freshness`, `teams` (`n` = notes without `id`/`values`/`rank`,
-`next`) and `matches` (id → notes). The tool (`notes.get_notes`) reads the
-inputs; both go through the same engine functions, and
-`tests/test_notes.py` checks the pre-rendered team notes equal the tool's.
+Nothing is pre-rendered: the same section is written to
+`viewer/notes-inputs.json` (and `public/notes/inputs-<v>.json`), and the page
+asks `GET /api/notes_api` (`api/notes_api.py`) for the notes it shows
+([notes-contracts.md](notes-contracts.md) section 4).
+
+The page inlines only `NOTES` (`notes_data.page_payload`): `v`
+(`inputs_version`), `as_of`, `freshness`, `next` and `api` (the endpoint
+path). The endpoint, the CLI and the future chatbot all call the same engine
+functions over this snapshot.
 
 Point-in-time: a note as of cutoff C uses series and lineup rows dated
 before C's day and facts observed before C (`evaluation/leakage_check.py`,

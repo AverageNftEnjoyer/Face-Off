@@ -357,10 +357,10 @@ class DeterminismTest(unittest.TestCase):
             self.skipTest("no viewer/data-bundle.json (build it to run this)")
         with open(path, encoding="utf-8") as f:
             bundle = json.load(f)
-        if "notes" not in bundle:
-            self.skipTest("bundle built before the notes section existed")
+        if "inputs_version" not in bundle.get("notes", {}):
+            self.skipTest("bundle built before the on-demand notes snapshot existed")
         sec = bundle["notes"]
-        teams = sorted(sec["teams"])[:12]
+        teams = sorted(sec["inputs"]["teams"])[:12]
         days = sorted({r[0] for r in sec["inputs"]["series"]})[-200::20]
 
         def run():
@@ -370,12 +370,8 @@ class DeterminismTest(unittest.TestCase):
             return NT.dumps([NT.get_notes_batch(calls, d, bundle) for d in days[:3]]
                             + [NT.team_notes(t, "latest", bundle) for t in teams])
         self.assertEqual(run(), run())
-        # the pre-rendered team notes are exactly what the tool returns
-        t = teams[0]
-        nxt = sec["teams"][t]["next"]
-        live = NT.team_notes(t, sec["live_cutoff"], bundle, nxt and nxt["day"], nxt and nxt["event"])
-        self.assertEqual(NT.dumps(live["notes"]), NT.dumps(sec["teams"][t]["notes"]))
-
+        # the version names exactly this snapshot
+        self.assertEqual(ND.inputs_version(sec), sec["inputs_version"])
 
 if __name__ == "__main__":
     unittest.main()

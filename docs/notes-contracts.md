@@ -199,3 +199,73 @@ the note schema bumps the major (and `note_schema`); new optional fields bump
 the minor.
 
 CLI: `python model/notes.py --a Aurora --b 9z --date 2026-10-14 [--bundle PATH] [--team-only]`.
+
+---
+
+## 4. Serving: on-demand notes over HTTP (decision record, 2026-10-15)
+
+### Decision
+
+Notes are **computed on request and cached**, not pre-rendered for every
+page and pairing. The page ships no notes; it asks `GET /api/notes_api` for
+the matchup or team it is showing. This **replaces** the original plan's
+"precomputed at ingestion, static bundle, no runtime server" for the notes
+panels (the rest of the site stays fully static).
+
+### Why (alternatives weighed)
+
+| Option | Against it |
+|---|---|
+| Pre-render everything into the page (v1 of this feature) | 730 KB on every page load for notes most visitors never open; grows with matches. |
+| Pre-render all N² pairings as static files | ~6 k pairs × live events, frozen at "now": no historical asof, no arbitrary event, and every pair is rebuilt on every refresh although few are viewed. N² is fine at 78 teams, not at 300. |
+| **Lazy endpoint + CDN cache (chosen)** | A runtime function: regional (not edge) compute, cold starts, Vercel execution limits. Accepted because the work is a few ms of pure CPU, the CDN serves every repeat, and it keeps one engine for the page, the CLI and the future chatbot. |
+
+Consequences, stated plainly:
+- **Not edge compute.** Vercel Python functions run in one region. The CDN
+  cache helps only on hits; a miss pays a cold start (Python start + loading
+  the ~1 MB inputs file) — expected well under a second, fine for a panel
+  below the fold.
+- **Cost.** No LLM, no key. Invocations count toward Vercel's function quota
+  (free tier ample: one invocation per distinct URL per data version, repeats
+  are CDN hits).
+- **Failure.** If the function is down the panel says "Context unavailable
+  right now" with a retry; nothing else on the page depends on it.
+
+### Immutable snapshot + asof: the semantics
+
+- Each build produces one **inputs snapshot** (`viewer/notes-inputs.json`,
+  the bundle's `notes` section without anything pre-rendered), identified by
+  `inputs_version` = sha1-12 of its canonical JSON. It covers results,
+  lineups and web facts, so a facts-only fetch also changes it. The snapshot
+  is never modified; the page carries its version (`NOTES.v`).
+- The engine is a pure function
+  `notes = f(snapshot, team_a, team_b, asof, match_day, event)`.
+  Same arguments → same bytes, always (tests/test_notes.py).
+- `asof` is **an information cutoff inside that snapshot**, applied by fixed
+  rules on dated fields only: series and lineup rows dated before the cutoff
+  day, facts with `observed_at` before the cutoff instant, fact expiry per
+  section 1. Different `asof` values on one snapshot *deliberately* give
+  different notes (a historical view of what was known then); that is a
+  property of the arguments, not drift. Nothing reads a clock.
+- `asof=latest` resolves to the snapshot's `live_cutoff`; the response echoes
+  it as `asof_resolved`, so "latest" is fully determined by the snapshot.
+- The cutoff is clamped to the start of `match_day` when that is earlier.
+
+### HTTP contract
+
+`GET /api/notes_api?v=<inputs_version>&a=<team>&b=<team>&asof=<YYYY-MM-DD|latest>[&day=YYYY-MM-DD][&event=<name>]`
+or `...&team=<team>` for team notes. The body is exactly the section 3 tool
+output (plus `asof_resolved`, `inputs_version`).
+
+| Status | When | Cache |
+|---|---|---|
+| 200 | `ok: true` | `s-maxage=86400` (the URL carries `v`, so a new snapshot is a new URL) |
+| 400 | `BAD_REQUEST` (missing / malformed parameter), `BAD_DATE`, `SAME_TEAM` | short |
+| 404 | `UNKNOWN_TEAM` with `close_matches` (validated server-side, never a 500) | short |
+| 409 | `STALE_VERSION`: `v` is not the snapshot this deployment serves; body carries `current` (the page reloads its version) | none |
+| 503 | `UNAVAILABLE`: inputs could not be loaded | none |
+
+The page builds canonical URLs (fixed parameter order, `latest` for unplayed
+fixtures and team pages, the match day for played ones) so equal requests
+share one cache entry. Cache layers: page memory → Vercel CDN (keyed by URL)
+→ a small LRU inside the warm function.

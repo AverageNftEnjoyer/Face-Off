@@ -29,6 +29,7 @@ Face-Off/
 ├── pipeline/           scheduled refresh jobs and data maintenance
 ├── checks/             data-quality gates and freshness / consistency checks
 ├── viewer/             bundle + static page builder, page template, site media
+├── api/                Vercel serverless functions: the on-demand notes endpoint
 ├── tests/              unittest suite (python -m unittest discover -s tests)
 ├── data/               inputs, caches and committed outputs: data only, no code
 ├── assets/             source art (full-size originals; the site uses viewer/media/)
@@ -97,6 +98,11 @@ and the layout above.
           │                                          over data/notes_facts.json, display only)
           ▼
  viewer/build_viewer.py ─► public/index.html + public/img/   (renders only from the bundle)
+          │                 + public/notes/inputs-<v>.json   (static copy of the notes snapshot)
+          ▼
+ api/notes_api.py  (Vercel function) ◄─ viewer/notes-inputs.json (snapshot, written by build_bundle)
+          ▲   GET /api/notes_api?v=..&a=..&b=..   notes computed on request, CDN-cached per URL
+          └── the page's notes panels
  viewer/write_status.py ─► public/status.json                (result alerts feed)
 ```
 
@@ -172,7 +178,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | File | Role |
 |---|---|
 | `viewer/build_bundle.py` | Emits `viewer/data-bundle.json`, the single versioned derived-data bundle. |
-| `viewer/notes_data.py` | The bundle's `notes` section: engine inputs from `data/`, cleaned web facts, freshness, pre-rendered team and match notes; `page_payload` is the page's `NOTES`. |
+| `viewer/notes_data.py` | The bundle's `notes` section = the notes snapshot: engine inputs from `data/`, cleaned web facts, freshness, next fixtures, `inputs_version`; `write_inputs` writes `viewer/notes-inputs.json`; `page_payload` is the page's small `NOTES` (no notes: the page asks `api/notes_api.py`). |
 | `viewer/build_viewer.py` | Computes everything from the data (`build_data`) and renders the static page from `template.html` + the bundle. |
 | `viewer/events.py` | Tournament discovery and parsing from cached pages (infobox, format, brackets, schedule). |
 | `viewer/fetch_assets.py` | Logos, map art, flags and team-page roster data from Liquipedia into `viewer/assets.json`. |
@@ -183,6 +189,12 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 Non-code viewer files: `viewer/template.html` (the whole front end: HTML, CSS,
 JS), `viewer/assets.json` (asset index, committed), `viewer/media/site_bg.jpg`
 (site background).
+
+### `api/`: serverless functions (Vercel)
+
+| File | Role |
+|---|---|
+| `api/notes_api.py` | `GET /api/notes_api`: matchup / team notes on request from the snapshot `viewer/notes-inputs.json` via `model/notes.py`; structured errors, version pinning (409), CDN cache headers, in-instance LRU; `--serve` runs it locally. Decision record: `docs/notes-contracts.md` section 4. |
 
 ### `tests/`
 
@@ -217,7 +229,7 @@ this document and the layout in step.
 | `SOURCES.md` | by hand | Where every record comes from, and the terms followed. |
 | `raw/pages/`, `raw/media/`, `raw/*.txt` | `lpfetch`, `fetch_assets`, `daily_refresh` | Fetch cache, images, tracked page titles. |
 
-Generated and gitignored: `viewer/data-bundle.json`, `public/`, roster and
+Generated and gitignored: `viewer/data-bundle.json`, `viewer/notes-inputs.json`, `public/`, roster and
 fill-in candidates, research reports.
 
 ---
@@ -252,6 +264,11 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-15**: Notes are generated on request: new `api/` folder with the Vercel
+  function `api/notes_api.py` (CDN-cached per URL, pinned to the snapshot's
+  `inputs_version`); the page ships no notes and fills its panels from it;
+  notes panels also on the home matchup and the event matchup tool. Decision
+  record and asof semantics: `docs/notes-contracts.md` section 4.
 - **2026-10-15**: Matchup notes (display only, never a model input): rule
   engine + tool `model/notes.py` (contracts `docs/notes-contracts.md`, manifest
   `docs/notes-tool-manifest.json`), fact schema `model/notes_facts.py`, tenure

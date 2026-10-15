@@ -175,6 +175,8 @@ def main(out_path=None):
         "data": data,
         "notes": ND.build(data, fixtures),
     }
+    # the notes endpoint's snapshot (api/notes_api.py), next to the bundle
+    ND.write_inputs(bundle["notes"], os.path.join(os.path.dirname(os.path.abspath(out_path)), "notes-inputs.json"))
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(bundle, f, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     kb = os.path.getsize(out_path) // 1024
