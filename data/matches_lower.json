@@ -217638,6 +217638,29 @@
   "kind": "main"
  },
  {
+  "match_id": "4287878ea977",
+  "date": "2026-10-15",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "Bushido Wildcats",
+  "team_b": "ex-6666 Esports",
+  "winner": "ex-6666 Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "ex-6666 Esports"
+   },
+   {
+    "map": "Anubis",
+    "winner": "ex-6666 Esports"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399302",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "f40f6ec61c33",
   "date": "2026-10-15",
   "event": "Logitech G Pro Series 2026",

@@ -55194,5 +55194,27 @@
   "event_page": "Thunderpick/World Championship/2026",
   "ext_match_id": "2399385",
   "tier": "S"
+ },
+ {
+  "match_id": "8a50df85bd1e",
+  "date": "2026-10-15",
+  "event": "Thunderpick World Championship 2026",
+  "team_a": "Aurora Gaming",
+  "team_b": "Ninjas in Pyjamas",
+  "winner": "Aurora Gaming",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Aurora Gaming"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Aurora Gaming"
+   }
+  ],
+  "event_page": "Thunderpick/World Championship/2026",
+  "ext_match_id": "2399408",
+  "tier": "S"
  }
 ]
