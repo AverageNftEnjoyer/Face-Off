@@ -216923,11 +216923,11 @@
   "kind": "main"
  },
  {
-  "match_id": "521941e99b64",
+  "match_id": "7d6122f489a6",
   "date": "2026-10-13",
   "event": "CCT Europe 2026 Series #11",
   "team_a": "Black Phoenix",
-  "team_b": "6666 Esports",
+  "team_b": "ex-6666 Esports",
   "winner": "Black Phoenix",
   "best_of": 3,
   "maps": [
@@ -217215,6 +217215,29 @@
   "kind": "main"
  },
  {
+  "match_id": "4402fe7c96d1",
+  "date": "2026-10-14",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "FORZE Reload",
+  "team_b": "Sökerorg",
+  "winner": "FORZE Reload",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "FORZE Reload"
+   },
+   {
+    "map": "Dust2",
+    "winner": "FORZE Reload"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399301",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "a3ecb4d87c2a",
   "date": "2026-10-14",
   "event": "CCT Europe 2026 Series #11",
@@ -217292,6 +217315,79 @@
   "kind": "main"
  },
  {
+  "match_id": "0890c0ff596e",
+  "date": "2026-10-14",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "DAMAJUANA",
+  "team_b": "Alianza Lima Esports",
+  "winner": "DAMAJUANA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "DAMAJUANA"
+   },
+   {
+    "map": "Cache",
+    "winner": "DAMAJUANA"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399574",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "6d2e13049fb6",
+  "date": "2026-10-14",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "Joga de terno",
+  "team_b": "A NATA",
+  "winner": "Joga de terno",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "Joga de terno"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Joga de terno"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399575",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "2dc0ccf84da1",
+  "date": "2026-10-14",
+  "event": "ESL Challenger League Season 52: South America - Cup #3",
+  "team_a": "LargadosyPelados",
+  "team_b": "Galorys",
+  "winner": "LargadosyPelados",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "LargadosyPelados"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Galorys"
+   },
+   {
+    "map": "Dust2",
+    "winner": "LargadosyPelados"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/South America/Cup 3",
+  "ext_match_id": "2399205",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "25d8749be4fe",
   "date": "2026-10-14",
   "event": "NODWIN Clutch Series #13",
@@ -217311,6 +217407,33 @@
   ],
   "event_page": "NODWIN Gaming/Clutch Series/13",
   "ext_match_id": "2399077",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "3949510c1a10",
+  "date": "2026-10-14",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "Black Phoenix",
+  "team_b": "ex-RUSTEC",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "ex-RUSTEC"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Cache",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399078",
   "tier": "B",
   "kind": "main"
  },
@@ -217342,12 +217465,12 @@
   "kind": "main"
  },
  {
-  "match_id": "f89abf6957cc",
+  "match_id": "5aafd21346b2",
   "date": "2026-10-14",
   "event": "NODWIN Clutch Series #13",
   "team_a": "GenOne",
-  "team_b": "6666 Esports",
-  "winner": "6666 Esports",
+  "team_b": "ex-6666 Esports",
+  "winner": "ex-6666 Esports",
   "best_of": 3,
   "maps": [
    {
@@ -217356,11 +217479,11 @@
    },
    {
     "map": "Inferno",
-    "winner": "6666 Esports"
+    "winner": "ex-6666 Esports"
    },
    {
     "map": "Anubis",
-    "winner": "6666 Esports"
+    "winner": "ex-6666 Esports"
    }
   ],
   "event_page": "NODWIN Gaming/Clutch Series/13",
@@ -217484,6 +217607,29 @@
   ],
   "event_page": "Stake Pulse/Beat III",
   "ext_match_id": "2399258",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "f40f6ec61c33",
+  "date": "2026-10-15",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "NEXVOID",
+  "team_b": "Mindfreak (Australian team)",
+  "winner": "NEXVOID",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "NEXVOID"
+   },
+   {
+    "map": "Inferno",
+    "winner": "NEXVOID"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399533",
   "tier": "B",
   "kind": "main"
  }
