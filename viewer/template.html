@@ -2316,9 +2316,10 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -2; pointer-event
     linear-gradient(180deg, rgba(6, 18, 26, .3) 0%, rgba(6, 18, 26, .45) 55%, rgba(6, 18, 26, .7) 100%),
     var(--site-bg, none) center / cover no-repeat,
     #06121A; }
-/* panels let the scene through faintly */
+/* panels let the scene through faintly. No backdrop-filter on them: the panels scroll over the
+   fixed background, so a backdrop blur had to be re-rendered for every panel on every scroll frame
+   (the main cause of laggy scrolling); at 80% opacity the blur was barely visible anyway. */
 body { --panel: rgba(12, 28, 37, .8); }
-.ho-p, .ho-un, .panel, .ho-tabs { -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 
 /* v17: tighter spacing between modules */
 .ho { gap: .65rem; }
@@ -2518,6 +2519,37 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
 }
 @keyframes nxShim { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 .tnx { margin-top: 1rem; }
+.fx-whybox { margin-bottom: 1rem; }
+.fx-why-h { font-weight: 600; font-size: 1rem; color: var(--text); }
+.fx-why { font-size: .92rem; line-height: 1.6; color: var(--text); max-width: 80ch; }
+.fx-src { font-size: .76rem; color: var(--dim); }
+.fx-foot { margin-top: .7rem; }
+.fx-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 1100px) { .fx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fx-grid > :nth-child(2) { grid-column: 1 / -1; grid-row: 2; } }
+@media (max-width: 760px) { .fx-grid { grid-template-columns: minmax(0, 1fr); } .fx-grid > :nth-child(2) { grid-column: auto; grid-row: auto; } }
+.fx-a { border-top: 2px solid var(--ct); } .fx-b { border-top: 2px solid var(--t); }
+.fx-dl { margin: 0; display: grid; }
+.fx-r { display: grid; grid-template-columns: 6.4rem minmax(0, 1fr); gap: .7rem; padding: .55rem 0; border-top: 1px solid var(--line); }
+.fx-r:first-child { border-top: 0; padding-top: 0; }
+.fx-r dt { font-size: .76rem; color: var(--dim); padding-top: .12rem; }
+.fx-r dd { margin: 0; font-size: .88rem; line-height: 1.45; color: var(--text); min-width: 0; overflow-wrap: anywhere; }
+.fx-s { display: block; font-size: .76rem; color: var(--dim); margin-top: .12rem; }
+.fx-r dd .wl, .fx-mt .wl { display: inline-grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 4px; font-size: .68rem; font-weight: 700; font-style: normal; vertical-align: .05em; }
+.fx-l10 { display: inline-flex; gap: .2rem; flex-wrap: wrap; margin: .25rem .45rem .1rem 0; vertical-align: middle; }
+.fx-pf { display: flex; flex-wrap: wrap; gap: .35rem .9rem; }
+.fx-pf a { color: var(--text); }
+.fx-pf .fx-s { display: inline; }
+.fx-rec { font-size: 1.05rem; } .fx-rec b { margin: 0 .35rem; }
+.fx-mt { list-style: none; margin: 0; padding: 0; display: grid; }
+.fx-mt li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .55rem; align-items: center; padding: .5rem 0; border-top: 1px solid var(--line); font-size: .84rem; }
+.fx-mt li .fx-s { margin: 0; }
+.fx-msg { font-size: .88rem; color: var(--dim); }
+.fx-sk { display: grid; gap: .6rem; }
+.fx-sk i { display: block; height: .9rem; border-radius: 4px; background: var(--raise); }
+.fx-sk i:nth-child(3n+1) { width: 82%; } .fx-sk i:nth-child(3n+2) { width: 64%; } .fx-sk i:nth-child(3n) { width: 73%; }
+@media (prefers-reduced-motion: no-preference) { .fx-sk i { animation: fxPulse 1.4s ease-in-out infinite; } }
+@keyframes fxPulse { 50% { opacity: .45; } }
+.fx-team { margin-bottom: 1rem; }
 /* five matchup tabs: keep Format on the same row (the tab list scrolls rather than wrapping) */
 @media (min-width: 761px) {
   .ho-tabs { flex-wrap: nowrap; }
@@ -2525,6 +2557,12 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
   .ho-tl button { padding: 0 1rem; }
   .ho-tr2 { flex: none; }
 }
+.nx-why { margin-bottom: .9rem; border-color: var(--nx-line2); }
+.nx-why-h { margin: 0; font-size: 1rem; font-weight: 600; color: var(--nx-text); }
+.nx-why-t { margin: 0; font-size: .92rem; line-height: 1.6; color: var(--nx-text); max-width: 75ch; }
+.nx-why-src { margin: 0; font-size: .74rem; color: var(--nx-mute); }
+.nx-chip.nx-ai { border-color: color-mix(in srgb, var(--nx-pink) 40%, transparent); background: color-mix(in srgb, var(--nx-pink) 8%, transparent); }
+.nx-chip.nx-ai::before { background: var(--nx-pink); }
 .nx-sec { font: 600 .72rem/1.2 var(--nx-face); letter-spacing: .08em; text-transform: uppercase; color: var(--nx-mute); margin: .2rem 0 -.3rem; }
 .nx-sheet dl { margin: 0; display: grid; }
 .nx-r { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: .6rem; padding: .5rem 0; border-top: 1px solid var(--nx-line); }
@@ -3865,7 +3903,7 @@ function viewHome() {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
     o = { rf: rfTool(null, desk.a, desk.b) };
   }
-  o.notes = isFeat ? matchNotes(m, EV_BY[m.ev]) : pairNotes(desk.a, desk.b);
+  o.notes = whyCard(pred, desk.a, desk.b, isFeat ? m.id : null, desk.bo) + (isFeat ? matchNotes(m, EV_BY[m.ev]) : pairNotes(desk.a, desk.b));
   const key = `${desk.a}|${desk.b}`;
   if (desk.key !== key) { desk.key = key; desk.spot = null; desk.tab = "overview"; }
   PAIR = [desk.a, desk.b];
@@ -4665,7 +4703,7 @@ function evMatchup(e) {
     <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
     <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap teams</button></div>
   </section>
-  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), notes: pairNotes(s.a, s.b, e), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
+  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), notes: whyCard(pred, s.a, s.b, null, 3) + pairNotes(s.a, s.b, e), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
     ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Hypothetical series</b><span>${asof}</span></span></span></div>` })}`;
 }
 
@@ -4715,14 +4753,48 @@ function noteItem(n, ctx) {
     <div class="nx-ev" id="${id}"${open ? "" : " hidden"}>${n.evidence ? `<span>${esc(n.evidence)}</span>` : ""}${src}</div></li>`;
 }
 const noteList = (ns, ctx, cls = "") => `<ul class="nx-list${cls}">${ns.map(n => noteItem(n, ctx)).join("")}</ul>`;
-function notesSkeleton(title = "Matchup context") {
-  return `<section class="nx" aria-busy="true" aria-label="${esc(title)}, loading">
-    <header class="nx-hd"><div><h2>${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.</p></div></header>
-    <div class="nx-sk" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>`;
+// the Notes tab and the team facts use the site's own panels (.ho-p / .panel, condensed titles)
+HI.facts = svgI(`<path d="M6.5 3.5h8l3.5 3.5v13.5h-11.5zM14.5 3.5V7H18M9.5 11.5h5M9.5 15h5M9.5 18h3"/>`);
+const fxHead = (title, sub, icon = HI.facts) => `<header class="ho-h">${icon}<div><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ""}</div></header>`;
+function notesSkeleton(title = "The facts") {
+  return `<section class="ho-p fx-box" aria-busy="true" aria-label="${esc(title)}, loading">${fxHead(esc(title), "Loading…")}
+    <div class="fx-sk" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>`;
 }
-function notesHead(title, hid, ans) {
-  const r = notesFresh(ans);
-  return `<header class="nx-hd"><div><h2 id="${hid}">${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.${r.warn ? ` <span class="nx-warn">${esc(r.warn)}</span>` : ""}</p></div>${NOTES ? notesChip(ans) : ""}</header>`;
+const fxMsg = (title, html) => `<section class="ho-p fx-box">${fxHead(esc(title), "")}<p class="fx-msg">${html}</p></section>`;
+/* "Why the model picks X", at the top of the Notes tab. An AI-written summary
+   (collectors/notes_summarize.py, NOTES.sum, scheduled matches only) is shown while the model's
+   call still matches the one it was written from (same favourite, within 5 points);
+   otherwise a rule-based summary from the same factor numbers. Either way it explains the
+   counted factors; notes are context and are labelled so. */
+const WHY_DRIFT = 0.05;
+function whyRule(pred, a, b, bo) {
+  const F = pFor(pred, bo), fav = F.p >= 0.5 ? a : b, dog = fav === a ? b : a;
+  const pf = fav === a ? F.p : 1 - F.p, band = fav === a ? F.band : [1 - F.band[1], 1 - F.band[0]];
+  const pc = x => `${(x * 100).toFixed(1)}%`;
+  const rows = pred.factors.map(f => ({ f, ev: pred.fx ? factFor(f.factor, pred.fx, a, b) : { kind: "data", text: "" } }))
+    .filter(x => x.ev.kind === "data" && Math.abs(x.f.pp) >= 0.05)
+    .map(x => ({ name: (LABELS[x.f.factor] || [x.f.factor])[0], pp: x.f.pp, toward: x.f.pp > 0 ? a : b, ev: x.ev.text }))
+    .sort((x, y) => Math.abs(y.pp) - Math.abs(x.pp));
+  const pro = rows.filter(r => r.toward === fav).slice(0, 3), con = rows.filter(r => r.toward === dog).slice(0, 2);
+  const item = r => `${r.name.toLowerCase()} (+${Math.abs(r.pp).toFixed(1)} points${r.ev ? `: ${r.ev}` : ""})`;
+  const close = pf < 0.55 ? "This is close to a coin flip. " : pf >= 0.7 ? "That is a clear lean. " : "";
+  let t = `The model makes ${fav} the favourite at ${pc(pf)} (likely range ${pc(band[0])} to ${pc(band[1])}). ${close}`;
+  t += pro.length ? `What puts them ahead: ${pro.map(item).join("; ")}. ` : `No single factor stands out; the edge is small. `;
+  if (con.length) t += `Pulling the other way for ${dog}: ${con.map(item).join("; ")}. `;
+  if (pred.warn && pred.warn.length) t += `Caution: ${pred.warn.map(w => w.split(/[:(]/)[0].trim().toLowerCase()).join(", ")}.`;
+  return { fav, text: t.trim() };
+}
+function whyCard(pred, a, b, mid, bo = 3) {
+  if (!pred) return "";
+  const r = whyRule(pred, a, b, bo);
+  const ai = mid && NOTES && NOTES.sum && NOTES.sum[mid];
+  const fresh = ai && bo === 3 && ai.favourite === r.fav && Math.abs(ai.win_prob_a - pred.p) <= WHY_DRIFT;
+  const body = fresh
+    ? `<p class="fx-why-h">${esc(ai.headline)}</p><p class="fx-why">${esc(ai.summary)}</p>
+       <p class="fx-src">Written by AI (${esc(ai.model)}) from the model's numbers on ${esc(fmtDate(String(ai.generated_at).slice(0, 10)))}; every number in it was checked against that data.</p>`
+    : `<p class="fx-why">${esc(r.text)}</p><p class="fx-src">Built from the model's factor numbers${bo !== 3 ? ` for a best of ${bo}` : ""}.</p>`;
+  return `<section class="ho-p fx-whybox">${fxHead(`Why the model picks ${esc(shortName(r.fav))}${fresh ? ` <small>AI summary</small>` : ""}`,
+    "The reasons counted in the win chance", HI.spark)}${body}</section>`;
 }
 /* Notes are generated on request: a panel renders as a slot (skeleton), the observer below
    asks api/notes_api.py once per canonical URL, and the answer is kept for this visit.
@@ -4749,7 +4821,7 @@ function nxGet(url) {
   }
   return NX_WAIT.get(url);
 }
-const nxTitle = kind => kind === "team" ? "Team context" : "Notes";
+const nxTitle = kind => kind === "team" ? "Team facts" : "The facts";
 const nxHid = kind => kind === "team" ? "nxTT" : "nxMT";
 function nxSlotHtml(kind, url, a, b) {
   return `<div class="nx-slot" data-nx-url="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">${notesSkeleton(nxTitle(kind))}</div>`;
@@ -4757,16 +4829,16 @@ function nxSlotHtml(kind, url, a, b) {
 // one panel: kind "match" (two teams) or "team"; p = the request parameters
 function nxSlot(kind, p, a, b) {
   if (typeof NOTES === "undefined") return notesSkeleton(nxTitle(kind));
-  if (!NOTES || !NOTES.v) return `<section class="nx" aria-labelledby="${nxHid(kind)}">${notesHead(nxTitle(kind), nxHid(kind))}<p class="nx-none">No context available in this build.</p></section>`;
+  if (!NOTES || !NOTES.v) return fxMsg(nxTitle(kind), "No facts available in this build.");
   const url = nxUrl(p), got = NX_DONE.get(url);
   return got ? nxRender(kind, got, a, b, url) : nxSlotHtml(kind, url, a, b);
 }
 function nxRender(kind, r, a, b, url) {
-  const body = r.body, hid = nxHid(kind), head = notesHead(nxTitle(kind), hid);
+  const body = r.body;
   if (!body || !r.status || r.status >= 500)
-    return `<section class="nx" aria-labelledby="${hid}">${head}<p class="nx-none">Context unavailable right now. <button type="button" class="btn" data-nx-retry="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">Retry</button></p></section>`;
+    return fxMsg(nxTitle(kind), `Facts unavailable right now. <button type="button" class="btn" data-nx-retry="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">Retry</button>`);
   if (!body.ok && body.error && body.error.code === "STALE_VERSION")
-    return `<section class="nx" aria-labelledby="${hid}">${head}<p class="nx-none">This page is older than the latest data. <button type="button" class="btn" data-nx-reload="1">Reload</button></p></section>`;
+    return fxMsg(nxTitle(kind), `This page is older than the latest data. <button type="button" class="btn" data-nx-reload="1">Reload</button>`);
   const ns = body.ok ? body.notes || [] : [];
   return kind === "team" ? teamPanel(ns, a, body) : notesPanel(ns, a, b, `n${url}`, body);
 }
@@ -4785,7 +4857,7 @@ document.addEventListener("click", e => {
   if (e.target.closest("[data-nx-reload]")) { location.reload(); return; }
   const b = e.target.closest("[data-nx-retry]");
   if (!b) return;
-  const sec = b.closest(".nx");
+  const sec = b.closest(".fx-box");
   NX_DONE.delete(b.dataset.nxRetry);
   if (sec) sec.outerHTML = nxSlotHtml(b.dataset.nxKind, b.dataset.nxRetry, b.dataset.a, b.dataset.b);
 });
@@ -4804,53 +4876,51 @@ function teamNotes(name) {
   return nxSlot("team", { team: name, asof: "latest", day: nx && nx.day, event: nx && nx.event, limit: 24 }, name);
 }
 const nxDays = n => n == null ? "" : n <= 0 ? "same day" : n === 1 ? "1 day" : `${n} days`;
-const nxRow = (k, v, sub = "") => `<div class="nx-r"><dt>${k}</dt><dd>${v}${sub ? `<span class="nx-rs">${sub}</span>` : ""}</dd></div>`;
-// one team's fact sheet (notes.team_sheet): always filled, rules or not
-function nxSheet(sh, cls) {
-  if (!sh) return "";
+const nxRow = (k, v, sub = "") => `<div class="fx-r"><dt>${k}</dt><dd>${v}${sub ? `<span class="fx-s">${sub}</span>` : ""}</dd></div>`;
+// one team's fact sheet (notes.team_sheet): always filled
+function nxRows(sh, restSub = "before this match") {
   const L = sh.last, f = sh.form, r = sh.roster, rows = [];
   rows.push(nxRow("Last match", L
     ? `<span class="wl ${L.won ? "W" : "L"}">${L.won ? "W" : "L"}</span> ${esc(L.score || "")} vs ${esc(L.opp)}`
     : "No series in the data", L ? `${esc(L.event)}${L.stage ? ` (${esc(L.stage)})` : ""} · ${esc(fmtDate(L.date))}` : ""));
-  if (L) rows.push(nxRow("Rest", nxDays(L.days), "before this match"));
+  if (L) rows.push(nxRow("Rest", nxDays(L.days), restSub));
   rows.push(nxRow("Schedule", `${sh.load.d14} in 14 days`, `${sh.load.d30} in the last 30`));
   if (f) rows.push(nxRow("Form", `${f.streak.result === "W" ? "Won" : "Lost"} ${f.streak.n} straight`,
-    `<span class="nx-l10" aria-label="Last ${f.last10.length}, newest first: ${f.w10} won, ${f.l10} lost">${[...f.last10].map(x => `<i class="wl ${x}">${x}</i>`).join("")}</span> ${f.w10}-${f.l10} in the last ${f.last10.length}`));
+    `<span class="fx-l10" aria-label="Last ${f.last10.length}, newest first: ${f.w10} won, ${f.l10} lost">${[...f.last10].map(x => `<i class="wl ${x}">${x}</i>`).join("")}</span>${f.w10}-${f.l10} in the last ${f.last10.length}`));
   if (r && r.five) {
     rows.push(nxRow("Five", esc(r.five.join(", ")), r.stand_ins && r.stand_ins.length ? `Stand-in in the latest lineup: ${esc(r.stand_ins.join(", "))}` : ""));
     rows.push(nxRow("Together", r.days_together == null ? "Not resolvable from the lineups" : `${r.at_least ? "At least " : ""}${r.days_together} days`,
-      `${r.together_since ? `as this five since ${esc(fmtDate(r.together_since))}` : ""}${r.newest && r.newest.length && r.newest_since ? ` · newest: ${esc(r.newest.join(", "))} (${esc(fmtDate(r.newest_since))})` : ""}${r.lineups_thru ? ` · lineups through ${esc(fmtDate(r.lineups_thru))}` : ""}`));
+      `${r.together_since ? `as this five since ${esc(fmtDate(r.together_since))}` : ""}${r.newest && r.newest.length && r.newest_since ? ` · newest: ${esc(r.newest.join(", "))} (${esc(fmtDate(r.newest_since))})` : ""}`));
   } else if (r) rows.push(nxRow("Five", "Unknown", esc(r.why || "")));
   rows.push(nxRow("Player form", sh.players && sh.players.length
-    ? `<span class="nx-pf">${sh.players.map(p => `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.player)} ${p.rating_last30.toFixed(2)} <span class="nx-rs">(${p.delta >= 0 ? "+" : ""}${p.delta.toFixed(2)})</span></a>`).join("")}</span>`
-    : "No HLTV form facts yet", sh.players && sh.players.length ? "rating last 30 days (vs baseline) · HLTV" : ""));
-  return `<section class="nx-col nx-sheet ${cls}" aria-label="${esc(sh.team)} facts"><h3>${esc(sh.team)}</h3><dl>${rows.join("")}</dl></section>`;
+    ? `<span class="fx-pf">${sh.players.map(p => `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.player)} ${p.rating_last30.toFixed(2)} <span class="fx-s">(${p.delta >= 0 ? "+" : ""}${p.delta.toFixed(2)})</span></a>`).join("")}</span>`
+    : "No HLTV form facts yet", sh.players && sh.players.length ? "rating, last 30 days (vs baseline) · HLTV" : ""));
+  return `<dl class="fx-dl">${rows.join("")}</dl>`;
+}
+function nxSheet(sh, side) {
+  if (!sh) return "";
+  return `<section class="ho-p fx-box fx-${side}">${fxHead(`<span class="${side === "a" ? "ct" : "t"}">${esc(shortName(sh.team))}</span> <small>facts</small>`, "")}${nxRows(sh)}</section>`;
 }
 function nxH2h(h, a, b) {
   if (!h) return "";
-  const list = h.recent.map(m => `<li><span class="wl ${m.winner === a ? "W" : "L"}">${m.winner === a ? "W" : "L"}</span><span>${[m.score, m.event + (m.stage ? ` (${m.stage})` : "")].filter(Boolean).map(esc).join(" · ")}</span><span class="nx-rs">${esc(fmtDate(m.date))}</span></li>`).join("");
-  return `<section class="nx-col m nx-h2hs" aria-label="Head-to-head"><h3>Head-to-head</h3>${h.meetings
-    ? `<p class="nx-rec"><b>${esc(a)}</b> ${h.record[a]}–${h.record[b]} <b>${esc(b)}</b><span class="nx-rs">${h.meetings} meeting${h.meetings === 1 ? "" : "s"} in the data · results from ${esc(a)}'s side</span></p><ul class="nx-mt">${list}</ul>`
-    : `<p class="nx-empty">They have not met in the data.</p>`}</section>`;
+  const list = h.recent.map(m => `<li><span class="wl ${m.winner === a ? "W" : "L"}">${m.winner === a ? "W" : "L"}</span><span>${[m.score, m.event + (m.stage ? ` (${m.stage})` : "")].filter(Boolean).map(esc).join(" · ")}</span><span class="fx-s">${esc(fmtDate(m.date))}</span></li>`).join("");
+  return `<section class="ho-p fx-box">${fxHead(`Head-to-head`, h.meetings ? `${h.meetings} meeting${h.meetings === 1 ? "" : "s"} in the data, from ${esc(shortName(a))}'s side` : "")}${h.meetings
+    ? `<p class="fx-rec"><span class="ct">${esc(shortName(a))}</span> <b>${h.record[a]}–${h.record[b]}</b> <span class="t">${esc(shortName(b))}</span></p><ul class="fx-mt">${list}</ul>`
+    : `<p class="fx-msg">They have not met in the data.</p>`}</section>`;
 }
+// the Notes tab: the facts for both sides and the meetings (the why card sits above it)
 function notesPanel(ns, a, b, ctx, ans) {
-  const head = notesHead("Notes", "nxMT", ans), sh = ans && ans.sheet;
-  const team = t => ns.filter(n => n.scope !== "matchup" && n.team_scope === t);
-  const h2h = ns.filter(n => n.scope === "matchup" || (n.team_scope !== a && n.team_scope !== b));
-  const col = (t, cls) => { const l = team(t);
-    return `<section class="nx-col ${cls}" aria-label="${esc(`${t} notes`)}"><h3>${esc(t)}</h3>${l.length ? noteList(l, ctx) : `<p class="nx-empty">Nothing unusual for ${esc(t)}</p>`}</section>`; };
-  const stand = ns.length
-    ? `<div class="nx-grid${h2h.length ? " h2h" : ""}">${col(a, "a")}${h2h.length ? `<section class="nx-col m" aria-label="Head-to-head notes"><h3>Head-to-head</h3>${noteList(h2h, ctx)}</section>` : ""}${col(b, "b")}</div>`
-    : `<p class="nx-none">Nothing unusual stands out for this matchup: no rule fired. The facts below are the full picture.</p>`;
-  const facts = sh ? `<h3 class="nx-sec">The facts</h3><div class="nx-grid h2h nx-facts">${nxSheet(sh.a, "a")}${nxH2h(sh.h2h, a, b)}${nxSheet(sh.b, "b")}</div>` : "";
-  return `<section class="nx" aria-labelledby="nxMT">${head}<h3 class="nx-sec">What stands out</h3>${stand}${facts}</section>`;
+  const sh = ans && ans.sheet;
+  if (!sh) return fxMsg("The facts", "No facts for this matchup yet.");
+  const at = ans.asof_resolved && ans.asof_date !== "latest" ? `As known before ${esc(fmtDate(String(ans.asof_resolved).slice(0, 10)))}` : `As of ${esc(fmtDate(String(ans.asof_resolved || DATA.as_of).slice(0, 10)))}`;
+  return `<div class="fx-grid">${nxSheet(sh.a, "a")}${nxH2h(sh.h2h, a, b)}${nxSheet(sh.b, "b")}</div>
+    <p class="fx-src fx-foot">${at} · from results and lineups${sh.a.players.length || sh.b.players.length ? " and HLTV" : ""}. Context only: none of this is counted in the win chance beyond the factors above.</p>`;
 }
+// the team page: the same sheet in a site panel
 function teamPanel(ns, name, ans) {
   const nx = NOTES && NOTES.next && NOTES.next[name];
-  const next = nx ? `<p class="nx-next">Rest counted to the next match: vs ${esc(nx.opp)}, ${esc(nx.event)}, ${esc(fmtDate(nx.day))}</p>` : "";
-  const sh = ans && ans.sheet ? `<div class="nx-tsheet">${nxSheet(ans.sheet, "a")}</div>` : "";
-  return `<section class="nx" aria-labelledby="nxTT">${notesHead("Team context", "nxTT", ans)}
-    ${ns.length ? noteList(ns, `t${name}`, " nx-tlist") : `<p class="nx-none">Nothing unusual for ${esc(name)} right now: no rule fired.</p>`}${sh}${next}</section>`;
+  if (!ans || !ans.sheet) return fxMsg("Team facts", `No facts for ${esc(name)} yet.`);
+  return `<section class="panel fx-box fx-team"><h2>Team facts <span class="dim">${nx ? `rest counted to the next match: vs ${esc(nx.opp)}, ${esc(fmtDate(nx.day))}` : `as of ${esc(fmtDate(String(ans.asof_resolved || DATA.as_of).slice(0, 10)))}`}</span></h2>${nxRows(ans.sheet, nx ? "before the next match" : "since their last match")}</section>`;
 }
 // open / close one note in place (no re-render), remembered for the next render
 document.addEventListener("click", e => {
@@ -4878,7 +4948,7 @@ function viewMatch(id) {
   const up = evMs.filter(x => !x.finished && x.day >= daysBefore(DATA.as_of, 1));
   const done = evMs.filter(x => x.finished && x.w1 !== x.w2).reverse().slice(0, 6);
   const navList = evMs.filter(x => x.pred), j = navList.findIndex(x => x.id === id);
-  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, notes: matchNotes(m, e),
+  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, notes: whyCard(pred, a, b, m.id, bo) + matchNotes(m, e),
     played: m.maps.length ? playedMaps(m) : "", nav: { prev: j > 0 ? navList[j - 1] : null, next: j >= 0 ? navList[j + 1] || null : null } };
   const field = evTeamsList(e).filter(t => T[t] && T[t].vrs).sort((x, y) => T[x].vrs.rank - T[y].vrs.rank);
   return `<nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>
@@ -5312,17 +5382,20 @@ function go() {
 }
 // scrollbars show only while something scrolls (capture: scroll events do not bubble)
 (() => {
-  const timers = new WeakMap();
+  // one timer per scroller, re-armed lazily: a scroll event only stamps the time (no class
+  // write or timer churn per event); the class comes off 900 ms after the last scroll
+  const last = new WeakMap();
+  const off = el => { const t = 900 - (performance.now() - last.get(el)); if (t > 0) setTimeout(off, t, el); else { el.classList.remove("sb-on"); last.delete(el); } };
   addEventListener("scroll", e => {
     const el = e.target === document ? document.documentElement : e.target;
     if (!el || !el.classList) return;
-    el.classList.add("sb-on");
-    clearTimeout(timers.get(el));
-    timers.set(el, setTimeout(() => el.classList.remove("sb-on"), 900));
-  }, true);
+    const armed = last.has(el);
+    last.set(el, performance.now());
+    if (!armed) { el.classList.add("sb-on"); setTimeout(off, 900, el); }
+  }, { capture: true, passive: true });
 })();
 window.addEventListener("hashchange", go);
-document.addEventListener("scroll", e => { if (e.target && e.target.id === "hoCards") { homeUi.cuScroll = e.target.scrollLeft; hoPagerSync(e.target); } }, true);
+document.addEventListener("scroll", e => { if (e.target && e.target.id === "hoCards") { homeUi.cuScroll = e.target.scrollLeft; hoPagerSync(e.target); } }, { capture: true, passive: true });
 window.addEventListener("resize", () => { const c = $("#hoCards"); if (c) hoPagerSync(c); });
 
 function rerender() {

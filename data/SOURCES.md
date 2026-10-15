@@ -255,6 +255,14 @@ by the predictor, the backtest or any weight fit, and never by
   default $1.00) after which calls stop until the next month. Per-run tokens,
   web searches, estimated cost and the budget are in `notes_manifest.json` and
   `notes_manifest_log.jsonl`.
+- AI summaries (added 2026-10-15): `collectors/notes_summarize.py` asks the
+  same API, **without** web search, to rewrite the model's own call for each
+  scheduled match (win chance, counted factors and their evidence, warnings,
+  the notes) as a short plain-English summary. Its input is our data only, and
+  a grounding check rejects any summary containing a number that is not in
+  that input. Stored in `notes_summaries.json` with the model name and date,
+  labelled on the page as AI-written; budget `FACEOFF_SUMMARY_BUDGET_USD`
+  (default $5.00 a month), spend in `notes_summary_log.jsonl`.
 
 ## 3. Not used
 - HLTV: not scraped for results (no official API; bot protection). Its result

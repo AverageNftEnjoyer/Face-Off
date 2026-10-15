@@ -280,7 +280,10 @@ def parse_matches(title, txt, alias, stage_prefix=""):
 def parse_participants(txt, alias):
     """{team: {"players": [ids], "coach": [ids], "subs": [ids], "flags": {id: cc}}}"""
     out = {}
-    show = C.showmatch_spans(txt)
+    # showmatches, and {{FormerParticipants}}: teams that withdrew or were replaced
+    # (Liquipedia moves them there, e.g. Virtus.pro at Thunderpick 2026)
+    show = C.showmatch_spans(txt) + [(st, txt.index(body, st) + len(body) + 2)
+                                     for st, body in C.find_templates(txt, "FormerParticipants")]
     for start, body in C.find_templates(txt, "Opponent"):
         if any(a <= start < b for a, b in show):
             continue

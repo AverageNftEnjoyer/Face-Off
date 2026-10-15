@@ -68,6 +68,21 @@ jobs:
           set -o pipefail
           python collectors/notes_fetch.py --strict 2>&1 | tee /tmp/notes.txt
 
+      # Plain-English "why the model picks X" for scheduled matches, from the model's own
+      # numbers (no web search); grounding-checked; own budget, default $5.00 a month.
+      # Rebuild the bundle first so the new facts are in the notes it reads.
+      - name: Write AI summaries of the model's calls
+        id: summarize
+        if: ${{ !cancelled() }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FACEOFF_NOTES_MODEL: ${{ vars.FACEOFF_NOTES_MODEL }}
+          FACEOFF_SUMMARY_BUDGET_USD: ${{ vars.FACEOFF_SUMMARY_BUDGET_USD }}   # optional; empty = $5.00 a month
+        run: |
+          set -o pipefail
+          python viewer/build_bundle.py viewer/data-bundle.json
+          python collectors/notes_summarize.py 2>&1 | tee -a /tmp/notes.txt
+
       - name: Tests
         id: tests
         run: python -m unittest discover -s tests
@@ -78,7 +93,7 @@ jobs:
         run: |
           git config user.name "faceoff-refresh-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in data/notes_facts.json data/notes_manifest.json data/notes_manifest_log.jsonl; do
+          for f in data/notes_facts.json data/notes_manifest.json data/notes_manifest_log.jsonl data/notes_summaries.json data/notes_summary_log.jsonl; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
