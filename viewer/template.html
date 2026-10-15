@@ -2445,6 +2445,94 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
   padding: .55rem .6rem .55rem 1rem; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--acc) 55%, var(--line2));
   background: rgba(10, 24, 32, .96); box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .8); font-size: .88rem; }
 .freshbar .btn { min-height: 2rem; padding: .25rem .9rem; }
+
+/* ---------- matchup notes (context, never signal) ----------
+   Drawn in the SaaS skin: its own tokens on .nx, so it drops into the
+   redesign unchanged. Note text is monochrome; pink / cyan mark only the team
+   columns (team 1 pink, team 2 cyan) and freshness (cyan fresh, amber stale).
+   No green / red here: those mean W/L and right / wrong elsewhere. */
+.nx {
+  --nx-bg: #000; --nx-panel: #0A0A0B; --nx-raise: #141416; --nx-line: rgba(255, 255, 255, .09); --nx-line2: rgba(255, 255, 255, .16);
+  --nx-text: #F4F4F5; --nx-dim: #A1A1AA; --nx-mute: #71717A;
+  --nx-pink: #FF2E88; --nx-cyan: #22D3EE; --nx-amber: #F5B83D;
+  --nx-face: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--nx-bg); color: var(--nx-text); font-family: var(--nx-face);
+  border: 1px solid var(--nx-line); border-radius: 12px; padding: 1rem 1.1rem 1.1rem; display: grid; gap: .85rem; min-width: 0;
+}
+.nx-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem 1rem; flex-wrap: wrap; }
+.nx-hd > div { display: grid; gap: .2rem; min-width: 0; }
+.nx-hd h2 { font: 600 1rem/1.2 var(--nx-face); letter-spacing: -.005em; color: var(--nx-text); margin: 0; text-transform: none; }
+.nx-sub { font-size: .78rem; line-height: 1.35; color: var(--nx-dim); margin: 0; }
+.nx-chip { display: inline-flex; align-items: center; gap: .45rem; min-height: 1.75rem; padding: .2rem .7rem; border-radius: 999px;
+  font-size: .75rem; font-weight: 500; color: var(--nx-text); white-space: nowrap; max-width: 100%;
+  border: 1px solid color-mix(in srgb, var(--nx-cyan) 40%, transparent); background: color-mix(in srgb, var(--nx-cyan) 8%, transparent); }
+.nx-chip::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: var(--nx-cyan); flex: none; }
+.nx-chip.stale { border-color: color-mix(in srgb, var(--nx-amber) 45%, transparent); background: color-mix(in srgb, var(--nx-amber) 9%, transparent); }
+.nx-chip.stale::before { background: var(--nx-amber); }
+.nx-chip.none { border-color: var(--nx-line2); background: transparent; color: var(--nx-dim); }
+.nx-chip.none::before { background: var(--nx-mute); }
+.nx-chip span { overflow: hidden; text-overflow: ellipsis; }
+.nx-warn { color: var(--nx-amber); font-size: .75rem; }
+.nx-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.nx-grid.h2h { grid-template-columns: minmax(0, 1fr) minmax(0, .85fr) minmax(0, 1fr); }
+.nx-col { --nx-side: var(--nx-line2); display: grid; gap: .3rem; align-content: start; min-width: 0; padding: .7rem .75rem .75rem; border-radius: 10px;
+  border: 1px solid var(--nx-line); border-top: 2px solid color-mix(in srgb, var(--nx-side) 70%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nx-side) 7%, transparent), transparent 4.5rem), var(--nx-panel); }
+.nx-col.a { --nx-side: var(--nx-pink); } .nx-col.b { --nx-side: var(--nx-cyan); }
+.nx-col.m { --nx-side: #52525B; background: var(--nx-panel); }
+.nx-col h3 { font: 600 .72rem/1.2 var(--nx-face); letter-spacing: .08em; text-transform: uppercase; color: var(--nx-dim); margin: 0 0 .2rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.nx-n { border-top: 1px solid var(--nx-line); }
+.nx-n:first-child { border-top: 0; }
+.nx-q { all: unset; box-sizing: border-box; width: 100%; min-height: 44px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .5rem;
+  padding: .45rem .35rem; border-radius: 6px; cursor: pointer; color: var(--nx-text); font: 400 .86rem/1.35 var(--nx-face); }
+.nx-q:hover { background: var(--nx-raise); }
+.nx-q:focus-visible { outline: 2px solid var(--nx-text); outline-offset: 1px; }
+.nx-q::before { content: ""; width: .4rem; height: .4rem; border-right: 1.5px solid var(--nx-mute); border-bottom: 1.5px solid var(--nx-mute); transform: rotate(-45deg); margin: 0 .1rem 0 .05rem; }
+.nx-q[aria-expanded="true"]::before { transform: rotate(45deg); }
+/* collapsed: at most two lines, then an ellipsis; open: the whole headline */
+.nx-hl { min-width: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow-wrap: anywhere; }
+.nx-q[aria-expanded="true"] .nx-hl { display: block; }
+.nx-age { display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; color: var(--nx-mute); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.nx-age.old::before { content: ""; width: .4rem; height: .4rem; border-radius: 50%; background: var(--nx-amber); }
+.nx-rum { font-size: .62rem; font-weight: 600; letter-spacing: .1em; color: var(--nx-dim); border: 1px dashed var(--nx-line2); border-radius: 4px; padding: .05rem .35rem; margin-right: .4rem; vertical-align: .08em; }
+.nx-n.rumor .nx-q { color: var(--nx-dim); font-style: italic; }
+.nx-n.rumor .nx-rum { font-style: normal; }
+.nx-ev { padding: 0 .35rem .6rem 1.45rem; display: grid; gap: .3rem; font-size: .76rem; line-height: 1.45; color: var(--nx-dim); }
+.nx-ev[hidden] { display: none; }
+.nx-ev a { color: var(--nx-text); text-decoration: underline; text-decoration-color: var(--nx-line2); text-underline-offset: 2px; justify-self: start;
+  display: inline-flex; align-items: center; min-height: 44px; }
+.nx-ev a:hover { text-decoration-color: var(--nx-text); }
+.nx-src { color: var(--nx-mute); }
+.nx-empty { color: var(--nx-mute); font-size: .82rem; margin: 0; padding: .35rem .35rem .2rem; }
+.nx-none { color: var(--nx-dim); font-size: .86rem; margin: 0; padding: .9rem; border: 1px dashed var(--nx-line2); border-radius: 10px; }
+.nx-next { font-size: .76rem; color: var(--nx-mute); margin: 0; }
+.nx-tlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr)); gap: 0 1rem; align-items: start; }
+.nx-tlist .nx-n:first-child { border-top: 1px solid var(--nx-line); }
+.nx-sk { display: grid; gap: .55rem; }
+.nx-sk i { display: block; height: .85rem; border-radius: 4px; background: var(--nx-raise); }
+.nx-sk i:nth-child(3n+1) { width: 82%; } .nx-sk i:nth-child(3n+2) { width: 64%; } .nx-sk i:nth-child(3n) { width: 73%; }
+@media (prefers-reduced-motion: no-preference) {
+  .nx-sk i { background: linear-gradient(90deg, var(--nx-raise) 0%, #232327 50%, var(--nx-raise) 100%) 0 0 / 200% 100%; animation: nxShim 1.4s linear infinite; }
+}
+@keyframes nxShim { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.ho.ho-m { grid-template-areas: "cu un" "court st" "nx res" "tabs res" "body res"; }
+.ho-nx { grid-area: nx; }
+.tnx { margin-top: 1rem; }
+@media (max-width: 1100px) {
+  .ho.ho-m { grid-template-areas: "cu cu" "un st" "court court" "nx nx" "tabs tabs" "body body" "res res"; }
+}
+@media (max-width: 1000px) { .nx-grid.h2h { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nx-grid.h2h .nx-col.m { grid-column: 1 / -1; grid-row: 2; } }
+@media (max-width: 760px) {
+  .ho.ho-m { grid-template-areas: "cu" "un" "court" "nx" "tabs" "body" "st" "res"; }
+}
+@media (max-width: 640px) {
+  .nx { padding: .85rem .8rem .9rem; border-radius: 10px; }
+  .nx-grid, .nx-grid.h2h { grid-template-columns: minmax(0, 1fr); }
+  .nx-grid.h2h .nx-col.m { grid-column: auto; grid-row: auto; }
+  .nx-chip { white-space: normal; }
+}
 </style>
 
 <header class="top" id="top">
@@ -2608,6 +2696,7 @@ if (IMG && IMG.site && IMG.site.bg) document.documentElement.style.setProperty("
 const FIXTURES = /*__FIXTURES__*/null;   // upcoming matches, expanded prediction form (docs/bundle-schema.md)
 const RESULTS = /*__RESULTS__*/null;     // recent results with model verdicts (docs/bundle-schema.md)
 const META = /*__META__*/null;           // {bundle_version, generated_at, data_through, data_hash, vrs_date}
+const NOTES = /*__NOTES__*/null;         // matchup notes, display only (docs/notes-contracts.md); null when the bundle has none
 // the bundle schema this page reads; build_viewer.py's drift check fails the build when it is not
 // the version the build writes (SUPPORTED_BUNDLE_VERSION)
 const PAGE_BUNDLE_VERSION = 2;
@@ -4559,6 +4648,84 @@ function evMatchup(e) {
 }
 
 /* ---------------- match page ---------------- */
+/* ---------------- matchup notes ----------------
+   Context, never signal: NOTES (viewer/notes_data.py page_payload) is shown as
+   it comes and is read by nothing else on the page. NOTES === undefined means a
+   deferred load still on its way (skeleton); null means this build has none. */
+const NX_OPEN = new Set();   // notes the visitor has opened, kept across re-renders of the same page
+const NX_SRC = { matches: "From results", lineups: "From lineups" };
+// a note's stable id (notes.py) when the bundle carries it; older bundles fall back to its text
+const nxKey = (ctx, n) => `${ctx}|${n.id || `${n.rule}|${n.team_scope}|${n.headline}`}`;
+function notesFresh() {
+  const f = NOTES && NOTES.freshness;
+  if (!f) return { cls: "none", text: "No facts in this build", title: "This page build carries no notes data", warn: "" };
+  const up = f.facts_updated_at ? String(f.facts_updated_at).slice(0, 10) : null;
+  const day = up || f.as_of || NOTES.as_of;
+  if (!up) return { cls: "none", text: `Results & lineups as of ${fmtDate(day)} · no web facts yet`,
+    title: "Notes come from match results and lineups only; no player-form or news facts have been fetched yet", warn: "" };
+  const stale = !!f.stale || (f.oldest_fact_age_days != null && f.oldest_fact_age_days > (f.stale_after_days || 7));
+  const miss = (f.teams_with_no_facts || []).length;
+  return { cls: stale ? "stale" : "", text: `Facts as of ${fmtDate(day)}`,
+    title: `Web facts last fetched ${String(f.facts_updated_at).replace("T", " ").slice(0, 16)} UTC${f.oldest_fact_age_days != null ? ` · oldest ${f.oldest_fact_age_days}d old` : ""}${miss ? ` · ${miss} team${miss === 1 ? "" : "s"} playing soon with no web facts` : ""}`,
+    warn: stale ? "Some facts may be outdated" : "" };
+}
+function notesChip() {
+  const r = notesFresh();
+  return `<span class="nx-chip ${r.cls}" title="${esc(r.title)}"><span>${esc(r.text)}</span></span>`;
+}
+function noteItem(n, ctx) {
+  const k = nxKey(ctx, n), open = NX_OPEN.has(k), rumor = n.kind === "rumor";
+  const id = "nx" + Array.from(k).reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7).toString(36);
+  const age = +n.age_days || 0;
+  const src = n.source_url
+    ? `<a href="${esc(n.source_url)}" target="_blank" rel="noopener">${esc(n.source || "Source")} ↗</a>`
+    : `<span class="nx-src">${esc(NX_SRC[n.source] || (n.source ? `From ${n.source}` : ""))}</span>`;
+  return `<li class="nx-n${rumor ? " rumor" : ""}">
+    <button type="button" class="nx-q" data-nx="${esc(k)}" aria-expanded="${open}" aria-controls="${id}">
+      <span class="nx-hl">${rumor ? `<span class="nx-rum">RUMOR</span>` : ""}${esc(n.headline)}</span>
+      <span class="nx-age${age > 7 ? " old" : ""}"${age > 7 ? ` title="Older than a week"` : ""}>${age === 0 ? "today" : `${age}d old`}</span>
+    </button>
+    <div class="nx-ev" id="${id}"${open ? "" : " hidden"}>${n.evidence ? `<span>${esc(n.evidence)}</span>` : ""}${src}</div></li>`;
+}
+const noteList = (ns, ctx, cls = "") => `<ul class="nx-list${cls}">${ns.map(n => noteItem(n, ctx)).join("")}</ul>`;
+function notesSkeleton(title = "Matchup context") {
+  return `<section class="nx" aria-busy="true" aria-label="${esc(title)}, loading">
+    <header class="nx-hd"><div><h2>${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.</p></div></header>
+    <div class="nx-sk" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>`;
+}
+function notesHead(title, hid) {
+  const r = notesFresh();
+  return `<header class="nx-hd"><div><h2 id="${hid}">${esc(title)}</h2><p class="nx-sub">Informational — not counted in the win chance.${r.warn ? ` <span class="nx-warn">${esc(r.warn)}</span>` : ""}</p></div>${NOTES ? notesChip() : ""}</header>`;
+}
+function matchNotes(id, a, b) {
+  if (typeof NOTES === "undefined") return notesSkeleton();
+  const ns = (NOTES && NOTES.matches && NOTES.matches[id]) || [];
+  const ctx = `m${id}`, head = notesHead("Matchup context", "nxMT");
+  if (!ns.length) return `<section class="nx" aria-labelledby="nxMT">${head}<p class="nx-none">No context available for this matchup yet — check back closer to match time.</p></section>`;
+  const team = t => ns.filter(n => n.scope !== "matchup" && n.team_scope === t);
+  const h2h = ns.filter(n => n.scope === "matchup" || (n.team_scope !== a && n.team_scope !== b));
+  const col = (t, cls) => { const l = team(t);
+    return `<section class="nx-col ${cls}" aria-label="${esc(`${t} context`)}"><h3>${esc(t)}</h3>${l.length ? noteList(l, ctx) : `<p class="nx-empty">No notable context for ${esc(t)}</p>`}</section>`; };
+  return `<section class="nx" aria-labelledby="nxMT">${head}
+    <div class="nx-grid${h2h.length ? " h2h" : ""}">${col(a, "a")}${h2h.length ? `<section class="nx-col m" aria-label="Head-to-head context"><h3>Head-to-head</h3>${noteList(h2h, ctx)}</section>` : ""}${col(b, "b")}</div></section>`;
+}
+function teamNotes(name) {
+  if (typeof NOTES === "undefined") return notesSkeleton("Team context");
+  const t = NOTES && NOTES.teams && NOTES.teams[name], ns = (t && t.n) || [], nx = t && t.next;
+  const next = nx ? `<p class="nx-next">Rest counted to the next match: vs ${esc(nx.opp)}, ${esc(nx.event)}, ${esc(fmtDate(nx.day))}</p>` : "";
+  return `<section class="nx" aria-labelledby="nxTT">${notesHead("Team context", "nxTT")}
+    ${ns.length ? noteList(ns, `t${name}`, " nx-tlist") : `<p class="nx-none">No notable context for ${esc(name)} right now.</p>`}${next}</section>`;
+}
+// open / close one note in place (no re-render), remembered for the next render
+document.addEventListener("click", e => {
+  const q = e.target.closest(".nx-q");
+  if (!q) return;
+  const open = q.getAttribute("aria-expanded") !== "true", ev = document.getElementById(q.getAttribute("aria-controls"));
+  q.setAttribute("aria-expanded", String(open));
+  if (ev) ev.hidden = !open;
+  if (open) NX_OPEN.add(q.dataset.nx); else NX_OPEN.delete(q.dataset.nx);
+});
+
 function viewMatch(id) {
   const m = MATCH[id];
   if (!m || !m.t1 || !m.t2) return `<p>That match isn't in this snapshot. <a class="btn" href="#events">Tournaments</a></p>`;
@@ -4582,7 +4749,8 @@ function viewMatch(id) {
   <h1 class="sr-only">${esc(`${a} vs ${b}, ${e.name}`)}</h1>
   <div class="ho ho-m">
     ${hoComing(up, `Coming up at ${shortEv(e.name)}`, `#e-${e.slug}`)}${hoEvCard(e, m, path)}
-    ${hoCourt(pred, a, b, o, bo)}${hoStand(field.length ? field : [a, b].filter(t => T[t] && T[t].vrs))}${hoTabs(bo, true)}
+    ${hoCourt(pred, a, b, o, bo)}${hoStand(field.length ? field : [a, b].filter(t => T[t] && T[t].vrs))}
+    <div class="ho-nx">${matchNotes(id, a, b)}</div>${hoTabs(bo, true)}
     <div class="ho-body" id="hoBody" role="tabpanel" aria-labelledby="hoTab-${desk.tab}">${hoBody(pred, a, b, o, bo)}</div>
     ${hoResults(done, "No finished series at this tournament yet.")}
   </div>`;
@@ -4655,6 +4823,7 @@ function viewTeam(slugv) {
         : `<span class="small dim">Valve Regional Standings</span><b class="cond">-</b><span class="small dim">not in the current standings</span>`}
       <span class="small dim" style="margin-top:.4rem">${t.series ? `Elo ${t.elo}${t.rank ? `, ${ordinal(t.rank)} of active teams` : `, ${t.series} series in the data`}` : "No series in the data yet"}</span></div>
   </section>
+  <div class="tnx">${teamNotes(n)}</div>
   ${rfPanel(rfSides(rfTool(null, n, null), n, null))}
   <div class="tlay">
     ${lineup(n, "a", null)}

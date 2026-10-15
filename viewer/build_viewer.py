@@ -41,6 +41,7 @@ import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
 import events as E  # noqa: E402
+import notes_data as ND  # noqa: E402  (the page's copy of the matchup notes)
 import predictor as pr  # noqa: E402
 import roster_flags as RF  # noqa: E402
 import team_colors as TC  # noqa: E402
@@ -825,7 +826,7 @@ def drift_check(tpl, bundle):
     if not pv or int(pv.group(1)) != SUPPORTED_BUNDLE_VERSION:
         problems.append(f"template PAGE_BUNDLE_VERSION {pv.group(1) if pv else 'missing'} "
                         f"!= SUPPORTED_BUNDLE_VERSION {SUPPORTED_BUNDLE_VERSION}")
-    for const in ("FIXTURES", "RESULTS"):
+    for const in ("FIXTURES", "RESULTS", "NOTES"):
         if f"/*__{const}__*/" not in tpl:
             problems.append(f"missing placeholder /*__{const}__*/")
     if problems:
@@ -877,11 +878,15 @@ def main(out_path):
     fix = json.dumps(bundle["fixtures"], separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     res = json.dumps(bundle["results"], separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     met = json.dumps(meta, separators=(",", ":")).replace("</", "<\\/")
-    html = (tpl.replace("/*__DATA__*/null", blob)
+    # matchup notes (display only): the compact pre-rendered copy, null when the bundle has none
+    notes = ND.page_payload(bundle["notes"]) if bundle.get("notes") else None
+    nts = json.dumps(notes, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    html =(tpl.replace("/*__DATA__*/null", blob)
                .replace("/*__IMAGES__*/null", img)
                .replace("/*__FIXTURES__*/null", fix)
                .replace("/*__RESULTS__*/null", res)
-               .replace("/*__META__*/null", met))
+               .replace("/*__META__*/null", met)
+               .replace("/*__NOTES__*/null", nts))
     os.makedirs(out_dir, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)

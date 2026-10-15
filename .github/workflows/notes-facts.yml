@@ -1,0 +1,121 @@
+# Web facts for the matchup notes (player form, stand-ins, roster rumours) for
+# the teams playing in the next 7 days: collectors/notes_fetch.py, through the
+# OpenAI Responses API. Display context only: nothing here feeds the model.
+#
+# Cost is bounded in the script: at most --max-calls OpenAI calls per run, and
+# a unit fetched in the last 12 h is skipped (data/notes_manifest.json reports
+# calls, tokens and the estimated cost of every run).
+#
+# The key: Settings > Secrets and variables > Actions > "New repository
+# secret", name OPENAI_API_KEY. Never commit it or put it in a repository
+# *variable* (variables are plain text). Secrets are encrypted at rest, masked
+# in logs, and not passed to workflows run from forks. Only the fetch step
+# receives it, as an environment variable; the script sends it only in the
+# Authorization header to api.openai.com and scrubs it (and anything shaped
+# like an OpenAI key) from the committed manifest, the log and issue text.
+#
+# Loud by design: a missing OPENAI_API_KEY secret, more than half the fetches
+# failing or an unwritable manifest turns the run red and opens an issue; a
+# silently dead fetcher is the thing to avoid.
+name: Notes facts
+
+on:
+  schedule:
+    - cron: "47 */6 * * *"   # 00:47, 06:47, 12:47, 18:47 UTC: half an hour after the refresh
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+# its own queue: in the refresh group a queued notes run could be cancelled by
+# the next queued live refresh (GitHub keeps one pending run per group). It
+# writes only the three data/notes_* files the refreshes never touch, and its
+# commit step rebases onto whatever a refresh pushed meanwhile.
+concurrency:
+  group: notes-facts
+  cancel-in-progress: false
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # 12 h page cache of the scrape path (gitignored): carried between runs
+      - uses: actions/cache@v4
+        with:
+          path: data/raw/notes_cache
+          key: notes-cache-${{ github.run_id }}
+          restore-keys: notes-cache-
+
+      # the scope (teams with a fixture in the next 7 days) comes from the bundle
+      - name: Build the derived data bundle
+        run: python viewer/build_bundle.py viewer/data-bundle.json
+
+      - name: Fetch notes facts
+        id: fetch
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FACEOFF_NOTES_MODEL: ${{ vars.FACEOFF_NOTES_MODEL }}   # optional repository variable; empty = default model
+        run: |
+          set -o pipefail
+          python collectors/notes_fetch.py --strict 2>&1 | tee /tmp/notes.txt
+
+      - name: Tests
+        id: tests
+        run: python -m unittest discover -s tests
+
+      - name: Commit and push changed notes facts
+        # also after a red fetch (its good facts and the manifest are the record), never after red tests
+        if: ${{ !cancelled() && steps.fetch.outcome != 'skipped' && steps.tests.outcome != 'failure' }}
+        run: |
+          git config user.name "faceoff-refresh-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for f in data/notes_facts.json data/notes_manifest.json data/notes_manifest_log.jsonl; do
+            if [ -e "$f" ]; then git add "$f"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "No notes changes."
+            exit 0
+          fi
+          git commit -m "Notes facts $(date -u +%Y-%m-%dT%H:%MZ)"
+          # someone may have pushed while this ran: replay the data commit on top
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push
+
+      # Loud on failure: failure() is REQUIRED (a step with no status-check
+      # function gets an implicit success() and is skipped after a failure).
+      - name: Open an issue when the notes fetch fails
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create data-pipeline --color B60205 --description "Automated data pipeline alerts" 2>/dev/null || true
+          {
+            echo "The notes facts fetch failed (matchup notes may go stale; predictions are unaffected). Run: $RUN_URL"
+            echo
+            echo '```'
+            tail -c 20000 /tmp/notes.txt 2>/dev/null || echo "(no fetch output: an earlier step failed)"
+            echo '```'
+            echo
+            echo '```json'
+            head -c 30000 data/notes_manifest.json 2>/dev/null || echo "{}"
+            echo
+            echo '```'
+          } > /tmp/issue.md
+          # one open issue at a time: the same failure repeats every run until fixed
+          existing=$(gh issue list --label data-pipeline --state open --search "Notes fetch failed in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue.md
+          else
+            gh issue create --title "Notes fetch failed ($(date -u +%Y-%m-%d))" \
+              --body-file /tmp/issue.md --label data-pipeline
+          fi
