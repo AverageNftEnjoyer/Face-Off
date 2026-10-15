@@ -226,9 +226,41 @@ duplicates).
   dated 2026-10-05, the latest series it has is 2026-10-04, a week behind
   `matches.json` (2026-10-11). It is a cross-check, not a backup feed.
 
+## Notes facts (OpenAI web research): display context only
+
+Added 2026-10-14. `collectors/notes_fetch.py` writes `notes_facts.json`, the
+web facts behind the matchup notes (player form, stand-ins, roster rumours).
+They are shown beside a match with their source link and are **never** read
+by the predictor, the backtest or any weight fit, and never by
+`matches.json`.
+
+- What is read: for the teams with a fixture in the next 7 days only, (a) per
+  player, the HLTV player stats page, and (b) per team, news of stand-ins and
+  roster rumours from the last 30 days. Both go through the OpenAI Responses
+  API (`https://api.openai.com/v1/responses`, key in the `OPENAI_API_KEY`
+  secret). The model is used as an extractor with strict JSON output; every
+  fact must carry the `https://` URL it came from (no source, no fact), names a
+  team in the bundle and passes `model/notes_facts.py::validate_fact`, or it is
+  rejected and logged in `notes_manifest.json`.
+- HLTV terms and politeness: our own HTTP requests to HLTV (the "scrape" path)
+  obey robots.txt, including its wildcard rules, send the project User-Agent
+  with a contact URL, keep >= 3 s between requests to one host, cache pages
+  12 h under `raw/notes_cache/` (gitignored, not republished) and stop asking a
+  host that refused once in the run. On 2026-10-14 HLTV's robots.txt
+  disallows the dated stats pages (`/stats*?*startDate*`) a 30-day rating
+  needs and plain HTTP gets a 403 Cloudflare challenge, so the scrape path does
+  not run and form comes from (b) OpenAI's `web_search` tool, which reads
+  pages with OpenAI's own crawler under OpenAI's terms. We store a handful of
+  numbers per player with a link back, not page content.
+- Volume: at most `--max-calls` (60) OpenAI calls per run, every 6 h; a unit
+  fetched in the last 12 h is skipped. Per-run tokens, web searches and
+  estimated cost are in `notes_manifest.json` and `notes_manifest_log.jsonl`.
+
 ## 3. Not used
-- HLTV: not scraped (no official API; bot protection; the project does not scrape
-  it). Its data reaches us only as Valve republishes it in section 2.
+- HLTV: not scraped for results (no official API; bot protection). Its result
+  data reaches us only as Valve republishes it in section 2. Player form for
+  the display-only matchup notes is the one exception; see "Notes facts"
+  above (robots.txt obeyed; in practice read through OpenAI web search).
 - Commercial esports data APIs (PandaScore, GRID, Abios): they need an account /
   API key and contract terms the project does not have; not evaluated further.
 - Steam Web API: no professional match results. FACEIT Data API: only

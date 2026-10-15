@@ -49,6 +49,15 @@ Exit code 0 = no leakage found, 1 = leakage (offending fields are printed).
      it), and a deliberately leaky builder that folds day D's lower-tier
      series in before day D's features must fail the scramble.
 
+  8. NOTES (notes.py over notes_data.section; display only): for each D,
+     the notes of every series dated D (matchup + both team views) must be
+     byte-identical when outcomes dated >= D are inverted, lineups dated >= D
+     are made-up fives, squads gain spells joined after D, hand-entered
+     overrides are added (history never reads them) and web facts observed
+     at or after D's start are added. CANARIES: facts observed just before D
+     must show on every day, and the notes computed with a one-day-late
+     cutoff must differ on at least one day.
+
 NOT COVERED, AND WHY IT CANNOT BE:
   data/roster_events.json is a present-day scrape of Liquipedia stand-in
   tables keyed by TOURNAMENT, with no date per stand-in. There is nothing
@@ -297,6 +306,85 @@ def check_veto(matches, test_days):
     return problems, caught
 
 
+def _notes_day(section, matches, day, cutoff=None):
+    """Canonical JSON of the notes (both team views and the matchup) of every
+    series dated `day`, computed as of `cutoff` (default: the day itself)."""
+    import notes as NT
+    b = {"notes": section}
+    out = []
+    for m in sorted((m for m in matches if m["date"] == day), key=lambda m: (m["team_a"], m["team_b"])):
+        a, t = m["team_a"], m["team_b"]
+        asof = cutoff or day
+        out.append([a, t, NT.get_notes(a, t, asof, b, match_day=day, event=m["event"]),
+                    NT.team_notes(a, asof, b, day), NT.team_notes(t, asof, b, day)])
+    return NT.dumps(out)
+
+
+def _canary_facts(teams, day, after):
+    """Web facts for `teams` observed just before `day` (after=False: they must
+    show) or at / after its start (after=True: they must never show)."""
+    import notes_facts as NF
+    d = bt._d(day)
+    ts = [NF.fmt_ts(NF.cutoff_of(d) + bt.timedelta(seconds=s)) for s in ((0, 3600, 86400 * 3) if after else (-60,))]
+    out = []
+    for t in sorted(teams):
+        for i, obs in enumerate(ts):
+            tag = f"{'late' if after else 'early'}{i}"
+            base = dict(team=t, observed_at=obs, source_url=f"https://example.org/{tag}", source="CANARY",
+                        method="scrape")
+            out.append(NF.make_fact(player=f"canary_{tag}", rating_last30=1.9 if after else 1.3,
+                                    rating_baseline=1.0, baseline="last12m", maps_last30=20, **base))
+            out.append(NF.make_fact(type="stand_in", player=f"sub_{tag}", date=day, **base))
+            out.append(NF.make_fact(type="roster_rumor", player=f"rumor_{tag}", date=day, **base))
+    return out
+
+
+def check_notes(matches, test_days):
+    """Test 8: matchup notes (notes.py over notes_data.section). For each day D,
+    every series dated D must get byte-identical notes when, in the variant
+    inputs, every outcome dated >= D is inverted, every lineup dated >= D is
+    five made-up players, squads gain spells joined after D, hand-entered roster
+    overrides are added on and before D, and web facts observed at or after
+    D's start are added. Canary facts observed before D must show (the check
+    sees facts at all), and the same notes computed one day late (cutoff D+1)
+    on the variant must differ on at least one day (the check has teeth).
+    -> (problems, days tested, early facts seen on, leaky cutoff caught on)."""
+    import notes_data as ND
+    _, lineups, squads, _, _ = ND.load_inputs()
+    as_of = max(bt._d(m["date"]) for m in matches) + bt.timedelta(days=1)
+    empty = {"fact_schema": 1, "updated_at": None, "form": [], "news": []}
+    problems, seen, caught = [], 0, 0
+    for day in test_days:
+        teams = {t for m in matches if m["date"] == day for t in (m["team_a"], m["team_b"])}
+        early = _canary_facts(teams, day, after=False)
+        clean_facts = dict(empty, form=[f for f in early if "rating_last30" in f],
+                           news=[f for f in early if "type" in f])
+        clean = ND.section(as_of, matches, [], [], {}, [], lineups, squads, [], clean_facts)
+        late = _canary_facts(teams, day, after=True)
+        var_facts = dict(clean_facts, form=clean_facts["form"] + [f for f in late if "rating_last30" in f],
+                         news=clean_facts["news"] + [f for f in late if "type" in f])
+        var_lineups = {k: ({s: ([f"fake{i}_{s}_{k}" for i in range(5)] if v.get(s) else None) for s in ("a", "b")}
+                           if k.split("|", 1)[0] >= day else v) for k, v in lineups.items()}
+        # squad spells joined after D for the players each team last fielded
+        nxt = (bt._d(day) + bt.timedelta(days=1)).isoformat()
+        var_squads = {t: list(rows) for t, rows in squads.items()}
+        for t in sorted(teams):
+            rows = sorted((k, v) for k, v in lineups.items() if k < day and t in k.split("|")[1:])
+            for k, v in rows[-1:]:
+                five = v.get("a") if k.split("|")[1] == t else v.get("b")
+                var_squads.setdefault(t, []).extend([[p, nxt, ""] for p in five or []])
+        overrides = [{"team": t, "kind": "roster_change", "from": f, "players": [f"ov{i}" for i in range(5)]}
+                     for t in sorted(teams) for f in ((bt._d(day) - bt.timedelta(days=5)).isoformat(), day)]
+        variant = ND.section(as_of, scramble_from(matches, day), [], [], {}, [], var_lineups, var_squads,
+                             overrides, var_facts)
+        got_clean = _notes_day(clean, matches, day)
+        if got_clean != _notes_day(variant, matches, day):
+            problems.append(f"{day}: notes changed when information dated >= D was altered")
+        seen += "sub_early0" in got_clean
+        caught += _notes_day(variant, matches, day, (bt._d(day) + bt.timedelta(days=1)).isoformat()) != got_clean
+    return problems, len(test_days), seen, caught
+
+
 def sample_days(days, k):
     if k >= len(days):
         return days
@@ -382,6 +470,14 @@ def main(argv=None):
     print(f"lower tier (weight {w_low}{'' if bt.LOWER_TIER_ELO_WEIGHT else ', switched on for the check'}, "
           f"{len(low_all)} series): {len(l_fail)} leaks on {l_days} days; lower-tier data changes features: "
           f"{'yes' if l_sees else 'NO (check is blind)'}; leaky-builder canary caught on {l_caught} days")
+
+    # 8. matchup notes (display only): results, lineups, squads, overrides and
+    #    web facts dated >= D never reach a day-D note
+    n_fail, n_days, n_seen, n_caught = check_notes(matches, test_days)
+    failures += n_fail
+    canary_ok = canary_ok and n_seen == n_days and n_caught > 0
+    print(f"notes: {len(n_fail)} leaks on {n_days} days; facts observed before D shown on {n_seen}/{n_days} "
+          f"days; one-day-late cutoff caught on {n_caught} days")
 
     print(f"scramble + truncate: {len(failures)} differing fields")
     for f in failures[:30]:

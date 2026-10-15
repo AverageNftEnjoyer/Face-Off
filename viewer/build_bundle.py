@@ -16,6 +16,9 @@ Envelope:
                    pre-match prediction outputs
   results          recently finished matches with map scores + model verdicts
   data             the full computed payload (teams, pairs, h2h, events, ...)
+  notes            matchup notes: engine inputs, web facts, freshness and the
+                   pre-rendered team / match notes (viewer/notes_data.py;
+                   display only, never read by the predictor)
 
 Determinism: identical inputs produce byte-identical output when
 FACEOFF_GENERATED_AT is pinned (acceptance: delete + rebuild = identical).
@@ -35,6 +38,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import build_viewer as bv  # noqa: E402
+import notes_data as ND  # noqa: E402
 
 BUNDLE_VERSION = 2
 RESULT_DAYS = 30       # results window: finished matches this recent
@@ -169,6 +173,7 @@ def main(out_path=None):
         "fixtures": fixtures,
         "results": results,
         "data": data,
+        "notes": ND.build(data, fixtures),
     }
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(bundle, f, sort_keys=True, separators=(",", ":"), ensure_ascii=False)

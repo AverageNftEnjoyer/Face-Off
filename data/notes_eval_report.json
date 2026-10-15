@@ -1,0 +1,258 @@
+{
+ "config": {
+  "cold_rest_days": 21,
+  "form_delta": 0.1,
+  "form_min_maps": 5,
+  "heavy_min_series": 8,
+  "heavy_window_days": 14,
+  "max_matchup_notes": 6,
+  "max_per_rule_team": 2,
+  "max_team_notes": 6,
+  "new_addition_days": 45,
+  "revenge_max_days": 90,
+  "scope_days": 7,
+  "short_rest_days": 4,
+  "stale_after_days": 7,
+  "streak_min": 4,
+  "tenure_new_days": 90,
+  "tenure_new_min": 2,
+  "tenure_stable_days": 180
+ },
+ "facts": {
+  "form": 0,
+  "news": 0,
+  "updated_at": null
+ },
+ "mean_notes_per_series": 1.759,
+ "mirror_mismatches": 0,
+ "note": "Informational: fire rates of display-only notes. Not a signal test; the win rates are descriptive (not held out, not strength-corrected) and no note is a model input.",
+ "notes_per_series": {
+  "0": 144,
+  "1": 321,
+  "2": 327,
+  "3": 174,
+  "4": 56,
+  "5": 21,
+  "6": 2
+ },
+ "rules": {
+  "COLD_PLAYER": {
+   "fired_sides": null,
+   "shown_series": 0,
+   "status": "live-forward (web facts begin at deployment; no history to fire on)"
+  },
+  "COLD_REST": {
+   "descriptive_win_rate": {
+    "n": 277,
+    "rate": 0.4946,
+    "wins": 137
+   },
+   "fire_rate_sides": 0.1325,
+   "fired_sides": 277,
+   "shown_rate_series": 0.1981,
+   "shown_series": 207,
+   "status": "fires"
+  },
+  "HEAVY_SCHEDULE": {
+   "descriptive_win_rate": {
+    "n": 108,
+    "rate": 0.4722,
+    "wins": 51
+   },
+   "fire_rate_sides": 0.0517,
+   "fired_sides": 108,
+   "shown_rate_series": 0.0928,
+   "shown_series": 97,
+   "status": "fires"
+  },
+  "HOT_PLAYER": {
+   "fired_sides": null,
+   "shown_series": 0,
+   "status": "live-forward (web facts begin at deployment; no history to fire on)"
+  },
+  "NEW_ADDITION": {
+   "descriptive_win_rate": {
+    "n": 240,
+    "rate": 0.4917,
+    "wins": 118
+   },
+   "fire_rate_sides": 0.1148,
+   "fired_sides": 240,
+   "shown_rate_series": 0.2105,
+   "shown_series": 220,
+   "status": "fires"
+  },
+  "REVENGE": {
+   "descriptive_win_rate": {
+    "n": 294,
+    "rate": 0.4082,
+    "wins": 120
+   },
+   "fire_rate_sides": 0.1407,
+   "fired_sides": 294,
+   "shown_rate_series": 0.2813,
+   "shown_series": 294,
+   "status": "fires"
+  },
+  "ROSTER_RUMOR": {
+   "fired_sides": null,
+   "shown_series": 0,
+   "status": "live-forward (web facts begin at deployment; no history to fire on)"
+  },
+  "SHORT_REST": {
+   "descriptive_win_rate": {
+    "n": 35,
+    "rate": 0.6,
+    "wins": 21
+   },
+   "fire_rate_sides": 0.0167,
+   "fired_sides": 35,
+   "shown_rate_series": 0.0287,
+   "shown_series": 30,
+   "status": "fires"
+  },
+  "STAND_IN": {
+   "fired_sides": null,
+   "shown_series": 0,
+   "status": "live-forward (web facts begin at deployment; no history to fire on)"
+  },
+  "STREAK": {
+   "descriptive_win_rate": {
+    "n": 257,
+    "rate": 0.5331,
+    "wins": 137
+   },
+   "fire_rate_sides": 0.123,
+   "fired_sides": 257,
+   "shown_rate_series": 0.2172,
+   "shown_series": 227,
+   "status": "fires"
+  },
+  "TENURE_NEW": {
+   "descriptive_win_rate": {
+    "n": 185,
+    "rate": 0.4649,
+    "wins": 86
+   },
+   "fire_rate_sides": 0.0885,
+   "fired_sides": 185,
+   "shown_rate_series": 0.1713,
+   "shown_series": 179,
+   "status": "fires"
+  },
+  "TENURE_STABLE": {
+   "descriptive_win_rate": {
+    "n": 442,
+    "rate": 0.5656,
+    "wins": 250
+   },
+   "fire_rate_sides": 0.2115,
+   "fired_sides": 442,
+   "shown_rate_series": 0.3789,
+   "shown_series": 396,
+   "status": "fires"
+  }
+ },
+ "shown_notes_by_rule": {
+  "COLD_REST": 277,
+  "HEAVY_SCHEDULE": 108,
+  "NEW_ADDITION": 240,
+  "REVENGE": 294,
+  "SHORT_REST": 35,
+  "STREAK": 257,
+  "TENURE_NEW": 185,
+  "TENURE_STABLE": 442
+ },
+ "sweeps": {
+  "cold_rest_days": {
+   "chosen": 21,
+   "fire_rate_sides": {
+    "14": 0.1794,
+    "21": 0.1325,
+    "28": 0.0904,
+    "35": 0.0703,
+    "45": 0.0579
+   },
+   "rule": "COLD_REST"
+  },
+  "heavy_min_series": {
+   "chosen": 8,
+   "fire_rate_sides": {
+    "10": 0.0115,
+    "6": 0.156,
+    "7": 0.0952,
+    "8": 0.0517,
+    "9": 0.0254
+   },
+   "rule": "HEAVY_SCHEDULE"
+  },
+  "new_addition_days": {
+   "chosen": 45,
+   "fire_rate_sides": {
+    "21": 0.0421,
+    "30": 0.0636,
+    "45": 0.1148,
+    "60": 0.1804,
+    "90": 0.3038
+   },
+   "rule": "NEW_ADDITION"
+  },
+  "revenge_max_days": {
+   "chosen": 90,
+   "fire_rate_sides": {
+    "180": 0.222,
+    "365": 0.2785,
+    "60": 0.111,
+    "90": 0.1407
+   },
+   "rule": "REVENGE"
+  },
+  "short_rest_days": {
+   "chosen": 4,
+   "fire_rate_sides": {
+    "2": 0.001,
+    "3": 0.0105,
+    "4": 0.0167,
+    "5": 0.0234,
+    "7": 0.0407
+   },
+   "rule": "SHORT_REST"
+  },
+  "streak_min": {
+   "chosen": 4,
+   "fire_rate_sides": {
+    "3": 0.2498,
+    "4": 0.123,
+    "5": 0.0675,
+    "6": 0.0354
+   },
+   "rule": "STREAK"
+  },
+  "tenure_new_min": {
+   "chosen": 2,
+   "fire_rate_sides": {
+    "1": 0.3923,
+    "2": 0.0885,
+    "3": 0.0187
+   },
+   "rule": "TENURE_NEW"
+  },
+  "tenure_stable_days": {
+   "chosen": 180,
+   "fire_rate_sides": {
+    "120": 0.2995,
+    "180": 0.2115,
+    "270": 0.1201,
+    "365": 0.0732,
+    "90": 0.3828
+   },
+   "rule": "TENURE_STABLE"
+  }
+ },
+ "window": {
+  "from": "2025-10-15",
+  "series": 1045,
+  "sides": 2090,
+  "to": "2026-10-14"
+ }
+}

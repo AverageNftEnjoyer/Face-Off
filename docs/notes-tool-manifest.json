@@ -1,0 +1,552 @@
+{
+ "name": "faceoff_get_notes",
+ "version": "1.0.0",
+ "note_schema": 1,
+ "description": "Deterministic context notes for a CS2 matchup or a team, from the Face-Off data bundle: rest and schedule (short rest, heavy schedule, weeks without an official), roster tenure (days with the current five, new players), win/loss streaks, the last head-to-head, and, where the web fetcher has recorded them, player form (HLTV rating over the last 30 days vs the player's baseline), stand-ins and roster rumors. Call it whenever you need to explain or add colour to a matchup ('why is Aurora favored?', 'anything I should know about this series?', 'what is going on with NiP lately?'), next to the prediction tool for the numbers. Every note is computed by fixed rules from dated data, never written by a model: quote its headline or values and cite source_url when it has one. Notes are context only. They are NOT inputs to the win probability (counted_in_win_probability is always false), so never say a note moved the prediction. ok=true with an empty notes list means the rules ran and nothing notable fired; ok=false is an error to report or fix (for example retry with a name from close_matches).",
+ "when_to_call": [
+  "Before or while explaining a prediction for a specific series.",
+  "When asked what is notable about a team right now (team_notes).",
+  "For a past series, pass asof_date = the match day: the notes then use only what was known before it was played."
+ ],
+ "invocation": {
+  "python": "import os, sys, json; os.chdir('<repo root>'); sys.path.insert(0, '.'); import paths, notes; bundle = json.load(open('viewer/data-bundle.json', encoding='utf-8')); notes.get_notes('Aurora Gaming', 'Ninjas in Pyjamas', 'latest', bundle, match_day='2026-10-15', event='Thunderpick World Championship 2026')",
+  "python_note": "Run from the repo root. 'import paths' puts model/ (where notes.py lives) on sys.path.",
+  "cli": "python model/notes.py --a \"Aurora Gaming\" --b \"Ninjas in Pyjamas\" --date latest --match-day 2026-10-15 --event \"Thunderpick World Championship 2026\"",
+  "cli_team": "python model/notes.py --a \"Aurora Gaming\" --team-only --date latest [--match-day D] [--event E]",
+  "cli_exit_codes": "0 ok, 1 error object printed, 2 no bundle file",
+  "batch_python": "notes.get_notes_batch([{'team_a': 'Aurora Gaming', 'team_b': 'Ninjas in Pyjamas', 'match_day': '2026-10-15'}, {'team_a': '9z', 'team_b': 'Falcons'}], 'latest', bundle)",
+  "bundle": "viewer/data-bundle.json (build it with: python viewer/build_bundle.py viewer/data-bundle.json). Only bundle['notes'] is read.",
+  "cli_batch": "No CLI batch form; use get_notes_batch from Python."
+ },
+ "functions": {
+  "get_notes": {
+   "description": "Notes for one matchup: team A's notes, the head-to-head notes and team B's notes, ranked by a fixed importance order and capped at 6.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "team_a",
+     "team_b",
+     "asof_date",
+     "bundle"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "team_a": {
+      "type": "string",
+      "description": "Team name as in the bundle. Case-insensitive; short names such as 'NiP', '9z' or 'Aurora' resolve to the full name. An unknown name returns UNKNOWN_TEAM with close_matches."
+     },
+     "team_b": {
+      "type": "string"
+     },
+     "asof_date": {
+      "type": "string",
+      "description": "Information cutoff. 'YYYY-MM-DD' = start of that day UTC (use the match day for a past series); 'YYYY-MM-DDTHH:MM:SSZ' = that instant; 'latest' = everything the bundle knows now."
+     },
+     "bundle": {
+      "type": "object",
+      "description": "The parsed viewer/data-bundle.json."
+     },
+     "match_day": {
+      "type": "string",
+      "format": "date",
+      "description": "Day the series is played; rest, schedule and head-to-head 'days ago' count to it. Default: the asof day. It never widens what is visible."
+     },
+     "event": {
+      "type": "string",
+      "description": "The series' event name; a SHORT_REST is not shown when the team's last series was at the same event."
+     }
+    }
+   },
+   "returns": "GetNotesResult or Error"
+  },
+  "get_notes_batch": {
+   "description": "get_notes for many matchups in one call (the bundle is indexed once). An invalid matchup gets an Error in its slot; the others still return.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "matchups",
+     "asof_date",
+     "bundle"
+    ],
+    "properties": {
+     "matchups": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": [
+        "team_a",
+        "team_b"
+       ],
+       "properties": {
+        "team_a": {
+         "type": "string"
+        },
+        "team_b": {
+         "type": "string"
+        },
+        "match_day": {
+         "type": "string"
+        },
+        "event": {
+         "type": "string"
+        },
+        "asof_date": {
+         "type": "string",
+         "description": "Overrides the batch asof_date for this matchup."
+        }
+       }
+      }
+     },
+     "asof_date": {
+      "type": "string"
+     },
+     "bundle": {
+      "type": "object"
+     }
+    }
+   },
+   "returns": "{tool, tool_version, note_schema, ok: true, results: [GetNotesResult | Error]}"
+  },
+  "team_notes": {
+   "description": "Team-scoped notes only (no opponent): schedule, tenure, streak, form, stand-ins, rumors; capped at 6.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "team",
+     "asof_date",
+     "bundle"
+    ],
+    "properties": {
+     "team": {
+      "type": "string"
+     },
+     "asof_date": {
+      "type": "string"
+     },
+     "bundle": {
+      "type": "object"
+     },
+     "match_day": {
+      "type": "string"
+     },
+     "event": {
+      "type": "string"
+     }
+    }
+   },
+   "returns": "GetNotesResult with 'team' in place of team_a / team_b"
+  }
+ },
+ "schemas": {
+  "Note": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "rule",
+    "scope",
+    "team_scope",
+    "kind",
+    "headline",
+    "evidence",
+    "values",
+    "source",
+    "source_url",
+    "observed_at",
+    "age_days",
+    "rank"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "description": "12-hex stable id of the note"
+    },
+    "rule": {
+     "type": "string",
+     "enum": [
+      "STAND_IN",
+      "SHORT_REST",
+      "COLD_REST",
+      "TENURE_NEW",
+      "NEW_ADDITION",
+      "REVENGE",
+      "HOT_PLAYER",
+      "COLD_PLAYER",
+      "STREAK",
+      "HEAVY_SCHEDULE",
+      "TENURE_STABLE",
+      "ROSTER_RUMOR"
+     ]
+    },
+    "scope": {
+     "type": "string",
+     "enum": [
+      "team",
+      "matchup"
+     ],
+     "description": "team: about one team whoever it plays; matchup: about this pairing (head-to-head)"
+    },
+    "team_scope": {
+     "type": "string",
+     "description": "The team the note is about"
+    },
+    "kind": {
+     "type": "string",
+     "enum": [
+      "fact",
+      "rumor"
+     ],
+     "description": "rumor = an unconfirmed roster report; never restate it as fact"
+    },
+    "headline": {
+     "type": "string",
+     "description": "One plain line from a fixed template"
+    },
+    "evidence": {
+     "type": "string",
+     "description": "The numbers behind the headline, separated by ' · '"
+    },
+    "values": {
+     "type": "object",
+     "description": "The same numbers, machine-readable: quote these"
+    },
+    "source": {
+     "type": "string",
+     "description": "'matches' (results data), 'lineups' (lineup data) or a web source label such as 'HLTV'"
+    },
+    "source_url": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Web facts only; cite it when you use the note"
+    },
+    "observed_at": {
+     "type": "string",
+     "format": "date",
+     "description": "Date of the newest information the note rests on"
+    },
+    "age_days": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "Days from observed_at to the asof day"
+    },
+    "rank": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 12,
+     "description": "Position of the rule in the fixed importance order, 1 = most important"
+    }
+   }
+  },
+  "GetNotesResult": {
+   "type": "object",
+   "required": [
+    "tool",
+    "tool_version",
+    "note_schema",
+    "ok",
+    "notes",
+    "omitted",
+    "freshness",
+    "counted_in_win_probability"
+   ],
+   "properties": {
+    "tool": {
+     "const": "faceoff_get_notes"
+    },
+    "tool_version": {
+     "type": "string"
+    },
+    "note_schema": {
+     "const": 1
+    },
+    "ok": {
+     "const": true
+    },
+    "team_a": {
+     "type": "string",
+     "description": "The canonical name the input resolved to"
+    },
+    "team_b": {
+     "type": "string"
+    },
+    "asof_date": {
+     "type": "string"
+    },
+    "match_day": {
+     "type": "string"
+    },
+    "event": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "notes": {
+     "type": "array",
+     "maxItems": 6,
+     "items": {
+      "$ref": "#/schemas/Note"
+     }
+    },
+    "omitted": {
+     "type": "integer",
+     "description": "Notes that fired but fell outside the cap"
+    },
+    "freshness": {
+     "type": "object",
+     "description": "Freshness of the WEB facts (form, stand-ins, rumors) for these teams. stale is true when there are none or the oldest is older than stale_after_days. Notes from results and lineups do not depend on it.",
+     "properties": {
+      "as_of": {
+       "type": "string"
+      },
+      "facts_updated_at": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "oldest_fact_age_days": {
+       "type": [
+        "integer",
+        "null"
+       ]
+      },
+      "stale": {
+       "type": "boolean"
+      },
+      "stale_after_days": {
+       "type": "integer"
+      },
+      "scope_teams": {
+       "type": "integer"
+      },
+      "teams_with_no_facts": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "facts_live": {
+       "type": "integer"
+      }
+     }
+    },
+    "counted_in_win_probability": {
+     "const": false
+    },
+    "team": {
+     "type": "string",
+     "description": "team_notes only: the resolved team (in place of team_a / team_b)"
+    }
+   }
+  },
+  "Error": {
+   "type": "object",
+   "required": [
+    "tool",
+    "tool_version",
+    "note_schema",
+    "ok",
+    "error"
+   ],
+   "properties": {
+    "ok": {
+     "const": false
+    },
+    "error": {
+     "type": "object",
+     "required": [
+      "code",
+      "message"
+     ],
+     "properties": {
+      "code": {
+       "enum": [
+        "UNKNOWN_TEAM",
+        "SAME_TEAM",
+        "BAD_DATE",
+        "MISSING_FIELDS",
+        "BAD_SCHEMA"
+       ]
+      },
+      "message": {
+       "type": "string"
+      },
+      "team": {
+       "type": "string"
+      },
+      "close_matches": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "UNKNOWN_TEAM: up to 5 bundle names to retry with"
+      },
+      "field": {
+       "type": "string",
+       "description": "BAD_DATE: the parameter at fault"
+      },
+      "value": {},
+      "fields": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "description": "MISSING_FIELDS: dotted bundle paths that are absent (rebuild the bundle)"
+      },
+      "found": {
+       "type": "object",
+       "description": "BAD_SCHEMA: the bundle's notes.schema"
+      },
+      "supported": {
+       "type": "object"
+      }
+     }
+    }
+   }
+  }
+ },
+ "rules": {
+  "order": "STAND_IN, SHORT_REST, COLD_REST, TENURE_NEW, NEW_ADDITION, REVENGE, HOT_PLAYER, COLD_PLAYER, STREAK, HEAVY_SCHEDULE, TENURE_STABLE, ROSTER_RUMOR",
+  "STAND_IN": "A sourced stand-in is active for the team.",
+  "SHORT_REST": "Last official at most 4 days before the match, at a different event.",
+  "COLD_REST": "No official for at least 21 days.",
+  "TENURE_NEW": "At least 2 of the current five arrived in the last 90 days.",
+  "NEW_ADDITION": "Exactly one arrival in the last 90 days, at most 45 days ago.",
+  "REVENGE": "The team lost the pair's last meeting, at most 90 days before the match.",
+  "HOT_PLAYER": "HLTV rating over the last 30 days at least 0.10 above the player's baseline, at least 5 maps, observed within the last 14 days.",
+  "COLD_PLAYER": "The same, at least 0.10 below the baseline.",
+  "STREAK": "At least 4 straight officials won or lost.",
+  "HEAVY_SCHEDULE": "At least 8 officials in the 14 days before the match.",
+  "TENURE_STABLE": "The current five together at least 180 days, no arrival in the last 90 days.",
+  "ROSTER_RUMOR": "A sourced report under 90 days old linking a player with a move. Always kind = rumor."
+ },
+ "versioning": "tool_version is semver: a breaking change to the output or the note schema bumps the major (and note_schema); new optional fields bump the minor. Check tool_version and note_schema before parsing.",
+ "error_example": {
+  "tool": "faceoff_get_notes",
+  "tool_version": "1.0.0",
+  "note_schema": 1,
+  "ok": false,
+  "error": {
+   "code": "UNKNOWN_TEAM",
+   "message": "No team named 'Aurorra' in the bundle.",
+   "team": "Aurorra",
+   "close_matches": [
+    "Aurora Gaming"
+   ]
+  }
+ },
+ "worked_example": {
+  "call": "get_notes('Aurora Gaming', 'Ninjas in Pyjamas', '2026-10-15', bundle, match_day='2026-10-15', event='Thunderpick World Championship 2026')",
+  "result": {
+   "tool": "faceoff_get_notes",
+   "tool_version": "1.0.0",
+   "note_schema": 1,
+   "ok": true,
+   "team_a": "Aurora Gaming",
+   "team_b": "Ninjas in Pyjamas",
+   "asof_date": "2026-10-15",
+   "match_day": "2026-10-15",
+   "event": "Thunderpick World Championship 2026",
+   "notes": [
+    {
+     "id": "c289e627583d",
+     "rule": "TENURE_NEW",
+     "scope": "team",
+     "team_scope": "Ninjas in Pyjamas",
+     "kind": "fact",
+     "headline": "New roster: 2 players joined in the last 90 days",
+     "evidence": "Joined: adamb (2026-09-14), Krimbo (2026-09-17) · lineups through 2026-09-28",
+     "values": {
+      "n": 2,
+      "players": [
+       "adamb",
+       "Krimbo"
+      ],
+      "joined": [
+       "2026-09-14",
+       "2026-09-17"
+      ],
+      "lineups_thru": "2026-09-28"
+     },
+     "source": "lineups",
+     "source_url": null,
+     "observed_at": "2026-09-28",
+     "age_days": 17,
+     "rank": 4
+    },
+    {
+     "id": "fe514d15fd20",
+     "rule": "HEAVY_SCHEDULE",
+     "scope": "team",
+     "team_scope": "Aurora Gaming",
+     "kind": "fact",
+     "headline": "Heavy schedule: 8 officials in 14 days",
+     "evidence": "8 series from 2026-10-03 to 2026-10-14",
+     "values": {
+      "last_date": "2026-10-14",
+      "event": "Thunderpick World Championship 2026",
+      "stage": "Group Stage",
+      "days": 1,
+      "n14": 8,
+      "event_last_series": "2026-10-14"
+     },
+     "source": "matches",
+     "source_url": null,
+     "observed_at": "2026-10-14",
+     "age_days": 1,
+     "rank": 10
+    }
+   ],
+   "omitted": 0,
+   "freshness": {
+    "as_of": "2026-10-15",
+    "facts_updated_at": null,
+    "oldest_fact_age_days": null,
+    "stale": true,
+    "stale_after_days": 7,
+    "scope_teams": 2,
+    "teams_with_no_facts": [
+     "Aurora Gaming",
+     "Ninjas in Pyjamas"
+    ],
+    "facts_live": 0
+   },
+   "counted_in_win_probability": false
+  },
+  "web_fact_note_example": {
+   "id": "(12 hex)",
+   "rule": "HOT_PLAYER",
+   "scope": "team",
+   "team_scope": "Aurora Gaming",
+   "kind": "fact",
+   "headline": "woxic: 1.24 rating over the last 30 days, +0.11 vs baseline (playing hot)",
+   "evidence": "1.24 over 12 maps · baseline 1.13 (last 12 months) · HLTV",
+   "values": {
+    "player": "woxic",
+    "rating_last30": 1.24,
+    "rating_baseline": 1.13,
+    "baseline": "last12m",
+    "delta": 0.11,
+    "maps_last30": 12
+   },
+   "source": "HLTV",
+   "source_url": "https://www.hltv.org/stats/players/...",
+   "observed_at": "2026-10-13",
+   "age_days": 2,
+   "rank": 7
+  },
+  "narration_example": "Context, not part of the win chance: Aurora have played 8 officials in the last 14 days (Oct 3 to Oct 14), and two of NiP's five (adamb, Krimbo) joined in mid-September. Both come from results and lineup data; neither moves the model's number."
+ },
+ "usage_notes": [
+  "'latest' resolves to the bundle's notes.live_cutoff: the start of the day after the last result in the data (or just after the last web-fact run, if later). 'Days ago' counts to match_day, which defaults to that day; pass match_day for an upcoming series.",
+  "Pass event for a series inside a running tournament: without it, a team that played at the same event yesterday gets a SHORT_REST note.",
+  "team_scope is the team a sentence is about: for REVENGE (scope 'matchup') it is the team that lost the last meeting; for STREAK the team on the streak.",
+  "Names resolve exactly, then case-insensitively, then through the Liquipedia short-name table (e.g. nip, 9z, aurora, falcons, liquid); anything else is UNKNOWN_TEAM with close_matches (difflib). The resolved names are echoed in team_a / team_b.",
+  "Text fields contain the UTF-8 '·' separator: set PYTHONIOENCODING=utf-8 on a Windows console, or serialise with ensure_ascii=True.",
+  "values keys differ per rule; read them from the note itself (worked_example shows TENURE_NEW, HEAVY_SCHEDULE and HOT_PLAYER).",
+  "Narrating: say first that notes are context, not part of the win chance; present a note that cuts against the team asked about as such; label rumors as unconfirmed; mention when freshness.stale means no current web facts."
+ ]
+}

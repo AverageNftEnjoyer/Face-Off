@@ -92,7 +92,9 @@ and the layout above.
           │
           ▼  commit data/ + push  ─►  Vercel build (vercel.json)
  viewer/build_bundle.py ─► viewer/data-bundle.json  (Elo, form, pools, H2H,
-          │                                          predictions, veto, track record)
+          │                                          predictions, veto, track record,
+          │                                          notes: viewer/notes_data.py + model/notes.py
+          │                                          over data/notes_facts.json, display only)
           ▼
  viewer/build_viewer.py ─► public/index.html + public/img/   (renders only from the bundle)
  viewer/write_status.py ─► public/status.json                (result alerts feed)
@@ -119,6 +121,9 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | `model/backtest.py` | Point-in-time history: loads `matches.json` / `matches_lower.json` / roster events, folds series Elo day by day (`Timeline`, `build_dataset`), and runs the train/test backtest. Shared by the viewer, gates and evaluation. |
 | `model/lineup_features.py` | Point-in-time lineup features from `data/lineups.json` + manual `data/roster_overrides.json`. |
 | `model/roster_flags.py` | Display-only "treat with caution" roster flags shown beside predictions (not a model input). |
+| `model/tenure.py` | Point-in-time roster tenure (days with the current five, join dates) from dated lineups + squad histories. Display only: tenure failed its held-out test, so it is not a model input; the notes read it. |
+| `model/notes.py` | Matchup notes engine and tool: deterministic rules (rest, schedule, tenure, streak, head-to-head, form, stand-ins, rumours) over the bundle's `notes` section; `get_notes` / `get_notes_batch` / `team_notes` + CLI (`docs/notes-tool-manifest.json`). Pure, no I/O; never read by the predictor. |
+| `model/notes_facts.py` | Fact schema v1 of the notes' web facts: validation, ids, merge and point-in-time selection (shared by the fetcher and the engine). |
 
 ### `evaluation/`: is the model honest?
 
@@ -126,7 +131,8 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 |---|---|
 | `evaluation/walkforward.py` | Walk-forward fit and evaluation of factor weights; writes `data/walkforward_report.json` (the site's track record). |
 | `evaluation/fit_weights.py` | Fits factor multipliers on the train split. |
-| `evaluation/leakage_check.py` | Proves every feature is strictly pre-match (scramble / truncate tests with canaries). |
+| `evaluation/leakage_check.py` | Proves every feature is strictly pre-match (scramble / truncate tests with canaries); test 8 covers the matchup notes. |
+| `evaluation/notes_eval.py` | Fire rate of each matchup-notes rule over the last 12 months and its threshold sweep (informational, not a signal test); writes `data/notes_eval_report.json`. |
 
 ### `collectors/`: sources to `data/`
 
@@ -139,6 +145,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | `collectors/lineups.py` | Per-match five-man lineups from Valve's regional-standings repository. |
 | `collectors/valve_results.py` | Second, independent results source (Valve rows) used only as a cross-check. |
 | `collectors/vrs.py` | Valve Regional Standings: `data/vrs.json`, `data/vrs_status.json`; `--check` fails when stale. |
+| `collectors/notes_fetch.py` | Web facts for the matchup notes (player form, stand-ins, roster rumours) for teams playing in the next 7 days, via the OpenAI Responses API (HLTV page + LLM extractor, else `web_search`); validated with `notes_facts`, appended to `data/notes_facts.json`; per-run manifest + log; call cap, cache-first, `--dry-run` on recorded fixtures (`tests/fixtures/notes_fetch/`). Display context only. |
 
 ### `pipeline/`: scheduled jobs
 
@@ -165,6 +172,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | File | Role |
 |---|---|
 | `viewer/build_bundle.py` | Emits `viewer/data-bundle.json`, the single versioned derived-data bundle. |
+| `viewer/notes_data.py` | The bundle's `notes` section: engine inputs from `data/`, cleaned web facts, freshness, pre-rendered team and match notes; `page_payload` is the page's `NOTES`. |
 | `viewer/build_viewer.py` | Computes everything from the data (`build_data`) and renders the static page from `template.html` + the bundle. |
 | `viewer/events.py` | Tournament discovery and parsing from cached pages (infobox, format, brackets, schedule). |
 | `viewer/fetch_assets.py` | Logos, map art, flags and team-page roster data from Liquipedia into `viewer/assets.json`. |
@@ -202,8 +210,13 @@ this document and the layout in step.
 | `backtest_report.json`, `walkforward_report.json` | `backtest`, `walkforward` | Read by the viewer's track record. |
 | `veto_fixtures.json` | by hand | Test fixtures for the veto engine. |
 | `faceoff.db` | `build_db` | Read-only SQLite copy. |
+| `notes_eval_report.json` | `evaluation/notes_eval.py` | Notes rule fire rates + threshold sweeps (informational). |
+| `notes_facts.json` | `collectors/notes_fetch.py` | Web facts for the matchup notes (fact schema v1, append-only, 400-day prune). Never read by the model. |
+| `notes_manifest.json` | `collectors/notes_fetch.py` | Latest fetch run: scope, calls, tokens, estimated cost, rejected facts, failures, the `checked` ledger (cache-first). |
+| `notes_manifest_log.jsonl` | `collectors/notes_fetch.py` | One compact summary line per fetch run (history). |
 | `SOURCES.md` | by hand | Where every record comes from, and the terms followed. |
 | `raw/pages/`, `raw/media/`, `raw/*.txt` | `lpfetch`, `fetch_assets`, `daily_refresh` | Fetch cache, images, tracked page titles. |
+| `raw/notes_cache/` | `notes_fetch` | 12 h page cache of the notes scrape path (gitignored; kept between CI runs by `actions/cache`). |
 
 Generated and gitignored: `viewer/data-bundle.json`, `public/`, roster and
 fill-in candidates, research reports.
@@ -216,10 +229,12 @@ fill-in candidates, research reports.
 |---|---|---|
 | `daily-refresh.yml` | every 6 h + nightly | `pipeline/daily_refresh.py` → `checks/data_gates.py` → bundle → tests → page build check → `pipeline/build_db.py` → commit + push → roster-review issue → `--check-status` → `collectors/vrs.py --check` |
 | `live-refresh.yml` | every 10 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
+| `notes-facts.yml` | every 6 h (:47, offset from the refresh) | bundle (for the 7-day scope) → `collectors/notes_fetch.py` (`OPENAI_API_KEY` secret) → tests → commit the three `notes_*` data files + push; issue on failure |
 | `validate.yml` | every 30 min | `checks/validate_freshness.py`; restarts the live refresh when behind |
 
 Both refresh workflows share one concurrency group, so two runs never write
-the cache together. Vercel rebuilds on every push using `vercel.json`'s
+the cache together (`notes-facts.yml` has its own: it writes only the
+`data/notes_*` files). Vercel rebuilds on every push using `vercel.json`'s
 `buildCommand`; nothing needs installing (stdlib only).
 
 ## Running locally
@@ -238,6 +253,13 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-15**: Matchup notes (display only, never a model input): rule
+  engine + tool `model/notes.py` (contracts `docs/notes-contracts.md`, manifest
+  `docs/notes-tool-manifest.json`), fact schema `model/notes_facts.py`, tenure
+  ported to `model/tenure.py`, bundle section `notes` (`viewer/notes_data.py`,
+  page `NOTES`), web-fact fetcher `collectors/notes_fetch.py` + `notes-facts.yml`
+  (`data/notes_facts.json`, manifests), `evaluation/notes_eval.py`, leakage test 8.
+  Match pages get a "Matchup context" panel, team pages a "Team context" strip.
 - **2026-10-14**: Repository reorganised into role folders: root-level model
   code → `model/` and `evaluation/`; code that lived in `data/` → `collectors/`;
   `scripts/` split into `pipeline/` and `checks/`; background originals →
