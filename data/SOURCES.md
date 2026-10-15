@@ -262,7 +262,12 @@ by the predictor, the backtest or any weight fit, and never by
   a grounding check rejects any summary containing a number that is not in
   that input. Stored in `notes_summaries.json` with the model name and date,
   labelled on the page as AI-written; budget `FACEOFF_SUMMARY_BUDGET_USD`
-  (default $5.00 a month), spend in `notes_summary_log.jsonl`.
+  (default $5.00 a month), spend in `notes_summary_log.jsonl`. The same step
+  writes post-match recaps for matches finished in the last 3 days, from the
+  match data (map scores, halves, the model's pre-match call and simulated
+  veto); any number not in that data, or a banned cliché, rejects the recap.
+  Per-player statistics are not collected, so recaps say so rather than name
+  standouts.
 
 ## 3. Not used
 - HLTV: not scraped for results (no official API; bot protection). Its result

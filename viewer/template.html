@@ -2519,12 +2519,23 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
 }
 @keyframes nxShim { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 .tnx { margin-top: 1rem; }
-.fx-whybox { margin-bottom: 1rem; }
+.fx-wrap { display: grid; gap: .65rem; }
+.fx-top { align-items: stretch; }
+.fx-teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; align-items: stretch; }
+@media (max-width: 760px) { .fx-teams { grid-template-columns: minmax(0, 1fr); } }
+.fx-story { align-content: start; }
+.fx-part { display: grid; gap: .45rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+.fx-part:first-of-type { padding-top: 0; border-top: 0; }
+.fx-h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: .45rem; margin: 0; font-stretch: 62.5%; font-weight: 700; font-size: 1.02rem;
+  text-transform: uppercase; letter-spacing: .02em; color: var(--dim); }
+.fx-h3 span { color: var(--text); }
+.fx-h3 em { font-style: normal; font-stretch: 87.5%; font-size: .66rem; letter-spacing: .08em; color: var(--acc);
+  border: 1px solid color-mix(in srgb, var(--acc) 45%, transparent); border-radius: 4px; padding: .05rem .35rem; }
 .fx-why-h { font-weight: 600; font-size: 1rem; color: var(--text); }
-.fx-why { font-size: .92rem; line-height: 1.6; color: var(--text); max-width: 80ch; }
+.fx-why { font-size: .88rem; line-height: 1.6; color: var(--text); }
 .fx-src { font-size: .76rem; color: var(--dim); }
-.fx-foot { margin-top: .7rem; }
-.fx-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.fx-foot { padding-top: .6rem; border-top: 1px solid var(--line); }
+.fx-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr) minmax(0, 1fr); gap: .65rem; align-items: stretch; }
 @media (max-width: 1100px) { .fx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fx-grid > :nth-child(2) { grid-column: 1 / -1; grid-row: 2; } }
 @media (max-width: 760px) { .fx-grid { grid-template-columns: minmax(0, 1fr); } .fx-grid > :nth-child(2) { grid-column: auto; grid-row: auto; } }
 .fx-a { border-top: 2px solid var(--ct); } .fx-b { border-top: 2px solid var(--t); }
@@ -3903,7 +3914,7 @@ function viewHome() {
     pred = decode(DATA.pairs[`${desk.a}|${desk.b}`]);
     o = { rf: rfTool(null, desk.a, desk.b) };
   }
-  o.notes = whyCard(pred, desk.a, desk.b, isFeat ? m.id : null, desk.bo) + (isFeat ? matchNotes(m, EV_BY[m.ev]) : pairNotes(desk.a, desk.b));
+  o.notes = isFeat ? matchNotes(m, EV_BY[m.ev], pred, desk.bo) : pairNotes(desk.a, desk.b, null, pred, desk.bo);
   const key = `${desk.a}|${desk.b}`;
   if (desk.key !== key) { desk.key = key; desk.spot = null; desk.tab = "overview"; }
   PAIR = [desk.a, desk.b];
@@ -4703,7 +4714,7 @@ function evMatchup(e) {
     <div class="picker">${list.map(n => pickTile(n, `data-epick="${esc(n)}" data-ev="${e.slug}" ${n === s.a ? 'data-slot="a"' : n === s.b ? 'data-slot="b"' : ""} aria-pressed="${n === s.a || n === s.b}"`)).join("")}</div>
     <div class="slots"><span><span class="ct">${esc(s.a)}</span> bans first in the simulated veto</span><button type="button" class="btn" data-eswap="${e.slug}">Swap teams</button></div>
   </section>
-  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), notes: whyCard(pred, s.a, s.b, null, 3) + pairNotes(s.a, s.b, e), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
+  ${matchDesk(pred, s.a, s.b, { ev: e, rf: rfTool(e, s.a, s.b), notes: pairNotes(s.a, s.b, e, pred, 3), label: e.status === "finished" ? "Model's call before the event" : "Model's call today",
     ctx: `<div class="ctx"><span class="ev"><span style="display:grid"><b>Hypothetical series</b><span>${asof}</span></span></span></div>` })}`;
 }
 
@@ -4761,45 +4772,140 @@ function notesSkeleton(title = "The facts") {
     <div class="fx-sk" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>`;
 }
 const fxMsg = (title, html) => `<section class="ho-p fx-box">${fxHead(esc(title), "")}<p class="fx-msg">${html}</p></section>`;
-/* "Why the model picks X", at the top of the Notes tab. An AI-written summary
-   (collectors/notes_summarize.py, NOTES.sum, scheduled matches only) is shown while the model's
-   call still matches the one it was written from (same favourite, within 5 points);
-   otherwise a rule-based summary from the same factor numbers. Either way it explains the
-   counted factors; notes are context and are labelled so. */
+/* "Why the model picks X", at the top of the Notes tab: plain words, no figures (the figures are
+   in the panels around it). Part one is the model's own reasons (the counted factors); part two is
+   everything else a fan would weigh (rest, schedule, streaks, roster stability, the map veto, past
+   meetings, player form), labelled as context that is not in the number. An AI-written version
+   (collectors/notes_summarize.py, NOTES.sum, scheduled matches) replaces it while the model's call
+   still matches the one it was written from (same favourite, within 5 points). */
 const WHY_DRIFT = 0.05;
-function whyRule(pred, a, b, bo) {
+const WHY_SIZE = pp => pp < 1 ? "slightly" : pp < 4 ? "modestly" : pp < 8 ? "clearly" : "strongly";
+function whyModel(pred, a, b, bo) {
   const F = pFor(pred, bo), fav = F.p >= 0.5 ? a : b, dog = fav === a ? b : a;
-  const pf = fav === a ? F.p : 1 - F.p, band = fav === a ? F.band : [1 - F.band[1], 1 - F.band[0]];
-  const pc = x => `${(x * 100).toFixed(1)}%`;
-  const rows = pred.factors.map(f => ({ f, ev: pred.fx ? factFor(f.factor, pred.fx, a, b) : { kind: "data", text: "" } }))
-    .filter(x => x.ev.kind === "data" && Math.abs(x.f.pp) >= 0.05)
-    .map(x => ({ name: (LABELS[x.f.factor] || [x.f.factor])[0], pp: x.f.pp, toward: x.f.pp > 0 ? a : b, ev: x.ev.text }))
-    .sort((x, y) => Math.abs(y.pp) - Math.abs(x.pp));
-  const pro = rows.filter(r => r.toward === fav).slice(0, 3), con = rows.filter(r => r.toward === dog).slice(0, 2);
-  const item = r => `${r.name.toLowerCase()} (+${Math.abs(r.pp).toFixed(1)} points${r.ev ? `: ${r.ev}` : ""})`;
-  const close = pf < 0.55 ? "This is close to a coin flip. " : pf >= 0.7 ? "That is a clear lean. " : "";
-  let t = `The model makes ${fav} the favourite at ${pc(pf)} (likely range ${pc(band[0])} to ${pc(band[1])}). ${close}`;
-  t += pro.length ? `What puts them ahead: ${pro.map(item).join("; ")}. ` : `No single factor stands out; the edge is small. `;
-  if (con.length) t += `Pulling the other way for ${dog}: ${con.map(item).join("; ")}. `;
-  if (pred.warn && pred.warn.length) t += `Caution: ${pred.warn.map(w => w.split(/[:(]/)[0].trim().toLowerCase()).join(", ")}.`;
-  return { fav, text: t.trim() };
+  const pf = fav === a ? F.p : 1 - F.p, width = F.band[1] - F.band[0];
+  const lean = pf < 0.53 ? `sees this as a coin flip, with only the faintest lean toward ${fav}`
+    : pf < 0.58 ? `has ${fav} as a slight favourite` : pf < 0.68 ? `has ${fav} as the favourite`
+    : pf < 0.8 ? `has ${fav} as a clear favourite` : `has ${fav} as a strong favourite`;
+  const sure = width > 0.35 ? "but it is unsure: the range of likely outcomes is wide"
+    : width > 0.22 ? "with moderate confidence" : "and is fairly confident in that read";
+  const say = {
+    base_strength: t => `${t} are the stronger team on rating`,
+    form_30d: t => `${t} have done better than their rating expects over the last month`,
+    form_last5: t => `${t} have the better run over their last five series`,
+    head_to_head: t => `${t} have had the better of their meetings over the past year`,
+    roster: t => `${t === a ? b : a} are dealing with a stand-in or a missing in-game leader`,
+  };
+  const rows = pred.factors.filter(f => say[f.factor] && Math.abs(f.pp) >= 0.05 && (!pred.fx || factFor(f.factor, pred.fx, a, b).kind === "data"))
+    .map(f => ({ toward: f.pp > 0 ? a : b, txt: `${say[f.factor](f.pp > 0 ? a : b)} (${WHY_SIZE(Math.abs(f.pp))} in their favour)`, pp: Math.abs(f.pp) }))
+    .sort((x, y) => y.pp - x.pp);
+  const pro = rows.filter(r => r.toward === fav), con = rows.filter(r => r.toward === dog);
+  let t = `The model ${lean}, ${sure}. `;
+  t += pro.length ? `In ${fav}'s favour: ${pro.map(r => r.txt).join("; ")}. ` : `No single factor pushes hard for ${fav}; the edge is small. `;
+  if (con.length) t += `For ${dog}: ${con.map(r => r.txt).join("; ")}. `;
+  if (pred.warn && pred.warn.some(w => /VOLATIL/i.test(w))) t += `Recent results have strayed from what the ratings expect, so an upset is more likely than usual. `;
+  return { fav, dog, text: t.trim() };
 }
-function whyCard(pred, a, b, mid, bo = 3) {
+// everything else, from the fact sheet and the simulated veto: context, not counted
+function whyContext(pred, a, b, sheet) {
+  const out = [];
+  if (pred && pred.maps && pred.map_p) {
+    const favA = pred.map_p.filter(x => x > 0.55).length, favB = pred.map_p.filter(x => x < 0.45).length;
+    out.push(favA > favB ? `the simulated veto lands mostly on maps that suit ${a}` : favB > favA ? `the simulated veto lands mostly on maps that suit ${b}` : `the simulated veto leaves the maps fairly even`);
+  }
+  if (sheet) for (const [t, sh] of [[a, sheet.a], [b, sheet.b]]) {
+    if (!sh) continue;
+    const L = sh.last, f = sh.form, r = sh.roster;
+    if (L && L.days <= 1) out.push(`${t} played just a day ago`);
+    else if (L && L.days <= 4) out.push(`${t} have had a short turnaround since their last match`);
+    else if (L && L.days >= 21) out.push(`${t} have not played an official match in weeks and may be rusty`);
+    if (sh.load && sh.load.d14 >= 8) out.push(`${t} are on a heavy schedule`);
+    if (f && f.streak.n >= 3) out.push(`${t} are on a ${f.streak.result === "W" ? "winning" : "losing"} run`);
+    if (r && r.days_together != null) {
+      if (r.days_together <= 45) out.push(`${t} are playing with a new five that has had little time together`);
+      else if (r.days_together >= 365) out.push(`${t}'s five has been together for over a year`);
+      else if (r.days_together >= 180) out.push(`${t} have a settled roster`);
+    }
+    if (r && r.stand_ins && r.stand_ins.length) out.push(`${t} fielded a stand-in in their latest lineup`);
+    for (const p of sh.players || []) {
+      if (p.delta >= 0.1) out.push(`${p.player} of ${t} is in strong individual form`);
+      else if (p.delta <= -0.1) out.push(`${p.player} of ${t} is in a cold spell`);
+    }
+  }
+  const h = sheet && sheet.h2h;
+  if (h && h.meetings) {
+    const wa = h.record[a], wb = h.record[b], last = h.recent[0];
+    out.push(wa === wb ? `across all their meetings in the data the record is even` : `across all their meetings in the data, ${wa > wb ? a : b} have the upper hand`);
+    if (last) out.push(`${last.winner} won the most recent one`);
+  } else if (h) out.push(`the two have not met before in the data`);
+  return out;
+}
+/* Post-match recap at the top of a finished match's Notes tab: the AI-written one
+   (collectors/notes_summarize.py, NOTES.recap; house style: cause first, map by map, the model
+   check, what's next) when there is one, else a rule-based recap from the same match data. */
+function recapRule(m, pred, a, b) {
+  const W = m.w1 > m.w2 ? a : b, L = W === a ? b : a, pc = x => `${(x * 100).toFixed(1)}%`;
+  const fav = pred.p >= 0.5 ? a : b, pf = Math.max(pred.p, 1 - pred.p), upset = fav !== W;
+  const exp = pred.maps || [], score = mp => mp.w === 1 ? `${mp.s1}-${mp.s2}` : `${mp.s2}-${mp.s1}`;
+  const side = mp => { const sd = mp.w === 1 ? mp.side1 : mp.side2; if (!sd) return null;
+    return sd.ct >= sd.t ? ["CT", sd.ct] : ["T", sd.t]; };
+  const maps = m.maps.filter(mp => mp.s1 != null);
+  const blow = maps.map(mp => ({ mp, d: Math.abs(mp.s1 - mp.s2) })).sort((x, y) => y.d - x.d)[0];
+  const off = maps.find(mp => !exp.includes(mp.map));
+  const winOf = mp => mp.w === 1 ? a : b;
+  let lede, offSaid = false;
+  if (upset && off && winOf(off) === W) offSaid = true, lede = `The veto went off script: ${off.map} was not one of the maps the model expected, and ${W} took it ${score(off)}.`;
+  else if (blow && blow.d >= 8) { const sd = side(blow.mp); lede = `${blow.mp.map} decided it: ${winOf(blow.mp)} won it ${score(blow.mp)}${sd ? `, built on a ${sd[1]}-round ${sd[0]} half` : ""}.`; }
+  else if (maps.some(mp => mp.ot)) lede = `It came down to overtime on ${maps.find(mp => mp.ot).map}.`;
+  else lede = `${W} won it without a blowout: every map stayed within a handful of rounds.`;
+  const per = maps.map(mp => { const sd = side(mp);
+    return `${mp.map}: ${winOf(mp)} ${score(mp)}${sd ? ` (${sd[1]} rounds on ${sd[0]})` : ""}${mp.ot ? ", after overtime" : ""}${exp.includes(mp.map) || offSaid ? "" : ", a map the simulated veto did not expect"}.`; }).join(" ");
+  const top = pred.factors.filter(f => Math.abs(f.pp) >= 0.05 && (pred.fx ? factFor(f.factor, pred.fx, a, b).kind === "data" : true))
+    .sort((x, y) => Math.abs(y.pp) - Math.abs(x.pp))[0];
+  const why = top ? `${(LABELS[top.factor] || [top.factor])[0].toLowerCase()}${pred.fx ? ` (${factFor(top.factor, pred.fx, a, b).text})` : ""}` : "";
+  // the sharpest miss: a map the winner took although the model gave them little chance on it
+  const pa = mp => (pred.map_p || [])[exp.indexOf(mp.map)];
+  const miss = maps.filter(mp => exp.includes(mp.map) && winOf(mp) === W && pa(mp) != null)
+    .map(mp => ({ mp, c: W === a ? pa(mp) : 1 - pa(mp) })).sort((x, y) => x.c - y.c)[0];
+  const check = upset
+    ? `The model had ${fav} at ${pc(pf)} and was wrong. Its call rested mainly on ${why || "the rating gap"}${miss && miss.c < 0.45 ? `; ${W} beat that on ${miss.mp.map}, where the model gave them ${pc(miss.c)}` : off && !offSaid ? `, and the series moved to ${off.map}, outside the veto it simulated` : ""}.`
+    : `The model had ${fav} at ${pc(pf)} and called it right${pf < 0.58 ? `, though it saw the matchup as close` : ""}.`;
+  return `${lede} ${per} ${check} Player statistics are not in our data, so this recap cannot name standouts.`;
+}
+function recapPart(m, pred, a, b) {
+  if (!m || !m.finished || !m.maps || !m.maps.length || m.w1 === m.w2 || !pred) return "";
+  const ai = NOTES && NOTES.recap && NOTES.recap[m.id];
+  const W = shortName(m.w1 > m.w2 ? a : b), sc = m.w1 > m.w2 ? `${m.w1}-${m.w2}` : `${m.w2}-${m.w1}`;
+  const body = ai
+    ? `<p class="fx-why-h">${esc(ai.headline)}</p><p class="fx-why">${esc(ai.summary)}</p>`
+    : `<p class="fx-why">${esc(recapRule(m, pred, a, b))}</p>`;
+  return `<div class="fx-part"><h3 class="fx-h3">Recap <span>${esc(W)} win ${sc}</span>${ai ? `<em>AI</em>` : ""}</h3>${body}
+    <p class="fx-src">${ai ? `Written by AI (${esc(ai.model)}) from the match data, ${esc(fmtDate(String(ai.generated_at).slice(0, 10)))}` : "From the match data and the model's pre-match call"}.</p></div>`;
+}
+function whyPart(pred, a, b, mid, bo = 3, sheet = null, played = false) {
   if (!pred) return "";
-  const r = whyRule(pred, a, b, bo);
+  const m = whyModel(pred, a, b, bo), ctx = whyContext(pred, a, b, sheet);
   const ai = mid && NOTES && NOTES.sum && NOTES.sum[mid];
-  const fresh = ai && bo === 3 && ai.favourite === r.fav && Math.abs(ai.win_prob_a - pred.p) <= WHY_DRIFT;
+  const fresh = ai && bo === 3 && ai.favourite === m.fav && Math.abs(ai.win_prob_a - pred.p) <= WHY_DRIFT;
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
   const body = fresh
-    ? `<p class="fx-why-h">${esc(ai.headline)}</p><p class="fx-why">${esc(ai.summary)}</p>
-       <p class="fx-src">Written by AI (${esc(ai.model)}) from the model's numbers on ${esc(fmtDate(String(ai.generated_at).slice(0, 10)))}; every number in it was checked against that data.</p>`
-    : `<p class="fx-why">${esc(r.text)}</p><p class="fx-src">Built from the model's factor numbers${bo !== 3 ? ` for a best of ${bo}` : ""}.</p>`;
-  return `<section class="ho-p fx-whybox">${fxHead(`Why the model picks ${esc(shortName(r.fav))}${fresh ? ` <small>AI summary</small>` : ""}`,
-    "The reasons counted in the win chance", HI.spark)}${body}</section>`;
+    ? `<p class="fx-why-h">${esc(ai.headline)}</p><p class="fx-why">${esc(ai.summary)}</p>`
+    : `<p class="fx-why">${esc(m.text)}</p>${ctx.length ? `<p class="fx-why"><b>Beyond the model:</b> ${esc(cap(ctx.join("; ")))}.</p>` : ""}`;
+  return `<div class="fx-part"><h3 class="fx-h3">${played ? "The model's read before the match" : "Why the model picks"} <span>${esc(shortName(m.fav))}</span>${fresh ? `<em>AI</em>` : ""}</h3>${body}
+    <p class="fx-src">${fresh ? `Written by AI (${esc(ai.model)}) from the model's data, ${esc(fmtDate(String(ai.generated_at).slice(0, 10)))}` : `From the model's factors and the facts${bo !== 3 ? ` for a best of ${bo}` : ""}`}.</p></div>`;
+}
+// the story panel: recap (finished matches) + the model's read, one card, divided by hairlines
+function storyPanel(w, a, b, sheet, at) {
+  if (!w) return "";
+  const played = !!(w.m && w.m.finished);
+  const parts = recapPart(w.m, w.pred, a, b) + whyPart(w.pred, a, b, w.mid, w.bo, sheet, played);
+  return `<section class="ho-p fx-story">${fxHead(played ? "Match story" : "The read", played ? "What happened, and what the model expected" : "Why the model leans the way it does", HI.spark)}
+    ${parts}<p class="fx-src fx-foot">${at ? `${at} · ` : ""}Everything beyond the model's counted factors is context only and not part of the win chance.</p></section>`;
 }
 /* Notes are generated on request: a panel renders as a slot (skeleton), the observer below
    asks api/notes_api.py once per canonical URL, and the answer is kept for this visit.
    Contract and caching: docs/notes-contracts.md section 4. */
 const NX_DONE = new Map();     // url -> {status, body} once answered
+const NX_WHY = new Map();      // url -> {pred, mid, bo}: what the "why" card above the facts needs
 const NX_WAIT = new Map();     // url -> in-flight promise
 function nxApi() {
   // ?notesapi=http://127.0.0.1:8787/api/notes_api points a local build at `python api/notes_api.py --serve`
@@ -4827,20 +4933,23 @@ function nxSlotHtml(kind, url, a, b) {
   return `<div class="nx-slot" data-nx-url="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">${notesSkeleton(nxTitle(kind))}</div>`;
 }
 // one panel: kind "match" (two teams) or "team"; p = the request parameters
-function nxSlot(kind, p, a, b) {
+function nxSlot(kind, p, a, b, why = null) {
   if (typeof NOTES === "undefined") return notesSkeleton(nxTitle(kind));
   if (!NOTES || !NOTES.v) return fxMsg(nxTitle(kind), "No facts available in this build.");
   const url = nxUrl(p), got = NX_DONE.get(url);
+  if (why) NX_WHY.set(url, why);
   return got ? nxRender(kind, got, a, b, url) : nxSlotHtml(kind, url, a, b);
 }
 function nxRender(kind, r, a, b, url) {
-  const body = r.body;
+  const body = r.body, w = kind === "match" && NX_WHY.get(url);
+  const whyOnly = w ? storyPanel(w, a, b, null, "") : "";
   if (!body || !r.status || r.status >= 500)
-    return fxMsg(nxTitle(kind), `Facts unavailable right now. <button type="button" class="btn" data-nx-retry="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">Retry</button>`);
+    return whyOnly + fxMsg(nxTitle(kind), `Facts unavailable right now. <button type="button" class="btn" data-nx-retry="${esc(url)}" data-nx-kind="${kind}" data-a="${esc(a)}" data-b="${esc(b || "")}">Retry</button>`);
   if (!body.ok && body.error && body.error.code === "STALE_VERSION")
     return fxMsg(nxTitle(kind), `This page is older than the latest data. <button type="button" class="btn" data-nx-reload="1">Reload</button>`);
   const ns = body.ok ? body.notes || [] : [];
-  return kind === "team" ? teamPanel(ns, a, body) : notesPanel(ns, a, b, `n${url}`, body);
+  if (kind === "team") return teamPanel(ns, a, body);
+  return notesPanel(ns, a, b, `n${url}`, body, w);
 }
 // fill every slot the page has just rendered (any view, any tab switch)
 function nxHydrate(root = document) {
@@ -4862,14 +4971,16 @@ document.addEventListener("click", e => {
   if (sec) sec.outerHTML = nxSlotHtml(b.dataset.nxKind, b.dataset.nxRetry, b.dataset.a, b.dataset.b);
 });
 // the match page: a played match as of its own day, an unplayed one as of now (rest counted to its day)
-function matchNotes(m, e) {
-  return nxSlot("match", { a: m.t1, b: m.t2, asof: m.finished ? m.day : "latest", day: m.day, event: e && e.name, limit: 24 }, m.t1, m.t2);
+function matchNotes(m, e, pred, bo = 3) {
+  return nxSlot("match", { a: m.t1, b: m.t2, asof: m.finished ? m.day : "latest", day: m.day, event: e && e.name, limit: 24 }, m.t1, m.t2,
+    pred ? { pred, mid: m.id, bo, m } : null);
 }
 // any two teams: today (home), or inside an event (a finished one as of its first day)
-function pairNotes(a, b, e) {
-  if (!e) return nxSlot("match", { a, b, asof: "latest", limit: 24 }, a, b);
+function pairNotes(a, b, e, pred, bo = 3) {
+  const why = pred ? { pred, mid: null, bo } : null;
+  if (!e) return nxSlot("match", { a, b, asof: "latest", limit: 24 }, a, b, why);
   const fin = e.status === "finished";
-  return nxSlot("match", { a, b, asof: fin ? e.start : "latest", day: fin ? e.start : null, event: e.name, limit: 24 }, a, b);
+  return nxSlot("match", { a, b, asof: fin ? e.start : "latest", day: fin ? e.start : null, event: e.name, limit: 24 }, a, b, why);
 }
 function teamNotes(name) {
   const nx = NOTES && NOTES.next && NOTES.next[name];
@@ -4908,13 +5019,14 @@ function nxH2h(h, a, b) {
     ? `<p class="fx-rec"><span class="ct">${esc(shortName(a))}</span> <b>${h.record[a]}–${h.record[b]}</b> <span class="t">${esc(shortName(b))}</span></p><ul class="fx-mt">${list}</ul>`
     : `<p class="fx-msg">They have not met in the data.</p>`}</section>`;
 }
-// the Notes tab: the facts for both sides and the meetings (the why card sits above it)
-function notesPanel(ns, a, b, ctx, ans) {
+// the Notes tab, laid out like Overview: the story across the top, then team A, the meetings, team B
+function notesPanel(ns, a, b, ctx, ans, w = null) {
   const sh = ans && ans.sheet;
-  if (!sh) return fxMsg("The facts", "No facts for this matchup yet.");
-  const at = ans.asof_resolved && ans.asof_date !== "latest" ? `As known before ${esc(fmtDate(String(ans.asof_resolved).slice(0, 10)))}` : `As of ${esc(fmtDate(String(ans.asof_resolved || DATA.as_of).slice(0, 10)))}`;
-  return `<div class="fx-grid">${nxSheet(sh.a, "a")}${nxH2h(sh.h2h, a, b)}${nxSheet(sh.b, "b")}</div>
-    <p class="fx-src fx-foot">${at} · from results and lineups${sh.a.players.length || sh.b.players.length ? " and HLTV" : ""}. Context only: none of this is counted in the win chance beyond the factors above.</p>`;
+  const at = ans && ans.asof_resolved && ans.asof_date !== "latest" ? `As known before ${esc(fmtDate(String(ans.asof_resolved).slice(0, 10)))}`
+    : `As of ${esc(fmtDate(String((ans && ans.asof_resolved) || DATA.as_of).slice(0, 10)))}`;
+  const story = storyPanel(w, a, b, sh, at);
+  if (!sh) return `<div class="fx-wrap">${story}${fxMsg("The facts", "No facts for this matchup yet.")}</div>`;
+  return `<div class="fx-wrap">${story}<div class="fx-grid">${nxSheet(sh.a, "a")}${nxH2h(sh.h2h, a, b)}${nxSheet(sh.b, "b")}</div></div>`;
 }
 // the team page: the same sheet in a site panel
 function teamPanel(ns, name, ans) {
@@ -4948,7 +5060,7 @@ function viewMatch(id) {
   const up = evMs.filter(x => !x.finished && x.day >= daysBefore(DATA.as_of, 1));
   const done = evMs.filter(x => x.finished && x.w1 !== x.w2).reverse().slice(0, 6);
   const navList = evMs.filter(x => x.pred), j = navList.findIndex(x => x.id === id);
-  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, notes: whyCard(pred, a, b, m.id, bo) + matchNotes(m, e),
+  const o = { ev: e, evName: shortEv(e.name), centre: m.finished || isLive(m) ? centreFor(m) : "", verdict: verdictFor(m, pred), live: isLive(m), rf: m.rf, notes: matchNotes(m, e, pred, bo),
     played: m.maps.length ? playedMaps(m) : "", nav: { prev: j > 0 ? navList[j - 1] : null, next: j >= 0 ? navList[j + 1] || null : null } };
   const field = evTeamsList(e).filter(t => T[t] && T[t].vrs).sort((x, y) => T[x].vrs.rank - T[y].vrs.rank);
   return `<nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><a href="#e-${e.slug}">${esc(e.name)}</a><span>/</span><span>${esc(m.stage)}</span></nav>

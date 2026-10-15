@@ -152,7 +152,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | `collectors/valve_results.py` | Second, independent results source (Valve rows) used only as a cross-check. |
 | `collectors/vrs.py` | Valve Regional Standings: `data/vrs.json`, `data/vrs_status.json`; `--check` fails when stale. |
 | `collectors/notes_fetch.py` | Web facts for the matchup notes (player form, stand-ins, roster rumours) for teams playing in the next 3 days: one OpenAI Responses API call per team (`web_search`, form + news in one strict JSON answer), at most once per 24 h; validated with `notes_facts`, appended to `data/notes_facts.json`; per-run manifest + log; call cap and a hard monthly budget (`FACEOFF_NOTES_BUDGET_USD`, summed from the log); `--dry-run` on recorded fixtures (`tests/fixtures/notes_fetch/`). Display context only. |
-| `collectors/notes_summarize.py` | AI-written "why the model picks X" summaries for scheduled matches, from the model's own numbers + the notes (no web search); grounding check rejects any number not in the input; rewrites only on changed input; own monthly budget (`FACEOFF_SUMMARY_BUDGET_USD`, default $5). Writes `data/notes_summaries.json`. |
+| `collectors/notes_summarize.py` | AI-written match writing: post-match recaps for matches finished in the last 3 days (house style: cause first, map by map, the model check, what's next; figures only from the match data, clichés rejected) and "why the model picks X" summaries for scheduled matches, from the model's own numbers + the notes (no web search); grounding check rejects any number not in the input; rewrites only on changed input; own monthly budget (`FACEOFF_SUMMARY_BUDGET_USD`, default $5). Writes `data/notes_summaries.json`. |
 
 ### `pipeline/`: scheduled jobs
 
@@ -227,7 +227,7 @@ this document and the layout in step.
 | `notes_facts.json` | `collectors/notes_fetch.py` | Web facts for the matchup notes (fact schema v1, append-only, 400-day prune). Never read by the model. |
 | `notes_manifest.json` | `collectors/notes_fetch.py` | Latest fetch run: scope, calls, tokens, estimated cost, monthly budget, rejected facts, failures, the `checked` ledger (24 h TTL). |
 | `notes_manifest_log.jsonl` | `collectors/notes_fetch.py` | One compact summary line per fetch run (history; the monthly budget is summed from it). |
-| `notes_summaries.json` | `collectors/notes_summarize.py` | AI summaries of the model's calls, by event match id (kept 120 days). Display only. |
+| `notes_summaries.json` | `collectors/notes_summarize.py` | AI "why" summaries (`summaries`) and post-match recaps (`recaps`), by event match id (kept 120 days). Display only. |
 | `notes_summary_log.jsonl` | `collectors/notes_summarize.py` | One line per summary run: calls, tokens, cost, rejections (the budget is summed from it). |
 | `SOURCES.md` | by hand | Where every record comes from, and the terms followed. |
 | `raw/pages/`, `raw/media/`, `raw/*.txt` | `lpfetch`, `fetch_assets`, `daily_refresh` | Fetch cache, images, tracked page titles. |
@@ -267,6 +267,10 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-15**: Post-match recaps at the top of a finished match's Notes tab: AI-written
+  by `collectors/notes_summarize.py` in the house style (cause-first lede, map by map,
+  the model check, what's next), rule-based from the same match data otherwise. The
+  "why" text is now plain words with no figures and covers every factor.
 - **2026-10-15**: Smoother scrolling: the content panels no longer use a backdrop blur
   (re-blurred every scroll frame; 21-29 ms frames -> 16.7 ms); scroll listeners passive.
   The Notes tab and team facts restyled to the site's panels; the notes list is not shown.

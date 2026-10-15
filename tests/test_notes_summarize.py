@@ -35,9 +35,10 @@ def answer(text):
                               "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(text)}]}]}
 
 
-GOOD = {"headline": "Alpha favoured at 65.1%",
-        "summary": "The model gives Alpha a 65.1% chance (range 52% to 77%). Team strength adds 9.1 points for Alpha, "
-                   "and the last 30 days 3.2 more."}
+GOOD = {"headline": "Alpha are the favourites",
+        "summary": "The model has Alpha as the favourite with moderate confidence. Alpha are clearly the stronger team "
+                   "on rating and have done better than expected over the last month. Not counted in the win chance: "
+                   "Alpha won the most recent meeting."}
 
 
 class Base(unittest.TestCase):
@@ -68,10 +69,12 @@ class GroundingTest(Base):
 
     def test_invented_number_rejected(self):
         bad = dict(GOOD, summary=GOOD["summary"] + " Alpha won 17 of their last 23 maps.")
+        self.assertIn("figures in the text", S.check(bad, S.match_input(bundle()["data"]["events"][0]["matches"][0],
+                                                                        {"name": "Cup"}, {"ok": False}))[0])
         self.run_(answer(bad))
         self.assertFalse(os.path.exists(self.out))
         with open(self.log, encoding="utf-8") as f:
-            self.assertIn("numbers not in the input", f.read())
+            self.assertIn("figures in the text", f.read())
 
     def test_favourite_must_be_named(self):
         inp = S.match_input(bundle()["data"]["events"][0]["matches"][0], {"name": "Cup"}, {"ok": False})
@@ -82,6 +85,14 @@ class GroundingTest(Base):
         names = [r["factor"] for r in inp["prediction"]["counted_factors"]]
         self.assertEqual(names[0], S.LABELS["base_strength"])
         self.assertEqual(inp["prediction"]["win_chance"], "65.1%")
+
+
+class NamesWithDigitsTest(unittest.TestCase):
+    def test_digits_inside_names_are_fine(self):
+        m = dict(bundle()["data"]["events"][0]["matches"][0], t1="9z Team", t2="3DMAX")
+        inp = S.match_input(m, {"name": "Season 24 Finals"}, {"ok": False})
+        ok = {"headline": "9z Team edge it", "summary": "The model leans to 9z Team over 3DMAX at Season 24 Finals."}
+        self.assertEqual(S.check(ok, inp), [])
 
 
 class CacheBudgetKeyTest(Base):
@@ -114,6 +125,70 @@ class CacheBudgetKeyTest(Base):
         self.run_(boom, env={"OPENAI_API_KEY": "sk-test-SECRET"})
         with open(self.log, encoding="utf-8") as f:
             self.assertNotIn("SECRET", f.read())
+
+
+def finished_match():
+    return {"id": "cup-0", "t1": "Alpha", "t2": "Bravo", "day": (AS_OF - timedelta(days=1)).isoformat(), "stage": "Semifinal",
+            "bo": 3, "finished": True, "w1": 0, "w2": 2, "pred": dict(PRED, vm=["Nuke", "Mirage", "Inferno"],
+                                                                     vp=[0.7, 0.6, 0.55]),
+            "maps": [{"map": "Nuke", "s1": 1, "s2": 13, "w": 2, "ot": 0, "first1": "ct",
+                      "side1": {"ct": 1, "t": 0}, "side2": {"ct": 1, "t": 12}},
+                     {"map": "Ancient", "s1": 11, "s2": 13, "w": 2, "ot": 0, "first1": "t",
+                      "side1": {"ct": 6, "t": 5}, "side2": {"ct": 7, "t": 6}}]}
+
+
+RECAP_GOOD = {"headline": "Bravo flip the script on Nuke",
+              "summary": ("Bravo turned Alpha's best map into a rout and the series never recovered. Nuke went 13-1 "
+                          "to Bravo, twelve of those rounds on the T side, on a map where the model leaned Alpha. "
+                          "Ancient was the divergence: it was never in the simulated veto, and Bravo closed it 13-11. "
+                          "Player statistics are not in our data, so standouts go unnamed here. The model had Alpha "
+                          "as the favourite on rating strength; the mechanism of the miss was the map pool, with Bravo "
+                          "winning one map the veto expected and one it did not. Alpha lost a map the model rated as "
+                          "theirs by a wide margin, which matters more than the scoreline suggests. Watch whether "
+                          "Bravo's T side on Nuke holds up next time out, because that half decided everything here.")}
+
+
+class RecapTest(unittest.TestCase):
+    def inp(self):
+        return S.recap_input(finished_match(), {"name": "Cup"}, {"ok": False})
+
+    def test_input_flags_the_miss(self):
+        inp = self.inp()
+        self.assertEqual(inp["model_call"]["result"], "upset")
+        self.assertEqual(inp["match"]["winner"], "Bravo")
+        self.assertFalse(inp["maps"][1]["in_simulated_veto"])
+        self.assertIn("per-player statistics (ratings, ADR) are not in the data", inp["data_gaps"])
+
+    def test_good_recap_passes(self):
+        self.assertEqual(S.check_recap(RECAP_GOOD, self.inp()), [])
+
+    def test_banned_invented_short(self):
+        inp = self.inp()
+        self.assertTrue(any("banned" in e for e in S.check_recap(
+            dict(RECAP_GOOD, summary=RECAP_GOOD["summary"] + " What a series."), inp)))
+        self.assertTrue(any("numbers not in the input" in e for e in S.check_recap(
+            dict(RECAP_GOOD, summary=RECAP_GOOD["summary"] + " Bravo's star posted a 1.61 rating."), inp)))
+        self.assertTrue(any("length" in e for e in S.check_recap({"headline": "x", "summary": "Bravo won."}, inp)))
+
+
+class RecapRunTest(Base):
+    def setUp(self):
+        super().setUp()
+        b = bundle()
+        b["data"]["events"][0]["matches"].append(finished_match())
+        with open(self.b, "w", encoding="utf-8") as f:
+            json.dump(b, f)
+
+    def test_recap_written_once(self):
+        def llm(k, body):
+            return answer(RECAP_GOOD if k.startswith("recap|") else GOOD)(k, body)
+        self.assertEqual(self.run_(llm), 0)
+        st = self.store()
+        self.assertEqual(st["recaps"]["cup-0"]["result"], "upset")
+        self.assertIn("cup-1", st["summaries"])
+        calls = []
+        self.run_(lambda k, body: (calls.append(k), llm(k, body))[1], now=NOW + timedelta(hours=1))
+        self.assertEqual(calls, [])          # unchanged inputs: nothing rewritten
 
 
 if __name__ == "__main__":

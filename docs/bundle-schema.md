@@ -288,6 +288,7 @@ section changes no other byte of the bundle.
 | `notes.freshness` | The `notes_freshness` signal over teams with a fixture in the next 3 days, the fetcher's scope (contracts, section 2). |
 | `notes.next` | `team → {day, event, opp}`: the team's next fixture within `config.next_match_days` (team-page notes count rest to it). |
 | `notes.summaries` | Event match id → `{headline, summary, favourite, win_prob_a, team_a, team_b, model, generated_at}`: the AI-written "why the model picks X" (`data/notes_summaries.json`, `collectors/notes_summarize.py`) for this build's matches. The page shows one only while the model's call still has the same favourite and is within 5 points of `win_prob_a`; otherwise its rule-based summary. |
+| `notes.recaps` | Event match id → `{headline, summary, winner, result, model, generated_at}`: AI-written post-match recaps (`collectors/notes_summarize.py`); the page falls back to a rule-based recap from the match data. |
 | `notes.inputs_version` | sha1-12 of the section's canonical JSON: the snapshot id every notes URL carries (`?v=`). |
 
 Nothing is pre-rendered: the same section is written to
@@ -297,7 +298,7 @@ asks `GET /api/notes_api` (`api/notes_api.py`) for the notes it shows
 
 The page inlines only `NOTES` (`notes_data.page_payload`): `v`
 (`inputs_version`), `as_of`, `freshness`, `next`, `api` (the endpoint
-path) and `sum` (= `notes.summaries`). The endpoint, the CLI and the future chatbot all call the same engine
+path), `sum` (= `notes.summaries`) and `recap` (= `notes.recaps`). The endpoint, the CLI and the future chatbot all call the same engine
 functions over this snapshot.
 
 Point-in-time: a note as of cutoff C uses series and lineup rows dated

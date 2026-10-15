@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-notes_summarize.py -- AI-written "why the model picks this team" summaries
-for scheduled matches, in plain English, from the model's own numbers.
-Writes data/notes_summaries.json; the page shows them in the Notes tab.
+notes_summarize.py -- AI-written match writing from the model's own data:
+"why the model picks this team" for scheduled matches (plain words, no
+figures) and post-match recaps for matches finished in the last RECAP_DAYS
+(lede on the cause, map by map, the model check, what's next; figures only
+from the match data, banned clichés rejected, missing player stats stated).
+Writes data/notes_summaries.json; the page shows both in the Notes tab.
 
 WHAT THE AI SEES, AND ALL IT MAY SAY
   For each upcoming match (a tracked event match with a pre-match call, dated
@@ -12,10 +15,13 @@ WHAT THE AI SEES, AND ALL IT MAY SAY
   it ("What moves the number"), the engine's warnings, and the matchup notes
   + fact sheet (notes.get_notes), labelled as context NOT counted in the win
   chance. The model only rewrites these numbers as prose:
-  * GROUNDING CHECK: every number in the answer must appear in the input
-    (percentages may be rounded to whole numbers); small counts 0-10 are
-    allowed. Anything else rejects the summary (the page then shows its
-    rule-based summary instead). The favourite's name must appear.
+  * PLAIN WORDS ONLY: the summary may contain no figures at all (no
+    percentages, scores, records, days); a digit left after removing team,
+    player and event names rejects it, and the page shows its rule-based
+    summary instead. The favourite's name must appear. It covers the counted
+    factors first, then the wider picture (rest, schedule, streaks, roster
+    stability, the veto maps, past meetings, player form), labelled as not
+    counted in the win chance.
   * No web search, no tools: nothing outside our data can get in.
 
 COST (estimates; verify against OpenAI's pricing page)
@@ -64,13 +70,21 @@ LABELS = {"base_strength": "Team strength (Elo rating gap)", "form_30d": "Last 3
           "form_last5": "Last 5 series", "head_to_head": "Head-to-head (past year)", "roster": "Roster (stand-ins, missing IGL)"}
 ROSTER_TXT = ["", "stand-in", "missing IGL", "stand-in for the IGL"]
 
-SYSTEM = ("You explain a Counter-Strike 2 match prediction to a fan in plain, calm English. Use ONLY the facts and "
-          "numbers in the input; never add players, results, history or opinions that are not there, and do not "
-          "give betting advice. Write a short headline and a summary of 3 to 5 sentences (60-120 words): who the "
-          "model favours and its win chance with the 90% range; the two or three counted factors that matter most, "
-          "with their point values and the evidence behind them; any warning about uncertainty; then one sentence of "
-          "context from the notes, saying plainly that it is not counted in the win chance (skip it if there are no "
-          "notes). Write percentages as given (you may round to whole numbers). Answer only with the JSON object.")
+VOICE = ("Voice: a sharp human analyst for Faceoff, a CS2 analytics site. Dry, direct, confident; mix short punchy "
+         "sentences with longer analytical ones. Take a position on what decides it; do not hedge everything. Hype is "
+         "earned, never default. Interpret, do not list. Never write: 'what a series', 'absolute cinema', 'banger', "
+         "'both teams battled hard', 'anyone's game', 'left it all on the server'. ")
+SYSTEM = (VOICE + "You explain a Counter-Strike 2 match prediction to a fan. Open with the single most telling reason, not "
+          "the matchup. Use ONLY the facts in "
+          "the input; never add players, results, history or opinions that are not there, and do not give betting "
+          "advice. Write NO digits or figures at all: no percentages, scores, records, ratings, days or counts. Say "
+          "it in words instead (slight favourite, clear favourite, coin flip, a wide range of outcomes, played "
+          "yesterday, a new roster, the upper hand in past meetings). Write a short headline and a summary of 4 to 6 "
+          "sentences: first who the model favours and how confident it is; then the counted factors in "
+          "prediction.counted_factors, strongest first, saying which team each one helps; then the wider picture "
+          "from context_not_counted (rest, schedule, streaks, roster stability, the simulated veto maps, past "
+          "meetings, player form, stand-ins, rumours), saying plainly that this part is not counted in the win "
+          "chance. Answer only with the JSON object.")
 OUT_SCHEMA = NFX._strict({"headline": {"type": "string"}, "summary": {"type": "string"}})
 
 
@@ -119,53 +133,157 @@ def match_input(m, ev, notes_out):
                        "counted_factors": factor_rows(p, a, b),
                        "warnings": [w.split(":")[0] + ": " + w.split(":", 1)[1].split(".")[0].strip() if ":" in w else w
                                     for w in p.get("w") or []]},
-        "context_not_counted": [{"about": n["team_scope"], "note": n["headline"], "detail": n["evidence"]}
-                                for n in (notes_out.get("notes") or [])] if notes_out.get("ok") else [],
+        "context_not_counted": {
+            "notes": [{"about": n["team_scope"], "note": n["headline"], "detail": n["evidence"]}
+                      for n in (notes_out.get("notes") or [])] if notes_out.get("ok") else [],
+            "fact_sheet": notes_out.get("sheet") if notes_out.get("ok") else None,
+            "simulated_veto_maps": [{"map": mp, "favours": a if pa > 0.5 else b, "how_much": _how(abs(pa - 0.5))}
+                                    for mp, pa in zip(p.get("vm") or [], p.get("vp") or [])],
+        },
     }
+
+
+def _how(d):
+    return "barely" if d < 0.05 else "somewhat" if d < 0.12 else "clearly"
 
 
 def input_hash(inp):
     return hashlib.sha1(json.dumps(inp, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:12]
 
 
-_NUM = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?")
-
-
-def allowed_numbers(inp):
-    """Every number in the input, plus whole-number roundings of percentages
-    and decimals, plus small counts."""
-    txt = json.dumps(inp, ensure_ascii=False)
-    ok = set(str(i) for i in range(11))
-    for n in _NUM.findall(txt):
-        n = n.replace(",", ".")
-        ok.add(n)
-        try:
-            f = float(n)
-            ok.add(str(round(f)))
-            ok.add(f"{f:.1f}")
-            ok.add(f"{f:g}")
-        except ValueError:
-            pass
-    return ok
-
-
 def check(out, inp):
-    """-> list of problems (empty = the summary may be shown)."""
+    """-> list of problems (empty = the summary may be shown). The text must be
+    figure-free: after removing the team and event names (which may contain
+    digits, e.g. 9z, 3DMAX, Season 24), no digit may remain. The favourite must
+    be named."""
     if not isinstance(out, dict):
         return ["answer is not an object"]
     errs = []
     head, body = str(out.get("headline") or "").strip(), str(out.get("summary") or "").strip()
     if not head or not body:
         errs.append("empty headline or summary")
-    if len(body) > 1200 or len(head) > 160:
+    if len(body) > 1400 or len(head) > 160:
         errs.append("too long")
-    ok = allowed_numbers(inp)
-    bad = sorted({n for n in _NUM.findall(head + " " + body) if n.replace(",", ".") not in ok})
+    text = head + " " + body
+    names = [inp["match"]["team_a"], inp["match"]["team_b"], inp["match"].get("event") or ""]
+    sheet = (inp.get("context_not_counted") or {}).get("fact_sheet") or {}
+    for side in ("a", "b"):
+        sh = sheet.get(side) or {}
+        names += [(sh.get("last") or {}).get("event") or "", (sh.get("last") or {}).get("opp") or ""]
+        names += (sh.get("roster") or {}).get("five") or []
+        names += [p.get("player", "") for p in sh.get("players") or []]
+    names += [m.get("event") or "" for m in (sheet.get("h2h") or {}).get("recent") or []]
+    bare = text
+    for n in sorted({n for n in names if n}, key=len, reverse=True):
+        bare = re.sub(re.escape(n), " ", bare, flags=re.I)
+    digits = sorted(set(re.findall(r"\d+", bare)))
+    if digits:
+        errs.append(f"figures in the text: {digits[:6]}")
+    fav = inp["prediction"]["favourite"]
+    if fav.lower() not in text.lower() and fav.split()[-1].lower() not in text.lower():
+        errs.append("favourite not named")
+    return errs
+
+
+# ---- post-match recaps ------------------------------------------------------
+RECAP_DAYS = 3          # recap matches finished in the last few days (as_of - RECAP_DAYS .. as_of)
+RECAP_SYSTEM = (VOICE + "You write the post-match recap. The reader knows the score; they come for the why. "
+                "Structure, in this order: (1) a lede of one or two sentences with the single most interesting causal "
+                "fact, not the scoreline; (2) how it happened, map by map, only decisive details (round score, which "
+                "half or side carried it, overtime, whether the maps played were the ones the simulated veto "
+                "expected); (3) standouts: per-player statistics are NOT in the data, so say so in one short clause "
+                "rather than inventing names or ratings; (4) the model check: what the model predicted and what "
+                "actually decided it; if the call was wrong, name the exact mechanism from the input (which "
+                "assumption broke, which map diverged from the expected veto); (5) one forward-looking line about "
+                "what to watch next. Every claim needs evidence from the input. Numbers are allowed ONLY if they appear "
+                "in the input. 120 to 220 words. Answer only with the JSON object.")
+BANNED = ("what a series", "absolute cinema", "banger", "battled hard", "anyone's game", "anyones game",
+          "left it all on the server")
+
+
+def recent_finished(bundle, as_of):
+    lo = (as_of - timedelta(days=RECAP_DAYS)).isoformat()
+    for e in bundle["data"]["events"]:
+        for m in e["matches"]:
+            if (m.get("finished") and m.get("pred") and m.get("t1") and m.get("t2") and m.get("maps")
+                    and m.get("w1") != m.get("w2") and lo <= (m.get("day") or "") < as_of.isoformat()):
+                yield m, e
+
+
+def recap_input(m, ev, notes_out):
+    """Everything the recap may use: the result, each map (score, halves,
+    overtime, start side), the model's pre-match call and its reasons, the
+    veto it simulated, and the pre-match context. Gaps are stated."""
+    a, b, p = m["t1"], m["t2"], m["pred"]
+    pre = match_input(m, ev, notes_out)
+    winner = a if m["w1"] > m["w2"] else b
+    expected = list(p.get("vm") or [])
+    maps = []
+    for i, mp in enumerate(m["maps"], 1):
+        s1, s2 = mp.get("s1"), mp.get("s2")
+        sd1, sd2 = mp.get("side1") or {}, mp.get("side2") or {}
+        chance = None
+        if mp.get("map") in expected:
+            pa = (p.get("vp") or [])[expected.index(mp["map"])]
+            chance = _pct(pa) + f" for {a}"
+        maps.append({"order": i, "map": mp.get("map"), "winner": a if mp.get("w") == 1 else b,
+                     "score": f"{s1}-{s2} ({a}-{b})" if s1 is not None else None,
+                     "halves": {a: {"ct": sd1.get("ct"), "t": sd1.get("t")}, b: {"ct": sd2.get("ct"), "t": sd2.get("t")}}
+                     if sd1 or sd2 else None,
+                     "overtime": bool(mp.get("ot")), f"{a}_started_on": mp.get("first1"),
+                     "in_simulated_veto": mp.get("map") in expected, "model_map_chance": chance})
+    fav = pre["prediction"]["favourite"]
+    return {"match": pre["match"] | {"winner": winner, "series_score": f"{m['w1']}-{m['w2']} ({a}-{b})"},
+            "model_call": {"favourite": fav, "win_chance": pre["prediction"]["win_chance"],
+                           "range_90": pre["prediction"]["range_90"],
+                           "predicted_score": pre["prediction"]["most_likely_score"],
+                           "result": "correct" if fav == winner else "upset",
+                           "counted_factors": pre["prediction"]["counted_factors"],
+                           "warnings": pre["prediction"]["warnings"],
+                           "simulated_veto_maps": expected},
+            "maps": maps, "pre_match_context": pre["context_not_counted"],
+            "data_gaps": ["per-player statistics (ratings, ADR) are not in the data",
+                          "who picked and who banned each map is not in the data"]}
+
+
+_NUM = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?")
+
+
+def allowed_numbers(inp):
+    """Every number in the input (with whole-number roundings) plus 0-10."""
+    ok = {str(i) for i in range(11)}
+    for n in _NUM.findall(json.dumps(inp, ensure_ascii=False)):
+        n = n.replace(",", ".")
+        ok.add(n)
+        try:
+            f = float(n)
+            ok.update({str(round(f)), f"{f:.1f}", f"{f:g}"})
+        except ValueError:
+            pass
+    return ok
+
+
+def check_recap(out, inp):
+    if not isinstance(out, dict):
+        return ["answer is not an object"]
+    errs = []
+    head, body = str(out.get("headline") or "").strip(), str(out.get("summary") or "").strip()
+    text = head + " " + body
+    if not head or not body:
+        errs.append("empty headline or recap")
+    words = len(body.split())
+    if not 80 <= words <= 300:
+        errs.append(f"length {words} words")
+    low = text.lower()
+    hit = [b for b in BANNED if b in low]
+    if hit:
+        errs.append(f"banned phrases: {hit}")
+    bad = sorted({n for n in _NUM.findall(text) if n.replace(",", ".") not in allowed_numbers(inp)})
     if bad:
         errs.append(f"numbers not in the input: {bad[:6]}")
-    fav = inp["prediction"]["favourite"]
-    if fav.lower() not in (head + " " + body).lower() and fav.split()[-1].lower() not in (head + " " + body).lower():
-        errs.append("favourite not named")
+    w = inp["match"]["winner"]
+    if w.lower() not in low and w.split()[-1].lower() not in low:
+        errs.append("winner not named")
     return errs
 
 
@@ -218,20 +336,29 @@ def main(argv=None, now=None, llm=None, env=None):
                                 "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(
                                     {"headline": "Dry run", "summary": "Dry run: no model was called."})}]}]}
                ) if a.dry_run else NFX.LiveLLM(key)
-    store = NFX._read_json(a.out) or {"schema": SCHEMA, "updated_at": None, "summaries": {}}
-    sums = store.get("summaries") or {}
+    store = NFX._read_json(a.out) or {"schema": SCHEMA, "updated_at": None, "summaries": {}, "recaps": {}}
+    books = {"why": store.get("summaries") or {}, "recap": store.get("recaps") or {}}
     as_of = date.fromisoformat(bundle["data"]["as_of"])
-    stats = {"run_at": run_at, "mode": mode, "model": model, "scheduled": 0, "skipped_fresh": 0, "llm_calls": 0,
-             "written": 0, "rejected": [], "failed": [], "deferred_budget": 0, "input_tokens": 0, "output_tokens": 0}
-    run_cost = 0.0
+    stats = {"run_at": run_at, "mode": mode, "model": model, "scheduled": 0, "recaps_due": 0, "skipped_fresh": 0,
+             "llm_calls": 0, "written": 0, "rejected": [], "failed": [], "deferred_budget": 0,
+             "input_tokens": 0, "output_tokens": 0}
+    jobs = []
     for m, ev in sorted(scheduled(bundle, as_of), key=lambda x: (x[0].get("day") or "", x[0]["id"])):
         stats["scheduled"] += 1
-        notes_out = NT.get_notes(m["t1"], m["t2"], "latest", bundle, match_day=m["day"], event=ev["name"], limit=12)
-        inp = match_input(m, ev, notes_out)
+        n = NT.get_notes(m["t1"], m["t2"], "latest", bundle, match_day=m["day"], event=ev["name"], limit=12)
+        jobs.append(("why", m, match_input(m, ev, n), SYSTEM, check))
+    for m, ev in sorted(recent_finished(bundle, as_of), key=lambda x: (x[0].get("day") or "", x[0]["id"])):
+        stats["recaps_due"] += 1
+        # the context as it stood before the match (its own day as the cutoff)
+        n = NT.get_notes(m["t1"], m["t2"], m["day"], bundle, match_day=m["day"], event=ev["name"], limit=12)
+        jobs.append(("recap", m, recap_input(m, ev, n), RECAP_SYSTEM, check_recap))
+    run_cost = 0.0
+    for kind, m, inp, system, checker in jobs:
+        book = books[kind]
         h = input_hash(inp)
-        old = sums.get(m["id"])
-        if old and (old.get("input_hash") == h or
-                    now - NF.parse_ts(old["generated_at"]) < timedelta(hours=REWRITE_HOURS)):
+        old = book.get(m["id"])
+        if old and (old.get("input_hash") == h or (kind == "why" and
+                    now - NF.parse_ts(old["generated_at"]) < timedelta(hours=REWRITE_HOURS))):
             stats["skipped_fresh"] += 1
             continue
         if stats["llm_calls"] >= a.max_calls:
@@ -239,43 +366,47 @@ def main(argv=None, now=None, llm=None, env=None):
         if spent + run_cost + worst > limit + 1e-9:
             stats["deferred_budget"] += 1
             continue
-        body = {"model": model, "instructions": SYSTEM, "input": json.dumps(inp, ensure_ascii=False), "store": False,
+        body = {"model": model, "instructions": system, "input": json.dumps(inp, ensure_ascii=False), "store": False,
                 "max_output_tokens": MAX_OUTPUT_TOKENS,
-                "text": {"format": {"type": "json_schema", "name": "why_summary", "schema": OUT_SCHEMA, "strict": True}}}
+                "text": {"format": {"type": "json_schema", "name": f"{kind}_summary", "schema": OUT_SCHEMA, "strict": True}}}
         if model.startswith(("gpt-5", "o")):
             body["reasoning"] = {"effort": "low"}
         stats["llm_calls"] += 1
         try:
-            out, u = NFX.parse_response(llm(f"sum|{m['id']}", body))
+            out, u = NFX.parse_response(llm(f"{kind}|{m['id']}", body))
         except NFX.FetchError as e:
             u = e.args[1] if len(e.args) > 1 and isinstance(e.args[1], dict) else {}
             run_cost += cost(u)
-            stats["failed"].append({"match": m["id"], "reason": NFX.redact(e.args[0], key)})
+            stats["failed"].append({"kind": kind, "match": m["id"], "reason": NFX.redact(e.args[0], key)})
             continue
         run_cost += cost(u)
         stats["input_tokens"] += u.get("input_tokens", 0)
         stats["output_tokens"] += u.get("output_tokens", 0)
-        errs = [] if a.dry_run else check(out, inp)
+        errs = [] if a.dry_run else checker(out, inp)
         if errs:
-            stats["rejected"].append({"match": m["id"], "reasons": errs})
+            stats["rejected"].append({"kind": kind, "match": m["id"], "reasons": errs})
             continue
-        p = inp["prediction"]
-        sums[m["id"]] = {"headline": out["headline"].strip(), "summary": out["summary"].strip(),
-                         "team_a": m["t1"], "team_b": m["t2"], "day": m["day"], "favourite": p["favourite"],
-                         "win_prob_a": round(m["pred"]["p"], 4), "model": model, "generated_at": run_at,
-                         "input_hash": h}
+        rec = {"headline": out["headline"].strip(), "summary": out["summary"].strip(), "team_a": m["t1"],
+               "team_b": m["t2"], "day": m["day"], "model": model, "generated_at": run_at, "input_hash": h}
+        if kind == "why":
+            rec |= {"favourite": inp["prediction"]["favourite"], "win_prob_a": round(m["pred"]["p"], 4)}
+        else:
+            rec |= {"winner": inp["match"]["winner"], "result": inp["model_call"]["result"]}
+        book[m["id"]] = rec
         stats["written"] += 1
     keep = (as_of - timedelta(days=KEEP_DAYS)).isoformat()
-    store = {"schema": SCHEMA, "updated_at": run_at if stats["written"] else store.get("updated_at"),
-             "summaries": {k: v for k, v in sorted(sums.items()) if (v.get("day") or "") >= keep}}
-    if stats["written"] or len(store["summaries"]) != len(sums):
-        NFX._write(a.out, NFX.dumps(store))
+    kept = {k: {i: v for i, v in sorted(b.items()) if (v.get("day") or "") >= keep} for k, b in books.items()}
+    new = {"schema": SCHEMA, "updated_at": run_at if stats["written"] else store.get("updated_at"),
+           "summaries": kept["why"], "recaps": kept["recap"]}
+    if stats["written"] or any(len(kept[k]) != len(books[k]) for k in books) or "recaps" not in store:
+        NFX._write(a.out, NFX.dumps(new))
     stats["est_cost_usd"] = round(run_cost, 4)
     stats["budget"] = {"limit_usd": limit, "spent_month_usd": round(spent + run_cost, 4)}
     os.makedirs(os.path.dirname(os.path.abspath(a.log)), exist_ok=True)
     with open(a.log, "a", encoding="utf-8", newline="\n") as f:
         f.write(NFX.redact(json.dumps(stats, sort_keys=True, ensure_ascii=False, separators=(",", ":")), key) + "\n")
-    print(f"notes_summarize [{mode}]: {stats['scheduled']} scheduled, {stats['skipped_fresh']} unchanged, "
+    print(f"notes_summarize [{mode}]: {stats['scheduled']} scheduled, {stats['recaps_due']} recaps due, "
+          f"{stats['skipped_fresh']} unchanged, "
           f"{stats['llm_calls']} calls, {stats['written']} written, {len(stats['rejected'])} rejected, "
           f"{len(stats['failed'])} failed, {stats['deferred_budget']} over budget; ~${stats['est_cost_usd']:.4f} "
           f"(month ${stats['budget']['spent_month_usd']:.4f} of ${limit:.2f})")

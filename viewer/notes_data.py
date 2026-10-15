@@ -137,10 +137,13 @@ def build(data, fixtures, facts_path=None):
     sec["next"] = {t: nxt[t] for t in sorted(nxt) if t in data["teams"]}
     # AI summaries of the model's calls (collectors/notes_summarize.py), for this build's matches
     ids = {m["id"] for e in data["events"] for m in e["matches"]}
-    sums = (_load(SUMMARIES_PATH, {}) or {}).get("summaries") or {}
+    store = _load(SUMMARIES_PATH, {}) or {}
+    sums, recs = store.get("summaries") or {}, store.get("recaps") or {}
     sec["summaries"] = {k: {f: v[f] for f in ("headline", "summary", "favourite", "win_prob_a", "team_a", "team_b",
                                                "model", "generated_at")}
                         for k, v in sorted(sums.items()) if k in ids}
+    sec["recaps"] = {k: {f: v[f] for f in ("headline", "summary", "winner", "result", "model", "generated_at")}
+                     for k, v in sorted(recs.items()) if k in ids}
     sec["inputs_version"] = inputs_version(sec)
     return sec
 
@@ -162,4 +165,5 @@ def page_payload(section):
     """What the page inlines (NOTES): no notes, only what it needs to ask
     the endpoint for them (snapshot version, freshness, next fixtures)."""
     return {"v": section["inputs_version"], "as_of": section["as_of"], "freshness": section["freshness"],
-            "next": section.get("next") or {}, "api": "/api/notes_api", "sum": section.get("summaries") or {}}
+            "next": section.get("next") or {}, "api": "/api/notes_api", "sum": section.get("summaries") or {},
+            "recap": section.get("recaps") or {}}
