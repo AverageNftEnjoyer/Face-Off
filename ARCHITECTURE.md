@@ -242,7 +242,7 @@ fill-in candidates, research reports.
 | Workflow | Cadence | Does |
 |---|---|---|
 | `daily-refresh.yml` | every 6 h + nightly | `pipeline/daily_refresh.py` → `checks/data_gates.py` → bundle → tests → page build check → `pipeline/build_db.py` → commit + push → roster-review issue → `--check-status` → `collectors/vrs.py --check` |
-| `live-refresh.yml` | every 10 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
+| `live-refresh.yml` | every 15 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
 | `notes-facts.yml` | daily 06:47 UTC | bundle (for the 3-day scope) → `collectors/notes_fetch.py` (`OPENAI_API_KEY` secret) → bundle → `collectors/notes_summarize.py` (AI "why" summaries) → tests → commit the `notes_*` data files + push; issue on failure |
 | `validate.yml` | every 30 min | `checks/validate_freshness.py`; restarts the live refresh when behind |
 
@@ -267,6 +267,9 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-15**: Smoother scrolling: the content panels no longer use a backdrop blur
+  (re-blurred every scroll frame; 21-29 ms frames -> 16.7 ms); scroll listeners passive.
+  The Notes tab and team facts restyled to the site's panels; the notes list is not shown.
 - **2026-10-15**: "Why the model picks X" at the top of the Notes tab: AI-written for
   scheduled matches (`collectors/notes_summarize.py`, step in `notes-facts.yml`,
   `data/notes_summaries.json`, $5/month cap), rule-based from the same factor numbers
