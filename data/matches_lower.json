@@ -217361,6 +217361,33 @@
   "kind": "main"
  },
  {
+  "match_id": "1150118462f0",
+  "date": "2026-10-14",
+  "event": "ESL Challenger League Season 52: North America - Cup #3",
+  "team_a": "Chicken Coop Esports",
+  "team_b": "Overtake Sector",
+  "winner": "Overtake Sector",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Overtake Sector"
+   },
+   {
+    "map": "Cache",
+    "winner": "Chicken Coop Esports"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Overtake Sector"
+   }
+  ],
+  "event_page": "ESL/Challenger League/Season 52/North America/Cup 3",
+  "ext_match_id": "2399233",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "2dc0ccf84da1",
   "date": "2026-10-14",
   "event": "ESL Challenger League Season 52: South America - Cup #3",
@@ -217630,6 +217657,29 @@
   ],
   "event_page": "Logitech G Pro Series/2026",
   "ext_match_id": "2399533",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "63823655a004",
+  "date": "2026-10-15",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "NEXVOID",
+  "team_b": "Rooster",
+  "winner": "NEXVOID",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "NEXVOID"
+   },
+   {
+    "map": "Inferno",
+    "winner": "NEXVOID"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399535",
   "tier": "B",
   "kind": "main"
  }
