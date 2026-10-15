@@ -55196,6 +55196,32 @@
   "tier": "S"
  },
  {
+  "match_id": "16b1576fcae2",
+  "date": "2026-10-15",
+  "event": "Thunderpick World Championship 2026",
+  "team_a": "9z Team",
+  "team_b": "Team Falcons",
+  "winner": "Team Falcons",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Team Falcons"
+   },
+   {
+    "map": "Mirage",
+    "winner": "9z Team"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Team Falcons"
+   }
+  ],
+  "event_page": "Thunderpick/World Championship/2026",
+  "ext_match_id": "2399409",
+  "tier": "S"
+ },
+ {
   "match_id": "8a50df85bd1e",
   "date": "2026-10-15",
   "event": "Thunderpick World Championship 2026",
