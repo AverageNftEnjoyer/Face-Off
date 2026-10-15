@@ -37,8 +37,6 @@ viewer/data-b.*.json
 # --- data ---
 # Valve standings tree: looked at during data collection, not used by anything
 data/raw/valve/
-# notes fetch page cache (third-party HLTV pages, 12 h TTL; collectors/notes_fetch.py)
-data/raw/notes_cache/
 # Team logos and map art (trademarks of their owners). Kept so the hub can be
 # rebuilt offline; uncomment if this repo is public and you'd rather not
 # republish them (python viewer/fetch_assets.py downloads them again).

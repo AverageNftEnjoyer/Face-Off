@@ -1,15 +1,9 @@
 {
- "_note": "Recorded OpenAI Responses-API answers for collectors/notes_fetch.py --dry-run (keyed by unit: news|<team>, form|<team>|<player>, form_scrape|<team>|<player>) and recorded pages (http). Shapes and usage numbers follow real responses; the facts are FIXTURES, not real news: every source URL but one is on the reserved fixtures.invalid domain. @D-n@ = as_of minus n days.",
- "http": {
-  "https://www.hltv.org/robots.txt": {
-   "body": "User-agent: *\n\nDisallow: /stats?*startDate*\nDisallow: /stats*?*startDate*\nDisallow: /stats*?*endDate*\nDisallow: /blog/*\n",
-   "status": 200
-  }
- },
+ "_note": "Recorded OpenAI Responses-API answers for collectors/notes_fetch.py --dry-run, one per team (key team|<team>): players (form) and news in one strict json_schema output. Shapes and usage numbers follow real responses of the one-call shape; the facts are FIXTURES, not real news: every source URL is on the reserved fixtures.invalid domain. @D-n@ = as_of minus n days.",
  "llm": {
-  "form|FURIA|FalleN": {
-   "id": "resp_fixture_form_furia_2",
-   "model": "gpt-5-mini",
+  "team|FURIA": {
+   "id": "resp_fixture_furia",
+   "model": "gpt-5-nano",
    "object": "response",
    "output": [
     {
@@ -17,7 +11,16 @@
       "query": "fixture",
       "type": "search"
      },
-     "id": "ws_form_furia_2_0",
+     "id": "ws_furia_0",
+     "status": "completed",
+     "type": "web_search_call"
+    },
+    {
+     "action": {
+      "query": "fixture",
+      "type": "search"
+     },
+     "id": "ws_furia_1",
      "status": "completed",
      "type": "web_search_call"
     },
@@ -25,11 +28,11 @@
      "content": [
       {
        "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"FalleN\", \"rating_baseline\": 0.98, \"rating_last30\": 3.4, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/fallen\", \"team\": \"FURIA\"}",
+       "text": "{\"news\": [{\"date\": \"@D-6@\", \"event\": null, \"move\": \"out\", \"other_team\": \"Falcons\", \"player\": \"fixture_rumor_out\", \"replaced\": null, \"source_url\": \"https://fixtures.invalid/notes_fetch/news/furia-rumor\", \"team\": \"FURIA Esports\", \"type\": \"roster_rumor\", \"until\": null}, {\"date\": \"@D-1@\", \"event\": null, \"move\": null, \"other_team\": null, \"player\": \"nobody\", \"replaced\": null, \"source_url\": \"https://fixtures.invalid/notes_fetch/news/unknown\", \"team\": \"Some Unknown Org\", \"type\": \"stand_in\", \"until\": null}], \"players\": [{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"yuurih\", \"rating_baseline\": 1.06, \"rating_last30\": 1.04, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/yuurih\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"KSCERATO\", \"rating_baseline\": 1.12, \"rating_last30\": 1.15, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/kscerato\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"FalleN\", \"rating_baseline\": 0.98, \"rating_last30\": 0.95, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/fallen\"}, {\"baseline\": null, \"found\": false, \"maps_last30\": null, \"player\": \"molodoy\", \"rating_baseline\": null, \"rating_last30\": null, \"rating_version\": null, \"source_url\": null}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 10, \"player\": \"s1mple\", \"rating_baseline\": 1.25, \"rating_last30\": 1.2, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/s1mple\"}]}",
        "type": "output_text"
       }
      ],
-     "id": "msg_form_furia_2",
+     "id": "msg_furia",
      "role": "assistant",
      "status": "completed",
      "type": "message"
@@ -37,14 +40,17 @@
    ],
    "status": "completed",
    "usage": {
-    "input_tokens": 7332,
-    "output_tokens": 1020,
-    "total_tokens": 8352
+    "input_tokens": 10420,
+    "output_tokens": 2080,
+    "output_tokens_details": {
+     "reasoning_tokens": 1380
+    },
+    "total_tokens": 12500
    }
   },
-  "form|FURIA|KSCERATO": {
-   "id": "resp_fixture_form_furia_1",
-   "model": "gpt-5-mini",
+  "team|PARIVISION": {
+   "id": "resp_fixture_pari",
+   "model": "gpt-5-nano",
    "object": "response",
    "output": [
     {
@@ -52,7 +58,16 @@
       "query": "fixture",
       "type": "search"
      },
-     "id": "ws_form_furia_1_0",
+     "id": "ws_pari_0",
+     "status": "completed",
+     "type": "web_search_call"
+    },
+    {
+     "action": {
+      "query": "fixture",
+      "type": "search"
+     },
+     "id": "ws_pari_1",
      "status": "completed",
      "type": "web_search_call"
     },
@@ -60,11 +75,11 @@
      "content": [
       {
        "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"KSCERATO\", \"rating_baseline\": 1.12, \"rating_last30\": 1.15, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/kscerato\", \"team\": \"FURIA\"}",
+       "text": "{\"news\": [{\"date\": \"@D-2@\", \"event\": \"Thunderpick World Championship 2026\", \"move\": null, \"other_team\": null, \"player\": \"fixture_standin\", \"replaced\": \"zweih\", \"source_url\": \"https://fixtures.invalid/notes_fetch/news/pari-standin\", \"team\": \"PARIVISION\", \"type\": \"stand_in\", \"until\": null}, {\"date\": \"@D-5@\", \"event\": null, \"move\": \"in\", \"other_team\": null, \"player\": \"fixture_rumor\", \"replaced\": null, \"source_url\": \"\", \"team\": \"PARIVISION\", \"type\": \"roster_rumor\", \"until\": null}], \"players\": [{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"Jame\", \"rating_baseline\": 1.02, \"rating_last30\": 1.08, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/jame\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"xiELO\", \"rating_baseline\": 1.11, \"rating_last30\": 1.21, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/xielo\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 19, \"player\": \"zweih\", \"rating_baseline\": 1.03, \"rating_last30\": 0.97, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/zweih\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"FL1T\", \"rating_baseline\": 1.07, \"rating_last30\": 1.12, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/fl1t\"}, {\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"HObbit\", \"rating_baseline\": 1.0, \"rating_last30\": 3.4, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/hobbit\"}]}",
        "type": "output_text"
       }
      ],
-     "id": "msg_form_furia_1",
+     "id": "msg_pari",
      "role": "assistant",
      "status": "completed",
      "type": "message"
@@ -72,379 +87,14 @@
    ],
    "status": "completed",
    "usage": {
-    "input_tokens": 7321,
-    "output_tokens": 1015,
-    "total_tokens": 8336
-   }
-  },
-  "form|FURIA|YEKINDAR": {
-   "id": "resp_fixture_form_furia_4",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_furia_4_0",
-     "status": "completed",
-     "type": "web_search_call"
+    "input_tokens": 11840,
+    "output_tokens": 2310,
+    "output_tokens_details": {
+     "reasoning_tokens": 1610
     },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": false, \"maps_last30\": null, \"player\": \"YEKINDAR\", \"rating_baseline\": null, \"rating_last30\": null, \"rating_version\": null, \"source_url\": null, \"team\": \"FURIA\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_furia_4",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 6900,
-    "output_tokens": 410,
-    "total_tokens": 7310
-   }
-  },
-  "form|FURIA|molodoy": {
-   "id": "resp_fixture_form_furia_3",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_furia_3_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "molodoy has been in great form lately, with a rating around 1.19 over the last month.",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_furia_3",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7020,
-    "output_tokens": 640,
-    "total_tokens": 7660
-   }
-  },
-  "form|FURIA|yuurih": {
-   "id": "resp_fixture_form_furia_0",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_furia_0_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 18, \"player\": \"yuurih\", \"rating_baseline\": 1.06, \"rating_last30\": 1.04, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/yuurih\", \"team\": \"FURIA\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_furia_0",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7310,
-    "output_tokens": 1010,
-    "total_tokens": 8320
-   }
-  },
-  "form|PARIVISION|FL1T": {
-   "id": "resp_fixture_form_pari_3",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_pari_3_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"FL1T\", \"rating_baseline\": 1.07, \"rating_last30\": 1.12, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/fl1t\", \"team\": \"PARIVISION\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_pari_3",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7439,
-    "output_tokens": 1001,
-    "total_tokens": 8440
-   }
-  },
-  "form|PARIVISION|HObbit": {
-   "id": "resp_fixture_form_pari_4",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_pari_4_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"HObbit\", \"rating_baseline\": 1.0, \"rating_last30\": 0.89, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/hobbit\", \"team\": \"PARIVISION\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_pari_4",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7452,
-    "output_tokens": 1008,
-    "total_tokens": 8460
-   }
-  },
-  "form|PARIVISION|Jame": {
-   "id": "resp_fixture_form_pari_0",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_pari_0_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"Jame\", \"rating_baseline\": 1.02, \"rating_last30\": 1.08, \"rating_version\": \"3.0\", \"source_url\": \"https://www.hltv.org/stats/players/90001/jame\", \"team\": \"PARIVISION\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_pari_0",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7400,
-    "output_tokens": 980,
-    "total_tokens": 8380
-   }
-  },
-  "form|PARIVISION|xiELO": {
-   "id": "resp_fixture_form_pari_1",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_pari_1_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 21, \"player\": \"xiELO\", \"rating_baseline\": 1.11, \"rating_last30\": 1.21, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/xielo\", \"team\": \"PARIVISION\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_pari_1",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7413,
-    "output_tokens": 987,
-    "total_tokens": 8400
-   }
-  },
-  "form|PARIVISION|zweih": {
-   "id": "resp_fixture_form_pari_2",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_form_pari_2_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"baseline\": \"last12m\", \"found\": true, \"maps_last30\": 19, \"player\": \"zweih\", \"rating_baseline\": 1.03, \"rating_last30\": 0.97, \"rating_version\": \"3.0\", \"source_url\": \"https://fixtures.invalid/notes_fetch/stats/zweih\", \"team\": \"PARIVISION\"}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_form_pari_2",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 7426,
-    "output_tokens": 994,
-    "total_tokens": 8420
-   }
-  },
-  "news|FURIA": {
-   "id": "resp_fixture_news_furia",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_news_furia_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_news_furia_1",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"items\": [{\"date\": \"@D-6@\", \"event\": null, \"move\": \"out\", \"other_team\": \"Falcons\", \"player\": \"fixture_rumor_out\", \"replaced\": null, \"source_url\": \"https://fixtures.invalid/notes_fetch/news/furia-rumor\", \"team\": \"FURIA Esports\", \"type\": \"roster_rumor\", \"until\": null}, {\"date\": \"@D-1@\", \"event\": null, \"move\": null, \"other_team\": null, \"player\": \"nobody\", \"replaced\": null, \"source_url\": \"https://fixtures.invalid/notes_fetch/news/unknown\", \"team\": \"Some Unknown Org\", \"type\": \"stand_in\", \"until\": null}]}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_news_furia",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 8840,
-    "output_tokens": 1210,
-    "total_tokens": 10050
-   }
-  },
-  "news|PARIVISION": {
-   "id": "resp_fixture_news_pari",
-   "model": "gpt-5-mini",
-   "object": "response",
-   "output": [
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_news_pari_0",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "action": {
-      "query": "fixture",
-      "type": "search"
-     },
-     "id": "ws_news_pari_1",
-     "status": "completed",
-     "type": "web_search_call"
-    },
-    {
-     "content": [
-      {
-       "annotations": [],
-       "text": "{\"items\": [{\"date\": \"@D-2@\", \"event\": \"Thunderpick World Championship 2026\", \"move\": null, \"other_team\": null, \"player\": \"fixture_standin\", \"replaced\": \"zweih\", \"source_url\": \"https://fixtures.invalid/notes_fetch/news/pari-standin\", \"team\": \"PARIVISION\", \"type\": \"stand_in\", \"until\": null}, {\"date\": \"@D-5@\", \"event\": null, \"move\": \"in\", \"other_team\": null, \"player\": \"fixture_rumor\", \"replaced\": null, \"source_url\": \"\", \"team\": \"PARIVISION\", \"type\": \"roster_rumor\", \"until\": null}]}",
-       "type": "output_text"
-      }
-     ],
-     "id": "msg_news_pari",
-     "role": "assistant",
-     "status": "completed",
-     "type": "message"
-    }
-   ],
-   "status": "completed",
-   "usage": {
-    "input_tokens": 9120,
-    "output_tokens": 1430,
-    "total_tokens": 10550
+    "total_tokens": 14150
    }
   }
  },
- "recorded_at": "2026-10-14T12:00:00Z"
+ "recorded_at": "2026-10-15T12:00:00Z"
 }

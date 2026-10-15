@@ -68,7 +68,8 @@ CONFIG = {
     "max_matchup_notes": 6,
     "max_team_notes": 6,
     "max_per_rule_team": 2,      # at most this many notes of one rule about one team
-    "scope_days": 7,             # freshness: teams with a fixture within this many days
+    "scope_days": 3,             # freshness: teams with a fixture within this many days (notes_fetch.SCOPE_DAYS)
+    "next_match_days": 7,        # team pages: rest counted to the next fixture within this many days
     "stale_after_days": 7,       # freshness: oldest fact older than this -> stale
 }
 

@@ -5,80 +5,81 @@ docs/notes-contracts.md section 1) -> data/notes_facts.json.
 Facts are display context only: nothing written here is read by the
 predictor, the backtest or any weight fit.
 
-Scope: the teams with a fixture in the next 7 days (viewer/data-bundle.json,
-`fixtures[].day` in [as_of, as_of + 7]); `--teams A,B` overrides it. Per scope
-team there are two kinds of work unit, and every unit costs exactly ONE LLM
-call (OpenAI Responses API, POST /v1/responses, key from OPENAI_API_KEY, model
-from FACEOFF_NOTES_MODEL, default DEFAULT_MODEL):
+ONE OpenAI call per team. Scope: the teams with a fixture in the next
+SCOPE_DAYS (3) days (viewer/data-bundle.json, `fixtures[].day` in [as_of,
+as_of + 3]); `--teams A,B` overrides it. Per team a single Responses API call
+(POST /v1/responses, key from OPENAI_API_KEY, model from FACEOFF_NOTES_MODEL,
+default DEFAULT_MODEL) with the `web_search` tool returns, in one strict
+json_schema output, BOTH
+  players  the HLTV form of every current roster player (rating over the last
+           30 days, maps in that window, a 12-month or career baseline, the
+           stats page URL), and
+  news     stand-ins and roster rumours of the last 30 days, each with an
+           https source_url.
+Never prose. (We do not fetch HLTV ourselves: its robots.txt disallows the
+dated stats pages and plain HTTP gets a Cloudflare challenge.)
 
-  news  one call per team with the `web_search` tool: stand-ins and roster
-        rumours of the last 30 days only, strict JSON (json_schema structured
-        output), every item with an https source_url. Never prose.
-  form  one call per rostered player (coaches skipped). Preferred path
-        "scrape": a plain HTTP fetch of the player's HLTV stats page, stripped
-        to text and handed to the LLM as an EXTRACTOR only (no tools). The
-        HLTV URL is learnt from an earlier fact's source_url (we have no HLTV
-        ids of our own). When the page cannot be read (robots.txt disallows
-        it, HTTP 403 / Cloudflare challenge, network error) the same unit falls
-        back to "web_search" for that player. As of 2026-10-14 BOTH apply to
-        HLTV: robots.txt disallows the dated (`?startDate=`) stats pages a
-        30-day rating needs, and plain HTTP gets a 403 Cloudflare challenge, so
-        in practice every form unit runs on web_search; the manifest says so
-        under `scrape`.
+The answer is mapped onto exact bundle names (a team the bundle does not
+know, or a player not on the team's roster, is rejected), stamped with this
+run's one `observed_at`, built with notes_facts.make_fact and checked with
+notes_facts.validate_fact. A rejected fact is logged in the manifest with its
+reasons and never written. Accepted facts are appended with notes_facts.merge
+(history kept, 400-day prune); the file is rewritten only when it changes.
 
-LLM output is mapped onto exact bundle team names (a team the bundle does not
-know is rejected), stamped with this run's one `observed_at`, built with
-notes_facts.make_fact and checked with notes_facts.validate_fact. A rejected
-fact is logged in the manifest with its reasons and never written. Accepted
-facts are appended with notes_facts.merge (history kept, 400-day prune); the
-file is rewritten only when its content changes.
+Cost bounds (all four apply on every run):
+  * one call per team, at most once per TEAM_TTL_HOURS (24) per team: the
+    manifest's `checked` ledger (and the store's newest fact) says when a team
+    was last fetched, so an empty answer is not re-asked every run.
+  * `--max-calls` (default 10) per run; teams playing soonest go first, the
+    rest are `deferred`, never dropped.
+  * a HARD MONTHLY BUDGET, env FACEOFF_NOTES_BUDGET_USD (default 1.00):
+    before each call, this calendar month's est_cost_usd from
+    notes_manifest_log.jsonl (lines of the same mode: dry runs never spend the
+    live budget) + this run's spend so far + calls in flight + the worst case
+    of the next call (worst_call_usd) must stay within it, else the call is
+    not made and the team is deferred with "monthly budget reached". That is
+    not a failure (exit 0); the manifest records `budget`.
+  * per call: web_search with search_context_size "low", max_tool_calls
+    MAX_TOOL_CALLS (2), max_output_tokens MAX_OUTPUT_TOKENS, reasoning effort
+    low. If the API rejects one of those optional parameters (HTTP 400 naming
+    it) the call is retried once without it (a 400 is not billed).
 
-Polite crawling (scrape path; terms in data/SOURCES.md):
-  * robots.txt is read once per host per run (cached) and obeyed. Python's
-    urllib.robotparser does prefix matching only and so misses HLTV's
-    wildcard rules (`/stats*?*startDate*`); a URL is fetched only when
-    robotparser AND a wildcard-aware check of the same file both allow it.
-  * descriptive User-Agent with a contact URL (UA), gzip accepted.
-  * >= MIN_GAP (3 s) between requests to one host, across all worker threads.
-  * every 200 response is cached under data/raw/notes_cache/ (gitignored),
-    keyed by URL, for PAGE_TTL_HOURS; a host that answers 403 / a challenge is
-    not asked again in the same run.
-  * retries with backoff on 429 / 5xx / network errors only.
-
-Cost bounds:
-  * `--max-calls` (default 60) caps LLM calls per run. Units are planned up
-    front in priority order (news for every team, then form by nearest
-    fixture) and the overflow is deferred to the next run, never dropped.
-  * cache first: a unit is skipped when the store already has a fact for it,
-    or the last run checked it (manifest `checked`, so an empty news search
-    is not repeated every run), less than CACHE_HOURS ago.
-  * `--concurrency` (default 3) bounds the worker threads.
-  * the pricing constants below are ESTIMATES; the manifest reports tokens
-    and web_search calls so the bill can be checked against them.
+Expected spend, from the PRICE_* constants below (ESTIMATES: verify against
+https://openai.com/api/pricing) and the fixtures' usage numbers (about 11k
+input tokens incl. search results, 2.2k output tokens incl. reasoning, 2
+searches):
+  per call   0.0006 (input) + 0.0009 (output) + 0.02 (2 searches) ~= $0.021
+             (one search: ~$0.011). The per-search fee is ~93% of the bill.
+  per day    5-8 teams in a 3-day scope, once a day: ~$0.11-0.17
+  per month  ~$3.2-5.2 uncapped; the default $1.00 budget therefore binds
+             after roughly 6-9 days of the month, after which calls stop
+             (exit 0, "monthly budget reached") until the 1st. Fewer calls
+             (a longer TTL, e.g. --ttl-hours 72: each team about once per
+             3-day window, ~$1.5/month) or a larger budget are the levers.
 
 Exit policy:
-  0  run finished (facts may be empty: no fixtures, all cached, nothing found).
-  1  more than 50% of attempted units failed (LLM / network error, output
-     that is not JSON), counted once at least FAIL_MIN (3) failed, so one
-     stubborn unit retried alone does not turn every run red; the good facts
-     and the manifest are still written. A failed unit is not marked checked
-     and is retried next run.
-  1  the bundle is missing or unreadable, an unknown --teams name, or the
-     existing store is not JSON (never overwritten).
+  0  run finished (facts may be empty: no fixtures, all cached, nothing
+     found, budget reached).
+  1  more than 50% of attempted teams failed (LLM / network error, output
+     that is not JSON) and at least min(FAIL_MIN, attempted) failed; the good
+     facts and the manifest are still written. A failed team is not marked
+     checked and is retried next run.
+  1  the bundle is missing or unreadable, an unknown --teams name, a
+     FACEOFF_NOTES_BUDGET_USD that is not a number, or the existing store is
+     not JSON (never overwritten).
   1  OPENAI_API_KEY unset in strict mode (--strict, or CI / GITHUB_ACTIONS
-     set): a silently dead fetcher is the failure we must not have. The
-     manifest records the error. Locally without --strict: a clear message,
-     nothing written, exit 0.
+     set): a silently dead fetcher is the failure we must not have. Locally
+     without --strict: a clear message, nothing written, exit 0.
   2  the manifest cannot be written.
 
-`--dry-run` uses no network at all: LLM responses and pages come from the
-recorded fixtures in tests/fixtures/notes_fetch/ (`--fixtures DIR`). Point
-`--out` / `--manifest` at a scratch path so fixture facts never reach data/.
+`--dry-run` uses no network at all: LLM responses come from the recorded
+fixtures in tests/fixtures/notes_fetch/ (`--fixtures DIR`). Point `--out` /
+`--manifest` at a scratch path so fixture facts never reach data/.
 
 Usage:
   python collectors/notes_fetch.py                       # live, scope from the bundle
-  python collectors/notes_fetch.py --teams FURIA,MOUZ --max-calls 10
-  python collectors/notes_fetch.py --teams FURIA --refresh   # ignore the 12 h cache-first rule
+  python collectors/notes_fetch.py --teams FURIA,MOUZ --max-calls 2
+  python collectors/notes_fetch.py --teams FURIA --refresh   # ignore the 24 h rule
   python collectors/notes_fetch.py --dry-run --teams FURIA,PARIVISION \\
       --out /tmp/f.json --manifest /tmp/m.json
 Stdlib only.
@@ -86,8 +87,6 @@ Stdlib only.
 import argparse
 import concurrent.futures
 import difflib
-import gzip
-import hashlib
 import json
 import os
 import re
@@ -97,9 +96,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-import urllib.robotparser
 from datetime import date, datetime, timedelta, timezone
-from html.parser import HTMLParser
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import paths  # noqa: E402  (puts every code folder on sys.path)
@@ -107,48 +104,48 @@ import paths  # noqa: E402  (puts every code folder on sys.path)
 import notes_facts as nf  # noqa: E402
 
 # ---- pricing: ESTIMATES, verify against https://openai.com/api/pricing -----
-# (USD; gpt-5-mini list prices as last checked by hand. Cached-input discounts
+# (USD, gpt-5-nano list prices as last known by hand. Cached-input discounts
 # are ignored, so the estimate errs high. Web-search result tokens are billed
-# as input tokens and are already inside usage.input_tokens.)
-PRICE_INPUT_PER_M = 0.25            # per 1M input tokens
-PRICE_OUTPUT_PER_M = 2.00           # per 1M output tokens (reasoning included)
+# as input tokens and are already inside usage.input_tokens; the per-call
+# search fee is separate.)
+PRICE_INPUT_PER_M = 0.05            # per 1M input tokens
+PRICE_OUTPUT_PER_M = 0.40           # per 1M output tokens (reasoning included)
 PRICE_WEB_SEARCH_PER_CALL = 0.01    # per web_search tool call ($10 / 1k calls)
 
-DEFAULT_MODEL = "gpt-5-mini"
+DEFAULT_MODEL = "gpt-5-nano"
 API_URL = "https://api.openai.com/v1/responses"
-UA = ("FaceOff-CS2-insights/0.2 (non-commercial fan analytics; "
-      "https://github.com/AverageNftEnjoyer/Face-Off; python-urllib; low volume, cached)")
+UA = ("FaceOff-CS2-insights/0.3 (non-commercial fan analytics; "
+      "https://github.com/AverageNftEnjoyer/Face-Off; python-urllib; low volume)")
 
-SCOPE_DAYS = 7          # teams with a fixture in [as_of, as_of + 7]
-CACHE_HOURS = 12        # a unit fetched / checked this recently is skipped
-PAGE_TTL_HOURS = 12     # on-disk page cache lifetime
+SCOPE_DAYS = 3          # teams with a fixture in [as_of, as_of + 3]
+TEAM_TTL_HOURS = 24     # a team fetched / checked this recently is skipped
 NEWS_DAYS = 30          # news window asked for (and enforced on the answer)
-DEFAULT_MAX_CALLS = 60
-DEFAULT_CONCURRENCY = 3
-FAIL_RATIO = 0.5        # more than this share of attempted units failing -> exit 1 ...
-FAIL_MIN = 3            # ... once at least this many failed (one stubborn unit retried alone is not an outage)
-CHECKED_KEEP_HOURS = 48
-MIN_GAP = 3.0           # seconds between requests to one host
-HTTP_BACKOFF = [5, 15]  # scrape retries (429 / 5xx / network only)
+DEFAULT_MAX_CALLS = 10
+DEFAULT_CONCURRENCY = 2
+DEFAULT_BUDGET_USD = 1.00
+MAX_TOOL_CALLS = 2      # web searches per call
+MAX_OUTPUT_TOKENS = 6000
+WORST_INPUT_TOKENS = 40000   # budget guard's upper bound on one call's input (prompt + search results)
+FAIL_RATIO = 0.5        # more than this share of attempted teams failing -> exit 1 ...
+FAIL_MIN = 3            # ... once at least min(FAIL_MIN, attempted) failed
+CHECKED_KEEP_HOURS = 24 * 8
 LLM_BACKOFF = [5, 20, 60]
 MAX_RETRY_AFTER = 120
-MAX_PAGE_CHARS = 24000  # page text handed to the extractor
+OPTIONAL_PARAMS = ("search_context_size", "max_tool_calls", "reasoning")
+BUDGET_REASON = "monthly budget reached"
 
 BUNDLE = os.path.join(paths.VIEWER, "data-bundle.json")
 OUT = os.path.join(paths.DATA, "notes_facts.json")
 MANIFEST = os.path.join(paths.DATA, "notes_manifest.json")
 LOG_NAME = "notes_manifest_log.jsonl"
-CACHE_DIR = os.path.join(paths.RAW, "notes_cache")
 FIXTURES = os.path.join(paths.ROOT, "tests", "fixtures", "notes_fetch")
-
-HLTV_PLAYER = re.compile(r"^https://www\.hltv\.org/stats/players/(\d+)/([^/?#]+)")
 
 
 class FetchError(Exception):
-    """A unit failed (counted against the 50% rule)."""
+    """A team's call failed (counted against the 50% rule)."""
 
 
-# ---- structured-output schemas ---------------------------------------------
+# ---- structured-output schema (one per team) -------------------------------
 def _nullable(t, enum=None):
     s = {"type": [t, "null"]}
     if enum:
@@ -156,91 +153,86 @@ def _nullable(t, enum=None):
     return s
 
 
-FORM_SCHEMA = {
-    "type": "object", "additionalProperties": False,
-    "properties": {
-        "found": {"type": "boolean"},
-        "team": {"type": "string"},
-        "player": {"type": "string"},
-        "rating_last30": _nullable("number"),
-        "rating_baseline": _nullable("number"),
-        "baseline": _nullable("string", nf.BASELINES),
-        "maps_last30": _nullable("integer"),
-        "rating_version": _nullable("string"),
-        "source_url": _nullable("string"),
-    },
-}
-FORM_SCHEMA["required"] = list(FORM_SCHEMA["properties"])
+def _strict(props):
+    return {"type": "object", "additionalProperties": False, "properties": props, "required": list(props)}
 
-NEWS_ITEM = {
-    "type": "object", "additionalProperties": False,
-    "properties": {
-        "type": {"type": "string", "enum": list(nf.NEWS_TYPES)},
-        "team": {"type": "string"},
-        "player": {"type": "string"},
-        "date": {"type": "string"},
-        "source_url": {"type": "string"},
-        "replaced": _nullable("string"),
-        "until": _nullable("string"),
-        "event": _nullable("string"),
-        "move": _nullable("string", ("in", "out")),
-        "other_team": _nullable("string"),
-    },
-}
-NEWS_ITEM["required"] = list(NEWS_ITEM["properties"])
-NEWS_SCHEMA = {"type": "object", "additionalProperties": False, "required": ["items"],
-               "properties": {"items": {"type": "array", "items": NEWS_ITEM}}}
+
+PLAYER_ITEM = _strict({
+    "player": {"type": "string"},
+    "found": {"type": "boolean"},
+    "rating_last30": _nullable("number"),
+    "rating_baseline": _nullable("number"),
+    "baseline": _nullable("string", nf.BASELINES),
+    "maps_last30": _nullable("integer"),
+    "rating_version": _nullable("string"),
+    "source_url": _nullable("string"),
+})
+NEWS_ITEM = _strict({
+    "type": {"type": "string", "enum": list(nf.NEWS_TYPES)},
+    "team": {"type": "string"},
+    "player": {"type": "string"},
+    "date": {"type": "string"},
+    "source_url": {"type": "string"},
+    "replaced": _nullable("string"),
+    "until": _nullable("string"),
+    "event": _nullable("string"),
+    "move": _nullable("string", ("in", "out")),
+    "other_team": _nullable("string"),
+})
+TEAM_SCHEMA = _strict({"players": {"type": "array", "items": PLAYER_ITEM},
+                       "news": {"type": "array", "items": NEWS_ITEM}})
 
 RULES = ("You are a data extractor for a Counter-Strike 2 statistics site. Answer ONLY with JSON "
          "matching the schema; never prose. Report only what a page you actually read states; "
          "never estimate, infer or invent a number, a date or a URL.")
 
 
-def news_request(team, players, day):
+def team_request(team, players, day):
     lo = (day - timedelta(days=NEWS_DAYS)).isoformat()
     return (f"Today is {day.isoformat()}. CS2 team: {team!r}; current players: {', '.join(players) or 'unknown'}.\n"
-            f"Search the web for news dated {lo} or later, and report ONLY:\n"
-            f"1. stand_in: a player standing in for {team!r} (player = the stand-in, replaced = the regular "
-            f"if named, date = first day of the stand-in or the announcement, until = last day if stated, "
-            f"event = the event if stated).\n"
+            f"Use at most {MAX_TOOL_CALLS} web searches (HLTV first: the team's page and its players' stats).\n"
+            f"players: one entry per current player listed above, player = that exact nickname. "
+            f"rating_last30 = HLTV Rating over the last 30 days; maps_last30 = maps played in that window; "
+            f"rating_baseline = the same rating over the last 12 months (baseline='last12m') or the career "
+            f"figure (baseline='career'); rating_version as labelled (e.g. '2.1', '3.0'); source_url = the "
+            f"https URL of the stats page the numbers are on (prefer https://www.hltv.org/stats/players/<id>/<nick>). "
+            f"If a required number is not on a page you read: found=false and the numbers null.\n"
+            f"news: ONLY items dated {lo} or later:\n"
+            f"1. stand_in: a player standing in for {team!r} (player = the stand-in, replaced = the regular if "
+            f"named, date = first day of the stand-in or the announcement, until = last day if stated, event = "
+            f"the event if stated).\n"
             f"2. roster_rumor: a player reported or rumoured to be joining (move=in) or leaving (move=out) "
             f"{team!r}; other_team = the other organisation if named.\n"
-            f"team = {team!r} for every item. date = YYYY-MM-DD as the source dates it. source_url = the "
-            f"https URL of the article. Leave fields that do not apply null. Nothing found: items = [].")
+            f"team = {team!r} for every news item. date = YYYY-MM-DD as the source dates it. source_url = the "
+            f"https URL of the article. Fields that do not apply: null. Nothing found: news = [].")
 
 
-def form_search_request(team, player, day):
-    return (f"Today is {day.isoformat()}. Find the HLTV statistics of CS2 player {player!r} ({team}).\n"
-            f"Report: rating_last30 = HLTV Rating over the last 30 days; maps_last30 = maps played in "
-            f"that window; rating_baseline = the same rating over the last 12 months (baseline='last12m') "
-            f"or the career figure (baseline='career'); rating_version as labelled (e.g. '2.1', '3.0'). "
-            f"source_url = the https URL of the stats page the numbers are on (prefer "
-            f"https://www.hltv.org/stats/players/<id>/<nick>). team = {team!r}, player = {player!r}. "
-            f"If any required number is not on a page you read, set found=false and the numbers null.")
-
-
-def form_extract_request(team, player, url, text):
-    return (f"Extract the statistics of CS2 player {player!r} ({team}) from this page text "
-            f"(fetched from {url}). rating_last30 / maps_last30 = the last-30-days figures; "
-            f"rating_baseline with baseline='last12m' or 'career' as the page shows. team = {team!r}, "
-            f"player = {player!r}, source_url = null. If the page does not show a required number, "
-            f"found=false.\n\n--- page text ---\n{text}")
-
-
-def payload(model, prompt, schema, name, search):
+def payload(model, prompt, schema=TEAM_SCHEMA, name="team_facts"):
     p = {"model": model, "instructions": RULES, "input": prompt, "store": False,
+         "max_output_tokens": MAX_OUTPUT_TOKENS, "max_tool_calls": MAX_TOOL_CALLS,
+         "tools": [{"type": "web_search", "search_context_size": "low"}],
          "text": {"format": {"type": "json_schema", "name": name, "schema": schema, "strict": True}}}
-    if search:
-        p["tools"] = [{"type": "web_search", "search_context_size": "low"}]
     if model.startswith(("gpt-5", "o")):
         p["reasoning"] = {"effort": "low"}
     return p
 
 
+def _drop_param(body, name):
+    """A copy of the request without the optional parameter `name`."""
+    body = json.loads(json.dumps(body))
+    if name == "search_context_size":
+        for t in body.get("tools") or []:
+            t.pop("search_context_size", None)
+    else:
+        body.pop(name, None)
+    return body
+
+
 # ---- response parsing ------------------------------------------------------
 def parse_response(resp):
-    """Responses-API object -> (parsed JSON, usage dict). FetchError when the
-    run did not complete, refused, or answered with something that is not JSON."""
+    """Responses-API object -> (parsed JSON, usage dict). FetchError(msg,
+    usage) when the run did not complete, refused, or answered with something
+    that is not JSON."""
     usage = resp.get("usage") or {}
     u = {"input_tokens": int(usage.get("input_tokens") or 0),
          "output_tokens": int(usage.get("output_tokens") or 0),
@@ -286,10 +278,12 @@ class LiveLLM:
         self.key, self.timeout = key, timeout
 
     def __call__(self, unit_key, body):
-        data = json.dumps(body).encode("utf-8")
-        req = urllib.request.Request(API_URL, data=data, method="POST", headers={
-            "Authorization": f"Bearer {self.key}", "Content-Type": "application/json", "User-Agent": UA})
-        for backoff in LLM_BACKOFF + [None]:
+        dropped = set()
+        backoffs = iter(LLM_BACKOFF + [None])
+        while True:
+            data = json.dumps(body).encode("utf-8")
+            req = urllib.request.Request(API_URL, data=data, method="POST", headers={
+                "Authorization": f"Bearer {self.key}", "Content-Type": "application/json", "User-Agent": UA})
             try:
                 with urllib.request.urlopen(req, timeout=self.timeout) as r:
                     return json.loads(r.read().decode("utf-8"))
@@ -299,6 +293,13 @@ class LiveLLM:
                     detail = json.loads(e.read().decode("utf-8")).get("error", {}).get("message", "")
                 except Exception:
                     pass
+                if e.code == 400:
+                    bad = next((p for p in OPTIONAL_PARAMS if p in detail and p not in dropped), None)
+                    if bad:      # the model does not take this optional knob: ask again without it
+                        dropped.add(bad)
+                        body = _drop_param(body, bad)
+                        continue
+                backoff = next(backoffs)
                 if e.code not in (429, 500, 502, 503, 504) or backoff is None:
                     raise FetchError(redact(f"OpenAI HTTP {e.code}: {detail[:160]}", self.key))
                 try:
@@ -307,10 +308,10 @@ class LiveLLM:
                     pause = backoff
                 time.sleep(pause)
             except (urllib.error.URLError, TimeoutError, OSError) as e:
+                backoff = next(backoffs)
                 if backoff is None:
                     raise FetchError(redact(f"OpenAI unreachable: {e}", self.key))
                 time.sleep(backoff)
-        raise FetchError("OpenAI: retries exhausted")
 
 
 class RecordedLLM:
@@ -329,207 +330,11 @@ class RecordedLLM:
         return json.loads(s)
 
 
-# ---- polite HTTP (scrape path) ---------------------------------------------
-class _Text(HTMLParser):
-    SKIP = {"script", "style", "noscript", "svg", "head"}
-    BLOCK = {"p", "div", "tr", "li", "br", "h1", "h2", "h3", "h4", "table", "section", "span"}
-
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.out, self.skip = [], 0
-
-    def handle_starttag(self, tag, attrs):
-        if tag in self.SKIP:
-            self.skip += 1
-        elif tag in self.BLOCK:
-            self.out.append("\n")
-
-    def handle_endtag(self, tag):
-        if tag in self.SKIP and self.skip:
-            self.skip -= 1
-
-    def handle_data(self, d):
-        if not self.skip:
-            self.out.append(d)
-
-
-def html_to_text(html):
-    p = _Text()
-    p.feed(html)
-    lines = (re.sub(r"[ \t\r\f\v]+", " ", ln).strip() for ln in "".join(p.out).split("\n"))
-    return "\n".join(ln for ln in lines if ln)[:MAX_PAGE_CHARS]
-
-
-def _robots_rules(text, agent="faceoff-cs2-insights"):
-    """Disallow/Allow patterns of the group for `agent` (else '*'), in the
-    wildcard ('*', '$') syntax robotparser ignores."""
-    groups, cur, in_rules = {}, [], False
-    for raw in text.splitlines():
-        ln = raw.split("#", 1)[0].strip()
-        if ":" not in ln:
-            continue
-        k, v = (x.strip() for x in ln.split(":", 1))
-        k = k.lower()
-        if k == "user-agent":
-            if in_rules:
-                cur, in_rules = [], False
-            cur.append(v.lower())
-            groups.setdefault(v.lower(), [])
-        elif k in ("allow", "disallow"):
-            in_rules = True
-            for a in cur:
-                groups[a].append((k, v))
-    return groups.get(agent) or groups.get("*") or []
-
-
-def _rule_match(pattern, path):
-    if not pattern:
-        return False
-    rx = re.escape(pattern).replace(r"\*", ".*")
-    if rx.endswith(r"\$"):
-        rx = rx[:-2] + "$"
-    return re.match(rx, path) is not None
-
-
-def robots_allows(text, url):
-    """robotparser AND a wildcard-aware longest-match check must both allow."""
-    rp = urllib.robotparser.RobotFileParser()
-    rp.parse(text.splitlines())
-    if not rp.can_fetch(UA, url):
-        return False
-    u = urllib.parse.urlsplit(url)
-    path = (u.path or "/") + (("?" + u.query) if u.query else "")
-    best = None
-    for kind, pat in _robots_rules(text):
-        if _rule_match(pat, path) and (best is None or len(pat) > len(best[1])
-                                       or (len(pat) == len(best[1]) and kind == "allow")):
-            best = (kind, pat)
-    return best is None or best[0] == "allow"
-
-
-class Http:
-    """Polite cached GET. `recorded` (dry run): {url: {"status", "body"}} and
-    no network at all."""
-
-    def __init__(self, cache_dir=CACHE_DIR, recorded=None, now=None):
-        self.cache_dir, self.recorded = cache_dir, recorded
-        self.now = now or datetime.now(timezone.utc)
-        self.requests = 0
-        self._lock = threading.Lock()
-        self._host_locks, self._last, self._robots, self._blocked = {}, {}, {}, {}
-
-    def _host_lock(self, host):
-        with self._lock:
-            return self._host_locks.setdefault(host, threading.Lock())
-
-    def _cache_path(self, url):
-        return os.path.join(self.cache_dir, hashlib.sha1(url.encode()).hexdigest()[:16] + ".json")
-
-    def _cached(self, url):
-        if self.recorded is not None:
-            return None
-        p = self._cache_path(url)
-        try:
-            with open(p, encoding="utf-8") as f:
-                rec = json.load(f)
-            if self.now - nf.parse_ts(rec["fetched"]) < timedelta(hours=PAGE_TTL_HOURS):
-                return rec["body"]
-        except (OSError, ValueError, KeyError):
-            pass
-        return None
-
-    def _store(self, url, body):
-        if self.recorded is not None:
-            return
-        os.makedirs(self.cache_dir, exist_ok=True)
-        with open(self._cache_path(url), "w", encoding="utf-8") as f:
-            json.dump({"url": url, "fetched": nf.fmt_ts(self.now), "body": body}, f, ensure_ascii=False)
-
-    def _send(self, url):
-        """-> (status, body). One request, after the per-host gap."""
-        if self.recorded is not None:
-            rec = self.recorded.get(url)
-            if rec is None:
-                return None, "dry run: no recorded page"
-            with self._lock:
-                self.requests += 1
-            return rec.get("status", 200), rec.get("body", "")
-        host = urllib.parse.urlsplit(url).netloc
-        with self._host_lock(host):
-            wait = MIN_GAP - (time.time() - self._last.get(host, 0.0))
-            if wait > 0:
-                time.sleep(wait)
-            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"})
-            try:
-                with self._lock:
-                    self.requests += 1
-                with urllib.request.urlopen(req, timeout=30) as r:
-                    raw = r.read()
-                    if r.headers.get("Content-Encoding") == "gzip":
-                        raw = gzip.decompress(raw)
-                    return r.status, raw.decode("utf-8", "replace")
-            except urllib.error.HTTPError as e:
-                try:
-                    body = e.read().decode("utf-8", "replace")
-                except Exception:
-                    body = ""
-                return e.code, body
-            finally:
-                self._last[host] = time.time()
-
-    def get(self, url):
-        """-> page body, or raises FetchError(reason)."""
-        body = self._cached(url)
-        if body is not None:
-            return body
-        host = urllib.parse.urlsplit(url).netloc
-        if host in self._blocked:
-            raise FetchError(f"{host} refused earlier this run ({self._blocked[host]})")
-        for backoff in HTTP_BACKOFF + [None]:
-            try:
-                status, body = self._send(url)
-            except (urllib.error.URLError, TimeoutError, OSError) as e:
-                status, body = None, f"network error: {e}"
-            if status == 200:
-                if "Just a moment..." in body[:2000] or "cf-chl" in body[:5000]:
-                    self._blocked[host] = "Cloudflare challenge"
-                    raise FetchError("Cloudflare challenge (HTTP 200)")
-                self._store(url, body)
-                return body
-            if status in (401, 403) or (body and "Just a moment..." in body[:2000]):
-                why = f"HTTP {status}" + (" Cloudflare challenge" if "Just a moment" in (body or "") else "")
-                self._blocked[host] = why
-                raise FetchError(why)
-            if status not in (None, 429, 500, 502, 503, 504) or backoff is None or self.recorded is not None:
-                raise FetchError(f"HTTP {status}" if status else str(body))
-            time.sleep(backoff)
-        raise FetchError("retries exhausted")
-
-    def allowed(self, url):
-        """robots.txt check (fetched once per host per run). An unreadable
-        robots.txt (403, error) counts as 'disallow'."""
-        u = urllib.parse.urlsplit(url)
-        host = u.netloc
-        with self._host_lock("robots:" + host):
-            if host not in self._robots:
-                try:
-                    self._robots[host] = self.get(f"{u.scheme}://{host}/robots.txt")
-                except FetchError as e:
-                    self._robots[host] = e
-        r = self._robots[host]
-        if isinstance(r, FetchError):
-            return False, f"robots.txt unreadable ({r})"
-        if not robots_allows(r, url):
-            return False, f"robots.txt disallows {u.path}{'?' + u.query if u.query else ''}"
-        return True, None
-
-
 # ---- bundle, scope, names --------------------------------------------------
 def _norm(s):
     s = re.sub(r"[^a-z0-9]", "", str(s).lower())
-    for pre in ("team",):
-        if s.startswith(pre) and len(s) > len(pre) + 1:
-            s = s[len(pre):]
+    if s.startswith("team") and len(s) > 5:
+        s = s[4:]
     for suf in ("esports", "esport", "gaming", "clan", "team"):
         if s.endswith(suf) and len(s) > len(suf) + 1:
             s = s[: -len(suf)]
@@ -537,8 +342,7 @@ def _norm(s):
 
 
 class TeamNames:
-    """LLM / HLTV team names -> exact bundle names (None when unknown or
-    ambiguous)."""
+    """LLM team names -> exact bundle names (None when unknown or ambiguous)."""
 
     def __init__(self, teams, aliases=None):
         self.teams = set(teams)
@@ -565,10 +369,10 @@ def load_aliases():
         return {}
 
 
-def scope(bundle, as_of, only=None):
+def scope(bundle, as_of, days=SCOPE_DAYS, only=None):
     """[(team, nearest fixture day, [players])] sorted by (day, team)."""
     teams = bundle["data"]["teams"]
-    hi = as_of + timedelta(days=SCOPE_DAYS)
+    hi = as_of + timedelta(days=days)
     near = {}
     for fx in bundle.get("fixtures") or []:
         try:
@@ -588,72 +392,60 @@ def scope(bundle, as_of, only=None):
     return out
 
 
-# ---- the run ---------------------------------------------------------------
+# ---- answer -> facts -------------------------------------------------------
 def _domain_label(url):
     host = urllib.parse.urlsplit(url).netloc.lower()
     host = host[4:] if host.startswith("www.") else host
     return {"hltv.org": "HLTV", "liquipedia.net": "Liquipedia"}.get(host, host)
 
 
-def _newest(facts):
-    """{key: newest observed_at} for form (team, player) and news (team)."""
-    form, news = {}, {}
-    for f in facts[0]:
-        k = (f["team"], f["player"])
-        form[k] = max(form.get(k, ""), f["observed_at"])
-    for f in facts[1]:
-        news[f["team"]] = max(news.get(f["team"], ""), f["observed_at"])
-    return form, news
+def form_facts_from(players, unit, ctx):
+    """players[] of one answer -> (facts, rejections)."""
+    if not isinstance(players, list):
+        return [], [{"kind": "form", "reasons": ["answer has no players list"]}]
+    roster = {p.lower(): p for p in unit["players"]}
+    facts, rej, seen = [], [], set()
+    for it in players:
+        if not isinstance(it, dict):
+            rej.append({"kind": "form", "reasons": ["player entry is not an object"]})
+            continue
+        if not it.get("found"):
+            continue
+        nick = roster.get(str(it.get("player") or "").lower())
+        reasons = []
+        if nick is None:
+            reasons.append(f"player {it.get('player')!r} is not on the {unit['team']} roster")
+        elif nick in seen:
+            reasons.append(f"player {nick!r} listed twice")
+        if not it.get("source_url"):
+            reasons.append("missing source_url")
+        if reasons:
+            rej.append({"kind": "form", "player": it.get("player"), "reasons": reasons, "raw": it})
+            continue
+        seen.add(nick)
+        f = nf.make_fact(team=unit["team"], player=nick, observed_at=ctx["observed_at"],
+                         source_url=it["source_url"], source=_domain_label(it["source_url"]), method="web_search",
+                         rating_last30=it.get("rating_last30"), rating_baseline=it.get("rating_baseline"),
+                         baseline=it.get("baseline"), maps_last30=it.get("maps_last30"),
+                         rating_version=it.get("rating_version"))
+        errs = nf.validate_fact(f, ctx["teams"])
+        if errs:
+            rej.append({"kind": "form", "player": nick, "reasons": errs, "raw": it})
+        else:
+            facts.append(f)
+    return facts, rej
 
 
-def _hltv_url(form_facts, team, player):
-    best = None
-    for f in form_facts:
-        if f["team"] == team and f["player"].lower() == player.lower() and HLTV_PLAYER.match(f["source_url"]):
-            if best is None or f["observed_at"] > best["observed_at"]:
-                best = f
-    m = HLTV_PLAYER.match(best["source_url"]) if best else None
-    return f"https://www.hltv.org/stats/players/{m.group(1)}/{m.group(2)}" if m else None
-
-
-def form_facts_from(out, unit, ctx, method, source_url):
-    """LLM form answer -> ([fact], [rejection]) (empty, empty when found=false)."""
-    if not isinstance(out, dict):
-        return [], [{"reasons": ["answer is not an object"]}]
-    if not out.get("found"):
-        return [], []
-    reasons = []
-    team = ctx["names"](out.get("team"))
-    if team is None:
-        reasons.append(f"unknown team {out.get('team')!r}")
-    elif team != unit["team"]:
-        reasons.append(f"team {team!r} is not the requested {unit['team']!r}")
-    if str(out.get("player") or "").lower() != unit["player"].lower():
-        reasons.append(f"player {out.get('player')!r} is not the requested {unit['player']!r}")
-    url = source_url or out.get("source_url")
-    if not url:
-        reasons.append("missing source_url")
-    if reasons:
-        return [], [{"reasons": reasons, "raw": out}]
-    f = nf.make_fact(team=team, player=unit["player"], observed_at=ctx["observed_at"], source_url=url,
-                     source=_domain_label(url), method=method,
-                     rating_last30=out.get("rating_last30"), rating_baseline=out.get("rating_baseline"),
-                     baseline=out.get("baseline"), maps_last30=out.get("maps_last30"),
-                     rating_version=out.get("rating_version"))
-    errs = nf.validate_fact(f, ctx["teams"])
-    return ([], [{"reasons": errs, "raw": out}]) if errs else ([f], [])
-
-
-def news_facts_from(out, unit, ctx):
-    items = out.get("items") if isinstance(out, dict) else None
+def news_facts_from(items, unit, ctx):
+    """news[] of one answer -> (facts, rejections)."""
     if not isinstance(items, list):
-        return [], [{"reasons": ["answer has no items list"]}]
+        return [], [{"kind": "news", "reasons": ["answer has no news list"]}]
     facts, rej = [], []
     lo = ctx["as_of"] - timedelta(days=NEWS_DAYS)
     hi = ctx["as_of"] + timedelta(days=NEWS_DAYS)
     for it in items:
         if not isinstance(it, dict):
-            rej.append({"reasons": ["item is not an object"]})
+            rej.append({"kind": "news", "reasons": ["item is not an object"]})
             continue
         reasons = []
         team = ctx["names"](it.get("team"))
@@ -668,9 +460,9 @@ def news_facts_from(out, unit, ctx):
             if it.get("until") and date.fromisoformat(str(it["until"])) < d:
                 reasons.append("until before date")
         except ValueError:
-            reasons.append(f"date {it.get('date')!r} not YYYY-MM-DD")
+            reasons.append(f"date {it.get('date')!r} / until {it.get('until')!r} not a real YYYY-MM-DD")
         if reasons:
-            rej.append({"reasons": reasons, "raw": it})
+            rej.append({"kind": "news", "player": it.get("player"), "reasons": reasons, "raw": it})
             continue
         other = it.get("other_team")
         f = nf.make_fact(type=it.get("type"), team=team, player=it.get("player"),
@@ -679,68 +471,103 @@ def news_facts_from(out, unit, ctx):
                          replaced=it.get("replaced"), until=it.get("until"), event=it.get("event"),
                          move=it.get("move"), other_team=(ctx["names"](other) or other) if other else None)
         errs = nf.validate_fact(f, ctx["teams"])
-        (rej.append({"reasons": errs, "raw": it}) if errs else facts.append(f))
+        if errs:
+            rej.append({"kind": "news", "player": it.get("player"), "reasons": errs, "raw": it})
+        else:
+            facts.append(f)
     return facts, rej
 
 
-def run_unit(unit, ctx):
-    """One unit -> result dict. Raises nothing: failures are recorded."""
-    res = {"unit": unit, "facts": [], "rejected": [], "error": None, "usage": None, "scrape": None,
-           "method": None, "called": False}
-    try:
-        if unit["kind"] == "news":
-            res["method"] = "web_search"
-            body = payload(ctx["model"], news_request(unit["team"], unit["players"], ctx["as_of"]),
-                           NEWS_SCHEMA, "roster_news", True)
-            out = _call(ctx, unit["key"], body, res)
-            res["facts"], res["rejected"] = news_facts_from(out, unit, ctx)
-            return res
-        text, page = None, None
-        if unit.get("hltv"):
-            lo = (ctx["as_of"] - timedelta(days=30)).isoformat()
-            page = f"{unit['hltv']}?startDate={lo}&endDate={ctx['as_of'].isoformat()}"
-            ok, why = ctx["http"].allowed(page)
-            try:
-                if not ok:
-                    raise FetchError(why)
-                text = html_to_text(ctx["http"].get(page))
-                res["scrape"] = "ok"
-            except FetchError as e:
-                res["scrape"] = str(e)
-        if text:
-            res["method"] = "scrape"
-            body = payload(ctx["model"], form_extract_request(unit["team"], unit["player"], page, text),
-                           FORM_SCHEMA, "player_form", False)
-            out = _call(ctx, unit["key"].replace("form|", "form_scrape|", 1), body, res)
-            res["facts"], res["rejected"] = form_facts_from(out, unit, ctx, "scrape", page)
-        else:
-            res["method"] = "web_search"
-            body = payload(ctx["model"], form_search_request(unit["team"], unit["player"], ctx["as_of"]),
-                           FORM_SCHEMA, "player_form", True)
-            out = _call(ctx, unit["key"], body, res)
-            res["facts"], res["rejected"] = form_facts_from(out, unit, ctx, "web_search", None)
-    except FetchError as e:
-        res["error"] = str(e)
-    except Exception as e:      # per-unit isolation: one failure never stops the others
-        res["error"] = f"{type(e).__name__}: {e}"
-    return res
-
-
-def _call(ctx, key, body, res):
-    res["called"] = True
-    resp = ctx["llm"](key, body)
-    try:
-        out, usage = parse_response(resp)
-    except FetchError as e:
-        res["usage"] = e.args[1] if len(e.args) > 1 else None
-        raise FetchError(e.args[0])
-    res["usage"] = usage
-    return out
-
-
+# ---- budget ----------------------------------------------------------------
 def estimate_cost(input_tokens, output_tokens, web_search_calls):
     return round(input_tokens / 1e6 * PRICE_INPUT_PER_M + output_tokens / 1e6 * PRICE_OUTPUT_PER_M
                  + web_search_calls * PRICE_WEB_SEARCH_PER_CALL, 4)
+
+
+def worst_call_usd():
+    """Upper bound of one call: the guard reserves this before calling."""
+    return estimate_cost(WORST_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_TOOL_CALLS)
+
+
+def month_spent(log_path, month, mode):
+    """Sum of est_cost_usd over the log lines of calendar month `month`
+    ('YYYY-MM', UTC) written by runs of the same `mode`."""
+    total = 0.0
+    try:
+        with open(log_path, encoding="utf-8") as f:
+            for ln in f:
+                try:
+                    r = json.loads(ln)
+                    if str(r.get("run_at", "")).startswith(month) and r.get("mode") == mode:
+                        total += float(r.get("est_cost_usd") or 0)
+                except (ValueError, TypeError, AttributeError):
+                    continue
+    except OSError:
+        pass
+    return round(total, 4)
+
+
+class Budget:
+    """Thread-safe monthly guard: reserve() before a call, settle() after."""
+
+    def __init__(self, limit, spent_before):
+        self.limit, self.before = limit, spent_before
+        self.run_spent, self.inflight = 0.0, 0.0
+        self.stopped = False
+        self._lock = threading.Lock()
+
+    def reserve(self):
+        w = worst_call_usd()
+        with self._lock:
+            if self.before + self.run_spent + self.inflight + w > self.limit + 1e-9:
+                self.stopped = True
+                return None
+            self.inflight += w
+            return w
+
+    def settle(self, reserved, actual):
+        with self._lock:
+            self.inflight -= reserved
+            self.run_spent += actual
+
+    def report(self):
+        spent = round(self.before + self.run_spent, 4)
+        return {"limit_usd": self.limit, "spent_month_usd": spent, "spent_before_run_usd": self.before,
+                "remaining_usd": round(max(0.0, self.limit - spent), 4), "worst_call_usd": worst_call_usd(),
+                "stopped": self.stopped}
+
+
+# ---- the run ---------------------------------------------------------------
+def run_unit(unit, ctx):
+    """One team -> result dict. Raises nothing: failures are recorded."""
+    res = {"unit": unit, "facts": [], "rejected": [], "error": None, "usage": None, "called": False,
+           "deferred": None}
+    reserved = ctx["budget"].reserve()
+    if reserved is None:
+        res["deferred"] = BUDGET_REASON
+        return res
+    try:
+        res["called"] = True
+        resp = ctx["llm"](unit["key"], payload(ctx["model"], team_request(unit["team"], unit["players"], ctx["as_of"])))
+        try:
+            out, res["usage"] = parse_response(resp)
+        except FetchError as e:
+            res["usage"] = e.args[1] if len(e.args) > 1 else None
+            raise FetchError(e.args[0])
+        if not isinstance(out, dict):
+            raise FetchError("answer is not a JSON object")
+        ff, fr = form_facts_from(out.get("players"), unit, ctx)
+        nfacts, nr = news_facts_from(out.get("news"), unit, ctx)
+        res["facts"], res["rejected"] = ff + nfacts, fr + nr
+    except FetchError as e:
+        res["error"] = str(e)
+    except Exception as e:      # per-team isolation: one failure never stops the others
+        res["error"] = f"{type(e).__name__}: {e}"
+    finally:
+        u = res["usage"] or {}
+        ctx["budget"].settle(reserved, estimate_cost(u.get("input_tokens", 0), u.get("output_tokens", 0),
+                                                     u.get("web_search_calls", 0)))
+    return res
 
 
 def dumps(obj):
@@ -764,22 +591,24 @@ def _read_json(path):
 
 def parse_args(argv):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--teams", help="comma-separated bundle team names (overrides the 7-day scope)")
+    ap.add_argument("--teams", help="comma-separated bundle team names (overrides the scope)")
+    ap.add_argument("--scope-days", type=int, default=SCOPE_DAYS, help="teams with a fixture in the next N days (default %(default)s)")
+    ap.add_argument("--ttl-hours", type=float, default=TEAM_TTL_HOURS, help="re-fetch a team at most this often (default %(default)s)")
     ap.add_argument("--max-calls", type=int, default=DEFAULT_MAX_CALLS, help="LLM calls per run (default %(default)s)")
     ap.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY, help="worker threads (default %(default)s)")
     ap.add_argument("--dry-run", action="store_true", help="no network: recorded fixtures only")
     ap.add_argument("--fixtures", default=FIXTURES, help="dry-run fixture folder")
     ap.add_argument("--out", default=OUT)
     ap.add_argument("--manifest", default=MANIFEST)
-    ap.add_argument("--log", help=f"run history (default: {LOG_NAME} beside --manifest)")
+    ap.add_argument("--log", help=f"run history, also the budget's ledger (default: {LOG_NAME} beside --manifest)")
     ap.add_argument("--bundle", default=BUNDLE)
     ap.add_argument("--as-of", help="scope start day YYYY-MM-DD (default: the run's UTC date)")
-    ap.add_argument("--refresh", action="store_true", help="ignore the cache-first rule (re-fetch every unit)")
+    ap.add_argument("--refresh", action="store_true", help="ignore the TTL (re-fetch every team; the budget still applies)")
     ap.add_argument("--strict", action="store_true", help="fail on a missing API key (implied by CI)")
     return ap.parse_args(argv)
 
 
-def main(argv=None, now=None, llm=None, http=None, env=None):
+def main(argv=None, now=None, llm=None, env=None):
     a = parse_args(argv)
     env = os.environ if env is None else env
     now = (now or datetime.now(timezone.utc)).replace(microsecond=0)
@@ -789,6 +618,14 @@ def main(argv=None, now=None, llm=None, http=None, env=None):
     model = env.get("FACEOFF_NOTES_MODEL") or DEFAULT_MODEL
     log_path = a.log or os.path.join(os.path.dirname(os.path.abspath(a.manifest)), LOG_NAME)
     mode = "dry-run" if a.dry_run else "live"
+    key = env.get("OPENAI_API_KEY")
+
+    try:
+        budget_limit = float(env.get("FACEOFF_NOTES_BUDGET_USD") or DEFAULT_BUDGET_USD)
+    except ValueError:
+        print(f"notes_fetch: FACEOFF_NOTES_BUDGET_USD={env.get('FACEOFF_NOTES_BUDGET_USD')!r} is not a number",
+              file=sys.stderr)
+        return 1
 
     try:
         with open(a.bundle, encoding="utf-8") as f:
@@ -810,9 +647,11 @@ def main(argv=None, now=None, llm=None, http=None, env=None):
                 print(f"notes_fetch: no team named {t!r} in the bundle; close: "
                       f"{difflib.get_close_matches(t, list(teams), 5)}", file=sys.stderr)
             return 1
-    sc = scope(bundle, as_of, only)
+    sc = scope(bundle, as_of, a.scope_days, only)
 
+    budget = Budget(budget_limit, month_spent(log_path, observed_at[:7], mode))
     manifest = {"run_at": observed_at, "mode": mode, "model": model, "as_of": as_of.isoformat(),
+                "scope_days": a.scope_days, "ttl_hours": a.ttl_hours,
                 "scope_teams": [t for t, _, _ in sc], "error": None, "warnings": [],
                 "pricing_estimate": {"note": "ESTIMATES: verify against https://openai.com/api/pricing",
                                      "input_per_m_usd": PRICE_INPUT_PER_M, "output_per_m_usd": PRICE_OUTPUT_PER_M,
@@ -820,28 +659,28 @@ def main(argv=None, now=None, llm=None, http=None, env=None):
 
     def finish(code):
         manifest["exit_code"] = code
+        manifest.setdefault("budget", budget.report())
         try:
-            _write(a.manifest, redact(dumps(manifest), env.get("OPENAI_API_KEY")))
+            _write(a.manifest, redact(dumps(manifest), key))
             summary = {k: manifest.get(k) for k in (
-                "run_at", "mode", "model", "as_of", "error", "exit_code", "llm_calls", "http_requests",
+                "run_at", "mode", "model", "as_of", "error", "exit_code", "llm_calls",
                 "input_tokens", "output_tokens", "web_search_calls", "est_cost_usd", "cache_hits",
                 "cache_hit_rate", "units_attempted", "units_failed", "units_deferred", "facts_written",
                 "store_changed")}
             summary["scope_teams"] = len(manifest["scope_teams"])
             summary["teams_attempted"] = len(manifest.get("teams_attempted") or [])
-            summary["players_attempted"] = manifest.get("players_attempted")
             summary["facts_rejected"] = len(manifest.get("facts_rejected") or [])
             summary["fail_reasons"] = sorted({x["reason"] for x in manifest.get("fetches_failed") or []})[:10]
+            summary["budget_stopped"] = manifest["budget"]["stopped"]
             os.makedirs(os.path.dirname(os.path.abspath(log_path)), exist_ok=True)
             with open(log_path, "a", encoding="utf-8", newline="\n") as f:
                 f.write(redact(json.dumps(summary, sort_keys=True, separators=(",", ":"), ensure_ascii=False),
-                               env.get("OPENAI_API_KEY")) + "\n")
+                               key) + "\n")
         except OSError as e:
             print(f"notes_fetch: cannot write the manifest {a.manifest}: {e}", file=sys.stderr)
             return 2
         return code
 
-    key = env.get("OPENAI_API_KEY")
     if not a.dry_run and llm is None and not key:
         msg = "OPENAI_API_KEY is not set: no facts can be fetched"
         if strict:
@@ -860,85 +699,65 @@ def main(argv=None, now=None, llm=None, http=None, env=None):
     form_old, news_old, dropped = nf.clean(store)          # structural check only: history of any team is kept
     if dropped:
         manifest["warnings"].append(f"{len(dropped)} malformed stored facts dropped")
-    newest_form, newest_news = _newest((form_old, news_old))
+    newest = {}
+    for f in form_old + news_old:
+        newest[f["team"]] = max(newest.get(f["team"], ""), f["observed_at"])
 
     try:
         prev = _read_json(a.manifest) or {}
     except (OSError, ValueError):
         prev = {}
-    keep_lo = nf.fmt_ts(now - timedelta(hours=CHECKED_KEEP_HOURS))
-    checked = {k: v for k, v in (prev.get("checked") or {}).items() if isinstance(v, str) and keep_lo <= v <= observed_at}
-    fresh_lo = nf.fmt_ts(now - timedelta(hours=CACHE_HOURS))
+    keep_lo = nf.fmt_ts(now - timedelta(hours=max(CHECKED_KEEP_HOURS, a.ttl_hours)))
+    checked = {k: v for k, v in (prev.get("checked") or {}).items()
+               if k.startswith("team|") and isinstance(v, str) and keep_lo <= v <= observed_at}
+    fresh_lo = nf.fmt_ts(now - timedelta(hours=a.ttl_hours))
 
-    def fresh(key, newest):
-        if a.refresh:
-            return False
-        return max(newest or "", checked.get(key, "")) > fresh_lo
-
-    if a.dry_run:
+    if a.dry_run and llm is None:
         try:
             fx = _read_json(os.path.join(a.fixtures, "responses.json")) or {}
         except ValueError as e:
             manifest["error"] = f"fixtures unreadable: {e}"
             return finish(1)
-        llm = llm or RecordedLLM(fx.get("llm") or {}, as_of)
-        http = http or Http(recorded=fx.get("http") or {}, now=now)
-    else:
-        llm = llm or LiveLLM(key)
-        http = http or Http(now=now)
+        llm = RecordedLLM(fx.get("llm") or {}, as_of)
+    llm = llm or LiveLLM(key)
 
-    # plan: news for every team first (stand-ins matter most), then form by nearest fixture
+    # plan: one unit per team, soonest fixture first
     units, hits = [], 0
     for t, d, players in sc:
-        k = f"news|{t}"
-        if fresh(k, newest_news.get(t)):
+        k = f"team|{t}"
+        if not a.refresh and max(newest.get(t, ""), checked.get(k, "")) > fresh_lo:
             hits += 1
         else:
-            units.append({"kind": "news", "team": t, "day": d.isoformat(), "players": players, "key": k})
-    for t, d, players in sc:
-        for p in players:
-            k = f"form|{t}|{p}"
-            if fresh(k, newest_form.get((t, p))):
-                hits += 1
-            else:
-                units.append({"kind": "form", "team": t, "player": p, "day": d.isoformat(), "key": k,
-                              "hltv": _hltv_url(form_old, t, p)})
+            units.append({"team": t, "day": d.isoformat(), "players": players, "key": k})
     cap = max(0, a.max_calls)
-    todo, deferred = units[:cap], units[cap:]
-    if deferred:
-        manifest["warnings"].append(f"--max-calls {cap}: {len(deferred)} units deferred to the next run")
+    todo = units[:cap]
+    deferred = [{"team": u["team"], "reason": f"--max-calls {cap}"} for u in units[cap:]]
 
     ctx = {"model": model, "as_of": as_of, "observed_at": observed_at, "teams": teams, "names": names,
-           "llm": llm, "http": http}
+           "llm": llm, "budget": budget}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.concurrency)) as ex:
         results = list(ex.map(lambda u: run_unit(u, ctx), todo))   # map keeps the plan order
 
     new_facts, rejected, failed = [], [], []
     tok_in = tok_out = searches = calls = 0
-    scrape = {"tried": 0, "ok": 0, "fell_back": 0, "reasons": {}}
     for r in results:
         u = r["unit"]
-        tag = {"kind": u["kind"], "team": u["team"], **({"player": u["player"]} if u["kind"] == "form" else {})}
+        if r["deferred"]:
+            deferred.append({"team": u["team"], "reason": r["deferred"]})
+            continue
         calls += r["called"]
         if r["usage"]:
             tok_in += r["usage"]["input_tokens"]
             tok_out += r["usage"]["output_tokens"]
             searches += r["usage"]["web_search_calls"]
-        if r["scrape"] is not None:
-            scrape["tried"] += 1
-            if r["scrape"] == "ok":
-                scrape["ok"] += 1
-            else:
-                scrape["fell_back"] += 1
-                scrape["reasons"][r["scrape"]] = scrape["reasons"].get(r["scrape"], 0) + 1
         if r["error"]:
-            failed.append({**tag, "reason": r["error"]})
+            failed.append({"team": u["team"], "reason": redact(r["error"], key)})
         else:
             checked[u["key"]] = observed_at
         new_facts += r["facts"]
         for x in r["rejected"]:
-            rejected.append({**tag, "method": r["method"], "reasons": x["reasons"],
-                             **({"raw": x["raw"]} if "raw" in x else {})})
+            rejected.append({"team": u["team"], **x})
+    deferred.sort(key=lambda x: [u["team"] for u in units].index(x["team"]))
 
     old_ids = {f["id"] for f in form_old + news_old}
     added = [f for f in new_facts if f["id"] not in old_ids]
@@ -955,35 +774,41 @@ def main(argv=None, now=None, llm=None, http=None, env=None):
         _write(a.out, text)
         store_changed = True
 
-    attempted = len(todo)
+    attempted = calls
     n_failed = len(failed)
     denom = hits + len(units)
     manifest.update({
-        "teams_attempted": sorted({u["team"] for u in todo}),
-        "players_attempted": sum(1 for u in todo if u["kind"] == "form"),
+        "teams_attempted": sorted(r["unit"]["team"] for r in results if r["called"]),
         "units_planned": len(units), "units_attempted": attempted, "units_failed": n_failed,
-        "units_deferred": len(deferred), "deferred": [u["key"] for u in deferred],
+        "units_deferred": len(deferred), "deferred": deferred,
         "facts_written": len(added), "facts_written_ids": sorted(f["id"] for f in added),
         "facts_pruned": pruned, "facts_rejected": rejected, "fetches_failed": failed,
         "cache_hits": hits, "cache_hit_rate": round(hits / denom, 3) if denom else None,
-        "scrape": scrape, "http_requests": http.requests, "llm_calls": calls,
-        "input_tokens": tok_in, "output_tokens": tok_out, "web_search_calls": searches,
+        "llm_calls": calls, "input_tokens": tok_in, "output_tokens": tok_out, "web_search_calls": searches,
         "est_cost_usd": estimate_cost(tok_in, tok_out, searches),
+        "budget": budget.report(),
         "store": a.out if a.out != OUT else "data/notes_facts.json", "store_changed": store_changed,
         "checked": dict(sorted(checked.items())),
     })
-    if scrape["tried"] and not scrape["ok"]:
-        manifest["warnings"].append("scrape path unavailable this run (see scrape.reasons); form used web_search")
+    if budget.stopped:
+        n = sum(1 for d in deferred if d["reason"] == BUDGET_REASON)
+        b = manifest["budget"]
+        line = (f"monthly budget reached: ${b['spent_month_usd']:.4f} of ${b['limit_usd']:.2f} spent this month "
+                f"(next call could cost up to ${b['worst_call_usd']:.4f}); {n} teams deferred to next month "
+                f"or a larger FACEOFF_NOTES_BUDGET_USD")
+        manifest["warnings"].append(line)
+        print(f"notes_fetch: {line}", file=sys.stderr)
     code = 0
-    if attempted and n_failed >= FAIL_MIN and n_failed / attempted > FAIL_RATIO:
-        manifest["error"] = f"{n_failed} of {attempted} units failed (> {int(FAIL_RATIO * 100)}%)"
+    if attempted and n_failed >= min(FAIL_MIN, attempted) and n_failed / attempted > FAIL_RATIO:
+        manifest["error"] = f"{n_failed} of {attempted} teams failed (> {int(FAIL_RATIO * 100)}%)"
         print(f"notes_fetch: ERROR {manifest['error']}", file=sys.stderr)
         code = 1
     rc = finish(code)
-    print(f"notes_fetch [{mode}]: scope {len(sc)} teams, {attempted} units ({n_failed} failed, "
-          f"{len(deferred)} deferred), {hits} cache hits, {len(added)} new facts, {len(rejected)} rejected, "
-          f"{calls} LLM calls, {tok_in}+{tok_out} tokens, {searches} searches, ~${manifest['est_cost_usd']}"
-          f"{'' if store_changed else ' (store unchanged)'}", file=sys.stderr)
+    print(f"notes_fetch [{mode}]: scope {len(sc)} teams ({a.scope_days} days), {attempted} calls "
+          f"({n_failed} failed, {len(deferred)} deferred), {hits} cache hits, {len(added)} new facts, "
+          f"{len(rejected)} rejected, {tok_in}+{tok_out} tokens, {searches} searches, "
+          f"~${manifest['est_cost_usd']} (month ${manifest['budget']['spent_month_usd']} of "
+          f"${budget_limit:.2f}){'' if store_changed else ' (store unchanged)'}", file=sys.stderr)
     return rc
 
 

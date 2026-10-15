@@ -285,7 +285,7 @@ section changes no other byte of the bundle.
 | `notes.inputs.names` | Normalised player id → display id (`data.players`). |
 | `notes.inputs.fixtures` | `[day, event, team_a, team_b]` of `fixtures[]` (freshness scope, next-match context). |
 | `notes.facts` | `data/notes_facts.json` after validation (fact schema v1; malformed facts are dropped at build). |
-| `notes.freshness` | The `notes_freshness` signal over teams with a fixture in the next 7 days (contracts, section 2). |
+| `notes.freshness` | The `notes_freshness` signal over teams with a fixture in the next 3 days, the fetcher's scope (contracts, section 2). |
 | `notes.teams` | `team → {"notes": [note], "omitted", "next": {day, event, opp} \| null}`: team-page notes as of `live_cutoff`, rest counted to the team's next fixture within 7 days. |
 | `notes.matches` | Event match id (`data.events[].matches[].id`) → `{"asof", "notes", "omitted"}`: a played match as of its own day, an unplayed one as of `live_cutoff` with rest counted to its day. |
 

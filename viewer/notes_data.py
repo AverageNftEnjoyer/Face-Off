@@ -133,7 +133,7 @@ def build(data, fixtures, facts_path=None):
     sec["freshness"] = NT.freshness(inp, cut)
     # team pages: as of now, rest counted to the team's next fixture within the scope window
     nxt = {}
-    hi = (as_of + timedelta(days=NT.CONFIG["scope_days"])).isoformat()
+    hi = (as_of + timedelta(days=NT.CONFIG["next_match_days"])).isoformat()
     for d, ev, a, bb in sorted(fx):
         if as_of.isoformat() <= d <= hi:
             nxt.setdefault(a, {"day": d, "event": ev, "opp": bb})

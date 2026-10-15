@@ -145,7 +145,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | `collectors/lineups.py` | Per-match five-man lineups from Valve's regional-standings repository. |
 | `collectors/valve_results.py` | Second, independent results source (Valve rows) used only as a cross-check. |
 | `collectors/vrs.py` | Valve Regional Standings: `data/vrs.json`, `data/vrs_status.json`; `--check` fails when stale. |
-| `collectors/notes_fetch.py` | Web facts for the matchup notes (player form, stand-ins, roster rumours) for teams playing in the next 7 days, via the OpenAI Responses API (HLTV page + LLM extractor, else `web_search`); validated with `notes_facts`, appended to `data/notes_facts.json`; per-run manifest + log; call cap, cache-first, `--dry-run` on recorded fixtures (`tests/fixtures/notes_fetch/`). Display context only. |
+| `collectors/notes_fetch.py` | Web facts for the matchup notes (player form, stand-ins, roster rumours) for teams playing in the next 3 days: one OpenAI Responses API call per team (`web_search`, form + news in one strict JSON answer), at most once per 24 h; validated with `notes_facts`, appended to `data/notes_facts.json`; per-run manifest + log; call cap and a hard monthly budget (`FACEOFF_NOTES_BUDGET_USD`, summed from the log); `--dry-run` on recorded fixtures (`tests/fixtures/notes_fetch/`). Display context only. |
 
 ### `pipeline/`: scheduled jobs
 
@@ -212,11 +212,10 @@ this document and the layout in step.
 | `faceoff.db` | `build_db` | Read-only SQLite copy. |
 | `notes_eval_report.json` | `evaluation/notes_eval.py` | Notes rule fire rates + threshold sweeps (informational). |
 | `notes_facts.json` | `collectors/notes_fetch.py` | Web facts for the matchup notes (fact schema v1, append-only, 400-day prune). Never read by the model. |
-| `notes_manifest.json` | `collectors/notes_fetch.py` | Latest fetch run: scope, calls, tokens, estimated cost, rejected facts, failures, the `checked` ledger (cache-first). |
-| `notes_manifest_log.jsonl` | `collectors/notes_fetch.py` | One compact summary line per fetch run (history). |
+| `notes_manifest.json` | `collectors/notes_fetch.py` | Latest fetch run: scope, calls, tokens, estimated cost, monthly budget, rejected facts, failures, the `checked` ledger (24 h TTL). |
+| `notes_manifest_log.jsonl` | `collectors/notes_fetch.py` | One compact summary line per fetch run (history; the monthly budget is summed from it). |
 | `SOURCES.md` | by hand | Where every record comes from, and the terms followed. |
 | `raw/pages/`, `raw/media/`, `raw/*.txt` | `lpfetch`, `fetch_assets`, `daily_refresh` | Fetch cache, images, tracked page titles. |
-| `raw/notes_cache/` | `notes_fetch` | 12 h page cache of the notes scrape path (gitignored; kept between CI runs by `actions/cache`). |
 
 Generated and gitignored: `viewer/data-bundle.json`, `public/`, roster and
 fill-in candidates, research reports.
@@ -229,7 +228,7 @@ fill-in candidates, research reports.
 |---|---|---|
 | `daily-refresh.yml` | every 6 h + nightly | `pipeline/daily_refresh.py` → `checks/data_gates.py` → bundle → tests → page build check → `pipeline/build_db.py` → commit + push → roster-review issue → `--check-status` → `collectors/vrs.py --check` |
 | `live-refresh.yml` | every 10 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
-| `notes-facts.yml` | every 6 h (:47, offset from the refresh) | bundle (for the 7-day scope) → `collectors/notes_fetch.py` (`OPENAI_API_KEY` secret) → tests → commit the three `notes_*` data files + push; issue on failure |
+| `notes-facts.yml` | daily 06:47 UTC | bundle (for the 3-day scope) → `collectors/notes_fetch.py` (`OPENAI_API_KEY` secret) → tests → commit the three `notes_*` data files + push; issue on failure |
 | `validate.yml` | every 30 min | `checks/validate_freshness.py`; restarts the live refresh when behind |
 
 Both refresh workflows share one concurrency group, so two runs never write

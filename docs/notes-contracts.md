@@ -132,7 +132,7 @@ team. Team pages keep at most `CONFIG["max_team_notes"]`.
  "scope_teams": 18, "teams_with_no_facts": ["9z"], "facts_live": 64}
 ```
 
-Computed over the **scope teams** (teams with a fixture in the next 7 days).
+Computed over the **scope teams** (teams with a fixture in the next 3 days: the fetcher's scope).
 `oldest_fact_age_days` is the age of the oldest *newest* fact among scope
 teams that have any (null when none); `stale` = `oldest_fact_age_days > 7` or
 no fact run at all.

@@ -1,10 +1,17 @@
 # Web facts for the matchup notes (player form, stand-ins, roster rumours) for
-# the teams playing in the next 7 days: collectors/notes_fetch.py, through the
-# OpenAI Responses API. Display context only: nothing here feeds the model.
+# the teams playing in the next 3 days: collectors/notes_fetch.py, ONE OpenAI
+# Responses API call (gpt-5-nano + web_search) per team. Display context only:
+# nothing here feeds the model.
 #
-# Cost is bounded in the script: at most --max-calls OpenAI calls per run, and
-# a unit fetched in the last 12 h is skipped (data/notes_manifest.json reports
-# calls, tokens and the estimated cost of every run).
+# Cost is bounded in the script: a team at most once per 24 h, at most
+# --max-calls (10) calls per run, and a hard monthly budget
+# (FACEOFF_NOTES_BUDGET_USD, default $1.00, summed from
+# data/notes_manifest_log.jsonl): when the next call could exceed it, calls stop
+# for the month and the run still exits 0. Estimates (constants in the script,
+# to verify against OpenAI's pricing page): ~$0.02 per call (almost all of it
+# the $0.01-per-search fee, 2 searches), 5-8 teams a day ~$0.11-0.17/day,
+# ~$3-5/month uncapped, so the $1 budget binds after about a week of the month.
+# data/notes_manifest.json reports calls, tokens, cost and the budget.
 #
 # The key: Settings > Secrets and variables > Actions > "New repository
 # secret", name OPENAI_API_KEY. Never commit it or put it in a repository
@@ -21,7 +28,7 @@ name: Notes facts
 
 on:
   schedule:
-    - cron: "47 */6 * * *"   # 00:47, 06:47, 12:47, 18:47 UTC: half an hour after the refresh
+    - cron: "47 6 * * *"     # once a day, 06:47 UTC (the 24 h TTL makes more runs pointless)
   workflow_dispatch: {}
 
 permissions:
@@ -47,14 +54,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 12 h page cache of the scrape path (gitignored): carried between runs
-      - uses: actions/cache@v4
-        with:
-          path: data/raw/notes_cache
-          key: notes-cache-${{ github.run_id }}
-          restore-keys: notes-cache-
-
-      # the scope (teams with a fixture in the next 7 days) comes from the bundle
+      # the scope (teams with a fixture in the next 3 days) comes from the bundle
       - name: Build the derived data bundle
         run: python viewer/build_bundle.py viewer/data-bundle.json
 
@@ -63,6 +63,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FACEOFF_NOTES_MODEL: ${{ vars.FACEOFF_NOTES_MODEL }}   # optional repository variable; empty = default model
+          FACEOFF_NOTES_BUDGET_USD: ${{ vars.FACEOFF_NOTES_BUDGET_USD }}   # optional; empty = $1.00 a month
         run: |
           set -o pipefail
           python collectors/notes_fetch.py --strict 2>&1 | tee /tmp/notes.txt
