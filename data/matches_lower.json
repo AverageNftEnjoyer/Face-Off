@@ -218032,5 +218032,28 @@
   "ext_match_id": "2399260",
   "tier": "B",
   "kind": "main"
+ },
+ {
+  "match_id": "154c2f631820",
+  "date": "2026-10-16",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "FlyQuest",
+  "team_b": "Off Chops",
+  "winner": "FlyQuest",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "FlyQuest"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FlyQuest"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399538",
+  "tier": "B",
+  "kind": "main"
  }
 ]
