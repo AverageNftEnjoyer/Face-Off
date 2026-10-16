@@ -175,59 +175,6 @@
    "logo_path": "data/raw/media/7fb8b0b82a4b66b2.png",
    "logo_dark_path": "data/raw/media/7fb8b0b82a4b66b2.png"
   },
-  "33": {
-   "page": "33",
-   "logo": "BET-M 33 allmode.png",
-   "logo_dark": "BET-M 33 allmode.png",
-   "location": "Russia",
-   "region": "CIS",
-   "roster": [
-    {
-     "id": "executor",
-     "name": "Ilya Weber",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2025-06-??"
-    },
-    {
-     "id": "z1Nny",
-     "name": "Pavel Prokopiev",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2025-06-??"
-    },
-    {
-     "id": "bluewh1te",
-     "name": "Lubsan Mulonov",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2025-06-??"
-    },
-    {
-     "id": "Raijin",
-     "name": "Konstantin Trubarov",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2026-08-18"
-    },
-    {
-     "id": "Wierd_1k",
-     "name": "Sergey Tur",
-     "flag": "ru",
-     "igl": false,
-     "role": "Coach",
-     "joined": "2025-06-??"
-    }
-   ],
-   "icon": "BET-M 33 allmode.png",
-   "icon_dark": "BET-M 33 allmode.png",
-   "logo_path": "data/raw/media/1ce2e06597fdb40d.png",
-   "logo_dark_path": "data/raw/media/1ce2e06597fdb40d.png"
-  },
   "3DMAX": {
    "page": "3DMAX",
    "logo": "3DMAX 2024 allmode.png",
@@ -2132,67 +2079,6 @@
    "icon_dark": "Infinite Gaming allmode.png",
    "logo_path": "data/raw/media/c87c608e6be2b518.png",
    "logo_dark_path": "data/raw/media/c87c608e6be2b518.png"
-  },
-  "Imperial Esports": {
-   "page": "Imperial Esports",
-   "logo": "Imperial Esports 2025 allmode.png",
-   "logo_dark": "Imperial Esports 2025 allmode.png",
-   "location": "Brazil",
-   "region": "South America",
-   "roster": [
-    {
-     "id": "VINI",
-     "name": "Vinicius Figueiredo",
-     "flag": "br",
-     "igl": true,
-     "role": "",
-     "joined": "2022-02-18"
-    },
-    {
-     "id": "noway",
-     "name": "Kaiky Santos",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2023-10-08"
-    },
-    {
-     "id": "chelo",
-     "name": "Marcelo Cespedes",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2025-07-01"
-    },
-    {
-     "id": "decenty",
-     "name": "Lucas Bacelar",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2026-02-24"
-    },
-    {
-     "id": "saadzin",
-     "name": "Guilherme Pacheco",
-     "flag": "br",
-     "igl": false,
-     "role": "",
-     "joined": "2026-07-10"
-    },
-    {
-     "id": "tacitus",
-     "name": "Marcos Castilho",
-     "flag": "br",
-     "igl": false,
-     "role": "Coach",
-     "joined": "2026-08-03"
-    }
-   ],
-   "icon": "Imperial Esports 2025 allmode.png",
-   "icon_dark": "Imperial Esports 2025 allmode.png",
-   "logo_path": "data/raw/media/ba01286af007964e.png",
-   "logo_dark_path": "data/raw/media/ba01286af007964e.png"
   },
   "JiJieHao": {
    "page": "JiJieHao",
@@ -4635,67 +4521,6 @@
    "icon_dark": "The MongolZ 2024 03 allmode.png",
    "logo_path": "data/raw/media/6c20cc9a2af33e0c.png",
    "logo_dark_path": "data/raw/media/6c20cc9a2af33e0c.png"
-  },
-  "Virtus.pro": {
-   "page": "Virtus.pro",
-   "logo": "Virtus.pro 2019 allmode.png",
-   "logo_dark": "Virtus.pro 2019 allmode.png",
-   "location": "Armenia",
-   "region": "CIS",
-   "roster": [
-    {
-     "id": "tO0RO",
-     "name": "Vadim Arkov",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2025-09-01"
-    },
-    {
-     "id": "b1st",
-     "name": "Vladimir Krasikov",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2025-10-20"
-    },
-    {
-     "id": "mir",
-     "name": "Nikolay Bityukov",
-     "flag": "ru",
-     "igl": true,
-     "role": "",
-     "joined": "2026-02-20"
-    },
-    {
-     "id": "AquaRS",
-     "name": "Aleksandr Kovalev",
-     "flag": "ru",
-     "igl": false,
-     "role": "",
-     "joined": "2026-03-12"
-    },
-    {
-     "id": "F0R3VER",
-     "name": "Dias Kutubay",
-     "flag": "kz",
-     "igl": false,
-     "role": "",
-     "joined": "2026-03-12"
-    },
-    {
-     "id": "ProbLeM",
-     "name": "Dmitriy Martynov",
-     "flag": "ru",
-     "igl": false,
-     "role": "Interim Coach",
-     "joined": "2026-01-12"
-    }
-   ],
-   "icon": "Virtus.pro 2019 allmode.png",
-   "icon_dark": "Virtus.pro 2019 allmode.png",
-   "logo_path": "data/raw/media/948ad7194554a2c9.png",
-   "logo_dark_path": "data/raw/media/948ad7194554a2c9.png"
   },
   "Wildcard": {
    "page": "Wildcard",
