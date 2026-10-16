@@ -218034,6 +218034,33 @@
   "kind": "main"
  },
  {
+  "match_id": "7319592a7980",
+  "date": "2026-10-16",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "Black Phoenix",
+  "team_b": "ILLYRIANS",
+  "winner": "ILLYRIANS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Dust2",
+    "winner": "ILLYRIANS"
+   },
+   {
+    "map": "Cache",
+    "winner": "ILLYRIANS"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399306",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "154c2f631820",
   "date": "2026-10-16",
   "event": "Logitech G Pro Series 2026",
@@ -218053,6 +218080,133 @@
   ],
   "event_page": "Logitech G Pro Series/2026",
   "ext_match_id": "2399538",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "4a9e92a63286",
+  "date": "2026-10-16",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "FlyQuest",
+  "team_b": "Team Abyssal",
+  "winner": "FlyQuest",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "FlyQuest"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FlyQuest"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399540",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "ad83883cecef",
+  "date": "2026-10-16",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "Ground Zero Gaming",
+  "team_b": "Team Abyssal",
+  "winner": "Team Abyssal",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Ground Zero Gaming"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Team Abyssal"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Team Abyssal"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399539",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "f2ce630f48da",
+  "date": "2026-10-16",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "Off Chops",
+  "team_b": "Ground Zero Gaming",
+  "winner": "Off Chops",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Off Chops"
+   },
+   {
+    "map": "Anubis",
+    "winner": "Ground Zero Gaming"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Off Chops"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399541",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "fc47a48dab8a",
+  "date": "2026-10-16",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "Team Abyssal",
+  "team_b": "Off Chops",
+  "winner": "Off Chops",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "Off Chops"
+   },
+   {
+    "map": "Inferno",
+    "winner": "Off Chops"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399542",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "4937bda7317d",
+  "date": "2026-10-16",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Ninjas in Pyjamas",
+  "team_b": "Team Liquid",
+  "winner": "Ninjas in Pyjamas",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "Team Liquid"
+   },
+   {
+    "map": "Nuke",
+    "winner": "Ninjas in Pyjamas"
+   },
+   {
+    "map": "Cache",
+    "winner": "Ninjas in Pyjamas"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399262",
   "tier": "B",
   "kind": "main"
  }
