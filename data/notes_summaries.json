@@ -1,0 +1,80 @@
+{
+ "recaps": {
+  "thunderpick-world-champi-3": {
+   "day": "2026-10-14",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "Legacy clinches 2-0 as Mirage OT swing decides it; veto faith overridden on the second map",
+   "input_hash": "dc77d8308f0e",
+   "model": "gpt-5-nano",
+   "result": "correct",
+   "summary": "Lede: The deciding moment was Mirage going to overtime, where Legacy took control after starting on the terrorist side and closed out 16-14. How it happened: Dust2 went Legacy 13-11; Mirage went to OT with Legacy winning 16-14 after a 6-6 halftime split and both sides equal in regulation. The simulated veto favored Mirage for Legacy clearly and favored Ancient barely for PARIVISION, but the actual veto path left Mirage as the second map where Legacy seized the decider. Standouts: per-player statistics aren’t present in the data, so none can be named here. Model check: the model predicted 2-1 for Legacy and the result was 2-0, so the call was correct; the decisive mechanism was Mirage turning into a Legacy-favored map per the input (model_map_chance 62.3% for Legacy on Mirage) and Legacy leveraging the overtime swing to seal the series. Forward-looking: watch Legacy’s next group-stage test to see if they can sustain Mirage-level pressure in overtime situations.",
+   "team_a": "Legacy",
+   "team_b": "PARIVISION",
+   "winner": "Legacy"
+  },
+  "thunderpick-world-champi-5": {
+   "day": "2026-10-15",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "Aurora Gaming ride stable core to a 2-0 over NiP, as the veto drifted but the map pressure held.",
+   "input_hash": "944431c0eb42",
+   "model": "gpt-5-nano",
+   "result": "correct",
+   "summary": "Aurora’s edge was in map control and cohesion, not dramatic roster magic. The first map swung on Cache with Aurora starting CT and closing 13-9; second map Dust2 favored Aurora from pistol and held through the half splits, 13-7. The simulated veto favored Mirage/Cache/Inferno, but the series played Cache then Dust2, diverging from the full veto chain yet staying within Aurora’s comfort zone. There were no standout per-player stats available in the input, so that note is explicit. The model correctly predicted a 2-0 win for Aurora (81.9% favorite) and the actual result matched the forecast; the decisive mechanism was Aurora’s consistent map-specific pressure and stability against NiP’s new lineup rather than a last-minute roster shock. Going forward, watch whether NiP’s new additions settle in and whether Aurora can sustain this pace through a heavier slate of games.",
+   "team_a": "Aurora Gaming",
+   "team_b": "Ninjas in Pyjamas",
+   "winner": "Aurora Gaming"
+  },
+  "thunderpick-world-champi-8": {
+   "day": "2026-10-15",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "FURIA claws back after Legacy’s Cache edge; veto trend holds but map inertia flips the series",
+   "input_hash": "d4b97f356290",
+   "model": "gpt-5-nano",
+   "result": "correct",
+   "summary": "The series swung on a single map that defied the pre-pick expectations: Legacy grabbed Cache 13-10 after a CT start, then FURIA flipped Inferno 13-5 and Mirage 13-8 to seal a 2-1 victory. The simulated veto lined up with the three maps (Mirage, Cache, Dust2), and the predicted favorites tilted toward FURIA overall, which matched the model’s 58.5% win probability and the correct call of a 0-2 Legacy score by the model’s prediction—but the actual result was a 1-2 finish for FURIA due to the decisive map swings on Inferno and Mirage. Standouts can’t be named by score-based stats here, as per-player data isn’t present in the input. The model predicted Legacy would win 0-2, yet the deciding factor was FURIA stabilizing in map-specific brawls (Inferno dominant on half closers, Mirage’s T-side pressure), revealing that map-level execution trumped the broader Elo-based expectation. Going forward, FURIA’s group-stage momentum should continue into the next matchups, with attention to how Legacy adapts on the sampled vetoed maps.",
+   "team_a": "Legacy",
+   "team_b": "FURIA",
+   "winner": "FURIA"
+  }
+ },
+ "schema": 1,
+ "summaries": {
+  "1win-private-club-2-2": {
+   "day": "2026-10-19",
+   "favourite": "The MongolZ",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "MongolZ favoured; clear edge despite volatility",
+   "input_hash": "910edb849b47",
+   "model": "gpt-5-nano",
+   "summary": "The model favours The MongolZ and conveys a clear favourite status with reasonable confidence. The strongest counted factor favors The MongolZ due to the Elo gap, which supports them, while the second counted factor shows Alliance posting better results in the last handful of series in opposition to the MongolZ. In terms of the rest of the picture, nuanced context not counted notes rust from a long inactivity slate and a new roster for The MongolZ, alongside a recent trend in Alliance form. This non counted context should not be read as part of the win chance but it colors the overall feel of the matchup.",
+   "team_a": "Alliance",
+   "team_b": "The MongolZ",
+   "win_prob_a": 0.2929
+  },
+  "1win-private-club-2-3": {
+   "day": "2026-10-19",
+   "favourite": "Fnatic",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "Fnatic favored, with a narrow edge",
+   "input_hash": "781c900ac045",
+   "model": "gpt-5-nano",
+   "summary": "Fnatic is the slight favourite and the model carries a fairly clear read. The strongest counted factor is team strength gap, which leans Fnatic in their direction; the second factor is results over the last month versus what the rating expected, which also tips Fnatic. On the other hand, the context not counted in the win chance notes that Team Liquid have been essentially inactive for a stretch and added new players recently, which could influence their readiness and depth. The wider picture shows Team Liquid may carry rust and roster change that are not included in the win probability. This means the explicit win chance is a snapshot, while the non counted context could shift outcomes in the long run.",
+   "team_a": "Fnatic",
+   "team_b": "Team Liquid",
+   "win_prob_a": 0.526
+  },
+  "thunderpick-world-champi-10": {
+   "day": "2026-10-16",
+   "favourite": "Legacy",
+   "generated_at": "2026-10-16T12:00:24Z",
+   "headline": "Legacy as clear favourite heading into group stage clash",
+   "input_hash": "d3acde77ad28",
+   "model": "gpt-5-nano",
+   "summary": "Legacy is the clear favourite and the model is confident in the pick. The strongest counted factor favours Legacy due to a gap in strength as shown by the Elo rating, giving Legacy the upper hand. The next counted factor tilts toward BetBoom Team based on last thirty days results compared to what the rating expected, hinting at a tighter match than the gap alone suggests. Head to head over the past year tracks slightly in Legacy’s favour, supporting the pick, while the last five series tilt toward BetBoom Team but with limited impact. The broader context, including rest, schedule, roster stability, simulated veto maps and past meetings, is noted but not counted in the win chance. This non counted context adds texture but does not alter the model’s clear reading.",
+   "team_a": "Legacy",
+   "team_b": "BetBoom Team",
+   "win_prob_a": 0.6145
+  }
+ },
+ "updated_at": "2026-10-16T12:00:24Z"
+}

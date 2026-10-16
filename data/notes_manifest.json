@@ -1,0 +1,104 @@
+{
+ "as_of": "2026-10-16",
+ "budget": {
+  "limit_usd": 1.0,
+  "remaining_usd": 0.6893,
+  "spent_before_run_usd": 0.0,
+  "spent_month_usd": 0.3107,
+  "stopped": false,
+  "worst_call_usd": 0.0244
+ },
+ "cache_hit_rate": 0.0,
+ "cache_hits": 0,
+ "checked": {
+  "team|9z Team": "2026-10-16T11:57:29Z",
+  "team|Alliance": "2026-10-16T11:57:29Z",
+  "team|Aurora Gaming": "2026-10-16T11:57:29Z",
+  "team|BetBoom Team": "2026-10-16T11:57:29Z",
+  "team|Fnatic": "2026-10-16T11:57:29Z",
+  "team|Legacy": "2026-10-16T11:57:29Z",
+  "team|PARIVISION": "2026-10-16T11:57:29Z",
+  "team|Team Liquid": "2026-10-16T11:57:29Z",
+  "team|The MongolZ": "2026-10-16T11:57:29Z",
+  "team|magic": "2026-10-16T11:57:29Z"
+ },
+ "deferred": [],
+ "error": null,
+ "est_cost_usd": 0.3107,
+ "exit_code": 0,
+ "facts_pruned": 0,
+ "facts_rejected": [
+  {
+   "kind": "news",
+   "player": "",
+   "raw": {
+    "date": "",
+    "event": "",
+    "move": null,
+    "other_team": "",
+    "player": "",
+    "replaced": "",
+    "source_url": "",
+    "team": "Legacy",
+    "type": "stand_in",
+    "until": ""
+   },
+   "reasons": [
+    "missing source_url",
+    "date '' / until '' not a real YYYY-MM-DD"
+   ],
+   "team": "Legacy"
+  }
+ ],
+ "facts_written": 1,
+ "facts_written_ids": [
+  "b22e469a7025"
+ ],
+ "fetches_failed": [],
+ "input_tokens": 139085,
+ "llm_calls": 10,
+ "mode": "live",
+ "model": "gpt-5-nano",
+ "output_tokens": 9304,
+ "pricing_estimate": {
+  "input_per_m_usd": 0.05,
+  "note": "ESTIMATES: verify against https://openai.com/api/pricing",
+  "output_per_m_usd": 0.4,
+  "web_search_per_call_usd": 0.01
+ },
+ "run_at": "2026-10-16T11:57:29Z",
+ "scope_days": 3,
+ "scope_teams": [
+  "9z Team",
+  "Aurora Gaming",
+  "BetBoom Team",
+  "Legacy",
+  "Alliance",
+  "Fnatic",
+  "PARIVISION",
+  "Team Liquid",
+  "The MongolZ",
+  "magic"
+ ],
+ "store": "data/notes_facts.json",
+ "store_changed": true,
+ "teams_attempted": [
+  "9z Team",
+  "Alliance",
+  "Aurora Gaming",
+  "BetBoom Team",
+  "Fnatic",
+  "Legacy",
+  "PARIVISION",
+  "Team Liquid",
+  "The MongolZ",
+  "magic"
+ ],
+ "ttl_hours": 24,
+ "units_attempted": 10,
+ "units_deferred": 0,
+ "units_failed": 0,
+ "units_planned": 10,
+ "warnings": [],
+ "web_search_calls": 30
+}

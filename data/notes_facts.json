@@ -1,0 +1,19 @@
+{
+ "fact_schema": 1,
+ "form": [],
+ "news": [
+  {
+   "date": "2026-10-06",
+   "id": "b22e469a7025",
+   "method": "web_search",
+   "observed_at": "2026-10-16T11:57:29Z",
+   "player": "lattykk",
+   "replaced": "mo0N",
+   "source": "HLTV",
+   "source_url": "https://www.hltv.org/news/xxxxxx-magic-sign-lattykk-replacing-mo0N",
+   "team": "magic",
+   "type": "stand_in"
+  }
+ ],
+ "updated_at": "2026-10-16T11:57:29Z"
+}
