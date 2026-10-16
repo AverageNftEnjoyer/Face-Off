@@ -1,7 +1,5 @@
 {
- "ok": false,
- "stale_pages": [
-  "Thunderpick/World Championship/2026"
- ],
- "stale_since": "2026-10-16T13:32:25Z"
+ "ok": true,
+ "stale_pages": [],
+ "stale_since": null
 }
