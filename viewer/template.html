@@ -259,15 +259,6 @@ body[data-w="wide"], body:has(#view > .court) { --pagew: 140rem; }
 .flag { width: 1.15rem; height: auto; border-radius: 2px; vertical-align: -.1em; flex: none; }
 
 /* ---------- event hero ---------- */
-.hero {
-  position: relative; overflow: hidden;
-  border: 1px solid var(--line); border-radius: var(--r);
-  background: var(--panel);
-  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.25rem 1.75rem; align-items: center;
-  padding: 1.25rem;
-}
-.hero .evlogo { width: clamp(5rem, 14vw, 8.5rem); height: auto; }
-.hero h1 { font-size: var(--s3); }
 .facts { display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin-top: .6rem; }
 .facts div { display: grid; }
 .facts dt { font-size: var(--s-1); color: var(--dim); }
@@ -380,7 +371,6 @@ tr.out .tlink { color: var(--dim); }
 
 /* bracket: one column per round. A single-elimination tree (each round half the one before)
    is laid out by bracket slot and joined with elbow lines; finished matches light their line. */
-.evbody + .panel, .evbody ~ .panel { margin-top: 1.5rem; }
 .bracket { --bgap: 1.6rem; display: grid; column-gap: var(--bgap); row-gap: 1.1rem; overflow-x: auto; padding: .1rem .1rem .3rem; }
 .bcol { display: flex; flex-direction: column; min-width: 0; }
 .bcol h3, .bthird h3 { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; margin: 0 0 .55rem;
@@ -615,7 +605,6 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 }
 @media (max-width: 640px) {
   .grid2 { grid-template-columns: minmax(0, 1fr); }
-  .hero { grid-template-columns: minmax(0, 1fr); }
   .pool { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mrow { grid-template-columns: 3.4rem minmax(0, 1fr) 3.6rem minmax(0, 1fr); }
   .mrow .tag { grid-column: 1 / -1; justify-items: start; grid-auto-flow: column; justify-content: start; gap: .5rem; }
@@ -634,24 +623,8 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 }
 
 /* ---------- v3: tournaments ---------- */
-.evgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .75rem; }
-.evcard {
-  display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: .35rem .9rem; align-items: center;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: .9rem;
-}
-.evcard:hover { background: var(--raise); border-color: var(--dim); }
-.evcard img.evl { width: 4rem; height: 4rem; object-fit: contain; grid-row: span 2; }
-.evcard .ename { font-stretch: 75%; font-weight: 800; font-size: var(--s1); line-height: 1.1; }
-.evcard .emeta { font-size: var(--s-1); color: var(--dim); display: flex; flex-wrap: wrap; gap: .1rem .9rem; }
-.evcard .efoot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding-top: .5rem; border-top: 1px solid var(--line); font-size: var(--s-1); }
-.evcard .champ { display: flex; align-items: center; gap: .4rem; font-weight: 700; }
 .chip.up { color: var(--ct); }
 .chip.done { color: var(--dim); }
-.subtabs { display: flex; gap: .35rem; flex-wrap: wrap; }
-.subtabs a { padding: .5rem .9rem; border-radius: var(--r); border: 1px solid var(--line); background: var(--panel); font-weight: 700; color: var(--dim); }
-.subtabs a:hover { color: var(--text); border-color: var(--dim); }
-.subtabs a[aria-current="page"] { color: var(--text); background: var(--raise); border-color: var(--t); }
-.hero .champline { display: flex; align-items: center; gap: .6rem; margin-top: .75rem; font-weight: 700; }
 
 .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: .75rem; }
 .pcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: .85rem; display: grid; gap: .6rem; align-content: start; }
@@ -676,13 +649,6 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .grouptbl + .grouptbl { margin-top: .75rem; }
 .grouptbl h3 { font-size: var(--s-1); color: var(--dim); font-weight: 600; margin-bottom: .2rem; }
 
-/* ---------- v5: tournaments ----------
-   The season read as a circuit: one calendar strip with every event on its own
-   dates, the event running now pulled forward, and the finished ones as an
-   honours roll where each champion sits in its own logo colour (--tc, and the
-   page-mixed --tcd for fills). No cards for their own sake: rows on hairlines. */
-/* page widths: every page uses --pagew (see .page); body[data-w] narrows the desk */
-.evname { font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; line-height: .95; }
 /* v6: tier filter + tier labels (S solid, A outlined) */
 .tierbar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; border: 0; padding: 0; margin: 0; }
 .tierbar legend { float: left; margin-right: .4rem; color: var(--dim); font-size: var(--s-1); }
@@ -695,145 +661,9 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .tierbox:has(input:focus-visible) { outline: 2px solid var(--text); outline-offset: 2px; }
 .tier { display: inline-grid; place-items: center; min-width: 1.15em; height: 1.15em; padding: 0 .2em; margin-right: .35em; border-radius: 2px; font-style: normal; font-stretch: 100%; font-weight: 800; font-size: .72em; line-height: 1; vertical-align: .12em; border: 1px solid var(--text); color: var(--text); }
 .tier.tS { background: var(--text); color: var(--bg); }
-.onair .tier { font-size: .8rem; vertical-align: middle; }
-
-.season { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 3rem; }
-.season h1 { font-size: clamp(3rem, 7vw, 5.75rem); line-height: .8; }
-.season h1 span { color: var(--dim); font-weight: 600; }
-.tally { display: flex; flex-wrap: wrap; gap: .75rem 2.75rem; }
-.tally div { display: grid; gap: .15rem; }
-.tally b { font-stretch: 62.5%; font-weight: 800; font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: .9; }
-.tally span { color: var(--dim); font-size: var(--s-1); }
-
-.strip-wrap { overflow-x: auto; scrollbar-width: thin; border-block: 1px solid var(--line); }
-.strip { position: relative; min-width: 62rem; padding: 2.1rem 0 1.6rem; }
-.strip .mo { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); padding: .45rem .5rem; font-size: var(--s-1); color: var(--dim); white-space: nowrap; }
-.strip .mo.past { background: rgba(0, 0, 0, .12); }
-.strip .mo b { color: var(--text); font-weight: 700; }
-.strip .lanes { position: relative; display: grid; gap: .45rem; }
-.strip .lane { position: relative; height: 3.25rem; }
-.pin {
-  position: absolute; top: 0; bottom: 0; display: flex; align-items: center; gap: .45rem;
-  padding: 0 .45rem 0 .4rem; min-width: 0; overflow: hidden;
-  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
-  box-shadow: inset 3px 0 0 var(--tc, var(--line));
-}
-.pin:hover, .pin:focus-visible { background: var(--raise); z-index: 3; }
-.pin > img { width: 2rem; height: 2rem; object-fit: contain; flex: none; }
-.pin .pt { display: grid; min-width: 0; }
-.pin .pt b { font-stretch: 62.5%; font-weight: 800; font-size: .95rem; line-height: 1; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pin .pt span { display: flex; align-items: center; gap: .3rem; font-size: .7rem; color: var(--dim); white-space: nowrap; overflow: hidden; }
-.pin .pt .logo { width: .95rem; height: .95rem; }
-.pin.live { border-color: var(--loss); box-shadow: inset 3px 0 0 var(--loss), 0 0 0 1px var(--loss); }
-.pin.upcoming { background: var(--bg); border-style: dashed; }
-.pin.upcoming .pt b { color: var(--dim); }
-.strip .now { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--loss); z-index: 2; pointer-events: none; }
-
-.marquee { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(20rem, 1fr); gap: 1.5rem 2.5rem; align-items: start; }
-.onair { display: grid; gap: 1.1rem; padding: 1.25rem 1.4rem 1.4rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); box-shadow: inset 0 3px 0 var(--loss); }
-.onair.soon { box-shadow: inset 0 3px 0 var(--ct); }
-.onair-h { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1rem 1.5rem; align-items: center; }
-.onair-h > img { width: clamp(5rem, 8vw, 7.5rem); height: auto; }
-.onair-h h2 { font-size: clamp(2rem, 3.6vw, 3.25rem); }
-.onair-h h2 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
-.onair .meta { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-top: .5rem; color: var(--dim); }
-.onair .meta b { color: var(--text); font-weight: 700; }
-.dayctr { display: grid; justify-items: end; text-align: right; }
-.dayctr b { font-stretch: 62.5%; font-weight: 800; font-size: clamp(3rem, 6vw, 5rem); line-height: .8; }
-.dayctr b small { font-size: .45em; color: var(--dim); font-weight: 700; }
-.dayctr span { color: var(--dim); font-size: var(--s-1); margin-top: .75rem; }
-.daytrack { display: flex; gap: 3px; }
-.daytrack i { flex: 1; height: .4rem; border-radius: 1px; background: var(--line); }
-.daytrack i.done { background: var(--dim); }
-.daytrack i.today { background: var(--loss); }
-.alive { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .6rem 1rem; align-items: center; }
-.alive > span { color: var(--dim); font-size: var(--s-1); white-space: nowrap; }
-.alive .ls { display: flex; flex-wrap: wrap; gap: .35rem .5rem; }
-.alive .ls a { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .55rem .2rem .3rem; border-radius: 3px; background: var(--bg); font-size: var(--s-1); font-weight: 700; }
-.alive .ls a:hover { background: var(--raise); }
-.alive .ls.out a { background: none; color: var(--dim); font-weight: 400; padding-inline: .2rem; }
-.alive .ls.out em { font-style: normal; color: var(--text); font-weight: 700; }
-
-.nextup { display: grid; align-content: start; }
-.nextup h2 { font-stretch: 75%; font-weight: 800; font-size: var(--s1); padding-bottom: .5rem; border-bottom: 1px solid var(--line); }
-.nu { display: grid; grid-template-columns: 3.4rem 2.75rem minmax(0, 1fr) auto; gap: .2rem .85rem; align-items: center; padding: .75rem .25rem; border-bottom: 1px solid var(--line); }
-.nu:hover { background: var(--panel); }
-.nu .dt { display: grid; justify-items: center; line-height: 1; }
-.nu .dt b { font-stretch: 62.5%; font-weight: 800; font-size: 1.9rem; }
-.nu .dt span { font-size: .72rem; color: var(--dim); }
-.nu > img, .nu > .evl-ph { width: 2.75rem; height: 2.75rem; object-fit: contain; }
-.nu .nm { display: grid; min-width: 0; }
-.nu .nm b { font-stretch: 62.5%; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; line-height: 1.05; }
-.nu .nm span { font-size: var(--s-1); color: var(--dim); }
-.nu .rt { display: grid; justify-items: end; font-size: var(--s-1); }
-.nu .rt b { font-weight: 700; }
-.nu .rt span { color: var(--dim); }
 .evl-ph { display: grid; place-items: center; background: var(--raise); border-radius: 3px; color: var(--dim); font-weight: 800; font-size: .7rem; }
 
-.results { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 23rem); gap: 1.5rem 2.5rem; align-items: start; }
-.results h2, .titles h2 { font-stretch: 75%; font-weight: 800; font-size: var(--s1); padding-bottom: .5rem; border-bottom: 1px solid var(--line); display: flex; gap: .75rem; align-items: baseline; flex-wrap: wrap; }
-.results h2 .dim, .titles h2 .dim { font-stretch: 100%; font-weight: 400; font-size: var(--s-1); }
-.roll { display: grid; }
-.roll > a {
-  display: grid; grid-template-columns: 4.25rem 3.75rem minmax(11rem, 1.25fr) minmax(15rem, 1.35fr) minmax(12rem, 1fr) 6.5rem;
-  gap: .5rem 1.1rem; align-items: center; padding: .6rem .25rem; border-bottom: 1px solid var(--line);
-}
-.roll > a:hover { background: var(--panel); }
-.roll .dt { display: grid; line-height: 1.05; }
-.roll .dt b { font-stretch: 62.5%; font-weight: 800; font-size: 1.35rem; text-transform: uppercase; }
-.roll .dt span { font-size: .72rem; color: var(--dim); }
-.roll .el { width: 3.75rem; height: 3.75rem; object-fit: contain; }
-.roll .en { display: grid; min-width: 0; gap: .15rem; }
-.roll .en b { font-stretch: 62.5%; font-weight: 800; font-size: 1.3rem; text-transform: uppercase; line-height: 1; }
-.roll .en span { font-size: var(--s-1); color: var(--dim); }
-.roll .cw { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 .8rem; align-items: center; padding: .45rem .8rem .45rem .6rem; border-radius: 3px; background: var(--tcd, var(--panel)); box-shadow: inset 4px 0 0 var(--tc, var(--line)); }
-.roll .cw .logo { width: 2.9rem; height: 2.9rem; grid-row: span 2; }
-.roll .cw b { font-stretch: 62.5%; font-weight: 800; font-size: 1.6rem; text-transform: uppercase; line-height: .95; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.roll .cw span { font-size: .72rem; color: var(--dim); }
-.roll .fn { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: .55rem; align-items: center; color: var(--dim); font-size: var(--s-1); min-width: 0; }
-.roll .fn .sc { font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; color: var(--text); white-space: nowrap; }
-.roll .fn em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.roll .pz { display: grid; justify-items: end; font-size: var(--s-1); }
-.roll .pz b { font-weight: 700; font-size: var(--s0); }
-.roll .pz span { color: var(--dim); }
-
-.titles { display: grid; align-content: start; }
-.trow { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: .2rem .8rem; align-items: center; padding: .65rem .25rem; border-bottom: 1px solid var(--line); }
-.trow:hover { background: var(--panel); }
-.trow .logo { width: 2.75rem; height: 2.75rem; grid-row: span 2; }
-.trow > b { font-stretch: 62.5%; font-weight: 800; font-size: 1.35rem; text-transform: uppercase; line-height: 1; }
-.trow .n { font-stretch: 62.5%; font-weight: 800; font-size: 2.6rem; line-height: .8; grid-row: span 2; color: var(--tc, var(--text)); }
-.trow .won { display: flex; flex-wrap: wrap; gap: .25rem; }
-.trow .won img { width: 1.9rem; height: 1.9rem; object-fit: contain; }
-.trow .won { grid-column: 2; }
-.trow .won .evl-ph { width: 1.4rem; height: 1.4rem; font-size: .55rem; }
-.pin > .evl-ph { width: 2rem; height: 2rem; flex: none; }
-.onair-h > .evl-ph { width: 6rem; height: 6rem; }
-.roll .el.evl-ph, .tfin .el.evl-ph { font-size: .8rem; }
-.evhero > .evlogo.evl-ph { height: clamp(6rem, 11vw, 10.5rem); font-size: 1.5rem; }
-
-/* one tournament */
-.evhero { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(17rem, 30rem); gap: 1.25rem 2.5rem; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
-.evhero > .evlogo { width: clamp(6rem, 11vw, 10.5rem); height: auto; }
-.evhero h1 { font-size: clamp(2.4rem, 5vw, 4.5rem); line-height: .85; }
-.evhero .facts { gap: .6rem 2.25rem; margin-top: 1rem; }
-.evhero .facts dd { font-size: var(--s1); font-stretch: 87.5%; }
-.evhero .facts .big dd { font-stretch: 62.5%; font-weight: 800; font-size: var(--s2); line-height: 1.1; }
-.crown { align-self: stretch; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .15rem 1.1rem; align-content: center; padding: 1.1rem 1.3rem; border-radius: var(--r); background: var(--tcd, var(--panel)); box-shadow: inset 5px 0 0 var(--tc, var(--line)); }
-.crown > .logo { width: clamp(4rem, 6vw, 5.75rem); height: clamp(4rem, 6vw, 5.75rem); grid-row: span 3; }
-.crown .lbl { font-size: var(--s-1); color: var(--dim); }
-.crown .who { font-stretch: 62.5%; font-weight: 800; font-size: clamp(1.9rem, 3vw, 2.8rem); text-transform: uppercase; line-height: .9; overflow-wrap: anywhere; }
-.crown .who:hover { text-decoration: underline; }
-.crown .sub { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; font-size: var(--s-1); color: var(--dim); }
-.crown .sub b { color: var(--text); }
-.crown.state { grid-template-columns: minmax(0, 1fr); }
-.crown.state .who { font-size: clamp(2.4rem, 4vw, 3.6rem); }
-.crown.live { box-shadow: inset 5px 0 0 var(--loss); }
-
-.evbody { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 1.5rem; align-items: start; }
-.evbody > .evside { display: grid; gap: 1.5rem; min-width: 0; }
-.evbody > .evside + .evside { grid-column: 2; }
-.evbody > section:first-child { grid-row: span 2; }
+.tfin .el.evl-ph { font-size: .8rem; }
 .page.ewide .pool .maptile { aspect-ratio: 16 / 7; }
 
 .stand { display: grid; }
@@ -846,14 +676,7 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .stand .tms .tlink { font-weight: 600; }
 .stand .tms .open { color: var(--dim); }
 
-/* following a tournament: the hub above the schedule */
-.hub { margin-bottom: 1rem; box-shadow: inset 0 3px 0 var(--loss); }
-.hub.done { box-shadow: none; }
-.hubgrid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1rem 1.5rem; align-items: start; }
-/* finished rows carry a score, not a pick: a narrow middle column keeps the team names readable */
-@media (min-width: 641px) { .hubres .mrow { grid-template-columns: 4.2rem minmax(0, 1fr) 3.6rem minmax(0, 1fr) auto; } }
-.hubh { display: flex; align-items: center; gap: .5rem; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin: .4rem 0 .35rem; }
-.hubday { font-size: var(--s-1); font-weight: 700; margin: .55rem 0 .2rem; }
+/* following a tournament: the model's record and what the winners play next */
 .hubrec { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; font-size: var(--s-1); color: var(--dim); margin: 0 0 .5rem; }
 .hubrec b { color: var(--text); }
 .hubrec a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
@@ -922,38 +745,7 @@ footer.foot { font-size: var(--s-1); color: var(--dim); display: grid; gap: .35r
 .tfin .won { text-align: right; font-size: var(--s-1); }
 .tfin .won b { font-weight: 700; }
 
-@media (max-width: 1500px) {
-  .roll > a { grid-template-columns: 4.25rem 3.25rem minmax(0, 1fr) minmax(13rem, 1.2fr) 6rem; }
-  .roll .fn { grid-column: 3 / 6; grid-row: 2; }
-  .roll .el { width: 3.25rem; height: 3.25rem; }
-}
-@media (max-width: 1200px) {
-  .results, .marquee { grid-template-columns: minmax(0, 1fr); }
-  .evhero { grid-template-columns: auto minmax(0, 1fr); }
-  .evhero .crown { grid-column: 1 / -1; }
-}
-@media (max-width: 960px) {
-  .evbody { grid-template-columns: minmax(0, 1fr); }
-  .evbody > .evside + .evside { grid-column: auto; }
-  .evbody > section:first-child { grid-row: auto; }
-}
-@media (min-width: 1700px) {
-  .evbody { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, .8fr); grid-template-rows: auto; }
-  .evbody > section:first-child { grid-row: auto; }
-  .evbody > .evside + .evside { grid-column: 3; }
-}
 @media (max-width: 760px) {
-  .onair-h { grid-template-columns: auto minmax(0, 1fr); }
-  .onair-h .dayctr { grid-column: 1 / -1; justify-items: start; text-align: left; }
-  .alive { grid-template-columns: minmax(0, 1fr); }
-  .roll > a { grid-template-columns: 3.75rem minmax(0, 1fr) auto; }
-  .roll .dt { grid-column: 1; grid-row: 1; }
-  .roll .el { display: none; }
-  .roll .en { grid-column: 2 / 4; }
-  .roll .cw { grid-column: 1 / 3; grid-row: 2; }
-  .roll .pz { grid-column: 3; grid-row: 2; }
-  .roll .fn { grid-column: 1 / -1; grid-row: 3; }
-  .evhero > .evlogo { width: 4.5rem; }
   .tfin > a { grid-template-columns: 2.5rem minmax(0, 1fr) auto; }
   .tfin .dt { grid-column: 2; grid-row: 2; }
   .tfin .el { grid-row: span 2; width: 2.5rem; height: 2.5rem; }
@@ -1575,13 +1367,7 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
   .mrow .mid.mpick .pk { justify-content: space-between; }
   /* the tag line (result chip, roster badge, stage) wraps instead of pushing the page sideways */
   .mrow .tag { grid-area: tag; display: flex; flex-wrap: wrap; align-items: center; gap: .15rem .5rem; }
-  .evhero { grid-template-columns: minmax(0, 1fr); }
-  .evhero > .evlogo { width: 4rem; }
-  .strip-wrap { -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); mask-image: linear-gradient(90deg, transparent, #000 1.25rem, #000 calc(100% - 2.5rem), transparent); }
   .page .strip-hint { display: block; }
-  .strip { min-width: 112rem; }   /* wide enough that each event's name shows; opens on today */
-  .onair-h > img { width: 3.75rem; }
-  .onair { padding: 1rem; }
 }
 .strip-hint { display: none; font-size: var(--s-1); color: var(--dim); margin-top: -1rem; }
 @media (max-width: 520px) {
@@ -1597,9 +1383,8 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 /* touch screens: controls at least 44px tall */
 @media (pointer: coarse) {
   .btn, .seg button, .subtabs a, .tierbox, .days button, .filters select, .tdlg input[type="search"], .dtabs button { min-height: 44px; }
-  .subtabs a { display: inline-flex; align-items: center; }
   .cside .cchg { min-height: 44px; padding-inline: .85rem; font-size: .8rem; }
-  .rlist a, .nextm, .res a, .alive .ls a, .stand .tms .tlink { min-height: 44px; }
+  .rlist a, .nextm, .res a, .stand .tms .tlink { min-height: 44px; }
   /* links set in running text or headings: a taller hit area without moving the layout */
   .crumb a, .cname, .crown .who { display: inline-block; padding-block: .7rem; margin-block: -.7rem; }
   .tablewrap td a { display: inline-block; padding-block: .8rem; }
@@ -1610,14 +1395,12 @@ td.pc-hi, td.pc-mid, td.pc-lo, .lb .row .v { font-weight: 700; }
 .hero, .thead, .tcard, .evcard, .onair, .vs, .pcard, .crown, .tray, .board { border-radius: var(--rp); }
 .mrow, .callcard, .splitfig div, .player, .pick { border-radius: 8px; }
 .thead, .hero { background: linear-gradient(180deg, rgba(23, 42, 46, .4), transparent 8rem), var(--panel); }
-.subtabs a { border-radius: 8px; }
 .subtabs a[aria-current="page"], .days button[aria-pressed="true"], .pcard .btn[aria-pressed="true"] { border-color: var(--acc); }
-.subtabs a[aria-current="page"] { background: var(--acc-deep); color: var(--text); }
 .tierbox { border-radius: 8px; }
 .tierbox:has(input:checked) { border-color: var(--acc); }
 .tierbox input { accent-color: var(--acc); }
 .search, .filters select { border-color: var(--line2); border-radius: 8px; }
-.thead h1, .season h1, .evhero h1, .onair-h h2 { font-style: italic; }
+.thead h1 { font-style: italic; }
 .tcard .cond, .pcard .ph .cond { font-style: italic; }
 .tdlg { border-color: var(--line2); border-radius: var(--rp); background: #0F1C1F; }
 .tdlg-h h2 { font-style: italic; font-stretch: 62.5%; font-weight: 800; font-size: 1.5rem; }
@@ -2599,6 +2382,370 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
   .nx-grid, .nx-grid.h2h { grid-template-columns: minmax(0, 1fr); }
   .nx-grid.h2h .nx-col.m { grid-column: auto; grid-row: auto; }
   .nx-chip { white-space: normal; }
+}
+/* ---------- tournaments: the list (#events) and one tournament (#e-<slug>) ----------
+   One shell for both: a left sidebar, dark navy panels with thin cyan borders, condensed
+   italic display titles, cyan for team 1 / the current place, pink for team 2.
+   Performance: no backdrop-filter, no fixed backgrounds, one soft shadow per panel, tints are
+   plain gradients, and the only animation is the LIVE dot (and only when motion is welcome). */
+.tz {
+  --cy: #2ED3E6; --pk: #F2459A; --tzb: rgba(62, 196, 220, .2); --tzb2: rgba(62, 196, 220, .42);
+  --panel: #0A1924; --line: #15303D; --tzr: 8px; --well: rgba(5, 14, 21, .55);
+  min-width: 0;
+}
+.tz .tz-panel, .tz .panel {
+  background: linear-gradient(180deg, rgba(26, 62, 82, .32), transparent 7rem), var(--panel);
+  border: 1px solid var(--tzb); border-radius: var(--tzr); box-shadow: 0 16px 30px -24px rgba(0, 0, 0, .9);
+}
+.tz .panel > h2 { font-size: 1.28rem; text-transform: uppercase; }
+.tz-panel { padding: .9rem 1rem 1rem; display: grid; gap: .75rem; align-content: start; min-width: 0; }
+.tz h1, .tz-h, .tz-pname, .tz-vt, .tz-rn > b, .tz-fn b, .tz-fsc, .tz-tsc {
+  font-style: italic; font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; letter-spacing: .01em;
+}
+.tz .ca { color: var(--cy); }
+.tz .cb { color: var(--pk); }
+.tz a:focus-visible, .tz button:focus-visible, .tz input:focus-visible, .tz select:focus-visible { outline: 2px solid var(--cy); outline-offset: 2px; }
+
+/* status pills */
+.tz-pill { display: inline-flex; align-items: center; gap: .4rem; padding: .18rem .6rem; border: 1px solid; border-radius: 6px;
+  font-size: .7rem; font-weight: 700; font-style: normal; letter-spacing: .07em; text-transform: uppercase; line-height: 1.2; white-space: nowrap; }
+.tz-pill.live { color: #FF5D63; border-color: rgba(255, 93, 99, .6); background: rgba(255, 93, 99, .12); }
+.tz-pill.live::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; }
+@media (prefers-reduced-motion: no-preference) { .tz-pill.live::before { animation: pulse 1.6s ease-in-out infinite; } }
+.tz-pill.up { color: var(--cy); border-color: rgba(46, 211, 230, .55); background: rgba(46, 211, 230, .08); }
+.tz-pill.done { color: #A6B6BF; border-color: rgba(166, 182, 191, .32); background: rgba(166, 182, 191, .08); }
+
+/* art: the event's own image, its city's, else a darkened map from its pool; logo on top;
+   a cyan slash low left and a pink one at the right edge */
+.tz-art { position: relative; overflow: hidden; isolation: isolate; background: #071219; }
+.tz-art > .tz-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.tz-art::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, rgba(4, 12, 18, .2), rgba(4, 12, 18, .7)); }
+.tz-art.map::before { background: linear-gradient(90deg, rgba(4, 13, 20, .86), rgba(6, 22, 32, .62) 50%, rgba(4, 13, 20, .86)), linear-gradient(180deg, rgba(8, 40, 58, .25), rgba(4, 12, 18, .65)); }
+.tz-art::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(118deg, transparent 0 8%, rgba(46, 211, 230, .7) 8.4%, transparent 9.6%),
+    linear-gradient(118deg, transparent 0 91%, rgba(242, 69, 154, .8) 91.5%, transparent 92.8%); }
+.tz-art .tz-lg { position: relative; object-fit: contain; }
+.tz-art .evl-ph { display: grid; place-items: center; font-style: italic; font-stretch: 62.5%; font-weight: 800; color: #DDE8EC; background: none; font-size: 1.4rem; }
+
+/* sidebar */
+.tz-side { position: sticky; top: calc(var(--toph) + 1rem); max-height: calc(100dvh - var(--toph) - 2rem); overflow-y: auto; overscroll-behavior: contain;
+  display: flex; flex-direction: column; gap: .9rem; padding: .7rem; min-width: 0;
+  background: var(--panel); border: 1px solid var(--tzb); border-radius: var(--tzr); }
+.tz-nav { display: grid; gap: .2rem; }
+.tz-nav a, .tz-back { display: flex; align-items: center; gap: .75rem; min-height: 2.6rem; padding: 0 .8rem; border-radius: 6px; border: 1px solid transparent; color: var(--dim); font-weight: 600; font-size: .92rem; }
+.tz-nav a .ico, .tz-back .ico { width: 1.2rem; height: 1.2rem; flex: none; }
+.tz-nav a:hover, .tz-back:hover { color: var(--text); background: rgba(46, 211, 230, .06); }
+.tz-nav a[aria-current="page"] { color: var(--text); border-color: rgba(46, 211, 230, .35); background: linear-gradient(90deg, rgba(46, 211, 230, .22), rgba(46, 211, 230, .04)); box-shadow: inset 3px 0 0 var(--cy); }
+.tz-nav a[aria-current="page"] .ico { color: var(--cy); }
+.tz-back { font-size: .8rem; min-height: 2.2rem; border-bottom-color: var(--tzb); border-radius: 6px 6px 0 0; }
+.tz-info { padding: .9rem .4rem 0; border-top: 1px solid var(--tzb); }
+.tz-info h2 { font-size: .92rem; font-weight: 700; margin-bottom: .3rem; }
+.tz-iname { font-size: .78rem; color: var(--cy); font-weight: 600; margin-bottom: .55rem; line-height: 1.3; }
+.tz-info dl { display: grid; gap: .65rem; margin: .4rem 0 0; }
+.tz-info dl > div { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); column-gap: .6rem; align-items: center; }
+.tz-info .ico { grid-row: span 2; width: 1.2rem; height: 1.2rem; color: var(--dim); }
+.tz-info dt { font-size: .72rem; color: var(--dim); line-height: 1.2; }
+.tz-info dd { margin: 0; font-weight: 600; font-size: .88rem; line-height: 1.25; overflow-wrap: anywhere; }
+.tz-loc { position: relative; display: block; margin-top: auto; min-height: 8.5rem; flex: none; border-radius: 6px; overflow: hidden; border: 1px solid var(--tzb); }
+.tz-loc .tz-art { position: absolute; inset: 0; }
+.tz-loc .tz-art::before { background: linear-gradient(180deg, rgba(4, 12, 18, .15), rgba(4, 12, 18, .85)); }
+.tz-loct { position: absolute; left: .7rem; right: .7rem; bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+.tz-loct .ico { width: 1.25rem; height: 1.25rem; color: var(--cy); flex: none; }
+.tz-loct b { display: block; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; font-size: .9rem; line-height: 1.1; }
+.tz-loct small { display: block; font-size: .72rem; color: var(--dim); }
+.tz-loc:hover { border-color: var(--tzb2); }
+
+/* shared bits */
+.tz-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.1rem; font-size: .78rem; color: var(--dim); }
+.tz-meta > span { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; }
+.tz-meta .ico { width: .95rem; height: .95rem; color: var(--cy); flex: none; }
+.tz-meta .tz-fm { padding-left: 1.1rem; border-left: 1px solid var(--tzb); }
+.tz-fm i { font-style: normal; color: var(--cy); }
+.tz-h { display: flex; align-items: center; gap: .55rem; font-size: 1.28rem; line-height: 1.1; }
+.tz-h::before { content: ""; width: 3px; height: 1em; border-radius: 1px; background: var(--cy); flex: none; }
+.tz-ph { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.tz-ph > a, .tz-sub > a { display: inline-flex; align-items: center; gap: .3rem; font-size: .78rem; color: var(--cy); white-space: nowrap; }
+.tz-ph > a .ico, .tz-sub > a .ico { width: .9rem; height: .9rem; }
+.tz-ph > a:hover, .tz-sub > a:hover { text-decoration: underline; }
+.tz-note { font-size: .72rem; color: var(--dim); }
+.tz-desc { font-size: .88rem; line-height: 1.5; color: #C3D1D8; max-width: 70ch; }
+.tz-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tz-chips button { min-height: 2.35rem; padding: 0 1.1rem; border-radius: 999px; border: 1px solid var(--tzb2); background: rgba(5, 14, 21, .6); color: var(--text); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.tz-chips button:hover { border-color: var(--cy); }
+.tz-chips button[aria-pressed="true"] { background: var(--cy); border-color: var(--cy); color: #032229; }
+.tz-chips.sm button { min-height: 2rem; padding: 0 .85rem; font-size: .76rem; border-radius: 5px; }
+
+/* the list page */
+.tz-list { display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.tz-lmain { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(24rem, 33rem);
+  grid-template-areas: "head prev" "bar prev" "list prev"; gap: 1rem 1.25rem; align-items: start; min-width: 0; }
+.tz-lhero { position: absolute; left: 0; right: 0; top: 0; height: 17rem; z-index: -1; border-radius: var(--tzr); }
+.tz-lhero.tz-art::before { background: linear-gradient(90deg, rgba(6, 18, 26, .92), rgba(6, 18, 26, .5) 60%, rgba(6, 18, 26, .8)), linear-gradient(180deg, rgba(6, 18, 26, 0) 40%, #06121A); }
+.tz-lhero.tz-art::after { background: linear-gradient(118deg, transparent 0 91%, rgba(242, 69, 154, .6) 91.4%, transparent 92.4%); }
+.tz-lhead { grid-area: head; padding: 2.4rem 1.2rem .4rem; }
+.tz-lhead h1 { font-size: clamp(2.8rem, 5vw, 4.6rem); line-height: .9; }
+.tz-lhead p { margin-top: .5rem; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: #B5C4CB; }
+.tz-bar { grid-area: bar; display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding-inline: .2rem; }
+.tz-q { flex: 1 1 13rem; display: flex; align-items: center; gap: .5rem; min-height: 2.4rem; padding: 0 .8rem; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(5, 14, 21, .7); }
+.tz-q .ico { width: 1rem; height: 1rem; color: var(--dim); flex: none; }
+.tz-q input { flex: 1; min-width: 0; border: 0; background: none; color: var(--text); font: inherit; font-size: .85rem; outline: none; }
+.tz-q:focus-within { border-color: var(--cy); }
+.tz-rg select { min-height: 2.4rem; padding: 0 2rem 0 .8rem; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(5, 14, 21, .7); color: var(--text); font: inherit; font-size: .85rem; cursor: pointer; }
+.tz-rg select option { background: #0A1924; }
+.tz-bar .tierbar { gap: .35rem; }
+.tz-bar .tierbar legend { font-size: .72rem; margin-right: .2rem; }
+.tz-bar .tierbar > .dim { display: none; }
+.tz-bar .tierbox { min-height: 2.4rem; padding: 0 .6rem 0 .5rem; border-radius: 6px; border-color: var(--tzb2); background: rgba(5, 14, 21, .7); font-size: .82rem; }
+.tz-bar .tierbox input { accent-color: var(--cy); }
+.tz-bar .tierbox:has(input:checked) { border-color: var(--cy); }
+.tz-rows { grid-area: list; list-style: none; margin: 0; padding: 0 .3rem 0 0; display: grid; gap: .55rem; align-content: start;
+  max-height: max(26rem, calc(100dvh - var(--toph) - 16rem)); overflow-y: auto; overscroll-behavior: contain; }
+.tz-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 3rem; border: 1px solid var(--tzb); border-radius: var(--tzr);
+  background: linear-gradient(90deg, rgba(22, 52, 70, .5), rgba(10, 25, 36, .3)), var(--panel); }
+.tz-row:hover { border-color: var(--tzb2); }
+.tz-row.on { border-color: var(--cy); box-shadow: inset 0 0 0 1px var(--cy); background: linear-gradient(90deg, rgba(30, 90, 110, .45), rgba(10, 25, 36, .3)), var(--panel); }
+.tz-rowb { display: grid; grid-template-columns: 8.75rem minmax(0, 1fr) auto; gap: 1.1rem; align-items: center; padding: .45rem .4rem .45rem .45rem;
+  min-width: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; border-radius: var(--tzr) 0 0 var(--tzr); }
+.tz-thumb { width: 8.75rem; aspect-ratio: 16 / 9; border-radius: 5px; display: grid; place-items: center; }
+.tz-thumb .tz-lg { width: 72%; height: 62%; }
+.tz-rn { display: grid; gap: .45rem; min-width: 0; }
+.tz-rn > b { font-size: 1.45rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tz-go { display: grid; place-items: center; color: var(--dim); border-radius: 0 var(--tzr) var(--tzr) 0; }
+.tz-go .ico { width: 1.4rem; height: 1.4rem; }
+.tz-go:hover, .tz-go:focus-visible { color: var(--cy); background: rgba(46, 211, 230, .08); }
+.tz-none { padding: 1rem; }
+
+/* the preview panel */
+.tz-prev { grid-area: prev; position: sticky; top: calc(var(--toph) + 1rem); padding: 0; gap: 0; overflow: hidden; }
+.tz-pban { aspect-ratio: 16 / 6.4; display: grid; place-items: center; }
+.tz-pban .tz-lg { width: 52%; height: 64%; }
+.tz-pban > .tz-pill { position: absolute; top: .75rem; right: .75rem; }
+.tz-pmeta { padding: .75rem 1rem; border-bottom: 1px solid var(--tzb); }
+.tz-ptabs { display: flex; gap: .15rem; overflow-x: auto; padding: 0 .5rem; border-bottom: 1px solid var(--tzb); scrollbar-width: none; }
+.tz-ptabs a { display: grid; place-items: center; min-height: 2.75rem; padding: 0 .8rem; color: var(--dim); font-weight: 600; font-size: .86rem; white-space: nowrap; border-bottom: 2px solid transparent; }
+.tz-ptabs a:hover { color: var(--text); }
+.tz-ptabs a.on { color: var(--text); border-bottom-color: var(--cy); background: linear-gradient(0deg, rgba(46, 211, 230, .14), transparent); }
+.tz-pbody { padding: .9rem 1rem 1rem; display: grid; gap: .85rem; min-width: 0; }
+.tz-pname { font-size: 1.45rem; line-height: 1.05; }
+.tz-tiles { display: flex; border: 1px solid var(--tzb); border-radius: 6px; background: var(--well); }
+.tz-tiles > div { flex: 1 1 0; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: .55rem; align-items: center; padding: .65rem .7rem; border-left: 1px solid var(--tzb); min-width: 0; }
+.tz-tiles > div:first-child { border-left: 0; }
+.tz-tiles > div:last-child { flex-grow: 1.7; }
+.tz-tiles .ico { grid-row: span 2; width: 1.45rem; height: 1.45rem; color: var(--cy); }
+.tz-tiles b { font-weight: 700; font-size: 1rem; line-height: 1.15; font-stretch: 87.5%; text-transform: uppercase; overflow-wrap: anywhere; }
+.tz-tiles span { font-size: .64rem; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
+.tz-sub { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+.tz-sub h3 { font-size: .95rem; font-weight: 700; }
+.tz-sub h3 small { font-weight: 400; font-size: .72rem; color: var(--dim); margin-left: .3rem; }
+.tz-seeds { display: grid; grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr)); gap: .45rem; }
+.tz-seeds a { display: grid; justify-items: center; gap: .3rem; padding: .7rem .3rem .55rem; min-width: 0; text-align: center; border: 1px solid var(--tzb); border-radius: 6px; background: var(--well); }
+.tz-seeds a:hover { border-color: var(--tzb2); }
+.tz-seeds .logo { width: 2.5rem; height: 2.5rem; }
+.tz-seeds b { max-width: 100%; font-size: .8rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tz-seeds span { padding: .05rem .4rem; border-radius: 4px; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--dim); }
+.tz-seeds a:first-child span { color: var(--cy); background: rgba(46, 211, 230, .14); }
+.tz-pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.4rem, 1fr)); gap: .4rem; }
+.tz-pool a { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--tzb); border-radius: 5px; background: #0B1A22; }
+.tz-pool a:hover { border-color: var(--tzb2); }
+.tz-pool img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tz-pool span { position: absolute; left: 0; right: 0; bottom: 0; padding: 1rem .4rem .25rem; font-size: .72rem; font-weight: 600; background: linear-gradient(180deg, transparent, rgba(4, 10, 14, .92)); }
+.tz-cta { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; border: 1px solid var(--cy); border-radius: 6px; color: var(--cy); font-weight: 700; background: rgba(46, 211, 230, .06); }
+.tz-cta:hover { background: rgba(46, 211, 230, .14); }
+.tz-cta .ico { width: 1rem; height: 1rem; }
+
+/* one tournament: hero */
+.tz-ev { display: grid; gap: 1.1rem; }
+.tz-ehero { position: relative; isolation: isolate; display: grid; align-items: center; min-height: 15.5rem; overflow: hidden; border: 1px solid var(--tzb); border-radius: var(--tzr); }
+.tz-ehart { position: absolute; inset: 0; z-index: -1; display: grid; justify-items: end; align-items: center; padding-right: 7%; }
+.tz-ehart .tz-lg { width: min(30%, 26rem); height: 62%; }
+.tz-ehart.tz-art::before { background: linear-gradient(90deg, rgba(5, 13, 20, .96), rgba(5, 13, 20, .78) 38%, rgba(5, 13, 20, .3) 72%, rgba(5, 13, 20, .45)); }
+.tz-ehart.tz-art.map::before { background: linear-gradient(90deg, rgba(5, 13, 20, .97), rgba(5, 13, 20, .84) 40%, rgba(6, 20, 32, .64) 72%, rgba(5, 13, 20, .78)), linear-gradient(180deg, rgba(10, 36, 60, .35), rgba(5, 13, 20, .5)); }
+.tz-ehin { display: grid; gap: .5rem; max-width: 50rem; padding: 1.4rem 1.6rem 1.5rem; }
+.tz-crumb { display: flex; gap: .45rem; font-size: .76rem; color: var(--dim); }
+.tz-crumb a:hover { color: var(--text); text-decoration: underline; }
+.tz-kick { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.tz-kick > span:first-child { color: var(--cy); font-size: .78rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.tz-kick .tier { margin: 0; font-size: .78rem; }
+.tz-ehin h1 { font-size: clamp(2.2rem, 4.2vw, 3.9rem); line-height: .92; max-width: 18ch; }
+.tz-hmeta { font-size: .95rem; color: var(--text); gap: .4rem 0; }
+.tz-hmeta > span + span { margin-left: 1.1rem; padding-left: 1.1rem; border-left: 1px solid rgba(255, 255, 255, .18); }
+.tz-hmeta .ico { width: 1.1rem; height: 1.1rem; }
+.tz-hmeta i { font-style: normal; color: var(--dim); }
+.tz-champ { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; width: fit-content; padding: .35rem .8rem .35rem .45rem; border-radius: 6px; background: rgba(5, 14, 21, .75); border: 1px solid var(--tzb); box-shadow: inset 3px 0 0 var(--tc, var(--cy)); font-size: .85rem; }
+.tz-champ > span { color: var(--dim); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.tz-champ a, .tz-champ b { font-weight: 700; }
+.tz-champ a:hover { text-decoration: underline; }
+.tz-champ em { font-style: normal; color: var(--dim); }
+.tz-egrid { display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.tz-emain { display: grid; gap: 1.1rem; min-width: 0; align-content: start; }
+.tz-vt { font-size: 1.6rem; line-height: 1; }
+.tz-ov { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem); gap: 1.1rem; align-items: start; }
+.tz-col { display: grid; gap: 1.1rem; min-width: 0; align-content: start; }
+.tz-two { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.tz-stack { display: grid; gap: 1.1rem; min-width: 0; }
+.tz .tz-emain > .panel, .tz .tz-col > .panel { min-width: 0; }
+
+/* featured match: team 1 on a cyan half, team 2 on a pink half */
+.tz-fh { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.tz-cur { display: flex; align-items: center; gap: .55rem; }
+.tz-cur .ico { width: 1.4rem; height: 1.4rem; color: var(--dim); }
+.tz-cur small { display: block; font-size: .68rem; color: var(--dim); }
+.tz-cur b { font-size: .85rem; font-weight: 700; }
+.tz-fcard { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem; align-items: center;
+  padding: 1.5rem 1.25rem 1.1rem; overflow: hidden; border: 1px solid var(--tzb); border-radius: 6px;
+  background: linear-gradient(100deg, rgba(23, 168, 160, .4), rgba(14, 74, 84, .22) 36%, rgba(6, 18, 27, .9) 50%, rgba(96, 22, 74, .26) 64%, rgba(196, 40, 128, .42)), #07141C; }
+.tz-fcard::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(110deg, transparent 0 2.5%, rgba(46, 211, 230, .55) 2.8%, transparent 3.8%), linear-gradient(110deg, transparent 0 96.2%, rgba(242, 69, 154, .65) 96.6%, transparent 97.6%); }
+.tz-fs { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.tz-fs.b { flex-direction: row-reverse; text-align: right; }
+.tz-fs .logo.xl { width: clamp(3.6rem, 6.5vw, 6.25rem); height: clamp(3.6rem, 6.5vw, 6.25rem); }
+.tz-fs.lost { opacity: .62; }
+.tz-fn { min-width: 0; }
+.tz-fn b { display: block; font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1; overflow-wrap: anywhere; }
+.tz-fn b a:hover { text-decoration: underline; }
+.tz-fn b small { font-size: .55em; font-style: normal; }
+.tz-seed { display: inline-block; margin-top: .45rem; padding: .1rem .45rem; border-radius: 3px; background: var(--cy); color: #03252C; font-size: .66rem; font-weight: 800; letter-spacing: .04em; }
+.tz-fs.b .tz-seed { background: var(--pk); color: #2B0519; }
+.tz-fmid { display: grid; justify-items: center; gap: .4rem; }
+.tz-fmid > small { font-size: .72rem; font-weight: 600; color: #C3D1D8; letter-spacing: .12em; text-transform: uppercase; text-align: center; }
+.tz-fsc { display: flex; gap: .45rem; padding: .15rem 1.1rem; font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(4, 12, 18, .75); }
+.tz-fsc i { color: var(--dim); font-style: normal; }
+.tz-fsc.vs { font-size: clamp(1.8rem, 3.4vw, 2.6rem); color: #DDE8EC; }
+.tz-fwhen { font-size: .76rem; color: #C3D1D8; text-align: center; }
+.tz-bo { padding: .08rem .5rem; border: 1px solid var(--tzb2); border-radius: 4px; color: var(--cy); font-size: .68rem; font-weight: 800; text-transform: uppercase; }
+.tz-fvl { grid-column: 1 / -1; margin-bottom: -.45rem; text-align: center; font-size: .68rem; color: var(--dim); letter-spacing: .12em; text-transform: uppercase; }
+.tz-fmaps { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.tz-fmap { display: flex; align-items: center; gap: .6rem; padding: .3rem .8rem .3rem .3rem; border: 1px solid var(--tzb); border-radius: 5px; background: rgba(4, 12, 18, .7); }
+.tz-fmap.sim { border-style: dashed; }
+.tz-fmap img { width: 4.25rem; height: 2.4rem; object-fit: cover; border-radius: 3px; }
+.tz-fmap b { display: block; font-size: .8rem; font-weight: 700; text-transform: uppercase; }
+.tz-fmap small { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; color: var(--dim); }
+.tz-fbtn { grid-column: 1 / -1; justify-self: center; display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: 0 1.1rem; border: 1px solid var(--tzb2); border-radius: 5px; background: rgba(4, 12, 18, .75); font-size: .82rem; font-weight: 600; }
+.tz-fbtn .ico { width: .95rem; height: .95rem; }
+.tz-fbtn:hover { border-color: var(--cy); color: var(--cy); }
+
+/* live & upcoming / latest results */
+.tz-trows { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
+.tz-tr { display: grid; grid-template-columns: 5.4rem 7.5rem minmax(0, 1fr) 3.4rem minmax(0, 1fr) minmax(0, 9rem) 4.6rem; gap: .75rem; align-items: center;
+  padding: .45rem .6rem; border: 1px solid transparent; border-bottom-color: var(--tzb); border-radius: 5px; font-size: .84rem; }
+.tz-tr:last-child { border-bottom-color: transparent; }
+.tz-tr.lv { border-color: rgba(255, 93, 99, .35); background: rgba(255, 93, 99, .05); }
+.tz-tt, .tz-ts { display: grid; gap: .12rem; line-height: 1.2; min-width: 0; }
+.tz-tt > span:not(.tz-pill), .tz-ts span { font-size: .76rem; color: var(--dim); }
+.tz-tt .tz-pill { justify-self: start; }
+.tz-tt b { font-weight: 700; }
+.tz-ts b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tz-tm { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.tz-tm b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tz-tm.tbd b { color: var(--dim); font-weight: 500; }
+.tz-tm.tbd b small { font-weight: 400; }
+.tz-tm.lost { opacity: .55; }
+.tz-tsc { text-align: center; font-size: 1.2rem; white-space: nowrap; color: var(--dim); }
+.tz-tsc .ca, .tz-tsc .cb { font-weight: 800; }
+.tz-tmap { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.tz-tmap img { width: 3.2rem; height: 1.8rem; object-fit: cover; border-radius: 3px; flex: none; }
+.tz-tmap > span { display: grid; min-width: 0; line-height: 1.2; }
+.tz-tmap b { font-size: .78rem; font-weight: 600; }
+.tz-tmap small { font-size: .66rem; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tz-vbtn { display: grid; place-items: center; min-height: 2.1rem; border: 1px solid var(--tzb2); border-radius: 5px; font-size: .78rem; font-weight: 600; }
+.tz-vbtn:hover { border-color: var(--cy); color: var(--cy); }
+.tz-vbtn.off { opacity: .3; }
+
+/* group standings, bracket summary, next matches */
+.tz-gt { border-collapse: separate; border-spacing: 0 3px; font-size: .84rem; }
+.tz-gt th { padding: 0 .5rem .2rem; border: 0; font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; }
+.tz-gt td { padding: .42rem .5rem; border: 0; background: var(--well); }
+.tz-gt td:first-child { width: 2rem; color: var(--dim); border-radius: 4px 0 0 4px; box-shadow: inset 3px 0 0 var(--tc, var(--tzb2)); }
+.tz-gt td:last-child { border-radius: 0 4px 4px 0; }
+.tz-gt td.n { font-variant-numeric: tabular-nums; }
+.tz-gt tr.up td:nth-child(3) { color: var(--win); font-weight: 700; }
+.tz-gt tr.out td { opacity: .6; }
+.tz-gname { margin-top: .15rem; font-size: .7rem; font-weight: 700; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
+.tz-bl { display: grid; grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr); gap: .5rem; align-items: center; padding: .4rem .5rem; border: 1px solid transparent; border-radius: 4px; background: var(--well); font-size: .8rem; }
+.tz-bl:hover { border-color: var(--tzb2); }
+.tz-bl .tz-tm:last-child { flex-direction: row-reverse; text-align: right; }
+.tz-bl .tz-tsc { font-size: 1rem; }
+.tz-nday { margin-top: .1rem; font-size: .8rem; font-weight: 700; color: var(--cy); }
+.tz-nx { display: grid; grid-template-columns: 3.9rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1rem; gap: .5rem; align-items: center; min-height: 2.75rem; padding: .45rem .6rem;
+  border: 1px solid var(--tzb); border-radius: 5px; background: var(--well); font-size: .82rem; }
+a.tz-nx:hover { border-color: var(--tzb2); }
+.tz-nx > i { font-style: normal; font-size: .72rem; color: var(--dim); }
+.tz-nt { font-weight: 700; white-space: nowrap; font-size: .78rem; }
+.tz-nbo { font-size: .72rem; color: var(--dim); }
+.tz-nx > .ico { width: 1rem; height: 1rem; color: var(--dim); }
+.tz-nx .logo.sm { width: 1.2rem; height: 1.2rem; }
+.tz-rec .hubrec { margin: 0; }
+.tz .pool { grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
+
+/* widths: the table drops columns as the main column narrows; the right column drops below at 1100px */
+@media (min-width: 1101px) and (max-width: 1560px) {
+  .tz-tr { grid-template-columns: 5.2rem minmax(0, 1fr) 3rem minmax(0, 1fr) 4.4rem; }
+  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
+}
+@media (max-width: 1100px) {
+  .tz-lmain { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar" "list" "prev"; }
+  .tz-prev { position: static; }
+  .tz-rows { max-height: none; overflow: visible; padding-right: 0; }
+  .tz-ov, .tz-two { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .tz-tr { grid-template-columns: 5.2rem minmax(0, 1fr) 3rem minmax(0, 1fr) 4.4rem; }
+  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
+  .tz-list, .tz-egrid { grid-template-columns: 13rem minmax(0, 1fr); }
+}
+/* phones: the sidebar becomes a strip of links at the top, one column, 44px targets */
+@media (max-width: 760px) {
+  .tz-list, .tz-egrid { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+  .tz-side { position: static; max-height: none; overflow: visible; padding: .4rem; gap: .4rem; }
+  .tz-nav { display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: none; }
+  .tz-nav a { flex: none; min-height: 44px; padding: 0 .85rem; border-color: var(--tzb); }
+  .tz-back { min-height: 44px; }
+  .tz-loc, .tz-list .tz-sinfo { display: none; }
+  .tz-info { padding: .5rem .4rem .2rem; }
+  .tz-info h2, .tz-iname { display: none; }
+  .tz-info dl { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+  .tz-lhead { padding: 1.4rem .8rem .2rem; }
+  .tz-lhero { height: 12rem; }
+  .tz-bar { padding: 0; }
+  .tz-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; }
+  .tz-chips button, .tz-chips.sm button { flex: none; min-height: 44px; }
+  .tz-q, .tz-rg select, .tz-bar .tierbox { min-height: 44px; }
+  .tz-q { flex-basis: 100%; }
+  .tz-row { grid-template-columns: minmax(0, 1fr) 44px; }
+  .tz-rowb { grid-template-columns: 5.6rem minmax(0, 1fr); gap: .7rem; padding: .4rem; }
+  .tz-thumb { width: 5.6rem; }
+  .tz-rowb > .tz-pill { grid-column: 2; justify-self: start; margin-top: -.3rem; }
+  .tz-rn > b { font-size: 1.12rem; white-space: normal; }
+  .tz-rn .tz-meta { gap: .2rem .8rem; }
+  .tz-rn .tz-fm { padding-left: 0; border-left: 0; }
+  .tz-ptabs a { min-height: 44px; }
+  .tz-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tz-tiles > div:nth-child(3) { border-left: 0; }
+  .tz-tiles > div:nth-child(n + 3) { border-top: 1px solid var(--tzb); }
+  .tz-ehero { min-height: 0; }
+  .tz-ehart { justify-items: end; align-items: start; padding: 1rem; }
+  .tz-ehart .tz-lg { display: none; }
+  .tz-ehin { padding: 1rem; }
+  .tz-ehin h1 { font-size: 2.1rem; }
+  .tz-hmeta { gap: .3rem 1rem; }
+  .tz-hmeta > span + span { margin-left: 0; padding-left: 0; border-left: 0; }
+  .tz-fcard { padding: 1.1rem .7rem .9rem; gap: .7rem .5rem; }
+  .tz-fs, .tz-fs.b { flex-direction: column; text-align: center; gap: .5rem; }
+  .tz-fs .logo.xl { width: 3.4rem; height: 3.4rem; }
+  .tz-fn b { font-size: 1.1rem; }
+  .tz-fsc { font-size: 2.2rem; padding: .1rem .6rem; }
+  .tz-tr { grid-template-columns: minmax(0, 1fr) 2.8rem minmax(0, 1fr); grid-template-areas: "tt tt vb" "a sc b"; gap: .4rem .5rem; }
+  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
+  .tz-tt { grid-area: tt; display: flex; align-items: center; gap: .5rem; }
+  .tz-tr > .tz-tm.a { grid-area: a; }
+  .tz-tr > .tz-tm.b { grid-area: b; flex-direction: row-reverse; text-align: right; }
+  .tz-tr > .tz-tsc { grid-area: sc; }
+  .tz-vbtn { grid-area: vb; justify-self: end; min-height: 44px; min-width: 4.5rem; }
+  .tz-nx { grid-template-columns: 3.6rem minmax(0, 1fr) auto minmax(0, 1fr) 1rem; min-height: 44px; }
+  .tz-nx .tz-nbo { display: none; }
+  .tz-nx > .tz-tm.b { flex-direction: row-reverse; text-align: right; }
+  .tz-gt td { padding-block: .6rem; }
+  .tz-fbtn, .tz-cta { min-height: 44px; }
 }
 </style>
 
@@ -4035,17 +4182,6 @@ window.addEventListener("hashchange", () => closePop(false));
 })();
 
 /* ---------------- tournaments index ---------------- */
-function evCard(e) {
-  const n = new Set([...e.participants.map(p => p.team), ...e.matches.flatMap(m => [m.t1, m.t2]).filter(Boolean)]).size;
-  return `<a class="evcard" href="#e-${e.slug}">
-    ${IMG.events[e.slug] ? `<img class="evl" src="${IMG.events[e.slug]}" alt="" loading="lazy">` : `<span class="evl"></span>`}
-    <span class="ename">${esc(e.name)}</span>
-    <span class="emeta"><span>${span(e.start, e.end)}</span>${e.city ? `<span>${esc(e.city)}${e.country ? ", " + esc(e.country) : ""}</span>` : e.type ? `<span>${esc(e.type)}</span>` : ""}</span>
-    <span class="efoot">${e.champion ? `<span class="champ">${logo(e.champion, "sm")}${esc(e.champion)} won</span>` : `<span class="dim">${n ? `${n} teams` : "Teams to be announced"}</span>`}
-      <span style="display:flex;gap:.5rem;align-items:center"><span class="dim">${e.prize ? "$" + esc(e.prize) : ""}</span>${statusChip(e)}</span></span>
-  </a>`;
-}
-/* v5: the season as a circuit */
 /* v6: tier filter (Tournaments page only). e.tl is the event's own tier
    (S / A); both on by default. The choice is kept in
    localStorage when the browser allows it; events without a tier always show. */
@@ -4120,108 +4256,243 @@ function teamFinishes(team, evs) {
   </div></section>`;
 }
 
-function seasonStrip(EV) {
-  const yr = +DATA.as_of.slice(0, 4);
-  const first = `${yr}-01-01`;
-  const last = dObj(EV.reduce((a, e) => e.end > a ? e.end : a, `${yr}-12-31`));
-  const endD = new Date(Date.UTC(last.getUTCFullYear(), last.getUTCMonth() + 1, 1));
-  const total = Math.round((endD - dObj(first)) / 864e5);
-  const x = d => dayDiff(first, d) / total * 100;
-  const months = [];
-  for (let d = new Date(Date.UTC(yr, 0, 1)); d < endD; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) months.push(d);
-  const mo = months.map((d, i) => {
-    const iso = d.toISOString().slice(0, 10), nx = (months[i + 1] || endD).toISOString().slice(0, 10);
-    return `<span class="mo${nx <= DATA.as_of ? " past" : ""}" style="left:${x(iso)}%;width:${x(nx) - x(iso)}%">${MONTHS[d.getUTCMonth()]}${d.getUTCMonth() === 0 ? ` <b>${d.getUTCFullYear()}</b>` : ""}</span>`;
-  }).join("");
-  const MINW = 36 / total * 100;                 // a pin is at least ~5 weeks wide so its name fits
-  const lanes = [], pins = [];
-  for (const e of [...EV].sort((a, b) => a.start.localeCompare(b.start))) {
-    const w = Math.max((dayDiff(e.start, e.end) + 1) / total * 100, MINW);
-    const l = Math.min(x(e.start), 100 - w);
-    let i = lanes.findIndex(r => r <= l - .25);
-    if (i < 0) { i = lanes.length; lanes.push(0); }
-    lanes[i] = l + w;
-    const sub = e.champion ? `${logo(e.champion, "sm")}${esc(e.champion)}` : e.status === "live" ? `<span class="chip live">Live</span>` : esc(span(e.start, e.end));
-    pins.push([i, `<a class="pin ${e.status}" href="#e-${e.slug}" style="left:${l}%;width:${w}%;${e.champion ? tcVars(e.champion) : ""}" title="${esc(e.name)}, ${esc(span(e.start, e.end))}${e.champion ? `, won by ${esc(e.champion)}` : ""}">${evImg(e)}<span class="pt"><b>${tierTag(e)}${esc(shortEv(e.name))}</b><span>${sub}</span></span></a>`]);
+/* ---------------- tournaments: the shared shell (sidebar, art, pills, facts) ----------------
+   The Tournaments list (#events) and every tournament page (#e-<slug>) share one layout: a left
+   sidebar (links, Tournament Info, the location card), dark navy panels with thin cyan borders,
+   team 1 in cyan and team 2 in pink. Everything shown is read from the event's own fields; a
+   missing field is left out, never filled in. */
+const TZI = {
+  home: svgI(`<path d="M3.5 11L12 4l8.5 7M6 9.5V20h4.5v-5.5h3V20H18V9.5"/>`),
+  cup: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
+  shield: svgI(`<path d="M12 3l7.5 3v5.2c0 4.4-3.1 7.9-7.5 9.8-4.4-1.9-7.5-5.4-7.5-9.8V6z"/>`),
+  bars: svgI(`<path d="M5.5 19.5V12M12 19.5V5M18.5 19.5v-9M3 19.5h18"/>`),
+  cal: svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>`),
+  pin: svgI(`<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>`),
+  prize: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2.1 0 2.9 5.8 1.5 5.8 4.3 0 1.3-1.3 2.1-3 2.1-1.3 0-2.5-.6-3-1.6M12 6v1.8M12 16.3V18"/>`),
+  fmt: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>`),
+  teams: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
+  globe: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5s1.1-6.1 3.5-8.5z"/>`),
+  bracket: svgI(`<path d="M3.5 5.5h5v5h-5M3.5 13.5h5v5h-5M8.5 8h4v8.5h-4M12.5 12h4M16.5 9.5h4v5h-4"/>`),
+  list: svgI(`<path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12"/><circle cx="4.5" cy="6.5" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="17.5" r="1"/>`),
+  search: svgI(`<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>`),
+  back: svgI(`<path d="M20 12H5M10.5 6.5L5 12l5.5 5.5"/>`),
+};
+// 'Kraków' -> 'krakow', 'Rio de Janeiro' -> 'rio-de-janeiro': the same key as build_viewer.city_slug
+const citySlug = c => String(c || "").normalize("NFKD").replace(/[^\x00-\x7f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+// an event's region for the list filter, from its country (an online event is "Online")
+const REGION_OF = (() => {
+  const m = {};
+  for (const [r, cs] of Object.entries({
+    "Europe": "Europe|Malta|Poland|Romania|Sweden|Netherlands|Spain|Germany|France|Portugal|Serbia|Denmark|Finland|Norway|United Kingdom|England|Ireland|Belgium|Austria|Switzerland|Czech Republic|Czechia|Slovakia|Slovenia|Hungary|Italy|Greece|Croatia|Bulgaria|Lithuania|Latvia|Estonia|Ukraine|Russia|Belarus|Turkey|Montenegro|Bosnia and Herzegovina|North Macedonia|Cyprus|Luxembourg|Iceland",
+    "North America": "United States|USA|Canada|Mexico",
+    "South America": "Brazil|Argentina|Chile|Colombia|Peru|Uruguay|Paraguay|Ecuador|Bolivia|Venezuela",
+    "Asia": "Asia|China|Hong Kong|Taiwan|Macau|Japan|South Korea|Korea|Mongolia|Kazakhstan|Uzbekistan|Kyrgyzstan|India|Singapore|Malaysia|Indonesia|Thailand|Vietnam|Philippines",
+    "Oceania": "Oceania|Australia|New Zealand",
+    "Middle East": "Middle East|Saudi Arabia|United Arab Emirates|Qatar|Kuwait|Bahrain|Oman|Jordan|Israel|Lebanon|Iraq|Iran|Egypt",
+  })) for (const c of cs.split("|")) m[c] = r;
+  return m;
+})();
+const evRegion = e => e.type === "Online" ? "Online" : REGION_OF[e.country] || (!e.city && !e.country ? "Online" : "");
+const REGIONS = ["Europe", "North America", "South America", "Asia", "Oceania", "Middle East", "Online"];
+const hashOf = s => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+// Tournament art: the event's own image, else its city's (or "online" for an event with no city),
+// else a map from the event's own pool, darkened by the overlay, with the event logo on top
+function evArt(e) {
+  const own = (IMG.evart || {})[e.slug] || (IMG.cityart || {})[citySlug(e.city) || "online"];
+  if (own) return { src: own, own: true };
+  const pool = (e.pool || []).filter(m => IMG.maps[m]);
+  const list = pool.length ? pool : Object.keys(IMG.maps).sort();
+  const mp = list.length ? list[hashOf(e.slug) % list.length] : null;
+  return { src: mp ? IMG.maps[mp] : "", own: false };
+}
+const evInitials = e => esc(shortEv(e.name).split(/\s+/).map(w => w[0]).join("").slice(0, 3));
+// o: {w, h} intrinsic size of the background, eager (the one hero image), logo (false: none), extra html
+function tzArt(e, cls, o = {}) {
+  const a = evArt(e);
+  const bg = a.src ? `<img class="tz-bg" src="${a.src}" alt="" width="${o.w || 480}" height="${o.h || 270}"${o.eager ? ` decoding="async" fetchpriority="high"` : ` loading="lazy" decoding="async"`}>` : "";
+  const lg = o.logo === false ? "" : IMG.events[e.slug]
+    ? `<img class="tz-lg" src="${IMG.events[e.slug]}" alt="" width="${o.lw || 160}" height="${o.lh || 90}"${o.eager ? "" : ` loading="lazy" decoding="async"`}>`
+    : `<span class="tz-lg evl-ph" aria-hidden="true">${evInitials(e)}</span>`;
+  return `<div class="tz-art ${a.own ? "own" : "map"} ${cls}">${bg}${lg}${o.extra || ""}</div>`;
+}
+// a prize in short form for tight tiles ($1M, $1.32M, $772.5K): exact, just shorter
+const usdShort = n => n >= 1e6 ? `$${+(n / 1e6).toFixed(3)}M` : n >= 1e3 ? `$${+(n / 1e3).toFixed(1)}K` : usd(n);
+const tzPill = e => e.status === "live" ? `<span class="tz-pill live">Live</span>`
+  : e.status === "upcoming" ? `<span class="tz-pill up">Upcoming</span>` : `<span class="tz-pill done">Completed</span>`;
+const mdy = s => { const d = dObj(s); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`; };
+const tzDates = e => e.start === e.end ? `${mdy(e.start)}, ${e.start.slice(0, 4)}`
+  : `${mdy(e.start)}${e.start.slice(0, 4) !== e.end.slice(0, 4) ? ", " + e.start.slice(0, 4) : ""} – ${mdy(e.end)}, ${e.end.slice(0, 4)}`;
+const tzPlace = e => e.city ? `${e.city}${e.country ? ", " + e.country : ""}` : e.country || (e.type === "Online" ? "Online" : "");
+// the format as stage names ("Group Stage + Playoffs", "Swiss + Playoffs") and as one line per stage.
+// A stage line is a top-level line with a colon ("Playoffs:", "Group Stage: May 9th - 13th");
+// placeholder lines from an unfilled page ("The format is") are skipped.
+function fmtStages(e) {
+  const out = [];
+  for (const [d, t] of e.format || []) {
+    const s = String(t);
+    if (d === 1) { if (s.includes(":")) out.push({ head: s.replace(/:.*$/, "").trim(), first: null }); }
+    else if (d === 2 && out.length && out[out.length - 1].first == null) out[out.length - 1].first = s.replace(/[.:]$/, "");
   }
-  const rows = lanes.map((_, i) => `<div class="lane">${pins.filter(p => p[0] === i).map(p => p[1]).join("")}</div>`).join("");
-  return `<div class="strip-wrap"><div class="strip" role="group" aria-label="Tournament calendar">${mo}<div class="lanes">${rows}</div>
-    <div class="now" style="left:${x(DATA.as_of)}%" title="Today"></div></div></div>
-    <p class="strip-hint">Swipe the calendar sideways for the other months.</p>`;
+  return out.filter(x => x.head);
+}
+const fmtShort = e => [...new Set(fmtStages(e).map(x => /swiss/i.test(x.first || "") ? "Swiss" : x.head))].join(" + ");
+const fmtLong = e => fmtStages(e).filter(x => x.first).map(x => `${x.head}: ${x.first}`).join("; ");
+const teamRegion = t => String(T[t]?.vrs?.region || T[t]?.region || "").toLowerCase();
+const evTeamCount = e => evTeamsList(e).filter(isTeamSlot).length;
+const regionCount = e => new Set(evTeamsList(e).map(teamRegion).filter(Boolean)).size;
+// seeds: the event's teams in VRS order (teams outside the VRS have no seed)
+const vrsSeeds = e => evTeamsList(e).filter(t => T[t]?.vrs).sort((a, b) => vrsRank(a) - vrsRank(b));
+// The event in plain facts: teams, place, prize, format, then where it stands
+function tzFacts(e) {
+  const n = evTeamCount(e), where = tzPlace(e), prize = prizeTxt(e);
+  const s = [];
+  if (n) s.push(`${n} teams${e.venue ? ` at ${e.venue}` : ""}${e.city ? ` in ${where}` : where ? ` (${where})` : ""}${prize ? ` for a ${prize} prize pool` : ""}.`);
+  else {
+    const loc = [e.venue, where].filter(Boolean).join(", ");
+    s.push("Teams to be announced.");
+    if (loc || prize) s.push(`${loc}${loc && prize ? ", " : ""}${prize ? `${prize} prize pool` : ""}.`.replace(/^./, c => c.toUpperCase()));
+  }
+  const f = fmtLong(e);
+  if (f) s.push(f + ".");
+  const fin = finalOf(e);
+  if (fin) s.push(`${fin.w} won, ${fin.sw}–${fin.sl} over ${fin.l} in the final.`);
+  else if (e.champion) s.push(`${e.champion} won.`);
+  else if (e.status === "live") {
+    const total = dayDiff(e.start, e.end) + 1, today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 1), total);
+    const P = e.placements || {}, alive = evTeamsList(e).filter(t => !P[t] || P[t].label === "Still playing").length;
+    s.push(`Day ${today} of ${total}${n ? `; ${alive} of ${n} teams still in` : ""}.`);
+  } else if (e.status === "upcoming") s.push(`Starts ${startsIn(e).replace(/^starting$/, "today").replace(/^starts /, "")}.`);
+  if (e.organizer) s.push(`Organized by ${e.organizer}.`);
+  return s.join(" ");
+}
+const tzMeta = (e, fmt = true) => `<span>${TZI.cal}${esc(tzDates(e))}</span>${tzPlace(e) ? `<span>${TZI.pin}${esc(tzPlace(e))}</span>` : ""}${prizeTxt(e) ? `<span>${TZI.prize}${prizeTxt(e)}</span>` : ""}${fmt && fmtShort(e) ? `<span class="tz-fm"><i>Format:</i> ${esc(fmtShort(e))}</span>` : ""}`;
+
+// The sidebar: links, then Tournament Info and the location card for one event
+const SITE_LINKS = [["#home", "Home", TZI.home], ["#events", "Tournaments", TZI.cup], ["#teams", "Teams", TZI.shield], ["#record", "Stats", TZI.bars]];
+function tzInfo(e, named = false) {
+  if (!e) return `<section class="tz-info" id="tzInfo" hidden></section>`;
+  const n = evTeamCount(e);
+  const rows = [[TZI.fmt, "Format", fmtShort(e)], [TZI.teams, "Teams", n ? String(n) : ""], [TZI.cup, "Prize pool", prizeTxt(e)],
+    [TZI.pin, "Location", e.city || e.country || (e.type === "Online" ? "Online" : "")]].filter(r => r[2]);
+  return `<section class="tz-info" id="tzInfo" aria-label="Tournament info"><h2>Tournament info</h2>
+    ${named ? `<p class="tz-iname">${esc(e.name)}</p>` : ""}
+    <dl>${rows.map(([i, k, v]) => `<div>${i}<dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl></section>`;
+}
+function tzLoc(e) {
+  const city = e && (e.city || (e.type === "Online" ? "Online" : e.country));
+  if (!city) return `<span id="tzLoc" hidden></span>`;
+  return `<a class="tz-loc" id="tzLoc" href="#e-${e.slug}" aria-label="${esc(`${e.name}: ${tzPlace(e)}`)}">${tzArt(e, "tz-locart", { w: 320, h: 180, logo: false })}
+    <span class="tz-loct">${TZI.pin}<span><b>${esc(city)}</b>${e.city && e.country ? `<small>${esc(e.country)}</small>` : ""}</span></span></a>`;
+}
+function tzSide(e, links, cur, back = "", named = false) {
+  return `<aside class="tz-side" aria-label="Tournament navigation">
+    ${back}
+    <nav class="tz-nav" aria-label="${back ? "Tournament sections" : "Site sections"}">${links.map(([h, l, i]) => `<a href="${h}"${h === cur ? ` aria-current="page"` : ""}>${i}<span>${l}</span></a>`).join("")}</nav>
+    <div class="tz-sinfo">${tzInfo(e, named)}</div>
+    ${tzLoc(e)}
+  </aside>`;
 }
 
-function onAir(e) {
-  const live = e.status === "live";
-  const total = dayDiff(e.start, e.end) + 1;
-  const today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 0), total);
-  const teams = evTeamsList(e), P = e.placements || {};
-  const alive = teams.filter(t => !P[t] || P[t].label === "Still playing");
-  const out = teams.filter(t => P[t] && P[t].label !== "Still playing").sort((a, b) => (P[a].from || 99) - (P[b].from || 99));
-  const byTime = (a, b) => (a.day || "9").localeCompare(b.day || "9") || (a.when || "").localeCompare(b.when || "");
-  const next = e.matches.filter(m => !m.finished && m.t1 && m.t2).sort(byTime).slice(0, 4);
-  const counter = live
-    ? `<div class="dayctr"><b>Day ${today}<small> of ${total}</small></b><span>${alive.length} of ${teams.length} teams still in</span></div>`
-    : `<div class="dayctr"><b>${Math.max(dayDiff(DATA.as_of, e.start), 0)}<small> days</small></b><span>until the first series</span></div>`;
-  return `<article class="onair${live ? "" : " soon"}">
-    <div class="onair-h">${evImg(e)}
-      <div>${statusChip(e)} ${tierTag(e)}<h2 class="evname" style="margin-top:.4rem"><a href="#e-${e.slug}">${esc(e.name)}</a></h2>
-        <div class="meta"><span>${esc(span(e.start, e.end))}</span>${whereOf(e) ? `<span>${esc(whereOf(e))}</span>` : ""}${prizeTxt(e) ? `<span><b>${prizeTxt(e)}</b> prize pool</span>` : ""}</div></div>
-      ${counter}</div>
-    ${live ? `<div class="daytrack" aria-hidden="true">${Array.from({ length: total }, (_, i) => `<i class="${i + 1 < today ? "done" : i + 1 === today ? "today" : ""}"></i>`).join("")}</div>` : ""}
-    ${teams.length ? `<div class="alive"><span>${live ? "Still in" : "Teams"}</span><div class="ls">${alive.map(t => tchip(t)).join("")}</div>
-      ${out.length ? `<span>Out</span><div class="ls out">${out.map(t => tchip(t, ` <em>${finishOf(e, t).text}</em>`)).join("")}</div>` : ""}</div>` : `<p class="empty">Teams to be announced.</p>`}
-    ${next.length ? `<div class="mlist">${next.map(matchRow).join("")}</div>` : ""}
-    <div class="links"><a class="btn" href="#e-${e.slug}">Matches and tables</a><a class="btn" href="#e-${e.slug}.matchup">Build a matchup</a></div>
-  </article>`;
+/* ---------------- tournaments list (#events) ----------------
+   A row SELECTS its tournament and shows it in the preview panel; the row's arrow, a double
+   click or Enter OPENS the tournament page. The live event (else the next one) starts selected. */
+const tzF = { st: "all", q: "", rg: "" };
+let tzSel = null;
+const tzFold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const TZ_ST = [["all", "All"], ["live", "Ongoing"], ["upcoming", "Upcoming"], ["finished", "Completed"]];
+function tzOrder() {
+  const by = (a, b) => a.start.localeCompare(b.start);
+  return [...EV.filter(e => e.status === "live").sort(by), ...EV.filter(e => e.status === "upcoming").sort(by),
+    ...EV.filter(e => e.status === "finished").sort(by).reverse()];
 }
-
+function tzShown(e) {
+  if (!tierShown(e)) return false;
+  if (tzF.st !== "all" && e.status !== tzF.st) return false;
+  if (tzF.rg && evRegion(e) !== tzF.rg) return false;
+  const q = tzFold(tzF.q).trim();
+  return !q || tzFold(`${e.name} ${e.city || ""} ${e.country || ""} ${e.organizer || ""}`).includes(q);
+}
+function tzRow(e) {
+  const on = e.slug === tzSel;
+  return `<li class="tz-row ${e.status}${on ? " on" : ""}">
+    <button type="button" class="tz-rowb" data-tzsel="${e.slug}" aria-pressed="${on}" title="Show ${esc(e.name)} in the preview; double-click or Enter opens it">
+      ${tzArt(e, "tz-thumb", { w: 192, h: 108, lw: 120, lh: 68 })}
+      <span class="tz-rn"><b>${tierTag(e)}${esc(e.name)}</b><span class="tz-meta">${tzMeta(e)}</span></span>
+      ${tzPill(e)}
+    </button>
+    <a class="tz-go" href="#e-${e.slug}" aria-label="Open ${esc(e.name)}">${HI.next}</a>
+  </li>`;
+}
+function tzListHtml() {
+  const list = tzOrder().filter(tzShown);
+  return list.length ? list.map(tzRow).join("") : `<li class="tz-none"><p class="empty">No tournaments match these filters.</p></li>`;
+}
+function tzPreview(e) {
+  if (!e) return `<section class="tz-prev tz-panel" id="tzPrev"><p class="empty">Choose a tournament.</p></section>`;
+  const secs = tzSections(e).filter(s => s[0] !== "matchup");
+  const n = evTeamCount(e), rg = regionCount(e), seeds = vrsSeeds(e).slice(0, 5);
+  const tiles = [[TZI.teams, n || "", "Teams"], [TZI.prize, prizeNum(e) ? usdShort(prizeNum(e)) : "", "Prize pool"], [TZI.globe, rg || "", rg === 1 ? "Region" : "Regions"], [TZI.cup, fmtShort(e), "Format"]].filter(t => t[1]);
+  const pool = (e.pool || []);
+  return `<section class="tz-prev tz-panel" id="tzPrev" aria-labelledby="tzPrevT" aria-live="polite">
+    ${tzArt(e, "tz-pban", { w: 640, h: 270, lw: 300, lh: 150, extra: tzPill(e) })}
+    <div class="tz-pmeta tz-meta">${tzMeta(e)}</div>
+    <nav class="tz-ptabs" aria-label="${esc(e.name)} sections">${secs.map(([k, l]) => `<a href="#e-${e.slug}${k ? "." + k : ""}"${k ? "" : ` class="on"`}>${l}</a>`).join("")}</nav>
+    <div class="tz-pbody">
+      <h2 class="tz-pname" id="tzPrevT">${tierTag(e)}${esc(e.name)}</h2>
+      <p class="tz-desc">${esc(tzFacts(e))}</p>
+      ${tiles.length ? `<div class="tz-tiles">${tiles.map(([i, v, l]) => `<div>${i}<b>${esc(v)}</b><span>${l}</span></div>`).join("")}</div>` : ""}
+      ${seeds.length ? `<div class="tz-sub"><h3>Top teams <small>by VRS rank</small></h3>${n ? `<a href="#e-${e.slug}.teams">View all teams ${HI.arrow}</a>` : ""}</div>
+        <div class="tz-seeds">${seeds.map(t => `<a href="#t-${T[t].slug}">${logo(t, "md")}<b>${esc(shortName(t))}</b><span>VRS #${T[t].vrs.rank}</span></a>`).join("")}</div>` : ""}
+      ${pool.length ? `<div class="tz-sub"><h3>Map pool</h3><a href="#e-${e.slug}.maps">Map stats ${HI.arrow}</a></div>
+        <div class="tz-pool">${pool.map(mp => `<a href="#e-${e.slug}.maps" title="${esc(mp)}: every team's record on it at this tournament">${IMG.maps[mp] ? `<img src="${IMG.maps[mp]}" alt="" width="160" height="90" loading="lazy" decoding="async">` : ""}<span>${esc(mp)}</span></a>`).join("")}</div>` : ""}
+      <a class="tz-cta" href="#e-${e.slug}">View tournament ${HI.arrow}</a>
+    </div>
+  </section>`;
+}
 function viewEvents() {
-  const EV = DATA.events.filter(tierShown);   // the tier filter applies to everything below
-  const yr = DATA.as_of.slice(0, 4);
-  const byStart = (a, b) => a.start.localeCompare(b.start);
-  const live = EV.filter(e => e.status === "live").sort(byStart);
-  const up = EV.filter(e => e.status === "upcoming").sort(byStart);
-  const done = EV.filter(e => e.status === "finished").sort(byStart).reverse();
-  const feat = live.length ? live : up.slice(0, 1);
-  const rest = up.filter(e => !feat.includes(e));
-  const season = EV.filter(e => e.start.startsWith(yr));
-  const champs = {};
-  for (const e of done) if (e.champion) (champs[e.champion] = champs[e.champion] || []).push(e);
-  const pot = season.reduce((a, e) => a + prizeNum(e), 0);
-  const tally = [[season.length, "tournaments"], [season.filter(e => e.status === "finished").length, "decided"],
-    [Object.keys(champs).length, "different champions"], [`$${(pot / 1e6).toFixed(1)}M`, "in prize pools"]];
-
-  const nu = e => {
-    const d = dObj(e.start);
-    return `<a class="nu" href="#e-${e.slug}"><span class="dt"><b>${d.getUTCDate()}</b><span>${MONTHS[d.getUTCMonth()]}${String(d.getUTCFullYear()) !== yr ? " " + d.getUTCFullYear() : ""}</span></span>
-      ${evImg(e)}<span class="nm"><b>${tierTag(e)}${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
-      <span class="rt"><b>${prizeTxt(e)}</b><span>${startsIn(e)}</span></span></a>`;
-  };
-  const row = e => {
-    const f = finalOf(e), c = e.champion, d = dObj(e.start);
-    return `<a href="#e-${e.slug}" style="${c ? tcVars(c) : ""}">
-      <span class="dt"><b>${MONTHS[d.getUTCMonth()]}</b><span>${dayRange(e)}</span></span>
-      ${evImg(e, "el")}
-      <span class="en"><b>${tierTag(e)}${esc(e.name)}</b><span>${esc(whereOf(e))}</span></span>
-      ${c ? `<span class="cw">${logo(c)}<b>${esc(c)}</b><span>Champion</span></span>` : `<span class="cw"><span>No result recorded</span></span>`}
-      <span class="fn">${f ? `<span class="sc">${f.sw}–${f.sl}</span>${logo(f.l, "sm")}<em>over ${esc(f.l)} in the final</em>` : ""}</span>
-      <span class="pz"><b>${prizeTxt(e)}</b><span>${evTeamsList(e).length} teams</span></span></a>`;
-  };
-  const titles = Object.entries(champs).sort((a, b) => b[1].length - a[1].length || b[1][0].end.localeCompare(a[1][0].end));
-  return `
-  <header class="season"><h1 class="cond">${yr} <span>season</span></h1>
-    <div class="tally">${tally.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join("")}</div></header>
-  ${tierBar()}
-  ${EV.length ? seasonStrip(EV) : `<p class="empty">No tournaments in the selected tiers. Tick a tier above to show its events.</p>`}
-  <div class="marquee">
-    <div style="display:grid;gap:1.5rem">${feat.map(onAir).join("") || `<p class="empty">Nothing running right now.</p>`}</div>
-    <aside class="nextup"><h2>Next up</h2>${rest.map(nu).join("") || `<p class="empty">No further tournaments announced yet.</p>`}</aside>
-  </div>
-  ${done.length ? `<div class="results">
-    <section><h2>Results <span class="dim">newest first, with the grand final score</span></h2><div class="roll">${done.map(row).join("")}</div></section>
-    <aside class="titles"><h2>Titles in ${yr} <span class="dim">event wins per team</span></h2>
-      ${titles.map(([t, list]) => `<a class="trow" href="${T[t] ? `#t-${T[t].slug}` : "#teams"}" style="${tcVars(t)}">${logo(t)}<b>${esc(t)}</b><span class="n">${list.length}</span><span class="won">${list.map(e => evImg(e, "", true)).join("")}</span></a>`).join("")}
-    </aside></div>` : ""}`;
+  const all = tzOrder();
+  if (!tzSel || !EV_BY[tzSel]) tzSel = (all.find(e => e.status === "live") || all.find(e => e.status === "upcoming") || all[0] || {}).slug || null;
+  const sel = EV_BY[tzSel];
+  const lead = all.find(e => e.status === "live") || all.find(e => e.status === "upcoming") || sel;
+  const cnt = k => EV.filter(e => e.status === k).length;
+  const regs = REGIONS.filter(r => EV.some(e => evRegion(e) === r));
+  const sub = [`${EV.length} tournaments`, cnt("live") ? `${cnt("live")} live` : "", `${cnt("upcoming")} upcoming`, `${cnt("finished")} completed`].filter(Boolean).join(" · ");
+  return `<div class="tz tz-list">
+    ${tzSide(sel, SITE_LINKS, "#events", "", true)}
+    <div class="tz-lmain">
+      ${lead ? tzArt(lead, "tz-lhero", { w: 1600, h: 600, eager: true, logo: false }) : ""}
+      <header class="tz-lhead"><h1>Tournaments</h1><p>${esc(sub)}</p></header>
+      <div class="tz-bar">
+        <div class="tz-chips" role="group" aria-label="Status">${TZ_ST.map(([k, l]) => `<button type="button" data-tzst="${k}" aria-pressed="${tzF.st === k}">${l}</button>`).join("")}</div>
+        <label class="tz-q">${TZI.search}<span class="sr-only">Search tournaments</span><input type="search" id="tzQ" value="${esc(tzF.q)}" placeholder="Search tournaments…" autocomplete="off" spellcheck="false"></label>
+        <label class="tz-rg"><span class="sr-only">Region</span><select id="tzRg"><option value="">All regions</option>${regs.map(r => `<option${tzF.rg === r ? " selected" : ""}>${r}</option>`).join("")}</select></label>
+        ${tierBar()}
+      </div>
+      <ul class="tz-rows" id="tzList" aria-label="Tournaments">${tzListHtml()}</ul>
+      ${tzPreview(sel)}
+    </div>
+  </div>`;
+}
+// list-page updates in place: the rows and the preview change, the page and the search box stay put
+function tzRefreshList() { const l = $("#tzList"); if (l) l.innerHTML = tzListHtml(); }
+function tzSelect(slug) {
+  const e = EV_BY[slug];
+  if (!e) return;
+  tzSel = slug;
+  document.querySelectorAll("#tzList .tz-row").forEach(li => {
+    const b = li.querySelector("[data-tzsel]"), on = b && b.dataset.tzsel === slug;
+    li.classList.toggle("on", on); if (b) b.setAttribute("aria-pressed", String(on));
+  });
+  const swap = (sel, html) => { const old = $(sel); if (old) { const t = document.createElement("div"); t.innerHTML = html.trim(); if (t.firstElementChild) old.replaceWith(t.firstElementChild); else old.remove(); } };
+  swap("#tzPrev", tzPreview(e));
+  swap("#tzInfo", tzInfo(e, true));
+  swap("#tzLoc", tzLoc(e));
+  // below 1100px the preview sits under the list: bring it into view
+  const p = $("#tzPrev");
+  if (p && matchMedia("(max-width: 1100px)").matches) {
+    const r = p.getBoundingClientRect();
+    if (r.top > innerHeight - 80 || r.bottom < 0) p.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
 }
 
 /* ---------------- one tournament ---------------- */
@@ -4314,58 +4585,206 @@ function matchRow(m) {
   return a && b ? `<a class="mrow" href="#m-${m.id}">${inner}</a>` : `<div class="mrow">${inner}</div>`;
 }
 
-function evHero(e) {
-  const facts = [
-    ["Dates", span(e.start, e.end)],
-    e.city ? ["Location", `${e.city}${e.country ? ", " + e.country : ""}`] : e.type ? ["Format", e.type] : null,
-    e.venue ? ["Venue", e.venue] : null,
-    prizeTxt(e) ? ["Prize pool", prizeTxt(e)] : null,
-    e.organizer ? ["Organizer", e.organizer] : null,
-    e.tier ? ["Tier", e.tier] : null,
+// The sections a tournament page has, each only when the event's data can fill it:
+// [sub-route, label, icon]. "" is the Overview.
+function tzSections(e) {
+  const teams = evTeamsList(e).filter(isTeamSlot);
+  return [
+    ["", "Overview", ICON.overview],
+    playoffCols(e).length ? ["bracket", "Bracket", TZI.bracket] : null,
+    e.matches.length ? ["matches", "Matches", TZI.cal] : null,
+    teams.length ? ["teams", "Teams", TZI.teams] : null,
+    groupTables(e).length || e.prizes.length ? ["standings", "Standings", TZI.cup] : null,
+    (e.pool || []).length ? ["maps", "Map stats", ICON.pools] : null,
+    teams.filter(t => T[t]).length >= 2 ? ["matchup", "Build a matchup", ICON.h2h] : null,
   ].filter(Boolean);
-  const n = evTeamsList(e).length;
-  if (n) facts.splice(facts.findIndex(f => f[0] === "Prize pool") + 1 || facts.length, 0, ["Teams", String(n)]);
-  const f = finalOf(e), P = e.placements || {};
-  let crown;
-  if (e.champion) {
-    const third = Object.keys(P).filter(t => P[t].from === 3);
-    crown = `<div class="crown" style="${tcVars(e.champion)}">${logo(e.champion)}
-      <span class="lbl">Champion</span>
-      ${T[e.champion] ? `<a class="who" href="#t-${T[e.champion].slug}">${esc(e.champion)}</a>` : `<span class="who">${esc(e.champion)}</span>`}
-      ${f ? `<span class="sub">Beat ${logo(f.l, "sm")}<b>${esc(f.l)}</b> ${f.sw}–${f.sl} in the final${third.length ? `; ${third.length > 1 ? "semifinalists" : "third"}: ${third.map(esc).join(", ")}` : ""}</span>` : ""}
-    </div>`;
-  } else if (e.status === "live") {
-    const total = dayDiff(e.start, e.end) + 1, today = Math.min(Math.max(dayDiff(e.start, DATA.as_of) + 1, 1), total);
-    const alive = evTeamsList(e).filter(t => !P[t] || P[t].label === "Still playing").length;
-    crown = `<div class="crown state live"><span class="lbl">Running now</span><span class="who">Day ${today} of ${total}</span><span class="sub"><b>${alive}</b> of ${n} teams still in</span></div>`;
-  } else if (e.status === "upcoming") {
-    const d = dayDiff(DATA.as_of, e.start);
-    crown = `<div class="crown state"><span class="lbl">First series</span><span class="who">${d <= 0 ? "Starting" : d === 1 ? "Tomorrow" : `In ${d} days`}</span><span class="sub">${n ? `<b>${n}</b> teams announced` : "Teams to be announced"}</span></div>`;
-  } else crown = "";
-  return `<section class="evhero">
-    ${evImg(e, "evlogo")}
-    <div>
-      <div class="evtop">${statusChip(e)}${favBtn(e, true)}</div>
-      <h1 class="cond" style="margin-top:.5rem">${esc(e.name)}</h1>
-      <dl class="facts">${facts.map(([k, v]) => `<div class="${k === "Prize pool" || k === "Dates" ? "big" : ""}"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+}
+
+function tzEvHero(e) {
+  const fin = finalOf(e);
+  const champ = e.champion ? `<p class="tz-champ" style="${tcVars(e.champion)}">${logo(e.champion, "sm")}<span>Champion</span>${T[e.champion] ? `<a href="#t-${T[e.champion].slug}">${esc(e.champion)}</a>` : `<b>${esc(e.champion)}</b>`}${fin ? `<em>${fin.sw}–${fin.sl} over ${esc(fin.l)} in the final</em>` : ""}</p>` : "";
+  return `<section class="tz-ehero">
+    ${tzArt(e, "tz-ehart", { w: 1600, h: 400, lw: 420, lh: 200, eager: true })}
+    <div class="tz-ehin">
+      <nav class="tz-crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span aria-hidden="true">/</span><span>${esc(shortEv(e.name))}</span></nav>
+      <p class="tz-kick"><span>CS2 tournament</span>${tierTag(e)}${tzPill(e)}${favBtn(e, true)}</p>
+      <h1>${esc(e.name)}</h1>
+      <p class="tz-meta tz-hmeta"><span>${TZI.cal}${esc(tzDates(e))}</span>${tzPlace(e) ? `<span>${TZI.pin}${esc(tzPlace(e))}</span>` : ""}${prizeTxt(e) ? `<span>${TZI.cup}${prizeTxt(e)} <i>Prize pool</i></span>` : ""}</p>
+      <p class="tz-desc">${esc(tzFacts(e))}</p>
+      ${champ}
     </div>
-    ${crown}
   </section>`;
 }
 
 function viewEvent(slug, sub) {
   const e = EV_BY[slug];
   if (!e) return `<p>Tournament not found. <a class="btn" href="#events">All tournaments</a></p>`;
-  const tabs = [["", "Matches"], ["teams", "Teams & lineups"], ["matchup", "Build a matchup"]];
-  const nav = `<nav class="subtabs" aria-label="Tournament sections">${tabs.map(([k, l]) => `<a href="#e-${slug}${k ? "." + k : ""}" ${sub === k ? 'aria-current="page"' : ""}>${l}</a>`).join("")}</nav>`;
+  const secs = tzSections(e);
+  if (!secs.some(([k]) => k === sub)) sub = "";
   let body;
   if (sub === "teams") body = evTeams(e);
   else if (sub === "matchup") body = evMatchup(e);
-  else body = evMatches(e);
-  return `<nav class="crumb"><a href="#events">Tournaments</a><span>/</span><span>${esc(e.name)}</span></nav>${evHero(e)}${nav}${body}`;
+  else if (sub === "matches") body = evDays(e);
+  else if (sub === "bracket") body = evBrackets(e);
+  else if (sub === "standings") body = `<div class="tz-two">${evGroupsPanel(e) || ""}<div class="tz-stack">${standings(e)}${evFormat(e)}</div></div>`;
+  else if (sub === "maps") body = evPoolPanel(e);
+  else body = tzOverview(e);
+  const links = secs.map(([k, l, i]) => [`#e-${slug}${k ? "." + k : ""}`, l, i]);
+  const back = `<a class="tz-back" href="#events">${TZI.back}<span>All tournaments</span></a>`;
+  const title = sub ? `<h2 class="tz-vt">${esc(secs.find(([k]) => k === sub)[1])}</h2>` : "";
+  return `<div class="tz tz-ev">${tzEvHero(e)}
+    <div class="tz-egrid">${tzSide(e, links, `#e-${slug}${sub ? "." + sub : ""}`, back)}
+      <div class="tz-emain${sub ? " tz-subv" : ""}">${title}${body}</div></div></div>`;
 }
 
-function evMatches(e) {
+/* ---------------- tournament overview: featured match, live & upcoming, standings, next ---------------- */
+const tzBo = m => `Bo${boOf(m)}`;
+const tzWhen = m => { const d = localDay(m.when) || m.day; return { day: d ? dayWord(d) : "TBA", time: m.when ? clock(m.when) : "" }; };
+// a team cell; an open slot names the match that fills it (title) and reads "TBD"
+function tzTeam(m, i, cls = "") {
+  const t = i ? m.t2 : m.t1;
+  if (t) return `<span class="tz-tm ${cls}">${logo(t, "sm")}<b>${esc(t)}</b></span>`;
+  const src = slotSource(m, i);
+  return `<span class="tz-tm tbd ${cls}"${src ? ` title="${esc(src.title)}"` : ""}>${logo(null, "sm")}<b>${src ? src.html : "TBD"}</b></span>`;
+}
+// The featured match: the live one, else the latest result, else the next one
+function tzFeatured(e) {
+  const live = e.matches.filter(isLive).sort(byTime)[0];
+  const done = e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).pop();
+  // the next one with at least one team drawn (an all-TBD card says nothing)
+  const next = e.matches.filter(m => !m.finished && !isLive(m) && (m.t1 || m.t2)).sort(byTime)[0];
+  const m = live || done || next;
+  if (!m) return "";
+  const kick = live ? "Live now" : done ? "Latest result" : "Next match";
+  const cur = e.status === "live" ? (live || e.matches.filter(x => !x.finished).sort(byTime)[0] || {}).stage : null;
+  const played = m.finished || isLive(m), bo = boOf(m);
+  const side = (i) => {
+    const t = i ? m.t2 : m.t1, w = winnerOf(m);
+    const seed = t && T[t]?.vrs ? `<span class="tz-seed">VRS #${T[t].vrs.rank}</span>` : "";
+    const src = !t ? slotSource(m, i) : null;
+    const nm = t ? (T[t] ? `<a href="#t-${T[t].slug}">${esc(t)}</a>` : esc(t)) : src ? src.html : "TBD";
+    return `<div class="tz-fs ${i ? "b" : "a"}${w && t !== w ? " lost" : ""}">${logo(t, "xl")}<div class="tz-fn"><b${src ? ` title="${esc(src.title)}"` : ""}>${nm}</b>${seed}</div></div>`;
+  };
+  let maps = "";
+  if (m.maps.length) maps = `<div class="tz-fmaps">${m.maps.map((x, i) => {
+    const won = x.w === 1 ? m.t1 : x.w === 2 ? m.t2 : null;
+    return `<div class="tz-fmap">${IMG.maps[x.map] ? `<img src="${IMG.maps[x.map]}" alt="" width="96" height="54" loading="lazy" decoding="async">` : ""}
+      <span><b>${esc(x.map)}</b><small class="${x.w === 1 ? "ca" : x.w === 2 ? "cb" : ""}">${x.s1 != null ? `${x.s1}–${x.s2}` : `Map ${i + 1}`}${won ? ` · ${esc(shortName(won))}` : ""}</small></span></div>`;
+  }).join("")}</div>`;
+  else if (m.pred && m.t1 && m.t2) {
+    const v = vetoFor(decode(m.pred), bo);
+    const steps = v ? v.veto.filter(s => s.verb !== "bans") : [];
+    if (steps.length) maps = `<p class="tz-fvl">The model's simulated veto</p><div class="tz-fmaps">${steps.map(s => `<div class="tz-fmap sim">${IMG.maps[s.map] ? `<img src="${IMG.maps[s.map]}" alt="" width="96" height="54" loading="lazy" decoding="async">` : ""}
+      <span><b>${esc(s.map)}</b><small class="${s.verb === "decider" ? "" : s.side === "A" ? "ca" : "cb"}">${s.verb === "decider" ? "Decider" : `${esc(shortName(s.side === "A" ? m.t1 : m.t2))} pick`}</small></span></div>`).join("")}</div>`;
+  }
+  const w = tzWhen(m);
+  const mid = played ? `<b class="tz-fsc"><span class="${m.w1 > m.w2 ? "ca" : ""}">${m.w1}</span><i>-</i><span class="${m.w2 > m.w1 ? "cb" : ""}">${m.w2}</span></b>`
+    : `<b class="tz-fsc vs">VS</b><span class="tz-fwhen">${esc(w.day)}${w.time ? ` · ${esc(w.time)}` : ""}</span>`;
+  return `<section class="tz-panel tz-feat" aria-labelledby="tzFeatH">
+    <header class="tz-fh"><h2 class="tz-h" id="tzFeatH">${live ? `<span class="tz-pill live">Live</span>` : ""}${kick}</h2>
+      ${cur ? `<span class="tz-cur">${HI.veto}<span><small>Current stage</small><b>${esc(cur)}</b></span></span>` : ""}</header>
+    <div class="tz-fcard">
+      ${side(0)}
+      <div class="tz-fmid"><small>${esc(m.stage)}</small>${mid}<span class="tz-bo">${tzBo(m)}</span></div>
+      ${side(1)}
+      ${maps}
+      ${m.t1 && m.t2 ? `<a class="tz-fbtn" href="#m-${m.id}">View match details ${HI.arrow}</a>` : ""}
+    </div>
+  </section>`;
+}
+// the matches a table shows: live and coming up while the event runs, the latest results once it is over
+function tzTableRows(e) {
+  if (e.status === "finished") return { title: "Latest results", list: e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).reverse().slice(0, 8) };
+  const live = e.matches.filter(isLive).sort(byTime);
+  const soon = e.matches.filter(m => !m.finished && !isLive(m) && (!m.day || m.day >= daysBefore(DATA.as_of, 1))).sort(byTime);
+  const list = [...live, ...soon].slice(0, 8);
+  // nothing drawn and nothing dated yet: the bracket and the matches view already show the empty slots
+  return { title: "Live & upcoming matches", live: live.length, list: list.some(m => m.t1 || m.t2 || m.day) ? list : [] };
+}
+function tzTable(e) {
+  const { title, list, live } = tzTableRows(e);
+  if (!list.length) return "";
+  const row = m => {
+    const lv = isLive(m), played = m.finished || lv, w = tzWhen(m);
+    // the map: the one being played (live), the last one played, or the model's simulated first map
+    let mp = null, ml = "";
+    if (m.maps.length) { mp = m.maps[m.maps.length - 1].map; ml = lv ? `Map ${m.maps.length}` : `${m.maps.length} map${m.maps.length > 1 ? "s" : ""}`; }
+    else if (m.pred && m.t1 && m.t2) { const v = vetoFor(decode(m.pred), boOf(m)); if (v && v.maps && v.maps[0]) { mp = v.maps[0]; ml = "Model's veto"; } }
+    const time = lv ? `<span class="tz-pill live">Live</span><span>${esc(w.time)}</span>` : `<b>${esc(w.day)}</b><span>${esc(w.time)}</span>`;
+    return `<li class="tz-tr${lv ? " lv" : ""}">
+      <span class="tz-tt">${time}</span>
+      <span class="tz-ts"><b>${esc(m.stage)}</b><span>${tzBo(m)}</span></span>
+      ${tzTeam(m, 0, "a")}
+      <span class="tz-tsc">${played ? `<span class="${m.w1 > m.w2 ? "ca" : ""}">${m.w1}</span> - <span class="${m.w2 > m.w1 ? "cb" : ""}">${m.w2}</span>` : "—"}</span>
+      ${tzTeam(m, 1, "b")}
+      <span class="tz-tmap"${mp && !m.maps.length ? ` title="Map 1 of the model's simulated veto"` : ""}>${mp ? `${IMG.maps[mp] ? `<img src="${IMG.maps[mp]}" alt="" width="64" height="36" loading="lazy" decoding="async">` : ""}<span><b>${esc(mp)}</b><small>${ml}</small></span>` : `<span class="dim">—</span>`}</span>
+      ${m.t1 && m.t2 ? `<a class="tz-vbtn" href="#m-${m.id}" aria-label="View ${esc(matchName(m))}">View</a>` : `<span class="tz-vbtn off" aria-hidden="true">View</span>`}
+    </li>`;
+  };
+  return `<section class="tz-panel tz-table" aria-labelledby="tzTabH">
+    <header class="tz-ph"><h2 class="tz-h" id="tzTabH">${esc(title)}${live ? ` <span class="tz-pill live">Live</span>` : ""}</h2><a href="#e-${e.slug}.matches">All matches ${HI.arrow}</a></header>
+    <ul class="tz-trows">${list.map(row).join("")}</ul>
+    <p class="tz-note">Times in your time zone${list.find(m => m.when) ? ` (${esc(tz(list.find(m => m.when).when))})` : ""}.</p>
+  </section>`;
+}
+// Group / Swiss standings with a filter chip per group; else a short bracket summary
+const tzGrp = {};    // slug -> the group shown ("" = all)
+function tzStandings(e) {
+  const groups = groupTables(e);
+  if (groups.length) {
+    const pick = groups.some(([n]) => n === tzGrp[e.slug]) ? tzGrp[e.slug] : "";
+    const shown = pick ? groups.filter(([n]) => n === pick) : groups;
+    const short = n => n.replace(/^group stage\s*/i, "").replace(/^group\s+/i, "") || n;
+    const table = ([name, rows]) => `${shown.length > 1 ? `<h3 class="tz-gname">${esc(name)}</h3>` : ""}<table class="tz-gt">
+      <thead><tr><th>#</th><th>Team</th><th class="n">W-L</th><th class="n" title="Maps won-lost">Maps</th></tr></thead>
+      <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}" style="${(T[r.team]?.color || [])[0] ? `--tc:${T[r.team].color[0]}` : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td></tr>`).join("")}</tbody></table>`;
+    return `<section class="tz-panel tz-stand" aria-labelledby="tzStH">
+      <header class="tz-ph"><h2 class="tz-h" id="tzStH">${e.swiss ? "Swiss stage standings" : "Group stage standings"}</h2><a href="#e-${e.slug}.standings">Standings ${HI.arrow}</a></header>
+      ${groups.length > 1 ? `<div class="tz-chips sm" role="group" aria-label="Group">${[["", "All groups"], ...groups.map(([n]) => [n, short(n)])].map(([k, l]) => `<button type="button" data-tzgrp="${esc(k)}" data-ev="${e.slug}" aria-pressed="${pick === k}">${esc(l)}</button>`).join("")}</div>` : ""}
+      ${shown.map(table).join("")}
+      ${e.swiss ? `<p class="tz-note">Series won-lost; 3 wins to advance, 3 losses out.</p>` : `<p class="tz-note">Series won-lost and maps won-lost.</p>`}
+    </section>`;
+  }
+  const cols = playoffCols(e);
+  if (!cols.length) return "";
+  const line = m => `<a class="tz-bl" href="${m.t1 && m.t2 ? `#m-${m.id}` : `#e-${e.slug}.bracket`}">${tzTeam(m, 0, winnerOf(m) && winnerOf(m) !== m.t1 ? "lost" : "")}<span class="tz-tsc">${m.finished || isLive(m) ? `${m.w1}-${m.w2}` : "—"}</span>${tzTeam(m, 1, winnerOf(m) && winnerOf(m) !== m.t2 ? "lost" : "")}</a>`;
+  return `<section class="tz-panel tz-stand" aria-labelledby="tzStH">
+    <header class="tz-ph"><h2 class="tz-h" id="tzStH">Bracket</h2><a href="#e-${e.slug}.bracket">Full bracket ${HI.arrow}</a></header>
+    ${bracketBlocks(cols).flatMap(([, cs]) => cs.flatMap(c => [`<h3 class="tz-gname">${esc(c.label)}</h3>`, ...bySlot(c.list).map(line)])).slice(0, 12).join("")}
+  </section>`;
+}
+// The next scheduled series, by the visitor's own day (Today / Tomorrow / a date)
+function tzNext(e) {
+  const list = e.matches.filter(m => pendingNow(m)).sort(byTime).slice(0, 6);
+  if (!list.length) return "";
+  let last = null;
+  const rows = list.map(m => {
+    const w = tzWhen(m), head = w.day !== last ? `<h3 class="tz-nday">${esc(w.day)}</h3>` : "";
+    last = w.day;
+    const inner = `<span class="tz-nt">${esc(w.time || "TBA")}</span>${tzTeam(m, 0, "a")}<i>vs</i>${tzTeam(m, 1, "b")}<span class="tz-nbo">${tzBo(m)}</span>${HI.next}`;
+    return head + (m.t1 && m.t2 ? `<a class="tz-nx" href="#m-${m.id}">${inner}</a>` : `<div class="tz-nx">${inner}</div>`);
+  }).join("");
+  return `<section class="tz-panel tz-next" aria-labelledby="tzNxH">
+    <header class="tz-ph"><h2 class="tz-h" id="tzNxH">Next matches</h2><a href="#e-${e.slug}.matches">Schedule ${HI.arrow}</a></header>${rows}</section>`;
+}
+// what the winners of the live and next series play next (single-elimination brackets only)
+function tzPaths(e) {
+  const ms = [...e.matches.filter(isLive), ...e.matches.filter(m => pendingNow(m) && m.t1 && m.t2)].sort(byTime).slice(0, FOLLOW.hubNext);
+  const steps = ms.map(m => ({ m, s: nextStep(m) })).filter(x => x.s);
+  if (!steps.length) return "";
+  return `<section class="tz-panel"><header class="tz-ph"><h2 class="tz-h">What the winners play next</h2></header><div class="hubpath">${steps.map(({ m, s }) => `<a href="#m-${s.m.id}"><span class="dim">${esc(matchName(m))}</span><span>→ ${esc(s.m.stage)}${s.m.day ? `, ${esc(wday(localDay(s.m.when) || s.m.day))} ${esc(fmtDay(localDay(s.m.when) || s.m.day))}` : ""} vs ${s.opp}</span></a>`).join("")}</div></section>`;
+}
+function tzOverview(e) {
+  const rec = evRecord(e);
+  const left = [tzFeatured(e), tzTable(e), rec ? `<section class="tz-panel tz-rec"><header class="tz-ph"><h2 class="tz-h">How the model called it</h2></header>${recordLine(e, rec)}</section>` : ""].join("");
+  const right = [tzStandings(e), tzNext(e), tzPaths(e), e.status !== "live" ? standings(e) : ""].join("");
+  const none = `<section class="tz-panel"><p class="empty">${e.matches.length ? "Teams and match times are not set yet." : "No schedule published yet."}${evTeamCount(e) ? ` See the <a href="#e-${e.slug}.teams">teams</a>.` : ""}</p></section>`;
+  if (!left.trim() && !right.trim()) return none;
+  return `<div class="tz-ov"><div class="tz-col">${left || none}</div><div class="tz-col r">${right}</div></div>`;
+}
+
+/* ---------------- tournament sub-views: matches by day, brackets, standings, map stats ---------------- */
+function evDays(e) {
   const days = [...new Set(e.matches.map(m => m.day).filter(Boolean))].sort();
   if (!days.length) return `<section class="panel"><p class="empty">No schedule published yet. ${e.participants.length ? `See <a class="btn" href="#e-${e.slug}.teams">Teams & lineups</a> or <a class="btn" href="#e-${e.slug}.matchup">build a matchup</a>.` : ""}</p></section>`;
   let d = dayPick[e.slug];
@@ -4375,62 +4794,65 @@ function evMatches(e) {
   }
   dayPick[e.slug] = d;
   const list = e.matches.filter(m => m.day === d).sort((x, y) => (x.when || "").localeCompare(y.when || ""));
-  const groups = groupTables(e);
-  const cols = playoffCols(e);
-  const bm = m => {
-    const w = winnerOf(m), live = isLive(m), played = m.finished || live;
-    const pred = !played && m.t1 && m.t2 ? decode(m.pred) : null;
-    const bo = [1, 3, 5].includes(m.bo) ? m.bo : 3;
-    const pp = pred ? (p => ({ p, s: displayPercent([p, 1 - p]) }))(pFor(pred, bo).p) : null;
-    const row = (t, s, i) => {
-      const cls = !t ? "tbd" : w ? (t === w ? "won" : "lost") : "";
-      const right = played ? `<b class="sc">${s}</b>`
-        : pp ? `<span class="bp${(pp.p >= .5) === (i === 0) ? " pk" : ""}">${pp.s[i]}%</span>` : "";
-      // an open slot names the match that fills it (its favourite first), never a new number
-      const src = !t ? slotSource(m, i) : null;
-      const nm = src ? `<span class="nm" title="${esc(src.title)}">${src.html}</span>` : `<span class="nm">${esc(t || "To be decided")}</span>`;
-      return `<div class="bt ${cls}">${logo(t, "sm")}${nm}${right}</div>`;
-    };
-    const day = localDay(m.when) || m.day;
-    const when = `${day ? `${wday(day)} ${fmtDay(day)}` : "TBA"}${m.when ? `, ${clock(m.when)}` : ""}`;
-    const inner = `${row(m.t1, m.w1, 0)}${row(m.t2, m.w2, 1)}<div class="when"><span>${when}</span>${rfBadge(rfSides(m.rf, m.t1, m.t2), true)}${live ? `<span class="chip live">Live</span>` : ""}</div>`;
-    const call = m.finished ? callOf(m) : null;
-    const tip = pp ? `Model's pre-match chances: ${m.t1} ${pp.s[0]}%, ${m.t2} ${pp.s[1]}%`
-      : call ? `Model's pre-match pick: ${call.fav} at ${call.favPct}% (${call.label.toLowerCase()})` : "";
-    return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" title="${esc(tip)}">${inner}</a>` : `<div class="bm">${inner}</div>`;
-  };
   const firstTz = e.matches.find(m => m.when);
-  return `${evHub(e)}
-  ${e.pool.length ? `<section class="pool" aria-label="Map pool: choose a map to see every team's record on it at this tournament">${e.pool.map(mp => {
-    const n = mapPlays(e, mp);
-    return `<button type="button" class="maptile" data-evmap="${esc(mp)}" data-ev="${e.slug}" aria-pressed="${evMap[e.slug] === mp}" style="${mapBg(mp)}" title="${esc(`${mp}: every team's record on it at this tournament`)}">
-      <span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}${n ? `, played ${n}×` : ""}</small></span></button>`;
-  }).join("")}</section>${mapPanel(e)}` : ""}
-  <div class="evbody">
-    <section class="panel">
+  return `<section class="panel">
       <h2>Matches <span class="dim">${firstTz ? `times in your time zone (${esc(tz(firstTz.when))}); ` : ""}the middle column is the model's pre-match pick</span></h2>
       <div class="days" role="group" aria-label="Match day">${days.map(x => `<button type="button" data-day="${x}" data-ev="${e.slug}" aria-pressed="${x === d}"><b>${wday(x)} ${fmtDay(x)}</b><span>${e.matches.filter(m => m.day === x).length} matches</span></button>`).join("")}</div>
       <div class="mlist">${list.map(matchRow).join("")}</div>
       ${list.some(m => !m.t1 || !m.t2) ? `<p class="small dim">Opponents for open slots are set by earlier results.</p>` : ""}
-    </section>
-    <div class="evside">
-      ${groups.length ? `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
-        ${groups.map(([name, rows]) => {
-          // each team's next scheduled series in this group, with the model's pre-match chance for that team
-          const nx = Object.fromEntries(rows.map(r => [r.team, nextInGroup(e, name, r.team)]));
-          const showNx = rows.some(r => nx[r.team]);
-          return `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table${showNx ? ` class="hasnx"` : ""}>
-          <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th>${showNx ? `<th class="gnx" title="Next series and the model's pre-match chance for this team">Next</th>` : ""}<th class="n">VRS</th></tr></thead>
-          <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td>${showNx ? `<td class="gnx">${nx[r.team] || ""}</td>` : ""}<td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
-        </table></div></div>`;
-        }).join("")}</section>` : ""}
-    </div>
-    <div class="evside">
-      ${standings(e)}
-      ${e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : ""}
-    </div>
-  </div>
-  ${bracketBlocks(cols).map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}${cs.some(c => c.list.some(m => !m.finished && !isLive(m) && m.t1 && m.t2 && m.pred)) ? ` <span class="dim">percentages are the model's pre-match chances</span>` : ""}</h2>${bracketHtml(cs, bm)}</section>`).join("")}`;
+    </section>`;
+}
+// one bracket match: both teams, the score or the model's pre-match chances, the day
+function bracketMatch(m) {
+  const w = winnerOf(m), live = isLive(m), played = m.finished || live;
+  const pred = !played && m.t1 && m.t2 ? decode(m.pred) : null;
+  const bo = boOf(m);
+  const pp = pred ? (p => ({ p, s: displayPercent([p, 1 - p]) }))(pFor(pred, bo).p) : null;
+  const row = (t, s, i) => {
+    const cls = !t ? "tbd" : w ? (t === w ? "won" : "lost") : "";
+    const right = played ? `<b class="sc">${s}</b>`
+      : pp ? `<span class="bp${(pp.p >= .5) === (i === 0) ? " pk" : ""}">${pp.s[i]}%</span>` : "";
+    // an open slot names the match that fills it (its favourite first), never a new number
+    const src = !t ? slotSource(m, i) : null;
+    const nm = src ? `<span class="nm" title="${esc(src.title)}">${src.html}</span>` : `<span class="nm">${esc(t || "To be decided")}</span>`;
+    return `<div class="bt ${cls}">${logo(t, "sm")}${nm}${right}</div>`;
+  };
+  const day = localDay(m.when) || m.day;
+  const when = `${day ? `${wday(day)} ${fmtDay(day)}` : "TBA"}${m.when ? `, ${clock(m.when)}` : ""}`;
+  const inner = `${row(m.t1, m.w1, 0)}${row(m.t2, m.w2, 1)}<div class="when"><span>${when}</span>${rfBadge(rfSides(m.rf, m.t1, m.t2), true)}${live ? `<span class="chip live">Live</span>` : ""}</div>`;
+  const call = m.finished ? callOf(m) : null;
+  const tip = pp ? `Model's pre-match chances: ${m.t1} ${pp.s[0]}%, ${m.t2} ${pp.s[1]}%`
+    : call ? `Model's pre-match pick: ${call.fav} at ${call.favPct}% (${call.label.toLowerCase()})` : "";
+  return m.t1 && m.t2 ? `<a class="bm" href="#m-${m.id}" title="${esc(tip)}">${inner}</a>` : `<div class="bm">${inner}</div>`;
+}
+function evBrackets(e) {
+  const blocks = bracketBlocks(playoffCols(e));
+  if (!blocks.length) return `<section class="panel"><p class="empty">No bracket published yet.</p></section>`;
+  return blocks.map(([fam, cs]) => `<section class="panel"><h2>${esc(fam)}${cs.some(c => c.list.some(m => !m.finished && !isLive(m) && m.t1 && m.t2 && m.pred)) ? ` <span class="dim">percentages are the model's pre-match chances</span>` : ""}</h2>${bracketHtml(cs, bracketMatch)}</section>`).join("");
+}
+function evGroupsPanel(e) {
+  const groups = groupTables(e);
+  if (!groups.length) return "";
+  return `<section class="panel"><h2>${e.swiss ? "Swiss tables" : "Group tables"} <span class="dim">${e.swiss ? "3 wins to advance, 3 losses out" : "series won and lost"}</span></h2>
+    ${groups.map(([name, rows]) => {
+      // each team's next scheduled series in this group, with the model's pre-match chance for that team
+      const nx = Object.fromEntries(rows.map(r => [r.team, nextInGroup(e, name, r.team)]));
+      const showNx = rows.some(r => nx[r.team]);
+      return `<div class="grouptbl">${groups.length > 1 ? `<h3>${esc(name)}</h3>` : ""}<div class="tablewrap"><table${showNx ? ` class="hasnx"` : ""}>
+      <thead><tr><th>#</th><th>Team</th><th class="n">Series</th><th class="n">Maps</th>${showNx ? `<th class="gnx" title="Next series and the model's pre-match chance for this team">Next</th>` : ""}<th class="n">VRS</th></tr></thead>
+      <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td>${showNx ? `<td class="gnx">${nx[r.team] || ""}</td>` : ""}<td class="n dim">${T[r.team]?.vrs ? "#" + T[r.team].vrs.rank : "-"}</td></tr>`).join("")}</tbody>
+    </table></div></div>`;
+    }).join("")}</section>`;
+}
+const evFormat = e => e.format.length ? `<section class="panel"><h2>Format</h2><ul class="fmt">${e.format.map(([dd, t]) => `<li class="d${dd}">${esc(t)}</li>`).join("")}</ul></section>` : "";
+function evPoolPanel(e) {
+  if (!e.pool.length) return `<section class="panel"><p class="empty">No map pool published yet.</p></section>`;
+  return `<section class="panel"><h2>Map pool <span class="dim">choose a map for every team's record on it at this tournament</span></h2>
+    <div class="pool">${e.pool.map(mp => {
+      const n = mapPlays(e, mp);
+      return `<button type="button" class="maptile" data-evmap="${esc(mp)}" data-ev="${e.slug}" aria-pressed="${evMap[e.slug] === mp}" style="${mapBg(mp)}" title="${esc(`${mp}: every team's record on it at this tournament`)}">
+      <span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}${n ? `, played ${n}×` : ""}</small></span></button>`;
+    }).join("")}</div></section>${mapPanel(e)}`;
 }
 
 // Bracket columns split into one block per stage ("Play-In", "Group Stage Group A", "Playoffs"),
@@ -4630,42 +5052,6 @@ function recordLine(e, r) {
   if (!r) return "";
   const u = r.upset;
   return `<p class="hubrec"><span><b>${r.hits} of ${r.n}</b> series called right at this event (${(r.hits / r.n * 100).toFixed(2)}%)</span>${u ? `<span>Biggest miss: <a href="#m-${u.m.id}">${esc(u.c.w)} beat ${esc(u.c.fav)}</a>, who the model had at ${u.c.favPct}%</span>` : ""}</p>`;
-}
-
-// The hub at the top of a tournament page: what is on now, what is next (with the model's pick
-// for each), the latest results, and how the model is doing at this event. A finished event
-// keeps only the record line.
-function evHub(e) {
-  const rec = evRecord(e);
-  if (e.status === "finished") return rec ? `<section class="panel hub done"><h2>How the model called it <span class="dim">pre-match picks against the results</span></h2>${recordLine(e, rec)}</section>` : "";
-  // before the start the day list below already opens on the first match day with every pick
-  if (e.status !== "live") return "";
-  const live = e.matches.filter(isLive).sort(byTime);
-  // series with both teams set (each has a pick); open bracket slots are named in the bracket below
-  const next = e.matches.filter(m => pendingNow(m) && m.t1 && m.t2).sort(byTime).slice(0, FOLLOW.hubNext);
-  const recent = e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).reverse().slice(0, FOLLOW.hubRecent);
-  if (!live.length && !next.length && !recent.length) return "";
-  // the next-up list split by the visitor's own calendar day
-  let lastDay = null;
-  const nextRows = next.map(m => {
-    const d = localDay(m.when) || m.day, head = d !== lastDay ? `<h3 class="hubday">${esc(dayWord(d))}</h3>` : "";
-    lastDay = d;
-    return head + matchRow(m);
-  }).join("");
-  const steps = [...live, ...next].map(m => ({ m, s: m.t1 && m.t2 ? nextStep(m) : null })).filter(x => x.s);
-  const title = "Follow the event";
-  return `<section class="panel hub">
-    <h2>${title} <span class="dim">the model's pre-match pick on every series; times in your time zone</span></h2>
-    ${recordLine(e, rec)}
-    <div class="hubgrid">
-      <div>
-        ${live.length ? `<h3 class="hubh"><span class="chip live">Live</span> Playing now</h3><div class="mlist">${live.map(matchRow).join("")}</div>` : ""}
-        ${next.length ? `<h3 class="hubh">Next up</h3><div class="mlist">${nextRows}</div>` : ""}
-        ${steps.length ? `<div class="hubpath"><h3 class="hubh">What the winners play next</h3>${steps.map(({ m, s }) => `<a href="#m-${s.m.id}"><span class="dim">${esc(matchName(m))}</span><span>→ ${esc(s.m.stage)}${s.m.day ? `, ${esc(wday(localDay(s.m.when) || s.m.day))} ${esc(fmtDay(localDay(s.m.when) || s.m.day))}` : ""} vs ${s.opp}</span></a>`).join("")}</div>` : ""}
-      </div>
-      ${recent.length ? `<div class="hubres"><h3 class="hubh">Latest results</h3><div class="mlist">${recent.map(matchRow).join("")}</div></div>` : ""}
-    </div>
-  </section>`;
 }
 
 // Home page: the tournaments running now and the ones about to start, each with its next series.
@@ -5482,9 +5868,6 @@ function route() {
   applyPair(v);
   document.querySelectorAll(".tabs a").forEach(a => a.dataset.tab === tab ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   animateBars(v);
-  // narrow screens: the season calendar scrolls sideways; open it on today rather than on January
-  const now = v.querySelector(".strip .now"), sw = now && now.closest(".strip-wrap");
-  if (sw && sw.scrollWidth > sw.clientWidth) sw.scrollLeft = Math.max(0, now.offsetLeft - sw.clientWidth * .6);
   return h;
 }
 let lastHash = null;
@@ -5522,6 +5905,16 @@ document.addEventListener("click", e => {
     if (FAVS.has(slug)) FAVS.delete(slug); else FAVS.add(slug);
     saveFavs(); rerender(); refreshPop(); updateBell(); return;
   }
+  const tzs = e.target.closest("[data-tzsel]");
+  if (tzs) { tzSelect(tzs.dataset.tzsel); return; }
+  const tst = e.target.closest("[data-tzst]");
+  if (tst) {   // list status chips: only the rows change
+    tzF.st = tst.dataset.tzst;
+    document.querySelectorAll("[data-tzst]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tzst === tzF.st)));
+    tzRefreshList(); return;
+  }
+  const tgr = e.target.closest("[data-tzgrp]");
+  if (tgr) { tzGrp[tgr.dataset.ev] = tgr.dataset.tzgrp; rerender(); const b = $(`[data-tzgrp="${CSS.escape(tgr.dataset.tzgrp)}"]`); if (b) b.focus({ preventScroll: true }); return; }
   const day = e.target.closest("[data-day]");
   if (day) { dayPick[day.dataset.ev] = day.dataset.day; rerender(); return; }
   const em = e.target.closest("[data-evmap]");
@@ -5638,6 +6031,14 @@ document.addEventListener("click", e => {
   const cmp = e.target.closest("[data-cmp]");
   if (cmp) { desk.a = cmp.dataset.cmp; desk.b = CMP_NAMES.find(n => n !== desk.a); desk.feat = null; }
 });
+// Tournaments list: a double click or Enter on a row opens the tournament (a click only selects it)
+document.addEventListener("dblclick", e => { const r = e.target.closest && e.target.closest("[data-tzsel]"); if (r) location.hash = `e-${r.dataset.tzsel}`; });
+document.addEventListener("keydown", e => {
+  const r = e.key === "Enter" && e.target.closest && e.target.closest("[data-tzsel]");
+  if (r) { e.preventDefault(); location.hash = `e-${r.dataset.tzsel}`; }
+});
+document.addEventListener("input", e => { if (e.target.id === "tzQ") { tzF.q = e.target.value; tzRefreshList(); } });
+document.addEventListener("change", e => { if (e.target.id === "tzRg") { tzF.rg = e.target.value; tzRefreshList(); } });
 document.addEventListener("keydown", e => {
   const tb = e.target.closest && e.target.closest(".ho-tl [role=tab]");
   if (!tb || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;

@@ -189,7 +189,10 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 
 Non-code viewer files: `viewer/template.html` (the whole front end: HTML, CSS,
 JS), `viewer/assets.json` (asset index, committed), `viewer/media/site_bg.jpg`
-(site background).
+(site background), and optional tournament art supplied by hand:
+`viewer/media/events/<event slug>.<jpg|png|webp>` (one event) and
+`viewer/media/cities/<city slug>.<ext>` (every event in that city); without
+them the tournament pages fall back to map art from the event's pool.
 
 ### `api/`: serverless functions (Vercel)
 
@@ -267,6 +270,13 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-16**: Tournaments redesign (`viewer/template.html`): `#events` is a filterable list
+  (status chips, search, region, tier) whose rows select an event into a preview panel and whose
+  arrow opens it; tournament pages get an art hero, a left sidebar (sections, Tournament Info,
+  location card) and an Overview (featured match, live & upcoming table, group standings or
+  bracket summary, next matches). New sub-routes `#e-<slug>.matches`, `.bracket`, `.standings`,
+  `.maps` (the old match list moves to `.matches`). Art order: `IMG.evart[slug]`, then
+  `IMG.cityart[city slug or "online"]`, then a darkened map from the event's pool.
 - **2026-10-15**: Post-match recaps at the top of a finished match's Notes tab: AI-written
   by `collectors/notes_summarize.py` in the house style (cause-first lede, map by map,
   the model check, what's next), rule-based from the same match data otherwise. The

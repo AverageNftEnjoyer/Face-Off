@@ -834,6 +834,22 @@ def drift_check(tpl, bundle):
                          + "\n  ".join(problems))
 
 
+def city_slug(city):
+    """'Kraków' -> 'krakow', 'Rio de Janeiro' -> 'rio-de-janeiro' (the page builds the same key)."""
+    import unicodedata
+    t = unicodedata.normalize("NFKD", str(city or "")).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+
+
+def media_files(sub):
+    """{file stem: repo-relative path} of the images in viewer/media/<sub>/ (stem = slug)."""
+    d = os.path.join(HERE, "media", sub)
+    if not os.path.isdir(d):
+        return {}
+    return {os.path.splitext(fn)[0].lower(): f"viewer/media/{sub}/{fn}" for fn in sorted(os.listdir(d))
+            if os.path.splitext(fn)[1].lower() in ImageWriter.EXTS}
+
+
 def main(out_path):
     # --- bundle contract -----------------------------------------------------
     # The viewer renders EXCLUSIVELY from viewer/data-bundle.json (schema:
@@ -861,12 +877,18 @@ def main(out_path):
     pairs, epairs = data["pairs"], data["epairs"]
     out_dir = os.path.dirname(os.path.abspath(out_path))
     imw = ImageWriter(out_dir)
+    media_dir = lambda sub: {k: imw.url(v) for k, v in media_files(sub).items()}
     images = {
         "logos": {t: imw.url(assets["teams"][t]["logo_dark_path"]) for t in names
                   if t in assets["teams"] and assets["teams"][t].get("logo_dark_path")},
         "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
         "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
         "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
+        # tournament art (optional, supplied by hand): viewer/media/events/<event slug>.<ext> for one
+        # event, viewer/media/cities/<city slug>.<ext> for every event in that city; the page falls
+        # back to map art from the event's pool when neither exists
+        "evart": media_dir("events"),
+        "cityart": media_dir("cities"),
         # the site background (a darkened, desaturated Mirage still; viewer/media/site_bg.jpg)
         "site": {"bg": imw.url("viewer/media/site_bg.jpg")} if os.path.exists(os.path.join(ROOT, "viewer", "media", "site_bg.jpg")) else {},
     }
