@@ -180,8 +180,9 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 |---|---|
 | `viewer/build_bundle.py` | Emits `viewer/data-bundle.json`, the single versioned derived-data bundle. |
 | `viewer/notes_data.py` | The bundle's `notes` section = the notes snapshot: engine inputs from `data/`, cleaned web facts, freshness, next fixtures, `inputs_version`; `write_inputs` writes `viewer/notes-inputs.json`; `page_payload` is the page's small `NOTES` (no notes: the page asks `api/notes_api.py`). |
-| `viewer/build_viewer.py` | Computes everything from the data (`build_data`) and renders the static page from `template.html` + the bundle. |
+| `viewer/build_viewer.py` | Computes everything from the data (`build_data`) and renders the static page from `template.html` + the bundle; inlines the images, event logo colours (`IMG.evcolor`) and the generated tournament art (`IMG.evgen`, written to `img/` as hashed SVGs). |
 | `viewer/events.py` | Tournament discovery and parsing from cached pages (infobox, format, brackets, schedule). |
+| `viewer/event_art.py` | Generated per-tournament key art: a small seeded SVG per event (beams, glow, pattern) in its logo's colours. |
 | `viewer/fetch_assets.py` | Logos, map art, flags and team-page roster data from Liquipedia into `viewer/assets.json`. |
 | `viewer/team_colors.py` | Team colours from logo pixels (stdlib PNG decoder). |
 | `viewer/veto_cache.py` | Content-addressed cache of veto distributions (`data/veto_dist_cache.json`), fingerprinted on model code. |
@@ -190,9 +191,9 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 Non-code viewer files: `viewer/template.html` (the whole front end: HTML, CSS,
 JS), `viewer/assets.json` (asset index, committed), `viewer/media/site_bg.jpg`
 (site background), and optional tournament art supplied by hand:
-`viewer/media/events/<event slug>.<jpg|png|webp>` (one event) and
-`viewer/media/cities/<city slug>.<ext>` (every event in that city); without
-them the tournament pages fall back to map art from the event's pool.
+`viewer/media/events/<event slug>.<jpg|png|webp>` (one event); without it an
+event gets key art generated from its logo (`viewer/event_art.py`), and an event
+with no logo falls back to map art from its pool.
 
 ### `api/`: serverless functions (Vercel)
 
@@ -270,13 +271,29 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
-- **2026-10-16**: Tournaments redesign (`viewer/template.html`): `#events` is a filterable list
-  (status chips, search, region, tier) whose rows select an event into a preview panel and whose
-  arrow opens it; tournament pages get an art hero, a left sidebar (sections, Tournament Info,
-  location card) and an Overview (featured match, live & upcoming table, group standings or
-  bracket summary, next matches). New sub-routes `#e-<slug>.matches`, `.bracket`, `.standings`,
-  `.maps` (the old match list moves to `.matches`). Art order: `IMG.evart[slug]`, then
-  `IMG.cityart[city slug or "online"]`, then a darkened map from the event's pool.
+- **2026-10-16**: Missing-result fix (Legacy-FURIA of 2026-10-15 reached the site 4.5 h late, with the next
+  match already naming Legacy): the live refresh now keeps asking for an unfinished match up to 12 h after its
+  scheduled start (24 h once a map is on the page), not 4 h. `checks/validate_freshness.py` gains an overdue
+  check (a match unfinished 12+ h after its start fails the run), and starts the live refresh with the new
+  `force` input of `live-refresh.yml` so the window cannot hide it.
+- **2026-10-16**: Per-tournament generated art: `viewer/event_art.py` draws a seeded SVG per event in its logo's
+  colours, inlined as `IMG.evgen`; art order is now `IMG.evart[slug]`, `IMG.evgen[slug]`, then a map from the pool.
+  The shared photo (`viewer/media/tournament_bg.jpg`, `IMG.tourbg`) is gone.
+
+- **2026-10-16**: Tournaments list (`#events`) redone after the owner's mockup: a "Tournaments" hero over the
+  selected event's art, pill status filters + search + region + tier switches, bordered cards (art thumbnail
+  tinted with the event logo's colour, condensed italic title, icon meta row, team logos, status pill) on the
+  left and a preview on the right (banner, meta, section tabs, facts, stat tiles, top 5 teams, map pool).
+  `build_viewer.py` now inlines `IMG.evcolor` (event logo colours via `team_colors`) and `IMG.tourbg`
+  (`viewer/media/tournament_bg.<ext>`, the shared tournament art placeholder).
+- **2026-10-16**: Tournaments pages rebuilt from the home page's own components (`viewer/template.html`):
+  `#events` is the `.ho` grid with a filter panel (`.seg` status, search, region, tier), the event list
+  (a row selects the event into the right column, its arrow opens it) and the selected event's card,
+  facts, top teams by VRS, sections and map pool; a tournament page is the match page's layout
+  (coming up, event card, `hoCourt` on the live / latest / next match, the current group table,
+  section tabs, a fixed right rail of next matches and latest results). New sub-routes
+  `#e-<slug>.matches`, `.bracket`, `.standings`, `.maps` (the old match list moves to `.matches`).
+  Art order: `IMG.evart[slug]`, then `IMG.tourbg`, then a map from the pool.
 - **2026-10-15**: Post-match recaps at the top of a finished match's Notes tab: AI-written
   by `collectors/notes_summarize.py` in the house style (cause-first lede, map by map,
   the model check, what's next), rule-based from the same match data otherwise. The

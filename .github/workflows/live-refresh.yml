@@ -18,7 +18,12 @@ name: Live tournament refresh
 on:
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Ask Liquipedia even when no match is inside its time window (the freshness check sets this for an overdue match)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -41,7 +46,7 @@ jobs:
           python-version: "3.12"
 
       - name: Refresh the live tournament pages (1 to 3 requests; exits at once when nothing is live)
-        run: python pipeline/daily_refresh.py --live
+        run: python pipeline/daily_refresh.py --live ${{ inputs.force && '--force' || '' }}
 
       - name: Data quality gates
         id: gates

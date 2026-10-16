@@ -48,7 +48,7 @@ jobs:
 
       - name: Start the live refresh when the data is behind
         if: steps.check.outputs.needs_refresh == 'true'
-        run: gh workflow run live-refresh.yml
+        run: gh workflow run live-refresh.yml -f force=${{ steps.check.outputs.force_refresh }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}

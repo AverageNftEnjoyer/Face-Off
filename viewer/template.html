@@ -333,7 +333,7 @@ button.maptile[aria-pressed="true"] { border-color: var(--acc); box-shadow: 0 0 
 
 .chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .05rem .5rem; font-size: .72rem; font-weight: 700; border: 1px solid currentColor; white-space: nowrap; }
 .chip.live { color: var(--loss); }
-.chip.live::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; animation: pulse 1.6s ease-in-out infinite; }
+
 @keyframes pulse { 50% { opacity: .25; } }
 .chip.hit { color: var(--win); }
 .chip.miss { color: var(--loss); }
@@ -1756,15 +1756,15 @@ a.ho-tr:hover { background: var(--raise); }
   background: linear-gradient(180deg, rgba(22, 48, 60, .35), transparent), var(--panel); border: 1px solid var(--line); border-radius: 8px; min-height: 3.1rem; }
 .ho-tl { display: flex; align-items: stretch; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .ho-tl::-webkit-scrollbar { display: none; }
-.ho-tl button { position: relative; display: inline-flex; align-items: center; gap: .6rem; padding: 0 1.25rem; white-space: nowrap; cursor: pointer;
+.ho-tl button, .ho-tl a { position: relative; display: inline-flex; align-items: center; gap: .6rem; padding: 0 1.25rem; white-space: nowrap; cursor: pointer;
   background: none; border: 0; color: var(--dim); font: inherit; font-weight: 500; font-size: .98rem; }
-.ho-tl button .ico { width: 1.1rem; height: 1.1rem; }
-.ho-tl button:hover { color: var(--text); }
-.ho-tl button:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-.ho-tl button[aria-selected="true"] { color: var(--text); font-weight: 600; background: linear-gradient(180deg, rgba(47, 212, 162, .04), rgba(47, 212, 162, .13)); }
-.ho-tl button[aria-selected="true"] .ico { color: var(--acc); }
-.ho-tl button[aria-selected="true"]::after { content: ""; position: absolute; left: .5rem; right: .5rem; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--acc); box-shadow: 0 0 12px rgba(47, 212, 162, .55); }
-.ho-tl button:focus-visible { outline-offset: -3px; }
+.ho-tl button .ico, .ho-tl a .ico { width: 1.1rem; height: 1.1rem; }
+.ho-tl button:hover, .ho-tl a:hover { color: var(--text); }
+.ho-tl button:first-child, .ho-tl a:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+.ho-tl button[aria-selected="true"], .ho-tl a[aria-current="page"] { color: var(--text); font-weight: 600; background: linear-gradient(180deg, rgba(47, 212, 162, .04), rgba(47, 212, 162, .13)); }
+.ho-tl button[aria-selected="true"] .ico, .ho-tl a[aria-current="page"] .ico { color: var(--acc); }
+.ho-tl button[aria-selected="true"]::after, .ho-tl a[aria-current="page"]::after { content: ""; position: absolute; left: .5rem; right: .5rem; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--acc); box-shadow: 0 0 12px rgba(47, 212, 162, .55); }
+.ho-tl button:focus-visible, .ho-tl a:focus-visible { outline-offset: -3px; }
 .ho-tr2 { display: flex; align-items: center; gap: .6rem; padding-block: .4rem; }
 .ho-tr2 .lbl { font-size: .85rem; color: var(--dim); }
 .ho-tr2 .seg { background: rgba(4, 12, 16, .5); }
@@ -1886,7 +1886,7 @@ a.ho-tr:hover { background: var(--raise); }
   .ho-dots { gap: .4rem; }
   .ho-tabs { padding: 0; }
   .ho-tl { width: 100%; border-bottom: 1px solid var(--line); }
-  .ho-tl button { padding: 0 .9rem; min-height: 44px; font-size: .9rem; }
+  .ho-tl button, .ho-tl a { padding: 0 .9rem; min-height: 44px; font-size: .9rem; }
   .ho-tr2 { padding: .45rem .7rem; width: 100%; }
   .ho-swap { margin-left: auto; }
   .ho-maps { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 7.2rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .2rem; }
@@ -2102,7 +2102,7 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -2; pointer-event
 /* panels let the scene through faintly. No backdrop-filter on them: the panels scroll over the
    fixed background, so a backdrop blur had to be re-rendered for every panel on every scroll frame
    (the main cause of laggy scrolling); at 80% opacity the blur was barely visible anyway. */
-body { --panel: rgba(12, 28, 37, .8); }
+body { --panel: rgba(12, 28, 37, .95); }
 
 /* v17: tighter spacing between modules */
 .ho { gap: .65rem; }
@@ -2348,7 +2348,7 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
 @media (min-width: 761px) {
   .ho-tabs { flex-wrap: nowrap; }
   .ho-tl { flex: 1 1 auto; }
-  .ho-tl button { padding: 0 1rem; }
+  .ho-tl button, .ho-tl a { padding: 0 1rem; }
   .ho-tr2 { flex: none; }
 }
 .nx-why { margin-bottom: .9rem; border-color: var(--nx-line2); }
@@ -2383,369 +2383,124 @@ body[data-page="home"] .page { padding-block: .9rem 1.2rem; }
   .nx-grid.h2h .nx-col.m { grid-column: auto; grid-row: auto; }
   .nx-chip { white-space: normal; }
 }
-/* ---------- tournaments: the list (#events) and one tournament (#e-<slug>) ----------
-   One shell for both: a left sidebar, dark navy panels with thin cyan borders, condensed
-   italic display titles, cyan for team 1 / the current place, pink for team 2.
-   Performance: no backdrop-filter, no fixed backgrounds, one soft shadow per panel, tints are
-   plain gradients, and the only animation is the LIVE dot (and only when motion is welcome). */
-.tz {
-  --cy: #2ED3E6; --pk: #F2459A; --tzb: rgba(62, 196, 220, .2); --tzb2: rgba(62, 196, 220, .42);
-  --panel: #0A1924; --line: #15303D; --tzr: 8px; --well: rgba(5, 14, 21, .55);
-  min-width: 0;
+/* tournaments (#e-<slug> reuses the home page's grid and panels; these few are its additions) */
+.ho-rail { display: grid; gap: 1.1rem; align-content: start; }
+.ho-rail > * { grid-area: auto; }
+@media (min-width: 1101px) { .ho-ev { grid-template-rows: auto auto auto 1fr; } }
+.ho-rail .pool { grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); }
+.ho-ev .ho-body .panel { border-radius: 8px; background: linear-gradient(180deg, rgba(22, 48, 60, .42), rgba(12, 28, 37, 0) 6rem), var(--panel); }
+.ho-evc.gen::before { opacity: .55; }
+.ho-evc .ho-unt { font-size: 1.7rem; }
+/* the list (#events): hero over the selected event's art, filters, cards on the left, the preview on the right */
+.tzp { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(24rem, 1fr); gap: 1.1rem; align-items: stretch; }
+.tz-art { --ec: var(--acc); position: relative; isolation: isolate; overflow: hidden; background: var(--raise) center / cover no-repeat; }
+.tz-art::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: var(--scrim, 1);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ec) 45%, transparent), transparent 70%), linear-gradient(90deg, rgba(5, 9, 22, .82), rgba(5, 9, 22, .4)); }
+.evl-list { display: grid; gap: .9rem; min-width: 0; }
+.tz-hd { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding-top: 1.6rem; }
+.tz-hd h1, .tz-ttl b, .tz-h { font-stretch: 62.5%; font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: 1; }
+.tz-hd h1 { font-size: clamp(2.6rem, 5vw, 4.2rem); text-shadow: 0 2px 18px rgba(0, 0, 0, .6); }
+.tz-hd p { margin-top: .4rem; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(230, 240, 242, .8); }
+.tz-hd .ho-pg { display: flex; align-items: center; gap: .35rem; }
+.evl-n { font-size: .78rem; color: var(--dim); margin-right: .3rem; font-variant-numeric: tabular-nums; }
+.evbar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+/* status filter: plain text tabs, the active one underlined (same as the preview's section tabs) */
+.tz-chips { display: flex; align-self: stretch; border-bottom: 1px solid var(--line); }
+.tz-chips button { border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--dim);
+  padding: .5rem .85rem; font: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; }
+.tz-chips button:hover { color: var(--text); }
+.tz-chips button[aria-pressed="true"] { color: var(--text); font-weight: 600; border-bottom-color: var(--acc); }
+.tz-q { position: relative; flex: 1 1 9rem; max-width: 18rem; margin-left: auto; }
+.tz-q .ico { position: absolute; left: .7rem; top: 50%; translate: 0 -50%; width: 1rem; height: 1rem; color: var(--dim); pointer-events: none; }
+.tz-q .search { max-width: none; padding-left: 2.2rem; }
+.evbar .filters select { min-width: 8rem; }
+.evbar .tierbar legend, .evbar .tierbar > .dim { display: none; }
+.evbar .tierbox { padding: .3rem .55rem .3rem .45rem; gap: .35rem; font-size: .82rem; }
+.evrows { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+.evr { display: grid; grid-template-columns: minmax(0, 1fr) 2.5rem; border: 1px solid var(--line2); border-radius: 8px; background: var(--panel); overflow: hidden; }
+.evr:hover { border-color: color-mix(in srgb, var(--acc) 40%, var(--line2)); }
+.evr.on { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc), 0 0 20px -6px rgba(47, 212, 162, .55); }
+.evr > button { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-width: 0; padding: .45rem .2rem .45rem .45rem;
+  border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.tz-th { align-self: stretch; min-height: 5.2rem; border-radius: 5px; display: grid; place-items: center; }
+.tz-th .el { width: 72%; height: 3.6rem; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .6)); }
+.evr-t { display: grid; gap: .35rem; min-width: 0; }
+.tz-ttl { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.tz-ttl b { font-size: 1.45rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tz-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.1rem; font-size: .8rem; color: rgba(228, 238, 236, .85); }
+.tz-meta > span { display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; }
+.tz-meta .ico { width: 1rem; height: 1rem; color: var(--acc); }
+.tz-fmt { padding-left: 1.1rem; border-left: 1px solid var(--line2); color: var(--acc); }
+.tz-fmt b { font-weight: 500; color: var(--text); }
+.evr-tier { font-style: normal; font-weight: 700; font-size: .72rem; letter-spacing: .04em; padding: .05rem .4rem; border-radius: 4px; white-space: nowrap; }
+.evr-tier.tS { color: var(--amber); background: color-mix(in srgb, var(--amber) 14%, transparent); }
+.evr-tier.tA { color: var(--ct); background: color-mix(in srgb, var(--ct) 14%, transparent); }
+.evr-more { font-style: normal; font-size: .8rem; font-weight: 600; color: var(--dim); margin-left: .25rem; white-space: nowrap; }
+.evr-tm { display: flex; flex-wrap: nowrap; align-items: center; gap: 7px; min-width: 0; overflow: hidden; }
+.evr-tm .logo[hidden], .evr-more[hidden] { display: none; }
+.evr-tm .logo { width: 1.9rem; height: 1.9rem; object-fit: contain; }
+.evr-tbd { font-size: .78rem; color: var(--dim); }
+.evr .ho-chev { grid-column: 2; grid-row: 1; min-height: 44px; color: var(--text); }
+.evr .ho-chev .ico { width: 1.1rem; height: 1.1rem; }
+.tz-pill { justify-self: end; align-self: start; margin-top: .25rem; font-size: .9rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.tz-pill.live { color: var(--loss); }
+.tz-pill.upcoming { color: var(--text); opacity: .75; }
+.tz-pill.finished { color: var(--dim); }
+/* the preview */
+.tzv { gap: .85rem; padding: .7rem; display: flex; flex-direction: column; }
+.tz-bn { min-height: 12.5rem; border-radius: 6px; display: grid; align-content: center; justify-items: start; gap: .5rem; padding: 1.1rem 1.3rem; }
+.tz-bl { max-width: 55%; max-height: 6.5rem; object-fit: contain; filter: drop-shadow(0 3px 10px rgba(0, 0, 0, .6)); }
+.tz-h { font-size: 1.6rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .7); }
+.tz-bn .tz-pill { position: absolute; top: .7rem; right: .7rem; margin: 0; }
+.tz-cr { position: absolute; right: .55rem; bottom: .35rem; font-size: 10.5px; color: rgba(230, 240, 242, .55); }
+.tz-cr:hover { color: var(--text); }
+.tzv > .tz-meta, .tz-about { padding-inline: .3rem; }
+.tz-tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.tz-tabs a { padding: .5rem .8rem; font-size: .88rem; color: var(--dim); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tz-tabs a:hover, .tz-tabs a.on { color: var(--text); }
+.tz-tabs a.on { border-color: var(--acc); }
+.tz-about { font-size: .9rem; line-height: 1.5; }
+.tz-st { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border: 1px solid var(--line); border-radius: 6px; }
+.tz-st > div { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: .6rem; align-items: center; padding: .7rem .75rem; }
+.tz-st > div + div { border-left: 1px solid var(--line); }
+.tz-st .ico { grid-row: 1 / 3; width: 1.6rem; height: 1.6rem; color: var(--acc); }
+.tz-st dd { grid-row: 1; grid-column: 2; margin: 0; font-weight: 700; font-size: .98rem; font-stretch: 87.5%; line-height: 1.15; overflow-wrap: anywhere; }
+.tz-st dt { grid-column: 2; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+.tz-sh { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .2rem; }
+.tz-sh h3 { font-size: 1rem; font-weight: 700; }
+.tz-tt { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max-content; align-content: start; gap: .6rem; position: relative; }
+.tz-tt > a[hidden] { display: none; }
+.tz-more { margin-left: .4rem; font-size: .82rem; font-weight: 500; color: var(--dim); }
+/* the list sets the row height; the preview fills it and its team grid takes what's left */
+@media (min-width: 1101px) {
+  .tzp > .tzv { height: 0; min-height: 100%; overflow: hidden; }
+  .tzv .tz-tt { flex: 1 1 0; min-height: 0; overflow: hidden; }
 }
-.tz .tz-panel, .tz .panel {
-  background: linear-gradient(180deg, rgba(26, 62, 82, .32), transparent 7rem), var(--panel);
-  border: 1px solid var(--tzb); border-radius: var(--tzr); box-shadow: 0 16px 30px -24px rgba(0, 0, 0, .9);
-}
-.tz .panel > h2 { font-size: 1.28rem; text-transform: uppercase; }
-.tz-panel { padding: .9rem 1rem 1rem; display: grid; gap: .75rem; align-content: start; min-width: 0; }
-.tz h1, .tz-h, .tz-pname, .tz-vt, .tz-rn > b, .tz-fn b, .tz-fsc, .tz-tsc {
-  font-style: italic; font-stretch: 62.5%; font-weight: 800; text-transform: uppercase; letter-spacing: .01em;
-}
-.tz .ca { color: var(--cy); }
-.tz .cb { color: var(--pk); }
-.tz a:focus-visible, .tz button:focus-visible, .tz input:focus-visible, .tz select:focus-visible { outline: 2px solid var(--cy); outline-offset: 2px; }
-
-/* status pills */
-.tz-pill { display: inline-flex; align-items: center; gap: .4rem; padding: .18rem .6rem; border: 1px solid; border-radius: 6px;
-  font-size: .7rem; font-weight: 700; font-style: normal; letter-spacing: .07em; text-transform: uppercase; line-height: 1.2; white-space: nowrap; }
-.tz-pill.live { color: #FF5D63; border-color: rgba(255, 93, 99, .6); background: rgba(255, 93, 99, .12); }
-.tz-pill.live::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; }
-@media (prefers-reduced-motion: no-preference) { .tz-pill.live::before { animation: pulse 1.6s ease-in-out infinite; } }
-.tz-pill.up { color: var(--cy); border-color: rgba(46, 211, 230, .55); background: rgba(46, 211, 230, .08); }
-.tz-pill.done { color: #A6B6BF; border-color: rgba(166, 182, 191, .32); background: rgba(166, 182, 191, .08); }
-
-/* art: the event's own image, its city's, else a darkened map from its pool; logo on top;
-   a cyan slash low left and a pink one at the right edge */
-.tz-art { position: relative; overflow: hidden; isolation: isolate; background: #071219; }
-.tz-art > .tz-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
-.tz-art::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, rgba(4, 12, 18, .2), rgba(4, 12, 18, .7)); }
-.tz-art.map::before { background: linear-gradient(90deg, rgba(4, 13, 20, .86), rgba(6, 22, 32, .62) 50%, rgba(4, 13, 20, .86)), linear-gradient(180deg, rgba(8, 40, 58, .25), rgba(4, 12, 18, .65)); }
-.tz-art::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(118deg, transparent 0 8%, rgba(46, 211, 230, .7) 8.4%, transparent 9.6%),
-    linear-gradient(118deg, transparent 0 91%, rgba(242, 69, 154, .8) 91.5%, transparent 92.8%); }
-.tz-art .tz-lg { position: relative; object-fit: contain; }
-.tz-art .evl-ph { display: grid; place-items: center; font-style: italic; font-stretch: 62.5%; font-weight: 800; color: #DDE8EC; background: none; font-size: 1.4rem; }
-
-/* sidebar */
-.tz-side { position: sticky; top: calc(var(--toph) + 1rem); max-height: calc(100dvh - var(--toph) - 2rem); overflow-y: auto; overscroll-behavior: contain;
-  display: flex; flex-direction: column; gap: .9rem; padding: .7rem; min-width: 0;
-  background: var(--panel); border: 1px solid var(--tzb); border-radius: var(--tzr); }
-.tz-nav { display: grid; gap: .2rem; }
-.tz-nav a, .tz-back { display: flex; align-items: center; gap: .75rem; min-height: 2.6rem; padding: 0 .8rem; border-radius: 6px; border: 1px solid transparent; color: var(--dim); font-weight: 600; font-size: .92rem; }
-.tz-nav a .ico, .tz-back .ico { width: 1.2rem; height: 1.2rem; flex: none; }
-.tz-nav a:hover, .tz-back:hover { color: var(--text); background: rgba(46, 211, 230, .06); }
-.tz-nav a[aria-current="page"] { color: var(--text); border-color: rgba(46, 211, 230, .35); background: linear-gradient(90deg, rgba(46, 211, 230, .22), rgba(46, 211, 230, .04)); box-shadow: inset 3px 0 0 var(--cy); }
-.tz-nav a[aria-current="page"] .ico { color: var(--cy); }
-.tz-back { font-size: .8rem; min-height: 2.2rem; border-bottom-color: var(--tzb); border-radius: 6px 6px 0 0; }
-.tz-info { padding: .9rem .4rem 0; border-top: 1px solid var(--tzb); }
-.tz-info h2 { font-size: .92rem; font-weight: 700; margin-bottom: .3rem; }
-.tz-iname { font-size: .78rem; color: var(--cy); font-weight: 600; margin-bottom: .55rem; line-height: 1.3; }
-.tz-info dl { display: grid; gap: .65rem; margin: .4rem 0 0; }
-.tz-info dl > div { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); column-gap: .6rem; align-items: center; }
-.tz-info .ico { grid-row: span 2; width: 1.2rem; height: 1.2rem; color: var(--dim); }
-.tz-info dt { font-size: .72rem; color: var(--dim); line-height: 1.2; }
-.tz-info dd { margin: 0; font-weight: 600; font-size: .88rem; line-height: 1.25; overflow-wrap: anywhere; }
-.tz-loc { position: relative; display: block; margin-top: auto; min-height: 8.5rem; flex: none; border-radius: 6px; overflow: hidden; border: 1px solid var(--tzb); }
-.tz-loc .tz-art { position: absolute; inset: 0; }
-.tz-loc .tz-art::before { background: linear-gradient(180deg, rgba(4, 12, 18, .15), rgba(4, 12, 18, .85)); }
-.tz-loct { position: absolute; left: .7rem; right: .7rem; bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
-.tz-loct .ico { width: 1.25rem; height: 1.25rem; color: var(--cy); flex: none; }
-.tz-loct b { display: block; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; font-size: .9rem; line-height: 1.1; }
-.tz-loct small { display: block; font-size: .72rem; color: var(--dim); }
-.tz-loc:hover { border-color: var(--tzb2); }
-
-/* shared bits */
-.tz-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1.1rem; font-size: .78rem; color: var(--dim); }
-.tz-meta > span { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; }
-.tz-meta .ico { width: .95rem; height: .95rem; color: var(--cy); flex: none; }
-.tz-meta .tz-fm { padding-left: 1.1rem; border-left: 1px solid var(--tzb); }
-.tz-fm i { font-style: normal; color: var(--cy); }
-.tz-h { display: flex; align-items: center; gap: .55rem; font-size: 1.28rem; line-height: 1.1; }
-.tz-h::before { content: ""; width: 3px; height: 1em; border-radius: 1px; background: var(--cy); flex: none; }
-.tz-ph { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
-.tz-ph > a, .tz-sub > a { display: inline-flex; align-items: center; gap: .3rem; font-size: .78rem; color: var(--cy); white-space: nowrap; }
-.tz-ph > a .ico, .tz-sub > a .ico { width: .9rem; height: .9rem; }
-.tz-ph > a:hover, .tz-sub > a:hover { text-decoration: underline; }
-.tz-note { font-size: .72rem; color: var(--dim); }
-.tz-desc { font-size: .88rem; line-height: 1.5; color: #C3D1D8; max-width: 70ch; }
-.tz-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
-.tz-chips button { min-height: 2.35rem; padding: 0 1.1rem; border-radius: 999px; border: 1px solid var(--tzb2); background: rgba(5, 14, 21, .6); color: var(--text); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
-.tz-chips button:hover { border-color: var(--cy); }
-.tz-chips button[aria-pressed="true"] { background: var(--cy); border-color: var(--cy); color: #032229; }
-.tz-chips.sm button { min-height: 2rem; padding: 0 .85rem; font-size: .76rem; border-radius: 5px; }
-
-/* the list page */
-.tz-list { display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); gap: 1.25rem; align-items: start; }
-.tz-lmain { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(24rem, 33rem);
-  grid-template-areas: "head prev" "bar prev" "list prev"; gap: 1rem 1.25rem; align-items: start; min-width: 0; }
-.tz-lhero { position: absolute; left: 0; right: 0; top: 0; height: 17rem; z-index: -1; border-radius: var(--tzr); }
-.tz-lhero.tz-art::before { background: linear-gradient(90deg, rgba(6, 18, 26, .92), rgba(6, 18, 26, .5) 60%, rgba(6, 18, 26, .8)), linear-gradient(180deg, rgba(6, 18, 26, 0) 40%, #06121A); }
-.tz-lhero.tz-art::after { background: linear-gradient(118deg, transparent 0 91%, rgba(242, 69, 154, .6) 91.4%, transparent 92.4%); }
-.tz-lhead { grid-area: head; padding: 2.4rem 1.2rem .4rem; }
-.tz-lhead h1 { font-size: clamp(2.8rem, 5vw, 4.6rem); line-height: .9; }
-.tz-lhead p { margin-top: .5rem; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: #B5C4CB; }
-.tz-bar { grid-area: bar; display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding-inline: .2rem; }
-.tz-q { flex: 1 1 13rem; display: flex; align-items: center; gap: .5rem; min-height: 2.4rem; padding: 0 .8rem; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(5, 14, 21, .7); }
-.tz-q .ico { width: 1rem; height: 1rem; color: var(--dim); flex: none; }
-.tz-q input { flex: 1; min-width: 0; border: 0; background: none; color: var(--text); font: inherit; font-size: .85rem; outline: none; }
-.tz-q:focus-within { border-color: var(--cy); }
-.tz-rg select { min-height: 2.4rem; padding: 0 2rem 0 .8rem; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(5, 14, 21, .7); color: var(--text); font: inherit; font-size: .85rem; cursor: pointer; }
-.tz-rg select option { background: #0A1924; }
-.tz-bar .tierbar { gap: .35rem; }
-.tz-bar .tierbar legend { font-size: .72rem; margin-right: .2rem; }
-.tz-bar .tierbar > .dim { display: none; }
-.tz-bar .tierbox { min-height: 2.4rem; padding: 0 .6rem 0 .5rem; border-radius: 6px; border-color: var(--tzb2); background: rgba(5, 14, 21, .7); font-size: .82rem; }
-.tz-bar .tierbox input { accent-color: var(--cy); }
-.tz-bar .tierbox:has(input:checked) { border-color: var(--cy); }
-.tz-rows { grid-area: list; list-style: none; margin: 0; padding: 0 .3rem 0 0; display: grid; gap: .55rem; align-content: start;
-  max-height: max(26rem, calc(100dvh - var(--toph) - 16rem)); overflow-y: auto; overscroll-behavior: contain; }
-.tz-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 3rem; border: 1px solid var(--tzb); border-radius: var(--tzr);
-  background: linear-gradient(90deg, rgba(22, 52, 70, .5), rgba(10, 25, 36, .3)), var(--panel); }
-.tz-row:hover { border-color: var(--tzb2); }
-.tz-row.on { border-color: var(--cy); box-shadow: inset 0 0 0 1px var(--cy); background: linear-gradient(90deg, rgba(30, 90, 110, .45), rgba(10, 25, 36, .3)), var(--panel); }
-.tz-rowb { display: grid; grid-template-columns: 8.75rem minmax(0, 1fr) auto; gap: 1.1rem; align-items: center; padding: .45rem .4rem .45rem .45rem;
-  min-width: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; border-radius: var(--tzr) 0 0 var(--tzr); }
-.tz-thumb { width: 8.75rem; aspect-ratio: 16 / 9; border-radius: 5px; display: grid; place-items: center; }
-.tz-thumb .tz-lg { width: 72%; height: 62%; }
-.tz-rn { display: grid; gap: .45rem; min-width: 0; }
-.tz-rn > b { font-size: 1.45rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tz-go { display: grid; place-items: center; color: var(--dim); border-radius: 0 var(--tzr) var(--tzr) 0; }
-.tz-go .ico { width: 1.4rem; height: 1.4rem; }
-.tz-go:hover, .tz-go:focus-visible { color: var(--cy); background: rgba(46, 211, 230, .08); }
-.tz-none { padding: 1rem; }
-
-/* the preview panel */
-.tz-prev { grid-area: prev; position: sticky; top: calc(var(--toph) + 1rem); padding: 0; gap: 0; overflow: hidden; }
-.tz-pban { aspect-ratio: 16 / 6.4; display: grid; place-items: center; }
-.tz-pban .tz-lg { width: 52%; height: 64%; }
-.tz-pban > .tz-pill { position: absolute; top: .75rem; right: .75rem; }
-.tz-pmeta { padding: .75rem 1rem; border-bottom: 1px solid var(--tzb); }
-.tz-ptabs { display: flex; gap: .15rem; overflow-x: auto; padding: 0 .5rem; border-bottom: 1px solid var(--tzb); scrollbar-width: none; }
-.tz-ptabs a { display: grid; place-items: center; min-height: 2.75rem; padding: 0 .8rem; color: var(--dim); font-weight: 600; font-size: .86rem; white-space: nowrap; border-bottom: 2px solid transparent; }
-.tz-ptabs a:hover { color: var(--text); }
-.tz-ptabs a.on { color: var(--text); border-bottom-color: var(--cy); background: linear-gradient(0deg, rgba(46, 211, 230, .14), transparent); }
-.tz-pbody { padding: .9rem 1rem 1rem; display: grid; gap: .85rem; min-width: 0; }
-.tz-pname { font-size: 1.45rem; line-height: 1.05; }
-.tz-tiles { display: flex; border: 1px solid var(--tzb); border-radius: 6px; background: var(--well); }
-.tz-tiles > div { flex: 1 1 0; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: .55rem; align-items: center; padding: .65rem .7rem; border-left: 1px solid var(--tzb); min-width: 0; }
-.tz-tiles > div:first-child { border-left: 0; }
-.tz-tiles > div:last-child { flex-grow: 1.7; }
-.tz-tiles .ico { grid-row: span 2; width: 1.45rem; height: 1.45rem; color: var(--cy); }
-.tz-tiles b { font-weight: 700; font-size: 1rem; line-height: 1.15; font-stretch: 87.5%; text-transform: uppercase; overflow-wrap: anywhere; }
-.tz-tiles span { font-size: .64rem; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
-.tz-sub { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
-.tz-sub h3 { font-size: .95rem; font-weight: 700; }
-.tz-sub h3 small { font-weight: 400; font-size: .72rem; color: var(--dim); margin-left: .3rem; }
-.tz-seeds { display: grid; grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr)); gap: .45rem; }
-.tz-seeds a { display: grid; justify-items: center; gap: .3rem; padding: .7rem .3rem .55rem; min-width: 0; text-align: center; border: 1px solid var(--tzb); border-radius: 6px; background: var(--well); }
-.tz-seeds a:hover { border-color: var(--tzb2); }
-.tz-seeds .logo { width: 2.5rem; height: 2.5rem; }
-.tz-seeds b { max-width: 100%; font-size: .8rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tz-seeds span { padding: .05rem .4rem; border-radius: 4px; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--dim); }
-.tz-seeds a:first-child span { color: var(--cy); background: rgba(46, 211, 230, .14); }
-.tz-pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.4rem, 1fr)); gap: .4rem; }
-.tz-pool a { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--tzb); border-radius: 5px; background: #0B1A22; }
-.tz-pool a:hover { border-color: var(--tzb2); }
-.tz-pool img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.tz-pool span { position: absolute; left: 0; right: 0; bottom: 0; padding: 1rem .4rem .25rem; font-size: .72rem; font-weight: 600; background: linear-gradient(180deg, transparent, rgba(4, 10, 14, .92)); }
-.tz-cta { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; border: 1px solid var(--cy); border-radius: 6px; color: var(--cy); font-weight: 700; background: rgba(46, 211, 230, .06); }
-.tz-cta:hover { background: rgba(46, 211, 230, .14); }
-.tz-cta .ico { width: 1rem; height: 1rem; }
-
-/* one tournament: hero */
-.tz-ev { display: grid; gap: 1.1rem; }
-.tz-ehero { position: relative; isolation: isolate; display: grid; align-items: center; min-height: 15.5rem; overflow: hidden; border: 1px solid var(--tzb); border-radius: var(--tzr); }
-.tz-ehart { position: absolute; inset: 0; z-index: -1; display: grid; justify-items: end; align-items: center; padding-right: 7%; }
-.tz-ehart .tz-lg { width: min(30%, 26rem); height: 62%; }
-.tz-ehart.tz-art::before { background: linear-gradient(90deg, rgba(5, 13, 20, .96), rgba(5, 13, 20, .78) 38%, rgba(5, 13, 20, .3) 72%, rgba(5, 13, 20, .45)); }
-.tz-ehart.tz-art.map::before { background: linear-gradient(90deg, rgba(5, 13, 20, .97), rgba(5, 13, 20, .84) 40%, rgba(6, 20, 32, .64) 72%, rgba(5, 13, 20, .78)), linear-gradient(180deg, rgba(10, 36, 60, .35), rgba(5, 13, 20, .5)); }
-.tz-ehin { display: grid; gap: .5rem; max-width: 50rem; padding: 1.4rem 1.6rem 1.5rem; }
-.tz-crumb { display: flex; gap: .45rem; font-size: .76rem; color: var(--dim); }
-.tz-crumb a:hover { color: var(--text); text-decoration: underline; }
-.tz-kick { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
-.tz-kick > span:first-child { color: var(--cy); font-size: .78rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
-.tz-kick .tier { margin: 0; font-size: .78rem; }
-.tz-ehin h1 { font-size: clamp(2.2rem, 4.2vw, 3.9rem); line-height: .92; max-width: 18ch; }
-.tz-hmeta { font-size: .95rem; color: var(--text); gap: .4rem 0; }
-.tz-hmeta > span + span { margin-left: 1.1rem; padding-left: 1.1rem; border-left: 1px solid rgba(255, 255, 255, .18); }
-.tz-hmeta .ico { width: 1.1rem; height: 1.1rem; }
-.tz-hmeta i { font-style: normal; color: var(--dim); }
-.tz-champ { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; width: fit-content; padding: .35rem .8rem .35rem .45rem; border-radius: 6px; background: rgba(5, 14, 21, .75); border: 1px solid var(--tzb); box-shadow: inset 3px 0 0 var(--tc, var(--cy)); font-size: .85rem; }
-.tz-champ > span { color: var(--dim); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
-.tz-champ a, .tz-champ b { font-weight: 700; }
-.tz-champ a:hover { text-decoration: underline; }
-.tz-champ em { font-style: normal; color: var(--dim); }
-.tz-egrid { display: grid; grid-template-columns: 15.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
-.tz-emain { display: grid; gap: 1.1rem; min-width: 0; align-content: start; }
-.tz-vt { font-size: 1.6rem; line-height: 1; }
-.tz-ov { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem); gap: 1.1rem; align-items: start; }
-.tz-col { display: grid; gap: 1.1rem; min-width: 0; align-content: start; }
-.tz-two { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 1.1rem; align-items: start; }
-.tz-stack { display: grid; gap: 1.1rem; min-width: 0; }
-.tz .tz-emain > .panel, .tz .tz-col > .panel { min-width: 0; }
-
-/* featured match: team 1 on a cyan half, team 2 on a pink half */
-.tz-fh { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
-.tz-cur { display: flex; align-items: center; gap: .55rem; }
-.tz-cur .ico { width: 1.4rem; height: 1.4rem; color: var(--dim); }
-.tz-cur small { display: block; font-size: .68rem; color: var(--dim); }
-.tz-cur b { font-size: .85rem; font-weight: 700; }
-.tz-fcard { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem; align-items: center;
-  padding: 1.5rem 1.25rem 1.1rem; overflow: hidden; border: 1px solid var(--tzb); border-radius: 6px;
-  background: linear-gradient(100deg, rgba(23, 168, 160, .4), rgba(14, 74, 84, .22) 36%, rgba(6, 18, 27, .9) 50%, rgba(96, 22, 74, .26) 64%, rgba(196, 40, 128, .42)), #07141C; }
-.tz-fcard::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(110deg, transparent 0 2.5%, rgba(46, 211, 230, .55) 2.8%, transparent 3.8%), linear-gradient(110deg, transparent 0 96.2%, rgba(242, 69, 154, .65) 96.6%, transparent 97.6%); }
-.tz-fs { display: flex; align-items: center; gap: 1rem; min-width: 0; }
-.tz-fs.b { flex-direction: row-reverse; text-align: right; }
-.tz-fs .logo.xl { width: clamp(3.6rem, 6.5vw, 6.25rem); height: clamp(3.6rem, 6.5vw, 6.25rem); }
-.tz-fs.lost { opacity: .62; }
-.tz-fn { min-width: 0; }
-.tz-fn b { display: block; font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1; overflow-wrap: anywhere; }
-.tz-fn b a:hover { text-decoration: underline; }
-.tz-fn b small { font-size: .55em; font-style: normal; }
-.tz-seed { display: inline-block; margin-top: .45rem; padding: .1rem .45rem; border-radius: 3px; background: var(--cy); color: #03252C; font-size: .66rem; font-weight: 800; letter-spacing: .04em; }
-.tz-fs.b .tz-seed { background: var(--pk); color: #2B0519; }
-.tz-fmid { display: grid; justify-items: center; gap: .4rem; }
-.tz-fmid > small { font-size: .72rem; font-weight: 600; color: #C3D1D8; letter-spacing: .12em; text-transform: uppercase; text-align: center; }
-.tz-fsc { display: flex; gap: .45rem; padding: .15rem 1.1rem; font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1; border: 1px solid var(--tzb2); border-radius: 6px; background: rgba(4, 12, 18, .75); }
-.tz-fsc i { color: var(--dim); font-style: normal; }
-.tz-fsc.vs { font-size: clamp(1.8rem, 3.4vw, 2.6rem); color: #DDE8EC; }
-.tz-fwhen { font-size: .76rem; color: #C3D1D8; text-align: center; }
-.tz-bo { padding: .08rem .5rem; border: 1px solid var(--tzb2); border-radius: 4px; color: var(--cy); font-size: .68rem; font-weight: 800; text-transform: uppercase; }
-.tz-fvl { grid-column: 1 / -1; margin-bottom: -.45rem; text-align: center; font-size: .68rem; color: var(--dim); letter-spacing: .12em; text-transform: uppercase; }
-.tz-fmaps { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
-.tz-fmap { display: flex; align-items: center; gap: .6rem; padding: .3rem .8rem .3rem .3rem; border: 1px solid var(--tzb); border-radius: 5px; background: rgba(4, 12, 18, .7); }
-.tz-fmap.sim { border-style: dashed; }
-.tz-fmap img { width: 4.25rem; height: 2.4rem; object-fit: cover; border-radius: 3px; }
-.tz-fmap b { display: block; font-size: .8rem; font-weight: 700; text-transform: uppercase; }
-.tz-fmap small { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; color: var(--dim); }
-.tz-fbtn { grid-column: 1 / -1; justify-self: center; display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: 0 1.1rem; border: 1px solid var(--tzb2); border-radius: 5px; background: rgba(4, 12, 18, .75); font-size: .82rem; font-weight: 600; }
-.tz-fbtn .ico { width: .95rem; height: .95rem; }
-.tz-fbtn:hover { border-color: var(--cy); color: var(--cy); }
-
-/* live & upcoming / latest results */
-.tz-trows { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
-.tz-tr { display: grid; grid-template-columns: 5.4rem 7.5rem minmax(0, 1fr) 3.4rem minmax(0, 1fr) minmax(0, 9rem) 4.6rem; gap: .75rem; align-items: center;
-  padding: .45rem .6rem; border: 1px solid transparent; border-bottom-color: var(--tzb); border-radius: 5px; font-size: .84rem; }
-.tz-tr:last-child { border-bottom-color: transparent; }
-.tz-tr.lv { border-color: rgba(255, 93, 99, .35); background: rgba(255, 93, 99, .05); }
-.tz-tt, .tz-ts { display: grid; gap: .12rem; line-height: 1.2; min-width: 0; }
-.tz-tt > span:not(.tz-pill), .tz-ts span { font-size: .76rem; color: var(--dim); }
-.tz-tt .tz-pill { justify-self: start; }
-.tz-tt b { font-weight: 700; }
-.tz-ts b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tz-tm { display: flex; align-items: center; gap: .5rem; min-width: 0; }
-.tz-tm b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tz-tm.tbd b { color: var(--dim); font-weight: 500; }
-.tz-tm.tbd b small { font-weight: 400; }
-.tz-tm.lost { opacity: .55; }
-.tz-tsc { text-align: center; font-size: 1.2rem; white-space: nowrap; color: var(--dim); }
-.tz-tsc .ca, .tz-tsc .cb { font-weight: 800; }
-.tz-tmap { display: flex; align-items: center; gap: .5rem; min-width: 0; }
-.tz-tmap img { width: 3.2rem; height: 1.8rem; object-fit: cover; border-radius: 3px; flex: none; }
-.tz-tmap > span { display: grid; min-width: 0; line-height: 1.2; }
-.tz-tmap b { font-size: .78rem; font-weight: 600; }
-.tz-tmap small { font-size: .66rem; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tz-vbtn { display: grid; place-items: center; min-height: 2.1rem; border: 1px solid var(--tzb2); border-radius: 5px; font-size: .78rem; font-weight: 600; }
-.tz-vbtn:hover { border-color: var(--cy); color: var(--cy); }
-.tz-vbtn.off { opacity: .3; }
-
-/* group standings, bracket summary, next matches */
-.tz-gt { border-collapse: separate; border-spacing: 0 3px; font-size: .84rem; }
-.tz-gt th { padding: 0 .5rem .2rem; border: 0; font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; }
-.tz-gt td { padding: .42rem .5rem; border: 0; background: var(--well); }
-.tz-gt td:first-child { width: 2rem; color: var(--dim); border-radius: 4px 0 0 4px; box-shadow: inset 3px 0 0 var(--tc, var(--tzb2)); }
-.tz-gt td:last-child { border-radius: 0 4px 4px 0; }
-.tz-gt td.n { font-variant-numeric: tabular-nums; }
-.tz-gt tr.up td:nth-child(3) { color: var(--win); font-weight: 700; }
-.tz-gt tr.out td { opacity: .6; }
-.tz-gname { margin-top: .15rem; font-size: .7rem; font-weight: 700; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
-.tz-bl { display: grid; grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr); gap: .5rem; align-items: center; padding: .4rem .5rem; border: 1px solid transparent; border-radius: 4px; background: var(--well); font-size: .8rem; }
-.tz-bl:hover { border-color: var(--tzb2); }
-.tz-bl .tz-tm:last-child { flex-direction: row-reverse; text-align: right; }
-.tz-bl .tz-tsc { font-size: 1rem; }
-.tz-nday { margin-top: .1rem; font-size: .8rem; font-weight: 700; color: var(--cy); }
-.tz-nx { display: grid; grid-template-columns: 3.9rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1rem; gap: .5rem; align-items: center; min-height: 2.75rem; padding: .45rem .6rem;
-  border: 1px solid var(--tzb); border-radius: 5px; background: var(--well); font-size: .82rem; }
-a.tz-nx:hover { border-color: var(--tzb2); }
-.tz-nx > i { font-style: normal; font-size: .72rem; color: var(--dim); }
-.tz-nt { font-weight: 700; white-space: nowrap; font-size: .78rem; }
-.tz-nbo { font-size: .72rem; color: var(--dim); }
-.tz-nx > .ico { width: 1rem; height: 1rem; color: var(--dim); }
-.tz-nx .logo.sm { width: 1.2rem; height: 1.2rem; }
-.tz-rec .hubrec { margin: 0; }
-.tz .pool { grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
-
-/* widths: the table drops columns as the main column narrows; the right column drops below at 1100px */
-@media (min-width: 1101px) and (max-width: 1560px) {
-  .tz-tr { grid-template-columns: 5.2rem minmax(0, 1fr) 3rem minmax(0, 1fr) 4.4rem; }
-  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
-}
-@media (max-width: 1100px) {
-  .tz-lmain { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar" "list" "prev"; }
-  .tz-prev { position: static; }
-  .tz-rows { max-height: none; overflow: visible; padding-right: 0; }
-  .tz-ov, .tz-two { grid-template-columns: minmax(0, 1fr); }
-}
-@media (min-width: 761px) and (max-width: 1000px) {
-  .tz-tr { grid-template-columns: 5.2rem minmax(0, 1fr) 3rem minmax(0, 1fr) 4.4rem; }
-  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
-  .tz-list, .tz-egrid { grid-template-columns: 13rem minmax(0, 1fr); }
-}
-/* phones: the sidebar becomes a strip of links at the top, one column, 44px targets */
+.tz-tt a { display: grid; justify-items: center; gap: .35rem; min-width: 0; padding: .95rem .4rem .8rem; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); }
+.tz-tt a:first-child { border-color: color-mix(in srgb, var(--acc) 55%, transparent); }
+.tz-tt a:hover { border-color: var(--acc); }
+.tz-tt .logo { width: 3.4rem; height: 3.4rem; object-fit: contain; }
+.tz-tt b { max-width: 100%; font-size: .95rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tz-tt span { padding: .05rem .45rem; border-radius: 4px; font-size: .68rem; font-weight: 700; letter-spacing: .05em; color: var(--dim); }
+.tz-tt a:first-child span { color: var(--acc); background: var(--acc-deep); }
+.tzv .pool { grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr)); }
+.page .tzv .pool .maptile { aspect-ratio: 4 / 3; padding: .35rem .45rem; }
+.tzv .maptile span { font-size: .9rem; }
+.tz-go { margin-top: auto; justify-content: center; padding: .8rem; border-radius: 10px; font-weight: 600; letter-spacing: .01em; box-shadow: none; transition: background-color .15s; }
+.ho-btn.tz-go { background: rgba(255, 255, 255, .08) !important; border: 0 !important; color: var(--text) !important; }
+.ho-btn.tz-go:hover { background: rgba(255, 255, 255, .13) !important; }
+.ho-btn.tz-go .ico { color: var(--text); }
+@media (max-width: 1100px) { .tzp { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 760px) {
-  .tz-list, .tz-egrid { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
-  .tz-side { position: static; max-height: none; overflow: visible; padding: .4rem; gap: .4rem; }
-  .tz-nav { display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: none; }
-  .tz-nav a { flex: none; min-height: 44px; padding: 0 .85rem; border-color: var(--tzb); }
-  .tz-back { min-height: 44px; }
-  .tz-loc, .tz-list .tz-sinfo { display: none; }
-  .tz-info { padding: .5rem .4rem .2rem; }
-  .tz-info h2, .tz-iname { display: none; }
-  .tz-info dl { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
-  .tz-lhead { padding: 1.4rem .8rem .2rem; }
-  .tz-lhero { height: 12rem; }
-  .tz-bar { padding: 0; }
-  .tz-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; }
-  .tz-chips button, .tz-chips.sm button { flex: none; min-height: 44px; }
-  .tz-q, .tz-rg select, .tz-bar .tierbox { min-height: 44px; }
-  .tz-q { flex-basis: 100%; }
-  .tz-row { grid-template-columns: minmax(0, 1fr) 44px; }
-  .tz-rowb { grid-template-columns: 5.6rem minmax(0, 1fr); gap: .7rem; padding: .4rem; }
-  .tz-thumb { width: 5.6rem; }
-  .tz-rowb > .tz-pill { grid-column: 2; justify-self: start; margin-top: -.3rem; }
-  .tz-rn > b { font-size: 1.12rem; white-space: normal; }
-  .tz-rn .tz-meta { gap: .2rem .8rem; }
-  .tz-rn .tz-fm { padding-left: 0; border-left: 0; }
-  .tz-ptabs a { min-height: 44px; }
-  .tz-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tz-tiles > div:nth-child(3) { border-left: 0; }
-  .tz-tiles > div:nth-child(n + 3) { border-top: 1px solid var(--tzb); }
-  .tz-ehero { min-height: 0; }
-  .tz-ehart { justify-items: end; align-items: start; padding: 1rem; }
-  .tz-ehart .tz-lg { display: none; }
-  .tz-ehin { padding: 1rem; }
-  .tz-ehin h1 { font-size: 2.1rem; }
-  .tz-hmeta { gap: .3rem 1rem; }
-  .tz-hmeta > span + span { margin-left: 0; padding-left: 0; border-left: 0; }
-  .tz-fcard { padding: 1.1rem .7rem .9rem; gap: .7rem .5rem; }
-  .tz-fs, .tz-fs.b { flex-direction: column; text-align: center; gap: .5rem; }
-  .tz-fs .logo.xl { width: 3.4rem; height: 3.4rem; }
-  .tz-fn b { font-size: 1.1rem; }
-  .tz-fsc { font-size: 2.2rem; padding: .1rem .6rem; }
-  .tz-tr { grid-template-columns: minmax(0, 1fr) 2.8rem minmax(0, 1fr); grid-template-areas: "tt tt vb" "a sc b"; gap: .4rem .5rem; }
-  .tz-tr .tz-ts, .tz-tr .tz-tmap { display: none; }
-  .tz-tt { grid-area: tt; display: flex; align-items: center; gap: .5rem; }
-  .tz-tr > .tz-tm.a { grid-area: a; }
-  .tz-tr > .tz-tm.b { grid-area: b; flex-direction: row-reverse; text-align: right; }
-  .tz-tr > .tz-tsc { grid-area: sc; }
-  .tz-vbtn { grid-area: vb; justify-self: end; min-height: 44px; min-width: 4.5rem; }
-  .tz-nx { grid-template-columns: 3.6rem minmax(0, 1fr) auto minmax(0, 1fr) 1rem; min-height: 44px; }
-  .tz-nx .tz-nbo { display: none; }
-  .tz-nx > .tz-tm.b { flex-direction: row-reverse; text-align: right; }
-  .tz-gt td { padding-block: .6rem; }
-  .tz-fbtn, .tz-cta { min-height: 44px; }
+  .evr > button { grid-template-columns: 5.5rem minmax(0, 1fr); gap: .7rem; }
+  .evr > button > .tz-pill { grid-column: 2; justify-self: start; margin: 0; }
+  .tz-ttl b { font-size: 1.2rem; white-space: normal; }
+  .evr-tm .logo { width: 1.5rem; height: 1.5rem; }
+  .tz-q { max-width: none; flex-basis: 100%; margin-left: 0; }
+  .tz-chips button { min-height: 44px; }
+  .tz-st { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tz-st > div + div { border-left: 0; }
+  .tz-tt { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 </style>
 
@@ -4256,26 +4011,19 @@ function teamFinishes(team, evs) {
   </div></section>`;
 }
 
-/* ---------------- tournaments: the shared shell (sidebar, art, pills, facts) ----------------
-   The Tournaments list (#events) and every tournament page (#e-<slug>) share one layout: a left
-   sidebar (links, Tournament Info, the location card), dark navy panels with thin cyan borders,
-   team 1 in cyan and team 2 in pink. Everything shown is read from the event's own fields; a
-   missing field is left out, never filled in. */
+/* ---------------- tournaments: facts, art and the list (#events) ----------------
+   Both tournament screens are built from the home page's own pieces (.ho grid, .ho-p panels,
+   .ho-un card, .ho-rr rows, .seg, the court). Everything shown is read from the event's own
+   fields; a missing field is left out, never filled in. */
 const TZI = {
-  home: svgI(`<path d="M3.5 11L12 4l8.5 7M6 9.5V20h4.5v-5.5h3V20H18V9.5"/>`),
-  cup: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
-  shield: svgI(`<path d="M12 3l7.5 3v5.2c0 4.4-3.1 7.9-7.5 9.8-4.4-1.9-7.5-5.4-7.5-9.8V6z"/>`),
-  bars: svgI(`<path d="M5.5 19.5V12M12 19.5V5M18.5 19.5v-9M3 19.5h18"/>`),
   cal: svgI(`<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>`),
-  pin: svgI(`<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>`),
-  prize: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.6-1.4-2.8-1.4-1.6 0-2.8.8-2.8 2.1 0 2.9 5.8 1.5 5.8 4.3 0 1.3-1.3 2.1-3 2.1-1.3 0-2.5-.6-3-1.6M12 6v1.8M12 16.3V18"/>`),
-  fmt: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>`),
-  teams: svgI(`<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.1-5 6-5s5.2 1.7 6 5M15.5 5.6a3.2 3.2 0 0 1 0 6M17.5 14.7c1.8.6 3 2.2 3.5 4.8"/>`),
-  globe: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5s1.1-6.1 3.5-8.5z"/>`),
+  cup: svgI(`<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8.5 20.5h7M10 17h4v3.5h-4z"/>`),
   bracket: svgI(`<path d="M3.5 5.5h5v5h-5M3.5 13.5h5v5h-5M8.5 8h4v8.5h-4M12.5 12h4M16.5 9.5h4v5h-4"/>`),
-  list: svgI(`<path d="M8.5 6.5h12M8.5 12h12M8.5 17.5h12"/><circle cx="4.5" cy="6.5" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="17.5" r="1"/>`),
-  search: svgI(`<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>`),
-  back: svgI(`<path d="M20 12H5M10.5 6.5L5 12l5.5 5.5"/>`),
+  info: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.6v.2"/>`),
+  pin: svgI(`<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>`),
+  coin: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.5-1.4-2.8-1.4-1.6 0-2.7.8-2.7 2 0 2.9 5.6 1.5 5.6 4.4 0 1.2-1.2 2-2.9 2-1.4 0-2.5-.6-3-1.6M12 6.3v1.5M12 16.2v1.5"/>`),
+  globe: svgI(`<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5S9.6 5.9 12 3.5z"/>`),
+  search: svgI(`<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>`),
 };
 // 'Kraków' -> 'krakow', 'Rio de Janeiro' -> 'rio-de-janeiro': the same key as build_viewer.city_slug
 const citySlug = c => String(c || "").normalize("NFKD").replace(/[^\x00-\x7f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -4295,33 +4043,18 @@ const REGION_OF = (() => {
 const evRegion = e => e.type === "Online" ? "Online" : REGION_OF[e.country] || (!e.city && !e.country ? "Online" : "");
 const REGIONS = ["Europe", "North America", "South America", "Asia", "Oceania", "Middle East", "Online"];
 const hashOf = s => [...String(s)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
-// Tournament art: the event's own image, else its city's (or "online" for an event with no city),
-// else a map from the event's own pool, darkened by the overlay, with the event logo on top
+// Tournament art: the event's own hand-supplied image, else its generated key art (event_art.py,
+// in its logo's colours), else a map from the event's own pool (the card's scrim darkens it)
 function evArt(e) {
-  const own = (IMG.evart || {})[e.slug] || (IMG.cityart || {})[citySlug(e.city) || "online"];
-  if (own) return { src: own, own: true };
+  if ((IMG.evart || {})[e.slug]) return { src: IMG.evart[e.slug], own: true };
+  if ((IMG.evgen || {})[e.slug]) return { src: IMG.evgen[e.slug], own: true, gen: true };
   const pool = (e.pool || []).filter(m => IMG.maps[m]);
   const list = pool.length ? pool : Object.keys(IMG.maps).sort();
   const mp = list.length ? list[hashOf(e.slug) % list.length] : null;
   return { src: mp ? IMG.maps[mp] : "", own: false };
 }
-const evInitials = e => esc(shortEv(e.name).split(/\s+/).map(w => w[0]).join("").slice(0, 3));
-// o: {w, h} intrinsic size of the background, eager (the one hero image), logo (false: none), extra html
-function tzArt(e, cls, o = {}) {
-  const a = evArt(e);
-  const bg = a.src ? `<img class="tz-bg" src="${a.src}" alt="" width="${o.w || 480}" height="${o.h || 270}"${o.eager ? ` decoding="async" fetchpriority="high"` : ` loading="lazy" decoding="async"`}>` : "";
-  const lg = o.logo === false ? "" : IMG.events[e.slug]
-    ? `<img class="tz-lg" src="${IMG.events[e.slug]}" alt="" width="${o.lw || 160}" height="${o.lh || 90}"${o.eager ? "" : ` loading="lazy" decoding="async"`}>`
-    : `<span class="tz-lg evl-ph" aria-hidden="true">${evInitials(e)}</span>`;
-  return `<div class="tz-art ${a.own ? "own" : "map"} ${cls}">${bg}${lg}${o.extra || ""}</div>`;
-}
-// a prize in short form for tight tiles ($1M, $1.32M, $772.5K): exact, just shorter
-const usdShort = n => n >= 1e6 ? `$${+(n / 1e6).toFixed(3)}M` : n >= 1e3 ? `$${+(n / 1e3).toFixed(1)}K` : usd(n);
-const tzPill = e => e.status === "live" ? `<span class="tz-pill live">Live</span>`
-  : e.status === "upcoming" ? `<span class="tz-pill up">Upcoming</span>` : `<span class="tz-pill done">Completed</span>`;
-const mdy = s => { const d = dObj(s); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`; };
-const tzDates = e => e.start === e.end ? `${mdy(e.start)}, ${e.start.slice(0, 4)}`
-  : `${mdy(e.start)}${e.start.slice(0, 4) !== e.end.slice(0, 4) ? ", " + e.start.slice(0, 4) : ""} – ${mdy(e.end)}, ${e.end.slice(0, 4)}`;
+const tzDates = e => { const md = s => { const d = dObj(s); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`; };
+  return e.start === e.end ? `${md(e.start)}, ${e.start.slice(0, 4)}` : `${md(e.start)}${e.start.slice(0, 4) !== e.end.slice(0, 4) ? ", " + e.start.slice(0, 4) : ""} – ${md(e.end)}, ${e.end.slice(0, 4)}`; };
 const tzPlace = e => e.city ? `${e.city}${e.country ? ", " + e.country : ""}` : e.country || (e.type === "Online" ? "Online" : "");
 // the format as stage names ("Group Stage + Playoffs", "Swiss + Playoffs") and as one line per stage.
 // A stage line is a top-level line with a colon ("Playoffs:", "Group Stage: May 9th - 13th");
@@ -4365,39 +4098,44 @@ function tzFacts(e) {
   if (e.organizer) s.push(`Organized by ${e.organizer}.`);
   return s.join(" ");
 }
-const tzMeta = (e, fmt = true) => `<span>${TZI.cal}${esc(tzDates(e))}</span>${tzPlace(e) ? `<span>${TZI.pin}${esc(tzPlace(e))}</span>` : ""}${prizeTxt(e) ? `<span>${TZI.prize}${prizeTxt(e)}</span>` : ""}${fmt && fmtShort(e) ? `<span class="tz-fm"><i>Format:</i> ${esc(fmtShort(e))}</span>` : ""}`;
+const evStatus = e => e.status === "live" ? "Live now" : e.status === "upcoming" ? "Upcoming" : "Completed";
 
-// The sidebar: links, then Tournament Info and the location card for one event
-const SITE_LINKS = [["#home", "Home", TZI.home], ["#events", "Tournaments", TZI.cup], ["#teams", "Teams", TZI.shield], ["#record", "Stats", TZI.bars]];
-function tzInfo(e, named = false) {
-  if (!e) return `<section class="tz-info" id="tzInfo" hidden></section>`;
-  const n = evTeamCount(e);
-  const rows = [[TZI.fmt, "Format", fmtShort(e)], [TZI.teams, "Teams", n ? String(n) : ""], [TZI.cup, "Prize pool", prizeTxt(e)],
-    [TZI.pin, "Location", e.city || e.country || (e.type === "Online" ? "Online" : "")]].filter(r => r[2]);
-  return `<section class="tz-info" id="tzInfo" aria-label="Tournament info"><h2>Tournament info</h2>
-    ${named ? `<p class="tz-iname">${esc(e.name)}</p>` : ""}
-    <dl>${rows.map(([i, k, v]) => `<div>${i}<dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl></section>`;
+// The event's card, in the place of home's "Up next": the art behind, status, name, dates, place
+function evCardHtml(e, foot, h = "h2") {
+  const a = evArt(e), n = evTeamCount(e);
+  return `<section class="ho-un ho-evc${a.gen ? " gen" : ""}" style="${a.src ? `background-image:url('${a.src}')` : ""}" aria-labelledby="evT">
+    <span class="ho-unl${e.status === "live" ? " live" : ""}">${evStatus(e)}</span>
+    <${h} class="ho-unt" id="evT">${tierTag(e)}${esc(e.name)}</${h}>
+    <p class="ho-uns">${esc([tzDates(e), tzPlace(e)].filter(Boolean).join(" • "))}</p>
+    ${prizeTxt(e) || n ? `<p class="ho-uns">${esc([prizeTxt(e) ? `${prizeTxt(e)} prize pool` : "", n ? `${n} teams` : ""].filter(Boolean).join(" • "))}</p>` : ""}
+    ${foot}
+  </section>`;
 }
-function tzLoc(e) {
-  const city = e && (e.city || (e.type === "Online" ? "Online" : e.country));
-  if (!city) return `<span id="tzLoc" hidden></span>`;
-  return `<a class="tz-loc" id="tzLoc" href="#e-${e.slug}" aria-label="${esc(`${e.name}: ${tzPlace(e)}`)}">${tzArt(e, "tz-locart", { w: 320, h: 180, logo: false })}
-    <span class="tz-loct">${TZI.pin}<span><b>${esc(city)}</b>${e.city && e.country ? `<small>${esc(e.country)}</small>` : ""}</span></span></a>`;
+// About: the facts line and the key numbers
+function evAbout(e, attrs = "") {
+  const n = evTeamCount(e), rg = regionCount(e);
+  const facts = [["Teams", n || ""], ["Prize pool", prizeTxt(e)], ["Regions", rg || ""], ["Format", fmtShort(e)], ["Organizer", e.organizer], ["Venue", e.venue]].filter(f => f[1]);
+  return `<section class="ho-p" ${attrs}><header class="ho-h">${TZI.info}<div><h2>About</h2></div></header>
+    <p>${esc(tzFacts(e))}</p>
+    <dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join("")}</dl></section>`;
 }
-function tzSide(e, links, cur, back = "", named = false) {
-  return `<aside class="tz-side" aria-label="Tournament navigation">
-    ${back}
-    <nav class="tz-nav" aria-label="${back ? "Tournament sections" : "Site sections"}">${links.map(([h, l, i]) => `<a href="${h}"${h === cur ? ` aria-current="page"` : ""}>${i}<span>${l}</span></a>`).join("")}</nav>
-    <div class="tz-sinfo">${tzInfo(e, named)}</div>
-    ${tzLoc(e)}
-  </aside>`;
+function evPoolCard(e) {
+  if (!(e.pool || []).length) return "";
+  return `<section class="ho-p"><header class="ho-h">${ICON.pools}<div><h2>Map pool</h2></div><a class="ho-all" href="#e-${e.slug}.maps">Map stats${HI.arrow}</a></header>
+    <div class="pool">${e.pool.map(mp => `<a class="maptile" href="#e-${e.slug}.maps" style="${mapBg(mp)}" title="${esc(`${mp}: every team's record on it at this tournament`)}"><span class="cond">${esc(mp)}</span></a>`).join("")}</div></section>`;
+}
+// the field by VRS rank, in the home page's standings rows
+function evSeeds(e) {
+  const s = vrsSeeds(e);
+  return s.length ? hoStand(s).replace("VRS standings <small>Form, last 5</small>", `Top teams <small>by VRS rank</small>`)
+    : `<section class="ho-st ho-p"><header class="ho-h">${HI.bars}<div><h2>Top teams</h2></div></header><p class="empty">Teams to be announced.</p></section>`;
 }
 
-/* ---------------- tournaments list (#events) ----------------
-   A row SELECTS its tournament and shows it in the preview panel; the row's arrow, a double
-   click or Enter OPENS the tournament page. The live event (else the next one) starts selected. */
 const tzF = { st: "all", q: "", rg: "" };
-let tzSel = null;
+let tzSel = null, tzPage = 0;
+// rows per page: as many as fit the window (about 110 px a card below the hero and filters), 3 to 12
+const tzFit = () => Math.max(3, Math.min(12, Math.floor((innerHeight - 290) / 110)));
+let TZ_PER = tzFit();
 const tzFold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const TZ_ST = [["all", "All"], ["live", "Ongoing"], ["upcoming", "Upcoming"], ["finished", "Completed"]];
 function tzOrder() {
@@ -4412,89 +4150,138 @@ function tzShown(e) {
   const q = tzFold(tzF.q).trim();
   return !q || tzFold(`${e.name} ${e.city || ""} ${e.country || ""} ${e.organizer || ""}`).includes(q);
 }
-function tzRow(e) {
+// the event's art as inline style: the picture plus --ec, its logo's colour (tints the scrim);
+// generated key art is already dark, so its scrim is lighter (--scrim)
+const tzArtStyle = e => { const a = evArt(e), c = (IMG.evcolor || {})[e.slug];
+  return `${a.src ? `background-image:url('${a.src}');` : ""}${a.gen ? "--scrim:.5;" : ""}${c ? `--ec:${c};` : ""}`; };
+const tzCredit = () => "";
+const tzPill = e => `<span class="tz-pill ${e.status}">${e.status === "live" ? "Live" : e.status === "upcoming" ? "Upcoming" : "Completed"}</span>`;
+const tzTier = e => e.tl ? `<em class="evr-tier t${esc(e.tl)}">${esc(e.tl)}-tier</em>` : "";
+// dates, place, prize, format with their icons (the list card and the preview share it)
+const tzMeta = e => `<span class="tz-meta">${[[TZI.cal, tzDates(e)], [TZI.pin, tzPlace(e)], [TZI.coin, prizeTxt(e)]]
+  .filter(x => x[1]).map(([i, t]) => `<span>${i}${esc(t)}</span>`).join("")}${fmtShort(e) ? `<span class="tz-fmt">Format: <b>${esc(fmtShort(e))}</b></span>` : ""}</span>`;
+// every team at the event, by VRS rank
+function evTeamsStrip(e) {
+  const ranked = [...evTeamsList(e)].sort((a, b) => vrsRank(a) - vrsRank(b));
+  if (!ranked.length) return `<span class="evr-tm evr-tbd">Teams to be announced</span>`;
+  const withLogo = ranked.filter(t => IMG.logos[t]), more = ranked.length - withLogo.length;
+  return `<span class="evr-tm" data-n="${ranked.length}" title="${esc(ranked.join(", "))}">${withLogo.map(t => logo(t, "sm")).join("")}<i class="evr-more"${more ? "" : " hidden"}>+${more} more</i></span>`;
+}
+// the preview's team grid: only the rows that fit beside the list (the list sets the height), the rest as "+N more"
+function tzFitTeams() {
+  const box = $("#evSide .tz-tt"), more = $("#tzTtMore");
+  if (!box) return;
+  const items = [...box.children];
+  items.forEach(a => { a.hidden = false; });
+  if (more) more.textContent = "";
+  if (matchMedia("(max-width: 1100px)").matches) return;
+  const h = box.clientHeight;
+  let hid = 0;
+  items.forEach(a => { if (a.offsetTop + a.offsetHeight > h + 1) { a.hidden = true; hid++; } });
+  if (more && hid) more.textContent = `+${hid} more`;
+}
+// show as many team logos as the row's width allows, the rest as "+N more" (runs after each render / resize)
+function tzFitStrips() {
+  document.querySelectorAll("#tzList .evr-tm[data-n]").forEach(el => {
+    const logos = [...el.querySelectorAll(".logo")], more = el.querySelector(".evr-more"), n = +el.dataset.n;
+    if (!logos.length || !more) return;
+    logos.forEach(l => { l.hidden = false; });
+    more.hidden = true;
+    const w = el.clientWidth, step = logos[0].getBoundingClientRect().width + 7;
+    if (!w || !step) return;
+    let fit = Math.floor(w / step);
+    if (fit >= logos.length && n === logos.length) return;
+    fit = Math.max(1, Math.floor((w - 74) / step));
+    logos.forEach((l, i) => { l.hidden = i >= fit; });
+    more.textContent = `+${n - Math.min(fit, logos.length)} more`;
+    more.hidden = false;
+  });
+}
+// one list card: the card selects the event into the preview, its chevron opens the event
+function evRow(e) {
   const on = e.slug === tzSel;
-  return `<li class="tz-row ${e.status}${on ? " on" : ""}">
-    <button type="button" class="tz-rowb" data-tzsel="${e.slug}" aria-pressed="${on}" title="Show ${esc(e.name)} in the preview; double-click or Enter opens it">
-      ${tzArt(e, "tz-thumb", { w: 192, h: 108, lw: 120, lh: 68 })}
-      <span class="tz-rn"><b>${tierTag(e)}${esc(e.name)}</b><span class="tz-meta">${tzMeta(e)}</span></span>
-      ${tzPill(e)}
-    </button>
-    <a class="tz-go" href="#e-${e.slug}" aria-label="Open ${esc(e.name)}">${HI.next}</a>
-  </li>`;
+  return `<li class="evr${on ? " on" : ""}"><button type="button" data-tzsel="${e.slug}" aria-pressed="${on}" title="Show ${esc(e.name)} on the right; double-click or Enter opens it">
+      <span class="tz-art tz-th" style="${tzArtStyle(e)}">${evImg(e, "el")}</span>
+      <span class="evr-t"><span class="tz-ttl"><b>${esc(e.name)}</b>${tzTier(e)}</span>${tzMeta(e)}${evTeamsStrip(e)}</span>${tzPill(e)}</button>
+    <a class="ho-chev" href="#e-${e.slug}" aria-label="Open ${esc(e.name)}">${HI.next}</a></li>`;
 }
 function tzListHtml() {
-  const list = tzOrder().filter(tzShown);
-  return list.length ? list.map(tzRow).join("") : `<li class="tz-none"><p class="empty">No tournaments match these filters.</p></li>`;
+  const list = tzOrder().filter(tzShown), pages = Math.max(1, Math.ceil(list.length / TZ_PER));
+  tzPage = Math.min(Math.max(tzPage, 0), pages - 1);
+  const show = list.slice(tzPage * TZ_PER, tzPage * TZ_PER + TZ_PER);
+  const cnt = $("#tzCnt"), prev = $("#tzPrev"), next = $("#tzNext");
+  if (cnt) cnt.textContent = tzCount(list.length);
+  if (prev) prev.disabled = tzPage <= 0;
+  if (next) next.disabled = tzPage >= pages - 1;
+  return show.length ? show.map(evRow).join("") : `<li><p class="empty">No tournaments match these filters.</p></li>`;
 }
-function tzPreview(e) {
-  if (!e) return `<section class="tz-prev tz-panel" id="tzPrev"><p class="empty">Choose a tournament.</p></section>`;
-  const secs = tzSections(e).filter(s => s[0] !== "matchup");
-  const n = evTeamCount(e), rg = regionCount(e), seeds = vrsSeeds(e).slice(0, 5);
-  const tiles = [[TZI.teams, n || "", "Teams"], [TZI.prize, prizeNum(e) ? usdShort(prizeNum(e)) : "", "Prize pool"], [TZI.globe, rg || "", rg === 1 ? "Region" : "Regions"], [TZI.cup, fmtShort(e), "Format"]].filter(t => t[1]);
-  const pool = (e.pool || []);
-  return `<section class="tz-prev tz-panel" id="tzPrev" aria-labelledby="tzPrevT" aria-live="polite">
-    ${tzArt(e, "tz-pban", { w: 640, h: 270, lw: 300, lh: 150, extra: tzPill(e) })}
-    <div class="tz-pmeta tz-meta">${tzMeta(e)}</div>
-    <nav class="tz-ptabs" aria-label="${esc(e.name)} sections">${secs.map(([k, l]) => `<a href="#e-${e.slug}${k ? "." + k : ""}"${k ? "" : ` class="on"`}>${l}</a>`).join("")}</nav>
-    <div class="tz-pbody">
-      <h2 class="tz-pname" id="tzPrevT">${tierTag(e)}${esc(e.name)}</h2>
-      <p class="tz-desc">${esc(tzFacts(e))}</p>
-      ${tiles.length ? `<div class="tz-tiles">${tiles.map(([i, v, l]) => `<div>${i}<b>${esc(v)}</b><span>${l}</span></div>`).join("")}</div>` : ""}
-      ${seeds.length ? `<div class="tz-sub"><h3>Top teams <small>by VRS rank</small></h3>${n ? `<a href="#e-${e.slug}.teams">View all teams ${HI.arrow}</a>` : ""}</div>
-        <div class="tz-seeds">${seeds.map(t => `<a href="#t-${T[t].slug}">${logo(t, "md")}<b>${esc(shortName(t))}</b><span>VRS #${T[t].vrs.rank}</span></a>`).join("")}</div>` : ""}
-      ${pool.length ? `<div class="tz-sub"><h3>Map pool</h3><a href="#e-${e.slug}.maps">Map stats ${HI.arrow}</a></div>
-        <div class="tz-pool">${pool.map(mp => `<a href="#e-${e.slug}.maps" title="${esc(mp)}: every team's record on it at this tournament">${IMG.maps[mp] ? `<img src="${IMG.maps[mp]}" alt="" width="160" height="90" loading="lazy" decoding="async">` : ""}<span>${esc(mp)}</span></a>`).join("")}</div>` : ""}
-      <a class="tz-cta" href="#e-${e.slug}">View tournament ${HI.arrow}</a>
-    </div>
+const tzCount = n => n ? `${tzPage * TZ_PER + 1}–${Math.min(n, tzPage * TZ_PER + TZ_PER)} of ${n}` : "none";
+// the right column: the selected event's banner, facts, numbers, top teams and map pool
+function evPrevSide(e) {
+  const n = evTeamCount(e), rg = regionCount(e), seeds = [...evTeamsList(e)].filter(t => T[t]).sort((a, b) => vrsRank(a) - vrsRank(b));
+  const tiles = [[ICON.lineups, n || "TBA", "Teams"], [TZI.coin, prizeTxt(e) || "TBA", "Prize pool"], [TZI.globe, rg || "–", "Regions"], [TZI.bracket, fmtShort(e) || "TBA", "Format"]];
+  const secs = tzSections(e).filter(([k]) => k !== "matchup");
+  return `<section class="ho-p tzv" id="evSide" aria-labelledby="evT">
+    <div class="tz-art tz-bn" style="${tzArtStyle(e)}">${IMG.events[e.slug] ? `<img class="tz-bl" src="${IMG.events[e.slug]}" alt="">` : ""}
+      <h2 class="tz-h" id="evT">${esc(e.name)}</h2>${tzPill(e)}${tzCredit(e)}</div>
+    ${tzMeta(e)}
+    <nav class="tz-tabs" aria-label="${esc(e.name)} sections">${secs.map(([k, l], i) => `<a href="#e-${e.slug}${k ? "." + k : ""}"${i ? "" : ` class="on"`}>${esc(l)}</a>`).join("")}</nav>
+    <p class="tz-about">${esc(tzFacts(e))}</p>
+    <dl class="tz-st">${tiles.map(([i, v, k]) => `<div>${i}<dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join("")}</dl>
+    <header class="tz-sh"><h3>${seeds.length > 10 ? "The field" : "Top teams"} <span class="tz-more" id="tzTtMore"></span></h3>${n ? `<a class="ho-all" href="#e-${e.slug}.teams">View all teams${HI.arrow}</a>` : ""}</header>
+    ${seeds.length ? `<div class="tz-tt">${seeds.map(t => `<a href="#t-${T[t].slug}">${logo(t)}<b>${esc(shortName(t))}</b><span>${T[t].vrs ? `VRS #${vrsRank(t)}` : "Unranked"}</span></a>`).join("")}</div>` : `<p class="empty">Teams to be announced.</p>`}
+    <a class="ho-btn tz-go" href="#e-${e.slug}">View tournament${HI.arrow}</a>
   </section>`;
 }
 function viewEvents() {
+  TZ_PER = tzFit();
+  requestAnimationFrame(() => { tzFitStrips(); tzFitTeams(); });
   const all = tzOrder();
-  if (!tzSel || !EV_BY[tzSel]) tzSel = (all.find(e => e.status === "live") || all.find(e => e.status === "upcoming") || all[0] || {}).slug || null;
+  if (!tzSel || !EV_BY[tzSel]) {
+    tzSel = (all.find(e => e.status === "live") || all.find(e => e.status === "upcoming") || all[0] || {}).slug || null;
+    const k = all.filter(tzShown).findIndex(e => e.slug === tzSel);
+    tzPage = k > 0 ? Math.floor(k / TZ_PER) : 0;
+  }
   const sel = EV_BY[tzSel];
-  const lead = all.find(e => e.status === "live") || all.find(e => e.status === "upcoming") || sel;
-  const cnt = k => EV.filter(e => e.status === k).length;
   const regs = REGIONS.filter(r => EV.some(e => evRegion(e) === r));
-  const sub = [`${EV.length} tournaments`, cnt("live") ? `${cnt("live")} live` : "", `${cnt("upcoming")} upcoming`, `${cnt("finished")} completed`].filter(Boolean).join(" · ");
-  return `<div class="tz tz-list">
-    ${tzSide(sel, SITE_LINKS, "#events", "", true)}
-    <div class="tz-lmain">
-      ${lead ? tzArt(lead, "tz-lhero", { w: 1600, h: 600, eager: true, logo: false }) : ""}
-      <header class="tz-lhead"><h1>Tournaments</h1><p>${esc(sub)}</p></header>
-      <div class="tz-bar">
+  const rows = tzListHtml(), n = all.filter(tzShown).length, pages = Math.ceil(n / TZ_PER);
+  return `<div class="tzp">
+    <section class="evl-list" aria-labelledby="evlT">
+      <header class="tz-hd"><div><h1 id="evlT">Tournaments</h1><p>Choose a tournament to explore matchups, brackets and stats</p></div>
+        <div class="ho-pg" role="group" aria-label="Page through the tournaments"><span class="evl-n" id="tzCnt">${tzCount(n)}</span>
+          <button type="button" id="tzPrev" data-tzpg="-1" aria-label="Previous tournaments"${tzPage <= 0 ? " disabled" : ""}>${HI.prev}</button>
+          <button type="button" id="tzNext" data-tzpg="1" aria-label="Next tournaments"${tzPage >= pages - 1 ? " disabled" : ""}>${HI.next}</button></div></header>
+      <div class="evbar">
         <div class="tz-chips" role="group" aria-label="Status">${TZ_ST.map(([k, l]) => `<button type="button" data-tzst="${k}" aria-pressed="${tzF.st === k}">${l}</button>`).join("")}</div>
-        <label class="tz-q">${TZI.search}<span class="sr-only">Search tournaments</span><input type="search" id="tzQ" value="${esc(tzF.q)}" placeholder="Search tournaments…" autocomplete="off" spellcheck="false"></label>
-        <label class="tz-rg"><span class="sr-only">Region</span><select id="tzRg"><option value="">All regions</option>${regs.map(r => `<option${tzF.rg === r ? " selected" : ""}>${r}</option>`).join("")}</select></label>
-        ${tierBar()}
+        <label class="tz-q">${TZI.search}<input type="search" class="search" id="tzQ" value="${esc(tzF.q)}" placeholder="Search tournaments…" aria-label="Search tournaments by name, city or organizer" autocomplete="off" spellcheck="false"></label>
+        <label class="filters"><span class="sr-only">Region</span><select id="tzRg"><option value="">All regions</option>${regs.map(r => `<option${tzF.rg === r ? " selected" : ""}>${r}</option>`).join("")}</select></label>
+        ${tierBar().replace('<fieldset class="tierbar">', '<fieldset class="tierbar" aria-label="Show tiers">')}
       </div>
-      <ul class="tz-rows" id="tzList" aria-label="Tournaments">${tzListHtml()}</ul>
-      ${tzPreview(sel)}
-    </div>
+      <ul class="evrows" id="tzList">${rows}</ul>
+    </section>
+    ${sel ? evPrevSide(sel) : ""}
   </div>`;
 }
-// list-page updates in place: the rows and the preview change, the page and the search box stay put
-function tzRefreshList() { const l = $("#tzList"); if (l) l.innerHTML = tzListHtml(); }
+// list-page updates in place: the rows and the right column change, the page and the search box stay put
+function tzRefreshList() { const l = $("#tzList"); if (l) { l.innerHTML = tzListHtml(); tzFitStrips(); } }
 function tzSelect(slug) {
   const e = EV_BY[slug];
   if (!e) return;
   tzSel = slug;
-  document.querySelectorAll("#tzList .tz-row").forEach(li => {
-    const b = li.querySelector("[data-tzsel]"), on = b && b.dataset.tzsel === slug;
+  document.querySelectorAll("#tzList .evr").forEach(li => {
+    const b = li.querySelector("[data-tzsel]"), on = !!b && b.dataset.tzsel === slug;
     li.classList.toggle("on", on); if (b) b.setAttribute("aria-pressed", String(on));
   });
-  const swap = (sel, html) => { const old = $(sel); if (old) { const t = document.createElement("div"); t.innerHTML = html.trim(); if (t.firstElementChild) old.replaceWith(t.firstElementChild); else old.remove(); } };
-  swap("#tzPrev", tzPreview(e));
-  swap("#tzInfo", tzInfo(e, true));
-  swap("#tzLoc", tzLoc(e));
+  const swap = (el, html) => { if (!el) return; const t = document.createElement("div"); t.innerHTML = html.trim(); el.replaceWith(t.firstElementChild); };
+  swap($("#evSide"), evPrevSide(e));
+  tzFitTeams();
   // below 1100px the preview sits under the list: bring it into view
-  const p = $("#tzPrev");
+  const p = $("#evSide");
   if (p && matchMedia("(max-width: 1100px)").matches) {
     const r = p.getBoundingClientRect();
     if (r.top > innerHeight - 80 || r.bottom < 0) p.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
 }
-
 /* ---------------- one tournament ---------------- */
 const dayPick = {};
 const evPick = {};      // slug -> {a, b, next}
@@ -4591,29 +4378,71 @@ function tzSections(e) {
   const teams = evTeamsList(e).filter(isTeamSlot);
   return [
     ["", "Overview", ICON.overview],
-    playoffCols(e).length ? ["bracket", "Bracket", TZI.bracket] : null,
     e.matches.length ? ["matches", "Matches", TZI.cal] : null,
-    teams.length ? ["teams", "Teams", TZI.teams] : null,
+    playoffCols(e).length ? ["bracket", "Bracket", TZI.bracket] : null,
     groupTables(e).length || e.prizes.length ? ["standings", "Standings", TZI.cup] : null,
+    teams.length ? ["teams", "Teams", ICON.lineups] : null,
     (e.pool || []).length ? ["maps", "Map stats", ICON.pools] : null,
     teams.filter(t => T[t]).length >= 2 ? ["matchup", "Build a matchup", ICON.h2h] : null,
   ].filter(Boolean);
 }
-
-function tzEvHero(e) {
-  const fin = finalOf(e);
-  const champ = e.champion ? `<p class="tz-champ" style="${tcVars(e.champion)}">${logo(e.champion, "sm")}<span>Champion</span>${T[e.champion] ? `<a href="#t-${T[e.champion].slug}">${esc(e.champion)}</a>` : `<b>${esc(e.champion)}</b>`}${fin ? `<em>${fin.sw}–${fin.sl} over ${esc(fin.l)} in the final</em>` : ""}</p>` : "";
-  return `<section class="tz-ehero">
-    ${tzArt(e, "tz-ehart", { w: 1600, h: 400, lw: 420, lh: 200, eager: true })}
-    <div class="tz-ehin">
-      <nav class="tz-crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span aria-hidden="true">/</span><span>${esc(shortEv(e.name))}</span></nav>
-      <p class="tz-kick"><span>CS2 tournament</span>${tierTag(e)}${tzPill(e)}${favBtn(e, true)}</p>
-      <h1>${esc(e.name)}</h1>
-      <p class="tz-meta tz-hmeta"><span>${TZI.cal}${esc(tzDates(e))}</span>${tzPlace(e) ? `<span>${TZI.pin}${esc(tzPlace(e))}</span>` : ""}${prizeTxt(e) ? `<span>${TZI.cup}${prizeTxt(e)} <i>Prize pool</i></span>` : ""}</p>
-      <p class="tz-desc">${esc(tzFacts(e))}</p>
-      ${champ}
-    </div>
-  </section>`;
+// the event's matches as the site's match records (with .ev), in schedule order
+const evMs = e => e.matches.map(x => MATCH[x.id] || Object.assign({}, x, { ev: e.slug })).sort(byTime);
+// The court's match: the live one, else the latest result, else the next one with both teams set
+function evFeatured(ms) {
+  const both = ms.filter(m => isTeamSlot(m.t1) && isTeamSlot(m.t2));
+  return both.filter(isLive)[0] || both.filter(m => m.finished).pop() || both.filter(m => !m.finished)[0] || null;
+}
+// Right of the court: the current group / Swiss table in the home standings rows (top five;
+// the Standings tab has all of it), else the playoff matches, else the field by VRS rank
+function evStandPanel(e) {
+  const groups = groupTables(e);
+  if (groups.length) {
+    // the stage whose last series is the most recent one (the play-in gives way to the group stage)
+    const last = e.matches.filter(m => m.kind === "groups" && m.t1 && m.t2 && (m.finished || isLive(m))).sort(byTime).pop();
+    const [name, rows] = (last && groups.find(([n]) => n === groupKey(last.stage))) || groups[groups.length - 1];
+    const on = PAIR || [];
+    const row = (r, i) => {
+      const cls = on[0] === r.team ? " oa" : on[1] === r.team ? " ob" : "";
+      const inner = `<span class="rk">${i + 1}</span><span class="nm">${logo(r.team, "sm")}<span>${esc(shortName(r.team))}</span></span><span class="wlr">${r.w}-${r.l}</span><span class="wlr">${r.mw}-${r.ml}</span>`;
+      return T[r.team] ? `<a class="ho-tr${cls}" href="#t-${T[r.team].slug}">${inner}</a>` : `<div class="ho-tr${cls}">${inner}</div>`;
+    };
+    return `<section class="ho-st ho-p" aria-labelledby="hoStT">
+      <header class="ho-h">${HI.bars}<div><h2 id="hoStT">${esc(e.swiss && /group stage/i.test(name) ? "Swiss stage" : name)} <small>Series won-lost</small></h2></div>${rows.length > 5 ? `<a class="ho-all" href="#e-${e.slug}.standings">All ${rows.length}${HI.arrow}</a>` : ""}</header>
+      <div class="ho-tbl"><div class="ho-tr hd" aria-hidden="true"><span>#</span><span>Team</span><span>W-L</span><span>Maps</span></div>${rows.slice(0, 5).map(row).join("")}</div>
+    </section>`;
+  }
+  const po = evMs(e).filter(m => m.kind === "playoffs");
+  if (po.some(m => m.t1 || m.t2)) {   // an all-TBD bracket says nothing yet: show the field instead
+    // the round being played now: the first one with an unfinished match, else the final rounds
+    const open = po.find(m => !m.finished), stage = open ? open.stage : po[po.length - 1].stage;
+    const list = po.filter(m => m.stage === stage).slice(0, 4);
+    return `<section class="ho-st ho-p" aria-labelledby="hoStT"><header class="ho-h">${TZI.bracket}<div><h2 id="hoStT">${esc(stage)}</h2></div><a class="ho-all" href="#e-${e.slug}.bracket">Bracket${HI.arrow}</a></header>
+      ${list.map(evMatchRow).join("")}</section>`;
+  }
+  return evSeeds(e);
+}
+// one match in the home page's result-row pattern: when, the two teams, the score or "vs", Bo
+function evMatchRow(m) {
+  const w = winnerOf(m), played = m.finished || isLive(m), d = localDay(m.when) || m.day;
+  const side = (t, i) => {
+    const src = !t ? slotSource(m, i) : null;
+    return `<span${w && t !== w ? ' class="lost"' : ""}${src ? ` title="${esc(src.title)}"` : ""}>${logo(t, "sm")}<em>${t ? esc(shortName(t)) : "TBD"}</em></span>`;
+  };
+  const inner = `<span class="ho-rm"><b>${esc(d ? dayWord(d) : "Date TBA")}</b><span>${esc([m.when ? clock(m.when) : "", m.stage].filter(Boolean).join(" • "))}</span></span>
+    <span class="ho-rt">${side(m.t1, 0)}<b class="ho-rsc">${played ? `${m.w1} - ${m.w2}` : "vs"}</b>${side(m.t2, 1)}</span>
+    ${isLive(m) ? `<span class="ho-chip miss">Live</span>` : `<span class="ho-chip none">Bo${boOf(m)}</span>`}<span class="ho-chev" aria-hidden="true">${HI.next}</span>`;
+  return m.t1 && m.t2 ? `<a class="ho-rr" href="#m-${m.id}">${inner}</a>` : `<div class="ho-rr">${inner}</div>`;
+}
+// The right rail on every section: what is next at this event, then its latest results
+function evRail(e, ms) {
+  const next = [...ms.filter(isLive), ...ms.filter(m => pendingNow(m) || (!m.finished && !isLive(m) && !m.day && e.status !== "finished"))].slice(0, 5);
+  const done = ms.filter(m => m.finished && m.t1 && m.t2 && m.w1 !== m.w2).reverse().slice(0, 5);
+  return `<div class="ho-res ho-rail">
+    <section class="ho-res ho-p" aria-labelledby="evNxT"><header class="ho-h">${HI.clock}<div><h2 id="evNxT">Next matches</h2></div><a class="ho-all" href="#e-${e.slug}.matches">Schedule${HI.arrow}</a></header>
+      ${next.length ? next.map(evMatchRow).join("") : `<p class="empty">${e.status === "finished" ? "The event is over." : "No further matches scheduled."}</p>`}</section>
+    ${hoResults(done, "No finished series at this tournament yet.")}
+  </div>`;
 }
 
 function viewEvent(slug, sub) {
@@ -4621,169 +4450,49 @@ function viewEvent(slug, sub) {
   if (!e) return `<p>Tournament not found. <a class="btn" href="#events">All tournaments</a></p>`;
   const secs = tzSections(e);
   if (!secs.some(([k]) => k === sub)) sub = "";
+  const ms = evMs(e);
+  const up = ms.filter(m => isTeamSlot(m.t1) && isTeamSlot(m.t2) && !m.finished && m.day && m.day >= daysBefore(DATA.as_of, 1));
+  // the court: the same component and inputs as the match page
+  const f = evFeatured(ms);
+  let court;
+  if (f) {
+    const pred = decode(f.pred), bo = boOf(f);
+    PAIR = [f.t1, f.t2];
+    const o = { ev: e, evName: `${shortEv(e.name)} • ${f.stage}`, centre: f.finished || isLive(f) ? centreFor(f) : "", live: isLive(f), rf: f.rf, nav: {},
+      verdict: `${verdictFor(f, pred)}<a class="chip plain" href="#m-${f.id}">${isLive(f) ? "Live match" : f.finished ? "Latest result" : "Next match"}: match page</a>` };
+    court = hoCourt(pred, f.t1, f.t2, o, bo);
+  } else court = evAbout(e, `style="grid-area:court"`);
   let body;
   if (sub === "teams") body = evTeams(e);
   else if (sub === "matchup") body = evMatchup(e);
   else if (sub === "matches") body = evDays(e);
   else if (sub === "bracket") body = evBrackets(e);
-  else if (sub === "standings") body = `<div class="tz-two">${evGroupsPanel(e) || ""}<div class="tz-stack">${standings(e)}${evFormat(e)}</div></div>`;
+  else if (sub === "standings") body = `${evGroupsPanel(e)}${standings(e)}${evFormat(e)}`;
   else if (sub === "maps") body = evPoolPanel(e);
-  else body = tzOverview(e);
-  const links = secs.map(([k, l, i]) => [`#e-${slug}${k ? "." + k : ""}`, l, i]);
-  const back = `<a class="tz-back" href="#events">${TZI.back}<span>All tournaments</span></a>`;
-  const title = sub ? `<h2 class="tz-vt">${esc(secs.find(([k]) => k === sub)[1])}</h2>` : "";
-  return `<div class="tz tz-ev">${tzEvHero(e)}
-    <div class="tz-egrid">${tzSide(e, links, `#e-${slug}${sub ? "." + sub : ""}`, back)}
-      <div class="tz-emain${sub ? " tz-subv" : ""}">${title}${body}</div></div></div>`;
-}
-
-/* ---------------- tournament overview: featured match, live & upcoming, standings, next ---------------- */
-const tzBo = m => `Bo${boOf(m)}`;
-const tzWhen = m => { const d = localDay(m.when) || m.day; return { day: d ? dayWord(d) : "TBA", time: m.when ? clock(m.when) : "" }; };
-// a team cell; an open slot names the match that fills it (title) and reads "TBD"
-function tzTeam(m, i, cls = "") {
-  const t = i ? m.t2 : m.t1;
-  if (t) return `<span class="tz-tm ${cls}">${logo(t, "sm")}<b>${esc(t)}</b></span>`;
-  const src = slotSource(m, i);
-  return `<span class="tz-tm tbd ${cls}"${src ? ` title="${esc(src.title)}"` : ""}>${logo(null, "sm")}<b>${src ? src.html : "TBD"}</b></span>`;
-}
-// The featured match: the live one, else the latest result, else the next one
-function tzFeatured(e) {
-  const live = e.matches.filter(isLive).sort(byTime)[0];
-  const done = e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).pop();
-  // the next one with at least one team drawn (an all-TBD card says nothing)
-  const next = e.matches.filter(m => !m.finished && !isLive(m) && (m.t1 || m.t2)).sort(byTime)[0];
-  const m = live || done || next;
-  if (!m) return "";
-  const kick = live ? "Live now" : done ? "Latest result" : "Next match";
-  const cur = e.status === "live" ? (live || e.matches.filter(x => !x.finished).sort(byTime)[0] || {}).stage : null;
-  const played = m.finished || isLive(m), bo = boOf(m);
-  const side = (i) => {
-    const t = i ? m.t2 : m.t1, w = winnerOf(m);
-    const seed = t && T[t]?.vrs ? `<span class="tz-seed">VRS #${T[t].vrs.rank}</span>` : "";
-    const src = !t ? slotSource(m, i) : null;
-    const nm = t ? (T[t] ? `<a href="#t-${T[t].slug}">${esc(t)}</a>` : esc(t)) : src ? src.html : "TBD";
-    return `<div class="tz-fs ${i ? "b" : "a"}${w && t !== w ? " lost" : ""}">${logo(t, "xl")}<div class="tz-fn"><b${src ? ` title="${esc(src.title)}"` : ""}>${nm}</b>${seed}</div></div>`;
-  };
-  let maps = "";
-  if (m.maps.length) maps = `<div class="tz-fmaps">${m.maps.map((x, i) => {
-    const won = x.w === 1 ? m.t1 : x.w === 2 ? m.t2 : null;
-    return `<div class="tz-fmap">${IMG.maps[x.map] ? `<img src="${IMG.maps[x.map]}" alt="" width="96" height="54" loading="lazy" decoding="async">` : ""}
-      <span><b>${esc(x.map)}</b><small class="${x.w === 1 ? "ca" : x.w === 2 ? "cb" : ""}">${x.s1 != null ? `${x.s1}–${x.s2}` : `Map ${i + 1}`}${won ? ` · ${esc(shortName(won))}` : ""}</small></span></div>`;
-  }).join("")}</div>`;
-  else if (m.pred && m.t1 && m.t2) {
-    const v = vetoFor(decode(m.pred), bo);
-    const steps = v ? v.veto.filter(s => s.verb !== "bans") : [];
-    if (steps.length) maps = `<p class="tz-fvl">The model's simulated veto</p><div class="tz-fmaps">${steps.map(s => `<div class="tz-fmap sim">${IMG.maps[s.map] ? `<img src="${IMG.maps[s.map]}" alt="" width="96" height="54" loading="lazy" decoding="async">` : ""}
-      <span><b>${esc(s.map)}</b><small class="${s.verb === "decider" ? "" : s.side === "A" ? "ca" : "cb"}">${s.verb === "decider" ? "Decider" : `${esc(shortName(s.side === "A" ? m.t1 : m.t2))} pick`}</small></span></div>`).join("")}</div>`;
+  else {
+    const rec = evRecord(e);
+    body = `${f ? evAbout(e) : ""}${rec ? `<section class="ho-p"><header class="ho-h">${HI.spark}<div><h2>How the model called it</h2></div></header>${recordLine(e, rec)}</section>` : ""}${evPaths(e)}${evPoolCard(e)}${evFormat(e)}`;
   }
-  const w = tzWhen(m);
-  const mid = played ? `<b class="tz-fsc"><span class="${m.w1 > m.w2 ? "ca" : ""}">${m.w1}</span><i>-</i><span class="${m.w2 > m.w1 ? "cb" : ""}">${m.w2}</span></b>`
-    : `<b class="tz-fsc vs">VS</b><span class="tz-fwhen">${esc(w.day)}${w.time ? ` · ${esc(w.time)}` : ""}</span>`;
-  return `<section class="tz-panel tz-feat" aria-labelledby="tzFeatH">
-    <header class="tz-fh"><h2 class="tz-h" id="tzFeatH">${live ? `<span class="tz-pill live">Live</span>` : ""}${kick}</h2>
-      ${cur ? `<span class="tz-cur">${HI.veto}<span><small>Current stage</small><b>${esc(cur)}</b></span></span>` : ""}</header>
-    <div class="tz-fcard">
-      ${side(0)}
-      <div class="tz-fmid"><small>${esc(m.stage)}</small>${mid}<span class="tz-bo">${tzBo(m)}</span></div>
-      ${side(1)}
-      ${maps}
-      ${m.t1 && m.t2 ? `<a class="tz-fbtn" href="#m-${m.id}">View match details ${HI.arrow}</a>` : ""}
-    </div>
-  </section>`;
-}
-// the matches a table shows: live and coming up while the event runs, the latest results once it is over
-function tzTableRows(e) {
-  if (e.status === "finished") return { title: "Latest results", list: e.matches.filter(m => m.finished && m.t1 && m.t2).sort(byTime).reverse().slice(0, 8) };
-  const live = e.matches.filter(isLive).sort(byTime);
-  const soon = e.matches.filter(m => !m.finished && !isLive(m) && (!m.day || m.day >= daysBefore(DATA.as_of, 1))).sort(byTime);
-  const list = [...live, ...soon].slice(0, 8);
-  // nothing drawn and nothing dated yet: the bracket and the matches view already show the empty slots
-  return { title: "Live & upcoming matches", live: live.length, list: list.some(m => m.t1 || m.t2 || m.day) ? list : [] };
-}
-function tzTable(e) {
-  const { title, list, live } = tzTableRows(e);
-  if (!list.length) return "";
-  const row = m => {
-    const lv = isLive(m), played = m.finished || lv, w = tzWhen(m);
-    // the map: the one being played (live), the last one played, or the model's simulated first map
-    let mp = null, ml = "";
-    if (m.maps.length) { mp = m.maps[m.maps.length - 1].map; ml = lv ? `Map ${m.maps.length}` : `${m.maps.length} map${m.maps.length > 1 ? "s" : ""}`; }
-    else if (m.pred && m.t1 && m.t2) { const v = vetoFor(decode(m.pred), boOf(m)); if (v && v.maps && v.maps[0]) { mp = v.maps[0]; ml = "Model's veto"; } }
-    const time = lv ? `<span class="tz-pill live">Live</span><span>${esc(w.time)}</span>` : `<b>${esc(w.day)}</b><span>${esc(w.time)}</span>`;
-    return `<li class="tz-tr${lv ? " lv" : ""}">
-      <span class="tz-tt">${time}</span>
-      <span class="tz-ts"><b>${esc(m.stage)}</b><span>${tzBo(m)}</span></span>
-      ${tzTeam(m, 0, "a")}
-      <span class="tz-tsc">${played ? `<span class="${m.w1 > m.w2 ? "ca" : ""}">${m.w1}</span> - <span class="${m.w2 > m.w1 ? "cb" : ""}">${m.w2}</span>` : "—"}</span>
-      ${tzTeam(m, 1, "b")}
-      <span class="tz-tmap"${mp && !m.maps.length ? ` title="Map 1 of the model's simulated veto"` : ""}>${mp ? `${IMG.maps[mp] ? `<img src="${IMG.maps[mp]}" alt="" width="64" height="36" loading="lazy" decoding="async">` : ""}<span><b>${esc(mp)}</b><small>${ml}</small></span>` : `<span class="dim">—</span>`}</span>
-      ${m.t1 && m.t2 ? `<a class="tz-vbtn" href="#m-${m.id}" aria-label="View ${esc(matchName(m))}">View</a>` : `<span class="tz-vbtn off" aria-hidden="true">View</span>`}
-    </li>`;
-  };
-  return `<section class="tz-panel tz-table" aria-labelledby="tzTabH">
-    <header class="tz-ph"><h2 class="tz-h" id="tzTabH">${esc(title)}${live ? ` <span class="tz-pill live">Live</span>` : ""}</h2><a href="#e-${e.slug}.matches">All matches ${HI.arrow}</a></header>
-    <ul class="tz-trows">${list.map(row).join("")}</ul>
-    <p class="tz-note">Times in your time zone${list.find(m => m.when) ? ` (${esc(tz(list.find(m => m.when).when))})` : ""}.</p>
-  </section>`;
-}
-// Group / Swiss standings with a filter chip per group; else a short bracket summary
-const tzGrp = {};    // slug -> the group shown ("" = all)
-function tzStandings(e) {
-  const groups = groupTables(e);
-  if (groups.length) {
-    const pick = groups.some(([n]) => n === tzGrp[e.slug]) ? tzGrp[e.slug] : "";
-    const shown = pick ? groups.filter(([n]) => n === pick) : groups;
-    const short = n => n.replace(/^group stage\s*/i, "").replace(/^group\s+/i, "") || n;
-    const table = ([name, rows]) => `${shown.length > 1 ? `<h3 class="tz-gname">${esc(name)}</h3>` : ""}<table class="tz-gt">
-      <thead><tr><th>#</th><th>Team</th><th class="n">W-L</th><th class="n" title="Maps won-lost">Maps</th></tr></thead>
-      <tbody>${rows.map((r, i) => `<tr class="${e.swiss && r.w >= 3 ? "up" : e.swiss && r.l >= 3 ? "out" : ""}" style="${(T[r.team]?.color || [])[0] ? `--tc:${T[r.team].color[0]}` : ""}"><td>${i + 1}</td><td>${tlink(r.team)}</td><td class="n">${r.w}-${r.l}</td><td class="n">${r.mw}-${r.ml}</td></tr>`).join("")}</tbody></table>`;
-    return `<section class="tz-panel tz-stand" aria-labelledby="tzStH">
-      <header class="tz-ph"><h2 class="tz-h" id="tzStH">${e.swiss ? "Swiss stage standings" : "Group stage standings"}</h2><a href="#e-${e.slug}.standings">Standings ${HI.arrow}</a></header>
-      ${groups.length > 1 ? `<div class="tz-chips sm" role="group" aria-label="Group">${[["", "All groups"], ...groups.map(([n]) => [n, short(n)])].map(([k, l]) => `<button type="button" data-tzgrp="${esc(k)}" data-ev="${e.slug}" aria-pressed="${pick === k}">${esc(l)}</button>`).join("")}</div>` : ""}
-      ${shown.map(table).join("")}
-      ${e.swiss ? `<p class="tz-note">Series won-lost; 3 wins to advance, 3 losses out.</p>` : `<p class="tz-note">Series won-lost and maps won-lost.</p>`}
-    </section>`;
-  }
-  const cols = playoffCols(e);
-  if (!cols.length) return "";
-  const line = m => `<a class="tz-bl" href="${m.t1 && m.t2 ? `#m-${m.id}` : `#e-${e.slug}.bracket`}">${tzTeam(m, 0, winnerOf(m) && winnerOf(m) !== m.t1 ? "lost" : "")}<span class="tz-tsc">${m.finished || isLive(m) ? `${m.w1}-${m.w2}` : "—"}</span>${tzTeam(m, 1, winnerOf(m) && winnerOf(m) !== m.t2 ? "lost" : "")}</a>`;
-  return `<section class="tz-panel tz-stand" aria-labelledby="tzStH">
-    <header class="tz-ph"><h2 class="tz-h" id="tzStH">Bracket</h2><a href="#e-${e.slug}.bracket">Full bracket ${HI.arrow}</a></header>
-    ${bracketBlocks(cols).flatMap(([, cs]) => cs.flatMap(c => [`<h3 class="tz-gname">${esc(c.label)}</h3>`, ...bySlot(c.list).map(line)])).slice(0, 12).join("")}
-  </section>`;
-}
-// The next scheduled series, by the visitor's own day (Today / Tomorrow / a date)
-function tzNext(e) {
-  const list = e.matches.filter(m => pendingNow(m)).sort(byTime).slice(0, 6);
-  if (!list.length) return "";
-  let last = null;
-  const rows = list.map(m => {
-    const w = tzWhen(m), head = w.day !== last ? `<h3 class="tz-nday">${esc(w.day)}</h3>` : "";
-    last = w.day;
-    const inner = `<span class="tz-nt">${esc(w.time || "TBA")}</span>${tzTeam(m, 0, "a")}<i>vs</i>${tzTeam(m, 1, "b")}<span class="tz-nbo">${tzBo(m)}</span>${HI.next}`;
-    return head + (m.t1 && m.t2 ? `<a class="tz-nx" href="#m-${m.id}">${inner}</a>` : `<div class="tz-nx">${inner}</div>`);
-  }).join("");
-  return `<section class="tz-panel tz-next" aria-labelledby="tzNxH">
-    <header class="tz-ph"><h2 class="tz-h" id="tzNxH">Next matches</h2><a href="#e-${e.slug}.matches">Schedule ${HI.arrow}</a></header>${rows}</section>`;
+  const tabs = `<div class="ho-tabs"><nav class="ho-tl" aria-label="Tournament sections">${secs.map(([k, l, i]) => `<a href="#e-${slug}${k ? "." + k : ""}"${k === sub ? ` aria-current="page"` : ""}>${i}${l}</a>`).join("")}</nav>
+    <div class="ho-tr2">${statusChip(e)}</div></div>`;
+  return `<nav class="crumb" aria-label="Breadcrumb"><a href="#events">Tournaments</a><span>/</span><span>${esc(e.name)}</span></nav>
+  <div class="ho ho-m ho-ev">
+    ${hoComing(up, `Coming up at ${shortEv(e.name)}`, `#e-${slug}.matches`)}
+    ${evCardHtml(e, favBtn(e, true), "h1")}
+    ${court}${evStandPanel(e)}${tabs}
+    <div class="ho-body" id="hoBody">${body}</div>
+    ${evRail(e, ms)}
+  </div>`;
 }
 // what the winners of the live and next series play next (single-elimination brackets only)
-function tzPaths(e) {
+function evPaths(e) {
   const ms = [...e.matches.filter(isLive), ...e.matches.filter(m => pendingNow(m) && m.t1 && m.t2)].sort(byTime).slice(0, FOLLOW.hubNext);
   const steps = ms.map(m => ({ m, s: nextStep(m) })).filter(x => x.s);
   if (!steps.length) return "";
-  return `<section class="tz-panel"><header class="tz-ph"><h2 class="tz-h">What the winners play next</h2></header><div class="hubpath">${steps.map(({ m, s }) => `<a href="#m-${s.m.id}"><span class="dim">${esc(matchName(m))}</span><span>→ ${esc(s.m.stage)}${s.m.day ? `, ${esc(wday(localDay(s.m.when) || s.m.day))} ${esc(fmtDay(localDay(s.m.when) || s.m.day))}` : ""} vs ${s.opp}</span></a>`).join("")}</div></section>`;
-}
-function tzOverview(e) {
-  const rec = evRecord(e);
-  const left = [tzFeatured(e), tzTable(e), rec ? `<section class="tz-panel tz-rec"><header class="tz-ph"><h2 class="tz-h">How the model called it</h2></header>${recordLine(e, rec)}</section>` : ""].join("");
-  const right = [tzStandings(e), tzNext(e), tzPaths(e), e.status !== "live" ? standings(e) : ""].join("");
-  const none = `<section class="tz-panel"><p class="empty">${e.matches.length ? "Teams and match times are not set yet." : "No schedule published yet."}${evTeamCount(e) ? ` See the <a href="#e-${e.slug}.teams">teams</a>.` : ""}</p></section>`;
-  if (!left.trim() && !right.trim()) return none;
-  return `<div class="tz-ov"><div class="tz-col">${left || none}</div><div class="tz-col r">${right}</div></div>`;
+  return `<section class="ho-p"><header class="ho-h">${TZI.bracket}<div><h2>What the winners play next</h2></div></header><div class="hubpath">${steps.map(({ m, s }) => `<a href="#m-${s.m.id}"><span class="dim">${esc(matchName(m))}</span><span>→ ${esc(s.m.stage)}${s.m.day ? `, ${esc(wday(localDay(s.m.when) || s.m.day))} ${esc(fmtDay(localDay(s.m.when) || s.m.day))}` : ""} vs ${s.opp}</span></a>`).join("")}</div></section>`;
 }
 
-/* ---------------- tournament sub-views: matches by day, brackets, standings, map stats ---------------- */
+/* ---------------- tournament sections: matches by day, brackets, standings, map stats ---------------- */
 function evDays(e) {
   const days = [...new Set(e.matches.map(m => m.day).filter(Boolean))].sort();
   if (!days.length) return `<section class="panel"><p class="empty">No schedule published yet. ${e.participants.length ? `See <a class="btn" href="#e-${e.slug}.teams">Teams & lineups</a> or <a class="btn" href="#e-${e.slug}.matchup">build a matchup</a>.` : ""}</p></section>`;
@@ -4854,7 +4563,6 @@ function evPoolPanel(e) {
       <span class="cond">${esc(mp)}<small>${esc(DATA.map_info[mp]?.location || "")}${n ? `, played ${n}×` : ""}</small></span></button>`;
     }).join("")}</div></section>${mapPanel(e)}`;
 }
-
 // Bracket columns split into one block per stage ("Play-In", "Group Stage Group A", "Playoffs"),
 // so a play-in, its groups and the playoffs are not squeezed into a single row of columns
 const ELIM = ["Round of 32", "Round of 16", "Quarterfinal", "Semifinal", "Third-place match", "Grand final"];
@@ -5858,7 +5566,8 @@ function route() {
   $("#view").classList.toggle("rwide", h === "record");
   // the top bar follows the page width so its edges line up with the content
   document.body.dataset.w = h === "record" ? "rwide" : (!h || h === "home" || h === "compare") ? "wide" : "";
-  const evWide = h === "events" || h.startsWith("e-"); $("#view").classList.toggle("ewide", evWide); if (evWide) document.body.dataset.w = "ewide";
+  // tournament pages use the home page's width and grid
+  const evWide = h === "events" || h.startsWith("e-"); $("#view").classList.toggle("ewide", evWide); if (evWide) document.body.dataset.w = "wide";
   const v = $("#view");
   document.body.dataset.page = tab === "home" ? "home" : "";
   v.innerHTML = html;
@@ -5905,16 +5614,16 @@ document.addEventListener("click", e => {
     if (FAVS.has(slug)) FAVS.delete(slug); else FAVS.add(slug);
     saveFavs(); rerender(); refreshPop(); updateBell(); return;
   }
+  const tzp = e.target.closest("[data-tzpg]");
+  if (tzp) { tzPage += +tzp.dataset.tzpg; tzRefreshList(); return; }
   const tzs = e.target.closest("[data-tzsel]");
   if (tzs) { tzSelect(tzs.dataset.tzsel); return; }
   const tst = e.target.closest("[data-tzst]");
   if (tst) {   // list status chips: only the rows change
-    tzF.st = tst.dataset.tzst;
+    tzF.st = tst.dataset.tzst; tzPage = 0;
     document.querySelectorAll("[data-tzst]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tzst === tzF.st)));
     tzRefreshList(); return;
   }
-  const tgr = e.target.closest("[data-tzgrp]");
-  if (tgr) { tzGrp[tgr.dataset.ev] = tgr.dataset.tzgrp; rerender(); const b = $(`[data-tzgrp="${CSS.escape(tgr.dataset.tzgrp)}"]`); if (b) b.focus({ preventScroll: true }); return; }
   const day = e.target.closest("[data-day]");
   if (day) { dayPick[day.dataset.ev] = day.dataset.day; rerender(); return; }
   const em = e.target.closest("[data-evmap]");
@@ -6037,8 +5746,17 @@ document.addEventListener("keydown", e => {
   const r = e.key === "Enter" && e.target.closest && e.target.closest("[data-tzsel]");
   if (r) { e.preventDefault(); location.hash = `e-${r.dataset.tzsel}`; }
 });
-document.addEventListener("input", e => { if (e.target.id === "tzQ") { tzF.q = e.target.value; tzRefreshList(); } });
-document.addEventListener("change", e => { if (e.target.id === "tzRg") { tzF.rg = e.target.value; tzRefreshList(); } });
+// a resize that changes how many rows fit keeps the selected event in view
+let tzRz = 0;
+addEventListener("resize", () => { clearTimeout(tzRz); tzRz = setTimeout(() => {
+  if (!$("#tzList")) return;
+  tzFitStrips(); tzFitTeams();
+  if (tzFit() === TZ_PER) return;
+  const k = tzOrder().filter(tzShown).findIndex(e => e.slug === tzSel);
+  TZ_PER = tzFit(); tzPage = k > 0 ? Math.floor(k / TZ_PER) : 0; tzRefreshList();
+}, 150); });
+document.addEventListener("input", e => { if (e.target.id === "tzQ") { tzF.q = e.target.value; tzPage = 0; tzRefreshList(); } });
+document.addEventListener("change", e => { if (e.target.id === "tzRg") { tzF.rg = e.target.value; tzPage = 0; tzRefreshList(); } });
 document.addEventListener("keydown", e => {
   const tb = e.target.closest && e.target.closest(".ho-tl [role=tab]");
   if (!tb || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;

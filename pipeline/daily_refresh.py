@@ -301,31 +301,61 @@ STALE_FAIL_MINUTES = 30    # live runs turn red only after pages have been stale
 
 
 MATCH_LEAD = timedelta(minutes=30)   # start asking this long before a match is due
-MATCH_TAIL = timedelta(hours=4)      # ...and keep asking until this long after its start (Bo5 + delays)
+# ...and keep asking until the match is finished, up to this long after its SCHEDULED start.
+# Scheduled times slip (earlier series run long, tech pauses, overtime): on 2026-10-15 Legacy-FURIA
+# was scheduled 20:50 CEST, was still on map 3 past the old 4 h tail, and its result reached the
+# site 4.5 hours late -- with the next match already showing Legacy as the opponent. A match with
+# a map already on the page is certainly under way, so it keeps the longer tail.
+MATCH_TAIL = timedelta(hours=12)
+MATCH_TAIL_STARTED = timedelta(hours=24)
+OVERDUE_ALERT = timedelta(hours=12)  # unfinished this long after its start: the data is behind, not the match slow
+OVERDUE_GIVE_UP = timedelta(days=2)  # ...and older than this it is a cancelled / unreported match, not a refresh problem
+
+
+def _match_start(m):
+    when = m.get("when")
+    if not when:
+        return None
+    try:
+        start = datetime.fromisoformat(when)
+    except ValueError:
+        return None
+    return start if start.tzinfo else start.replace(tzinfo=timezone.utc)
 
 
 def match_window_active(ev, now):
     """True while one of the event's unfinished matches is about to start, is under
-    way, or is overdue (started less than MATCH_TAIL ago). A match that has a date
-    but no start time yet counts for that whole day. Outside these windows nothing
-    on the page can change, so there is nothing to ask Liquipedia."""
+    way, or is overdue (see MATCH_TAIL). A match that has a date but no start time
+    yet counts for that whole day. Outside these windows nothing on the page can
+    change, so there is nothing to ask Liquipedia."""
     today = now.date().isoformat()
     for m in ev.get("matches", []):
         if m.get("finished"):
             continue
-        when = m.get("when")
-        if when:
-            try:
-                start = datetime.fromisoformat(when)
-            except ValueError:
-                continue
-            if start.tzinfo is None:
-                start = start.replace(tzinfo=timezone.utc)
-            if start - MATCH_LEAD <= now <= start + MATCH_TAIL:
+        start = _match_start(m)
+        if start:
+            tail = MATCH_TAIL_STARTED if m.get("maps") else MATCH_TAIL
+            if start - MATCH_LEAD <= now <= start + tail:
                 return True
-        elif m.get("day") == today:
+        elif not m.get("when") and m.get("day") == today:
             return True
     return False
+
+
+def overdue_matches(now=None, events=None):
+    """Unfinished matches of tracked events that started more than OVERDUE_ALERT ago
+    (and less than OVERDUE_GIVE_UP): "event: A vs B (scheduled ...)". A series
+    does not take 12 hours, so each one is a result the site is missing."""
+    now = now or _now()
+    out = []
+    for e in (events if events is not None else E.discover()):
+        for m in e.get("matches", []):
+            start = _match_start(m)
+            if m.get("finished") or not start or not (m.get("t1") and m.get("t2")):
+                continue
+            if OVERDUE_ALERT < now - start < OVERDUE_GIVE_UP:
+                out.append(f"{e['name']}: {m['t1']} vs {m['t2']} (scheduled {m['when']})")
+    return sorted(out)
 
 
 def live_titles(today, now=None, force=False):

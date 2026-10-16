@@ -10,6 +10,8 @@ old data. This script looks from the outside and answers three questions.
   A. LIVE PAGES  Does Liquipedia hold newer content for a live tournament than
                  the repo's cache? (one request per run, only while a tracked
                  tournament is on; none otherwise)
+  A2. OVERDUE    Is any tracked match unfinished in the data 12+ hours after its
+                 start? (a missing result; no network, starts a forced live refresh)
   B. REFRESH     Did the last refresh say it could not update a live page?
                  (data/refresh_status.json)
   D. VALVE       Are the stored Valve Regional Standings (data/vrs.json) older
@@ -130,8 +132,8 @@ def main(argv=None):
     heal = False      # B: a fresh refusal -> start the live refresh without failing the run
 
     # A. live pages against Liquipedia
+    import daily_refresh as dr
     if "--no-liquipedia" not in argv:
-        import daily_refresh as dr
         live = dr.live_titles(date.today())
         recent = minutes_since_data_commit("data")
         if live and recent < RECENT_REFRESH_MIN:
@@ -145,6 +147,12 @@ def main(argv=None):
                 print(f"live pages current with Liquipedia: {sorted(live)}")
         else:
             print("no match is due, under way or overdue: nothing to ask Liquipedia")
+
+    # A2. results the site is missing no matter what the live window says: a series that
+    # started 12+ hours ago and is still unfinished in the data (2026-10-15: Legacy-FURIA)
+    overdue = dr.overdue_matches() if "--no-liquipedia" not in argv else []
+    for o in overdue:
+        problems.append(f"no result recorded for a match that started 12+ hours ago: {o}")
 
     # B. what the last refresh reported
     try:

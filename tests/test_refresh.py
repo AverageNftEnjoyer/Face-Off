@@ -178,8 +178,9 @@ class TestMatchWindows(unittest.TestCase):
         self.assertFalse(dr.match_window_active(ev, self._at(17, 20)))   # 40 min before
         self.assertTrue(dr.match_window_active(ev, self._at(17, 35)))    # inside the 30 min lead
         self.assertTrue(dr.match_window_active(ev, self._at(20, 30)))    # under way
-        self.assertTrue(dr.match_window_active(ev, self._at(21, 59)))    # still overdue, within 4 h
-        self.assertFalse(dr.match_window_active(ev, self._at(22, 5)))    # given up
+        self.assertTrue(dr.match_window_active(ev, self._at(21, 59)))    # still overdue
+        self.assertTrue(dr.match_window_active(ev, self._at(23, 30)))    # 5.5 h in: the old 4 h tail lost the result
+        self.assertFalse(dr.match_window_active(ev, self._at(6, 5, day=11)))   # 12 h on: given up
 
     def test_finished_matches_never_count(self):
         ev = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10", "finished": True})
@@ -188,7 +189,25 @@ class TestMatchWindows(unittest.TestCase):
     def test_time_zone_offsets_are_respected(self):
         ev = self._ev({"when": "2026-10-10T20:00:00+02:00", "day": "2026-10-10"})   # 18:00 UTC
         self.assertTrue(dr.match_window_active(ev, self._at(18, 10)))
-        self.assertFalse(dr.match_window_active(ev, self._at(23)))
+        self.assertFalse(dr.match_window_active(ev, self._at(7, day=11)))
+
+    def test_match_with_a_map_on_the_page_keeps_asking_longer(self):
+        """2026-10-15 Legacy-FURIA: two maps done, third under way, past the plain tail."""
+        ev = self._ev({"when": "2026-10-10T18:00:00+00:00", "day": "2026-10-10", "maps": [{"map": "Cache"}]})
+        self.assertTrue(dr.match_window_active(ev, self._at(8, day=11)))
+        self.assertFalse(dr.match_window_active(ev, self._at(19, day=11)))
+
+    def test_overdue_matches_lists_missing_results(self):
+        ev = dict(self._ev(
+            {"when": "2026-10-10T18:00:00+00:00", "t1": "Legacy", "t2": "FURIA"},          # 14 h ago: missing result
+            {"when": "2026-10-10T18:00:00+00:00", "t1": "A", "t2": "B", "finished": True},  # has its result
+            {"when": "2026-10-10T08:00:00+00:00", "t1": "C", "t2": "D"},                    # 24 h ago: missing result
+            {"when": "2026-10-10T23:00:00+00:00", "t1": "E", "t2": "F"},                    # only 9 h ago: just slow
+            {"when": "2026-10-10T18:00:00+00:00", "t1": None, "t2": "G"}), name="Alpha Cup")  # opponent unknown
+        got = dr.overdue_matches(self._at(8, day=11), events=[ev])
+        self.assertEqual(len(got), 2)
+        self.assertIn("Alpha Cup: Legacy vs FURIA (scheduled 2026-10-10T18:00:00+00:00)", got)
+        self.assertEqual(dr.overdue_matches(self._at(8, day=14), events=[ev]), [])        # cancelled, not a refresh problem
 
     def test_match_with_a_date_but_no_time_counts_all_that_day(self):
         ev = self._ev({"day": "2026-10-10"})

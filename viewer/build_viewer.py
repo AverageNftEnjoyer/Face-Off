@@ -40,6 +40,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import paths  # noqa: E402,F401  (puts every code folder on sys.path)
 
 import backtest as bt  # noqa: E402
+import event_art as EA  # noqa: E402  (generated per-tournament key art)
 import events as E  # noqa: E402
 import notes_data as ND  # noqa: E402  (the page's copy of the matchup notes)
 import predictor as pr  # noqa: E402
@@ -85,6 +86,10 @@ class ImageWriter:
         ext = ext if ext in self.EXTS else ".png"
         with open(path, "rb") as f:
             raw = f.read()
+        return self.put(raw, ext)
+
+    def put(self, raw, ext):
+        """Write bytes made at build time (e.g. generated art) under their content hash."""
         name = _short_hash(raw) + ext
         if name not in self.names:
             dst = os.path.join(self.dir, name)
@@ -850,6 +855,25 @@ def media_files(sub):
             if os.path.splitext(fn)[1].lower() in ImageWriter.EXTS}
 
 
+def event_colors(assets):
+    """{event slug: "#rrggbb"}: the first saturated colour of each event logo (PNG only);
+    an all-white or grey logo has none and the page falls back to its accent."""
+    import colorsys
+    out, seen = {}, {}
+    for slug, p in assets["event_logos"].items():
+        if not p or not p.lower().endswith(".png"):
+            continue
+        if p not in seen:
+            seen[p] = None
+            for c in TC.logo_colors(os.path.join(ROOT, p)):
+                if c and colorsys.rgb_to_hsv(*(int(c[i:i + 2], 16) / 255 for i in (1, 3, 5)))[1] >= 0.35:
+                    seen[p] = c.lower()
+                    break
+        if seen[p]:
+            out[slug] = seen[p]
+    return out
+
+
 def main(out_path):
     # --- bundle contract -----------------------------------------------------
     # The viewer renders EXCLUSIVELY from viewer/data-bundle.json (schema:
@@ -884,11 +908,12 @@ def main(out_path):
         "maps": {mp: imw.url(v["path"]) for mp, v in assets["maps"].items()},
         "flags": {c: imw.url(p) for c, p in assets["flags"].items() if p},
         "events": {s: imw.url(p) for s, p in assets["event_logos"].items() if p},
-        # tournament art (optional, supplied by hand): viewer/media/events/<event slug>.<ext> for one
-        # event, viewer/media/cities/<city slug>.<ext> for every event in that city; the page falls
-        # back to map art from the event's pool when neither exists
+        # tournament art: viewer/media/events/<event slug>.<ext> supplied by hand for one event,
+        # else key art generated from the event logo's colours (event_art), else map art from the pool
         "evart": media_dir("events"),
-        "cityart": media_dir("cities"),
+        "evgen": {s: imw.put(svg.encode("utf-8"), ".svg") for s, svg in EA.all_event_art(assets, ROOT).items()},
+        # each event logo's first saturated colour (tints the tournament art), from team_colors' decoder
+        "evcolor": event_colors(assets),
         # the site background (a darkened, desaturated Mirage still; viewer/media/site_bg.jpg)
         "site": {"bg": imw.url("viewer/media/site_bg.jpg")} if os.path.exists(os.path.join(ROOT, "viewer", "media", "site_bg.jpg")) else {},
     }
