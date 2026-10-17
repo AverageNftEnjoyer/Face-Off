@@ -183,12 +183,12 @@
    "region": "eu",
    "roster": [
     {
-     "id": "wasiNk",
-     "name": "Damien Dufour",
+     "id": "BENOITOZOR",
+     "name": "Benoît Compagnaud",
      "flag": "fr",
      "igl": false,
-     "role": "Coach",
-     "joined": "2026-02-24"
+     "role": "Founder & Chief Executive Officer",
+     "joined": ""
     }
    ],
    "icon": "3DMAX 2024 allmode.png",
@@ -2020,14 +2020,6 @@
      "igl": false,
      "role": "",
      "joined": "2026-03-14"
-    },
-    {
-     "id": "jR",
-     "name": "Dmytro Chervak",
-     "flag": "ua",
-     "igl": false,
-     "role": "Coach",
-     "joined": "2025-09-25"
     }
    ],
    "icon": "Inner Circle 2025 allmode.png",
