@@ -35,6 +35,15 @@ def code_files():
     return out
 
 
+def _git_ignored(rel):
+    """True when git ignores `rel` (a generated file that need not exist in a fresh checkout)."""
+    import subprocess
+    try:
+        return subprocess.run(["git", "check-ignore", "-q", rel], cwd=ROOT, capture_output=True).returncode == 0
+    except OSError:
+        return False
+
+
 class TestArchitectureDoc(unittest.TestCase):
     def test_every_code_file_is_in_the_module_map(self):
         text = doc_text()
@@ -48,6 +57,8 @@ class TestArchitectureDoc(unittest.TestCase):
         gone = sorted(p for p in named
                       if not p.startswith(("data/", "public/", "out/"))   # data/ and outputs: generated or listed by name
                       and not os.path.exists(os.path.join(ROOT, p)))
+        # generated, gitignored files (the bundle, the notes snapshot) exist only after a build
+        gone = [p for p in gone if not _git_ignored(p)]
         self.assertEqual(gone, [], "ARCHITECTURE.md names files that no longer exist")
 
     def test_every_code_folder_is_documented(self):
