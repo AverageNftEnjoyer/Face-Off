@@ -218611,6 +218611,56 @@
   "kind": "main"
  },
  {
+  "match_id": "fd5dfc96746b",
+  "date": "2026-10-17",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "lavked",
+  "team_b": "Sökerorg",
+  "winner": "lavked",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "lavked"
+   },
+   {
+    "map": "Dust2",
+    "winner": "lavked"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399311",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "80e25c6f745b",
+  "date": "2026-10-17",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "ARK E-sports",
+  "team_b": "Martians",
+  "winner": "Martians",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "ARK E-sports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Martians"
+   },
+   {
+    "map": "Ancient",
+    "winner": "Martians"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399765",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
   "match_id": "a96dd7e23dd8",
   "date": "2026-10-17",
   "event": "Logitech G Pro Series 2026",
@@ -218730,6 +218780,79 @@
   "kind": "main"
  },
  {
+  "match_id": "d5e7e4f6dca4",
+  "date": "2026-10-17",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "Black Phoenix",
+  "team_b": "FORZE Reload",
+  "winner": "Black Phoenix",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Black Phoenix"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Black Phoenix"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399089",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "edda3e8fc8f8",
+  "date": "2026-10-17",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "GenOne",
+  "team_b": "Butterfly (Russian team)",
+  "winner": "GenOne",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "GenOne"
+   },
+   {
+    "map": "Inferno",
+    "winner": "GenOne"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399088",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "35f2f4f97217",
+  "date": "2026-10-17",
+  "event": "PGL Bucharest 2027: Closed Qualifier",
+  "team_a": "EYEBALLERS",
+  "team_b": "GamerLegion",
+  "winner": "EYEBALLERS",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Mirage",
+    "winner": "GamerLegion"
+   },
+   {
+    "map": "Nuke",
+    "winner": "EYEBALLERS"
+   },
+   {
+    "map": "Inferno",
+    "winner": "EYEBALLERS"
+   }
+  ],
+  "event_page": "PGL/2027/Bucharest/Qualifier",
+  "ext_match_id": "2399659",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
   "match_id": "06cd8a97c710",
   "date": "2026-10-17",
   "event": "PGL Bucharest 2027: Closed Qualifier",
@@ -218751,6 +218874,29 @@
   "ext_match_id": "2399658",
   "tier": "B",
   "kind": "qualifier"
+ },
+ {
+  "match_id": "364bbf36ecb7",
+  "date": "2026-10-17",
+  "event": "Stake Pulse Beat III",
+  "team_a": "MIBR",
+  "team_b": "100 Thieves",
+  "winner": "MIBR",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "MIBR"
+   },
+   {
+    "map": "Mirage",
+    "winner": "MIBR"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399267",
+  "tier": "B",
+  "kind": "main"
  },
  {
   "match_id": "38b52c94cc67",

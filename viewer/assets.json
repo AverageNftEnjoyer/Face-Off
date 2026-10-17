@@ -2308,6 +2308,67 @@
    "logo_path": "data/raw/media/61f3c599fbdd3554.png",
    "logo_dark_path": "data/raw/media/61f3c599fbdd3554.png"
   },
+  "Luminosity": {
+   "page": "Luminosity",
+   "logo": "Luminosity Gaming 2018 full lightmode.png",
+   "logo_dark": "Luminosity Gaming 2018 full darkmode.png",
+   "location": "Canada",
+   "region": "eu",
+   "roster": [
+    {
+     "id": "afro",
+     "name": "Aurélien Drapier",
+     "flag": "fr",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-01"
+    },
+    {
+     "id": "AZUWU",
+     "name": "Oscar Bell",
+     "flag": "uk",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-01"
+    },
+    {
+     "id": "Rainwaker",
+     "name": "Aleks Petrov",
+     "flag": "bg",
+     "igl": false,
+     "role": "",
+     "joined": "2026-07-01"
+    },
+    {
+     "id": "lux",
+     "name": "Lucas Meneghini",
+     "flag": "br",
+     "igl": true,
+     "role": "",
+     "joined": "2026-07-01"
+    },
+    {
+     "id": "yxngstxr",
+     "name": "Simon Boije",
+     "flag": "se",
+     "igl": false,
+     "role": "",
+     "joined": "2026-08-25"
+    },
+    {
+     "id": "kakafu",
+     "name": "Alexander Szymanczyk",
+     "flag": "at",
+     "igl": false,
+     "role": "Coach",
+     "joined": "2026-08-25"
+    }
+   ],
+   "icon": "Luminosity Gaming 2018 full lightmode.png",
+   "icon_dark": "Luminosity Gaming 2018 full darkmode.png",
+   "logo_path": "data/raw/media/258ec0c087d097c6.png",
+   "logo_dark_path": "data/raw/media/8ec307406e5fd687.png"
+  },
   "Luminosity Gaming": {
    "page": "Luminosity Gaming",
    "logo": "Luminosity Gaming 2018 full lightmode.png",
