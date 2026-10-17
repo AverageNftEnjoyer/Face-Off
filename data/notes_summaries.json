@@ -1,5 +1,17 @@
 {
  "recaps": {
+  "thunderpick-world-champi-2": {
+   "day": "2026-10-14",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "Falcons pull through Ancient OT, then roll Dust2 to seal 2-0 as NiP’s new roster falters",
+   "input_hash": "aea5a8ac556f",
+   "model": "gpt-5-nano",
+   "result": "correct",
+   "summary": "The Falcons leaned on map pressure and roster cohesion to outrun NiP across the vetoed map pool. Ancient went to OT after a tight CT/T balance (8-8, then 16-13 in OT) as Falcons started on CT; Dust2 followed with a commanding 13-6 finish after a strong T-half (Falcons 8, NiP 2 in the second). The simulated veto favored Mirage, Nuke, Inferno for Falcons, but Ancient and Dust2 played instead and the model’s favored maps didn’t align with the actual picks. The model predicted an 81.5% Falcons win with a 2-0 score and correctly forecasted the winner, but the exact map path diverged from the veto expectations. Standouts can’t be named with per-player stats here, as those aren’t in the data. In the pre-match context, Falcons had a stable five and recent form while NiP field a refreshed lineup with two new players joining in late September, a factor the input ties to NiP’s short 27 days together. Look for Falcons to press their map-control edge as the tournament progresses.",
+   "team_a": "Team Falcons",
+   "team_b": "Ninjas in Pyjamas",
+   "winner": "Team Falcons"
+  },
   "thunderpick-world-champi-3": {
    "day": "2026-10-14",
    "generated_at": "2026-10-16T12:00:24Z",
@@ -11,6 +23,18 @@
    "team_a": "Legacy",
    "team_b": "PARIVISION",
    "winner": "Legacy"
+  },
+  "thunderpick-world-champi-4": {
+   "day": "2026-10-14",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "FURIA ride the veto edge and close it 2-0, Mirage seals the win after Ancient sets pace",
+   "input_hash": "872b06d5df63",
+   "model": "gpt-5-nano",
+   "result": "correct",
+   "summary": "FURIA exploited a favorable map mix and a strong early CT side on Ancient to push the series out of reach before BetBoom could stabilize. Ancient went 13-10 for FURIA after a CT-heavy first half, then Mirage followed with a cleaner 13-9 on the T side for FURIA, keeping BetBoom at arm’s length. The simulated veto favored FURIA on Mirage and Nuke, with Cache as a softer edge; Mirage validated the larger edge, while the veto reveal showed Mirage as the turn map in this series. The model’s call aligned with reality: FURIA’s 2-0 victory matched the predicted score and the primary mechanism was the stronger map pool and better execution on the contentious picks, supported by the Elo-led strength assessment. Per-player stats aren’t provided in this dataset, so I can’t single out individuals; I can only cite team-level trends and roster stability as the driver here. In short, FURIA’s cohesion and map-read on the veto did the heavy lifting; BetBoom couldn’t claw back on the second map. Look to FURIA’s next match to see if this veto momentum holds against tighter competition.",
+   "team_a": "FURIA",
+   "team_b": "BetBoom Team",
+   "winner": "FURIA"
   },
   "thunderpick-world-champi-5": {
    "day": "2026-10-15",
@@ -42,11 +66,11 @@
   "1win-private-club-2-2": {
    "day": "2026-10-19",
    "favourite": "The MongolZ",
-   "generated_at": "2026-10-16T12:00:24Z",
-   "headline": "MongolZ favoured; clear edge despite volatility",
-   "input_hash": "910edb849b47",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "The MongolZ are the favourite, with a clear edge",
+   "input_hash": "d9635690246f",
    "model": "gpt-5-nano",
-   "summary": "The model favours The MongolZ and conveys a clear favourite status with reasonable confidence. The strongest counted factor favors The MongolZ due to the Elo gap, which supports them, while the second counted factor shows Alliance posting better results in the last handful of series in opposition to the MongolZ. In terms of the rest of the picture, nuanced context not counted notes rust from a long inactivity slate and a new roster for The MongolZ, alongside a recent trend in Alliance form. This non counted context should not be read as part of the win chance but it colors the overall feel of the matchup.",
+   "summary": "The model favours The MongolZ and signals clear favourite status with a high level of confidence. Counted factors place the edge with The MongolZ on team strength from the Elo gap, while Alliance shows marginally better form in the last several series. Additionally, map veto simulations lean toward The MongolZ on Inferno and Ancient, with a tainted but present advantage on Nuke. Context not counted highlights rust from no official games in months and a newly formed roster for The MongolZ, along with other non counted factors like rest, schedule, and past meetings that do not feed into the win probability.",
    "team_a": "Alliance",
    "team_b": "The MongolZ",
    "win_prob_a": 0.2929
@@ -54,14 +78,26 @@
   "1win-private-club-2-3": {
    "day": "2026-10-19",
    "favourite": "Fnatic",
-   "generated_at": "2026-10-16T12:00:24Z",
-   "headline": "Fnatic favored, with a narrow edge",
-   "input_hash": "781c900ac045",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "Fnatic slight favourite with a fairly clear read",
+   "input_hash": "c24d6f1385a6",
    "model": "gpt-5-nano",
-   "summary": "Fnatic is the slight favourite and the model carries a fairly clear read. The strongest counted factor is team strength gap, which leans Fnatic in their direction; the second factor is results over the last month versus what the rating expected, which also tips Fnatic. On the other hand, the context not counted in the win chance notes that Team Liquid have been essentially inactive for a stretch and added new players recently, which could influence their readiness and depth. The wider picture shows Team Liquid may carry rust and roster change that are not included in the win probability. This means the explicit win chance is a snapshot, while the non counted context could shift outcomes in the long run.",
+   "summary": "Fnatic is the slight favourite, with a fairly clear read. Counted factors lean Fnatic’s way, strongest by the Elo gap in Team strength; the next factor is last thirty days results, where Fnatic performed closer to expectations than Liquid. In the counted factors, Fnatic benefits from the team strength gap, while Liquid’s recent results lag in the eyes of the model. The overall context_not_counted notes that Liquid has no officials in a long span and a couple of roster changes recently, which is not counted in the win chance. Simulated veto maps hint Fnatic holding an edge on Cache, with Mirage and Dust two maps leaning toward Liquid, but those map opinions are not the win probability itself. The wider picture includes form and roster dynamics beyond the counted items, but those elements are not included in the win chance calculation.",
    "team_a": "Fnatic",
    "team_b": "Team Liquid",
    "win_prob_a": 0.526
+  },
+  "1win-private-club-2-4": {
+   "day": "2026-10-19",
+   "favourite": "PARIVISION",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "PARIVISION a clear favourite as PARIVISION edges ahead on Elo and recent form",
+   "input_hash": "a795d17a593b",
+   "model": "gpt-5-nano",
+   "summary": "PARIVISION is the clear favourite, with confidence described as a clear read. The strongest factor is the Elo gap, which benefits PARIVISION. Next, PARIVISION gains from the latest thirty days results versus what the rating expected, while head to head in the past year favours magic. The last five series tilt slightly toward PARIVISION. On the wider stage, magic has a stand in and a longer rest, while PARIVISION has had a short rest after recent action; the non counted context notes a rust risk for magic and a prior meeting where magic won, but these parts are not used to judge the win chance.",
+   "team_a": "PARIVISION",
+   "team_b": "magic",
+   "win_prob_a": 0.5932
   },
   "thunderpick-world-champi-10": {
    "day": "2026-10-16",
@@ -74,7 +110,31 @@
    "team_a": "Legacy",
    "team_b": "BetBoom Team",
    "win_prob_a": 0.6145
+  },
+  "thunderpick-world-champi-11": {
+   "day": "2026-10-17",
+   "favourite": "Aurora Gaming",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "Aurora Gaming favored with a clear read",
+   "input_hash": "df7ef4eef75c",
+   "model": "gpt-5-nano",
+   "summary": "Aurora Gaming is the slight favourite with a clear read. The strongest counted factor is team strength from the Elo gap, which tips toward Aurora Gaming. The next factor is last thirty days results versus rating expectations, which also leans toward Aurora Gaming. Head to head in the past year tilts toward FURIA, while the last five series give a slight edge to FURIA. The broader context shows FURIA facing a tight schedule and a long lived roster, while Aurora Gaming has a recent good run; this broader context is not counted in the win chance.",
+   "team_a": "Aurora Gaming",
+   "team_b": "FURIA",
+   "win_prob_a": 0.5102
+  },
+  "thunderpick-world-champi-12": {
+   "day": "2026-10-17",
+   "favourite": "Team Falcons",
+   "generated_at": "2026-10-17T11:16:20Z",
+   "headline": "Team Falcons clear favourite for the semifinal",
+   "input_hash": "fabb1702fc58",
+   "model": "gpt-5-nano",
+   "summary": "Team Falcons is the clear favourite and the model is confident in that reading. The strongest counted factor favours Team Falcons due to the Elo gap between the teams. The next counted factor, head to head over the past year, favours BetBoom Team, but only slightly. The last counted factor, results in the last thirty days compared to expectations, favours Team Falcons. The wider context from context_not_counted notes rest, schedule, streaks, roster stability, simulated veto maps, past meetings, player form, stand ins, and rumours, but that part is explicitly not counted in the win chance.",
+   "team_a": "Team Falcons",
+   "team_b": "BetBoom Team",
+   "win_prob_a": 0.8138
   }
  },
- "updated_at": "2026-10-16T12:00:24Z"
+ "updated_at": "2026-10-17T11:16:20Z"
 }
