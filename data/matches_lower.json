@@ -218034,6 +218034,33 @@
   "kind": "main"
  },
  {
+  "match_id": "0e871c78065b",
+  "date": "2026-10-16",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "BAKS Esports",
+  "team_b": "G2 Ares",
+  "winner": "BAKS Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "BAKS Esports"
+   },
+   {
+    "map": "Inferno",
+    "winner": "G2 Ares"
+   },
+   {
+    "map": "Dust2",
+    "winner": "BAKS Esports"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399309",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "7319592a7980",
   "date": "2026-10-16",
   "event": "CCT Europe 2026 Series #11",
@@ -218134,6 +218161,56 @@
   ],
   "event_page": "CCT/2026/South America/Series 7",
   "ext_match_id": "2399671",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "8409c4a9b241",
+  "date": "2026-10-16",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "Procyon Team",
+  "team_b": "Los Niños",
+  "winner": "Procyon Team",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Los Niños"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Procyon Team"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Procyon Team"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399672",
+  "tier": "C",
+  "kind": "main"
+ },
+ {
+  "match_id": "3d049f97a018",
+  "date": "2026-10-16",
+  "event": "CCT South America 2026 Series #7",
+  "team_a": "QUINTESSÊNCIA",
+  "team_b": "DAMAJUANA",
+  "winner": "QUINTESSÊNCIA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "QUINTESSÊNCIA"
+   },
+   {
+    "map": "Mirage",
+    "winner": "QUINTESSÊNCIA"
+   }
+  ],
+  "event_page": "CCT/2026/South America/Series 7",
+  "ext_match_id": "2399673",
   "tier": "C",
   "kind": "main"
  },
@@ -218284,6 +218361,56 @@
   "kind": "main"
  },
  {
+  "match_id": "74fa2ed392db",
+  "date": "2026-10-16",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "mellren",
+  "team_b": "ex-6666 Esports",
+  "winner": "mellren",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "mellren"
+   },
+   {
+    "map": "Ancient",
+    "winner": "ex-6666 Esports"
+   },
+   {
+    "map": "Mirage",
+    "winner": "mellren"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399086",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "513f2505e81e",
+  "date": "2026-10-16",
+  "event": "PGL Bucharest 2027: Closed Qualifier",
+  "team_a": "EYEBALLERS",
+  "team_b": "BBL Esports",
+  "winner": "BBL Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "BBL Esports"
+   },
+   {
+    "map": "Cache",
+    "winner": "BBL Esports"
+   }
+  ],
+  "event_page": "PGL/2027/Bucharest/Qualifier",
+  "ext_match_id": "2399656",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
   "match_id": "c80f7927f3e8",
   "date": "2026-10-16",
   "event": "PGL Bucharest 2027: Closed Qualifier",
@@ -218307,6 +218434,29 @@
   ],
   "event_page": "PGL/2027/Bucharest/Qualifier",
   "ext_match_id": "2399654",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "798d5fbcf44b",
+  "date": "2026-10-16",
+  "event": "PGL Bucharest 2027: Closed Qualifier",
+  "team_a": "GamerLegion",
+  "team_b": "ex-RUSTEC",
+  "winner": "ex-RUSTEC",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "ex-RUSTEC"
+   },
+   {
+    "map": "Inferno",
+    "winner": "ex-RUSTEC"
+   }
+  ],
+  "event_page": "PGL/2027/Bucharest/Qualifier",
+  "ext_match_id": "2399657",
   "tier": "B",
   "kind": "qualifier"
  },
@@ -218336,6 +218486,33 @@
   "ext_match_id": "2399655",
   "tier": "B",
   "kind": "qualifier"
+ },
+ {
+  "match_id": "91702d74b9d9",
+  "date": "2026-10-16",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Astralis",
+  "team_b": "MIBR",
+  "winner": "MIBR",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "Astralis"
+   },
+   {
+    "map": "Cache",
+    "winner": "MIBR"
+   },
+   {
+    "map": "Mirage",
+    "winner": "MIBR"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399264",
+  "tier": "B",
+  "kind": "main"
  },
  {
   "match_id": "82b66b08b7c5",
@@ -218384,6 +218561,75 @@
   ],
   "event_page": "Stake Pulse/Beat III",
   "ext_match_id": "2399262",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "ede5b9c3bc96",
+  "date": "2026-10-16",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Sangal Esports",
+  "team_b": "100 Thieves",
+  "winner": "100 Thieves",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "100 Thieves"
+   },
+   {
+    "map": "Dust2",
+    "winner": "100 Thieves"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399265",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a96dd7e23dd8",
+  "date": "2026-10-17",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "FlyQuest",
+  "team_b": "Rooster",
+  "winner": "FlyQuest",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "FlyQuest"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FlyQuest"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399544",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "ec5ac23ba901",
+  "date": "2026-10-17",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "NEXVOID",
+  "team_b": "Off Chops",
+  "winner": "NEXVOID",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "NEXVOID"
+   },
+   {
+    "map": "Ancient",
+    "winner": "NEXVOID"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399543",
   "tier": "B",
   "kind": "main"
  }
