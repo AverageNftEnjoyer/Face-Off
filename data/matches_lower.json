@@ -218588,6 +218588,29 @@
   "kind": "main"
  },
  {
+  "match_id": "04549b2baa7a",
+  "date": "2026-10-17",
+  "event": "CCT Europe 2026 Series #11",
+  "team_a": "G2 Ares",
+  "team_b": "ex-6666 Esports",
+  "winner": "ex-6666 Esports",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Inferno",
+    "winner": "ex-6666 Esports"
+   },
+   {
+    "map": "Dust2",
+    "winner": "ex-6666 Esports"
+   }
+  ],
+  "event_page": "CCT/2026/Europe/Series 11",
+  "ext_match_id": "2399310",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
   "match_id": "a96dd7e23dd8",
   "date": "2026-10-17",
   "event": "Logitech G Pro Series 2026",
@@ -218630,6 +218653,129 @@
   ],
   "event_page": "Logitech G Pro Series/2026",
   "ext_match_id": "2399543",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "d4a739e7474a",
+  "date": "2026-10-17",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "NEXVOID",
+  "team_b": "FlyQuest",
+  "winner": "FlyQuest",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "NEXVOID"
+   },
+   {
+    "map": "Dust2",
+    "winner": "FlyQuest"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FlyQuest"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399545",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "4fea9c25ab1c",
+  "date": "2026-10-17",
+  "event": "Logitech G Pro Series 2026",
+  "team_a": "Off Chops",
+  "team_b": "Rooster",
+  "winner": "Off Chops",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Nuke",
+    "winner": "Off Chops"
+   },
+   {
+    "map": "Cache",
+    "winner": "Off Chops"
+   }
+  ],
+  "event_page": "Logitech G Pro Series/2026",
+  "ext_match_id": "2399546",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "a9397b10c273",
+  "date": "2026-10-17",
+  "event": "NODWIN Clutch Series #13",
+  "team_a": "33",
+  "team_b": "Just Players",
+  "winner": "33",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Ancient",
+    "winner": "33"
+   },
+   {
+    "map": "Nuke",
+    "winner": "33"
+   }
+  ],
+  "event_page": "NODWIN Gaming/Clutch Series/13",
+  "ext_match_id": "2399087",
+  "tier": "B",
+  "kind": "main"
+ },
+ {
+  "match_id": "06cd8a97c710",
+  "date": "2026-10-17",
+  "event": "PGL Bucharest 2027: Closed Qualifier",
+  "team_a": "Eternal Fire",
+  "team_b": "Nuclear TigeRES",
+  "winner": "Nuclear TigeRES",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Anubis",
+    "winner": "Nuclear TigeRES"
+   },
+   {
+    "map": "Dust2",
+    "winner": "Nuclear TigeRES"
+   }
+  ],
+  "event_page": "PGL/2027/Bucharest/Qualifier",
+  "ext_match_id": "2399658",
+  "tier": "B",
+  "kind": "qualifier"
+ },
+ {
+  "match_id": "38b52c94cc67",
+  "date": "2026-10-17",
+  "event": "Stake Pulse Beat III",
+  "team_a": "Ninjas in Pyjamas",
+  "team_b": "HEROIC",
+  "winner": "Ninjas in Pyjamas",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Cache",
+    "winner": "Ninjas in Pyjamas"
+   },
+   {
+    "map": "Inferno",
+    "winner": "HEROIC"
+   },
+   {
+    "map": "Mirage",
+    "winner": "Ninjas in Pyjamas"
+   }
+  ],
+  "event_page": "Stake Pulse/Beat III",
+  "ext_match_id": "2399266",
   "tier": "B",
   "kind": "main"
  }
