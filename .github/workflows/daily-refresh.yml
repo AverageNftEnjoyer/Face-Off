@@ -25,7 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
+      # the branch tip, not the triggering commit: a run queued behind another refresh
+      # must start from the data that run just pushed
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-python@v6
         with:
@@ -79,7 +83,8 @@ jobs:
           fi
           git commit -m "Daily data refresh $(date -u +%Y-%m-%d)"
           # someone may have pushed code while this ran: replay the data commit on top
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          # on a conflict in the data files keep this run's own fresh fetch (-X theirs = the commit being replayed)
+          git pull --rebase --autostash -X theirs origin "${GITHUB_REF_NAME}"
           git push
 
       # Loud on failure: a red run must produce a visible issue, never silence.

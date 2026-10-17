@@ -39,7 +39,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # the branch tip, not the triggering commit: a run queued behind another refresh
+      # must start from the data that run just pushed
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-python@v6
         with:
@@ -72,7 +76,8 @@ jobs:
             exit 0
           fi
           git commit -m "Live data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          # on a conflict in the data files keep this run's own fresh fetch (-X theirs = the commit being replayed)
+          git pull --rebase --autostash -X theirs origin "${GITHUB_REF_NAME}"
           git push
 
       - name: Open an issue when the gates fail

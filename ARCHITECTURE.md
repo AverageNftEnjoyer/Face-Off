@@ -273,6 +273,9 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-17**: Refresh workflows (daily, live, notes) check out the branch tip, not the triggering
+  commit, and rebase with `-X theirs` (a run's own fresh fetch wins a data-file conflict): a run queued
+  behind another refresh no longer fails to push.
 - **2026-10-17**: Deploy safety: `checks/page_smoke.py` runs after every page build (Vercel build,
   refresh, CI, pre-push) and fails the build on a page that would not run, so the live site stays on
   the last good deployment; new `ci.yml` (tests + build + smoke on every code push); `.githooks/pre-push`
