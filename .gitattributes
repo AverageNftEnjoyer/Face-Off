@@ -1,1 +1,4 @@
 *.db binary
+
+# shell hooks must keep LF line endings to run
+.githooks/* text eol=lf
