@@ -55342,5 +55342,27 @@
   "event_page": "Thunderpick/World Championship/2026",
   "ext_match_id": "2399413",
   "tier": "S"
+ },
+ {
+  "match_id": "4b0a4d003656",
+  "date": "2026-10-17",
+  "event": "Thunderpick World Championship 2026",
+  "team_a": "Aurora Gaming",
+  "team_b": "FURIA",
+  "winner": "FURIA",
+  "best_of": 3,
+  "maps": [
+   {
+    "map": "Dust2",
+    "winner": "FURIA"
+   },
+   {
+    "map": "Inferno",
+    "winner": "FURIA"
+   }
+  ],
+  "event_page": "Thunderpick/World Championship/2026",
+  "ext_match_id": "2399414",
+  "tier": "S"
  }
 ]
