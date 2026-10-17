@@ -271,6 +271,9 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-17**: `daily-refresh.yml`: code tests no longer block publishing (the data gates and the
+  site build do); a red test opens a "Code tests failed" issue. `tests/test_architecture.py` no
+  longer checks file names in the change log (history may name deleted files).
 - **2026-10-16**: Missing-result fix (Legacy-FURIA of 2026-10-15 reached the site 4.5 h late, with the next
   match already naming Legacy): the live refresh now keeps asking for an unfinished match up to 12 h after its
   scheduled start (24 h once a map is on the page), not 4 h. `checks/validate_freshness.py` gains an overdue

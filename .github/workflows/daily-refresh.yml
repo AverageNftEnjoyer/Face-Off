@@ -51,8 +51,14 @@ jobs:
       - name: Build the derived data bundle
         run: python viewer/build_bundle.py viewer/data-bundle.json
 
+      # Code tests never block fresh data: the data gates above and the site build below
+      # are what protect what users see. A red test still opens an issue (step below).
       - name: Tests
-        run: python -m unittest discover -s tests
+        id: tests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python -m unittest discover -s tests 2>&1 | tee /tmp/tests.txt
 
       - name: Check the site builds
         run: python viewer/build_viewer.py public/index.html
@@ -101,6 +107,28 @@ jobs:
           else
             gh issue create --title "Data gates failed - publish blocked ($(date -u +%Y-%m-%d))" \
               --body-file /tmp/issue.md --label data-pipeline
+          fi
+
+      - name: Open an issue when the code tests fail
+        if: always() && steps.tests.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create data-pipeline --color B60205 --description "Automated data pipeline alerts" 2>/dev/null || true
+          {
+            echo "The code tests failed (data was still published: the data gates passed). Run: $RUN_URL"
+            echo
+            echo '```'
+            grep -E "^(FAIL|ERROR):|Error|assert|^Ran |^FAILED" /tmp/tests.txt | tail -c 20000
+            echo '```'
+          } > /tmp/issue.md
+          existing=$(gh issue list --label data-pipeline --state open --search "Code tests failed in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/issue.md
+          else
+            gh issue create --title "Code tests failed ($(date -u +%Y-%m-%d))" --body-file /tmp/issue.md --label data-pipeline
           fi
 
       # The roster candidate and its diff are NOT committed (.gitignore): the

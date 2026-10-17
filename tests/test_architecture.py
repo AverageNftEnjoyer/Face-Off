@@ -42,7 +42,9 @@ class TestArchitectureDoc(unittest.TestCase):
         self.assertEqual(missing, [], "add these to the module map in ARCHITECTURE.md")
 
     def test_every_mapped_file_exists(self):
-        named = set(re.findall(r"`((?:[a-z_]+/)+[A-Za-z0-9_.-]+\.(?:py|html|json|yml|jpg|png))`", doc_text()))
+        # the change log is history: it may name files that were later deleted
+        current = doc_text().split("## Change log")[0]
+        named = set(re.findall(r"`((?:[a-z_]+/)+[A-Za-z0-9_.-]+\.(?:py|html|json|yml|jpg|png))`", current))
         gone = sorted(p for p in named
                       if not p.startswith(("data/", "public/", "out/"))   # data/ and outputs: generated or listed by name
                       and not os.path.exists(os.path.join(ROOT, p)))
