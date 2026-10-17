@@ -173,6 +173,7 @@ Every code file, by folder. (Checked by `tests/test_architecture.py`.)
 | `checks/cross_source_check.py` | Agreement report between `matches.json` and `valve_results.json`. |
 | `checks/validate_freshness.py` | Independent schedule: Liquipedia vs repo vs deployed site; restarts the live refresh when behind. |
 | `checks/roster_overrides_check.py` | Validates `data/roster_overrides.json` names against known players and teams. |
+| `checks/page_smoke.py` | Refuses to ship a broken page: placeholders filled, data inlined, and the page script parses (`node --check`). Runs after every page build (Vercel, `daily-refresh.yml`, `ci.yml`, the pre-push hook); a failure fails the build so the last good deployment keeps serving. |
 
 ### `viewer/`: the site
 
@@ -249,6 +250,7 @@ fill-in candidates, research reports.
 | `live-refresh.yml` | every 15 min | `daily_refresh.py --live` while a tracked event runs → gates → db → push |
 | `notes-facts.yml` | daily 06:47 UTC | bundle (for the 3-day scope) → `collectors/notes_fetch.py` (`OPENAI_API_KEY` secret) → bundle → `collectors/notes_summarize.py` (AI "why" summaries) → tests → commit the `notes_*` data files + push; issue on failure |
 | `validate.yml` | every 30 min | `checks/validate_freshness.py`; restarts the live refresh when behind |
+| `ci.yml` | every push (not data-only) + pull requests | Full test suite → bundle + page build → `checks/page_smoke.py`; the code gate (branch protection can require it) |
 
 Both refresh workflows share one concurrency group, so two runs never write
 the cache together (`notes-facts.yml` has its own: it writes only the
@@ -271,6 +273,10 @@ python pipeline/daily_refresh.py --live          # backstop refresh from a home 
 Newest first. One line per change that touches structure, data flow, a data
 file, a workflow or a public behaviour of the site.
 
+- **2026-10-17**: Deploy safety: `checks/page_smoke.py` runs after every page build (Vercel build,
+  refresh, CI, pre-push) and fails the build on a page that would not run, so the live site stays on
+  the last good deployment; new `ci.yml` (tests + build + smoke on every code push); `.githooks/pre-push`
+  (enable with `git config core.hooksPath .githooks`).
 - **2026-10-17**: `daily-refresh.yml`: code tests no longer block publishing (the data gates and the
   site build do); a red test opens a "Code tests failed" issue. `tests/test_architecture.py` no
   longer checks file names in the change log (history may name deleted files).

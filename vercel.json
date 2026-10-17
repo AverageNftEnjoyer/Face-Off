@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "echo 'stdlib only, nothing to install'",
-  "buildCommand": "python3 viewer/build_bundle.py && python3 viewer/build_viewer.py public/index.html && python3 viewer/write_status.py public/status.json",
+  "buildCommand": "python3 viewer/build_bundle.py && python3 viewer/build_viewer.py public/index.html && python3 checks/page_smoke.py public/index.html && python3 viewer/write_status.py public/status.json",
   "outputDirectory": "public",
   "cleanUrls": true,
   "headers": [

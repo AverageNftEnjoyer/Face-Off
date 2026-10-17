@@ -61,7 +61,9 @@ jobs:
           python -m unittest discover -s tests 2>&1 | tee /tmp/tests.txt
 
       - name: Check the site builds
-        run: python viewer/build_viewer.py public/index.html
+        run: |
+          python viewer/build_viewer.py public/index.html
+          python checks/page_smoke.py public/index.html
 
       - name: Build the SQLite copy (data/faceoff.db)
         run: python pipeline/build_db.py

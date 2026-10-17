@@ -1,0 +1,16 @@
+#!/bin/sh
+# Face-Off pre-push check: nothing leaves this machine unless the tests pass and
+# the page builds and parses. Enabled per clone with:
+#   git config core.hooksPath .githooks
+# Emergency bypass (not for normal use): git push --no-verify
+set -e
+cd "$(git rev-parse --show-toplevel)"
+echo "pre-push: running the test suite..."
+python -m unittest discover -s tests -q
+echo "pre-push: building the page..."
+[ -f viewer/data-bundle.json ] || python viewer/build_bundle.py viewer/data-bundle.json
+tmp="$(mktemp -d)"
+python viewer/build_viewer.py "$tmp/index.html" > /dev/null
+python checks/page_smoke.py "$tmp/index.html"
+rm -rf "$tmp"
+echo "pre-push: OK"

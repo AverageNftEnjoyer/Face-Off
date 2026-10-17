@@ -1,0 +1,38 @@
+# Every push and pull request: the full test suite, the page build and the page
+# smoke check. This is the code gate; the data refresh workflows no longer let
+# code tests block data. With branch protection requiring this check, a change
+# that fails it cannot reach main, and Vercel (Deployment Checks) does not
+# promote a build whose checks failed.
+name: CI
+
+on:
+  push:
+    paths-ignore: ["data/**"]      # the refresh bots' data-only commits have their own gates
+  pull_request:
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Tests
+        run: python -m unittest discover -s tests
+
+      - name: Build the bundle and the page
+        run: |
+          python viewer/build_bundle.py viewer/data-bundle.json
+          python viewer/build_viewer.py public/index.html
+
+      - name: Page smoke check (the page script parses, the data is inlined)
+        run: python checks/page_smoke.py public/index.html
